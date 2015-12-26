@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSInternals.SAM", "DSInternals.SAM\DSInternals.SAM.csproj", "{924F67C0-8FFF-4714-891A-FC0799F46727}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSInternals.PowerShell", "DSInternals.PowerShell\DSInternals.PowerShell.csproj", "{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSInternals.SAM", "DSInternals.SAM\DSInternals.SAM.csproj", "{924F67C0-8FFF-4714-891A-FC0799F46727}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSInternals.Common", "DSInternals.Common\DSInternals.Common.csproj", "{7D47F040-D3A9-43CA-9F69-EF91FAF2C23A}"
 EndProject

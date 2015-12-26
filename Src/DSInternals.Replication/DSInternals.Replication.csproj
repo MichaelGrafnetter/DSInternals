@@ -75,21 +75,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="$(PROGRAMFILES)\Microsoft Visual Studio 12.0\VC\redist\x64\Microsoft.VC120.CRT\msvcp120.dll">
-      <Link>amd64\msvcp120.dll</Link>
-    </Content>
-    <Content Include="$(PROGRAMFILES)\Microsoft Visual Studio 12.0\VC\redist\x64\Microsoft.VC120.CRT\msvcr120.dll">
-      <Link>amd64\msvcr120.dll</Link>
-    </Content>
-    <Content Include="$(PROGRAMFILES)\Microsoft Visual Studio 12.0\VC\redist\x86\Microsoft.VC120.CRT\msvcp120.dll">
-      <Link>x86\msvcp120.dll</Link>
-    </Content>
-    <Content Include="$(PROGRAMFILES)\Microsoft Visual Studio 12.0\VC\redist\x86\Microsoft.VC120.CRT\msvcr120.dll">
-      <Link>x86\msvcr120.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
