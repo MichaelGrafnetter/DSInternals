@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(SolutionDir)\Configuration\Common.csproj.props" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DSInternals.PowerShell</RootNamespace>
+    <AssemblyName>DSInternals.PowerShell</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+      None
+    </ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>
+    </NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <DefineConstants>CODE_ANALYSIS;CODE_ANALYSIS;TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>
+    </NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Commands\Base\ADReplObjectCommandBase.cs" />
+    <Compile Include="Commands\Base\ADReplCommandBase.cs" />
+    <Compile Include="Commands\Base\PSCmdletEx.cs" />
+    <Compile Include="Commands\ConvertFromADManagedPasswordBlobCommand.cs" />
+    <Compile Include="Commands\ConvertToHexCommand.cs" />
+    <Compile Include="Commands\SetADDBBootKeyCommand.cs" />
+    <Compile Include="Commands\GetADDBBackupKeyCommand.cs" />
+    <Compile Include="Commands\SaveDPAPIBlobCommand.cs" />
+    <Compile Include="Commands\GetADReplBackupKeyCommand.cs" />
+    <Compile Include="Commands\GetADReplAccountCommand.cs" />
+    <Compile Include="Commands\GetBootKeyCommand.cs" />
+    <Compile Include="Commands\SetADDBDomainControllerCommand.cs" />
+    <Compile Include="Commands\GetADDBObjectCommand.cs" />
+    <Compile Include="Commands\GetADDBSchemaAttributeCommand.cs" />
+    <Compile Include="Commands\GetADDBIndexCommand.cs" />
+    <Compile Include="Commands\GetADDBAccountCommand.cs" />
+    <Compile Include="Commands\RemoveADDBObjectCommand.cs" />
+    <Compile Include="Commands\RestoreADDBAttributeCommand.cs" />
+    <Compile Include="Commands\GetADDBDomainControllerCommand.cs" />
+    <Compile Include="Commands\SetADDBPrimaryGroupCommand.cs" />
+    <Compile Include="Commands\Base\ADDBModifyPrincipalCommandBase.cs" />
+    <Compile Include="Commands\Base\ADDBPrincipalCommandBase.cs" />
+    <Compile Include="Commands\ConvertToGPPrefPasswordCommand.cs" />
+    <Compile Include="Commands\Base\ADDBCommandBase.cs" />
+    <Compile Include="Commands\Base\ADDBObjectCommandBase.cs" />
+    <Compile Include="Commands\AddADDBSidHistoryCommand.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Types\DomainController.cs" />
+    <Compile Include="Types\SchemaAttribute.cs" />
+    <Compile Include="Utils\ValidateHexStringAttribute.cs" />
+    <Compile Include="Utils\ValidatePasswordLengthAttribute.cs" />
+    <Compile Include="Commands\ConvertFromGPPrefPasswordCommand.cs" />
+    <Compile Include="Commands\ConvertToOrgIdHashCommand.cs" />
+    <Compile Include="Commands\ConvertToUnicodePasswordCommand.cs" />
+    <Compile Include="Commands\ConvertFromUnicodePasswordCommand.cs" />
+    <Compile Include="Commands\ConvertToLMHashCommand.cs" />
+    <Compile Include="Commands\ConvertToNTHashCommand.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Commands\SetSamAccountPasswordHashCommand.cs" />
+    <Compile Include="Utils\Win32ErrorCodeExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj">
+      <Project>{7d47f040-d3a9-43ca-9f69-ef91faf2c23a}</Project>
+      <Name>DSInternals.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\DSInternals.DataStore\DSInternals.DataStore.csproj">
+      <Project>{8a857b97-1be0-4bae-a4e8-dee870858bfd}</Project>
+      <Name>DSInternals.DataStore</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\DSInternals.Replication.Model\DSInternals.Replication.Model.csproj">
+      <Project>{0bca513c-5f12-48b6-8288-d3a95ec2994a}</Project>
+      <Name>DSInternals.Replication.Model</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\DSInternals.Replication\DSInternals.Replication.csproj">
+      <Project>{2ee0d48f-65ba-4d4f-a8e1-fc01349ba786}</Project>
+      <Name>DSInternals.Replication</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\DSInternals.SAM\DSInternals.SAM.csproj">
+      <Project>{924f67c0-8fff-4714-891a-fc0799f46727}</Project>
+      <Name>DSInternals.SAM</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.PowerShell.3.ReferenceAssemblies.1.0.0\lib\net4\System.Management.Automation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DSInternals.psm1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="en-US\about_DSInternals.help.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="ADDBCommandHierarchy.cd" />
+    <None Include="DSInternals.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Run-Cmdlets.ps1" />
+    <None Include="DSInternals.format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Tests\Set-SamAccountPasswordHash.Tests.ps1" />
+    <None Include="Tests\Path.Tests.ps1" />
+    <None Include="Tests\ConvertFrom-UnicodePassword.Tests.ps1" />
+    <None Include="Tests\ConvertTo-UnicodePassword.Tests.ps1" />
+    <None Include="Tests\ConvertTo-AADHash.Tests.ps1" />
+    <None Include="Tests\ConvertTo-Hex.Tests.ps1" />
+    <None Include="Tests\ConvertTo-LMHash.Tests.ps1" />
+    <None Include="Tests\ConvertTo-NTHash.Tests.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <StartProgram>$(SystemRoot)\System32\WindowsPowerShell\v1.0\powershell.exe</StartProgram>
+    <StartArguments>-NoLogo -NoProfile -ExecutionPolicy Bypass -NoExit -File "$(ProjectDir)\Run-Cmdlets.ps1"</StartArguments>
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>$(OutputPath)\</StartWorkingDirectory>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+  </PropertyGroup>
+</Project>

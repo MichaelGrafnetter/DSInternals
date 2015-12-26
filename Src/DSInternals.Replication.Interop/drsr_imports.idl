@@ -1,0 +1,16 @@
+// WARNING: This file should never be compiled by MIDL directly, because it would cause error.
+//          It should only be imported into drsr.idl.
+
+// This is an ugly trick used to import the ntdsapi.h, without dealing with redefinitions.
+// The ntdsapi_import is just a dummy interface with random GUID.
+// See https://msdn.microsoft.com/en-us/library/windows/desktop/aa367049(v=vs.85).aspx
+
+[
+	uuid(7d26fc07-8bb0-4c3e-978b-89522b4da06e),
+	version(1.0)
+]
+interface ntdsapi_import
+{
+	#define MIDL_PASS 
+	#include "drsr_imports.h"
+}

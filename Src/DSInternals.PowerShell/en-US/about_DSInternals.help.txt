@@ -1,0 +1,120 @@
+﻿TOPIC
+    about_DSInternals
+
+SHORT DESCRIPTION
+    The DSInternals PowerShell Module exposes several internal
+	and undocumented features of Active Directory.
+
+LONG DESCRIPTION
+	
+	LIST OF CMDLETS
+
+	Offline operations with the Active Directory database
+
+		Get-ADDBAccount
+		---------------
+		
+		Reads one or more accounts from a ntds.dit file, including secret attributes.
+		
+		Get-BootKey
+		-----------
+		
+		Reads the BootKey/SysKey from an offline SYSTEM registry hive.
+		
+		Add-ADDBSidHistory
+		------------------
+		
+		Adds one or more values to the sIDHistory attribute of an object in a ntds.dit file.
+		
+		Set-ADDBPrimaryGroup
+		--------------------
+		
+		Modifies the primaryGroupId attribute of an object to a ntds.dit file.
+		
+		Get-ADDBDomainController
+		------------------------
+		
+		Reads information about the originating DC from a ntds.dit file,
+		including domain name, domain SID, DC name and DC site.
+		
+		Set-ADDBDomainController
+		------------------------
+
+		Writes information about the DC to a ntds.dit file,
+		including the highest commited USN and database epoch.
+		
+		Get-ADDBSchemaAttribute
+		-----------------------
+		
+		Reads AD schema from a ntds.dit file, including datatable column names.
+		
+		Remove-ADDBObject
+		-----------------
+		
+		Physically removes specified object from a ntds.dit file,
+		making it semantically inconsistent. Highly experimental!
+	
+	Online operations with Active Directory database
+		
+		Get-ADReplAccount
+		-----------------
+		
+		Reads one or more accounts through the DRSR protocol, including secret attributes.
+		
+		Set-SamAccountPasswordHash
+		--------------------------
+		
+		Sets NT and LM hashes of an account through the SAMR protocol.
+
+	Hash calculation
+		
+		ConvertTo-NTHash
+		----------------
+		
+		Calculates NT hash of a given password.
+		
+		ConvertTo-LMHash
+		----------------
+		
+		Calculates LM hash of a given password.
+		
+		ConvertTo-OrgIdHash
+		-------------------
+		
+		Calculates OrgId hash of a given password. Used by Azure Active Directory Sync.
+
+	Password decryption
+		
+		ConvertFrom-GPPrefPassword
+		--------------------------
+		
+		Decodes a password from the format used by Group Policy Preferences.
+		
+		ConvertTo-GPPrefPassword
+		------------------------
+		
+		Converts a password to the format used by Group Policy Preferences.
+		
+		ConvertFrom-UnattendXmlPassword
+		-------------------------------
+
+		Decodes a password from the format used in unattend.xml files.
+		
+		ConvertTo-UnicodePassword
+		-------------------------
+
+		Converts a password to the format used in unattend.xml or *.ldif files.
+	
+	Misc
+		
+		ConvertFrom-ADManagedPasswordBlob
+
+		Decodes the value of the msDS-ManagedPassword attribute of a Group Managed Service Account.
+
+		ConvertTo-Hex
+		-------------
+		
+		Helper cmdlet that converts binary input to hexadecimal string.
+
+SEE ALSO
+	about_ActiveDirectory

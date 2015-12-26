@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(SolutionDir)\Configuration\Common.csproj.props" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7D47F040-D3A9-43CA-9F69-EF91FAF2C23A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DSInternals.Common</RootNamespace>
+    <AssemblyName>DSInternals.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuGetPackageImportStamp>a6f7f4f7</NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CryptSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CryptSharpOfficial.2.1.0.0\lib\CryptSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.DirectoryServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extensions\ByteArrayExtensions.cs" />
+    <Compile Include="Cryptography\Crc32.cs" />
+    <Compile Include="Cryptography\GPPrefPwdObfuscator.cs" />
+    <Compile Include="Cryptography\DirectorySecretDecryptor.cs" />
+    <Compile Include="Cryptography\SecretEncryptionType.cs" />
+    <Compile Include="Cryptography\LMHash.cs" />
+    <Compile Include="Cryptography\NTHash.cs" />
+    <Compile Include="Cryptography\OrgIdHash.cs" />
+    <Compile Include="Data\DistinguishedName.cs" />
+    <Compile Include="Data\DistinguishedNameComponent.cs" />
+    <Compile Include="Data\InstanceType.cs" />
+    <Compile Include="Data\DPAPIBackupKey.cs" />
+    <Compile Include="Data\DPAPIBackupKeyType.cs" />
+    <Compile Include="Data\Principals\ManagedPassword.cs" />
+    <Compile Include="Data\Principals\UserAccountControl.cs" />
+    <Compile Include="Data\Schema\AttributeSyntax.cs" />
+    <Compile Include="Data\Schema\BasicSchema.cs" />
+    <Compile Include="Data\Schema\BasicSchemaAttribute.cs" />
+    <Compile Include="Data\Schema\BasicSchemaFactory.cs" />
+    <Compile Include="Data\Schema\CommonDirectoryClasses.cs" />
+    <Compile Include="Data\Schema\CommonDirectoryAttributes.cs" />
+    <Compile Include="Data\Principals\DSAccount.cs" />
+    <Compile Include="Data\DirectoryObject.cs" />
+    <Compile Include="Data\Schema\IDirectorySchema.cs" />
+    <Compile Include="Data\Schema\ISchemaAttribute.cs" />
+    <Compile Include="Data\Principals\KerberosCredential.cs" />
+    <Compile Include="Data\Principals\KerberosCredentialNew.cs" />
+    <Compile Include="Data\Principals\KerberosKeyData.cs" />
+    <Compile Include="Data\Principals\KerberosKeyDataNew.cs" />
+    <Compile Include="Data\Principals\KerberosKeyType.cs" />
+    <Compile Include="Data\Principals\SupplementalCredentials.cs" />
+    <Compile Include="Exceptions\DirectoryException.cs" />
+    <Compile Include="Exceptions\DirectoryObjectException.cs" />
+    <Compile Include="Exceptions\DirectoryObjectNotFoundException.cs" />
+    <Compile Include="Exceptions\DirectoryObjectOperationException.cs" />
+    <Compile Include="Exceptions\SchemaAttributeNotFoundException.cs" />
+    <Compile Include="Interop\CryptoBuffer.cs" />
+    <Compile Include="Interop\Enums\NetCancelOptions.cs" />
+    <Compile Include="Interop\Enums\NetConnectOptions.cs" />
+    <Compile Include="Interop\Enums\NetResourceDisplayType.cs" />
+    <Compile Include="Interop\Enums\NetResourceScope.cs" />
+    <Compile Include="Interop\Enums\NetResourceType.cs" />
+    <Compile Include="Interop\Enums\NetResourceUsage.cs" />
+    <Compile Include="Interop\NamedPipeConnection.cs" />
+    <Compile Include="Interop\NativeMethods.cs" />
+    <Compile Include="Interop\NetResource.cs" />
+    <Compile Include="Interop\RegistryHiveFileMapping.cs" />
+    <Compile Include="Interop\Enums\RegistryKeyRights.cs" />
+    <Compile Include="Interop\SafeOemStringPointer.cs" />
+    <Compile Include="Interop\Enums\Win32ErrorCode.cs" />
+    <Compile Include="Interop\Enums\NtStatus.cs" />
+    <Compile Include="Interop\SafeUnicodeSecureStringPointer.cs" />
+    <Compile Include="Interop\OemString.cs" />
+    <Compile Include="Interop\SecureUnicodeString.cs" />
+    <Compile Include="Interop\UnicodeString.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Data\Principals\SamAccountType.cs" />
+    <Compile Include="Cryptography\SecureStringExtensions.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\RegistryKeyExtensions.cs" />
+    <Compile Include="Extensions\SecurityIdentifierExtensions.cs" />
+    <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Validator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\DSDataRepresentation.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

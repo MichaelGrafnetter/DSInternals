@@ -16,8 +16,9 @@
 [Rr]elease/
 [Rr]eleases/
 x64/
+amd64/
 x86/
-build/
+[Bb]uild/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -150,6 +151,10 @@ csx/
 # Windows Store app package directory
 AppPackages/
 
+# Private Keys
+*.pfx
+*.Private.snk
+
 # Others
 *.[Cc]ache
 ClientBin/
@@ -158,7 +163,6 @@ ClientBin/
 *~
 *.dbmdl
 *.dbproj.schemaview
-*.pfx
 *.publishsettings
 node_modules/
 bower_components/

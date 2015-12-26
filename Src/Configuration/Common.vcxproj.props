@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file contains settings that are common for all C++ projects. -->
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="Common.props" />
+  <!-- Output Paths -->
+  <PropertyGroup>
+    <!--
+    We need to rename platform to match the values that are used in the PROCESSOR_ARCHITECTURE environment variable.
+    -->
+    <TargetProcessorArchitecture Condition=" '$(Platform)'=='x64' ">amd64</TargetProcessorArchitecture>
+    <TargetProcessorArchitecture Condition=" '$(Platform)'=='Win32' ">x86</TargetProcessorArchitecture>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutDir>$(BinPath)\$(TargetProcessorArchitecture)\</OutDir>
+    <IntDir>$(ObjPath)\$(TargetProcessorArchitecture)\</IntDir>
+  </PropertyGroup>
+  <!-- Strong Name Signing -->
+  <PropertyGroup Condition=" '$(DoSign)'=='true' ">
+    <LinkKeyFile>$(SigningKeyPath)</LinkKeyFile>
+    <LinkDelaySign>$(PerformDelaySign)</LinkDelaySign>
+  </PropertyGroup>
+</Project>

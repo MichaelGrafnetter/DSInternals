@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file contains settings that are common for all projects. -->
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <BuildPath>$(SolutionDir)..\Build</BuildPath>
+    <BinPath>$(BuildPath)\bin\$(Configuration)\$(SolutionName)</BinPath>
+    <ObjPath>$(BuildPath)\obj\$(Configuration)\$(MSBuildProjectName)</ObjPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DoSign Condition=" '$(Configuration)'=='Release' ">true</DoSign>
+    <DoSign Condition=" '$(Configuration)'=='Debug' ">false</DoSign>
+    <KeyPath>$(SolutionDir)\..\Keys</KeyPath>
+    <PublicKeyPath>$(KeyPath)\DSInternals.Public.snk</PublicKeyPath>
+    <PrivateKeyPath>$(KeyPath)\DSInternals.Private.snk</PrivateKeyPath>
+    <PerformDelaySign Condition=" !Exists('$(PrivateKeyPath)') ">true</PerformDelaySign>
+    <PerformDelaySign Condition=" Exists('$(PrivateKeyPath)') ">false</PerformDelaySign>
+    <SigningKeyPath Condition=" '$(PerformDelaySign)' == 'true' ">$(PublicKeyPath)</SigningKeyPath>
+    <SigningKeyPath Condition=" '$(PerformDelaySign)' == 'false' ">$(PrivateKeyPath)</SigningKeyPath>
+  </PropertyGroup>
+</Project>

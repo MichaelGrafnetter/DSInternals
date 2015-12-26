@@ -1,0 +1,88 @@
+Version 2.9
+- The Get-BootKey cmdlet now supports online boot key retrieval
+- The PBKDF2.NET library has been replaced by CryptSharp
+- The Get-ADDBDomainController cmdlet now extracts some more data from the DB
+- The project has been open-sourced
+
+Version 2.8
+- Added the ConvertFrom-ADManagedPasswordBlob cmdlet
+- Added the Get-ADDBBackupKey cmdlet
+- Added the Get-ADReplBackupKey cmdlet
+- Added the Save-DPAPIBlob cmdlet
+- Added the HashcatLM view
+
+Version 2.7
+- Added the about_DSInternals help page (work in progress)
+- Fixed a bug in the Set-ADDBPrimaryGroup cmdlet
+
+Version 2.6
+- Implemented CRC checks in the Get-ADReplAccount cmdlet
+- The Get-ADReplAccount cmdlet now displays meaningful error messages on 64-bit systems
+- The -Server parameter of the Get-ADReplAccount is now compulsory instead of localhost being default
+- The Get-ADReplAccount and Set-SamAccountPasswordHash cmdlets now display a warning in case they are supplied with a DNS domain name instead of a NetBIOS one.
+- Fixed a bug in SupplementalCredentials parsing
+
+Version 2.5
+- Both x86 and x64 platforms are now supported.
+- A few parameters have been changed and new aliases added.
+- Fixed a bug in the Add-ADDBSidHistory cmdlet.
+
+Version 2.4
+- Fixed a bug regarding distinguished name parsing in the Get-ADDBAccount cmdlet
+- Removed a big memory leak in the Get-ADReplAccount cmdlet
+- Added the Get-ADReplicationAccount alias for Get-ADReplAccount
+- Updated AutoMapper to the latest version
+- Switched to the official build of Microsoft's Managed Esent libraries
+- The module has been published in PowerShell Gallery.
+
+Version 2.3
+- Parameter SystemHiveFilePath of the Get-BootKey cmdlet is now positional
+- Added the Readme.txt file with system requirements
+- Fixed a bug in distinguished name parsing that caused the Get-ADReplAccount cmdlet to fail under some circumstances
+
+Version 2.2
+- Added a few parameter validations
+- Fixed a bug in SupplementalCredentials parsing
+
+Version 2.1
+- The Get-ADReplAccount cmdlet can now retrieve all accounts from AD or just a sigle one
+- Added Microsoft Visual C++ 2013 Runtime libraries to the distribution
+- The module is now 64-bit only
+- Minor bug fixes
+
+Version 2.0
+- Added the Get-ADDBAccount cmdlet
+- Added the Get-BootKey cmdlet
+- Added the Get-ADReplAccount cmdlet
+- Added the Remove-ADDBObject cmdlet
+- Added the Format-Hex cmdlet
+- Merged the DSInternals.Cryptography assembly into DSInternals.Common
+- Minor bug fixes
+
+Version 1.6
+- Added the Set-ADDBDomainController cmdlet
+- Added the Get-ADDBSchemaAttribute cmdlet
+
+Version 1.5
+- Added the Get-ADDBDomainController cmdlet
+
+Version 1.4
+- Added the Set-ADDBPrimaryGroup cmdlet
+- The Add-ADDBSidHistory cmdlet now supports relative file paths
+
+Version 1.3.1
+- Fixed a bug in the Microsoft.Isam.Esent.Interop library,
+  that prevented the Add-ADDBSidHistory cmdlet to run on Windows Server 2008 R2
+
+Version 1.3
+- Added the Add-ADDBSidHistory cmdlet
+
+Version 1.2
+- Added the ConvertTo-GPPrefPassword cmdlet
+
+Version 1.1
+- Added the ConvertTo-OrgIdHash cmdlet
+- Added the ConvertFrom-GPPrefPassword cmdlet
+
+Version 1.0
+- Initial release

@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DSInternals.PowerShell.Commands.ADDBModifyPrincipalCommandBase">
+    <Position X="4.5" Y="7.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAIACAAAAA=</HashCode>
+      <FileName>Commands\Base\ADDBModifyPrincipalCommandBase.cs</FileName>
+      <NewMemberFileName>Commands\Base\ADDBPrincipalCommandBase.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.ADDBObjectCommandBase">
+    <Position X="6.25" Y="3" Width="2" />
+    <Members>
+      <Method Name="BeginProcessing" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Field Name="parameterSetByDN" Hidden="true" />
+      <Field Name="parameterSetByGuid" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAABAAACAAAAAAgAAAAAAAAYAAAACAAAAAAAAAAgA=</HashCode>
+      <FileName>Commands\Base\ADDBObjectCommandBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.ADDBCommandBase">
+    <Position X="5" Y="0.5" Width="1.75" />
+    <Members>
+      <Method Name="BeginProcessing" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>IAAAABAAACAAAAAAAAAAAAAAAAAEAAABAAAIAAAAAIA=</HashCode>
+      <FileName>Commands\Base\ADDBCommandBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.SetADDBPrimaryGroupCommand">
+    <Position X="3" Y="9.75" Width="2.5" />
+    <Members>
+      <Method Name="ProcessRecord" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\SetADDBPrimaryGroupCommand.cs</FileName>
+      <NewMemberFileName>Commands\AddADDBSidHistoryCommand.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.ADDBPrincipalCommandBase">
+    <Position X="6" Y="5.5" Width="2.5" />
+    <Members>
+      <Field Name="parameterSetByName" Hidden="true" />
+      <Field Name="parameterSetBySid" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAACAAAAAIAAAA=</HashCode>
+      <FileName>Commands\Base\ADDBPrincipalCommandBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.RestoreADDBAttributeCommand">
+    <Position X="2.75" Y="5.5" Width="2.5" />
+    <Members>
+      <Method Name="ProcessRecord" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAIAIAQAAAAA=</HashCode>
+      <FileName>Commands\RestoreADDBAttributeCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.GetADDBPrincipalCommand" Collapsed="true">
+    <Position X="7.5" Y="7.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\GetADDBPrincipalCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.AddADDBSidHistoryCommand">
+    <Position X="6" Y="9.75" Width="2.5" />
+    <Members>
+      <Method Name="ProcessRecord" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\AddADDBSidHistoryCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.GetADDBDomainControllerCommand" Collapsed="true">
+    <Position X="3.25" Y="3" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\GetADDBDomainControllerCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.GetADDBIndexCommand" Collapsed="true">
+    <Position X="8.5" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\GetADDBIndexCommand.cs</FileName>
+      <NewMemberFileName>Commands\GetADDBDomainControllerCommand.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.GetADDBObjectCommand" Collapsed="true">
+    <Position X="9" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\GetADDBObjectCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.GetADDBSchemaAttributeCommand" Collapsed="true">
+    <Position X="10.75" Y="3" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAQAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\GetADDBSchemaAttributeCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.RemoveADDBObjectCommand" Collapsed="true">
+    <Position X="11.75" Y="5.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\RemoveADDBObjectCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(SolutionDir)\Configuration\Common.csproj.props" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8A857B97-1BE0-4BAE-A4E8-DEE870858BFD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DSInternals.DataStore</RootNamespace>
+    <AssemblyName>DSInternals.DataStore</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Esent.Interop, Version=1.9.3.2, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\ManagedEsent.1.9.3.2\lib\net40\Esent.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Esent.Isam, Version=1.9.3.2, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Database.Isam.1.9.3.2\lib\net40\Esent.Isam.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AttributeMetadata.cs" />
+    <Compile Include="AttributeMetadataCollection.cs" />
+    <Compile Include="Cryptography\BootKeyRetriever.cs" />
+    <Compile Include="Cryptography\DataStoreSecretDecryptor.cs" />
+    <Compile Include="DatabaseFlags.cs" />
+    <Compile Include="DatastoreObject.cs" />
+    <Compile Include="DirectoryAgent.cs" />
+    <Compile Include="Enums\AttributeSystemFlags.cs" />
+    <Compile Include="ADConstants.cs" />
+    <Compile Include="Enums\DatabaseState.cs" />
+    <Compile Include="Enums\PekListFlags.cs" />
+    <Compile Include="Enums\PekListVersion.cs" />
+    <Compile Include="SchemaAttribute.cs" />
+    <Compile Include="Extensions\CursorExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Enums\DomainControllerOptions.cs" />
+    <Compile Include="DirectoryContext.cs" />
+    <Compile Include="DistinguishedNameResolver.cs" />
+    <Compile Include="DomainController.cs" />
+    <Compile Include="Interfaces\IDomainController.cs" />
+    <Compile Include="Interfaces\ISchemaAttributeExt.cs" />
+    <Compile Include="SecurityDescriptorResolver.cs" />
+    <Compile Include="LinkResolver.cs" />
+    <Compile Include="Enums\LinkType.cs" />
+    <Compile Include="Enums\AttributeOmSyntax.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DirectorySchema.cs" />
+    <Compile Include="Enums\SearchFlags.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj">
+      <Project>{7d47f040-d3a9-43ca-9f69-ef91faf2c23a}</Project>
+      <Name>DSInternals.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
