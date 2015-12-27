@@ -1,23 +1,30 @@
 #Requires -Version 3
+<#
+.SYNOPSIS
+Compiles the binaries from source codes.
+#>
 
 $solutionDir = Join-Path $PSScriptRoot '..\Src'
 $solutionFile = Join-Path $solutionDir 'DSInternals.sln'
 
-# We need the Invoke-MSBuild module (distributed as NuGet package) to always invoke the latest msbuild.exe.
-$modulePath = Join-Path $solutionDir  '.\packages\invokemsbuild*\Modules\Invoke-MSBuild'
+# We need the Invoke-MSBuild module to always invoke the latest msbuild.exe.
+$modulePath = Join-Path $PSScriptRoot 'Modules\Invoke-MSBuild'
 Import-Module $modulePath -ErrorAction Stop
 
-$configuration = 'Release'
-# $configuration = 'Debug'
+$targets = 'Clean','Build'
+$configurations = 'Release' #,'Debug'
+$platforms = 'x86','x64'
 
-# Clean
-Invoke-MsBuild -MsBuildParameters "/target:Clean /property:Configuration=$configuration;Platform=x64" `
-               -Path $solutionFile
-Invoke-MsBuild -MsBuildParameters "/target:Clean /property:Configuration=$configuration;Platform=x86" `
-               -Path $solutionFile
-
-# Build
-Invoke-MsBuild -MsBuildParameters "/target:Build /property:Configuration=$configuration;Platform=x64" `
-               -Path $solutionFile -ShowBuildWindow
-Invoke-MsBuild -MsBuildParameters "/target:Build /property:Configuration=$configuration;Platform=x86" `
-               -Path $solutionFile -ShowBuildWindow
+# Run all targets with all configurations and platforms
+foreach($target in $targets)
+{
+    foreach($configuration in $configurations)
+    {
+        foreach($platform in $platforms)
+        {
+            Write-Host "$($target)ing $configuration|$platform..."
+            Invoke-MsBuild -MsBuildParameters "/target:$target /property:Configuration=$configuration;Platform=$platform" `
+                           -Path $solutionFile -ShowBuildWindow
+        }
+    }
+}

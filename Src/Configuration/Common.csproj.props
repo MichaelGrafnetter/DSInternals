@@ -2,16 +2,18 @@
 <!-- This file contains settings that are common for all C# projects. -->
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="Common.props" />
+  <!-- Output Directory Paths -->
   <PropertyGroup>
     <OutputPath>$(BinPath)</OutputPath>
     <IntermediateOutputPath>$(ObjPath)</IntermediateOutputPath>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
+  <!-- Strong Name Signing -->
   <PropertyGroup>
     <SignAssembly>$(DoSign)</SignAssembly>
     <DelaySign>$(PerformDelaySign)</DelaySign>
     <AssemblyOriginatorKeyFile>$(SigningKeyPath)</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <!-- Only add the PDB files in Debug Configuration -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugType>none</DebugType>
     <AllowedReferenceRelatedFileExtensions>none</AllowedReferenceRelatedFileExtensions>
@@ -19,5 +21,9 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>full</DebugType>
     <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
+  <!-- Only run code analysis manually -->
+  <PropertyGroup>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
 </Project>

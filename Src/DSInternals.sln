@@ -30,6 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configurat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7E87272B-81F9-49FA-9C00-F368C0EC1E86}"
 	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
@@ -62,13 +63,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{924F67C0-8FFF-4714-891A-FC0799F46727}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{924F67C0-8FFF-4714-891A-FC0799F46727}.Debug|x64.Build.0 = Debug|Any CPU
-		{924F67C0-8FFF-4714-891A-FC0799F46727}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{924F67C0-8FFF-4714-891A-FC0799F46727}.Debug|x86.Build.0 = Debug|Any CPU
-		{924F67C0-8FFF-4714-891A-FC0799F46727}.Release|x64.ActiveCfg = Release|Any CPU
-		{924F67C0-8FFF-4714-891A-FC0799F46727}.Release|x86.ActiveCfg = Release|Any CPU
-		{924F67C0-8FFF-4714-891A-FC0799F46727}.Release|x86.Build.0 = Release|Any CPU
 		{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}.Debug|x64.Build.0 = Debug|Any CPU
 		{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -76,6 +70,13 @@ Global
 		{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}.Release|x64.ActiveCfg = Release|Any CPU
 		{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}.Release|x86.ActiveCfg = Release|Any CPU
 		{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}.Release|x86.Build.0 = Release|Any CPU
+		{924F67C0-8FFF-4714-891A-FC0799F46727}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{924F67C0-8FFF-4714-891A-FC0799F46727}.Debug|x64.Build.0 = Debug|Any CPU
+		{924F67C0-8FFF-4714-891A-FC0799F46727}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{924F67C0-8FFF-4714-891A-FC0799F46727}.Debug|x86.Build.0 = Debug|Any CPU
+		{924F67C0-8FFF-4714-891A-FC0799F46727}.Release|x64.ActiveCfg = Release|Any CPU
+		{924F67C0-8FFF-4714-891A-FC0799F46727}.Release|x86.ActiveCfg = Release|Any CPU
+		{924F67C0-8FFF-4714-891A-FC0799F46727}.Release|x86.Build.0 = Release|Any CPU
 		{7D47F040-D3A9-43CA-9F69-EF91FAF2C23A}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{7D47F040-D3A9-43CA-9F69-EF91FAF2C23A}.Debug|x64.Build.0 = Debug|Any CPU
 		{7D47F040-D3A9-43CA-9F69-EF91FAF2C23A}.Debug|x86.ActiveCfg = Debug|Any CPU
