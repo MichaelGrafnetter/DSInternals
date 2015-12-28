@@ -11,6 +11,11 @@ Quick Start Guide
 - [List of Cmdlets with Usage Examples](https://www.dsinternals.com/en/list-of-cmdlets-in-the-dsinternals-module/)
 - [Wiki](https://github.com/MichaelGrafnetter/DSInternals/wiki)
 
+License
+-------
+
+MIT License
+
 Author
 ------
 
