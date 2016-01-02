@@ -12,6 +12,10 @@ namespace DSInternals.DataStore
         private const string linkDNCol = "link_DNT";
         private const string backlinkDNCol = "backlink_DNT";
         private const string linkBaseCol = "link_base";
+        private const string linkDataCol = "link_data";
+        private const string linkMetadataCol = "link_metadata";
+        private const string linkDeletedTimeCol = "link_deltime";
+        private const string linkDeactivatedTimeCol = "link_deactivetime";
         private const string linkIndex = "link_present_active_index";
 
         private Cursor cursor;
@@ -27,29 +31,25 @@ namespace DSInternals.DataStore
 
         public int? GetLinkedDNTag(int dnTag, string attributeName)
         {
-            int[] result = this.GetLinkedDNTags(dnTag, attributeName);
-            switch(result.Length)
+            try
             {
-                case 0:
-                    return null;
-                case 1:
-                    return result[0];
-                default:
-                    // TODO: Make this a special exception type. Move message to resources.
-                    throw new Exception("More than 1 objects have been found.");
+                return this.GetLinkedDNTags(dnTag, attributeName).SingleOrDefault();
+            }
+            catch(InvalidOperationException)
+            {
+                // TODO: Make this a special exception type. Move message to resources.
+                throw new Exception("More than 1 objects have been found.");
             }
         }
 
-        public int[] GetLinkedDNTags(int dnTag, string attributeName)
+        public IEnumerable<int> GetLinkedDNTags(int dnTag, string attributeName)
         {
-            var result = new List<int>();
             SchemaAttribute attr = this.schema.FindAttribute(attributeName);
             if(!attr.LinkId.HasValue)
             {
-                // This is not a linked multivalue attribute.
                 //TODO: Throw a proper exception
-                throw new Exception();
-
+                // TODO: Check that attribute type is DN
+                throw new Exception("This is not a linked multivalue attribute.");
             }
             int linkId = attr.LinkId.Value;
             // Remove the rightmost bit that indicates if this is a forward link or a backlink.
@@ -62,9 +62,14 @@ namespace DSInternals.DataStore
             {
                 // TODO: Not deactivated?
                 int foundTag = (int)cursor.IndexRecord[backlinkDNCol];
-                result.Add(foundTag);
+                yield return foundTag;
             }
-            return result.ToArray();
+        }
+
+        public IEnumerable<byte[]> GetDNBinaryValues(int dnTag, string attributeName)
+        {
+            // TODO: Implement DN-Binary attribute value retrieval from linktable.
+            throw new NotImplementedException();
         }
 
         public void Dispose()

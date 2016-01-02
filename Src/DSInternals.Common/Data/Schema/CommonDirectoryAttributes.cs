@@ -59,6 +59,7 @@
         public const string OrganizationalUnitName = "ou";
         public const string ParentDNTag = "PDNT";
         public const string PEKList = "pekList";
+        public const string PEKChangeInterval = "pekKeyChangeInterval";
         public const string PrimaryGroupId = "primaryGroupID";
         public const int PrimaryGroupIdId = 589922;
         public const string PropertyMetaData = "replPropertyMetaData";

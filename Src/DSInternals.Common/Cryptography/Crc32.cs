@@ -1,6 +1,9 @@
 ﻿
 namespace DSInternals.Common.Cryptography
 {
+    /// <summary>
+    /// Implements the CRC32 algorithm, as used by AD replication.
+    /// </summary>
     public static class Crc32
     {
         private static readonly uint[] crcTable = new uint[] {
@@ -76,7 +79,7 @@ namespace DSInternals.Common.Cryptography
             uint crc = uint.MaxValue;
             for(int i = 0; i < buffer.Length; i++)
             {
-                crc = crcTable[(crc ^ buffer[i]) & 0xFF] ^ (crc >> 8);
+                crc = crcTable[(crc ^ buffer[i]) & byte.MaxValue] ^ (crc >> 8 );
             }
             return crc ^ uint.MaxValue;
         }
