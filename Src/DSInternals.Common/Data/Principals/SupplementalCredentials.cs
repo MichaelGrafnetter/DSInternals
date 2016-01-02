@@ -21,6 +21,7 @@
         private const string PropertyWDigest = "Primary:WDigest";
         private const string PropertyCleartext = "Primary:CLEARTEXT";
         private const string PropertyKerberosNew = "Primary:Kerberos-Newer-Keys";
+        private const string PropertyNTLMStrongHash = "Primary:NTLM-Strong-NTOWF";
         public KerberosCredential Kerberos
         {
             get;
@@ -37,6 +38,15 @@
             private set;
         }
         public string ClearText
+        {
+            get;
+            private set;
+        }
+
+        /// <remarks>
+        /// New in Windows Server 2016 TP4.
+        /// </remarks>
+        public byte[] NTLMStrongHash
         {
             get;
             private set;
@@ -117,6 +127,10 @@
                                 // A list of the credential types that are stored as properties in decryptedSecret.
                                 // We can safely ignore them.
                                 break;
+                            case PropertyNTLMStrongHash:
+                                // This is a new thing in Windows Server 2016 and it is currently not clear how to interpret the value.
+                                this.NTLMStrongHash = decodedPropertyValue;
+                                break;
                             default:
                                 // Unknown package. This should never happen
                                 break;
@@ -126,7 +140,6 @@
                     byte reserved5 = reader.ReadByte();
                 }
             }
-
         }
         private static byte[][] ReadWDiget(byte[] blob)
         {

@@ -224,6 +224,12 @@
                 <PropertyName>ClearText</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>NTLMStrongHash: </Text>
+              <ExpressionBinding>
+                <PropertyName>NTLMStrongHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <NewLine />
               <Text>Kerberos:</Text>
               <NewLine />
               <Frame>

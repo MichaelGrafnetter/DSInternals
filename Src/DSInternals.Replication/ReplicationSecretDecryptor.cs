@@ -23,7 +23,7 @@ namespace DSInternals.Replication
         {
             get
             {
-                return SecretEncryptionType.ReplicationSecretWithSalt;
+                return SecretEncryptionType.ReplicationRC4WithSalt;
             }
         }
 

@@ -1,3 +1,6 @@
+Version 2.10
+- Added support for the NTLM-Strong-NTOWF package in Supplemental Credentials (new in Windows Server 2016 TP4)
+
 Version 2.9
 - The Get-BootKey cmdlet now supports online boot key retrieval
 - The PBKDF2.NET library has been replaced by CryptSharp

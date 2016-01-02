@@ -40,7 +40,7 @@ namespace DSInternals.DataStore
         {
             get
             {
-                return SecretEncryptionType.DatabaseSecretWithSalt;
+                return SecretEncryptionType.DatabaseRC4WithSalt;
             }
         }
 
@@ -78,7 +78,7 @@ namespace DSInternals.DataStore
                 {
                     // TODO: Validate encryption type
                     SecretEncryptionType encryptionType = (SecretEncryptionType) reader.ReadUInt16();
-                    if(encryptionType != SecretEncryptionType.DatabaseSecretWithSalt)
+                    if(encryptionType != SecretEncryptionType.DatabaseRC4WithSalt)
                     {
                         // TODO: Extract as resource
                         var ex = new FormatException("Unsupported encryption type.");
@@ -167,7 +167,7 @@ namespace DSInternals.DataStore
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     // Header
-                    writer.Write((uint)PekListVersion.Current);
+                    writer.Write((uint)PekListVersion.W2k);
                     writer.Write((uint)flags);
                     writer.Write(salt);
                     // Data
@@ -201,7 +201,7 @@ namespace DSInternals.DataStore
                 using (BinaryReader reader = new BinaryReader(stream))
                 {
                     PekListVersion version = (PekListVersion) reader.ReadUInt32();
-                    if(version != PekListVersion.Current)
+                    if(version != PekListVersion.W2k)
                     {
                         // TODO: Extract as resource.
                         throw new FormatException("Unsupported PEK list version.");
