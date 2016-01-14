@@ -1,5 +1,9 @@
 Version 2.10
 - Added support for the NTLM-Strong-NTOWF package in Supplemental Credentials (new in Windows Server 2016 TP4)
+- Added support for initial databases
+- Added partial support for ADAM/LDS databases
+- The Get-ADDBSchemaAttribute now shows attribute OIDs
+- Fixed a bug in Exchange schema loading
 
 Version 2.9
 - The Get-BootKey cmdlet now supports online boot key retrieval
