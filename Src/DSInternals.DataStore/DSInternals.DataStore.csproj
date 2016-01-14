@@ -32,6 +32,10 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Esent.Interop, Version=1.9.3.2, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\ManagedEsent.1.9.3.2\lib\net40\Esent.Interop.dll</HintPath>
       <Private>True</Private>
@@ -58,6 +62,7 @@
     <Compile Include="Enums\DatabaseState.cs" />
     <Compile Include="Enums\PekListFlags.cs" />
     <Compile Include="Enums\PekListVersion.cs" />
+    <Compile Include="PrefixMap.cs" />
     <Compile Include="SchemaAttribute.cs" />
     <Compile Include="Extensions\CursorExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

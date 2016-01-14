@@ -4,6 +4,7 @@ using System.IO;
 using DSInternals.Common.Cryptography;
 using DSInternals.Common;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace DSInternals.DataStore
 {
@@ -40,8 +41,21 @@ namespace DSInternals.DataStore
         {
             get
             {
-                return SecretEncryptionType.DatabaseRC4WithSalt;
+                switch(this.Version)
+                {
+                    case PekListVersion.W2016:
+                        return SecretEncryptionType.DatabaseVNext;
+                    case PekListVersion.W2k:
+                    default:
+                        return SecretEncryptionType.DatabaseRC4WithSalt;
+                }
             }
+        }
+
+        public PekListVersion Version
+        {
+            get;
+            private set;
         }
 
         public DateTime LastGenerated
@@ -52,57 +66,65 @@ namespace DSInternals.DataStore
 
         public DataStoreSecretDecryptor(byte[] encryptedPEKListBlob, byte[] bootKey)
         {
-            // Decrypt
-            byte[] decryptedPekList = DecryptPekList(encryptedPEKListBlob, bootKey);
+            // Decrypt and set version
+            byte[] decryptedPekList = this.DecryptPekList(encryptedPEKListBlob, bootKey);
             // Parse the inner structure
-            this.Initialize(decryptedPekList);
+            this.ParsePekList(decryptedPekList);
         }
 
-        public DataStoreSecretDecryptor(byte[] cleartextPEKListBlob)
+        public DataStoreSecretDecryptor(byte[] cleartextPEKListBlob, PekListVersion version)
         {
-            this.Initialize(cleartextPEKListBlob);
+            this.Version = version;
+            this.ParsePekList(cleartextPEKListBlob);
         }
 
         public override byte[] DecryptSecret(byte[] blob)
         {
-            // Blob structure: Algorithm ID (2B), Flags (2B), PEK ID (4B), Salt (16B), Encrypted secret (rest)
-            const int EncryptedDataOffset = 2 * sizeof(short) + sizeof(uint) + SaltSize;
-            Validator.AssertMinLength(blob, EncryptedDataOffset + 1, "blob");
+            // Blob structure Win2k:   Algorithm ID (2B), Flags (2B), PEK ID (4B), Salt (16B), Encrypted secret (rest)
+            const int EncryptedDataOffsetDES = 2 * sizeof(short) + sizeof(uint) + SaltSize;
 
-            // Extract salt and the actual encrypted data from the blob
-            byte[] salt;
+            // Validate (DES has shorter blob)
+            Validator.AssertMinLength(blob, EncryptedDataOffsetDES + 1, "blob");
+
+            // Extract salt and metadata from the blob
             byte[] decryptionKey;
-            using (Stream stream = new MemoryStream(blob))
+            byte[] encryptedSecret;
+            byte[] salt;
+            SecretEncryptionType encryptionType;
+            using (var stream = new MemoryStream(blob, false))
             {
-                using (BinaryReader reader = new BinaryReader(stream))
+                using (var reader = new BinaryReader(stream))
                 {
-                    // TODO: Validate encryption type
-                    SecretEncryptionType encryptionType = (SecretEncryptionType) reader.ReadUInt16();
-                    if(encryptionType != SecretEncryptionType.DatabaseRC4WithSalt)
-                    {
-                        // TODO: Extract as resource
-                        var ex = new FormatException("Unsupported encryption type.");
-                        ex.Data.Add("SecretEncryptionType", encryptionType);
-                        throw ex;
-                    }
-                    
+                    encryptionType = (SecretEncryptionType) reader.ReadUInt16();
                     // The flags field is actually not used by AD and is always 0.
                     uint flags = reader.ReadUInt16();
                     uint keyId = reader.ReadUInt32();
                     // TODO: Check if the key exists
                     decryptionKey = this.Keys[keyId];
                     salt = reader.ReadBytes(SaltSize);
+                    // Read the underlaying stream to end
+                    encryptedSecret = stream.ReadToEnd();    
                 }
             }
-            // Perform decryption           
-            byte[] encryptedSecret = blob.Cut(EncryptedDataOffset);
-            byte[] decryptedSecret = DecryptUsingRC4(encryptedSecret, salt, decryptionKey);
+            // Decrypt
+            byte[] decryptedSecret;
+            switch (encryptionType)
+            {
+                case SecretEncryptionType.DatabaseRC4WithSalt:
+                    decryptedSecret = DecryptUsingRC4(encryptedSecret, salt, decryptionKey);
+                    break;
+                default:
+                    // TODO: Extract as resource
+                    var ex = new FormatException("Unsupported encryption type.");
+                    ex.Data.Add("SecretEncryptionType", encryptionType);
+                    throw ex;
+            }
+
             return decryptedSecret;
         }
 
-        private void Initialize(byte[] cleartextBlob)
+        private void ParsePekList(byte[] cleartextBlob)
         {
-            // TODO: Check min blob length
             // Blob structure: Signature (16B), Last Generated (8B), Current Key (4B), Key Count (4B), { Key Id (4B), Key (16B) } * Key Count
             const int minBlobLength = 16 + sizeof(long) + 3 * sizeof(uint) + KeySize;
             Validator.AssertMinLength(cleartextBlob, minBlobLength, "cleartextBlob");
@@ -167,6 +189,7 @@ namespace DSInternals.DataStore
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     // Header
+                    // TODO: Write version corresponding to the DB or original version!!!
                     writer.Write((uint)PekListVersion.W2k);
                     writer.Write((uint)flags);
                     writer.Write(salt);
@@ -187,7 +210,7 @@ namespace DSInternals.DataStore
 
         }
 
-        private static byte[] DecryptPekList(byte[] encryptedBlob, byte[] bootKey)
+        private byte[] DecryptPekList(byte[] encryptedBlob, byte[] bootKey)
         {
             // Blob structure: Version (4B), Flags (4B), Salt (16B), Encrypted PEK List
             Validator.AssertMinLength(encryptedBlob, EncryptedPekListOffset + 1, "blob");
@@ -196,28 +219,33 @@ namespace DSInternals.DataStore
             // Parse blob
             byte[] salt;
             PekListFlags flags;
-            using (Stream stream = new MemoryStream(encryptedBlob))
+            byte[] encryptedPekList;
+            using (var stream = new MemoryStream(encryptedBlob))
             {
-                using (BinaryReader reader = new BinaryReader(stream))
+                using (var reader = new BinaryReader(stream))
                 {
-                    PekListVersion version = (PekListVersion) reader.ReadUInt32();
-                    if(version != PekListVersion.W2k)
-                    {
-                        // TODO: Extract as resource.
-                        throw new FormatException("Unsupported PEK list version.");
-                    }
+                    this.Version = (PekListVersion) reader.ReadUInt32();
                     flags = (PekListFlags) reader.ReadUInt32();
                     salt = reader.ReadBytes(SaltSize);
+                    encryptedPekList = stream.ReadToEnd();
                 }
             }
 
-            byte[] encryptedPekList = encryptedBlob.Cut(EncryptedPekListOffset);
+            // Decrypt 
             byte[] decryptedPekList;
             switch(flags)
             {
                 case PekListFlags.Encrypted:
                     // Decrypt
-                    decryptedPekList = DecryptUsingRC4(encryptedPekList, salt, bootKey, BootKeySaltHashRounds);
+                    switch(this.Version)
+                    {
+                        case PekListVersion.W2k:
+                            decryptedPekList = DecryptUsingRC4(encryptedPekList, salt, bootKey, BootKeySaltHashRounds);
+                            break;
+                        default:
+                            // TODO: Extract as resource.
+                            throw new FormatException("Unsupported PEK list version.");
+                    }                    
                     break;
                 case PekListFlags.Clear:
                     // No decryption is needed. This is a very rare case.

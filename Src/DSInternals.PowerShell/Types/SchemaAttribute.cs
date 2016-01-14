@@ -22,6 +22,18 @@
             set;
         }
 
+        public int? InternalId
+        {
+            get;
+            set;
+        }
+
+        public string Oid
+        {
+            get;
+            set;
+        }
+
         public string Index
         {
             get;

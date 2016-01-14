@@ -133,26 +133,58 @@
 
         protected DirectorySecretDecryptor GetSecretDecryptor(byte[] bootKey)
         {
-            DirectorySecretDecryptor decryptor = null;
-            // TODO: Make this work for cleartext PEK lists, without requiring the Boot Key.
-            if (bootKey != null)
+            if (bootKey == null && ! this.context.DomainController.IsADAM)
             {
-                // Load the PEK List attribute from the domain object and decrypt it using Boot Key.
-                // HACK: Save the current cursor position, because it is shared.
-                var originalLocation = this.dataTableCursor.SaveLocation();
-                try
-                {
-                    var domain = this.FindObject(this.context.DomainController.DomainNamingContextDNT.Value);
-                    byte[] encryptedPEK;
-                    domain.ReadAttribute(CommonDirectoryAttributes.PEKList, out encryptedPEK);
-                    decryptor = new DataStoreSecretDecryptor(encryptedPEK, bootKey);
-                }
-                finally
-                {
-                    this.dataTableCursor.RestoreLocation(originalLocation);
-                }
+                // This is an AD DS DB, so the BootKey is stored in the registry. Stop processing if it is not provided.
+                return null;
+
             }
-            return decryptor;
+            if(this.context.DomainController.State == DatabaseState.Boot)
+            {
+                // The initial DB definitely does not contain any secrets.
+                return null;
+            }
+           
+            // HACK: Save the current cursor position, because it is shared.
+            var originalLocation = this.dataTableCursor.SaveLocation();
+            try
+            {
+                int pekListDNT;
+                if(this.context.DomainController.IsADAM)
+                {
+                    // This is a AD LDS DB, so the BootKey is stored directly in the DB.
+                    // Retrieve the pekList attribute of the root object:
+                    byte[] rootPekList;
+                    var rootObject = this.FindObject(ADConstants.RootDNTag);
+                    rootObject.ReadAttribute(CommonDirectoryAttributes.PEKList, out rootPekList);
+
+                    // Retrieve the pekList attribute of the schema object:
+                    byte[] schemaPekList;
+                    var schemaObject = this.FindObject(this.context.DomainController.SchemaNamingContextDNT);
+                    schemaObject.ReadAttribute(CommonDirectoryAttributes.PEKList, out schemaPekList);
+
+                    // Combine these things together into the BootKey/SysKey
+                    bootKey = BootKeyRetriever.GetBootKey(rootPekList, schemaPekList);
+
+                    // The actual PEK list is located on the Configuration NC object.
+                    pekListDNT = this.context.DomainController.ConfigurationNamingContextDNT;
+                }
+                else
+                {
+                    // This is an AD DS DB, so the PEK list is located on the Domain NC object.
+                    pekListDNT = this.context.DomainController.DomainNamingContextDNT.Value;
+                }
+
+                // Load the PEK List attribute from the holding object and decrypt it using Boot Key.
+                var pekListHolder = this.FindObject(pekListDNT);
+                byte[] encryptedPEK;
+                pekListHolder.ReadAttribute(CommonDirectoryAttributes.PEKList, out encryptedPEK);
+                return new DataStoreSecretDecryptor(encryptedPEK, bootKey);
+            }
+            finally
+            {
+                this.dataTableCursor.RestoreLocation(originalLocation);
+            }
         }
         
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)

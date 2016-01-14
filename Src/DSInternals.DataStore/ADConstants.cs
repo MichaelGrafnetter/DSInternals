@@ -10,6 +10,7 @@ namespace DSInternals.DataStore
         public const int GeneralizedTimeCoefficient = 10000000;
         public const string EseBaseName = "edb";
         public const int EseLogFileSize = 10240;
+        public const int NotAnObjectDNTag = 1;
         public const int RootDNTag = 2;
     }
 }

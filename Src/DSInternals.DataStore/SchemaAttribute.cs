@@ -10,7 +10,6 @@
     //TODO: Rename Attribute to ActiveDirectorySchemaAttribute
     public class SchemaAttribute : ISchemaAttributeExt
     {
-        private const string syntaxOidFormat = "2.5.5.{0}";
         /// <summary>
         /// Gets the ldapDisplayName of the ActiveDirectorySchemaAttribute object.
         /// </summary>
@@ -27,11 +26,27 @@
             get;
             internal set;
         }
+
+        // Contains compressed OID
         public int? Id
         {
             get;
             internal set;
         }
+
+        // Corresponds to column name suffix
+        public int? InternalId
+        {
+            get;
+            internal set;
+        }
+
+        public string Oid
+        {
+            get;
+            internal set;
+        }
+
         public string ColumnName
         {
             get;
@@ -228,8 +243,7 @@
         {
             get
             {
-                int lastOctet = this.Syntax - AttributeSyntax.Undefined;
-                return String.Format(syntaxOidFormat, lastOctet);
+                return PrefixMap.GetAttributeSyntaxOid(this.Syntax);
             }
         }
 

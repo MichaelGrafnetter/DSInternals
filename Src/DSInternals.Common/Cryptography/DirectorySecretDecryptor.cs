@@ -1,5 +1,6 @@
 ﻿using DSInternals.Common.Interop;
 using System;
+using System.IO;
 using System.Security.Cryptography;
 
 namespace DSInternals.Common.Cryptography
@@ -60,6 +61,13 @@ namespace DSInternals.Common.Cryptography
             return result;
         }
 
+        protected static byte[] DecryptUsingDES(byte[] encryptedHash, int rid)
+        {
+            byte[] decryptedHash;
+            NativeMethods.RtlDecryptNtOwfPwdWithIndex(encryptedHash, rid, out decryptedHash);
+            return decryptedHash;
+        }
+
         protected static byte[] DecryptUsingRC4(byte[] data, byte[] salt, byte[] decryptionKey, int saltHashRounds = DefaultSaltHashRounds)
         {
             byte[] rc4Key = ComputeMD5(decryptionKey, salt, saltHashRounds);
@@ -76,34 +84,20 @@ namespace DSInternals.Common.Cryptography
 
         protected static byte[] ComputeMD5(byte[] key, byte[] salt, int saltHashRounds = DefaultSaltHashRounds)
         {
-            // TODO: Perform in a MD5 cycle
-            int bufferSize = key.Length + salt.Length * saltHashRounds;
-            byte[] buffer = new byte[bufferSize];
-            // Copy key to buffer
-            Buffer.BlockCopy((Array)key, 0, (Array)buffer, 0, key.Length);
-            // Copy salt to buffer saltHashRounds-times
-            for (int i = 0; i < saltHashRounds; i++)
+            // TODO: Test that saltHashRounds >= 1
+            using (var md5 = new MD5CryptoServiceProvider())
             {
-                int bufferOffset = key.Length + i * salt.Length;
-                Buffer.BlockCopy((Array)salt, 0, (Array)buffer, bufferOffset, salt.Length);
+                // Hash key
+                md5.TransformBlock(key, 0, key.Length, null, 0);
+                // Hash salt (saltHashRounds-1) times
+                for(int i = 1; i < saltHashRounds; i++)
+                {
+                    md5.TransformBlock(salt, 0, salt.Length, null, 0);
+                }
+                // Final salt hash iteration
+                md5.TransformFinalBlock(salt, 0, salt.Length);
+                return md5.Hash;
             }
-            return ComputeMD5(buffer);
-        }
-
-        private static byte[] ComputeMD5(byte[] data)
-        {
-            using (MD5CryptoServiceProvider cryptoServiceProvider = new MD5CryptoServiceProvider())
-            {
-                cryptoServiceProvider.ComputeHash(data);
-                return cryptoServiceProvider.Hash;
-            }
-        }
-
-        private static byte[] DecryptUsingDES(byte[] encryptedHash, int rid)
-        {
-            byte[] decryptedHash;
-            NativeMethods.RtlDecryptNtOwfPwdWithIndex(encryptedHash, rid, out decryptedHash);
-            return decryptedHash;
         }
     }
 }

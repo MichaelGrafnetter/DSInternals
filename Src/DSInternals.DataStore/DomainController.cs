@@ -44,8 +44,12 @@
             this.systemTableCursor.MoveToFirst();
             // Load attributes from the hiddentable:
             this.NTDSSettingsDNT = this.systemTableCursor.RetrieveColumnAsInt(ntdsSettingsCol).Value;
-            this.OSVersionMinor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMinorCol);
-            this.OSVersionMajor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMajorCol);
+            if(this.systemTableCursor.TableDefinition.Columns.Contains(osVersionMajorCol))
+            {
+                // Some databases like the initial adamntds.dit do not contain the OS Version
+                this.OSVersionMinor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMinorCol);
+                this.OSVersionMajor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMajorCol);
+            }
             this.epochCache = this.systemTableCursor.RetrieveColumnAsInt(epochCol);
             this.UsnAtIfm = this.systemTableCursor.RetrieveColumnAsLong(usnAtIfmCol);
             this.BackupExpiration = this.systemTableCursor.RetrieveColumnAsGeneralizedTime(backupExpirationCol);
@@ -72,12 +76,12 @@
                 string ntdsName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.CommonName));
 
                 // Retrieve Configuration Naming Context
-                int? configNamingContextDNT  = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextDNTag));
-                this.ConfigurationNamingContext = context.DistinguishedNameResolver.Resolve(configNamingContextDNT.Value);
+                this.ConfigurationNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextDNTag)).Value;
+                this.ConfigurationNamingContext = context.DistinguishedNameResolver.Resolve(this.ConfigurationNamingContextDNT);
 
                 // Retrieve Schema Naming Context
-                int? schemaNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.SchemaLocation));
-                this.SchemaNamingContext = context.DistinguishedNameResolver.Resolve(schemaNamingContextDNT.Value);
+                this.SchemaNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.SchemaLocation)).Value;
+                this.SchemaNamingContext = context.DistinguishedNameResolver.Resolve(this.SchemaNamingContextDNT);
 
                 // Goto DC object (parent of NTDS):
                 bool dcFound = dataTableCursor.GotoToParentObject(schema);
@@ -140,6 +144,18 @@
             private set;
         }
 
+        public int SchemaNamingContextDNT
+        {
+            get;
+            private set;
+        }
+
+        public int ConfigurationNamingContextDNT
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// Gets the operating system version of this domain controller.
         /// </summary>
@@ -171,7 +187,8 @@
         {
             get
             {
-                return this.DomainNamingContext.GetDnsName();
+                // DomainNamingContext in ADAM DB might be null.
+                return (this.DomainNamingContext != null) ? this.DomainNamingContext.GetDnsName() : null;
             }
         }
 

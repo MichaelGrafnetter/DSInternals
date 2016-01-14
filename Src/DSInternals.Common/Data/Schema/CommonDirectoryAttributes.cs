@@ -22,8 +22,11 @@
         public const string GivenName = "givenName";
         public const int GivenNameId = 42;
         public const string GovernsId = "governsID";
+        public const int GovernsIdId = 131094;
         public const string InstanceType = "instanceType";
         public const int InstanceTypeId = 131073;
+        public const string InternalId = "msDS-IntId";
+        public const int InternalIdId = 591540;
         public const string InvocationId = "invocationId";
         public const string IsDefunct = "isDefunct";
         public const string IsDeleted = "isDeleted";
@@ -49,7 +52,9 @@
         public const int NTHashHistoryId = 589918;
         public const int NTHashId = 589914;
         public const string ObjectCategory = "objectCategory";
+        public const int ObjectCategoryId = 590606;
         public const string ObjectClass = "objectClass";
+        public const int ObjectClassId = 0;
         public const string ObjectGUID = "objectGUID";
         public const string ObjectSid = "objectSid";
         public const int ObjectSidId = 589970;
@@ -60,6 +65,7 @@
         public const string ParentDNTag = "PDNT";
         public const string PEKList = "pekList";
         public const string PEKChangeInterval = "pekKeyChangeInterval";
+        public const string PrefixMap = "prefixMap";
         public const string PrimaryGroupId = "primaryGroupID";
         public const int PrimaryGroupIdId = 589922;
         public const string PropertyMetaData = "replPropertyMetaData";

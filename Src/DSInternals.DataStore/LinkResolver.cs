@@ -16,7 +16,10 @@ namespace DSInternals.DataStore
         private const string linkMetadataCol = "link_metadata";
         private const string linkDeletedTimeCol = "link_deltime";
         private const string linkDeactivatedTimeCol = "link_deactivetime";
-        private const string linkIndex = "link_present_active_index";
+        // Index of valid links post Recycle Bin feature
+        private const string linkIndex2008 = "link_present_active_index";
+        // Index of valid links before the Recycle Bin feature
+        private const string linkIndex2003 = "link_present_index";
 
         private Cursor cursor;
         private DirectorySchema schema;
@@ -25,7 +28,16 @@ namespace DSInternals.DataStore
         {
             this.schema = schema;
             this.cursor = database.OpenCursor(ADConstants.LinkTableName);
-            cursor.SetCurrentIndex(linkIndex);
+            if (this.cursor.TableDefinition.Indices.Contains(linkIndex2008))
+            {
+                this.cursor.SetCurrentIndex(linkIndex2008);
+            }
+            else
+            {
+                // Fallback to the old index if the newer one does not exist
+                cursor.SetCurrentIndex(linkIndex2003);
+            }
+
             // TODO: Load column ids instead of names
         }
 
@@ -33,7 +45,8 @@ namespace DSInternals.DataStore
         {
             try
             {
-                return this.GetLinkedDNTags(dnTag, attributeName).SingleOrDefault();
+                // Cast int to int? to force null as default value instead of 0
+                return this.GetLinkedDNTags(dnTag, attributeName).Cast<int?>().SingleOrDefault();
             }
             catch(InvalidOperationException)
             {

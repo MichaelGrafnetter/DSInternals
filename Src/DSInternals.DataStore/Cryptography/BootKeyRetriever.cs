@@ -9,6 +9,7 @@ namespace DSInternals.DataStore
     public static class BootKeyRetriever
     {
         public const int BootKeyLength = 16;
+        // AD DS Constants:
         private const string CurrentControlSetKey = "Select";
         private const string CurrentControlSetValue = "Current";
         private const string SystemKey = "SYSTEM";
@@ -16,6 +17,10 @@ namespace DSInternals.DataStore
         private const int DefaultControlSetId = 1;
         private static readonly string[] BootKeySubKeyNames = { "JD", "Skew1", "GBG", "Data" };
         private static readonly int[] KeyPermutation = { 8, 5, 4, 2, 11, 9, 13, 3, 0, 6, 1, 12, 14, 10, 15, 7 };
+        // AD LDS Constants:
+        private const int AdamPekListLength = 40;
+        private static readonly int[] AdamRootPekListPermutation = { 2, 4, 25, 9, 7, 27, 5, 11 };
+        private static readonly int[] AdamSchemaPekListPermutation = { 37, 2, 17, 36, 20, 11, 22, 7 };
 
         /// <summary>
         /// Gets the boot key from an offline SYSTEM registry hive.
@@ -48,6 +53,32 @@ namespace DSInternals.DataStore
                     return GetBootKey(system);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the boot key from the ADAM root and schema objects.
+        /// </summary>
+        /// <returns>Boot Key</returns>
+        public static byte[] GetBootKey(byte[] rootPekList, byte[] schemaPekList)
+        {
+            Validator.AssertLength(rootPekList, AdamPekListLength, "rootPekList");
+            Validator.AssertLength(rootPekList, AdamPekListLength, "schemaPekList");
+            
+            byte[] result = new byte[BootKeyLength];
+            
+            // Construct the first 8 bytes of bootkey:
+            for(int i = 0; i < AdamRootPekListPermutation.Length; i++)
+            {
+                result[i] = rootPekList[AdamRootPekListPermutation[i]];
+            }
+
+            // Construct the remaining 8 bytes of bootkey:
+            for (int i = 0; i < AdamSchemaPekListPermutation.Length; i++)
+            {
+                result[i+AdamRootPekListPermutation.Length] = schemaPekList[AdamSchemaPekListPermutation[i]];
+            }
+
+            return result;
         }
 
         private static byte[] GetBootKey(RegistryKey systemKey)

@@ -2,6 +2,7 @@
 {
     using CryptSharp.Utility;
     using System;
+    using System.IO;
     using System.Security.Principal;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -117,6 +118,18 @@
             byte[] result = new byte[count];
             Buffer.BlockCopy((Array)blob, offset, (Array)result, 0, count);
             return result;
+        }
+
+        public static byte[] ReadToEnd(this MemoryStream stream)
+        {
+            long remainingBytes = stream.Length - stream.Position;
+            if(remainingBytes > int.MaxValue)
+            {
+                throw new ArgumentOutOfRangeException("stream");
+            }
+            byte[] buffer = new byte[remainingBytes];
+            stream.Read(buffer, 0, (int)remainingBytes);
+            return buffer;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace DSInternals.Common.Data
             {
                 using (BinaryReader reader = new BinaryReader(stream))
                 {
-                    // This value MUST be set to 3.
+                    // TODO: This value MUST be set to 3.
                     short revision = reader.ReadInt16();
                     // This value MUST be zero and ignored on read.
                     this.Flags = reader.ReadInt16();
