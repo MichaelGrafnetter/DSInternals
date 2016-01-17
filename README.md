@@ -14,7 +14,9 @@ Quick Start Guide
 Continuous Integration
 ----------------------
 
-![Build Status](https://grafnetter.visualstudio.com/DefaultCollection/_apis/public/build/definitions/419499fa-9402-4b5b-96ad-1d9d235c1b8f/6/badge)
+| Compilation  |  Unit Tests |
+--- | ---
+![Build Status](https://grafnetter.visualstudio.com/DefaultCollection/_apis/public/build/definitions/419499fa-9402-4b5b-96ad-1d9d235c1b8f/6/badge) | ![Build Status](https://grafnetter.visualstudio.com/DefaultCollection/_apis/public/build/definitions/419499fa-9402-4b5b-96ad-1d9d235c1b8f/7/badge)
 
 Automatic builds are provided by [Visual Studio Team Services](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx).
 
