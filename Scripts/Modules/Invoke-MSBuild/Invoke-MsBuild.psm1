@@ -126,7 +126,7 @@ function Invoke-MsBuild
 	.NOTES
 	Name:   Invoke-MsBuild
 	Author: Daniel Schroeder (originally based on the module at http://geekswithblogs.net/dwdii/archive/2011/05/27/part-2-automating-a-visual-studio-build-with-powershell.aspx)
-	Version: 1.5
+	Version: 1.6.0
 #>
 	[CmdletBinding(DefaultParameterSetName="Wait")]
 	param
@@ -250,7 +250,7 @@ function Invoke-MsBuild
 		{
 			$buildCrashed = $true;
 			$errorMessage = $_
-			Write-Error ("Unexpect error occured while building ""$Path"": $errorMessage" );
+			Write-Error ("Unexpected error occurred while building ""$Path"": $errorMessage");
 		}
 
 		# If the build crashed, return that the build didn't succeed.
@@ -310,10 +310,12 @@ function Get-VisualStudioCommandPromptPath
 	$vs2010CommandPrompt = $env:VS100COMNTOOLS + "vcvarsall.bat"
 	$vs2012CommandPrompt = $env:VS110COMNTOOLS + "VsDevCmd.bat"
 	$vs2013CommandPrompt = $env:VS120COMNTOOLS + "VsDevCmd.bat"
+	$vs2015CommandPrompt = $env:VS140COMNTOOLS + "VsDevCmd.bat"
 
 	# Store the VS Command Prompt to do the build in, if one exists.
 	$vsCommandPrompt = $null
-	if (Test-Path $vs2013CommandPrompt) { $vsCommandPrompt = $vs2013CommandPrompt }
+	if (Test-Path $vs2015CommandPrompt) { $vsCommandPrompt = $vs2015CommandPrompt }
+	elseif (Test-Path $vs2013CommandPrompt) { $vsCommandPrompt = $vs2013CommandPrompt }
 	elseif (Test-Path $vs2012CommandPrompt) { $vsCommandPrompt = $vs2012CommandPrompt }
 	elseif (Test-Path $vs2010CommandPrompt) { $vsCommandPrompt = $vs2010CommandPrompt }
 
@@ -331,21 +333,12 @@ function Get-MsBuildPath
 	Gets the path to the latest version of MsBuild.exe. Throws an exception if MSBuild.exe is not found.
 #>
 
-	# Get the latest version of Visual Studio installed on this sytem.
-	$VsVersion = Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\VisualStudio\' | Where{$_ -match '[0-9].'} |sort pschildname -Descending | select -first 1 -ExpandProperty pschildname  
-
-	# MsBuild is included with Visual Studio instead of .Net as of VS 2013 (v12.0), so need to look in .Net framework path if they don't have at least VS 2013 installed.
-	if([version]$VsVersion -ge [version]"12.0")
-	{
-		$MsBuildVersion = $VsVersion
-	}
-	else
-	{
-		$MsBuildVersion = (Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' | sort pschildname -Descending | select -first 1 -ExpandProperty pschildname).Substring(1)
-	}
-
-	# Get the path to the directory that MSBuild is in.
-	$MsBuildDirectoryPath = ('HKLM:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\{0}' -f $MsBuildVersion) | Get-ItemProperty -Name 'MSBuildToolsPath' | Select -ExpandProperty 'MSBuildToolsPath'
+	# Get the path to the directory that the latest version of MSBuild is in.
+	$MsBuildToolsVersionsStrings = Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\' | Where-Object { $_ -match '[0-9]+\.[0-9]' } | Select-Object -ExpandProperty PsChildName
+	[double[]]$MsBuildToolsVersions = $MsBuildToolsVersionsStrings | ForEach-Object { [Convert]::ToDouble($_) }
+	$LargestMsBuildToolsVersion = $MsBuildToolsVersions | Sort-Object -Descending | Select-Object -First 1 
+	$MsBuildToolsVersionsKeyToUse = Get-Item -Path ('HKLM:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\{0:n1}' -f $LargestMsBuildToolsVersion)
+	$MsBuildDirectoryPath = $MsBuildToolsVersionsKeyToUse | Get-ItemProperty -Name 'MSBuildToolsPath' | Select -ExpandProperty 'MSBuildToolsPath'
 
 	if(!$MsBuildDirectoryPath)
 	{

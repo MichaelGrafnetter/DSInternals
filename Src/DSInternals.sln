@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configurat
 		Configuration\Common.vcxproj.props = Configuration\Common.vcxproj.props
 		Configuration\CommonAssemblyInfo.cs = Configuration\CommonAssemblyInfo.cs
 		Configuration\CommonAssemblyInfo.h = Configuration\CommonAssemblyInfo.h
+		Configuration\Local.testsettings = Configuration\Local.testsettings
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7E87272B-81F9-49FA-9C00-F368C0EC1E86}"
@@ -47,6 +48,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{A6D948F4-1847-47B5-8997-83EEBD971892}"
 	ProjectSection(SolutionItems) = preProject
 		..\Scripts\Build-Solution.ps1 = ..\Scripts\Build-Solution.ps1
+		..\Scripts\Make.ps1 = ..\Scripts\Make.ps1
+		..\Scripts\Pack-Release.ps1 = ..\Scripts\Pack-Release.ps1
+		..\Scripts\Publish-Release.ps1 = ..\Scripts\Publish-Release.ps1
+		..\Scripts\Restore-ReferencedPackages.ps1 = ..\Scripts\Restore-ReferencedPackages.ps1
+		..\Scripts\Run-Tests.ps1 = ..\Scripts\Run-Tests.ps1
 		..\Scripts\Sign-ReferencedPackages.ps1 = ..\Scripts\Sign-ReferencedPackages.ps1
 	EndProjectSection
 EndProject

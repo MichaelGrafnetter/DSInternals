@@ -47,6 +47,7 @@ namespace DSInternals.DataStore.Test
         public void BootKeyRetriever_Online()
         {
             byte[] bootKey = BootKeyRetriever.GetBootKey();
+            // Just test that the key has 16B.
             Assert.AreEqual(BootKeyRetriever.BootKeyLength, bootKey.Length);
         }
 

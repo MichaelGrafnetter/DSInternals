@@ -4,15 +4,16 @@
 Compiles the binaries from source codes.
 #>
 
-$solutionDir = Join-Path $PSScriptRoot '..\Src'
-$solutionFile = Join-Path $solutionDir 'DSInternals.sln'
+$rootDir = Split-Path $PSScriptRoot -Parent
+$solutionFile = Join-Path $rootDir 'Src\DSInternals.sln'
+$logRootDir = Join-Path $rootDir 'Build\log'
 
 # We need the Invoke-MSBuild module to always invoke the latest msbuild.exe.
 $modulePath = Join-Path $PSScriptRoot 'Modules\Invoke-MSBuild'
 Import-Module $modulePath -ErrorAction Stop
 
 $targets = 'Clean','Build'
-$configurations = 'Release' #,'Debug'
+$configurations = 'Release','Debug'
 $platforms = 'x86','x64'
 
 # Run all targets with all configurations and platforms
@@ -23,8 +24,11 @@ foreach($target in $targets)
         foreach($platform in $platforms)
         {
             Write-Host "$($target)ing $configuration|$platform..."
-            Invoke-MsBuild -MsBuildParameters "/target:$target /property:Configuration=$configuration;Platform=$platform" `
-                           -Path $solutionFile -ShowBuildWindow
+            $logDir = Join-Path $logRootDir "$configuration\$platform"
+            mkdir $logDir -Force | Out-Null
+            $result = Invoke-MsBuild -MsBuildParameters "/target:$target /property:Configuration=$configuration;Platform=$platform" `
+                           -Path $solutionFile -ShowBuildWindow -BuildLogDirectoryPath $logDir -KeepBuildLogOnSuccessfulBuilds
+            echo "Success: $result"
         }
     }
 }

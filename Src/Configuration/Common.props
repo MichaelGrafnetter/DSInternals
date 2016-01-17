@@ -2,11 +2,21 @@
 <!-- This file contains settings that are common for all projects. -->
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <!-- Common project output path -->
     <BuildPath>$(SolutionDir)..\Build</BuildPath>
     <BinPath>$(BuildPath)\bin\$(Configuration)\$(SolutionName)</BinPath>
     <ObjPath>$(BuildPath)\obj\$(Configuration)\$(MSBuildProjectName)</ObjPath>
   </PropertyGroup>
   <PropertyGroup>
+    <!-- Create hard links instead of copying referenced NuGet packages. -->
+    <CreateHardLinksIfPossible>true</CreateHardLinksIfPossible>
+    <CreateHardLinksForCopyFilesToOutputDirectoryIfPossible>true</CreateHardLinksForCopyFilesToOutputDirectoryIfPossible>
+    <CreateHardLinksForCopyAdditionalFilesIfPossible>true</CreateHardLinksForCopyAdditionalFilesIfPossible>
+    <CreateHardLinksForCopyLocalIfPossible>true</CreateHardLinksForCopyLocalIfPossible>
+    <CreateHardLinksForPublishFilesIfPossible>true</CreateHardLinksForPublishFilesIfPossible>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Signing configuration -->
     <DoSign Condition=" '$(Configuration)'=='Release' ">true</DoSign>
     <DoSign Condition=" '$(Configuration)'=='Debug' ">false</DoSign>
     <KeyPath>$(SolutionDir)\..\Keys</KeyPath>
