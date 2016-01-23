@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using DSInternals.Common.Data;
     using Microsoft.Database.Isam;
     using DSInternals.Common;
@@ -17,6 +18,7 @@
         private const string AttributeColIndexPrefix = "INDEX_";
         private const string SystemColSuffix = "_col";
         private const string SystemColIndexSuffix = "_index";
+        private const char IndexNameComponentSeparator = '_';
 
         private IDictionary<int, SchemaAttribute> attributesByInternalId;
         private IDictionary<string, SchemaAttribute> attributesByName;
@@ -382,7 +384,8 @@
             // Strip any suffix or prefix from index
             if(indexName.StartsWith(AttributeColIndexPrefix))
             {
-                indexName = indexName.Substring(AttributeColIndexPrefix.Length, indexName.Length - AttributeColIndexPrefix.Length);
+                // The index name can start with INDEX_ or INDEX_T_ (e.g. INDEX_T_9EBE46C2), so we get the last component
+                indexName = indexName.Split(IndexNameComponentSeparator).Last();
             }
             if(indexName.EndsWith(SystemColIndexSuffix))
             {
