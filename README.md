@@ -1,7 +1,7 @@
 DSInternals PowerShell Module
 =============================
 
-![MIT License](https://img.shields.io/badge/license-MIT-green.svg) ![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-blue.svg) ![Visual Studio 2013](https://img.shields.io/badge/Visual%20Studio-2013-383278.svg)
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg) ![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-blue.svg) ![Visual Studio 2013](https://img.shields.io/badge/Visual%20Studio-2013-383278.svg)
 
 Description
 ------------
