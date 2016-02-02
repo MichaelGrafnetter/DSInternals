@@ -1,4 +1,5 @@
 Version 2.11
+- The replication now works on x86, again.
 - Fixed a bug in temporary index loading.
 
 Version 2.10
