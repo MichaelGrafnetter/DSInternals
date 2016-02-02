@@ -69,9 +69,18 @@
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(string domainNamingContext)
         {
-            // TODO: Move schema as a property
+            // TODO: Move schema prom constructor to property?
             // TODO: Split this function into RSA and Legacy Part so that exception in one of them does not crash the whole process
             var schema = BasicSchemaFactory.CreateSchema();
+
+            // Fetch the legacy pointer first, because there is a higher chance that it is present than the RSA one.
+            string legacyPointerDN = DPAPIBackupKey.GetPreferredLegacyKeyPointerDN(domainNamingContext);
+            var legacyPointer = this.GetLSASecret(legacyPointerDN, schema);
+            yield return legacyPointer;
+
+            string legacyKeyDN = DPAPIBackupKey.GetKeyDN(legacyPointer.KeyId, domainNamingContext);
+            var legacyKey = this.GetLSASecret(legacyKeyDN, schema);
+            yield return legacyKey;
 
             string rsaPointerDN = DPAPIBackupKey.GetPreferredRSAKeyPointerDN(domainNamingContext);
             var rsaPointer = this.GetLSASecret(rsaPointerDN, schema);
@@ -80,14 +89,6 @@
             string rsaKeyDN = DPAPIBackupKey.GetKeyDN(rsaPointer.KeyId, domainNamingContext);
             var rsaKey = this.GetLSASecret(rsaKeyDN, schema);
             yield return rsaKey;
-
-            string legacyPointerDN = DPAPIBackupKey.GetPreferredLegacyKeyPointerDN(domainNamingContext);
-            var legacyPointer = this.GetLSASecret(legacyPointerDN, schema);
-            yield return legacyPointer;
-
-            string legacyKeyDN = DPAPIBackupKey.GetKeyDN(legacyPointer.KeyId, domainNamingContext);
-            var legacyKey = this.GetLSASecret(legacyKeyDN, schema);
-            yield return legacyKey;
         }
 
         private DPAPIBackupKey GetLSASecret(string distinguishedName, BasicSchema schema)
