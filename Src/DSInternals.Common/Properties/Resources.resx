@@ -132,6 +132,9 @@
   <data name="InvalidCRCMessage" xml:space="preserve">
     <value>CRC check failed.</value>
   </data>
+  <data name="NotHexStringMessage" xml:space="preserve">
+    <value>Parameter is not a hexadecimal string.</value>
+  </data>
   <data name="ObjectNotAccountMessage" xml:space="preserve">
     <value>Object is not an account.</value>
   </data>

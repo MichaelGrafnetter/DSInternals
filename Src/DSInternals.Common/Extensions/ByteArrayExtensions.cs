@@ -5,12 +5,9 @@
     using System.IO;
     using System.Security.Principal;
     using System.Text;
-    using System.Text.RegularExpressions;
 
     public static class ByteArrayExtensions
     {
-        private const string hexPattern = "^[0-9a-fA-F]+$";
-
         public static void ZeroFill(this byte[] array)
         {
             for (int i = 0; i < array.Length; i++)
@@ -27,12 +24,7 @@
             }
 
             // CryptSharp does not validate if the input, so we need to do it ourselves.
-            bool isHexString = Regex.IsMatch(hex, hexPattern);
-            if(!isHexString)
-            {
-                // TODO: Extract string as resource.
-                throw new ArgumentException("Parameter is not a hexadecimal string.");
-            }
+            Validator.AssertIsHex(hex, "hex");
 
             // Finally, do the conversion:
             return Base16Encoding.Hex.GetBytes(hex);

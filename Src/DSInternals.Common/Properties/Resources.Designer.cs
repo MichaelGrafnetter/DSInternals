@@ -106,6 +106,15 @@ namespace DSInternals.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter is not a hexadecimal string..
+        /// </summary>
+        public static string NotHexStringMessage {
+            get {
+                return ResourceManager.GetString("NotHexStringMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Object is not an account..
         /// </summary>
         public static string ObjectNotAccountMessage {

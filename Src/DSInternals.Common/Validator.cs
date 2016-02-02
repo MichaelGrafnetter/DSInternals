@@ -5,11 +5,14 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Security;
+using System.Text.RegularExpressions;
 
 namespace DSInternals.Common
 {
     public static class Validator
     {
+        private const string hexPattern = "^[0-9a-fA-F]+$";
+
         public static void AssertSuccess(NtStatus status)
         {
             if(status != NtStatus.Success)
@@ -23,6 +26,17 @@ namespace DSInternals.Common
             if (code != Win32ErrorCode.Success)
             {
                 throw new Win32Exception((int) code);
+            }
+        }
+
+        public static void AssertIsHex(string value, string paramName)
+        {
+            bool isHexString = Regex.IsMatch(value, hexPattern);
+            if (!isHexString)
+            {
+                var exception = new ArgumentException(Resources.NotHexStringMessage, paramName);
+                exception.Data.Add("Value", value);
+                throw exception;
             }
         }
 
