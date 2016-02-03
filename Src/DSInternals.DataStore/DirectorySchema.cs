@@ -33,11 +33,10 @@
             this.LoadAttributeIndices(dataTable.Indices);
             using (var cursor = database.OpenCursor(ADConstants.DataTableName))
             {
-                this.LoadAttributeProperties(cursor);
                 this.LoadClassList(cursor);
+                this.LoadAttributeProperties(cursor);
                 this.LoadPrefixMap(cursor);
             }
-
             // TODO: Load Ext-Int Map from hiddentable
         }
 
@@ -204,19 +203,20 @@
             Columnid isDefunctCol = this.LoadColumnIdByAttributeName(dataTableCursor, CommonDirectoryAttributes.IsDefunct);
 
             // Now traverse through all schema attributes and load their properties
-            dataTableCursor.CurrentIndex = this.attributesByInternalId[CommonDirectoryAttributes.ObjectClassId].Index;
-            dataTableCursor.FindRecords(MatchCriteria.EqualTo, Key.Compose(CommonDirectoryClasses.AttributeSchemaId));
+            // Use this filter: (objectCategory=attributeSchema)
+            dataTableCursor.CurrentIndex = this.attributesByInternalId[CommonDirectoryAttributes.ObjectCategoryId].Index;
+            dataTableCursor.FindRecords(MatchCriteria.EqualTo, Key.Compose(this.FindClassId(CommonDirectoryClasses.AttributeSchema)));
             while (dataTableCursor.MoveNext())
             {
                 int? internalId = dataTableCursor.RetrieveColumnAsInt(internalIdCol);
                 int attributeId = dataTableCursor.RetrieveColumnAsInt(attributeIdCol).Value;
-                // Some built-in attributes do not have internal id set, which meand it is equal to the public id
+                // Some built-in attributes do not have internal id set, which means it is equal to the public id
                 int id = internalId ?? attributeId;
                 SchemaAttribute attribute;
                 bool found = this.attributesByInternalId.TryGetValue(id, out attribute);
                 if (! found)
                 {
-                    // Load info about a new attribute
+                    // We are loading info about a new attribute
                     attribute = new SchemaAttribute();
                     attribute.InternalId = internalId;
                 }
@@ -254,25 +254,32 @@
             // Initialize the class list
             this.classesByName = new Dictionary<string, int>();
 
-            // Load column IDs
-            Columnid ldapDisplayNameCol = this.FindColumnId(CommonDirectoryAttributes.LDAPDisplayName);
+            // Load column IDs. We are in an early stage of schema loading, which means that we cannot search for non-system attributes by name. 
             Columnid dntCol = this.FindColumnId(CommonDirectoryAttributes.DNTag);
+            Columnid governsIdCol = this.attributesByInternalId[CommonDirectoryAttributes.GovernsIdId].ColumnID;
+            SchemaAttribute ldapDisplayNameAtt = this.attributesByInternalId[CommonDirectoryAttributes.LdapDisplayNameId];
 
-            // Search for all classes
-            dataTableCursor.CurrentIndex = this.FindIndexName(CommonDirectoryAttributes.ObjectClass);
-            dataTableCursor.FindRecords(MatchCriteria.EqualTo, Key.Compose(CommonDirectoryClasses.ClassSchemaId));
+            // Search for all classes using this heuristics: (&(ldapDisplayName=*)(governsId=*))
+            dataTableCursor.CurrentIndex = ldapDisplayNameAtt.Index;
             while (dataTableCursor.MoveNext())
             {
+                int? governsId = dataTableCursor.RetrieveColumnAsInt(governsIdCol);
+                if(!governsId.HasValue)
+                {
+                    // This is an attribute and not a class, so we skip to the next object.
+                    continue;
+                }
                 // TODO: Load more data about classes
-                int classId = dataTableCursor.RetrieveColumnAsDNTag(dntCol).Value;
-                string className = dataTableCursor.RetrieveColumnAsString(ldapDisplayNameCol);
-                classesByName.Add(className, classId);
+                int classDNT = dataTableCursor.RetrieveColumnAsDNTag(dntCol).Value;
+                string className = dataTableCursor.RetrieveColumnAsString(ldapDisplayNameAtt.ColumnID);
+                classesByName.Add(className, classDNT);
             }
         }
 
         private void LoadPrefixMap(Cursor dataTableCursor)
         {
-            // Find the Schema Naming Context by its objectCategory
+            // Find the Schema Naming Context using this filter: (objectCategory=dMD)
+            dataTableCursor.FindAllRecords();
             dataTableCursor.CurrentIndex = this.FindIndexName(CommonDirectoryAttributes.ObjectCategory);
             int schemaObjectCategoryId = this.FindClassId(CommonDirectoryClasses.Schema);
             bool schemaFound = dataTableCursor.GotoKey(Key.Compose(schemaObjectCategoryId));

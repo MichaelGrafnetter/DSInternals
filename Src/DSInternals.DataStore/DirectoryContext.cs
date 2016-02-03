@@ -51,9 +51,10 @@
                 // TODO: Add param explanations
                 isamParameters.LogFileSize = ADConstants.EseLogFileSize;
                 isamParameters.DeleteOutOfRangeLogs = true;
+                isamParameters.EnableIndexChecking = 1;
+                isamParameters.EnableIndexCleanup = true;
                 isamParameters.CircularLog = true;
                 // TODO: Configure additional ISAM parameters
-                // this.instance.IsamSystemParameters.EnableIndexChecking = true;
                 // this.instance.IsamSystemParameters.EnableOnlineDefrag = false;
                 // JET_paramDeleteOldLogs =  1
                 this.session = this.instance.CreateSession();

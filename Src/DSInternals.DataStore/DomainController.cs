@@ -46,12 +46,19 @@
             this.NTDSSettingsDNT = this.systemTableCursor.RetrieveColumnAsInt(ntdsSettingsCol).Value;
             if(this.systemTableCursor.TableDefinition.Columns.Contains(osVersionMajorCol))
             {
-                // Some databases like the initial adamntds.dit do not contain the OS Version
+                // Some databases like the initial adamntds.dit or ntds.dit on Windows Server 2003 do not contain the OS Version
                 this.OSVersionMinor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMinorCol);
                 this.OSVersionMajor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMajorCol);
             }
-            this.epochCache = this.systemTableCursor.RetrieveColumnAsInt(epochCol);
-            this.UsnAtIfm = this.systemTableCursor.RetrieveColumnAsLong(usnAtIfmCol);
+            if (this.systemTableCursor.TableDefinition.Columns.Contains(epochCol))
+            {
+                // This is a new feature since Windows Server 2008
+                this.epochCache = this.systemTableCursor.RetrieveColumnAsInt(epochCol);
+            }
+            if (this.systemTableCursor.TableDefinition.Columns.Contains(usnAtIfmCol))
+            {
+                this.UsnAtIfm = this.systemTableCursor.RetrieveColumnAsLong(usnAtIfmCol);
+            }
             this.BackupExpiration = this.systemTableCursor.RetrieveColumnAsGeneralizedTime(backupExpirationCol);
             this.BackupUsn = this.systemTableCursor.RetrieveColumnAsLong(backupUsnCol);
             this.State = (DatabaseState) this.systemTableCursor.RetrieveColumnAsInt(stateCol).Value;
@@ -212,6 +219,12 @@
             }
             set
             {
+                if(this.epochCache == null)
+                {
+                    // This is a legacy DB without the epoch_col, so we cannot change it.
+                    // TODO: Extract as a resource.
+                    throw new InvalidOperationException("Current database does not support epoch information.");
+                }
                 // Update table
                 this.systemTableCursor.BeginEditForUpdate();
                 this.systemTableCursor.EditRecord[epochCol] = value;
