@@ -35,9 +35,8 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <!-- The .snk file won't be published to codeplex. -->
-  <PropertyGroup Condition="Exists('$(SigningKeyPath)')">
+  <PropertyGroup Condition="'$(DoSign)' == 'true'" >
     <DefineConstants>$(DefineConstants);STRONG_NAMED</DefineConstants>
-    <DelaySign>true</DelaySign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
