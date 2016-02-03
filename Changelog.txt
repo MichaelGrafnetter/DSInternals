@@ -1,4 +1,5 @@
 Version 2.11
+- Added support for Windows Server 2003 R2.
 - The replication now works on x86, again.
 - Fixed a bug in temporary index loading.
 
