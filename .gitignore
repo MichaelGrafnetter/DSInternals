@@ -199,3 +199,6 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+
+# Visual C++ 2015 OpenDB
+*.VC.opendb

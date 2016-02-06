@@ -13,7 +13,6 @@ namespace DSInternals
 			using namespace DSInternals::Replication::Model;
 			using namespace System::Security::Principal;
 			using namespace Microsoft::Win32::SafeHandles;
-			using namespace std;
 			using namespace System;
 			using namespace System::Runtime::InteropServices;
 
