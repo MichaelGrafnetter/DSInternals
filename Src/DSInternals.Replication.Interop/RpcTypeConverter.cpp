@@ -15,7 +15,7 @@ namespace DSInternals
 		{
 			UUID RpcTypeConverter::ToUUID(Guid guid)
 			{
-				array<BYTE>^ guidData = guid.ToByteArray();
+				cli::array<BYTE>^ guidData = guid.ToByteArray();
 				pin_ptr<BYTE> data = &(guidData[0]);
 				return *(UUID *)data;
 			}

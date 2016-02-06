@@ -12,7 +12,6 @@ using namespace System::Reflection;
 using namespace System::Security::Principal;
 using namespace System::Runtime::InteropServices;
 using namespace Microsoft::Win32::SafeHandles;
-using namespace std;
 using namespace msclr::interop;
 
 namespace DSInternals
