@@ -285,7 +285,9 @@ namespace Microsoft.Database.Isam
                     JET_SESID sesid = database.IsamSession.Sesid;
 
                     // If we use the wide API (Vista+), then the temp table will be in UTF-16.
-                    Encoding encodingOfTextColumns = EsentVersion.SupportsVistaFeatures
+                    // Technically, this should have worked in Vista. But there was a bug, and
+                    // it was fixed after Windows 7.
+                    Encoding encodingOfTextColumns = EsentVersion.SupportsWindows8Features
                                                          ? Encoding.Unicode
                                                          : Encoding.ASCII;
 
