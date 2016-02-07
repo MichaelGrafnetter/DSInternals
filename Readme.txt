@@ -50,7 +50,7 @@ System Requirements
 -------------------
 
 - Windows PowerShell 3+ 64-bit
-- .NET Framework 4.5+
+- .NET Framework 4.5.1+
 
 The cmdlets have been tested on these operating systems:
 
@@ -60,7 +60,7 @@ Windows 10 64-bit
 Windows 8.1 64-bit
 Windows 7 64-bit
 
-The cmdlets working with the AD database do not support Windows 2000 domain functional level and require 2008+ schema.
+The cmdlets working with the AD database do not support Windows 2000 domain functional level.
 
 Installation
 ------------
