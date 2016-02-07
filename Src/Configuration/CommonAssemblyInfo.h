@@ -4,4 +4,4 @@ using namespace System::Reflection;
 [assembly:AssemblyCopyrightAttribute(L"Copyright © 2015-2016 Michael Grafnetter. All rights reserved.")];
 
 // Note: Do not forget to change the version in app.rc files.
-[assembly:AssemblyVersionAttribute("2.11.1")];
+[assembly:AssemblyVersionAttribute("2.12")];

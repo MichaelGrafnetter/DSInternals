@@ -1,3 +1,8 @@
+Version 2.12
+- Commandlets for ntds.dit manipulation now work on Windows 7 / Windows Server 2008 R2.
+- The module now requires .NET Framework 4.5.1 instead of 4.5.
+- Both Visual Studio 2013 and 2015 are now supported platforms.
+
 Version 2.11
 - Added support for Windows Server 2003 R2.
 - The replication now works on x86, again.
