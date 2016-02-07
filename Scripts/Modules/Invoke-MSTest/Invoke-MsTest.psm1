@@ -378,11 +378,11 @@ function Get-VsCommonTools
 	
 	.DESCRIPTION
 		Gets path to the current VS common tools. 
-		Current list supports VS12, VS11 and VS10, you may need to add to this list
+		Current list supports VS14, VS12, VS11 and VS10, you may need to add to this list
 		to satisfy your needs.
 	#>
 	
-	$VsCommonToolsPaths = @(@($env:VS120COMNTOOLS,$env:VS110COMNTOOLS,$env:VS100COMNTOOLS) | Where-Object {$_ -ne $null})
+	$VsCommonToolsPaths = @(@($env:VS140COMNTOOLS,$env:VS120COMNTOOLS,$env:VS110COMNTOOLS,$env:VS100COMNTOOLS) | Where-Object {$_ -ne $null})
 	if ($VsCommonToolsPaths.Count -ne 0) {$VsCommonToolsPaths[0]}
 	else {Write-Error "Unable to find Visual Studio Common Tool Path."}
 }
