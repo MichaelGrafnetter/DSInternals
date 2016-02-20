@@ -8,6 +8,7 @@
     using Microsoft.Database.Isam;
     using DSInternals.Common;
     using DSInternals.Common.Exceptions;
+    using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
     /// The ActiveDirectorySchema class represents the schema partition for a particular domain.
@@ -30,7 +31,7 @@
         {
             TableDefinition dataTable = database.Tables[ADConstants.DataTableName];
             this.LoadColumnList(dataTable.Columns);
-            this.LoadAttributeIndices(dataTable.Indices);
+            this.LoadAttributeIndices(dataTable.Indices2);
             using (var cursor = database.OpenCursor(ADConstants.DataTableName))
             {
                 this.LoadClassList(cursor);
@@ -128,15 +129,19 @@
             }
         }
 
-        private void LoadAttributeIndices(IndexCollection indices)
+        private void LoadAttributeIndices(IEnumerable<IndexInfo> indices)
         {
-            foreach (IndexDefinition index in indices)
+            //HACK: We are using low-level IndexInfo instead of high-level IndexCollection.
+            /* There is a bug in Isam IndexCollection enumerator, which causes it to loop indefinitely
+             * through the first few indices under some very rare circumstances. */
+            foreach (var index in indices)
             {
-                if (index.KeyColumns.Count == 1)
+                var segments = index.IndexSegments;
+                if (segments.Count == 1)
                 {
                     // We support only simple indexes
                     SchemaAttribute attr = FindAttributeByIndexName(index.Name);
-                    if(attr != null)
+                    if (attr != null)
                     {
                         // We found a single attribute to which this index corresponds
                         attr.Index = index.Name;
