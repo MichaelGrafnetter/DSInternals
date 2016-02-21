@@ -7,10 +7,15 @@
 
     public class DirectoryContext : IDisposable
     {
+        private const string JetInstanceName = "DSInternals";
+
         private IsamInstance instance;
         private IsamSession session;
         private IsamDatabase database;
         private string attachedDatabasePath;
+
+        private static readonly Version Win8Version = new Version(6, 2);
+        private static readonly Version Win81Version = new Version(6, 3);
 
         /// <summary>
         ///
@@ -24,7 +29,9 @@
                 // TODO: Extract as resource
                 throw new FileNotFoundException("The specified database file does not exist.", dbFilePath);
             }
-            int pageSize = DirectoryContext.GetDBPageSize(dbFilePath);
+
+            ValidateDatabaseState(dbFilePath);
+
             string dbDirectoryPath = Path.GetDirectoryName(dbFilePath);
             string checkpointDirectoryPath = dbDirectoryPath;
             string tempDirectoryPath = dbDirectoryPath;
@@ -42,9 +49,7 @@
             }
             // TODO: Exception handling?
             // HACK: IsamInstance constructor throws AccessDenied Exception when the path does not end with a backslash.
-            // TODO: Const isam instance name
-            string instanceName = "DSInternals";
-            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(logDirectoryPath), AddPathSeparator(tempDirectoryPath), ADConstants.EseBaseName, instanceName, readOnly, pageSize);
+            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(logDirectoryPath), AddPathSeparator(tempDirectoryPath), ADConstants.EseBaseName, JetInstanceName, readOnly, ADConstants.PageSize);
             try
             {
                 var isamParameters = this.instance.IsamSystemParameters;
@@ -194,20 +199,39 @@
             }
         }
 
-        private static int GetDBPageSize(string dbPath)
+        private static void ValidateDatabaseState(string dbFilePath)
         {
-
-            int pageSize;
-            Api.JetGetDatabaseFileInfo(dbPath, out pageSize, JET_DbInfo.PageSize);
-            return pageSize;
-        }
-
-        private static JET_dbstate GetDBState(string dbPath)
-        {
+            // Retrieve info about the DB (Win Version, Page Size, State,...)
             JET_DBINFOMISC dbInfo;
-            Api.JetGetDatabaseFileInfo(dbPath, out dbInfo, JET_DbInfo.Misc);
-            return dbInfo.dbstate;
-        }
+            Api.JetGetDatabaseFileInfo(dbFilePath, out dbInfo, JET_DbInfo.Misc);
 
+            if (dbInfo.dbstate != JET_dbstate.CleanShutdown)
+            {
+                // Database might be inconsistent
+                // TODO: Extract message as a recource
+                throw new InvalidDatabaseStateException("The database is not in a clean state. Try to recover it first by running the 'esentutl /r edb /d' command.", dbFilePath);
+            }
+            
+            // Get current Windows version and trim the build number
+            var currentWinVer = Environment.OSVersion.Version;
+            var currentWinVerTrimmed = new Version(currentWinVer.Major, currentWinVer.Minor);
+
+            // Get the version of Windows that has last modified this DIT file
+            var dbVersion = new Version(dbInfo.dwMajorVersion, dbInfo.dwMinorVersion);
+
+            // Now compare those 2 versions
+            int versionDiff = dbVersion.CompareTo(currentWinVerTrimmed);
+            if(versionDiff != 0)
+            {
+                // -1: The DB comes from an older OS
+                // +1: The DB comes from a newer system
+                //HACK: There is a bug in Esentutl on Windows 6.3. It incorrectly puts version 6.2 into the ntds.dit file.
+                if(!(dbVersion == Win8Version && currentWinVerTrimmed == Win81Version))
+                {
+                    // TODO: Extract message as a recource
+                    throw new InvalidDatabaseStateException("The database comes from a different OS. Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", dbFilePath);
+                }
+            }
+        }
     }
 }

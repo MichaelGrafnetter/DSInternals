@@ -55,6 +55,7 @@
     <Compile Include="Enums\DatabaseState.cs" />
     <Compile Include="Enums\PekListFlags.cs" />
     <Compile Include="Enums\PekListVersion.cs" />
+    <Compile Include="Exceptions\InvalidDatabaseStateException.cs" />
     <Compile Include="PrefixMap.cs" />
     <Compile Include="SchemaAttribute.cs" />
     <Compile Include="Extensions\CursorExtensions.cs" />

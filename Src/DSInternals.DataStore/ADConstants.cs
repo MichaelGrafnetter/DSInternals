@@ -9,7 +9,8 @@ namespace DSInternals.DataStore
         public const string SecurityDescriptorTableName = "sd_table";
         public const int GeneralizedTimeCoefficient = 10000000;
         public const string EseBaseName = "edb";
-        public const int EseLogFileSize = 10240;
+        public const int PageSize = 8192; // 8k
+        public const int EseLogFileSize = 10240; // 10M
         public const int NotAnObjectDNTag = 1;
         public const int RootDNTag = 2;
     }
