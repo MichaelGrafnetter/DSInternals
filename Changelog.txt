@@ -1,3 +1,8 @@
+Version 2.13
+- Fixed a rare bug which caused the database cmdlets to hang while loading indices.
+- Meaningful error messages are now displayed when a dirty or downlevel ntds.dit file is encountered.
+- The DSInternals.Replication library now supports incremental replication (not exposed through PowerShell).
+
 Version 2.12
 - Commandlets for ntds.dit manipulation now work on Windows 7 / Windows Server 2008 R2.
 - The module now requires .NET Framework 4.5.1 instead of 4.5.

@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.12'
+ModuleVersion = '2.13'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -114,8 +114,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Cmdlets for ntds.dit manipulation now work on Windows 7 / Windows Server 2008 R2.
-- The module now requires .NET Framework 4.5.1 instead of 4.5.
+- Fixed a rare bug which caused the database cmdlets to hang while loading indices.
+- Meaningful error messages are now displayed when a dirty or downlevel ntds.dit file is encountered.
 "@
     } # End of PSData hashtable
 
