@@ -12,6 +12,7 @@
     using System.Security.Principal;
     using DSInternals.Common.Interop;
     using DSInternals.Common.Cryptography;
+    using DSInternals.Common;
 
     public class DirectoryReplicationClient : IDisposable
     {
@@ -37,25 +38,34 @@
 
         public IEnumerable<DSAccount> GetAccounts(string domainNamingContext)
         {
-            ReplicationResult result;
-            // Set Schema
-            // TODO: Test bad cookie
+            Validator.AssertNotNullOrWhiteSpace(domainNamingContext, "domainNamingContext");
             ReplicationCookie cookie = new ReplicationCookie(domainNamingContext);
+            return GetAccounts(cookie);
+        }
+
+        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie cookie)
+        {
+            Validator.AssertNotNull(cookie, "cookie");
+            // Set Schema
             var schema = BasicSchemaFactory.CreateSchema();
+            ReplicationResult result;
             do
             {
                 result = this.drsConnection.ReplicateAllObjects(cookie);
                 foreach (var obj in result.Objects)
                 {
                     obj.Schema = schema;
-                    if(!obj.IsAccount)
+                    if (!obj.IsAccount)
                     {
                         continue;
                     }
                     var account = new DSAccount(obj, this.SecretDecryptor);
                     yield return account;
                 }
-                cookie = result.Cookie;
+                /* We are modifying the original cookie. Originally, the cookie was immutable,
+                   but the new value could not be returned because iterators do not support out/ref.
+                   This is probably a poor design and it might be done in a more elegant way. */
+                cookie.Assign(result.Cookie);
             } while (result.HasMoreData);
         }
 
