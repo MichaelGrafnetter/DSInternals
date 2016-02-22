@@ -14,5 +14,8 @@
     <releaseNotes>Initial NuGet release.</releaseNotes>
     <copyright>Copyright (c) 2015-2016 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security RPC SAMR</tags>
+    <references>
+      <reference file="DSInternals.SAM.dll" />
+    </references>
   </metadata>
 </package>

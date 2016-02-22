@@ -14,5 +14,8 @@
     <releaseNotes>Initial NuGet release.</releaseNotes>
     <copyright>Copyright (c) 2015-2016 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security NTDS</tags>
+    <references>
+      <reference file="DSInternals.DataStore.dll" />
+    </references>
   </metadata>
 </package>

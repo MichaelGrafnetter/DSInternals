@@ -14,6 +14,9 @@
     <releaseNotes>Initial NuGet release.</releaseNotes>
     <copyright>Copyright (c) 2015-2016 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security RPC DRSR</tags>
+    <references>
+      <reference file="DSInternals.Replication.dll" />
+    </references>
   </metadata>
   <files>
     <file src="..\..\Build\bin\Release\DSInternals\amd64\DSInternals.Replication.Interop.dll" target="lib\net451" />
