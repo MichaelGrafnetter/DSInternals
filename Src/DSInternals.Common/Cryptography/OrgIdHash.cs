@@ -1,5 +1,4 @@
-﻿using CryptSharp.Utility;
-using DSInternals.Common;
+﻿using DSInternals.Common;
 
 using System.Security;
 using System.Security.Cryptography;
@@ -16,6 +15,7 @@ namespace DSInternals.Common.Cryptography
         public const int HashSize = 32;
         private const int Iterations = 100;
         private const string HashFormat = "v1;PPH1_MD4,{0},{1},{2};";
+        private const string InternalHashFunction = "HMACSHA256";
 
         public static byte[] GenerateSalt()
         {
@@ -39,9 +39,8 @@ namespace DSInternals.Common.Cryptography
             Validator.AssertLength(salt, SaltSize, "salt");
             string hexHash = ntHash.ToHex(true);
             byte[] hexHashBytes = UnicodeEncoding.Unicode.GetBytes(hexHash);
-            // No need to call Dispose on HMACSHA256, because PBKDF2 does that.
-            var sha256 = new HMACSHA256(hexHashBytes);
-            byte[] orgIdHashBytes = Pbkdf2.ComputeDerivedKey(sha256, salt, Iterations, HashSize); 
+            var pbkdf2 = new Pbkdf2(hexHashBytes, salt, Iterations, InternalHashFunction);
+            byte[] orgIdHashBytes = pbkdf2.GetBytes(HashSize);
             return orgIdHashBytes;
         }
 

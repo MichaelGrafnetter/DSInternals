@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- NuGet workaround (it does not support passing variables into referenced projects) -->
+    <SolutionDir Condition="$(SolutionDir) == ''">..\</SolutionDir>
+    <Configuration Condition="$(Confiruration) == ''">Release</Configuration>
+  </PropertyGroup>
   <Import Project="$(SolutionDir)\Configuration\Common.vcxproj.props" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">

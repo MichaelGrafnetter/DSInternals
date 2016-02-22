@@ -1,6 +1,5 @@
 ﻿namespace DSInternals.Common
 {
-    using CryptSharp.Utility;
     using System;
     using System.IO;
     using System.Security.Principal;
@@ -8,6 +7,11 @@
 
     public static class ByteArrayExtensions
     {
+        private const string HexDigits = "0123456789ABCDEF";
+        private static readonly byte[] HexValues = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
+                                                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                                0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+
         public static void ZeroFill(this byte[] array)
         {
             for (int i = 0; i < array.Length; i++)
@@ -22,12 +26,18 @@
             {
                 return null;
             }
-
-            // CryptSharp does not validate if the input, so we need to do it ourselves.
+            // Test that input is a hex string
             Validator.AssertIsHex(hex, "hex");
 
             // Finally, do the conversion:
-            return Base16Encoding.Hex.GetBytes(hex);
+            byte[] bytes = new byte[hex.Length / 2];
+            for (int x = 0, i = 0; i < hex.Length; i += 2, x += 1)
+            {
+                bytes[x] = (byte)(HexValues[Char.ToUpper(hex[i + 0]) - '0'] << 4 |
+                                  HexValues[Char.ToUpper(hex[i + 1]) - '0']);
+            }
+
+            return bytes;
         }
 
         public static string ToHex(this byte[] bytes, bool caps = false)
@@ -36,15 +46,22 @@
             {
                 return null;
             }
-            string hex = Base16Encoding.Hex.GetString(bytes);
+
+            StringBuilder hex = new StringBuilder(bytes.Length * 2);
+            foreach(byte currentByte in bytes)
+            {
+                hex.Append(HexDigits[(int)(currentByte >> 4)]);
+                hex.Append(HexDigits[(int)(currentByte & 0xF)]);
+            }
+
             if (caps)
             {
-                // Base16Encoding returns uppercase string by default
-                return hex;
+                // Uppercase string is calculated by default
+                return hex.ToString();
             }
             else
             {
-                return hex.ToLower();
+                return hex.ToString().ToLower();
             }
         }
 
@@ -74,6 +91,22 @@
             byte temp = bytes[index1];
             bytes[index1] = bytes[index2];
             bytes[index2] = temp;
+        }
+
+        /// <summary>
+        /// Encodes an integer into a 4-byte array, in big endian.
+        /// </summary>
+        /// <param name="number">The integer to encode.</param>
+        /// <returns>Array of bytes, in big endian order.</returns>
+        public static byte[] GetBigEndianBytes(this uint number)
+        {
+            byte[] bytes = BitConverter.GetBytes(number);
+            if (BitConverter.IsLittleEndian)
+            {
+                bytes.SwapBytes(0, 3);
+                bytes.SwapBytes(1, 2);
+            }
+            return bytes;
         }
 
         public static SecurityIdentifier ToSecurityIdentifier(this byte[] binarySid, bool bigEndianRid = false)

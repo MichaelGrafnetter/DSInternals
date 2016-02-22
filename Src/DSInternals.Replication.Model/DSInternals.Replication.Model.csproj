@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- NuGet workaround (it does not support passing variables into referenced projects) -->
+    <SolutionDir Condition="$(SolutionDir) == ''">..\</SolutionDir>
+    <Configuration Condition="$(Confiruration) == ''">Release</Configuration>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(SolutionDir)\Configuration\Common.csproj.props" />
   <PropertyGroup>

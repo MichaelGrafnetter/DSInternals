@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>DSInternals.Replication</id>
+    <version>$version$</version>
+    <title>DSInternals Replication</title>
+    <authors>Michael Grafnetter</authors>
+    <owners>Michael Grafnetter</owners>
+    <licenseUrl>https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/MichaelGrafnetter/DSInternals/</projectUrl>
+    <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>DSInternals Replication Library</description>
+    <releaseNotes>Initial NuGet release.</releaseNotes>
+    <copyright>Copyright (c) 2015-2016 Michael Grafnetter. All rights reserved.</copyright>
+    <tags>ActiveDirectory Security RPC DRSR</tags>
+  </metadata>
+  <files>
+    <file src="..\..\Build\bin\Release\DSInternals\amd64\DSInternals.Replication.Interop.dll" target="lib\net451" />
+  </files>
+</package>

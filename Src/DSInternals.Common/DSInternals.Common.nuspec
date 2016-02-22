@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DSInternals.Common</id>
+    <version>$version$</version>
+    <title>DSInternals Common</title>
+    <authors>Michael Grafnetter</authors>
+    <owners>Michael Grafnetter</owners>
+    <licenseUrl>https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/MichaelGrafnetter/DSInternals/</projectUrl>
+    <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>DSInternals Common Library</description>
+    <releaseNotes>Initial NuGet release.</releaseNotes>
+    <copyright>Copyright (c) 2015-2016 Michael Grafnetter. All rights reserved.</copyright>
+    <tags>ActiveDirectory Security</tags>
+  </metadata>
+</package>

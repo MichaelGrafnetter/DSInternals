@@ -1,13 +1,10 @@
 ﻿using DSInternals.Common;
 using DSInternals.Common.Data;
-using Org.BouncyCastle.Asn1;
-using Org.BouncyCastle.Math;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DSInternals.DataStore
 {
@@ -164,22 +161,28 @@ namespace DSInternals.DataStore
         /*
          * The following function has been copied from Org.BouncyCastle.Asn1.DerObjectIdentifier.
          * We could not use it directly, because it is private and we do not want to use Reflection that much.
+         * Project site: http://www.bouncycastle.org/csharp/
          */
+        /// <summary>
+        /// Converts binary ASN1 encoded OID into string.
+        /// </summary>
+        /// <param name="bytes">ASN1 encoded OID</param>
+        /// <returns>OID string</returns>
         private static string MakeOidStringFromBytes(byte[] bytes)
         {
             StringBuilder objId = new StringBuilder();
             long value = 0;
-            BigInteger bigValue = null;
+            BigInteger bigValue = 0;
             bool first = true;
 
             for (int i = 0; i != bytes.Length; i++)
             {
-                int b = bytes[i];
+                int currentByte = bytes[i];
 
                 if (value <= LongLimit)
                 {
-                    value += (b & 0x7f);
-                    if ((b & 0x80) == 0)             // end of number reached
+                    value += (currentByte & 0x7f);
+                    if ((currentByte & 0x80) == 0)             // end of number reached
                     {
                         if (first)
                         {
@@ -211,28 +214,28 @@ namespace DSInternals.DataStore
                 }
                 else
                 {
-                    if (bigValue == null)
+                    if (bigValue.IsZero)
                     {
-                        bigValue = BigInteger.ValueOf(value);
+                        bigValue = value;
                     }
-                    bigValue = bigValue.Or(BigInteger.ValueOf(b & 0x7f));
-                    if ((b & 0x80) == 0)
+                    bigValue = bigValue | (currentByte & 0x7f);
+                    if ((currentByte & 0x80) == 0)
                     {
                         if (first)
                         {
                             objId.Append('2');
-                            bigValue = bigValue.Subtract(BigInteger.ValueOf(80));
+                            bigValue = bigValue - 80;
                             first = false;
                         }
 
                         objId.Append('.');
                         objId.Append(bigValue);
-                        bigValue = null;
+                        bigValue = 0;
                         value = 0;
                     }
                     else
                     {
-                        bigValue = bigValue.ShiftLeft(7);
+                        bigValue = bigValue << 7;
                     }
                 }
             }

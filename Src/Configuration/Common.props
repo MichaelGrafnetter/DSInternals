@@ -3,8 +3,8 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- Common project output path -->
-    <BuildPath>$(SolutionDir)..\Build</BuildPath>
-    <BinPath>$(BuildPath)\bin\$(Configuration)\$(SolutionName)</BinPath>
+    <BuildPath>$(SolutionDir)\..\Build</BuildPath>
+    <BinPath>$(BuildPath)\bin\$(Configuration)\DSInternals</BinPath>
     <ObjPath>$(BuildPath)\obj\$(Configuration)\$(MSBuildProjectName)</ObjPath>
   </PropertyGroup>
   <PropertyGroup>
