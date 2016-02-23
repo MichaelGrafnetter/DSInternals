@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DSInternals.SAM.nuspec" />
+    <None Include="package\install.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

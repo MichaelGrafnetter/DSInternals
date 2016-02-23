@@ -17,8 +17,14 @@
     <references>
       <reference file="DSInternals.Replication.dll" />
     </references>
+    <dependencies>
+      <!-- We need to force a specific version of protobuf-net, because the newer one requires NuGet 3 / VS 2015. -->
+      <dependency id="protobuf-net" version="2.0.0.668" />
+    </dependencies>
   </metadata>
   <files>
+    <!-- NuGet does not add the DSInternals.Replication.Interop.dll assembly to the package for some reason, so we need to force it. -->
     <file src="..\..\Build\bin\Release\DSInternals\amd64\DSInternals.Replication.Interop.dll" target="lib\net451" />
+    <file src="package\install.ps1" target="tools" />
   </files>
 </package>
