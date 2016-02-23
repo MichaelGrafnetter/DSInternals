@@ -220,16 +220,13 @@
             var dbVersion = new Version(dbInfo.dwMajorVersion, dbInfo.dwMinorVersion);
 
             // Now compare those 2 versions
-            int versionDiff = dbVersion.CompareTo(currentWinVerTrimmed);
-            if(versionDiff != 0)
+            if(dbVersion != currentWinVerTrimmed)
             {
-                // -1: The DB comes from an older OS
-                // +1: The DB comes from a newer system
                 //HACK: There is a bug in Esentutl on Windows 6.3. It incorrectly puts version 6.2 into the ntds.dit file.
                 if(!(dbVersion == Win8Version && currentWinVerTrimmed == Win81Version))
                 {
                     // TODO: Extract message as a recource
-                    throw new InvalidDatabaseStateException("The database comes from a different OS. Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", dbFilePath);
+                    throw new InvalidDatabaseStateException(String.Format("The database comes from a different Windows version ({0}). Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", dbVersion), dbFilePath);
                 }
             }
         }
