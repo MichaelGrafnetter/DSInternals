@@ -17,5 +17,5 @@ Get-ChildItem -Path $repoRoot -Filter *.nuspec -Recurse -File |
     ForEach-Object { $PSItem.FullName.Replace('.nuspec', '.csproj') } |
     ForEach-Object {
         $solutionFile = $PSItem
-        & $nuget pack $solutionFile -OutputDirectory $outputDir -IncludeReferencedProjects -Properties "Configuration=Release;Platform=x64;SolutionDir=$solutionDir" -Verbosity detailed        
+        & $nuget pack $solutionFile -OutputDirectory $outputDir -IncludeReferencedProjects -Properties "Configuration=Release;Platform=x64;SolutionDir=$solutionDir" -Verbosity detailed -NonInteractive
     }

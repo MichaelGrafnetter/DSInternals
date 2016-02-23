@@ -10,7 +10,8 @@
     <projectUrl>https://github.com/MichaelGrafnetter/DSInternals/</projectUrl>
     <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>DSInternals Security Accounts Manager Library</description>
+    <description>DSInternals SAM implements a client for the Security Accounts Manager Remote Protocol (SAM-R). It can be used to import password hashes into Active Directory.</description>
+    <summary>DSInternals SAM implements a client for the Security Accounts Manager Remote Protocol (SAM-R).</summary>
     <releaseNotes>Initial NuGet release.</releaseNotes>
     <copyright>Copyright (c) 2015-2016 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security RPC SAMR</tags>

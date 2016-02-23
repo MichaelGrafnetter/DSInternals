@@ -10,12 +10,14 @@
     <projectUrl>https://github.com/MichaelGrafnetter/DSInternals/</projectUrl>
     <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>DSInternals Replication Library</description>
+    <description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</description>
+    <summary>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R).</summary>
     <releaseNotes>Initial NuGet release.</releaseNotes>
     <copyright>Copyright (c) 2015-2016 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security RPC DRSR</tags>
     <references>
       <reference file="DSInternals.Replication.dll" />
+      <reference file="DSInternals.Replication.Model.dll" />
     </references>
     <dependencies>
       <!-- We need to force a specific version of protobuf-net, because the newer one requires NuGet 3 / VS 2015. -->

@@ -6,15 +6,19 @@ Compiles the binaries from source codes.
 
 $rootDir = Split-Path $PSScriptRoot -Parent
 $solutionFile = Join-Path $rootDir 'Src\DSInternals.sln'
-$logRootDir = Join-Path $rootDir 'Build\log'
+$buildDir = Join-Path $rootDir 'Build'
+$logRootDir = Join-Path $buildDir 'log'
 
 # We need the Invoke-MSBuild module to always invoke the latest msbuild.exe.
 $modulePath = Join-Path $PSScriptRoot 'Modules\Invoke-MSBuild'
 Import-Module $modulePath -ErrorAction Stop
 
-$targets = 'Clean','Build'
-$configurations = 'Release','Debug'
+$targets = 'Build' # 'Clean'
+$configurations = 'Release' # 'Debug'
 $platforms = 'x86','x64'
+
+# Delete the entire Build directory
+del $buildDir -Recurse -Force
 
 # Run all targets with all configurations and platforms
 foreach($target in $targets)
