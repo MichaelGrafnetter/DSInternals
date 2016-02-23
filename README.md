@@ -1,12 +1,11 @@
-DSInternals PowerShell Module
-=============================
+DSInternals PowerShell Module and Framework
+===========================================
 
-![MIT License](https://img.shields.io/badge/License-MIT-green.svg) ![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg) ![Visual Studio 2013 | 2015](https://img.shields.io/badge/Visual%20Studio-2013%20|%202015-383278.svg) ![.NET Framework 4.5.1+](https://img.shields.io/badge/.NET%20Framework-4.5.1%2B-007FFF.svg)
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg) ![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg) ![.NET Framework 4.5.1+](https://img.shields.io/badge/.NET%20Framework-4.5.1%2B-007FFF.svg) ![Visual Studio 2013 | 2015](https://img.shields.io/badge/Visual%20Studio-2013%20|%202015-383278.svg)
 
-Description
-------------
-
-The DSInternals PowerShell Module exposes several internal and undocumented features of Active Directory.
+The DSInternals project consists of these two parts:
+- The [DSInternals Framework](https://www.nuget.org/profiles/MichaelGrafnetter) exposes several internal and undocumented features of Active Directory and can be used from any .NET application.
+- The [DSInternals PowerShell Module](https://www.powershellgallery.com/packages/DSInternals/) provides easy-to-use cmdlets that are built on top of the Framework. 
 
 Quick Start Guide
 -----------------
