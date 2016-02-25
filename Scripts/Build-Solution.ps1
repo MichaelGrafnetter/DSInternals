@@ -18,7 +18,10 @@ $configurations = 'Release' # 'Debug'
 $platforms = 'x86','x64'
 
 # Delete the entire Build directory
-del $buildDir -Recurse -Force
+if(Test-Path $buildDir)
+{
+    del $buildDir -Recurse -Force
+}
 
 # Run all targets with all configurations and platforms
 foreach($target in $targets)

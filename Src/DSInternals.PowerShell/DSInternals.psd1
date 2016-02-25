@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.13'
+ModuleVersion = '2.13.1'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -114,8 +114,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed a rare bug which caused the database cmdlets to hang while loading indices.
-- Meaningful error messages are now displayed when a dirty or downlevel ntds.dit file is encountered.
+- Fixed a bug regarding incorrect OS version detection.
 "@
     } # End of PSData hashtable
 

@@ -14,11 +14,8 @@
         private IsamDatabase database;
         private string attachedDatabasePath;
 
-        private static readonly Version Win8Version = new Version(6, 2);
-        private static readonly Version Win81Version = new Version(6, 3);
-
         /// <summary>
-        ///
+        /// Creates a new Active Directory database context.
         /// </summary>
         /// <param name="dbPath">dbFilePath must point to the DIT file on the local computer.</param>
         /// <param name="logPath">The path should point to a writeable folder on the local computer, where ESE log files will be created. If not specified, then temp folder will be used.</param>
@@ -210,24 +207,6 @@
                 // Database might be inconsistent
                 // TODO: Extract message as a recource
                 throw new InvalidDatabaseStateException("The database is not in a clean state. Try to recover it first by running the 'esentutl /r edb /d' command.", dbFilePath);
-            }
-            
-            // Get current Windows version and trim the build number
-            var currentWinVer = Environment.OSVersion.Version;
-            var currentWinVerTrimmed = new Version(currentWinVer.Major, currentWinVer.Minor);
-
-            // Get the version of Windows that has last modified this DIT file
-            var dbVersion = new Version(dbInfo.dwMajorVersion, dbInfo.dwMinorVersion);
-
-            // Now compare those 2 versions
-            if(dbVersion != currentWinVerTrimmed)
-            {
-                //HACK: There is a bug in Esentutl on Windows 6.3. It incorrectly puts version 6.2 into the ntds.dit file.
-                if(!(dbVersion == Win8Version && currentWinVerTrimmed == Win81Version))
-                {
-                    // TODO: Extract message as a recource
-                    throw new InvalidDatabaseStateException(String.Format("The database comes from a different Windows version ({0}). Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", dbVersion), dbFilePath);
-                }
             }
         }
     }
