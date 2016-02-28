@@ -26,7 +26,7 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.UserPrincipalNameId, CommonDirectoryAttributes.UserPrincipalName, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.PrimaryGroupIdId, CommonDirectoryAttributes.PrimaryGroupId, AttributeSyntax.Int));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CurrentValueId, CommonDirectoryAttributes.CurrentValue, AttributeSyntax.OctetString));
-
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.SecurityDescriptorId, CommonDirectoryAttributes.SecurityDescriptor, AttributeSyntax.SecurityDescriptor));
             
             return new BasicSchema(attributes);
         }

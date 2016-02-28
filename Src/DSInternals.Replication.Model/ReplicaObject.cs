@@ -1,13 +1,11 @@
 ﻿namespace DSInternals.Replication.Model
 {
-    using DSInternals.Common.Cryptography;
     using DSInternals.Common.Data;
     using System;
     using System.Security.AccessControl;
     using System.Security.Principal;
     using System.Text;
 
-    // TODO: IDisposable?
     public class ReplicaObject : DirectoryObject
     {
         private string distinguishedName;
@@ -56,14 +54,15 @@
             get;
             private set;
         }
-        // TODO: Remove hasValue returns
+
         protected bool HasAttribute(int attributeId)
         {
             return this.Attributes.ContainsKey(attributeId);
         }
-        // TODO: Read multiple values
-        protected bool ReadAttribute(int attributeId, out byte[][] values)
+
+        protected void ReadAttribute(int attributeId, out byte[][] values)
         {
+            values = null;
             ReplicaAttribute attribute;
             bool hasAttribute = this.Attributes.TryGetValue(attributeId, out attribute);
             if (hasAttribute)
@@ -72,73 +71,60 @@
                 if (hasValue)
                 {
                     values = attribute.Values;
-                    return true;
                 }
             }
-            values = null;
-            return false;
         }
 
-        protected bool ReadAttribute(int attributeId, out byte[] value)
+        protected void ReadAttribute(int attributeId, out byte[] value)
         {
-            return this.ReadAttribute(attributeId, out value, 0);
+            this.ReadAttribute(attributeId, out value, 0);
         }
 
-        protected bool ReadAttribute(int attributeId, out byte[] value, int valueIndex)
+        protected void ReadAttribute(int attributeId, out byte[] value, int valueIndex)
         {
             byte[][] values;
-            bool hasValue = this.ReadAttribute(attributeId, out values);
-            if(hasValue && values.Length > valueIndex)
-            {
-                value = values[valueIndex];
-                return true;
-            }
-            value = null;
-            return false;
-        }
-        protected bool ReadAttribute(int attributeId, out int? value)
-        {
-            byte[] binaryValue;
-            bool hasValue = this.ReadAttribute(attributeId, out binaryValue);
-            value = hasValue ? BitConverter.ToInt32(binaryValue, 0) : (int?)null;
-            return hasValue;
+            this.ReadAttribute(attributeId, out values);
+            bool containsValue = values != null && values.Length > valueIndex;
+            value = containsValue ? values[valueIndex] : null;
         }
 
-        protected bool ReadAttribute(int attributeId, out long? value)
+        protected void ReadAttribute(int attributeId, out int? value)
         {
             byte[] binaryValue;
-            bool hasValue = this.ReadAttribute(attributeId, out binaryValue);
-            value = hasValue ? BitConverter.ToInt64(binaryValue, 0) : (long?)null;
-            return hasValue;
+            this.ReadAttribute(attributeId, out binaryValue);
+            value = (binaryValue != null) ? BitConverter.ToInt32(binaryValue, 0) : (int?)null;
         }
 
-        protected bool ReadAttribute(int attributeId, out string value)
+        protected void ReadAttribute(int attributeId, out long? value)
         {
             byte[] binaryValue;
-            bool hasValue = this.ReadAttribute(attributeId, out binaryValue);
-            value = hasValue ? Encoding.Unicode.GetString(binaryValue) : null;
-            return hasValue;
+            this.ReadAttribute(attributeId, out binaryValue);
+            value = (binaryValue != null) ? BitConverter.ToInt64(binaryValue, 0) : (long?)null;
         }
-        protected bool ReadAttribute(int attributeId, out SecurityIdentifier value)
+
+        protected void ReadAttribute(int attributeId, out string value)
         {
             byte[] binaryValue;
-            bool hasValue = this.ReadAttribute(attributeId, out binaryValue);
-            value = hasValue ? new SecurityIdentifier(binaryValue, 0) : null;
-            return hasValue;
+            this.ReadAttribute(attributeId, out binaryValue);
+            value = (binaryValue != null) ? Encoding.Unicode.GetString(binaryValue) : null;
         }
-        protected bool ReadAttribute(int attributeId, out SamAccountType? value)
+        protected void ReadAttribute(int attributeId, out SecurityIdentifier value)
+        {
+            byte[] binaryValue;
+            this.ReadAttribute(attributeId, out binaryValue);
+            value = (binaryValue != null) ? new SecurityIdentifier(binaryValue, 0) : null;
+        }
+        protected void ReadAttribute(int attributeId, out SamAccountType? value)
         {
             int? numericValue;
-            bool hasValue = this.ReadAttribute(attributeId, out numericValue);
-            value = hasValue ? (SamAccountType)numericValue.Value : (SamAccountType?)null;
-            return hasValue;
+            this.ReadAttribute(attributeId, out numericValue);
+            value = numericValue.HasValue ? (SamAccountType)numericValue.Value : (SamAccountType?)null;
         }
-        protected bool ReadAttribute(int attributeId, out bool value)
+        protected void ReadAttribute(int attributeId, out bool value)
         {
             int? numericValue;
-            bool hasValue = this.ReadAttribute(attributeId, out numericValue);
-            value = hasValue ? numericValue.Value != 0 : false;
-            return hasValue;
+            this.ReadAttribute(attributeId, out numericValue);
+            value = numericValue.HasValue ? numericValue.Value != 0 : false;
         }
 
         public override bool HasAttribute(string name)
@@ -179,8 +165,15 @@
 
         public override void ReadAttribute(string name, out RawSecurityDescriptor value)
         {
-            // TODO: Implement SD retrieval
-            value = null;
+            int attributeId = this.Schema.FindAttributeId(name);
+            this.ReadAttribute(attributeId, out value);
+        }
+
+        protected void ReadAttribute(int attributeId, out RawSecurityDescriptor value)
+        {
+            byte[] binarySecurityDescriptor;
+            this.ReadAttribute(attributeId, out binarySecurityDescriptor);
+            value = (binarySecurityDescriptor != null) ? new RawSecurityDescriptor(binarySecurityDescriptor, 0) : null;
         }
 
         protected override bool HasBigEndianRid
