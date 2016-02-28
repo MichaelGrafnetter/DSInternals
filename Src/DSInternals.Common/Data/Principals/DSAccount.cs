@@ -1,8 +1,9 @@
 ﻿namespace DSInternals.Common.Data
 {
     using DSInternals.Common.Cryptography;
-    using System;
-    using System.Security.Principal;
+using System;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
     public class DSAccount
     {
@@ -14,6 +15,7 @@
         private string upn;
         private bool isDeleted;
         private SecurityIdentifier[] sidHistory;
+        private RawSecurityDescriptor securityDescriptor;
         private DateTime? lastLogon;
 
         public DSAccount(DirectoryObject dsObject, DirectorySecretDecryptor pek)
@@ -49,6 +51,9 @@
 
             // Surname:
             dsObject.ReadAttribute(CommonDirectoryAttributes.Surname, out this.surname);
+
+            // Security Descriptor:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out this.securityDescriptor);
 
             // Enabled:
             // TODO: Move to DirectoryObject?
@@ -149,6 +154,17 @@
             get
             {
                 return this.sidHistory;
+            }
+        }
+
+        /// <summary>
+        /// Gets the security descriptor of the object.
+        /// </summary>
+        public RawSecurityDescriptor SecurityDescriptor
+        {
+            get
+            {
+                return this.securityDescriptor;
             }
         }
 

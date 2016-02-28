@@ -4,6 +4,7 @@
     using DSInternals.Common.Data;
     using Microsoft.Database.Isam;
     using System;
+    using System.Security.AccessControl;
     using System.Security.Principal;
 
     public sealed class DatastoreObject : DirectoryObject
@@ -108,6 +109,21 @@
         {
             Columnid columnId = this.context.Schema.FindColumnId(name);
             value = this.cursor.RetrieveColumnAsLong(columnId);
+        }
+
+        public override void ReadAttribute(string name, out RawSecurityDescriptor value)
+        {
+            byte[] binarySecurityDescriptorId;
+            // The value is stored as 8 bytes instead of 64-bit integer
+            this.ReadAttribute(name, out binarySecurityDescriptorId);
+
+            if (binarySecurityDescriptorId == null)
+            {
+                value = null;
+                return;
+            }
+            long securityDescriptorId = BitConverter.ToInt64(binarySecurityDescriptorId, 0);
+            value = this.context.SecurityDescriptorRersolver.GetDescriptor(securityDescriptorId);
         }
 
         public void ReadAttribute(string name, out AttributeMetadataCollection value)

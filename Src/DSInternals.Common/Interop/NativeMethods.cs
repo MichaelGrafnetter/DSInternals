@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using Microsoft.Win32.SafeHandles;
+﻿using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -78,7 +77,7 @@ namespace DSInternals.Common.Interop
         /// <summary>
         /// This function upper cases the specified unicode source string 
         /// and then converts it into an oem string. The translation is done with respect
-        /// to the OEM code page (OCP). 
+        /// to the OEM code page (OCP). ma
         /// </summary>
         /// <param name="destinationString">Returns an oem string that is equivalent to the unicode source string. The maximum length field is only set if AllocateDestinationString is TRUE.</param>
         /// <param name="sourceString">Supplies the unicode source string that is to be converted to oem.</param>
@@ -211,5 +210,23 @@ namespace DSInternals.Common.Interop
         [DllImport(Mpr, CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern Win32ErrorCode WNetCancelConnection2([MarshalAs(UnmanagedType.LPWStr)] string name, NetCancelOptions flags, [MarshalAs(UnmanagedType.Bool)] bool force);
 
+
+        [DllImport(Advapi, CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool ConvertStringSecurityDescriptorToSecurityDescriptor(string stringSecurityDescriptor, uint stringSDRevision, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] out byte[] securityDescriptor, out uint securityDescriptorSize);
+
+        internal static Win32ErrorCode ConvertStringSecurityDescriptorToSecurityDescriptor(string stringSecurityDescriptor, uint stringSDRevision, out byte[] securityDescriptor)
+        {
+            uint securityDescriptorSize;
+            bool result = ConvertStringSecurityDescriptorToSecurityDescriptor(stringSecurityDescriptor, stringSDRevision, out securityDescriptor, out securityDescriptorSize);
+            if(result)
+            {
+                return Win32ErrorCode.Success;
+            }
+            else
+            {
+                return (Win32ErrorCode)Marshal.GetLastWin32Error();
+            }
+        }
     }
 }

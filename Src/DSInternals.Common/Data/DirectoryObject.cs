@@ -1,9 +1,10 @@
 ﻿namespace DSInternals.Common.Data
 {
     using DSInternals.Common.Cryptography;
-using System;
-using System.Linq;
-using System.Security.Principal;
+    using System;
+    using System.Linq;
+    using System.Security.AccessControl;
+    using System.Security.Principal;
 
     public abstract class DirectoryObject
     {
@@ -31,6 +32,8 @@ using System.Security.Principal;
         public abstract void ReadAttribute(string name, out int? value);
         public abstract void ReadAttribute(string name, out long? value);
         public abstract void ReadAttribute(string name, out string value);
+        public abstract void ReadAttribute(string name, out RawSecurityDescriptor value);
+
         public abstract string DistinguishedName
         {
             get;

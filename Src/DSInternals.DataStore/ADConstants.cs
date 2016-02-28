@@ -13,5 +13,6 @@ namespace DSInternals.DataStore
         public const int EseLogFileSize = 10240; // 10M
         public const int NotAnObjectDNTag = 1;
         public const int RootDNTag = 2;
+        public const int RootSecurityDescriptorId = 1;
     }
 }

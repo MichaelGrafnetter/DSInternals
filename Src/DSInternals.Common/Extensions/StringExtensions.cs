@@ -1,6 +1,6 @@
-﻿
-using System.IO;
+﻿using DSInternals.Common.Interop;
 using System.Security;
+using System.Security.AccessControl;
 namespace DSInternals.Common
 {
     public static class StringExtensions
@@ -30,6 +30,15 @@ namespace DSInternals.Common
             }
             output.MakeReadOnly();
             return output;
+        }
+
+        public static byte[] SddlToBinary(this string securityDescriptor)
+        {
+            Validator.AssertNotNullOrWhiteSpace(securityDescriptor, "securityDescriptor");
+            byte[] binarySecurityDescriptor;
+            Win32ErrorCode result = NativeMethods.ConvertStringSecurityDescriptorToSecurityDescriptor(securityDescriptor, GenericSecurityDescriptor.Revision, out binarySecurityDescriptor);
+            Validator.AssertSuccess(result);
+            return binarySecurityDescriptor;
         }
     }
 }

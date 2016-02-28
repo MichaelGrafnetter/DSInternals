@@ -439,6 +439,16 @@
                 <PropertyName>Description</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>SecurityDescriptor: </Text>
+              <ExpressionBinding>
+                <ScriptBlock>$_.SecurityDescriptor.ControlFlags</ScriptBlock>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Owner: </Text>
+              <ExpressionBinding>
+                <ScriptBlock>$_.SecurityDescriptor.Owner</ScriptBlock>
+              </ExpressionBinding>
+              <NewLine />
               <Text>NTHash: </Text>
               <ExpressionBinding>
                 <PropertyName>NTHash</PropertyName>

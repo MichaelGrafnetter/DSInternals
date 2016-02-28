@@ -80,6 +80,8 @@
         public const int SamAccountTypeId = 590126;
         public const string SchemaLocation = "dMDLocation";
         public const string SearchFlags = "searchFlags";
+        public const string SecurityDescriptor = "nTSecurityDescriptor";
+        public const int SecurityDescriptorId = 131353;
         public const string ServerReference = "serverReference";
         public const string SchemaGuid = "schemaIDGUID";
         public const string SIDHistory = "sIDHistory";

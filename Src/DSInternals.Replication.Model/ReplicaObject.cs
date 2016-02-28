@@ -3,6 +3,7 @@
     using DSInternals.Common.Cryptography;
     using DSInternals.Common.Data;
     using System;
+    using System.Security.AccessControl;
     using System.Security.Principal;
     using System.Text;
 
@@ -174,6 +175,12 @@
         {
             int attributeId = this.Schema.FindAttributeId(name);
             this.ReadAttribute(attributeId, out value);
+        }
+
+        public override void ReadAttribute(string name, out RawSecurityDescriptor value)
+        {
+            // TODO: Implement SD retrieval
+            value = null;
         }
 
         protected override bool HasBigEndianRid
