@@ -409,6 +409,11 @@
                 <PropertyName>Enabled</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>AdminCount: </Text>
+              <ExpressionBinding>
+                <PropertyName>AdminCount</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
               <Text>Deleted: </Text>
               <ExpressionBinding>
                 <PropertyName>Deleted</PropertyName>

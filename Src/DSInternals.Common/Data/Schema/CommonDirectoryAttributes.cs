@@ -2,6 +2,8 @@
 {
     public static class CommonDirectoryAttributes
     {
+        public const string AdminCount = "adminCount";
+        public const int AdminCountId = 589974;
         public const string AttributeId = "attributeID";
         public const int AttributeIdId = 131102;
         public const string AttributeOmSyntax = "oMSyntax";

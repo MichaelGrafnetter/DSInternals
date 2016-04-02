@@ -14,6 +14,7 @@ using System.Security.Principal;
         private string samAccountName;
         private string upn;
         private bool isDeleted;
+        private bool adminCount;
         private SecurityIdentifier[] sidHistory;
         private RawSecurityDescriptor securityDescriptor;
         private DateTime? lastLogon;
@@ -54,6 +55,9 @@ using System.Security.Principal;
 
             // Security Descriptor:
             dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out this.securityDescriptor);
+
+            // AdminCount (Although the schema defines it as Int32, it can only have values 0 and 1, so we directly convert it to bool)
+            dsObject.ReadAttribute(CommonDirectoryAttributes.AdminCount, out this.adminCount);
 
             // Enabled:
             // TODO: Move to DirectoryObject?
@@ -293,6 +297,20 @@ using System.Security.Principal;
             get;
             private set;
         }
+
+        /// <summary>
+        /// Indicates that a given object has had its ACLs changed to a more secure value
+        /// by the system because it was a member of one of the administrative groups
+        /// (directly or transitively).
+        /// </summary>
+        public bool AdminCount
+        {
+            get
+            {
+                return this.adminCount;
+            }
+        }
+
         /// <summary>
         /// Gets the account's password in Windows NT operating system one-way format (OWF).
         /// </summary>
