@@ -44,7 +44,7 @@ namespace DSInternals.DataStore
                 switch(this.Version)
                 {
                     case PekListVersion.W2016:
-                        return SecretEncryptionType.DatabaseVNext;
+                        return SecretEncryptionType.DatabaseAES;
                     case PekListVersion.W2k:
                     default:
                         return SecretEncryptionType.DatabaseRC4WithSalt;
@@ -82,13 +82,16 @@ namespace DSInternals.DataStore
         {
             // Blob structure Win2k:   Algorithm ID (2B), Flags (2B), PEK ID (4B), Salt (16B), Encrypted secret (rest)
             const int EncryptedDataOffsetDES = 2 * sizeof(short) + sizeof(uint) + SaltSize;
-
+            // Blob structure Win2016: Algorithm ID (2B), Flags (2B), PEK ID (4B), Salt (16B), Secret Length (4B), Encrypted secret (rest)
+            const int EncryptedDataOffsetAES = 2 * sizeof(short) + SaltSize + sizeof(ulong);
+            
             // Validate (DES has shorter blob)
             Validator.AssertMinLength(blob, EncryptedDataOffsetDES + 1, "blob");
 
             // Extract salt and metadata from the blob
             byte[] decryptionKey;
             byte[] encryptedSecret;
+            int secretLength = 0;
             byte[] salt;
             SecretEncryptionType encryptionType;
             using (var stream = new MemoryStream(blob, false))
@@ -102,6 +105,11 @@ namespace DSInternals.DataStore
                     // TODO: Check if the key exists
                     decryptionKey = this.Keys[keyId];
                     salt = reader.ReadBytes(SaltSize);
+                    if(encryptionType == SecretEncryptionType.DatabaseAES)
+                    {
+                        // AES data is padded, so the actual length is provided
+                        secretLength = reader.ReadInt32();
+                    }
                     // Read the underlaying stream to end
                     encryptedSecret = stream.ReadToEnd();    
                 }
@@ -112,6 +120,10 @@ namespace DSInternals.DataStore
             {
                 case SecretEncryptionType.DatabaseRC4WithSalt:
                     decryptedSecret = DecryptUsingRC4(encryptedSecret, salt, decryptionKey);
+                    break;
+                case SecretEncryptionType.DatabaseAES:
+                    byte[] decryptedSecretWithPadding = DecryptUsingAES(encryptedSecret, salt, decryptionKey);
+                    decryptedSecret = decryptedSecretWithPadding.Cut(0, secretLength);
                     break;
                 default:
                     // TODO: Extract as resource
@@ -241,6 +253,9 @@ namespace DSInternals.DataStore
                     {
                         case PekListVersion.W2k:
                             decryptedPekList = DecryptUsingRC4(encryptedPekList, salt, bootKey, BootKeySaltHashRounds);
+                            break;
+                        case PekListVersion.W2016:
+                            decryptedPekList = DecryptUsingAES(encryptedPekList, salt, bootKey);
                             break;
                         default:
                             // TODO: Extract as resource.

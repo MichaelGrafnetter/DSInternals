@@ -22,9 +22,9 @@
         ReplicationRC4WithSalt = 0x12,
 
         /// <summary>
-        /// Database secret encryption using PEK with salt.
+        /// Database secret encryption using PEK and AES.
         /// </summary>
         /// <remarks>Used since Windows Server 2016 TP4.</remarks>
-        DatabaseVNext = 0x13
+        DatabaseAES = 0x13
     }
 }

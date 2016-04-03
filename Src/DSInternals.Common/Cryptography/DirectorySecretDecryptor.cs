@@ -82,6 +82,29 @@ namespace DSInternals.Common.Cryptography
             return DecryptUsingRC4(data, salt, encryptionKey, saltHashRounds);
         }
 
+        protected static byte[] DecryptUsingAES(byte[] data, byte[] iv, byte[] key)
+        {
+            using(var aes = AesManaged.Create())
+            {
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.Zeros;
+                using(var decryptor = aes.CreateDecryptor(key, iv))
+                {
+                    using (var inputStream = new MemoryStream(data, false))
+                    {
+                        using (var cryptoStream = new CryptoStream(inputStream, decryptor, CryptoStreamMode.Read))
+                        {
+                            using(var outputStream = new MemoryStream(data.Length))
+                            {
+                                cryptoStream.CopyTo(outputStream);
+                                return outputStream.ToArray();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         protected static byte[] ComputeMD5(byte[] key, byte[] salt, int saltHashRounds = DefaultSaltHashRounds)
         {
             // TODO: Test that saltHashRounds >= 1
