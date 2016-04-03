@@ -6,9 +6,7 @@
 // - The RPC_UNICODE_STRING has been copied from ms-dtyp.idl.
 // - Custom drsr_imports.idl is used to import the ntdsapi.h file. 
 // - Types that are already defined in ntdsapi.h have been dropped from this IDL in order to prevent redefinitions.
-// This IDL file corresponds to Windows Server 2012 R2. Newer servers will add more calls, so this IDL will have to be updated.
-
-// TODO: Find a way to get #include "stdafx.h" into the generated C code so that we do not need to use Force Include
+// This IDL file corresponds to Windows Server 2016 TP4. Newer servers will add more calls, so this IDL will have to be updated.
 
 import "wtypesbase.idl";
 import "drsr_imports.idl";
@@ -160,12 +158,29 @@ interface drsuapi
 	} VALUE_META_DATA_EXT_V1;
 
 	typedef struct {
+		DSTIME timeCreated;
+		PROPERTY_META_DATA_EXT MetaData;
+		DWORD unused1;
+		DWORD unused2;
+		DWORD unused3;
+		DSTIME timeExpired;
+	} VALUE_META_DATA_EXT_V3;
+
+	typedef struct {
 		DSNAME *pObject;
 		ATTRTYP attrTyp;
 		ATTRVAL Aval;
 		BOOL fIsPresent;
 		VALUE_META_DATA_EXT_V1 MetaData;
-	} REPLVALINF;
+	} REPLVALINF_V1;
+
+	typedef struct {
+		DSNAME *pObject;
+		ATTRTYP attrTyp;
+		ATTRVAL Aval;
+		BOOL fIsPresent;
+		VALUE_META_DATA_EXT_V3 MetaData;
+	} REPLVALINF_V3;
 
 	typedef struct {
 		UCHAR rgTimes[84];
@@ -349,9 +364,29 @@ interface drsuapi
 		ULONG cNumNcSizeObjects;
 		ULONG cNumNcSizeValues;
 		[range(0, 1048576)] DWORD cNumValues;
-		[size_is(cNumValues)] REPLVALINF *rgValues;
+		[size_is(cNumValues)] REPLVALINF_V1 *rgValues;
 		DWORD dwDRSError;
 	} DRS_MSG_GETCHGREPLY_V6;
+
+	typedef struct {
+		UUID uuidDsaObjSrc;
+		UUID uuidInvocIdSrc;
+		[unique] DSNAME *pNC;
+		USN_VECTOR usnvecFrom;
+		USN_VECTOR usnvecTo;
+		[unique] UPTODATE_VECTOR_V2_EXT *pUpToDateVecSrc;
+		SCHEMA_PREFIX_TABLE PrefixTableSrc;
+		ULONG ulExtendedRet;
+		ULONG cNumObjects;
+		ULONG cNumBytes;
+		[unique] REPLENTINFLIST *pObjects;
+		BOOL fMoreData;
+		ULONG cNumNcSizeObjects;
+		ULONG cNumNcSizeValues;
+		[range(0, 1048576)] DWORD cNumValues;
+		[size_is(cNumValues)] REPLVALINF_V3 *rgValues;
+		DWORD dwDRSError;
+	} DRS_MSG_GETCHGREPLY_V9;
 
 	typedef struct {
 		DWORD cbUncompressedSize;
@@ -435,6 +470,7 @@ interface drsuapi
 		[case(2)] DRS_MSG_GETCHGREPLY_V2 V2;
 		[case(6)] DRS_MSG_GETCHGREPLY_V6 V6;
 		[case(7)] DRS_MSG_GETCHGREPLY_V7 V7;
+		[case(9)] DRS_MSG_GETCHGREPLY_V9 V9;
 	} DRS_MSG_GETCHGREPLY;
 
 	typedef struct {
@@ -1088,6 +1124,54 @@ interface drsuapi
 		[case(1)] DRS_MSG_ADDCLONEDCREPLY_V1 V1;
 	} DRS_MSG_ADDCLONEDCREPLY;
 
+	typedef struct _DRS_MSG_WRITENGCKEYREQ_V1{
+		[string] const WCHAR* pwszAccount;
+		[range(0, 0xFFFF)] DWORD cNgcKey;
+		[size_is(cNgcKey)] UCHAR * pNgcKey;
+	} DRS_MSG_WRITENGCKEYREQ_V1;
+
+	typedef
+		[switch_type(DWORD)]
+	union {
+		[case(1)]
+		DRS_MSG_WRITENGCKEYREQ_V1 V1;
+	} DRS_MSG_WRITENGCKEYREQ;
+
+	typedef struct _DRS_MSG_WRITENGCKEYREPLY_V1{
+		DWORD retVal;
+	} DRS_MSG_WRITENGCKEYREPLY_V1;
+
+	typedef
+		[switch_type(DWORD)]
+	union {
+		[case(1)]
+		DRS_MSG_WRITENGCKEYREPLY_V1 V1;
+	} DRS_MSG_WRITENGCKEYREPLY;
+
+	typedef struct _DRS_MSG_READNGCKEYREQ_V1{
+		[string] const WCHAR* pwszAccount;
+	} DRS_MSG_READNGCKEYREQ_V1;
+
+	typedef
+		[switch_type(DWORD)]
+	union {
+		[case(1)]
+		DRS_MSG_READNGCKEYREQ_V1 V1;
+	} DRS_MSG_READNGCKEYREQ;
+
+	typedef struct _DRS_MSG_READNGCKEYREPLY_V1{
+		DWORD retVal;
+		[range(0, 0xFFFF)] DWORD cNgcKey;
+		[size_is(cNgcKey)] UCHAR * pNgcKey;
+	} DRS_MSG_READNGCKEYREPLY_V1;
+
+	typedef
+		[switch_type(DWORD)]
+	union {
+		[case(1)]
+		DRS_MSG_READNGCKEYREPLY_V1 V1;
+	} DRS_MSG_READNGCKEYREPLY;
+
 	// opnum 0
 	ULONG
 		IDL_DRSBind(
@@ -1353,6 +1437,30 @@ interface drsuapi
 		[out, ref] DWORD * pdwOutVersion,
 		[out, ref, switch_is(*pdwOutVersion)]
 	DRS_MSG_ADDCLONEDCREPLY* pmsgOut
+		);
+
+	// opnum 29
+	ULONG
+		IDL_DRSWriteNgcKey(
+		[in, ref] DRS_HANDLE hDrs,
+		[in] DWORD dwInVersion,
+		[in, ref, switch_is(dwInVersion)]
+	DRS_MSG_WRITENGCKEYREQ* pmsgIn,
+		[out, ref] DWORD* pdwOutVersion,
+		[out, ref, switch_is(*pdwOutVersion)]
+	DRS_MSG_WRITENGCKEYREPLY* pmsgOut
+		);
+
+	// opnum 30
+	ULONG
+		IDL_DRSReadNgcKey(
+		[in, ref] DRS_HANDLE hDrs,
+		[in] DWORD dwInVersion,
+		[in, ref, switch_is(dwInVersion)]
+	DRS_MSG_READNGCKEYREQ* pmsgIn,
+		[out, ref] DWORD* pdwOutVersion,
+		[out, ref, switch_is(*pdwOutVersion)]
+	DRS_MSG_READNGCKEYREPLY* pmsgOut
 		);
 }
 
