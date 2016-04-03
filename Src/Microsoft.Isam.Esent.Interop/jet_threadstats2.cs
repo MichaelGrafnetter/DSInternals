@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows10
         /// <summary>
         /// The size of a JET_THREADSTATS2 structure.
         /// </summary>
-        internal static readonly uint Size = checked((uint)Marshal.SizeOf(typeof(JET_THREADSTATS2)));
+        internal static readonly int Size = Marshal.SizeOf(typeof(JET_THREADSTATS2));
 
         /// <summary>
         /// Size of the structure. This is used for interop.

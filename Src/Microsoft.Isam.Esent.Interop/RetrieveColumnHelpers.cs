@@ -897,6 +897,24 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Efficiently retrieves a set of columns and their values from the
+        /// current record of a cursor or the copy buffer of that cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve data from.</param>
+        /// <param name="grbit">Enumerate options.</param>
+        /// <returns>The discovered columns and their values.</returns>
+        public static IEnumerable<EnumeratedColumn> EnumerateColumns(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            EnumerateColumnsGrbit grbit)
+        {
+            IEnumerable<EnumeratedColumn> enumeratedColumns;
+            Api.JetEnumerateColumns(sesid, tableid, grbit, out enumeratedColumns);
+            return enumeratedColumns;
+        }
+
+        /// <summary>
         /// Create the nullable return value.
         /// </summary>
         /// <typeparam name="T">The (struct) type to return.</typeparam>

@@ -284,12 +284,9 @@ namespace Microsoft.Database.Isam
 
                     JET_SESID sesid = database.IsamSession.Sesid;
 
-                    // If we use the wide API (Vista+), then the temp table will be in UTF-16.
-                    // Technically, this should have worked in Vista. But there was a bug, and
-                    // it was fixed after Windows 7.
-                    Encoding encodingOfTextColumns = EsentVersion.SupportsWindows8Features
-                                                         ? Encoding.Unicode
-                                                         : Encoding.ASCII;
+                    // As of Sep 2015, JetGetColumnInfoW is only called for Win8+. Even though Unicode should have
+                    // worked in Win7, it wasn't reliable until Win8.
+                    Encoding encodingOfTextColumns = EsentVersion.SupportsWindows8Features ? Encoding.Unicode : LibraryHelpers.EncodingASCII;
 
                     string columnName = Api.RetrieveColumnAsString(
                         database.IsamSession.Sesid,

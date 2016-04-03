@@ -421,6 +421,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         VersionStoreTaskQueueMax = 105,
 
+        /// <summary>
+        /// This parameter controls whether perfmon counters should be enabled or not.
+        /// By default, perfmon counters are enabled, but there is memory overhead for enabling
+        /// them.
+        /// </summary>
+        DisablePerfmon = 107,
+
         // If you can not find the parameter you are expecting here, then perhaps it is
         // in a later version of the API, in VistaParam, Windows7Param, etc.
     }

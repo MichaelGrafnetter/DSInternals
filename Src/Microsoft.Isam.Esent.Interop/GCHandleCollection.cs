@@ -21,7 +21,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// The handles of the objects being pinned.
         /// </summary>
-        private List<GCHandle> handles;
+        private GCHandle[] handles;
+
+        /// <summary>
+        /// Handle count
+        /// </summary>
+        private int count;
 
         /// <summary>
         /// Disposes of the object.
@@ -30,9 +35,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             if (null != this.handles)
             {
-                foreach (GCHandle handle in this.handles)
-                {
-                    handle.Free();
+                for (int i = 0; i < this.count; i++)
+                { 
+                    this.handles[i].Free();
                 }
 
                 this.handles = null;
@@ -57,15 +62,33 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             if (null == this.handles)
             {
-                this.handles = new List<GCHandle>();                
+                this.handles = new GCHandle[4]; // same as List<T>
+            }
+            else if (this.count == this.handles.Length)
+            {
+                Array.Resize(ref this.handles, this.count * 2);
             }
 
+            Debug.Assert(this.count < this.handles.Length, "Index out of bound");
+
             GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            this.handles.Add(handle);
+            this.handles[this.count++] = handle;
 
             IntPtr pinned = handle.AddrOfPinnedObject();
             Debug.Assert(IntPtr.Zero != pinned, "Pinned object has null address");
             return pinned;
+        }
+
+        /// <summary>
+        /// Set handle array capacity.
+        /// </summary>
+        /// <param name="capacity">Estimated handle count</param>
+        public void SetCapacity(int capacity)
+        {
+            if (null == this.handles)
+            {
+                this.handles = new GCHandle[capacity];
+            }
         }
     }
 }

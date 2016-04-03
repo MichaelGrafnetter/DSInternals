@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Options for <see cref="Api.JetCreateInstance2"/>.
@@ -744,7 +745,8 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for <see cref="Api.JetEnumerateColumns"/>.
+    /// Options for <see cref="Api.JetEnumerateColumns(JET_SESID, JET_TABLEID, EnumerateColumnsGrbit, out IEnumerable&lt;EnumeratedColumn&gt;)"/>
+    /// and its associated overloads.
     /// </summary>
     /// <seealso cref="Server2003.Server2003Grbits.EnumerateIgnoreUserDefinedDefault"/>
     /// <seealso cref="Windows7.Windows7Grbits.EnumerateInRecordOnly"/>
@@ -792,7 +794,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// the default value. No effort is made to remove column values that
         /// match their default values.
         /// It is important to remember that this option affects the output of
-        /// <see cref="Api.JetEnumerateColumns"/> when used with 
+        /// <see cref="Api.JetEnumerateColumns(JET_SESID, JET_TABLEID, EnumerateColumnsGrbit, out IEnumerable&lt;EnumeratedColumn&gt;)"/>
+        /// and its associated overloads when used with 
         /// <see cref="EnumerateColumnsGrbit.EnumeratePresenceOnly"/> or
         /// <see cref="EnumerateColumnsGrbit.EnumerateTaggedOnly"/>.
         /// </summary>
@@ -1742,13 +1745,15 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// By setting this the client indicates that forward sequential scan is
-        /// the predominant usage pattern of this table.
+        /// the predominant usage pattern of this table (causing B+ Tree defrag to 
+        /// be auto-triggered to clean it up if fragmented).
         /// </summary>
         RetrieveHintTableScanForward = 0x00000010,
 
         /// <summary>
         /// By setting this the client indicates that backwards sequential scan
-        /// is the predominant usage pattern of this table.
+        /// is the predominant usage pattern of this table(causing B+ Tree defrag to 
+        /// be auto-triggered to clean it up if fragmented).
         /// </summary>
         RetrieveHintTableScanBackward = 0x00000020,
 

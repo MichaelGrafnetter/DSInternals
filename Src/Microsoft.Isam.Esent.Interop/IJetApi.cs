@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop.Implementation
 {
     using System;
+    using System.Collections.Generic;
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
@@ -2154,6 +2155,21 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int maxDataSize,
             EnumerateColumnsGrbit grbit);
 
+        /// <summary>
+        /// Efficiently retrieves a set of columns and their values from the
+        /// current record of a cursor or the copy buffer of that cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve data from.</param>
+        /// <param name="grbit">Enumerate options.</param>
+        /// <param name="enumeratedColumns">The discovered columns and their values.</param>
+        /// <returns>A warning or success.</returns>
+        int JetEnumerateColumns(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            EnumerateColumnsGrbit grbit,
+            out IEnumerable<EnumeratedColumn> enumeratedColumns);
+
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves record size information from the desired location.
@@ -2375,27 +2391,50 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use for the call.</param>
         /// <param name="dbid">The database to be defragmented.</param>
         /// <param name="tableName">
-        /// Unused parameter. Defragmentation is performed for the entire database described by the given database ID.
+        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// database ID, and other options (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>) require
+        /// the name of the table to defragment.
         /// </param>
         /// <param name="passes">
         /// When starting an online defragmentation task, this parameter sets the maximum number of defragmentation
         /// passes. When stopping an online defragmentation task, this parameter is set to the number of passes
-        /// performed.
+        /// performed. This is not honored in all modes (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="seconds">
         /// When starting an online defragmentation task, this parameter sets
         /// the maximum time for defragmentation. When stopping an online
         /// defragmentation task, this output buffer is set to the length of
-        /// time used for defragmentation.
+        /// time used for defragmentation. This is not honored in all modes (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="grbit">Defragmentation options.</param>
         /// <returns>An error code or warning.</returns>
+        /// <seealso cref="IJetApi.Defragment"/>.
         int JetDefragment(
             JET_SESID sesid,
             JET_DBID dbid,
             string tableName,
             ref int passes,
             ref int seconds,
+            DefragGrbit grbit);
+
+        /// <summary>
+        /// Starts and stops database defragmentation tasks that improves data
+        /// organization within a database.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="dbid">The database to be defragmented.</param>
+        /// <param name="tableName">
+        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// database ID, and other options (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>) require
+        /// the name of the table to defragment.
+        /// </param>
+        /// <param name="grbit">Defragmentation options.</param>
+        /// <returns>An error code or warning.</returns>
+        /// <seealso cref="IJetApi.JetDefragment"/>.
+        int Defragment(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tableName,
             DefragGrbit grbit);
 
         /// <summary>

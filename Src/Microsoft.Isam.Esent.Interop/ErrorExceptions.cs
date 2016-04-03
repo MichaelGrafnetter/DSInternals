@@ -3334,7 +3334,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentDbTimeTooOldException : EsentInconsistentException
+    public sealed class EsentDbTimeTooOldException : EsentCorruptionException
     {
         /// <summary>
         /// Initializes a new instance of the EsentDbTimeTooOldException class.
@@ -3366,7 +3366,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentDbTimeTooNewException : EsentInconsistentException
+    public sealed class EsentDbTimeTooNewException : EsentCorruptionException
     {
         /// <summary>
         /// Initializes a new instance of the EsentDbTimeTooNewException class.
@@ -3832,6 +3832,38 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentCommittedLogFileCorruptException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.LogSequenceChecksumMismatch exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentLogSequenceChecksumMismatchException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentLogSequenceChecksumMismatchException class.
+        /// </summary>
+        public EsentLogSequenceChecksumMismatchException() :
+            base("The previous log's accumulated segment checksum doesn't match the next log", JET_err.LogSequenceChecksumMismatch)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentLogSequenceChecksumMismatchException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentLogSequenceChecksumMismatchException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -9708,7 +9740,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSecondaryIndexCorruptedException class.
         /// </summary>
         public EsentSecondaryIndexCorruptedException() :
-            base("Secondary index is corrupt. The database must be defragmented or the affected index must be deleted. If the corrupt index is over Unicode text, a likely cause a sort-order change.", JET_err.SecondaryIndexCorrupted)
+            base("Secondary index is corrupt. The database must be defragmented or the affected index must be deleted. If the corrupt index is over Unicode text, a likely cause is a sort-order change.", JET_err.SecondaryIndexCorrupted)
         {
         }
 
@@ -11359,6 +11391,38 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.EncryptionBadItag exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentEncryptionBadItagException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentEncryptionBadItagException class.
+        /// </summary>
+        public EsentEncryptionBadItagException() :
+            base("Cannot encrypt tagged columns with itag>1", JET_err.EncryptionBadItag)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentEncryptionBadItagException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentEncryptionBadItagException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
     /// Base class for JET_err.TooManySorts exceptions.
     /// </summary>
     [SuppressMessage(
@@ -11608,6 +11672,38 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentFileInvalidTypeException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.FileAlreadyExists exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentFileAlreadyExistsException : EsentInconsistentException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentFileAlreadyExistsException class.
+        /// </summary>
+        public EsentFileAlreadyExistsException() :
+            base("File already exists", JET_err.FileAlreadyExists)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentFileAlreadyExistsException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentFileAlreadyExistsException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -12986,6 +13082,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentRecoveredWithoutUndoDatabasesConsistentException();
             case JET_err.CommittedLogFileCorrupt:
                 return new EsentCommittedLogFileCorruptException();
+            case JET_err.LogSequenceChecksumMismatch:
+                return new EsentLogSequenceChecksumMismatchException();
             case JET_err.UnicodeTranslationBufferTooSmall:
                 return new EsentUnicodeTranslationBufferTooSmallException();
             case JET_err.UnicodeTranslationFail:
@@ -13456,6 +13554,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentUpdateMustVersionException();
             case JET_err.DecryptionFailed:
                 return new EsentDecryptionFailedException();
+            case JET_err.EncryptionBadItag:
+                return new EsentEncryptionBadItagException();
             case JET_err.TooManySorts:
                 return new EsentTooManySortsException();
             case JET_err.InvalidOnSort:
@@ -13472,6 +13572,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentFileNotFoundException();
             case JET_err.FileInvalidType:
                 return new EsentFileInvalidTypeException();
+            case JET_err.FileAlreadyExists:
+                return new EsentFileAlreadyExistsException();
             case JET_err.AfterInitialization:
                 return new EsentAfterInitializationException();
             case JET_err.LogCorrupted:

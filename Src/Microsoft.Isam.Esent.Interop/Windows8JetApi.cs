@@ -129,7 +129,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="tableid">The table to create the index on.</param>
         /// <param name="indexcreates">Array of objects describing the indexes to be created.</param>
         /// <param name="numIndexCreates">Number of index description objects.</param>
+        /// <remarks>
+        /// <para>
+        /// <see cref="Api.JetCreateIndex2"/> and <see cref="Microsoft.Isam.Esent.Interop.Windows8.Windows8Api.JetCreateIndex4"/>
+        /// are very similar, and appear to take the same arguments. The difference is in the
+        /// implementation. JetCreateIndex2 uses LCIDs for Unicode indices (e.g. 1033), while
+        /// JetCreateIndex4 uses Locale Names (e.g. "en-US" or "de-DE". LCIDs are older, and not as well
+        /// supported in newer version of windows.
+        /// </para>
+        /// </remarks>
         /// <returns>An error code.</returns>
+        /// <seealso cref="Api.JetCreateIndex"/>
+        /// <seealso cref="Api.JetCreateIndex2"/>
         public int JetCreateIndex4(
             JET_SESID sesid,
             JET_TABLEID tableid,

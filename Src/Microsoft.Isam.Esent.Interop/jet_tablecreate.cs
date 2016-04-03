@@ -13,199 +13,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Implementation;
 
-#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
-    /// <summary>
-    /// The native version of the <see cref="JET_TABLECREATE"/> structure. This includes callbacks,
-    /// space hints, and uses NATIVE_INDEXCREATE.
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1305:FieldNamesMustNotUseHungarianNotation",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    internal unsafe struct NATIVE_TABLECREATE2
-    {
-        /// <summary>
-        /// Size of the structure.
-        /// </summary>
-        public uint cbStruct;
-
-        /// <summary>
-        /// Name of the table to create.
-        /// </summary>
-        [MarshalAs(UnmanagedType.LPTStr)]
-        public string szTableName;
-
-        /// <summary>
-        /// Name of the table from which to inherit base DDL.
-        /// </summary>
-        [MarshalAs(UnmanagedType.LPTStr)]
-        public string szTemplateTableName;
-
-        /// <summary>
-        /// Initial pages to allocate for table.
-        /// </summary>
-        public uint ulPages;
-
-        /// <summary>
-        /// Table density.
-        /// </summary>
-        public uint ulDensity;
-
-        /// <summary>
-        /// Array of column creation info.
-        /// </summary>
-        public NATIVE_COLUMNCREATE* rgcolumncreate;
-
-        /// <summary>
-        /// Number of columns to create.
-        /// </summary>
-        public uint cColumns;
-
-        /// <summary>
-        /// Array of indices to create, pointer to <see cref="NATIVE_INDEXCREATE"/>.
-        /// </summary>
-        public IntPtr rgindexcreate;
-
-        /// <summary>
-        /// Number of indices to create.
-        /// </summary>
-        public uint cIndexes;
-
-        /// <summary>
-        /// Callback function to use for the table.
-        /// </summary>
-        [MarshalAs(UnmanagedType.LPTStr)]
-        public string szCallback;
-
-        /// <summary>
-        /// Type of the callback function.
-        /// </summary>
-        public JET_cbtyp cbtyp;
-
-        /// <summary>
-        /// Table options.
-        /// </summary>
-        public uint grbit;
-
-        /// <summary>
-        /// Returned tabledid.
-        /// </summary>
-        public IntPtr tableid;
-
-        /// <summary>
-        /// Count of objects created (columns+table+indexes+callbacks).
-        /// </summary>
-        public uint cCreated;
-    }
-
-    /// <summary>
-    /// The native version of the <see cref="JET_TABLECREATE"/> structure. This includes callbacks,
-    /// space hints, and uses NATIvE_INDEXCREATE2.
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1305:FieldNamesMustNotUseHungarianNotation",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    internal unsafe struct NATIVE_TABLECREATE3
-    {
-        /// <summary>
-        /// Size of the structure.
-        /// </summary>
-        public uint cbStruct;
-
-        /// <summary>
-        /// Name of the table to create.
-        /// </summary>
-        [MarshalAs(UnmanagedType.LPWStr)]
-        public string szTableName;
-
-        /// <summary>
-        /// Name of the table from which to inherit base DDL.
-        /// </summary>
-        [MarshalAs(UnmanagedType.LPWStr)]
-        public string szTemplateTableName;
-
-        /// <summary>
-        /// Initial pages to allocate for table.
-        /// </summary>
-        public uint ulPages;
-
-        /// <summary>
-        /// Table density.
-        /// </summary>
-        public uint ulDensity;
-
-        /// <summary>
-        /// Array of column creation info.
-        /// </summary>
-        public NATIVE_COLUMNCREATE* rgcolumncreate;
-
-        /// <summary>
-        /// Number of columns to create.
-        /// </summary>
-        public uint cColumns;
-
-        /// <summary>
-        /// Array of indices to create, pointer to <see cref="NATIVE_INDEXCREATE2"/>.
-        /// </summary>
-        public IntPtr rgindexcreate;
-
-        /// <summary>
-        /// Number of indices to create.
-        /// </summary>
-        public uint cIndexes;
-
-        /// <summary>
-        /// Callback function to use for the table.
-        /// </summary>
-        [MarshalAs(UnmanagedType.LPWStr)]
-        public string szCallback;
-
-        /// <summary>
-        /// Type of the callback function.
-        /// </summary>
-        public JET_cbtyp cbtyp;
-
-        /// <summary>
-        /// Table options.
-        /// </summary>
-        public uint grbit;
-
-        /// <summary>
-        /// Space allocation, maintenance, and usage hints for default sequential index.
-        /// </summary>
-        public NATIVE_SPACEHINTS* pSeqSpacehints;
-
-        /// <summary>
-        /// Space allocation, maintenance, and usage hints for Separated LV tree.
-        /// </summary>
-        public NATIVE_SPACEHINTS* pLVSpacehints;
-
-        /// <summary>
-        /// Heuristic size to separate a intrinsic LV from the primary record.
-        /// </summary>
-        public uint cbSeparateLV;
-
-        /// <summary>
-        /// Returned tabledid.
-        /// </summary>
-        public IntPtr tableid;
-
-        /// <summary>
-        /// Count of objects created (columns+table+indexes+callbacks).
-        /// </summary>
-        public uint cCreated;
-    }
-#endif // !MANAGEDESENT_ON_WSA
-
     /// <summary>
     /// Contains the information needed to create a table in an ESE database.
     /// </summary>
@@ -643,5 +450,198 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="notYetPublishedEquals">Whether the additional fields in <paramref name="other"/>
         /// are the same as this.</param>
         partial void NotYetPublishedEquals(JET_TABLECREATE other, ref bool notYetPublishedEquals);
+
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
+        /// <summary>
+        /// The native version of the <see cref="JET_TABLECREATE"/> structure. This includes callbacks,
+        /// space hints, and uses NATIVE_INDEXCREATE.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+                         "SA1305:FieldNamesMustNotUseHungarianNotation",
+                         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        [SuppressMessage(
+            "Microsoft.StyleCop.CSharp.NamingRules",
+            "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+            Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        internal unsafe struct NATIVE_TABLECREATE2
+        {
+            /// <summary>
+            /// Size of the structure.
+            /// </summary>
+            public uint cbStruct;
+            
+            /// <summary>
+            /// Name of the table to create.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPTStr)]
+            public string szTableName;
+
+            /// <summary>
+            /// Name of the table from which to inherit base DDL.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPTStr)]
+            public string szTemplateTableName;
+
+            /// <summary>
+            /// Initial pages to allocate for table.
+            /// </summary>
+            public uint ulPages;
+
+            /// <summary>
+            /// Table density.
+            /// </summary>
+            public uint ulDensity;
+
+            /// <summary>
+            /// Array of column creation info.
+            /// </summary>
+            public NATIVE_COLUMNCREATE* rgcolumncreate;
+
+            /// <summary>
+            /// Number of columns to create.
+            /// </summary>
+            public uint cColumns;
+
+            /// <summary>
+            /// Array of indices to create, pointer to <see cref="JET_INDEXCREATE.NATIVE_INDEXCREATE"/>.
+            /// </summary>
+            public IntPtr rgindexcreate;
+
+            /// <summary>
+            /// Number of indices to create.
+            /// </summary>
+            public uint cIndexes;
+
+            /// <summary>
+            /// Callback function to use for the table.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPTStr)]
+            public string szCallback;
+
+            /// <summary>
+            /// Type of the callback function.
+            /// </summary>
+            public JET_cbtyp cbtyp;
+
+            /// <summary>
+            /// Table options.
+            /// </summary>
+            public uint grbit;
+
+            /// <summary>
+            /// Returned tabledid.
+            /// </summary>
+            public IntPtr tableid;
+
+            /// <summary>
+            /// Count of objects created (columns+table+indexes+callbacks).
+            /// </summary>
+            public uint cCreated;
+        }
+
+        /// <summary>
+        /// The native version of the <see cref="JET_TABLECREATE"/> structure. This includes callbacks,
+        /// space hints, and uses NATIvE_INDEXCREATE2.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+                     "SA1305:FieldNamesMustNotUseHungarianNotation",
+                     Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        [SuppressMessage(
+            "Microsoft.StyleCop.CSharp.NamingRules",
+            "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+            Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        internal unsafe struct NATIVE_TABLECREATE3
+        {
+            /// <summary>
+            /// Size of the structure.
+            /// </summary>
+            public uint cbStruct;
+
+            /// <summary>
+            /// Name of the table to create.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string szTableName;
+
+            /// <summary>
+            /// Name of the table from which to inherit base DDL.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string szTemplateTableName;
+
+            /// <summary>
+            /// Initial pages to allocate for table.
+            /// </summary>
+            public uint ulPages;
+
+            /// <summary>
+            /// Table density.
+            /// </summary>
+            public uint ulDensity;
+
+            /// <summary>
+            /// Array of column creation info.
+            /// </summary>
+            public NATIVE_COLUMNCREATE* rgcolumncreate;
+
+            /// <summary>
+            /// Number of columns to create.
+            /// </summary>
+            public uint cColumns;
+
+            /// <summary>
+            /// Array of indices to create, pointer to <see cref="JET_INDEXCREATE.NATIVE_INDEXCREATE2"/>.
+            /// </summary>
+            public IntPtr rgindexcreate;
+
+            /// <summary>
+            /// Number of indices to create.
+            /// </summary>
+            public uint cIndexes;
+
+            /// <summary>
+            /// Callback function to use for the table.
+            /// </summary>
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string szCallback;
+
+            /// <summary>
+            /// Type of the callback function.
+            /// </summary>
+            public JET_cbtyp cbtyp;
+
+            /// <summary>
+            /// Table options.
+            /// </summary>
+            public uint grbit;
+
+            /// <summary>
+            /// Space allocation, maintenance, and usage hints for default sequential index.
+            /// </summary>
+            public NATIVE_SPACEHINTS* pSeqSpacehints;
+
+            /// <summary>
+            /// Space allocation, maintenance, and usage hints for Separated LV tree.
+            /// </summary>
+            public NATIVE_SPACEHINTS* pLVSpacehints;
+
+            /// <summary>
+            /// Heuristic size to separate a intrinsic LV from the primary record.
+            /// </summary>
+            public uint cbSeparateLV;
+
+            /// <summary>
+            /// Returned tabledid.
+            /// </summary>
+            public IntPtr tableid;
+
+            /// <summary>
+            /// Count of objects created (columns+table+indexes+callbacks).
+            /// </summary>
+            public uint cCreated;
+        }
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

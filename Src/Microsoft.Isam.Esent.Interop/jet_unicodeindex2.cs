@@ -51,6 +51,7 @@ namespace Microsoft.Isam.Esent.Interop
         static JET_UNICODEINDEX()
         {
             // Some common LCIDs are listed at http://msdn.microsoft.com/en-us/goglobal/bb964664.aspx.
+            LcidToLocales.Add(127, string.Empty);
             LcidToLocales.Add(1033, "en-us");
             LcidToLocales.Add(1046, "pt-br");
             LcidToLocales.Add(3084, "fr-ca");
@@ -63,7 +64,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A BCP-47 style locale name.</returns>
         public string GetEffectiveLocaleName()
         {
-            if (!string.IsNullOrEmpty(this.szLocaleName))
+            if (this.szLocaleName != null)
             {
                 return this.szLocaleName;
             }

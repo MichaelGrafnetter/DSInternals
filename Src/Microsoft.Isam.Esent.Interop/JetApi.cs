@@ -13,6 +13,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Threading;
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
@@ -1850,7 +1851,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 fixed (JET_THREADSTATS* rawJetThreadstats = &threadstats)
                 {
-                    return Err(NativeMethods.JetGetThreadStats(rawJetThreadstats, JET_THREADSTATS.Size));
+                    return Err(NativeMethods.JetGetThreadStats(rawJetThreadstats, checked((uint)JET_THREADSTATS.Size)));
                 }
             }
         }
@@ -2825,7 +2826,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var nativeColumnlist = new NATIVE_COLUMNLIST();
             nativeColumnlist.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNLIST)));
 
-            if (this.Capabilities.SupportsVistaFeatures)
+            // Technically, this should have worked in Vista. But there was a bug, and
+            // it was fixed after Windows 7.
+            if (this.Capabilities.SupportsWindows8Features)
             {
                 err = Err(NativeMethods.JetGetTableColumnInfoW(
                     sesid.Value,
@@ -4453,6 +4456,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 uint* rgcbKeys = stackalloc uint[keyCount];
                 using (var gchandlecollection = new GCHandleCollection())
                 {
+                    gchandlecollection.SetCapacity(keyCount);
+
                     for (int i = 0; i < keyCount; ++i)
                     {
                         rgpvKeys[i] = (void*)gchandlecollection.Add(keys[keyIndex + i]);
@@ -4760,6 +4765,132 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
                 ConvertEnumerateColumnsResult(allocator, allocatorContext, numEnumColumn, nativeenumcolumns, out numColumnValues, out columnValues);
 
+                return Err(err);
+            }
+        }
+
+        /// <summary>
+        /// Efficiently retrieves a set of columns and their values from the
+        /// current record of a cursor or the copy buffer of that cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve data from.</param>
+        /// <param name="grbit">Enumerate options.</param>
+        /// <param name="enumeratedColumns">The discovered columns and their values.</param>
+        /// <returns>A warning or success.</returns>
+        public int JetEnumerateColumns(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            EnumerateColumnsGrbit grbit,
+            out IEnumerable<EnumeratedColumn> enumeratedColumns)
+        {
+            unsafe
+            {
+                // NOTE:  We must never throw an exception up through ESE or it will corrupt its internal state!
+                Exception allocatorException = null;
+                JET_PFNREALLOC allocator = (c, pv, cb) =>
+                {
+                    try
+                    {
+                        if (pv == IntPtr.Zero)
+                        {
+                            // NOTE:  this will allocate memory if cb == 0 and that is what we want.
+                            return Marshal.AllocHGlobal(new IntPtr(cb));
+                        }
+
+                        if (cb == 0)
+                        {
+                            Marshal.FreeHGlobal(pv);
+                            return IntPtr.Zero;
+                        }
+
+                        return Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+                    }
+                    catch (OutOfMemoryException)
+                    {
+                        return IntPtr.Zero;
+                    }
+#if !MANAGEDESENT_ON_WSA // Thread model has changed in windows store apps.
+                    catch (ThreadAbortException e)
+                    {
+                        LibraryHelpers.ThreadResetAbort();
+                        allocatorException = e;
+                        return IntPtr.Zero;
+                    }
+#endif
+                    catch (Exception e)
+                    {
+                        allocatorException = e;
+                        return IntPtr.Zero;
+                    }
+                };
+
+                uint nativeEnumColumnCount;
+                NATIVE_ENUMCOLUMN* nativeEnumColumns;
+                int err = Implementation.NativeMethods.JetEnumerateColumns(
+                    sesid.Value,
+                    tableid.Value,
+                    0,
+                    null,
+                    out nativeEnumColumnCount,
+                    out nativeEnumColumns,
+                    allocator,
+                    IntPtr.Zero,
+                    int.MaxValue,
+                    (uint)(grbit & ~EnumerateColumnsGrbit.EnumerateCompressOutput));
+
+                var columns = new EnumeratedColumn[nativeEnumColumnCount];
+                for (int i = 0; i < nativeEnumColumnCount; ++i)
+                {
+                    columns[i] = new EnumeratedColumn();
+                    columns[i].Id = new JET_COLUMNID { Value = nativeEnumColumns[i].columnid };
+                    columns[i].Error = nativeEnumColumns[i].err < 0 ? (JET_err)nativeEnumColumns[i].err : JET_err.Success;
+                    columns[i].Warning = nativeEnumColumns[i].err > 0 ? (JET_wrn)nativeEnumColumns[i].err : JET_wrn.Success;
+                    if ((JET_wrn)nativeEnumColumns[i].err == JET_wrn.Success)
+                    {
+                        EnumeratedColumn.Value[] values = new EnumeratedColumn.Value[nativeEnumColumns[i].cEnumColumnValue];
+                        columns[i].Values = values;
+                        for (int j = 0; j < nativeEnumColumns[i].cEnumColumnValue; j++)
+                        {
+                            values[j] = new EnumeratedColumn.Value();
+                            values[j].Ordinal = j + 1;
+                            values[j].Warning = (JET_wrn)nativeEnumColumns[i].rgEnumColumnValue[j].err;
+                            values[j].Bytes = new byte[(int)nativeEnumColumns[i].rgEnumColumnValue[j].cbData];
+                            Marshal.Copy(
+                                nativeEnumColumns[i].rgEnumColumnValue[j].pvData,
+                                values[j].Bytes,
+                                0,
+                                (int)nativeEnumColumns[i].rgEnumColumnValue[j].cbData);
+                            if (nativeEnumColumns[i].rgEnumColumnValue[j].pvData != IntPtr.Zero)
+                            {
+                                allocator(IntPtr.Zero, nativeEnumColumns[i].rgEnumColumnValue[j].pvData, 0);
+                            }
+                        }
+
+                        if (nativeEnumColumns[i].rgEnumColumnValue != null)
+                        {
+                            allocator(IntPtr.Zero, new IntPtr(nativeEnumColumns[i].rgEnumColumnValue), 0);
+                        }
+                    }
+                }
+
+                if (nativeEnumColumns != null)
+                {
+                    allocator(IntPtr.Zero, new IntPtr(nativeEnumColumns), 0);
+                }
+
+                if (allocatorException != null)
+                {
+#if !MANAGEDESENT_ON_WSA // Thread model has changed in Windows store apps.
+                    if (allocatorException is ThreadAbortException)
+                    {
+                        Thread.CurrentThread.Abort();
+                    }
+#endif
+                    throw allocatorException;
+                }
+
+                enumeratedColumns = columns;
                 return Err(err);
             }
         }
@@ -5113,21 +5244,25 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use for the call.</param>
         /// <param name="dbid">The database to be defragmented.</param>
         /// <param name="tableName">
-        /// Unused parameter. Defragmentation is performed for the entire database described by the given database ID.
+        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// database ID, and other options (such as <see cref="Windows7Grbits.DefragmentBTree"/>) require
+        /// the name of the table to defragment.
         /// </param>
         /// <param name="passes">
         /// When starting an online defragmentation task, this parameter sets the maximum number of defragmentation
         /// passes. When stopping an online defragmentation task, this parameter is set to the number of passes
-        /// performed.
+        /// performed. This is not honored in all modes (such as <see cref="Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="seconds">
         /// When starting an online defragmentation task, this parameter sets
         /// the maximum time for defragmentation. When stopping an online
         /// defragmentation task, this output buffer is set to the length of
-        /// time used for defragmentation.
+        /// time used for defragmentation. This is not honored in all modes (such as <see cref="Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="grbit">Defragmentation options.</param>
         /// <returns>An error code.</returns>
+        /// <seealso cref="JetApi.Defragment"/>.
+        /// <seealso cref="JetApi.JetDefragment2"/>.
         public int JetDefragment(JET_SESID sesid, JET_DBID dbid, string tableName, ref int passes, ref int seconds, DefragGrbit grbit)
         {
 #if MANAGEDESENT_ON_WSA
@@ -5151,22 +5286,55 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use for the call.</param>
         /// <param name="dbid">The database to be defragmented.</param>
         /// <param name="tableName">
-        /// Unused parameter. Defragmentation is performed for the entire database described by the given database ID.
+        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// database ID, and other options (such as <see cref="Windows7Grbits.DefragmentBTree"/>) require
+        /// the name of the table to defragment.
+        /// </param>
+        /// <param name="grbit">Defragmentation options.</param>
+        /// <returns>An error code.</returns>
+        /// <seealso cref="JetApi.JetDefragment"/>.
+        public int Defragment(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tableName,
+            DefragGrbit grbit)
+        {
+#if MANAGEDESENT_ON_WSA
+            return this.Defragment2(sesid, dbid, tableName, null, grbit);
+#else
+            TraceFunctionCall("Defragment");
+            int err = Err(NativeMethods.JetDefragment(
+                sesid.Value, dbid.Value, tableName, IntPtr.Zero, IntPtr.Zero, (uint)grbit));
+            return err;
+#endif
+        }
+
+        /// <summary>
+        /// Starts and stops database defragmentation tasks that improves data
+        /// organization within a database.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="dbid">The database to be defragmented.</param>
+        /// <param name="tableName">
+        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// database ID, and other options (such as <see cref="Windows7Grbits.DefragmentBTree"/>) require
+        /// the name of the table to defragment.
         /// </param>
         /// <param name="passes">
         /// When starting an online defragmentation task, this parameter sets the maximum number of defragmentation
         /// passes. When stopping an online defragmentation task, this parameter is set to the number of passes
-        /// performed.
+        /// performed. This is not honored in all modes (such as <see cref="Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="seconds">
         /// When starting an online defragmentation task, this parameter sets
         /// the maximum time for defragmentation. When stopping an online
         /// defragmentation task, this output buffer is set to the length of
-        /// time used for defragmentation.
+        /// time used for defragmentation. This is not honored in all modes (such as <see cref="Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="callback">Callback function that defrag uses to report progress.</param>
         /// <param name="grbit">Defragmentation options.</param>
         /// <returns>An error code or warning.</returns>
+        /// <seealso cref="JetApi.JetDefragment"/>.
         public int JetDefragment2(
             JET_SESID sesid,
             JET_DBID dbid,
@@ -5206,6 +5374,58 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.callbackWrappers.Collect();
             return err;
         }
+
+        //// Currently, this overload of JetDefragment2() is not used outside of WSA.
+#if MANAGEDESENT_ON_WSA
+        /// <summary>
+        /// Starts and stops database defragmentation tasks that improves data
+        /// organization within a database.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="dbid">The database to be defragmented.</param>
+        /// <param name="tableName">
+        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// database ID, and other options (such as <see cref="Windows7Grbits.DefragmentBTree"/>) require
+        /// the name of the table to defragment.
+        /// </param>
+        /// <param name="callback">Callback function that defrag uses to report progress.</param>
+        /// <param name="grbit">Defragmentation options.</param>
+        /// <returns>An error code or warning.</returns>
+        /// <seealso cref="JetApi.JetDefragment2"/>.
+        public int Defragment2(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tableName,
+            JET_CALLBACK callback,
+            DefragGrbit grbit)
+        {
+            TraceFunctionCall("Defragment2");
+
+            IntPtr functionPointer;
+            if (null == callback)
+            {
+                functionPointer = IntPtr.Zero;
+            }
+            else
+            {
+                JetCallbackWrapper callbackWrapper = this.callbackWrappers.Add(callback);
+                functionPointer = Marshal.GetFunctionPointerForDelegate(callbackWrapper.NativeCallback);
+#if DEBUG
+                GC.Collect();
+#endif
+            }
+
+#if MANAGEDESENT_ON_WSA
+            int err = Err(NativeMethods.JetDefragment2W(
+                sesid.Value, dbid.Value, tableName, IntPtr.Zero, IntPtr.Zero, functionPointer, (uint)grbit));
+#else
+            int err = Err(NativeMethods.JetDefragment2(
+                sesid.Value, dbid.Value, tableName, IntPtr.Zero, IntPtr.Zero, functionPointer, (uint)grbit));
+#endif
+            this.callbackWrappers.Collect();
+            return err;
+        }
+#endif
 
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
@@ -5625,15 +5845,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="managedIndexCreates">Index create structures to convert.</param>
         /// <param name="handles">The handle collection used to pin the data.</param>
         /// <returns>Pinned native versions of the index creates.</returns>
-        private static unsafe NATIVE_INDEXCREATE[] GetNativeIndexCreates(
+        private static unsafe JET_INDEXCREATE.NATIVE_INDEXCREATE[] GetNativeIndexCreates(
             IList<JET_INDEXCREATE> managedIndexCreates,
             ref GCHandleCollection handles)
         {
-            NATIVE_INDEXCREATE[] nativeIndices = null;
+            JET_INDEXCREATE.NATIVE_INDEXCREATE[] nativeIndices = null;
 
             if (managedIndexCreates != null && managedIndexCreates.Count > 0)
             {
-                nativeIndices = new NATIVE_INDEXCREATE[managedIndexCreates.Count];
+                nativeIndices = new JET_INDEXCREATE.NATIVE_INDEXCREATE[managedIndexCreates.Count];
 
                 for (int i = 0; i < managedIndexCreates.Count; ++i)
                 {
@@ -5662,15 +5882,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="managedIndexCreates">Index create structures to convert.</param>
         /// <param name="handles">The handle collection used to pin the data.</param>
         /// <returns>Pinned native versions of the index creates.</returns>
-        private static unsafe NATIVE_INDEXCREATE1[] GetNativeIndexCreate1s(
+        private static unsafe JET_INDEXCREATE.NATIVE_INDEXCREATE1[] GetNativeIndexCreate1s(
             IList<JET_INDEXCREATE> managedIndexCreates,
             ref GCHandleCollection handles)
         {
-            NATIVE_INDEXCREATE1[] nativeIndices = null;
+            JET_INDEXCREATE.NATIVE_INDEXCREATE1[] nativeIndices = null;
 
             if (managedIndexCreates != null && managedIndexCreates.Count > 0)
             {
-                nativeIndices = new NATIVE_INDEXCREATE1[managedIndexCreates.Count];
+                nativeIndices = new JET_INDEXCREATE.NATIVE_INDEXCREATE1[managedIndexCreates.Count];
 
                 for (int i = 0; i < managedIndexCreates.Count; ++i)
                 {
@@ -5700,15 +5920,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="managedIndexCreates">Index create structures to convert.</param>
         /// <param name="handles">The handle collection used to pin the data.</param>
         /// <returns>Pinned native versions of the index creates.</returns>
-        private static unsafe NATIVE_INDEXCREATE2[] GetNativeIndexCreate2s(
+        private static unsafe JET_INDEXCREATE.NATIVE_INDEXCREATE2[] GetNativeIndexCreate2s(
             IList<JET_INDEXCREATE> managedIndexCreates,
             ref GCHandleCollection handles)
         {
-            NATIVE_INDEXCREATE2[] nativeIndices = null;
+            JET_INDEXCREATE.NATIVE_INDEXCREATE2[] nativeIndices = null;
 
             if (managedIndexCreates != null && managedIndexCreates.Count > 0)
             {
-                nativeIndices = new NATIVE_INDEXCREATE2[managedIndexCreates.Count];
+                nativeIndices = new JET_INDEXCREATE.NATIVE_INDEXCREATE2[managedIndexCreates.Count];
 
                 for (int i = 0; i < managedIndexCreates.Count; ++i)
                 {
@@ -5772,7 +5992,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var handles = new GCHandleCollection();
             try
             {
-                NATIVE_INDEXCREATE[] nativeIndexcreates = GetNativeIndexCreates(indexcreates, ref handles);
+                JET_INDEXCREATE.NATIVE_INDEXCREATE[] nativeIndexcreates = GetNativeIndexCreates(indexcreates, ref handles);
                 return Err(NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, checked((uint)numIndexCreates)));
             }
             finally
@@ -5795,7 +6015,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var handles = new GCHandleCollection();
             try
             {
-                NATIVE_INDEXCREATE1[] nativeIndexcreates = GetNativeIndexCreate1s(indexcreates, ref handles);
+                JET_INDEXCREATE.NATIVE_INDEXCREATE1[] nativeIndexcreates = GetNativeIndexCreate1s(indexcreates, ref handles);
                 return Err(NativeMethods.JetCreateIndex2W(sesid.Value, tableid.Value, nativeIndexcreates, checked((uint)numIndexCreates)));
             }
             finally
@@ -5818,7 +6038,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var handles = new GCHandleCollection();
             try
             {
-                NATIVE_INDEXCREATE2[] nativeIndexcreates = GetNativeIndexCreate2s(indexcreates, ref handles);
+                JET_INDEXCREATE.NATIVE_INDEXCREATE2[] nativeIndexcreates = GetNativeIndexCreate2s(indexcreates, ref handles);
                 return Err(NativeMethods.JetCreateIndex3W(sesid.Value, tableid.Value, nativeIndexcreates, checked((uint)numIndexCreates)));
             }
             finally
@@ -5839,7 +6059,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_DBID dbid,
             JET_TABLECREATE tablecreate)
         {
-            NATIVE_TABLECREATE3 nativeTableCreate = tablecreate.GetNativeTableCreate3();
+            JET_TABLECREATE.NATIVE_TABLECREATE3 nativeTableCreate = tablecreate.GetNativeTableCreate3();
 
             unsafe
             {
@@ -5850,7 +6070,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     nativeTableCreate.rgcolumncreate = (NATIVE_COLUMNCREATE*)GetNativeColumnCreates(tablecreate.rgcolumncreate, true, ref handles);
 
                     // Convert/pin the index definitions.
-                    NATIVE_INDEXCREATE2[] nativeIndexCreates = GetNativeIndexCreate2s(tablecreate.rgindexcreate, ref handles);
+                    JET_INDEXCREATE.NATIVE_INDEXCREATE2[] nativeIndexCreates = GetNativeIndexCreate2s(tablecreate.rgindexcreate, ref handles);
                     nativeTableCreate.rgindexcreate = handles.Add(nativeIndexCreates);
 
                     // Convert/pin the space hints.
@@ -6089,15 +6309,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_DBID dbid,
             JET_TABLECREATE tablecreate)
         {
-            NATIVE_TABLECREATE2 nativeTableCreate = tablecreate.GetNativeTableCreate2();
+            JET_TABLECREATE.NATIVE_TABLECREATE2 nativeTableCreate = tablecreate.GetNativeTableCreate2();
 
             unsafe
             {
                 var handles = new GCHandleCollection();
                 try
                 {
-                    NATIVE_INDEXCREATE1[] nativeIndexCreate1s = null;
-                    NATIVE_INDEXCREATE[] nativeIndexCreates = null;
+                    JET_INDEXCREATE.NATIVE_INDEXCREATE1[] nativeIndexCreate1s = null;
+                    JET_INDEXCREATE.NATIVE_INDEXCREATE[] nativeIndexCreates = null;
                     int err;
 
                     if (this.Capabilities.SupportsVistaFeatures)

@@ -527,18 +527,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetCreateIndex2(
-            IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE[] pindexcreate, uint cIndexCreate);
+            IntPtr sesid, IntPtr tableid, [In] JET_INDEXCREATE.NATIVE_INDEXCREATE[] pindexcreate, uint cIndexCreate);
 
         // Introduced in Windows Vista, this version takes the larger NATIVE_INDEXCREATE1 structure.
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetCreateIndex2W(
-            IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE1[] pindexcreate, uint cIndexCreate);
+            IntPtr sesid, IntPtr tableid, [In] JET_INDEXCREATE.NATIVE_INDEXCREATE1[] pindexcreate, uint cIndexCreate);
 
         // Introduced in Windows 7, this version takes the larger NATIVE_INDEXCREATE2 structure, supporting
         // space hints.
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetCreateIndex3W(
-            IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE2[] pindexcreate, uint cIndexCreate);
+            IntPtr sesid, IntPtr tableid, [In] JET_INDEXCREATE.NATIVE_INDEXCREATE2[] pindexcreate, uint cIndexCreate);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetOpenTempTable(
@@ -589,15 +589,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
-        public static extern int JetCreateTableColumnIndex2(IntPtr sesid, uint dbid, ref NATIVE_TABLECREATE2 tablecreate3);
+        public static extern int JetCreateTableColumnIndex2(IntPtr sesid, uint dbid, ref JET_TABLECREATE.NATIVE_TABLECREATE2 tablecreate3);
 
         // Introduced in Vista.
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern int JetCreateTableColumnIndex2W(IntPtr sesid, uint dbid, ref NATIVE_TABLECREATE2 tablecreate3);
+        public static extern int JetCreateTableColumnIndex2W(IntPtr sesid, uint dbid, ref JET_TABLECREATE.NATIVE_TABLECREATE2 tablecreate3);
 
         // Introduced in Windows 7
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern int JetCreateTableColumnIndex3W(IntPtr sesid, uint dbid, ref NATIVE_TABLECREATE3 tablecreate3);
+        public static extern int JetCreateTableColumnIndex3W(IntPtr sesid, uint dbid, ref JET_TABLECREATE.NATIVE_TABLECREATE3 tablecreate3);
 #endif // !MANAGEDESENT_ON_WSA
 
         #region JetGetTableColumnInfo overlaods.
@@ -1198,13 +1198,25 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr sesid, uint dbid, string szTableName, ref uint pcPasses, ref uint pcSeconds, uint grbit);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetDefragment(
+            IntPtr sesid, uint dbid, string szTableName, IntPtr pcPasses, IntPtr pcSeconds, uint grbit);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetDefragment2(
             IntPtr sesid, uint dbid, string szTableName, ref uint pcPasses, ref uint pcSeconds, IntPtr callback, uint grbit);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetDefragment2(
+            IntPtr sesid, uint dbid, string szTableName, IntPtr pcPasses, IntPtr pcSeconds, IntPtr callback, uint grbit);
 #endif // !MANAGEDESENT_ON_WSA
 
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetDefragment2W(
             IntPtr sesid, uint dbid, string szTableName, ref uint pcPasses, ref uint pcSeconds, IntPtr callback, uint grbit);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetDefragment2W(
+            IntPtr sesid, uint dbid, string szTableName, IntPtr pcPasses, IntPtr pcSeconds, IntPtr callback, uint grbit);
 
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         [DllImport(EsentDll, ExactSpelling = true)]

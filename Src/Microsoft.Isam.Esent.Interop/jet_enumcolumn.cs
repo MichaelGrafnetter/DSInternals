@@ -155,8 +155,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <see cref="JET_wrn.ColumnSingleValue"/>.
         /// This points to memory allocated with the 
         /// <see cref="JET_PFNREALLOC"/> allocator callback passed to
-        /// <see cref="Api.JetEnumerateColumns"/>. Remember to
-        /// release the memory when finished.
+        /// <see cref="Api.JetEnumerateColumns(JET_SESID, JET_TABLEID, int, JET_ENUMCOLUMNID[], out int, out JET_ENUMCOLUMN[], JET_PFNREALLOC, IntPtr, int, EnumerateColumnsGrbit)"/>.
+        /// Remember to release the memory when finished.
         /// </summary>
         public IntPtr pvData { get; internal set; }
 

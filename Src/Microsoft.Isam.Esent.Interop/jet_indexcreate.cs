@@ -13,129 +13,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Vista;
 
-#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
-    /// <summary>
-    /// The native version of the JET_INDEXCREATE structure.
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1305:FieldNamesMustNotUseHungarianNotation",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    internal unsafe struct NATIVE_INDEXCREATE
-    {
-        /// <summary>
-        /// Size of the structure.
-        /// </summary>
-        public uint cbStruct;
-
-        /// <summary>
-        /// Name of the index.
-        /// </summary>
-        public IntPtr szIndexName;
-
-        /// <summary>
-        /// Index key description.
-        /// </summary>
-        public IntPtr szKey;
-
-        /// <summary>
-        /// Size of index key description.
-        /// </summary>
-        public uint cbKey;
-
-        /// <summary>
-        /// Index options.
-        /// </summary>
-        public uint grbit;
-
-        /// <summary>
-        /// Index density.
-        /// </summary>
-        public uint ulDensity;
-
-        /// <summary>
-        /// Pointer to unicode sort options.
-        /// </summary>
-        public NATIVE_UNICODEINDEX* pidxUnicode;
-
-        /// <summary>
-        /// Maximum size of column data to index. This can also be
-        /// a pointer to a JET_TUPLELIMITS structure.
-        /// </summary>
-        public IntPtr cbVarSegMac;
-
-        /// <summary>
-        /// Pointer to array of conditional columns.
-        /// </summary>
-        public IntPtr rgconditionalcolumn;
-
-        /// <summary>
-        /// Count of conditional columns.
-        /// </summary>
-        public uint cConditionalColumn;
-
-        /// <summary>
-        /// Returned error from index creation.
-        /// </summary>
-        public int err;
-    }
-
-    /// <summary>
-    /// The native version of the JET_INDEXCREATE structure. This version includes the cbKeyMost
-    /// member, which is only valid on Windows Vista and above, but the name of the structure
-    /// was not changed for Vista.
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1305:FieldNamesMustNotUseHungarianNotation",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    internal struct NATIVE_INDEXCREATE1
-    {
-        /// <summary>
-        /// Nested NATIVE_INDEXCREATE structure.
-        /// </summary>
-        public NATIVE_INDEXCREATE indexcreate;
-
-        /// <summary>
-        /// Maximum size of the key.
-        /// </summary>
-        public uint cbKeyMost;
-    }
-
-    /// <summary>
-    /// The native version of the JET_INDEXCREATE2 structure. Introduced in Windows 7,
-    /// this includes a <see cref="JET_SPACEHINTS"/> member.
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1305:FieldNamesMustNotUseHungarianNotation",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.NamingRules",
-        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    internal struct NATIVE_INDEXCREATE2
-    {
-        /// <summary>
-        /// Nested NATIVE_INDEXCREATE1 structure.
-        /// </summary>
-        public NATIVE_INDEXCREATE1 indexcreate1;
-
-        /// <summary>
-        /// A <see cref="NATIVE_SPACEHINTS"/> pointer.
-        /// </summary>
-        public IntPtr pSpaceHints;
-    }
-#endif // !MANAGEDESENT_ON_WSA
-
     /// <summary>
     /// Contains the information needed to create an index over data in an ESE database.
     /// </summary>
@@ -579,5 +456,128 @@ namespace Microsoft.Isam.Esent.Interop
 
             return true;
         }
+
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
+        /// <summary>
+        /// The native version of the JET_INDEXCREATE structure.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+                         "SA1305:FieldNamesMustNotUseHungarianNotation",
+                         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        [SuppressMessage(
+            "Microsoft.StyleCop.CSharp.NamingRules",
+            "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+            Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        internal unsafe struct NATIVE_INDEXCREATE
+        {
+            /// <summary>
+            /// Size of the structure.
+            /// </summary>
+            public uint cbStruct;
+
+            /// <summary>
+            /// Name of the index.
+            /// </summary>
+            public IntPtr szIndexName;
+
+            /// <summary>
+            /// Index key description.
+            /// </summary>
+            public IntPtr szKey;
+
+            /// <summary>
+            /// Size of index key description.
+            /// </summary>
+            public uint cbKey;
+
+            /// <summary>
+            /// Index options.
+            /// </summary>
+            public uint grbit;
+
+            /// <summary>
+            /// Index density.
+            /// </summary>
+            public uint ulDensity;
+
+            /// <summary>
+            /// Pointer to unicode sort options.
+            /// </summary>
+            public NATIVE_UNICODEINDEX* pidxUnicode;
+
+            /// <summary>
+            /// Maximum size of column data to index. This can also be
+            /// a pointer to a JET_TUPLELIMITS structure.
+            /// </summary>
+            public IntPtr cbVarSegMac;
+
+            /// <summary>
+            /// Pointer to array of conditional columns.
+            /// </summary>
+            public IntPtr rgconditionalcolumn;
+
+            /// <summary>
+            /// Count of conditional columns.
+            /// </summary>
+            public uint cConditionalColumn;
+
+            /// <summary>
+            /// Returned error from index creation.
+            /// </summary>
+            public int err;
+        }
+
+        /// <summary>
+        /// The native version of the JET_INDEXCREATE2 structure. Introduced in Windows 7,
+        /// this includes a <see cref="JET_SPACEHINTS"/> member.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+                         "SA1305:FieldNamesMustNotUseHungarianNotation",
+                         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        [SuppressMessage(
+            "Microsoft.StyleCop.CSharp.NamingRules",
+            "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+            Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        internal struct NATIVE_INDEXCREATE2
+        {
+            /// <summary>
+            /// Nested NATIVE_INDEXCREATE1 structure.
+            /// </summary>
+            public NATIVE_INDEXCREATE1 indexcreate1;
+
+            /// <summary>
+            /// A <see cref="NATIVE_SPACEHINTS"/> pointer.
+            /// </summary>
+            public IntPtr pSpaceHints;
+        }
+
+        /// <summary>
+        /// The native version of the JET_INDEXCREATE structure. This version includes the cbKeyMost
+        /// member, which is only valid on Windows Vista and above, but the name of the structure
+        /// was not changed for Vista.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+                         "SA1305:FieldNamesMustNotUseHungarianNotation",
+                         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        [SuppressMessage(
+            "Microsoft.StyleCop.CSharp.NamingRules",
+            "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+            Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        internal struct NATIVE_INDEXCREATE1
+        {
+            /// <summary>
+            /// Nested NATIVE_INDEXCREATE structure.
+            /// </summary>
+            public NATIVE_INDEXCREATE indexcreate;
+
+            /// <summary>
+            /// Maximum size of the key.
+            /// </summary>
+            public uint cbKeyMost;
+        }
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

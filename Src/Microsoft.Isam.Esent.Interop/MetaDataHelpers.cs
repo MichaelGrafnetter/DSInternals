@@ -119,8 +119,9 @@ namespace Microsoft.Isam.Esent.Interop
             JET_COLUMNLIST columnlist;
             JetGetTableColumnInfo(sesid, tableid, string.Empty, out columnlist);
 
-            // If we use the wide API (Vista+), then the temp table will be in UTF-16.
-            Encoding encodingOfTextColumns = EsentVersion.SupportsVistaFeatures ? Encoding.Unicode : LibraryHelpers.EncodingASCII;
+            // As of Sep 2015, JetGetColumnInfoW is only called for Win8+. Even though Unicode should have
+            // worked in Win7, it wasn't reliable until Win8.
+            Encoding encodingOfTextColumns = EsentVersion.SupportsWindows8Features ? Encoding.Unicode : LibraryHelpers.EncodingASCII;
 
             try
             {
@@ -266,6 +267,28 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(err);
 
             return true;
+        }
+
+        /// <summary>
+        /// Determines the name of the current index of a given cursor.
+        /// </summary>
+        /// <remarks>
+        /// This name is also used to later re-select that index as the current index using
+        /// <see cref="JetSetCurrentIndex"/>.  It can also be used to discover the properties of that index using
+        /// JetGetTableIndexInfo.
+        /// 
+        /// The returned name of the index will be null if the current index is the clustered index and no primary
+        /// index was explicitly defined.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to get the index name for.</param>
+        /// <returns>Returns the name of the index.</returns>
+        public static string JetGetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            string indexName;
+            Api.JetGetCurrentIndex(sesid, tableid, out indexName, SystemParameters.NameMost);
+
+            return string.IsNullOrEmpty(indexName) ? null : indexName;
         }
     }
 }

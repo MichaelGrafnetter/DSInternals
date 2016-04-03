@@ -19,7 +19,9 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         public const JET_param WaypointLatency = (JET_param)153;
 
         /// <summary>
-        /// Turn on/off automatic sequential B-tree defragmentation.
+        /// Turn on/off automatic sequential B-tree defragmentation tasks (On by 
+        /// default, but also requires <see cref="SpaceHintsGrbit"/> flags / <see cref="SpaceHintsGrbit"/>.RetrieveHintTableScan* 
+        /// to trigger on any given tables).
         /// </summary>
         public const JET_param DefragmentSequentialBTrees = (JET_param)160;
 

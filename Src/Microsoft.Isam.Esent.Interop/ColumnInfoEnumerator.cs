@@ -47,8 +47,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A ColumnInfo object containing the information from that record.</returns>
         private static ColumnInfo GetColumnInfoFromColumnlist(JET_SESID sesid, JET_COLUMNLIST columnlist)
         {
-            // If we use the wide API (Vista+), then the temp table will be in UTF-16.
-            Encoding encodingOfTextColumns = EsentVersion.SupportsVistaFeatures ? Encoding.Unicode : LibraryHelpers.EncodingASCII;
+            // As of Sep 2015, JetGetColumnInfoW is only called for Win8+. Even though Unicode should have
+            // worked in Win7, it wasn't reliable until Win8.
+            Encoding encodingOfTextColumns = EsentVersion.SupportsWindows8Features ? Encoding.Unicode : LibraryHelpers.EncodingASCII;
 
             string name = Api.RetrieveColumnAsString(
                 sesid,

@@ -117,7 +117,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 fixed (JET_THREADSTATS2* rawJetThreadstats = &threadstats)
                 {
-                    return Err(NativeMethods.JetGetThreadStats(rawJetThreadstats, JET_THREADSTATS2.Size));
+                    return Err(NativeMethods.JetGetThreadStats(rawJetThreadstats, checked((uint)JET_THREADSTATS2.Size)));
                 }
             }
         }

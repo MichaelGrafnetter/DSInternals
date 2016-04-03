@@ -1441,9 +1441,6 @@ namespace Microsoft.Database.Isam.Config
         /// <summary>
         /// A set of actions to be taken on IOs that appear hung.
         /// </summary>
-        /// <remarks>
-        /// default = (small=nothing, legacy=event on hung IOs)
-        /// </remarks>
         public int HungIOActions
         {
             get { return this.GetParam<int>(182); }

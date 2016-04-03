@@ -544,6 +544,11 @@ namespace Microsoft.Isam.Esent.Interop
         CommittedLogFileCorrupt = -586,
 
         /// <summary>
+        /// The previous log's accumulated segment checksum doesn't match the next log
+        /// </summary>
+        LogSequenceChecksumMismatch = -590,
+
+        /// <summary>
         /// Unicode translation buffer too small
         /// </summary>
         UnicodeTranslationBufferTooSmall = -601,
@@ -1459,7 +1464,7 @@ namespace Microsoft.Isam.Esent.Interop
         PrimaryIndexCorrupted = -1413,
 
         /// <summary>
-        /// Secondary index is corrupt. The database must be defragmented or the affected index must be deleted. If the corrupt index is over Unicode text, a likely cause a sort-order change.
+        /// Secondary index is corrupt. The database must be defragmented or the affected index must be deleted. If the corrupt index is over Unicode text, a likely cause is a sort-order change.
         /// </summary>
         SecondaryIndexCorrupted = -1414,
 
@@ -1719,6 +1724,11 @@ namespace Microsoft.Isam.Esent.Interop
         DecryptionFailed = -1622,
 
         /// <summary>
+        /// Cannot encrypt tagged columns with itag>1
+        /// </summary>
+        EncryptionBadItag = -1623,
+
+        /// <summary>
         /// Too many sort processes
         /// </summary>
         TooManySorts = -1701,
@@ -1757,6 +1767,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Invalid file type
         /// </summary>
         FileInvalidType = -1812,
+
+        /// <summary>
+        /// File already exists
+        /// </summary>
+        FileAlreadyExists = -1814,
 
         /// <summary>
         /// Cannot Restore after init.

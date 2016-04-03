@@ -530,7 +530,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if lhs comes before rhs.</returns>
         public static bool operator <(JET_COLUMNID lhs, JET_COLUMNID rhs)
         {
-            return lhs.CompareTo(rhs) < 0;
+            return lhs.Value < rhs.Value;
         }
 
         /// <summary>
@@ -541,7 +541,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if lhs comes after rhs.</returns>
         public static bool operator >(JET_COLUMNID lhs, JET_COLUMNID rhs)
         {
-            return lhs.CompareTo(rhs) > 0;
+            return lhs.Value > rhs.Value;
         }
 
         /// <summary>
@@ -553,7 +553,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if lhs comes before or is equal to rhs.</returns>
         public static bool operator <=(JET_COLUMNID lhs, JET_COLUMNID rhs)
         {
-            return lhs.CompareTo(rhs) <= 0;
+            return lhs.Value <= rhs.Value;
         }
 
         /// <summary>
@@ -565,7 +565,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if lhs comes after or is equal to rhs.</returns>
         public static bool operator >=(JET_COLUMNID lhs, JET_COLUMNID rhs)
         {
-            return lhs.CompareTo(rhs) >= 0;
+            return lhs.Value >= rhs.Value;
         }
 
         /// <summary>

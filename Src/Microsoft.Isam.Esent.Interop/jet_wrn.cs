@@ -224,6 +224,11 @@ namespace Microsoft.Isam.Esent.Interop
         ColumnNotInRecord = 1539,
 
         /// <summary>
+        /// Column value returned as a reference because it could not be reconstructed from the data in the record
+        /// </summary>
+        ColumnReference = 1541,
+
+        /// <summary>
         /// Data has changed
         /// </summary>
         DataHasChanged = 1610,

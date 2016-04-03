@@ -49,6 +49,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
     using System.Security.Permissions;
@@ -1204,6 +1205,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// The length, in characters, of szKey including the two terminating nulls.
         /// </param>
         /// <param name="density">Initial B+ tree density.</param>
+        /// <seealso cref="Api.JetCreateIndex"/>
+        /// <seealso cref="Microsoft.Isam.Esent.Interop.Windows8.Windows8Api.JetCreateIndex4"/>
         public static void JetCreateIndex(
             JET_SESID sesid,
             JET_TABLEID tableid,
@@ -1227,11 +1230,20 @@ namespace Microsoft.Isam.Esent.Interop
         /// will have exlusive access or the table can be opened for
         /// exclusive access by passing <see cref="OpenTableGrbit.DenyRead"/>
         /// to <see cref="JetOpenTable"/>.
+        /// <para>
+        /// <see cref="Api.JetCreateIndex2"/> and <see cref="Microsoft.Isam.Esent.Interop.Windows8.Windows8Api.JetCreateIndex4"/>
+        /// are very similar, and appear to take the same arguments. The difference is in the
+        /// implementation. JetCreateIndex2 uses LCIDs for Unicode indices (e.g. 1033), while
+        /// JetCreateIndex4 uses Locale Names (e.g. "en-US" or "de-DE". LCIDs are older, and not as well
+        /// supported in newer version of windows.
+        /// </para>
         /// </remarks>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to create the index on.</param>
         /// <param name="indexcreates">Array of objects describing the indexes to be created.</param>
         /// <param name="numIndexCreates">Number of index description objects.</param>
+        /// <seealso cref="Api.JetCreateIndex"/>
+        /// <seealso cref="Microsoft.Isam.Esent.Interop.Windows8.Windows8Api.JetCreateIndex4"/>
         public static void JetCreateIndex2(
             JET_SESID sesid,
             JET_TABLEID tableid,
@@ -1569,12 +1581,16 @@ namespace Microsoft.Isam.Esent.Interop
         #endregion
 
         /// <summary>
-        /// Ddetermines the name of the current
-        /// index of a given cursor. This name is also used to later re-select
-        /// that index as the current index using <see cref="JetSetCurrentIndex"/>.
-        /// It can also be used to discover the properties of that index using
-        /// JetGetTableIndexInfo.
+        /// Determines the name of the current index of a given cursor.
         /// </summary>
+        /// <remarks>
+        /// This name is also used to later re-select that index as the current index using
+        /// <see cref="JetSetCurrentIndex"/>.  It can also be used to discover the properties of that index using
+        /// JetGetTableIndexInfo.
+        /// 
+        /// The returned name of the index will be an empty string if the current index is the clustered index and no
+        /// primary index was explicitly defined.
+        /// </remarks>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to get the index name for.</param>
         /// <param name="indexName">Returns the name of the index.</param>
@@ -2479,6 +2495,25 @@ namespace Microsoft.Isam.Esent.Interop
                     grbit));
         }
 
+        /// <summary>
+        /// Efficiently retrieves a set of columns and their values from the
+        /// current record of a cursor or the copy buffer of that cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve data from.</param>
+        /// <param name="grbit">Enumerate options.</param>
+        /// <param name="enumeratedColumns">The discovered columns and their values.</param>
+        /// <returns>A warning or success.</returns>
+        public static JET_wrn JetEnumerateColumns(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            EnumerateColumnsGrbit grbit,
+            out IEnumerable<EnumeratedColumn> enumeratedColumns)
+        {
+            return Api.Check(
+                Impl.JetEnumerateColumns(sesid, tableid, grbit, out enumeratedColumns));
+        }
+
         #endregion
 
         #region DML
@@ -2776,21 +2811,24 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use for the call.</param>
         /// <param name="dbid">The database to be defragmented.</param>
         /// <param name="tableName">
-        /// Unused parameter. Defragmentation is performed for the entire database described by the given database ID.
+        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// database ID, and other options (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>) require
+        /// the name of the table to defragment.
         /// </param>
         /// <param name="passes">
         /// When starting an online defragmentation task, this parameter sets the maximum number of defragmentation
         /// passes. When stopping an online defragmentation task, this parameter is set to the number of passes
-        /// performed.
+        /// performed. This is not honored in all modes (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="seconds">
         /// When starting an online defragmentation task, this parameter sets
         /// the maximum time for defragmentation. When stopping an online
         /// defragmentation task, this output buffer is set to the length of
-        /// time used for defragmentation.
+        /// time used for defragmentation. This is not honored in all modes (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="grbit">Defragmentation options.</param>
         /// <returns>A warning code.</returns>
+        /// <seealso cref="Api.Defragment"/>
         public static JET_wrn JetDefragment(
             JET_SESID sesid,
             JET_DBID dbid,
@@ -2814,18 +2852,20 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use for the call.</param>
         /// <param name="dbid">The database to be defragmented.</param>
         /// <param name="tableName">
-        /// Unused parameter. Defragmentation is performed for the entire database described by the given database ID.
+        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// database ID, and other options (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>) require
+        /// the name of the table to defragment.
         /// </param>
         /// <param name="passes">
         /// When starting an online defragmentation task, this parameter sets the maximum number of defragmentation
         /// passes. When stopping an online defragmentation task, this parameter is set to the number of passes
-        /// performed.
+        /// performed. This is not honored in all modes (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="seconds">
         /// When starting an online defragmentation task, this parameter sets
         /// the maximum time for defragmentation. When stopping an online
         /// defragmentation task, this output buffer is set to the length of
-        /// time used for defragmentation.
+        /// time used for defragmentation. This is not honored in all modes (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>).
         /// </param>
         /// <param name="callback">Callback function that defrag uses to report progress.</param>
         /// <param name="grbit">Defragmentation options.</param>

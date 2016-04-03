@@ -209,5 +209,36 @@ namespace Microsoft.Isam.Esent.Interop
 
             return new GenericEnumerable<byte[]>(() => new IntersectIndexesEnumerator(sesid, ranges));
         }
+
+        /// <summary>
+        /// Positions a cursor to an index entry for the record that is associated with
+        /// the specified bookmark. The bookmark can be used with any index defined over
+        /// a table. The bookmark for a record can be retrieved using <see cref="JetGetBookmark"/>. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <param name="bookmark">The bookmark used to position the cursor.</param>
+        /// <param name="bookmarkSize">The size of the bookmark.</param>        
+        /// <returns>True if a record matching the bookmark was found.</returns>
+        public static bool TryGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize)
+        {
+            var err = (JET_err)Impl.JetGotoBookmark(sesid, tableid, bookmark, bookmarkSize);
+
+            // Return false if the record no longer exists.
+            if (JET_err.RecordDeleted == err)
+            {
+                return false;
+            }
+
+            // Return false if there is no entry for this record on the current (secondary) index.
+            if (JET_err.NoCurrentRecord == err)
+            {
+                return false;
+            }
+
+            Api.Check((int)err);
+            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
+            return true;
+        }
     }
 }
