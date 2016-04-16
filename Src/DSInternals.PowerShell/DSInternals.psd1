@@ -114,7 +114,9 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed a bug regarding incorrect OS version detection.
+- Added support for Windows Server 2016 ntds.dit encryption.
+- Added support for reading security descriptors (ACLs) from both ntds.dit files and DRS-R.
+- Added support for the AdminCount attribute.
 "@
     } # End of PSData hashtable
 
