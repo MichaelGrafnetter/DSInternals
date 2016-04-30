@@ -49,16 +49,17 @@ Save-DPAPIBlob
 System Requirements
 -------------------
 
-- Windows PowerShell 3+ 64-bit
+- Windows PowerShell 3+ (both 64-bit and 32-bit hosts are supported)
 - .NET Framework 4.5.1+
 
 The cmdlets have been tested on these operating systems:
 
+Windows Server 2016
 Windows Server 2012 R2
 Windows Server 2008 R2
-Windows 10 64-bit
-Windows 8.1 64-bit
-Windows 7 64-bit
+Windows 10
+Windows 8.1
+Windows 7
 
 The cmdlets working with the AD database do not support Windows 2000 domain functional level.
 
