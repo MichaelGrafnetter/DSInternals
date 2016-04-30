@@ -24,24 +24,19 @@ namespace DSInternals
 				: SafeHandleZeroOrMinusOneIsInvalid(true)
 			{
 				this->_clientDsa = clientDsa;
+				this->_serverReplEpoch = DrsConnection::defaultReplEpoch;
 
 				// Register the RetrieveSessionKey as RCP security callback. Mind the delegate lifecycle.
 				this->_securityCallback = gcnew SecurityCallback(this, &DrsConnection::RetrieveSessionKey);
-				RPC_STATUS status1 = RpcBindingSetOption(rpcHandle.ToPointer(), RPC_C_OPT_SECURITY_CALLBACK, (ULONG_PTR)Marshal::GetFunctionPointerForDelegate(this->_securityCallback).ToPointer());
+				RPC_STATUS status = RpcBindingSetOption(rpcHandle.ToPointer(), RPC_C_OPT_SECURITY_CALLBACK, (ULONG_PTR)Marshal::GetFunctionPointerForDelegate(this->_securityCallback).ToPointer());
 
-				UUID clientDsaUuid = RpcTypeConverter::ToUUID(clientDsa);
-				auto clientInfo = CreateClientInfo();
-				DRS_EXTENSIONS *genericServerInfo = nullptr;
-				DRS_HANDLE drsHandle = nullptr;
-				ULONG result = IDL_DRSBind_NoSEH(rpcHandle.ToPointer(), &clientDsaUuid, (DRS_EXTENSIONS*)clientInfo.get(), &genericServerInfo, &drsHandle);
-				Validator::AssertSuccess((Win32ErrorCode)result);
-				// Store the DRS handle
-				this->SetHandle((IntPtr)drsHandle);
-				// Prevent memory leak by storing the genericServerInfo in midl_ptr
-				auto genericServerInfoSafePtr = midl_ptr<DRS_EXTENSIONS>(genericServerInfo);
-				// TODO: Parse the server info
-				DRS_EXTENSIONS_INT serverInfo = DRS_EXTENSIONS_INT(genericServerInfo);
-				this->_serverSiteObjectGuid = RpcTypeConverter::ToGuid(serverInfo.siteObjGuid);
+				this->Bind(rpcHandle);
+				if (this->_serverReplEpoch != DrsConnection::defaultReplEpoch)
+				{
+					// The domain must have been renamed, so we need to rebind with the proper dwReplEpoch.
+					this->ReleaseHandle();
+					this->Bind(rpcHandle);
+				}
 			}
 
 			DrsConnection::DrsConnection(IntPtr preexistingDrssHandle, bool ownsHandle)
@@ -53,6 +48,30 @@ namespace DSInternals
 			DrsConnection::DrsConnection()
 				: SafeHandleZeroOrMinusOneIsInvalid(true)
 			{
+			}
+
+			void DrsConnection::Bind(IntPtr rpcHandle)
+			{
+				// Init binding parameters
+				UUID clientDsaUuid = RpcTypeConverter::ToUUID(this->_clientDsa);
+				auto clientInfo = this->CreateClientInfo();
+				DRS_EXTENSIONS *genericServerInfo = nullptr;
+				DRS_HANDLE drsHandle = nullptr;
+
+				// Bind
+				ULONG result = IDL_DRSBind_NoSEH(rpcHandle.ToPointer(), &clientDsaUuid, (DRS_EXTENSIONS*)clientInfo.get(), &genericServerInfo, &drsHandle);
+				Validator::AssertSuccess((Win32ErrorCode)result);
+				
+				// Prevent memory leak by storing the genericServerInfo in midl_ptr
+				auto genericServerInfoSafePtr = midl_ptr<DRS_EXTENSIONS>(genericServerInfo);
+
+				// Store the DRS handle
+				this->SetHandle((IntPtr)drsHandle);
+
+				// Parse the server info
+				DRS_EXTENSIONS_INT serverInfo = DRS_EXTENSIONS_INT(genericServerInfo);
+				this->_serverSiteObjectGuid = RpcTypeConverter::ToGuid(serverInfo.siteObjGuid);
+				this->_serverReplEpoch = serverInfo.dwReplEpoch;
 			}
 
 			array<byte>^ DrsConnection::SessionKey::get()
@@ -70,6 +89,7 @@ namespace DSInternals
 				clientInfo->dwFlags = DRS_EXT::ALL_EXT;
 				clientInfo->dwFlagsExt = DRS_EXT2::DRS_EXT_LH_BETA2;
 				clientInfo->dwExtCaps = DRS_EXT2::DRS_EXT_LH_BETA2 | DRS_EXT2::DRS_EXT_RECYCLE_BIN;
+				clientInfo->dwReplEpoch = this->_serverReplEpoch;
 				return clientInfo;
 			}
 

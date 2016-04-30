@@ -115,6 +115,7 @@ PrivateData = @{
         # ReleaseNotes of this module
         ReleaseNotes = @"
 - Added support for Windows Server 2016 ntds.dit encryption.
+- Added support for replication with renamed domains.
 - Added support for reading security descriptors (ACLs) from both ntds.dit files and DRS-R.
 - Added support for the AdminCount attribute.
 "@
