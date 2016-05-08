@@ -24,6 +24,7 @@
     </Control>
     <Control>
       <Name>Hash</Name>
+      <!-- Converts binary hash into a hex string -->
       <CustomControl>
         <CustomEntries>
           <CustomEntry>
@@ -31,6 +32,22 @@
               <ExpressionBinding>
                 <EnumerateCollection />
                 <ScriptBlock>ConvertTo-Hex $_</ScriptBlock>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <Name>Rid</Name>
+      <!-- Extracts RID from SID -->
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <EnumerateCollection />
+                <ScriptBlock>[DSInternals.Common.SecurityIdentifierExtensions]::GetRid($_)</ScriptBlock>
               </ExpressionBinding>
             </CustomItem>
           </CustomEntry>
@@ -496,6 +513,7 @@
     </View>
     <View>
       <Name>JohnNT</Name>
+      <!-- Format: <username>:$NT:<hash>:<sid>:: -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -523,6 +541,7 @@
     </View>
     <View>
       <Name>JohnLM</Name>
+      <!-- Format: <username>:<hash>:<sid>:: -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -550,6 +569,7 @@
     </View>
     <View>
       <Name>Ophcrack</Name>
+      <!-- Format: <username>::<lmhash>:<nthash>:<sid>:: -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -582,6 +602,7 @@
     </View>
     <View>
       <Name>HashcatNT</Name>
+      <!-- Format: <username>:<hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -604,6 +625,7 @@
     </View>
     <View>
       <Name>HashcatLM</Name>
+      <!-- Format: <username>:<hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -619,6 +641,78 @@
                 <PropertyName>LMHash</PropertyName>
                 <CustomControlName>Hash</CustomControlName>
               </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>NTHash</Name>
+      <!-- Format: <hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>NTHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>LMHash</Name>
+      <!-- Format: <hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>LMHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>PWDump</Name>
+      <!-- Format: <username>:<uid>:<LM-hash>:<NTLM-hash>:<comment>:<homedir>: -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>SamAccountName</PropertyName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>Sid</PropertyName>
+                <CustomControlName>Rid</CustomControlName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>LMHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>NTHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <Text>:::</Text>
             </CustomItem>
           </CustomEntry>
         </CustomEntries>
