@@ -197,13 +197,17 @@ enum DRS_EXT2 : DWORD
 	/// </summary>
 	DRS_EXT_LH_BETA2 = 0x00000002,
 	/// <summary>
-	/// If present, signifies that the DC has enabled the Recycle Binoptional feature.
+	/// If present, signifies that the DC has enabled the Recycle Bin optional feature.
 	/// </summary>
 	DRS_EXT_RECYCLE_BIN = 0x00000004,	
 	/// <summary>
 	/// If present, signifies that the DC supports DRS_MSG_GETCHGREPLY_V9.
 	/// </summary>
-	DRS_EXT_GETCHGREPLY_V9 = 0x00000100
+	DRS_EXT_GETCHGREPLY_V9 = 0x00000100,
+	/// <summary>
+	/// If present, signifies that the DC has enabled the Privileged Access Management optional feature.
+	/// </summary>
+	DRS_EXT_PAM = 0x00000200
 };
 
 DEFINE_ENUM_FLAG_OPERATORS(DRS_EXT2)

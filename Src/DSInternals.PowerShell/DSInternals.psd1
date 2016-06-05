@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.14'
+ModuleVersion = '2.15'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -114,10 +114,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added support for Windows Server 2016 ntds.dit encryption.
-- Added support for replication with renamed domains.
-- Added support for reading security descriptors (ACLs) from both ntds.dit files and DRS-R.
-- Added support for the AdminCount attribute.
+- Added support for the PAM optional feature. 
+- Added the PWDump custom view
+- Added the HashNT custom view
+- Added the HashLM custom view
 "@
     } # End of PSData hashtable
 

@@ -1,4 +1,5 @@
 Version 2.15
+- Added support for the PAM optional feature. 
 - Added the PWDump custom view
 - Added the HashNT custom view
 - Added the HashLM custom view
