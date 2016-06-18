@@ -114,10 +114,11 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
+- Removed dependency on ADSI.
 - Added support for the PAM optional feature. 
-- Added the PWDump custom view
-- Added the HashNT custom view
-- Added the HashLM custom view
+- Added the PWDump custom view.
+- Added the HashNT custom view.
+- Added the HashLM custom view.
 "@
     } # End of PSData hashtable
 

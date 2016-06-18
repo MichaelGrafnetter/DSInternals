@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DSInternals Replication Data Model")]
-[assembly: AssemblyVersion("2.14")]
-[assembly: AssemblyFileVersion("2.14")]
+[assembly: AssemblyVersion("2.15")]
+[assembly: AssemblyFileVersion("2.15")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]

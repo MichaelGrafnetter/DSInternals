@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>DSInternals SAM implements a client for the Security Accounts Manager Remote Protocol (SAM-R). It can be used to import password hashes into Active Directory.</description>
     <summary>DSInternals SAM implements a client for the Security Accounts Manager Remote Protocol (SAM-R).</summary>
-    <releaseNotes>Initial NuGet release.</releaseNotes>
+    <releaseNotes>Removed dependency on ADSI.</releaseNotes>
     <copyright>Copyright (c) 2015-2016 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security RPC SAMR</tags>
     <references>

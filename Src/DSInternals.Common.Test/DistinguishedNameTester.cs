@@ -187,12 +187,16 @@
         [TestMethod]
         public void DistinguishedName_AddParent()
         {
-            throw new AssertInconclusiveException();
+            var dn = new DistinguishedName("CN=Users");
+            dn.AddParent(new DistinguishedName("DC=adatum,DC=com"));
+            Assert.AreEqual("CN=Users,DC=adatum,DC=com", dn.ToString());
         }
         [TestMethod]
         public void DistinguishedName_AddChild()
         {
-            throw new AssertInconclusiveException();
+            var dn = new DistinguishedName("DC=adatum,DC=com");
+            dn.AddChild("CN", "Users");
+            Assert.AreEqual("CN=Users,DC=adatum,DC=com", dn.ToString());
         }
     }
 }

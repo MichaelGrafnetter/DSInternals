@@ -2,8 +2,8 @@
 {
     using DSInternals.Common;
     using System;
-    using System.DirectoryServices.ActiveDirectory;
     using System.Reflection;
+    using System.Text;
 
     public struct DistinguishedNameComponent
     {
@@ -20,23 +20,69 @@
 
         public override string ToString()
         {
-            string rdn = String.Format("{0}={1}", this.Name, this.Value);
-            return EscapeRDN(rdn);
+            return String.Format("{0}={1}", EscapeValue(this.Name), EscapeValue(this.Value));
         }
 
-        private static string EscapeRDN(string input)
+        private static string EscapeValue(string input)
         {
-            // HACK: Internal member System.DirectoryServices.ActiveDirectory.Utils.GetEscapedPath is used.
-            var directoryServicesAssembly = Assembly.Load(@"System.DirectoryServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-            var utilsClass = directoryServicesAssembly.GetType("System.DirectoryServices.ActiveDirectory.Utils");
-            var getEscapedPathMethod = utilsClass.GetMethod("GetEscapedPath", BindingFlags.Static | BindingFlags.NonPublic);
-            try
+            var result = new StringBuilder(input.Length);
+
+            for (int i = 0; i < input.Length; i++)
             {
-                return (string)getEscapedPathMethod.Invoke(null, new object[] { input });
+                char currentChar = input[i]; 
+                if (IsSpecialChar(currentChar))
+                {
+                    // Escape special chars
+                    result.Append('\\');
+                    result.Append(currentChar);
+                }
+                else if (currentChar == ' ' && (i == 0 || i == input.Length - 1))
+                {
+                    // Escape the leading or ending space
+                    result.Append("\\ ");
+                }
+                else if (currentChar < 32)
+                {
+                    // Escape control chars
+                    result.AppendFormat("\\{0:X2}", (int)currentChar);
+                }
+                else if (currentChar >= 128)
+                {
+                    // Escape multibyte chars
+                    byte[] bytes = Encoding.UTF8.GetBytes(currentChar.ToString());
+
+                    foreach (byte currentByte in bytes)
+                    {
+                        result.AppendFormat("\\{0:X2}", currentByte);
+                    }
+                }
+                else
+                {
+                    // Append the char without escaping
+                    result.Append(currentChar);
+                }
             }
-            catch (TargetInvocationException ex)
+
+            return result.ToString();
+        }
+
+        private static bool IsSpecialChar(char c)
+        {
+            // RFC 2253: special = "," / "=" / "+" / "<" /  ">" / "#" / ";"
+            switch(c)
             {
-                throw ex.InnerException;
+                case ',':
+                case '=':
+                case '+':
+                case '<':
+                case '>':
+                case '#':
+                case ';':
+                case '\\': // Escape char
+                case '"':  // Quote char
+                    return true;
+                default:
+                    return false;
             }
         }
     }
