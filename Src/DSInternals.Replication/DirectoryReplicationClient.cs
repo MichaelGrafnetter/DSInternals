@@ -129,6 +129,13 @@
             return this.GetAccount(objectGuid);
         }
 
+        public DSAccount GetAccountByUPN(string userPrincipalName)
+        {
+            // TODO: Redesign the GetAccount overloads, for GetAccountByUPN to follow the same convention.
+            Guid objectGuid = this.drsConnection.ResolveGuid(userPrincipalName);
+            return this.GetAccount(objectGuid);
+        }
+
         private DirectorySecretDecryptor SecretDecryptor
         {
             get

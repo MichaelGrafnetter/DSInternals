@@ -280,6 +280,12 @@ namespace DSInternals
 				return Guid::Parse(stringGuid);
 			}
 
+			Guid DrsConnection::ResolveGuid(String^ userPrincipalName)
+			{
+				auto stringGuid = this->ResolveName(userPrincipalName, DS_NAME_FORMAT::DS_USER_PRINCIPAL_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				return Guid::Parse(stringGuid);
+			}
+
 			String^ DrsConnection::ResolveName(String^ name, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired)
 			{
 				// We only want to resolve 1 name at a time:

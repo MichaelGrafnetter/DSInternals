@@ -49,6 +49,7 @@ namespace DSInternals
 				String^ ResolveDistinguishedName(SecurityIdentifier^ objectSid);
 				Guid ResolveGuid(NTAccount^ accountName);
 				Guid ResolveGuid(SecurityIdentifier^ objectSid);
+				Guid ResolveGuid(String^ userPrincipalName);
 			protected:
 				virtual bool ReleaseHandle() override;
 			private:
