@@ -14,7 +14,13 @@ namespace DSInternals.SAM.Interop
     {
         private const string spnPrefix = "cifs/";
         private const string SamLib = "samlib.dll";
-        private const string NtdsApi = "ntdsapi.dll";
+        private const string NtdsApi = "ntdsapi.dll";        
+        /// <summary>
+        ///  The maximum value of 1,000 is chosen to limit the amount of memory that the client can force the server to allocate.
+        /// </summary>
+        /// <see>https://msdn.microsoft.com/en-us/library/cc245712.aspx</see>
+        private const int MaxNamesToLookup = 1000;
+
         /// <summary>
         /// Establish a session with a SAM subsystem and subsequently open the SamServer object of that subsystem.
         /// The caller must have SAM_SERVER_CONNECT access to the SamServer object of the subsystem being connected to.
@@ -202,7 +208,7 @@ namespace DSInternals.SAM.Interop
         {
             Validator.AssertNotNull(names, "names");
             int count = names.Length;
-            if(count > 1000)
+            if(count > MaxNamesToLookup)
             {
                 // TODO: Extract as resource
                 throw new ArgumentOutOfRangeException("names", count, "Cannot translate more than 1000 names at once.");
