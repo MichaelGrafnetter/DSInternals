@@ -1,3 +1,11 @@
+Version 2.16
+- [Module] Added the Test-PasswordQuality and ConvertTo-NTHashSet cmdlets.
+- [Module] Added support for the the UserAccountControl attribute of user accounts.
+- [Framework] Added the ability to replicate user accounts by specifying their UPN.
+- [Framework] Added the ability to calculate a NT hash from both String and SecureString.
+- [Framework] Added the HashEqualityComparer, which allows the hashes to be stored 
+  in the built-in generic collections.
+
 Version 2.15
 - Removed dependency on ADSI.
 - Added support for the PAM optional feature. 

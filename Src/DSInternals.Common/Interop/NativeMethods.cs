@@ -45,6 +45,17 @@ namespace DSInternals.Common.Interop
         /// <see>https://github.com/wine-mirror/wine/blob/master/dlls/advapi32/crypt_md4.c</see>
         [DllImport(Advapi, SetLastError = true, EntryPoint = NTOwfInternalName, CharSet = CharSet.Unicode)]
         private static extern NtStatus RtlCalculateNtOwfPassword([In] ref SecureUnicodeString password, [MarshalAs(UnmanagedType.LPArray, SizeConst = NTHashNumBytes), In, Out] byte[] hash);
+        
+        /// <summary>
+        /// Takes the passed NtPassword and performs a one-way-function on it.
+        /// Uses the RSA MD4 function 
+        /// </summary>
+        /// <param name="password">The password to perform the one-way-function on. </param>
+        /// <param name="hash">The hashed password is returned here.</param>
+        /// <returns>STATUS_SUCCESS - The function was completed successfully. The hashed password is in hash.</returns>
+        /// <see>https://github.com/wine-mirror/wine/blob/master/dlls/advapi32/crypt_md4.c</see>
+        [DllImport(Advapi, SetLastError = true, EntryPoint = NTOwfInternalName, CharSet = CharSet.Unicode)]
+        private static extern NtStatus RtlCalculateNtOwfPassword([In] ref UnicodeString password, [MarshalAs(UnmanagedType.LPArray, SizeConst = NTHashNumBytes), In, Out] byte[] hash);
 
         internal static NtStatus RtlCalculateNtOwfPassword(SafeUnicodeSecureStringPointer password, out byte[] hash)
         {
@@ -53,6 +64,15 @@ namespace DSInternals.Common.Interop
             hash = new byte[NTHashNumBytes];
             return RtlCalculateNtOwfPassword(ref unicodePassword, hash);
         }
+
+        internal static NtStatus RtlCalculateNtOwfPassword(string password, out byte[] hash)
+        {
+            UnicodeString unicodePassword = new UnicodeString(password);
+            // Allocate output buffer
+            hash = new byte[NTHashNumBytes];
+            return RtlCalculateNtOwfPassword(ref unicodePassword, hash);
+        }
+
         /// <summary>
         /// Takes the passed password and performs a one-way-function on it.
         /// The current implementation does this by using the password as a key to encrypt a known block of text.

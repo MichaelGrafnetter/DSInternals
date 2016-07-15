@@ -13,6 +13,17 @@ namespace DSInternals.Common.Cryptography
         public const int HashSize = NativeMethods.NTHashNumBytes;
         public const int MaxInputLength = NativeMethods.NTPasswordMaxChars;
 
+        /// <summary>
+        /// Gets the NT hash of an empty password.
+        /// </summary>
+        public static byte[] Empty
+        {
+            get
+            {
+                return ComputeHash(string.Empty);
+            }
+        }
+
         public static byte[] ComputeHash(SecureString password)
         {
             Validator.AssertNotNull(password, "password");
@@ -22,6 +33,15 @@ namespace DSInternals.Common.Cryptography
                 NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(passwordPtr, out hash);
                 Validator.AssertSuccess(result);
             }
+            return hash;
+        }
+
+        public static byte[] ComputeHash(string password)
+        {
+            Validator.AssertNotNull(password, "password");
+            byte[] hash;
+            NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(password, out hash);
+            Validator.AssertSuccess(result);
             return hash;
         }
     }

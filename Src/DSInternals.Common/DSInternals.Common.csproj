@@ -38,6 +38,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cryptography\HashEqualityComparer.cs" />
     <Compile Include="Cryptography\Pbkdf2.cs" />
     <Compile Include="Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Cryptography\Crc32.cs" />

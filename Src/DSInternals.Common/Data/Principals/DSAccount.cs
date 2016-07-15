@@ -1,9 +1,9 @@
 ﻿namespace DSInternals.Common.Data
 {
     using DSInternals.Common.Cryptography;
-using System;
-using System.Security.AccessControl;
-using System.Security.Principal;
+    using System;
+    using System.Security.AccessControl;
+    using System.Security.Principal;
 
     public class DSAccount
     {
@@ -59,12 +59,10 @@ using System.Security.Principal;
             // AdminCount (Although the schema defines it as Int32, it can only have values 0 and 1, so we directly convert it to bool)
             dsObject.ReadAttribute(CommonDirectoryAttributes.AdminCount, out this.adminCount);
 
-            // Enabled:
-            // TODO: Move to DirectoryObject?
+            // UAC:
             int? numericUac;
             dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out numericUac);
-            UserAccountControl uac = (UserAccountControl)numericUac.Value;
-            this.Enabled = !uac.HasFlag(UserAccountControl.Disabled);
+            this.UserAccountControl = (UserAccountControl)numericUac.Value;
 
             // Deleted:
             dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out this.isDeleted);
@@ -237,9 +235,24 @@ using System.Security.Principal;
         /// </value>
         public bool Enabled
         {
+            get
+            {
+                return !this.UserAccountControl.HasFlag(UserAccountControl.Disabled);
+            }
+        }
+
+        /// <summary>
+        /// Gets the flags that control the behavior of the user account.
+        /// </summary>
+        /// <value>
+        /// The value can be zero or a combination of one or more flags.
+        /// </value>
+        public UserAccountControl UserAccountControl
+        {
             get;
             private set;
         }
+
         /// <summary>
         /// Gets a boolean value indicating whether this <see cref="DSAccount"/> is deleted.
         /// </summary>

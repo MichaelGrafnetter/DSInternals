@@ -9,31 +9,57 @@ namespace DSInternals.Common.Cryptography.Test
     public class NTHashTester
     {
         [TestMethod]
-        public void NTHash_EmptyInput()
+        public void NTHash_SecureString_EmptyInput()
         {
             SecureString password = string.Empty.ToSecureString();
             string result = NTHash.ComputeHash(password).ToHex(true);
             string expected = "31D6CFE0D16AE931B73C59D7E0C089C0";
             Assert.AreEqual(expected, result);
         }
+
+        [TestMethod]
+        public void NTHash_String_EmptyInput()
+        {
+            string result = NTHash.ComputeHash(string.Empty).ToHex(true);
+            string expected = "31D6CFE0D16AE931B73C59D7E0C089C0";
+            Assert.AreEqual(expected, result);
+        }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void NTHash_NullInput()
+        public void NTHash_SecureString_NullInput()
         {
-            NTHash.ComputeHash(null);
+            NTHash.ComputeHash((SecureString)null);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NTHash_String_NullInput()
+        {
+            NTHash.ComputeHash((string)null);
+        }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void NTHash_LongInput()
+        public void NTHash_SecureString_LongInput()
         {
             SecureString password = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789".ToSecureString();
             string result = NTHash.ComputeHash(password).ToHex(true);
         }
+
         [TestMethod]
-        public void NTHash_TestVector1()
+        public void NTHash_SecureString_TestVector1()
         {
             SecureString password = "Pa$$w0rd".ToSecureString();
             string result = NTHash.ComputeHash(password).ToHex(true);
+            string expected = "92937945B518814341DE3F726500D4FF";
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void NTHash_String_TestVector1()
+        {
+            string result = NTHash.ComputeHash("Pa$$w0rd").ToHex(true);
             string expected = "92937945B518814341DE3F726500D4FF";
             Assert.AreEqual(expected, result);
         }

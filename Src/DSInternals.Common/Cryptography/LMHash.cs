@@ -16,27 +16,6 @@ namespace DSInternals.Common.Cryptography
 
         public const int MaxChars = NativeMethods.LMPasswordMaxChars;
 
-        //public static byte[] ComputeHash(SecureString password)
-        //{
-        //    Validator.AssertNotNull(password, "password");
-        //    Validator.AssertMaxLength(password, MaxChars, "password");
-        //    int oemPwdBufferLength = Encoding.ASCII.GetMaxByteCount(MaxChars);
-        //    byte[] hash;
-        //    using (SafeOemStringPointer oemPwdBuffer = SafeOemStringPointer.Allocate(oemPwdBufferLength))
-        //    {
-        //        using(SafeUnicodeSecureStringPointer unicodePwdBuffer = new SafeUnicodeSecureStringPointer(password))
-        //        {
-
-        //            NtStatus result1 = NativeMethods.RtlUpcaseUnicodeToOemN(oemPwdBuffer, (uint)oemPwdBufferLength, unicodePwdBuffer);
-        //            Validator.AssertSuccess(result1);
-        //        }
-
-        //        NtStatus result2 = NativeMethods.RtlCalculateLmOwfPassword(oemPwdBuffer, out hash);
-        //        Validator.AssertSuccess(result2);
-        //    }
-        //    return hash;
-        //}
-
         public static byte[] ComputeHash(SecureString password)
         {
             Validator.AssertNotNull(password, "password");

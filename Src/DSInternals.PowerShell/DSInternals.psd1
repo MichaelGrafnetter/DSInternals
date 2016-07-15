@@ -56,7 +56,8 @@ ProcessorArchitecture = 'None'
 # TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = 'DSInternals.format.ps1xml'
+FormatsToProcess = 'DSInternals.DSAccount.format.ps1xml',
+				   'DSInternals.PasswordQualityTestResult.format.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('DSInternals.PowerShell.dll')
@@ -75,7 +76,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                'Get-ADReplAccount', 'ConvertTo-Hex',
 			   'ConvertFrom-ADManagedPasswordBlob',
 			   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
-			   'Set-ADDBBootKey'
+			   'Set-ADDBBootKey','ConvertTo-NTHashDictionary', 'Test-PasswordQuality'
 
 # Variables to export from this module
 # VariablesToExport = @()
@@ -84,7 +85,9 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
 AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
 				  'ConvertFrom-UnattendXmlPassword', 'ConvertTo-AADHash',
 				  'ConvertTo-MsoPasswordHash', 'Get-ADReplicationAccount',
-				  'ConvertFrom-ManagedPasswordBlob', 'Get-SysKey', 'Set-ADDBSysKey'
+				  'ConvertFrom-ManagedPasswordBlob', 'Get-SysKey', 'Set-ADDBSysKey',
+				  'New-NTHashSet', 'Test-ADPasswordQuality',
+				  'Test-ADDBPasswordQuality', 'Test-ADReplPasswordQuality' 
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -114,11 +117,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Removed dependency on ADSI.
-- Added support for the PAM optional feature. 
-- Added the PWDump custom view.
-- Added the HashNT custom view.
-- Added the HashLM custom view.
+- Added the Test-PasswordQuality and ConvertTo-NTHashDictionary cmdlets.
 "@
     } # End of PSData hashtable
 
