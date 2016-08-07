@@ -7,61 +7,17 @@ The DSInternals PowerShell Module exposes several internal and undocumented feat
 List of Cmdlets
 ---------------
 
+To see the list of available cmdlets with their description, run this command:
+
+PS > Get-Help about_DSInternals
 Offline AD Database Access:
-
-Get-ADDBAccount
-Get-ADDBDomainController
-Get-BootKey
-Get-ADDBBackupKey
-Get-ADDBSchemaAttribute
-Add-ADDBSidHistory
-Set-ADDBPrimaryGroup
-Set-ADDBDomainController
-Set-ADDBBootKey
-Remove-ADDBObject
-
-Online AD Database Access:
-
-Get-ADReplAccount
-Get-ADReplBackupKey
-Set-SamAccountPasswordHash
-
-Password Hash Calculation:
-
-ConvertTo-NTHash
-ConvertTo-LMHash
-ConvertTo-OrgIdHash
-
-Password Decryption:
-
-ConvertFrom-ADManagedPasswordBlob
-ConvertFrom-UnicodePassword
-ConvertTo-UnicodePassword
-ConvertFrom-GPPrefPassword
-ConvertTo-GPPrefPassword
-
-Misc:
-
-ConvertTo-Hex
-Save-DPAPIBlob
-
 
 System Requirements
 -------------------
 
-- Windows PowerShell 3+ (both 64-bit and 32-bit hosts are supported)
-- .NET Framework 4.5.1+
+List of supported systems is available here:
 
-The cmdlets have been tested on these operating systems:
-
-Windows Server 2016
-Windows Server 2012 R2
-Windows Server 2008 R2
-Windows 10
-Windows 8.1
-Windows 7
-
-The cmdlets working with the AD database do not support Windows 2000 domain functional level.
+https://github.com/MichaelGrafnetter/DSInternals/wiki/Installation
 
 Installation
 ------------
@@ -99,3 +55,8 @@ Homepage
 --------
 
 https://www.dsinternals.com
+
+Source Codes
+------------
+
+https://github.com/MichaelGrafnetter/DSInternals

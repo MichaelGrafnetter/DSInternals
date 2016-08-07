@@ -20,6 +20,16 @@ LONG DESCRIPTION
 		-----------
 		
 		Reads the BootKey/SysKey from an offline SYSTEM registry hive.
+
+		Set-ADDBBootKey
+		---------------
+
+		Re-encrypts a ntds.dit with a new BootKey. Highly experimental!
+		
+		Get-ADDBBackupKey
+		-----------------
+
+		Reads the DPAPI backup keys from a ntds.dit file.
 		
 		Add-ADDBSidHistory
 		------------------
@@ -60,6 +70,11 @@ LONG DESCRIPTION
 		-----------------
 		
 		Reads one or more accounts through the DRSR protocol, including secret attributes.
+
+		Get-ADReplBackupKey
+		-------------------
+		
+		Reads the DPAPI backup keys through the DRSR protocol.
 		
 		Set-SamAccountPasswordHash
 		--------------------------
@@ -72,6 +87,11 @@ LONG DESCRIPTION
 		----------------
 		
 		Calculates NT hash of a given password.
+
+		ConvertTo-NTHashDictionary
+		--------------------------
+		
+		Creates a hash->password dictionary for use with the Test-PasswordQuality cmdlet.
 		
 		ConvertTo-LMHash
 		----------------
@@ -104,12 +124,23 @@ LONG DESCRIPTION
 		-------------------------
 
 		Converts a password to the format used in unattend.xml or *.ldif files.
-	
-	Misc
-		
+
 		ConvertFrom-ADManagedPasswordBlob
+		---------------------------------
 
 		Decodes the value of the msDS-ManagedPassword attribute of a Group Managed Service Account.
+
+	Misc
+		
+		Test-PasswordQuality
+		--------------------
+		
+		Performs AD audit, including checks for weak, duplicate, default and empty passwords.
+		
+		Save-DPAPIBlob
+		--------------
+		
+		Saves the output of the Get-ADReplBackupKey and Get-ADDBBackupKey cmdlets to a file.
 
 		ConvertTo-Hex
 		-------------
