@@ -426,6 +426,11 @@
                 <PropertyName>Enabled</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>UserAccountControl: </Text>
+              <ExpressionBinding>
+                <PropertyName>UserAccountControl</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
               <Text>AdminCount: </Text>
               <ExpressionBinding>
                 <PropertyName>AdminCount</PropertyName>
