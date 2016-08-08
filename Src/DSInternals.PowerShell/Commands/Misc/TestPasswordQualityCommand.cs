@@ -56,6 +56,13 @@
             set;
         }
 
+        [Parameter]
+        public SwitchParameter ShowPlainTextPasswords
+        {
+            get;
+            set;
+        }
+
         #endregion Parameters
 
         #region Fields
@@ -130,7 +137,9 @@
                 if(this.Account.SupplementalCredentials.ClearText != null)
                 {
                     // Account has ClearText password (stored using reversible encryption)
-                    this.result.ClearTextPassword.Add(this.Account.SamAccountName);
+                    // Only reveal the password if explicitly asked to do so.
+                    string outputPassword = this.ShowPlainTextPasswords.IsPresent ? this.Account.SupplementalCredentials.ClearText : String.Empty;
+                    this.result.ClearTextPassword.Add(this.Account.SamAccountName, outputPassword);
                 }
                 if(this.Account.SupplementalCredentials.KerberosNew == null)
                 {
@@ -202,7 +211,9 @@
             if(isInDictionary)
             {
                 // The current password hash is on the list
-                this.result.WeakPassword.Add(this.Account.SamAccountName, foundPassword);
+                // Only reveal the password if explicitly asked to do so.
+                string outputPassword = this.ShowPlainTextPasswords.IsPresent ? foundPassword : String.Empty;
+                this.result.WeakPassword.Add(this.Account.SamAccountName, outputPassword);
             }
 
             if (this.Account.NTHashHistory == null || this.Account.NTHashHistory.Length <= 1)
@@ -218,7 +229,9 @@
                 if(isInDictionary)
                 {
                     // A historical password is on the list
-                    this.result.WeakHistoricalPassword.Add(this.Account.SamAccountName, foundPassword);
+                    // Only reveal the password if explicitly asked to do so.
+                    string outputPassword = this.ShowPlainTextPasswords.IsPresent ? foundPassword : String.Empty;
+                    this.result.WeakHistoricalPassword.Add(this.Account.SamAccountName, outputPassword);
 
                     // We already found one matching hash, so we skip the rest of the hashes.
                     break;

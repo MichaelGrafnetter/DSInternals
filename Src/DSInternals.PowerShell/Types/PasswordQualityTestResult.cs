@@ -11,7 +11,7 @@
         /// <summary>
         /// List of accounts whose passwords are stored using reversible encryption.
         /// </summary>
-        public StringCollection ClearTextPassword = new StringCollection();
+        public StringDictionary ClearTextPassword = new StringDictionary();
         /// <summary>
         /// List of accounts whose LM hashes are stored in the database.
         /// </summary>
