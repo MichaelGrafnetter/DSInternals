@@ -117,7 +117,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Test-PasswordQuality and ConvertTo-NTHashDictionary cmdlets.
+- Added the -ShowPlainTextPasswords parameter to the Test-PasswordQuality cmdlet.
 "@
     } # End of PSData hashtable
 
