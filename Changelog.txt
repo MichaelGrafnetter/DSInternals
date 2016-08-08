@@ -1,5 +1,5 @@
 Version 2.16.1
-- [Module] Added the -ShowClearTextPassword parameter to the Test-PasswordQuality cmdlet.
+- [Module] Added the -ShowPlainTextPasswords parameter to the Test-PasswordQuality cmdlet.
   Cracked and cleartext passwords now do not get displayed by default.
 
 Version 2.16
