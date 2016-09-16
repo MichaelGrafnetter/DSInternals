@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RpcTypeConverter.h"
 
+using namespace DSInternals::Common;
 using namespace System;
 using namespace System::Runtime::InteropServices;
 using namespace std;
@@ -29,6 +30,27 @@ namespace DSInternals
 					uuid.Data4[6], uuid.Data4[7]);
 			}
 
+			array<ReplicationCursor^>^ RpcTypeConverter::ToReplicationCursors(midl_ptr<DS_REPL_CURSORS> &&nativeCursors)
+			{
+				if (!nativeCursors)
+				{
+					return nullptr;
+				}
+
+				DWORD numCursors = nativeCursors->cNumCursors;
+				auto managedCursors = gcnew array<ReplicationCursor^>(numCursors);
+				
+				// Process all cursors, one-by-one
+				for (DWORD i = 0; i < numCursors; i++)
+				{
+					auto currentCursor = nativeCursors->rgCursor[i];
+					auto invocationId = RpcTypeConverter::ToGuid(currentCursor.uuidSourceDsaInvocationID);
+					managedCursors[i] = gcnew ReplicationCursor(invocationId, currentCursor.usnAttributeFilter);
+				}
+
+				return managedCursors;
+			}
+
 			midl_ptr<wchar_t> RpcTypeConverter::ToNativeString(String^ input)
 			{
 				if (input == nullptr)
@@ -48,7 +70,8 @@ namespace DSInternals
 
 			midl_ptr<DSNAME> RpcTypeConverter::ToDsName(String^ distinguishedName)
 			{
-				// TODO: Test DN not null
+				// Validate the parameter
+				Validator::AssertNotNullOrWhiteSpace(distinguishedName, "distinguishedName");
 
 				// Allocate and initialize the DSNAME struct
 				auto dnLen = distinguishedName->Length;

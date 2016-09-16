@@ -3,6 +3,7 @@ using DSInternals.Common.Interop;
 using DSInternals.Common.Properties;
 using System;
 using System.ComponentModel;
+using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Security;
 using System.Text.RegularExpressions;
@@ -15,18 +16,47 @@ namespace DSInternals.Common
 
         public static void AssertSuccess(NtStatus status)
         {
-            if(status != NtStatus.Success)
-            {
-                Win32ErrorCode code = NativeMethods.RtlNtStatusToDosError(status);
-                throw new Win32Exception((int) code);
-            }
+            Win32ErrorCode code = NativeMethods.RtlNtStatusToDosError(status);
+            AssertSuccess(code);
         }
         public static void AssertSuccess(Win32ErrorCode code)
         {
-            if (code != Win32ErrorCode.Success)
-            {
-                throw new Win32Exception((int) code);
+            if(code == Win32ErrorCode.Success)
+            { 
+                // No error occured, so exit gracefully.
+                return;
             }
+            var genericException = new Win32Exception((int)code);
+            Exception exceptionToThrow;
+            // We will try to translate the generic Win32 exception to a more specific built-in exception.
+            switch(code)
+            {
+                case Win32ErrorCode.DS_INVALID_DN_SYNTAX:
+                    exceptionToThrow = new ArgumentException(genericException.Message, genericException);
+                    break;
+                case Win32ErrorCode.ACCESS_DENIED:
+                case Win32ErrorCode.DS_DRA_ACCESS_DENIED:
+                    exceptionToThrow = new UnauthorizedAccessException(genericException.Message, genericException);
+                    break;
+                case Win32ErrorCode.NOT_ENOUGH_MEMORY:
+                case Win32ErrorCode.OUTOFMEMORY:
+                case Win32ErrorCode.DS_DRA_OUT_OF_MEM:
+                case Win32ErrorCode.RPC_S_OUT_OF_RESOURCES:
+                    exceptionToThrow = new OutOfMemoryException(genericException.Message, genericException);
+                    break;
+                case Win32ErrorCode.NO_LOGON_SERVERS:
+                case Win32ErrorCode.NO_SUCH_DOMAIN:
+                case Win32ErrorCode.RPC_S_SERVER_UNAVAILABLE:
+                case Win32ErrorCode.RPC_S_CALL_FAILED:
+                    exceptionToThrow = new ActiveDirectoryServerDownException(genericException.Message, genericException);
+                    break;
+                // TODO: Add translation for ActiveDirectoryOperationException and for other exception types.
+                default:
+                    // We were not able to translate the Win32Exception to a more specific type.
+                    exceptionToThrow = genericException;
+                    break;
+            }
+            throw exceptionToThrow;
         }
 
         public static void AssertIsHex(string value, string paramName)

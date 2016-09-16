@@ -486,5 +486,12 @@ ULONG IDL_DRSCrackNames_NoSEH(
 	/* [ref][out] */ DWORD *pdwOutVersion,
 	/* [switch_is][ref][out] */ DRS_MSG_CRACKREPLY *pmsgOut);
 
+ULONG IDL_DRSGetReplInfo_NoSEH(
+	/* [ref][in] */ DRS_HANDLE hDrs,
+	/* [in] */ DWORD dwInVersion,
+	/* [switch_is][ref][in] */ DRS_MSG_GETREPLINFO_REQ *pmsgIn,
+	/* [ref][out] */ DWORD *pdwOutVersion,
+	/* [switch_is][ref][out] */ DRS_MSG_GETREPLINFO_REPLY *pmsgOut);
+
 ULONG IDL_DRSUnbind_NoSEH(
 	/* [ref][out][in] */ DRS_HANDLE *phDrs);

@@ -41,6 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
@@ -53,6 +54,7 @@
     <Compile Include="ReplicaObject.cs" />
     <Compile Include="ReplicaObjectCollection.cs" />
     <Compile Include="ReplicationCookie.cs" />
+    <Compile Include="ReplicationCursor.cs" />
     <Compile Include="ReplicationResult.cs" />
   </ItemGroup>
   <ItemGroup>

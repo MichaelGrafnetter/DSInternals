@@ -32,26 +32,46 @@
 
         public DirectoryReplicationClient(string server, RpcProtocol protocol, NetworkCredential credential = null)
         {
+            Validator.AssertNotNullOrWhiteSpace(server, "server");
             this.CreateRpcConnection(server, protocol, credential);
             this.drsConnection = new DrsConnection(this.rpcConnection.Binding, DcPromoGuid2k3);
         }
 
-        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext)
+        public ReplicationCursor[] GetReplicationCursors(string namingContext)
+        {
+            Validator.AssertNotNullOrWhiteSpace(namingContext, "namingContext");
+            return this.drsConnection.GetReplicationCursors(namingContext);
+        }
+
+        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null)
         {
             Validator.AssertNotNullOrWhiteSpace(domainNamingContext, "domainNamingContext");
             ReplicationCookie cookie = new ReplicationCookie(domainNamingContext);
-            return GetAccounts(cookie);
+            return GetAccounts(cookie, progressReporter);
         }
 
-        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie cookie)
+        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null)
         {
-            Validator.AssertNotNull(cookie, "cookie");
-            // Set Schema
+            Validator.AssertNotNull(initialCookie, "initialCookie");
+            // Create AD schema
             var schema = BasicSchemaFactory.CreateSchema();
+            var currentCookie = initialCookie;
             ReplicationResult result;
+            int processedObjectCount = 0;
+
             do
             {
-                result = this.drsConnection.ReplicateAllObjects(cookie);
+                // Perform one replication cycle
+                result = this.drsConnection.ReplicateAllObjects(currentCookie);
+                
+                // Report replication progress
+                if(progressReporter != null)
+                {
+                    processedObjectCount += result.Objects.Count;
+                    progressReporter(result.Cookie, processedObjectCount, result.TotalObjectCount);
+                }
+
+                // Process the returned objects
                 foreach (var obj in result.Objects)
                 {
                     obj.Schema = schema;
@@ -62,10 +82,9 @@
                     var account = new DSAccount(obj, this.SecretDecryptor);
                     yield return account;
                 }
-                /* We are modifying the original cookie. Originally, the cookie was immutable,
-                   but the new value could not be returned because iterators do not support out/ref.
-                   This is probably a poor design and it might be done in a more elegant way. */
-                cookie.Assign(result.Cookie);
+
+                // Update the position of the replication cursor
+                currentCookie = result.Cookie;
             } while (result.HasMoreData);
         }
 
@@ -79,7 +98,7 @@
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(string domainNamingContext)
         {
-            // TODO: Move schema prom constructor to property?
+            // TODO: Move schema from constructor to property?
             // TODO: Split this function into RSA and Legacy Part so that exception in one of them does not crash the whole process
             var schema = BasicSchemaFactory.CreateSchema();
 

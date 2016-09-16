@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.16.1'
+ModuleVersion = '2.17'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -117,7 +117,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the -ShowPlainTextPasswords parameter to the Test-PasswordQuality cmdlet.
+- The Get-ADReplAccount -All command now reports replication progress.
 "@
     } # End of PSData hashtable
 

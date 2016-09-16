@@ -19,6 +19,9 @@ template<>
 void midl_delete<DRS_MSG_CRACKREPLY_V1>::operator()(DRS_MSG_CRACKREPLY_V1* request) const;
 
 template<>
+void midl_delete<DRS_MSG_GETREPLINFO_REQ_V1>::operator()(DRS_MSG_GETREPLINFO_REQ_V1* request) const;
+
+template<>
 midl_ptr<DRS_EXTENSIONS_INT> make_midl_ptr();
 
 template<>

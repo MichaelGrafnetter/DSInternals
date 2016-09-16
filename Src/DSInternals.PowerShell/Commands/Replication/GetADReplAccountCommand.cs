@@ -2,7 +2,10 @@
 {
     using DSInternals.Common.Data;
     using DSInternals.PowerShell.Properties;
+    using DSInternals.Replication;
+    using DSInternals.Replication.Model;
     using System;
+    using System.Linq;
     using System.Management.Automation;
     using System.Security.Principal;
 
@@ -72,10 +75,28 @@
 
         protected void ReturnAllAccounts()
         {
-            foreach (var account in this.ReplicationClient.GetAccounts(this.NamingContext))
+            // Write the initial progress
+            // TODO: Extract strings as resources
+            var progress = new ProgressRecord(1, "Replication", "Replicating Active Directory objects.");
+            progress.PercentComplete = 0;
+            this.WriteProgress(progress);
+
+            // Update the progress after each replication cycle
+            ReplicationProgressHandler progressReporter = (ReplicationCookie cookie, int processedObjectCount, int totalObjectCount) =>
+            {
+                progress.PercentComplete = (int) (((double)processedObjectCount / (double)totalObjectCount) * 100);
+                this.WriteProgress(progress);
+            };
+            
+            // Replicate all accounts
+            foreach (var account in this.ReplicationClient.GetAccounts(this.NamingContext, progressReporter))
             {
                 this.WriteObject(account);
             }
+
+            // Write progress completed
+            progress.RecordType = ProgressRecordType.Completed;
+            this.WriteProgress(progress);
         }
 
         protected void ReturnSingleAccount()

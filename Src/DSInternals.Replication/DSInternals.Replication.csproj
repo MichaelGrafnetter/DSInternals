@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="DirectoryReplicationClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReplicationProgressHandler.cs" />
     <Compile Include="RpcProtocol.cs" />
     <Compile Include="ReplicationSecretDecryptor.cs" />
   </ItemGroup>

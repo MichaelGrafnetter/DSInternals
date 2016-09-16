@@ -1,3 +1,9 @@
+Version 2.17
+- [Module] The Get-ADReplAccount -All command now reports replication progress.
+- [Framework] Added the ability to retrieve the replication cursor.
+- [Framework] The ReplicationCookie class is now immutable and replication progress is reported using a delegate.
+- [Framework] Win32 exceptions are now translated to more specific .NET exceptions by the Validator class.
+
 Version 2.16.1
 - [Module] Added the -ShowPlainTextPasswords parameter to the Test-PasswordQuality cmdlet.
   Cracked and cleartext passwords now do not get displayed by default.

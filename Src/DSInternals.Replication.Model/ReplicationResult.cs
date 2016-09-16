@@ -8,11 +8,12 @@ namespace DSInternals.Replication.Model
     public class ReplicationResult
     {
         // TODO: AsReadOnly
-        public ReplicationResult(ReplicaObjectCollection objects, bool hasMore, ReplicationCookie cookie)
+        public ReplicationResult(ReplicaObjectCollection objects, bool hasMore, ReplicationCookie cookie, int totalObjectCount)
         {
             this.Objects = objects;
             this.HasMoreData = hasMore;
             this.Cookie = cookie;
+            this.TotalObjectCount = totalObjectCount;
         }
         public ReplicaObjectCollection Objects
         {

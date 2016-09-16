@@ -78,9 +78,10 @@ namespace DSInternals
 			{
 				return this->_sessionKey;
 			}
-			void DrsConnection::SessionKey::set(array<byte>^ newKey)
+
+			Guid DrsConnection::ServerSiteGuid::get()
 			{
-				this->_sessionKey = newKey;
+				return this->_serverSiteObjectGuid;
 			}
 
 			midl_ptr<DRS_EXTENSIONS_INT> DrsConnection::CreateClientInfo()
@@ -91,6 +92,45 @@ namespace DSInternals
 				clientInfo->dwExtCaps = DRS_EXT2::DRS_EXT_LH_BETA2 | DRS_EXT2::DRS_EXT_RECYCLE_BIN | DRS_EXT2::DRS_EXT_PAM;
 				clientInfo->dwReplEpoch = this->_serverReplEpoch;
 				return clientInfo;
+			}
+
+			/// <summary>
+			/// Gets the replication cursor information for the specified partition.
+			/// </summary>
+			/// <param name="namingContext">The distinguished name of the partition for which to retrieve the replication cursor information.</param>
+			array<ReplicationCursor^>^ DrsConnection::GetReplicationCursors(String^ namingContext)
+			{
+				// Validate connection
+				// TODO: Extract connection validation as a proteted method
+				if (this->IsInvalid)
+				{
+					// TODO: Exception type
+					throw gcnew Exception("Not connected");
+				}
+				Validator::AssertNotNullOrWhiteSpace(namingContext, "namingContext");
+
+				// Prepare the parameters
+				DRS_HANDLE handle = this->handle.ToPointer();
+				const DWORD inVersion = 1;
+				DWORD outVersion = 0;
+				auto request = CreateReplicationCursorsRequest(namingContext);
+				
+				DRS_MSG_GETREPLINFO_REPLY reply = { nullptr };
+
+				// Retrieve info from DC
+				auto result = IDL_DRSGetReplInfo_NoSEH(handle, inVersion, (DRS_MSG_GETREPLINFO_REQ*)request.get(), &outVersion, &reply);
+				
+				// Validate the return code
+				Validator::AssertSuccess((Win32ErrorCode)result);
+
+				// TODO: Check the returned outVersion.
+
+				// Prevent memory leak by storing the cursors in midl_ptr
+				auto cursors = midl_ptr<DS_REPL_CURSORS>(reply.pCursors);
+
+				// Process the results
+				auto managedCursors = RpcTypeConverter::ToReplicationCursors(move(cursors));
+				return managedCursors;
 			}
 
 			midl_ptr<DRS_MSG_GETCHGREQ_V8> DrsConnection::CreateGenericReplicateRequest(midl_ptr<DSNAME> &&dsName, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects)
@@ -115,6 +155,14 @@ namespace DSInternals
 				return request;
 			}
 
+			midl_ptr<DRS_MSG_GETREPLINFO_REQ_V1> DrsConnection::CreateReplicationCursorsRequest(String^ namingContext)
+			{
+				auto request = make_midl_ptr<DRS_MSG_GETREPLINFO_REQ_V1>();
+				request->InfoType = DS_REPL_INFO_TYPE::DS_REPL_INFO_CURSORS_FOR_NC;
+				request->pszObjectDN = RpcTypeConverter::ToNativeString(namingContext).release();
+				return request;
+			}
+
 			midl_ptr<DRS_MSG_GETCHGREQ_V8> DrsConnection::CreateReplicateAllRequest(ReplicationCookie^ cookie, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects)
 			{
 				auto ncToReplicate = RpcTypeConverter::ToDsName(cookie->NamingContext);
@@ -124,13 +172,13 @@ namespace DSInternals
 				request->usnvecFrom.usnHighPropUpdate = cookie->HighPropUpdate;
 				request->usnvecFrom.usnReserved = cookie->Reserved;
 				request->uuidInvocIdSrc = RpcTypeConverter::ToUUID(cookie->InvocationId);
+				request->ulFlags |= DRS_OPTIONS::DRS_GET_NC_SIZE;
 				return request;
 			}
 
 			midl_ptr<DRS_MSG_GETCHGREQ_V8> DrsConnection::CreateReplicateSingleRequest(Guid objectGuid, array<ATTRTYP>^ partialAttributeSet)
 			{
 				auto objectToReplicate = RpcTypeConverter::ToDsName(objectGuid);
-				// TODO: Are sizes important?
 				auto request = CreateGenericReplicateRequest(move(objectToReplicate), partialAttributeSet, defaultMaxBytes, defaultMaxObjects);
 				request->ulExtendedOp = EXOP_REQ::EXOP_REPL_OBJ;
 				// Guid of an existing DC must be set for the replication to work
@@ -141,10 +189,9 @@ namespace DSInternals
 			midl_ptr<DRS_MSG_GETCHGREQ_V8> DrsConnection::CreateReplicateSingleRequest(String^ distinguishedName, array<ATTRTYP>^ partialAttributeSet)
 			{
 				auto objectToReplicate = RpcTypeConverter::ToDsName(distinguishedName);
-				// TODO: Are sizes important?
 				auto request = CreateGenericReplicateRequest(move(objectToReplicate), partialAttributeSet, defaultMaxBytes, defaultMaxObjects);
 				request->ulExtendedOp = EXOP_REQ::EXOP_REPL_OBJ;
-				// Guid of an existing DC must be set for the replication to work
+				// Guid of an existing object must be set for the replication to work
 				request->uuidDsaObjDest = RpcTypeConverter::ToUUID(this->_serverSiteObjectGuid);
 				return request;
 			}
@@ -161,8 +208,9 @@ namespace DSInternals
 
 			ReplicationResult^ DrsConnection::ReplicateAllObjects(ReplicationCookie^ cookie, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects)
 			{
-				// TODO: Validate Cookie not null
-				// TODO: To Params
+				// Validate parameters
+				Validator::AssertNotNull(cookie, "cookie");
+
 				auto request = CreateReplicateAllRequest(cookie, partialAttributeSet, maxBytes, maxObjects);
 				auto reply = GetNCChanges(move(request));
 				auto objects = ReadObjects(reply->pObjects, reply->cNumObjects);
@@ -170,7 +218,7 @@ namespace DSInternals
 				Guid invocationId = RpcTypeConverter::ToGuid(reply->uuidInvocIdSrc);
 				auto newCookie = gcnew ReplicationCookie(cookie->NamingContext, invocationId, usnTo.usnHighObjUpdate, usnTo.usnHighPropUpdate, usnTo.usnReserved);
 				bool hasMoreData = reply->fMoreData != 0;
-				return gcnew ReplicationResult(objects, hasMoreData, newCookie);
+				return gcnew ReplicationResult(objects, hasMoreData, newCookie, reply->cNumNcSizeObjects);
 			}
 
 			ReplicaObject^ DrsConnection::ReplicateSingleObject(String^ distinguishedName)
@@ -246,7 +294,7 @@ namespace DSInternals
 
 				if (reply->pResult->cItems != request->cNames)
 				{
-					// TODO: Exxception type
+					// TODO: Exception type
 					throw gcnew Exception("Obj not found");
 				}
 				return reply;
@@ -325,7 +373,7 @@ namespace DSInternals
 			
 			midl_ptr<PARTIAL_ATTR_VECTOR_V1_EXT> DrsConnection::CreateNativePas(array<ATTRTYP>^ partialAttributeSet)
 			{
-				// TODO: Move to type converter?
+				// TODO: Move to type RpcTypeConverter?
 				if (partialAttributeSet == nullptr)
 				{
 					return nullptr;
@@ -415,13 +463,13 @@ namespace DSInternals
 
 			Guid DrsConnection::ReadGuid(const GUID &guid)
 			{
-				// TODO: Type converter needed?
+				// TODO: Move to RpcTypeConverter?
 				return *reinterpret_cast<Guid *>(const_cast<GUID *>(&guid));
 			}
 
 			String^ DrsConnection::ReadName(const DSNAME* dsName)
 			{
-				// TODO: Move to type converter
+				// TODO: Move to RpcTypeConverter?
 				if (dsName == nullptr || dsName->NameLen <= 0)
 				{
 					return nullptr;
@@ -433,7 +481,7 @@ namespace DSInternals
 
 			SecurityIdentifier^ DrsConnection::ReadSid(const DSNAME* dsName)
 			{
-				// TODO: Move to type converter
+				// TODO: Move to type RpcTypeConverter?
 				if (dsName == nullptr || dsName->SidLen <= 0)
 				{
 					return nullptr;
@@ -469,7 +517,7 @@ namespace DSInternals
 					memcpy(pinnedManagedKey, nativeKey.SessionKey, nativeKey.SessionKeyLength);
 					// Do not forget to free the unmanaged memory
 					SECURITY_STATUS status3 = FreeContextBuffer(nativeKey.SessionKey);
-					this->SessionKey = managedKey;
+					this->_sessionKey = managedKey;
 				}
 			}
 		}

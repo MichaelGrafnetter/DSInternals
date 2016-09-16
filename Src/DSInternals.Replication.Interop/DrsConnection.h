@@ -36,8 +36,12 @@ namespace DSInternals
 				property array<byte>^ SessionKey
 				{
 					array<byte>^ get();
-					void set(array<byte>^ newKey);
 				}
+				property Guid ServerSiteGuid
+				{
+					Guid get();
+				}
+				array<ReplicationCursor^>^ GetReplicationCursors(String^ namingContext);
 				ReplicaObject^ ReplicateSingleObject(Guid objectGuid);
 				ReplicaObject^ ReplicateSingleObject(Guid objectGuid, array<ATTRTYP>^ partialAttributeSet);
 				ReplicaObject^ ReplicateSingleObject(String^ distinguishedName);
@@ -65,6 +69,7 @@ namespace DSInternals
 				midl_ptr<DRS_MSG_GETCHGREQ_V8> CreateReplicateSingleRequest(Guid objectGuid, array<ATTRTYP>^ partialAttributeSet);
 				midl_ptr<DRS_MSG_GETCHGREQ_V8> CreateGenericReplicateRequest(midl_ptr<DSNAME> &&dsName, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects);
 				void RetrieveSessionKey(void* rpcContext);
+				static midl_ptr<DRS_MSG_GETREPLINFO_REQ_V1> CreateReplicationCursorsRequest(String^ namingContext);
 				static midl_ptr<PARTIAL_ATTR_VECTOR_V1_EXT> CreateNativePas(array<ATTRTYP>^ partialAttributeSet);
 				static array<byte>^ ReadValue(const ATTRVAL &value);
 				static array<array<byte>^>^ ReadValues(const ATTRVALBLOCK &values);

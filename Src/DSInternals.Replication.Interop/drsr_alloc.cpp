@@ -156,7 +156,7 @@ void midl_delete<DRS_MSG_GETCHGREPLY_V6>::operator()(DRS_MSG_GETCHGREPLY_V6* rep
 
 	// Free the linked values:
 	DWORD numValues = reply->cNumValues;
-	for (DWORD i = 0; i < reply->cNumValues; i++)
+	for (DWORD i = 0; i < numValues; i++)
 	{
 		auto currentValue = reply->rgValues[i];
 		midl_user_free(currentValue.pObject);
@@ -166,4 +166,19 @@ void midl_delete<DRS_MSG_GETCHGREPLY_V6>::operator()(DRS_MSG_GETCHGREPLY_V6* rep
 
 	// Finally, free the encapsulating object:
 	midl_user_free(reply);
+}
+
+template<>
+void midl_delete<DRS_MSG_GETREPLINFO_REQ_V1>::operator()(DRS_MSG_GETREPLINFO_REQ_V1* request) const
+{
+	if (request == nullptr)
+	{
+		return;
+	}
+
+	// Free the DN string
+	midl_user_free(request->pszObjectDN);
+
+	// Free the encapsulating object:
+	midl_user_free(request);
 }
