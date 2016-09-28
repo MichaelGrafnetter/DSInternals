@@ -84,7 +84,9 @@
             // Update the progress after each replication cycle
             ReplicationProgressHandler progressReporter = (ReplicationCookie cookie, int processedObjectCount, int totalObjectCount) =>
             {
-                progress.PercentComplete = (int) (((double)processedObjectCount / (double)totalObjectCount) * 100);
+                int percentComplete = (int)(((double)processedObjectCount / (double)totalObjectCount) * 100);
+                // AD's object count estimate is sometimes lower than the actual count, so we cap the value to 100%.
+                progress.PercentComplete = Math.Min(percentComplete, 100);
                 this.WriteProgress(progress);
             };
             
