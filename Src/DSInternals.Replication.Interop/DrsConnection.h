@@ -54,6 +54,8 @@ namespace DSInternals
 				Guid ResolveGuid(NTAccount^ accountName);
 				Guid ResolveGuid(SecurityIdentifier^ objectSid);
 				Guid ResolveGuid(String^ userPrincipalName);
+				bool TestObjectExistence(String^ distinguishedName);
+				bool TestObjectExistence(Guid objectGuid);
 			protected:
 				virtual bool ReleaseHandle() override;
 			private:
@@ -61,8 +63,7 @@ namespace DSInternals
 				void Bind(IntPtr rpcHandle);
 				midl_ptr<DRS_MSG_GETCHGREPLY_V6> GetNCChanges(midl_ptr<DRS_MSG_GETCHGREQ_V8> &&request);
 				midl_ptr<DRS_MSG_CRACKREPLY_V1> CrackNames(midl_ptr<DRS_MSG_CRACKREQ_V1> &&request);
-				String^ ResolveName(String^ name, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired);
-				String^ ResolveName(midl_ptr<DRS_MSG_CRACKREQ_V1> &&request);
+				String^ TryResolveName(String^ name, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired);
 				midl_ptr<DRS_EXTENSIONS_INT> CreateClientInfo();
 				midl_ptr<DRS_MSG_GETCHGREQ_V8> CreateReplicateAllRequest(ReplicationCookie^ cookie, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects);
 				midl_ptr<DRS_MSG_GETCHGREQ_V8> CreateReplicateSingleRequest(String^ distinguishedName, array<ATTRTYP>^ partialAttributeSet);

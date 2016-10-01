@@ -11,11 +11,12 @@
             get;
             private set;
         }
-        public SchemaAttributeNotFoundException(string attributeName)
+        public SchemaAttributeNotFoundException(string attributeName) : base(null)
         {
             this.AttributeIdentifier = attributeName;
         }
         public SchemaAttributeNotFoundException(int attributeId)
+            : base(null)
         {
             this.AttributeIdentifier = attributeId;
         }

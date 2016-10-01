@@ -1,4 +1,5 @@
 ﻿using DSInternals.Common.Cryptography;
+using DSInternals.Common.Exceptions;
 using DSInternals.Common.Interop;
 using DSInternals.Common.Properties;
 using System;
@@ -36,6 +37,8 @@ namespace DSInternals.Common
                     break;
                 case Win32ErrorCode.ACCESS_DENIED:
                 case Win32ErrorCode.DS_DRA_ACCESS_DENIED:
+                case Win32ErrorCode.WRONG_PASSWORD:
+                case Win32ErrorCode.PASSWORD_EXPIRED:
                     exceptionToThrow = new UnauthorizedAccessException(genericException.Message, genericException);
                     break;
                 case Win32ErrorCode.NOT_ENOUGH_MEMORY:
@@ -49,6 +52,11 @@ namespace DSInternals.Common
                 case Win32ErrorCode.RPC_S_SERVER_UNAVAILABLE:
                 case Win32ErrorCode.RPC_S_CALL_FAILED:
                     exceptionToThrow = new ActiveDirectoryServerDownException(genericException.Message, genericException);
+                    break;
+                case Win32ErrorCode.DS_OBJ_NOT_FOUND:
+                // This error code means either a non-existing DN or Access Denied.
+                case Win32ErrorCode.DS_DRA_BAD_DN:
+                    exceptionToThrow = new DirectoryObjectNotFoundException(null, genericException);
                     break;
                 // TODO: Add translation for ActiveDirectoryOperationException and for other exception types.
                 default:

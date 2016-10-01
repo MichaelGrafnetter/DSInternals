@@ -620,7 +620,7 @@
         /// <summary>
         /// The volume label you entered exceeds the label character limit of the target file system.
         /// </summary>
-        LABEL_TOO_Int32 = 154,
+        LABEL_TOO_LONG = 154,
 
         /// <summary>
         /// Cannot create another thread.
@@ -811,7 +811,7 @@
         /// <summary>
         /// The global filename characters, * or ?, are entered incorrectly or too many global filename characters are specified.
         /// </summary>
-        META_EXPANSION_TOO_Int32 = 208,
+        META_EXPANSION_TOO_LONG = 208,
 
         /// <summary>
         /// The signal being posted is not correct.
@@ -1735,7 +1735,7 @@
         /// <summary>
         /// The format of the specified password is invalid.
         /// </summary>
-        INVALID_PASSUInt16NAME = 1216,
+        INVALID_PASSWORDNAME = 1216,
 
         /// <summary>
         /// The format of the specified message name is invalid.
@@ -2083,7 +2083,7 @@
         /// <summary>
         /// The password is too complex to be converted to a LAN Manager password. The LAN Manager password returned is a NULL string.
         /// </summary>
-        NULL_LM_PASSUInt16 = 1304,
+        NULL_LM_PASSWORD = 1304,
 
         /// <summary>
         /// The revision level is unknown.
@@ -2213,7 +2213,7 @@
         /// <summary>
         /// Logon failure: the specified account password has expired.
         /// </summary>
-        PASSUInt16_EXPIRED = 1330,
+        PASSWORD_EXPIRED = 1330,
 
         /// <summary>
         /// Logon failure: account currently disabled.
@@ -2468,7 +2468,7 @@
         /// <summary>
         /// The length of a secret exceeds the maximum length allowed.
         /// </summary>
-        SECRET_TOO_Int32 = 1382,
+        SECRET_TOO_LONG = 1382,
 
         /// <summary>
         /// The local security authority database contains an internal inconsistency.
@@ -3315,7 +3315,7 @@
         /// <summary>
         /// The string is too long.
         /// </summary>
-        RPC_S_STRING_TOO_Int32 = 1743,
+        RPC_S_STRING_TOO_LONG = 1743,
 
         /// <summary>
         /// The RPC protocol sequence was not found.
@@ -3470,7 +3470,7 @@
         /// <summary>
         /// The file containing the character translation table has fewer than 512 bytes.
         /// </summary>
-        RPC_X_SS_CHAR_TRANS_Int16_FILE = 1774,
+        RPC_X_SS_CHAR_TRANS_LONG_FILE = 1774,
 
         /// <summary>
         /// A null context handle was passed from the client to the host during a remote procedure call.
@@ -3805,7 +3805,7 @@
         /// <summary>
         /// The user's password must be changed before logging on the first time.
         /// </summary>
-        PASSUInt16_MUST_CHANGE = 1907,
+        PASSWORD_MUST_CHANGE = 1907,
 
         /// <summary>
         /// Could not find the domain controller for this domain.
@@ -4050,12 +4050,12 @@
         /// <summary>
         /// The network connection was made successfully, but the user had to be prompted for a password other than the one originally specified.
         /// </summary>
-        CONNECTED_OTHER_PASSUInt16 = 2108,
+        CONNECTED_OTHER_PASSWORD = 2108,
 
         /// <summary>
         /// The network connection was made successfully using default credentials.
         /// </summary>
-        CONNECTED_OTHER_PASSUInt16_DEFAULT = 2109,
+        CONNECTED_OTHER_PASSWORD_DEFAULT = 2109,
 
         /// <summary>
         /// The specified username is invalid.
@@ -5984,12 +5984,12 @@
         /// <summary>
         /// The name is too long.
         /// </summary>
-        DS_NAME_TOO_Int32 = 8348,
+        DS_NAME_TOO_LONG = 8348,
 
         /// <summary>
         /// The name value is too long.
         /// </summary>
-        DS_NAME_VALUE_TOO_Int32 = 8349,
+        DS_NAME_VALUE_TOO_LONG = 8349,
 
         /// <summary>
         /// The directory service encountered an error parsing a name.
@@ -6009,7 +6009,7 @@
         /// <summary>
         /// The security descriptor is too short.
         /// </summary>
-        DS_SEC_DESC_TOO_Int16 = 8353,
+        DS_SEC_DESC_TOO_LONG = 8353,
 
         /// <summary>
         /// The security descriptor is invalid.
@@ -6890,7 +6890,7 @@
         /// <summary>
         /// Security Account Manager needs to get the boot password.
         /// </summary>
-        DS_SAM_NEED_BOOTKEY_PASSUInt16 = 8529,
+        DS_SAM_NEED_BOOTKEY_PASSWORD = 8529,
 
         /// <summary>
         /// Security Account Manager needs to get the boot key from floppy disk.
@@ -8006,7 +8006,7 @@
         /// <summary>
         /// Name component or name was too long.
         /// </summary>
-        WSAENAMETOOInt32 = 10063,
+        WSAENAMETOOLONG = 10063,
 
         /// <summary>
         /// A socket operation failed because the destination host was down.
@@ -8657,7 +8657,7 @@
         /// <summary>
         /// Assembly Protection Error : The public key for an assembly was too short to be allowed.
         /// </summary>
-        SXS_PROTECTION_PUBLIC_KEY_TOO_Int16 = 14075,
+        SXS_PROTECTION_PUBLIC_KEY_TOO_LONG = 14075,
 
         /// <summary>
         /// Assembly Protection Error : The catalog for an assembly is not valid, or does not match the assembly's manifest.

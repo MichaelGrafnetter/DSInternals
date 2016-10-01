@@ -138,11 +138,14 @@
   <data name="ObjectNotAccountMessage" xml:space="preserve">
     <value>Object is not an account.</value>
   </data>
-  <data name="ObjectNotFoundMessageFormat" xml:space="preserve">
-    <value>Object with identity '{0}' has not been found.</value>
+  <data name="ObjectNotFoundMessage" xml:space="preserve">
+    <value>Could not find the requested object.</value>
   </data>
   <data name="ObjectNotSecurityPrincipalMessage" xml:space="preserve">
     <value>Object is not a security principal.</value>
+  </data>
+  <data name="ObjectWithIdentityNotFoundMessageFormat" xml:space="preserve">
+    <value>Object with identity '{0}' has not been found.</value>
   </data>
   <data name="OperationExceptionMessageFormat" xml:space="preserve">
     <value>{0} (Object identity: '{1}')</value>

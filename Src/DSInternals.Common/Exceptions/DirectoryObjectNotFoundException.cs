@@ -7,8 +7,8 @@
     [Serializable]
     public sealed class DirectoryObjectNotFoundException : DirectoryObjectException
     {
-        public DirectoryObjectNotFoundException(object objectIdentifier)
-            : base(objectIdentifier)
+        public DirectoryObjectNotFoundException(object objectIdentifier = null, Exception innerExcetion = null)
+            : base(objectIdentifier, innerExcetion)
         {
         }
 
@@ -16,7 +16,9 @@
         {
             get
             {
-                return String.Format(Resources.ObjectNotFoundMessageFormat,this.ObjectIdentifier);
+                return this.ObjectIdentifier != null ?
+                    String.Format(Resources.ObjectWithIdentityNotFoundMessageFormat, this.ObjectIdentifier) :
+                    Resources.ObjectNotFoundMessage;
             }
         }
     }

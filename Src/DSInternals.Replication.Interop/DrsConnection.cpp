@@ -3,6 +3,7 @@
 #include "RpcTypeConverter.h"
 
 using namespace DSInternals::Common;
+using namespace DSInternals::Common::Exceptions;
 using namespace DSInternals::Common::Interop;
 using namespace DSInternals::Replication::Model;
 
@@ -228,11 +229,29 @@ namespace DSInternals
 
 			ReplicaObject^ DrsConnection::ReplicateSingleObject(String^ distinguishedName, array<ATTRTYP>^ partialAttributeSet)
 			{
-				auto request = CreateReplicateSingleRequest(distinguishedName, partialAttributeSet);
-				auto reply = GetNCChanges(move(request));
-				auto objects = ReadObjects(reply->pObjects, reply->cNumObjects);
-				// TODO: Assert objects.Count == 1; It is guaranteed that it is > 0
-				return objects[0];
+				try
+				{
+					auto request = CreateReplicateSingleRequest(distinguishedName, partialAttributeSet);
+					auto reply = GetNCChanges(move(request));
+					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects);
+					// TODO: Assert objects.Count == 1; It is guaranteed that it is > 0
+					return objects[0];
+				}
+				catch (DirectoryObjectNotFoundException^)
+				{
+					// ReplicateSingleObject also exits with this error when access is denied, so we need to differentiate between these situations.
+					bool objectExists = this->TestObjectExistence(distinguishedName);
+					if (objectExists)
+					{
+						// Force the validator to throw the DRA access denied exception.
+						Validator::AssertSuccess(Win32ErrorCode::DS_DRA_ACCESS_DENIED);
+					}
+					else
+					{
+						// Rethrow the original exception, as the object really does not exists.
+						throw;
+					}
+				}
 			}
 
 			ReplicaObject^ DrsConnection::ReplicateSingleObject(Guid objectGuid)
@@ -242,11 +261,29 @@ namespace DSInternals
 
 			ReplicaObject^ DrsConnection::ReplicateSingleObject(Guid objectGuid, array<ATTRTYP>^ partialAttributeSet)
 			{
-				auto request = CreateReplicateSingleRequest(objectGuid, partialAttributeSet);
-				auto reply = GetNCChanges(move(request));
-				auto objects = ReadObjects(reply->pObjects, reply->cNumObjects);
-				// TODO: Assert objects.Count == 1; It is guaranteed that it is > 0
-				return objects[0];
+				try
+				{
+					auto request = CreateReplicateSingleRequest(objectGuid, partialAttributeSet);
+					auto reply = GetNCChanges(move(request));
+					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects);
+					// TODO: Assert objects.Count == 1; It is guaranteed that it is > 0
+					return objects[0];
+				}
+				catch (DirectoryObjectNotFoundException^)
+				{
+					// ReplicateSingleObject also exits with this error when access is denied, so we need to differentiate between these situations.
+					bool objectExists = this->TestObjectExistence(objectGuid);
+					if (objectExists)
+					{
+						// Force the validator to throw the DRA access denied exception.
+						Validator::AssertSuccess(Win32ErrorCode::DS_DRA_ACCESS_DENIED);
+					}
+					else
+					{
+						// Rethrow the original exception, as the object really does not exists.
+						throw;
+					}
+				}
 			}
 
 			midl_ptr<DRS_MSG_GETCHGREPLY_V6> DrsConnection::GetNCChanges(midl_ptr<DRS_MSG_GETCHGREQ_V8> &&request)
@@ -262,15 +299,11 @@ namespace DSInternals
 				DWORD outVersion = 0;
 				auto reply = make_midl_ptr<DRS_MSG_GETCHGREPLY_V6>();
 				// Send message:
-				ULONG result = IDL_DRSGetNCChanges_NoSEH(handle, inVersion, (DRS_MSG_GETCHGREQ*)request.get(), &outVersion, (DRS_MSG_GETCHGREPLY*)reply.get());
-				Validator::AssertSuccess((Win32ErrorCode)result);
-				// TODO: Check the returned version
+				auto result = (Win32ErrorCode) IDL_DRSGetNCChanges_NoSEH(handle, inVersion, (DRS_MSG_GETCHGREQ*)request.get(), &outVersion, (DRS_MSG_GETCHGREPLY*)reply.get());
+
 				// Validate result
-				if (reply->cNumObjects == 0)
-				{
-					// TODO: DirectoryObjectNotFound ex.
-					throw gcnew Exception("Directory object not found.");
-				}
+				// TODO: Check the returned version
+				Validator::AssertSuccess(result);
 				// TODO: Test extended error code:
 				DWORD extendedError = reply->dwDRSError;
 				return reply;
@@ -291,74 +324,104 @@ namespace DSInternals
 				DRS_HANDLE handle = this->handle.ToPointer();
 				auto result = IDL_DRSCrackNames_NoSEH(handle, inVersion, (DRS_MSG_CRACKREQ*)request.get(), &outVersion, (DRS_MSG_CRACKREPLY*)reply.get());
 				Validator::AssertSuccess((Win32ErrorCode)result);
-
-				if (reply->pResult->cItems != request->cNames)
-				{
-					// TODO: Exception type
-					throw gcnew Exception("Obj not found");
-				}
 				return reply;
 			}
 
 			String^ DrsConnection::ResolveDistinguishedName(NTAccount^ accountName)
 			{
 				auto stringAccountName = accountName->Value;
-				auto dn = this->ResolveName(stringAccountName, DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME);
+				auto dn = this->TryResolveName(stringAccountName, DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME);
+				if (dn == nullptr)
+				{
+					throw gcnew DirectoryObjectNotFoundException(stringAccountName, nullptr);
+				}
 				return dn;
 			}
 
 			String^ DrsConnection::ResolveDistinguishedName(SecurityIdentifier^ objectSid)
 			{
 				auto stringSid = objectSid->ToString();
-				auto dn = this->ResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME);
+				auto dn = this->TryResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME);
+				if (dn == nullptr)
+				{
+					throw gcnew DirectoryObjectNotFoundException(stringSid, nullptr);
+				}
 				return dn;
 			}
 
 			Guid DrsConnection::ResolveGuid(NTAccount^ accountName)
 			{
 				auto stringAccountName = accountName->Value;
-				auto stringGuid = this->ResolveName(stringAccountName, DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				auto stringGuid = this->TryResolveName(stringAccountName, DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				if (stringGuid == nullptr)
+				{
+					throw gcnew DirectoryObjectNotFoundException(stringAccountName, nullptr);
+				}
 				return Guid::Parse(stringGuid);
 			}
 
 			Guid DrsConnection::ResolveGuid(SecurityIdentifier^ objectSid)
 			{
 				auto stringSid = objectSid->ToString();
-				auto stringGuid = this->ResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				auto stringGuid = this->TryResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				if (stringGuid == nullptr)
+				{
+					throw gcnew DirectoryObjectNotFoundException(stringSid, nullptr);
+				}
 				return Guid::Parse(stringGuid);
 			}
 
 			Guid DrsConnection::ResolveGuid(String^ userPrincipalName)
 			{
-				auto stringGuid = this->ResolveName(userPrincipalName, DS_NAME_FORMAT::DS_USER_PRINCIPAL_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				auto stringGuid = this->TryResolveName(userPrincipalName, DS_NAME_FORMAT::DS_USER_PRINCIPAL_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				if (stringGuid == nullptr)
+				{
+					throw gcnew DirectoryObjectNotFoundException(userPrincipalName, nullptr);
+				}
 				return Guid::Parse(stringGuid);
 			}
 
-			String^ DrsConnection::ResolveName(String^ name, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired)
+			String^ DrsConnection::TryResolveName(String^ name, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired)
 			{
 				// We only want to resolve 1 name at a time:
 				const size_t numItems = 1;
+				
+				// Prepare the request
 				auto request = make_midl_ptr<DRS_MSG_CRACKREQ_V1>(numItems);
 				request->formatOffered = formatOffered;
 				request->formatDesired = formatDesired;
 				request->rpNames[0] = RpcTypeConverter::ToNativeString(name).release();
-				auto result = this->ResolveName(move(request));
-				// TODO: Merge with ResolveName(midl_ptr<DRS_MSG_CRACKREQ_V1> &&request)?
-				return result;
+				
+				// Perform RPC call
+				auto reply = this->CrackNames(move(request));
+				
+				// Process the response
+				auto item = reply->pResult->rItems[0];
+				if (item.status == DS_NAME_ERROR::DS_NAME_NO_ERROR)
+				{
+					auto name = marshal_as<String^>(item.pName);
+					return name;
+				}
+				else
+				{
+					// No name translation has been found for some reason.
+					return nullptr;
+				}
 			}
 
-			String^ DrsConnection::ResolveName(midl_ptr<DRS_MSG_CRACKREQ_V1> &&request)
+			bool DrsConnection::TestObjectExistence(String^ distinguishedName)
 			{
-				auto reply = this->CrackNames(move(request));
-				auto item = reply->pResult->rItems[0];
-				// TODO: const 0
-				if (item.status != 0)
-				{
-					// TODO: Exception type
-					throw gcnew Exception("Object not found");
-				}
-				auto name = marshal_as<String^>(item.pName);
-				return name;
+				auto resolvedName = this->TryResolveName(distinguishedName, DS_NAME_FORMAT::DS_FQDN_1779_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				// Return true if and only if the object exists
+				return resolvedName != nullptr;
+			}
+
+			bool DrsConnection::TestObjectExistence(Guid objectGuid)
+			{
+				auto stringGuid = objectGuid.ToString("B");
+				auto resolvedName = this->TryResolveName(stringGuid, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME);
+				// Return true if and only if the object exists
+				return resolvedName != nullptr;
 			}
 
 			bool DrsConnection::ReleaseHandle()

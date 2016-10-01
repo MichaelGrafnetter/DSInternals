@@ -13,7 +13,7 @@ namespace DSInternals.Common.Exceptions
             private set;
         }
 
-        public DirectoryObjectException(object objectIdentifier)
+        public DirectoryObjectException(object objectIdentifier, Exception innerException = null) : base(innerException)
         {
             this.ObjectIdentifier = objectIdentifier;
         }
