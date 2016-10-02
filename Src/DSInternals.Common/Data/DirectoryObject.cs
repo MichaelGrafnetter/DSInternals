@@ -56,6 +56,8 @@
             value = binarySid.ToSecurityIdentifier(this.HasBigEndianRid);
         }
 
+        public abstract void ReadAttribute(string name, out DistinguishedName value);
+
         public void ReadAttribute(string name, out SecurityIdentifier[] value)
         {
             byte[][] binarySids;

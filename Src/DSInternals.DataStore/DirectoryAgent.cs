@@ -198,6 +198,16 @@
             }
         }
 
+        public IEnumerable<KdsRootKey> GetKdsRootKeys()
+        {
+            // TODO: Refactor using Linq
+            // TODO: Test if schema contains the ms-Kds-Prov-RootKey class.
+            foreach (var keyObject in this.FindObjectsByCategory(CommonDirectoryClasses.KdsRootKey))
+            {
+                yield return new KdsRootKey(keyObject);
+            }
+        }
+
         public IEnumerable<DirectoryObject> FindObjectsByCategory(string className, bool includeDeleted = false)
         {
             // Find all objects with the right objectCategory

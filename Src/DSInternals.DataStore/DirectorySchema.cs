@@ -125,7 +125,8 @@
             else
             {
                 // TODO: Class not found exception
-                throw new Exception("Class not found.");
+                string message = String.Format("Class {0} has not been found in the schema.", className);
+                throw new InvalidOperationException(message);
             }
         }
 

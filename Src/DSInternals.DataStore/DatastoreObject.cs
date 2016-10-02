@@ -111,6 +111,13 @@
             value = this.cursor.RetrieveColumnAsLong(columnId);
         }
 
+        public override void ReadAttribute(string name, out DistinguishedName value)
+        {
+            Columnid columnId = this.context.Schema.FindColumnId(name);
+            var dnt = this.cursor.RetrieveColumnAsDNTag(columnId);
+            value = this.context.DistinguishedNameResolver.Resolve(dnt.Value);
+        }
+
         public override void ReadAttribute(string name, out RawSecurityDescriptor value)
         {
             byte[] binarySecurityDescriptorId;

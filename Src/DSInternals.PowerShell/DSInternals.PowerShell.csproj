@@ -51,6 +51,7 @@
     <Compile Include="Commands\Base\ADReplObjectCommandBase.cs" />
     <Compile Include="Commands\Base\ADReplCommandBase.cs" />
     <Compile Include="Commands\Base\PSCmdletEx.cs" />
+    <Compile Include="Commands\Datastore\GetADDBKdsRootKeyCommand.cs" />
     <Compile Include="Commands\Hash\ConvertToNTHashDictionaryCommand.cs" />
     <Compile Include="Commands\Misc\ConvertFromADManagedPasswordBlobCommand.cs" />
     <Compile Include="Commands\Misc\TestPasswordQualityCommand.cs" />
@@ -143,6 +144,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="ADDBCommandHierarchy.cd" />
+    <None Include="DSInternals.Hash.format.ps1xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DSInternals.KdsRootKey.format.ps1xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="DSInternals.PasswordQualityTestResult.format.ps1xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

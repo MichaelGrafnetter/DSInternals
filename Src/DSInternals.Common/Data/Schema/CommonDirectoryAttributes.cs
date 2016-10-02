@@ -35,6 +35,17 @@
         public const int IsDeletedId = 131120;
         public const string IsInGlobalCatalog = "isMemberOfPartialAttributeSet";
         public const string IsSingleValued = "isSingleValued";
+        public const string KdsCreationTime = "msKds-CreateTime";
+        public const string KdsDomainController = "msKds-DomainID";
+        public const string KdsKdfAlgorithm = "msKds-KDFAlgorithmID";
+        public const string KdsKdfParameters = "msKds-KDFParam";
+        public const string KdsSecretAgreementPrivateKeyLength = "msKds-PrivateKeyLength";
+        public const string KdsSecretAgreementPublicKeyLength = "msKds-PublicKeyLength";
+        public const string KdsPrivateKey = "msKds-RootKeyData";
+        public const string KdsSecretAgreementAlgorithm = "msKds-SecretAgreementAlgorithmID";
+        public const string KdsSecretAgreementParameters = "msKds-SecretAgreementParam";
+        public const string KdsEffectiveTime = "msKds-UseStartTime";
+        public const string KdsVersion = "msKds-Version";
         public const string LastLogon = "lastLogon";
         public const int LastLogonId = 589876;
         public const string LastLogonTimestamp = "lastLogonTimestamp";

@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSInternals.DataStore
 {
     public class LinkResolver : IDisposable
     {
+        // Column names:
         private const string linkDNCol = "link_DNT";
         private const string backlinkDNCol = "backlink_DNT";
         private const string linkBaseCol = "link_base";

@@ -1,9 +1,9 @@
 Version 2.18
+- [Module] Added the Get-ADDBKdsRootKey cmdlet.
 - [Module] The Get-ADReplAccount cmdlet now correctly reports the access denied error.
-- [Framework] Replication errors are now reported using more suitable exception types.
-
-Version 2.17.1
 - [Module] Fixed a bug in progress reporting of the Get-ADReplAccount cmdlet.
+- [Framework] Added support for KdsRootKey retrieval.
+- [Framework] Replication errors are now reported using more suitable exception types.
 
 Version 2.17
 - [Module] The Get-ADReplAccount -All command now reports replication progress.

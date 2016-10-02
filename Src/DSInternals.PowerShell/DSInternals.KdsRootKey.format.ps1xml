@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <Name>KdsRootKey</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.KdsRootKey</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>Id: </Text>
+              <ExpressionBinding>
+                <PropertyName>KeyId</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Version: </Text>
+              <ExpressionBinding>
+                <PropertyName>VersionNumber</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Creation Time: </Text>
+              <ExpressionBinding>
+                <PropertyName>CreationTime</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Effective Time: </Text>
+              <ExpressionBinding>
+                <PropertyName>EffectiveTime</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Domain Controller: </Text>
+              <ExpressionBinding>
+                <PropertyName>DomainController</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Key</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>KeyValue</PropertyName>
+                    <CustomControlName>Hash</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </Frame>
+              <Text>Key Derivation Function</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <Text>Algorithm: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>KdfAlgorithm</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>Parameters: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>KdfParameters</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </Frame>
+              <Text>Secret Agreement</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <Text>Algorithm: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>SecretAgreementAlgorithm</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>Public Key Length: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>SecretAgreementPublicKeyLength</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>Private Key Length: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>SecretAgreementPrivateKeyLength</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>Parameters</Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>2</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <PropertyName>SecretAgreementParameters</PropertyName>
+                        <CustomControlName>Hash</CustomControlName>
+                      </ExpressionBinding>
+                      <NewLine />
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

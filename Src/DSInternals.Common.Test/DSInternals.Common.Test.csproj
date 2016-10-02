@@ -60,6 +60,7 @@
     <Compile Include="Cryptography\OrgIdHashTester.cs" />
     <Compile Include="Cryptography\HashEqualityComparerTester.cs" />
     <Compile Include="DistinguishedNameTester.cs" />
+    <Compile Include="KdsRootKeyTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Cryptography\SecureStringExtensionsTester.cs" />
     <Compile Include="SecurityIdentifierExtensionsTester.cs" />

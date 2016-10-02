@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <Controls>
+    <Control>
+      <Name>HashCollection</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <EnumerateCollection />
+                    <ScriptBlock>$_ | ConvertTo-Hex | foreach -Begin { [int] $i = 1 } -Process { if($i -gt 1) { "`n" }; "Hash {0:d2}: {1}" -f $i,$_ ; $i++ }</ScriptBlock>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <Name>Hash</Name>
+      <!-- Converts binary hash into a hex string -->
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <EnumerateCollection />
+                <ScriptBlock>ConvertTo-Hex $_</ScriptBlock>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+  </Controls>
+</Configuration>

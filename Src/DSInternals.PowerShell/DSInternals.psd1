@@ -57,7 +57,9 @@ ProcessorArchitecture = 'None'
 
 # Format files (.ps1xml) to be loaded when importing this module
 FormatsToProcess = 'DSInternals.DSAccount.format.ps1xml',
-				   'DSInternals.PasswordQualityTestResult.format.ps1xml'
+				   'DSInternals.PasswordQualityTestResult.format.ps1xml',
+				   'DSInternals.KdsRootKey.format.ps1xml',
+				   'DSInternals.Hash.format.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('DSInternals.PowerShell.dll')
@@ -76,7 +78,8 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                'Get-ADReplAccount', 'ConvertTo-Hex',
 			   'ConvertFrom-ADManagedPasswordBlob',
 			   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
-			   'Set-ADDBBootKey','ConvertTo-NTHashDictionary', 'Test-PasswordQuality'
+			   'Set-ADDBBootKey','ConvertTo-NTHashDictionary', 'Test-PasswordQuality',
+			   'Get-ADDBKdsRootKey'
 
 # Variables to export from this module
 # VariablesToExport = @()
@@ -117,6 +120,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
+- Added the Get-ADDBKdsRootKey cmdlet.
+- The Get-ADReplAccount cmdlet now correctly reports the access denied error.
 - Fixed a bug in progress reporting of the Get-ADReplAccount cmdlet.
 "@
     } # End of PSData hashtable

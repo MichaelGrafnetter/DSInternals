@@ -108,6 +108,13 @@
             this.ReadAttribute(attributeId, out binaryValue);
             value = (binaryValue != null) ? Encoding.Unicode.GetString(binaryValue) : null;
         }
+
+        protected void ReadAttribute(int attributeId, out DistinguishedName value)
+        {
+            // TODO: Implement
+            throw new NotImplementedException();
+        }
+
         protected void ReadAttribute(int attributeId, out SecurityIdentifier value)
         {
             byte[] binaryValue;
@@ -158,6 +165,12 @@
         }
 
         public override void ReadAttribute(string name, out string value)
+        {
+            int attributeId = this.Schema.FindAttributeId(name);
+            this.ReadAttribute(attributeId, out value);
+        }
+
+        public override void ReadAttribute(string name, out DistinguishedName value)
         {
             int attributeId = this.Schema.FindAttributeId(name);
             this.ReadAttribute(attributeId, out value);
