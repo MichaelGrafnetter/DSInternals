@@ -30,6 +30,12 @@ LONG DESCRIPTION
 		-----------------
 
 		Reads the DPAPI backup keys from a ntds.dit file.
+
+		Get-ADDBKdsRootKey
+		------------------
+
+		Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryption,
+		e.g. SID-protected PFX files.
 		
 		Add-ADDBSidHistory
 		------------------
