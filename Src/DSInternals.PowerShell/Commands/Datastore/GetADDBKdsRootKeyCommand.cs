@@ -15,8 +15,6 @@
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
-            // TODO: Remove this from the final commit:
-            this.Host.UI.WriteLine("DSInternals 2.17 Preview [In cooperation with CQURE Team for DPAPI-NG decryption]");
             using(var directoryAgent = new DirectoryAgent(this.DirectoryContext))
             {
                 foreach(var rootKey in directoryAgent.GetKdsRootKeys())
