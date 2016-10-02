@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.17.1'
+ModuleVersion = '2.18'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -120,7 +120,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Get-ADDBKdsRootKey cmdlet.
+- Added the Get-ADDBKdsRootKey cmdlet to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
 - The Get-ADReplAccount cmdlet now correctly reports the access denied error.
 - Fixed a bug in progress reporting of the Get-ADReplAccount cmdlet.
 "@
