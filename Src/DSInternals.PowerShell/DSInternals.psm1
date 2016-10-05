@@ -11,7 +11,21 @@
 #
 
 $interopAssemblyPath = Join-Path $PSScriptRoot "$env:PROCESSOR_ARCHITECTURE\DSInternals.Replication.Interop.dll"
-Add-Type -Path $interopAssemblyPath
+try
+{
+    Add-Type -Path $interopAssemblyPath
+}
+catch [System.IO.FileLoadException]
+{
+    # This usually happens to users of the ZIP distribution who forget to unblock it before extracting the files.
+    $message = 'Could not load assembly "{0}". Try unblocking it using either the Properties dialog or the Unblock-File cmdlet and reload the DSInternals module afterwards. ' -f $interopAssemblyPath
+    Write-Error -Message $message `
+                -Exception $PSItem.Exception `
+                -Category SecurityError `
+                -CategoryTargetName $interopAssemblyPath `
+                -CategoryActivity $PSItem.CategoryInfo.Activity `
+                -CategoryReason $PSItem.CategoryInfo.Reason
+}
 
 #
 # Cmdlet aliases
