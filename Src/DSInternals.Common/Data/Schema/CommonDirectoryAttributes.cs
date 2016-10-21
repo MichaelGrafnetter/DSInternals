@@ -97,6 +97,8 @@
         public const int SecurityDescriptorId = 131353;
         public const string ServerReference = "serverReference";
         public const string SchemaGuid = "schemaIDGUID";
+        public const string ServicePrincipalName = "servicePrincipalName";
+        public const int ServicePrincipalNameId = 590595;
         public const string SIDHistory = "sIDHistory";
         public const int SIDHistoryId = 590433;
         public const string SupplementalCredentials = "supplementalCredentials";

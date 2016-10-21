@@ -13,6 +13,7 @@
         private string givenName;
         private string samAccountName;
         private string upn;
+        private string[] spn;
         private bool isDeleted;
         private bool adminCount;
         private SecurityIdentifier[] sidHistory;
@@ -58,6 +59,9 @@
 
             // AdminCount (Although the schema defines it as Int32, it can only have values 0 and 1, so we directly convert it to bool)
             dsObject.ReadAttribute(CommonDirectoryAttributes.AdminCount, out this.adminCount);
+
+            // Service Principal Name(s)
+            dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out this.spn);
 
             // UAC:
             int? numericUac;
@@ -321,6 +325,14 @@
             get
             {
                 return this.adminCount;
+            }
+        }
+
+        public string[] ServicePrincipalName
+        {
+            get
+            {
+                return this.spn;
             }
         }
 

@@ -466,6 +466,11 @@
                 <PropertyName>Description</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>ServicePrincipalName: </Text>
+              <ExpressionBinding>
+                <PropertyName>ServicePrincipalName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
               <Text>SecurityDescriptor: </Text>
               <ExpressionBinding>
                 <ScriptBlock>$_.SecurityDescriptor.ControlFlags</ScriptBlock>

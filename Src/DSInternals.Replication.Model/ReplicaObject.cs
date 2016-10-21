@@ -2,6 +2,7 @@
 {
     using DSInternals.Common.Data;
     using System;
+    using System.Linq;
     using System.Security.AccessControl;
     using System.Security.Principal;
     using System.Text;
@@ -109,6 +110,17 @@
             value = (binaryValue != null) ? Encoding.Unicode.GetString(binaryValue) : null;
         }
 
+        protected void ReadAttribute(int attributeId, out string[] values)
+        {
+            values = null;
+            byte[][] binaryValues;
+            this.ReadAttribute(attributeId, out binaryValues);
+            if(binaryValues != null)
+            {
+                values = binaryValues.Select(item => Encoding.Unicode.GetString(item)).ToArray();
+            }
+        }
+
         protected void ReadAttribute(int attributeId, out DistinguishedName value)
         {
             // TODO: Implement
@@ -168,6 +180,12 @@
         {
             int attributeId = this.Schema.FindAttributeId(name);
             this.ReadAttribute(attributeId, out value);
+        }
+
+        public override void ReadAttribute(string name, out string[] values)
+        {
+            int attributeId = this.Schema.FindAttributeId(name);
+            this.ReadAttribute(attributeId, out values);
         }
 
         public override void ReadAttribute(string name, out DistinguishedName value)

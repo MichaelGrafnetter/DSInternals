@@ -105,6 +105,12 @@
             value = this.cursor.RetrieveColumnAsString(columnId);
         }
 
+        public override void ReadAttribute(string name, out string[] values)
+        {
+            Columnid columnId = this.context.Schema.FindColumnId(name);
+            values = this.cursor.RetrieveColumnAsStringArray(columnId);
+        }
+
         public override void ReadAttribute(string name, out long? value)
         {
             Columnid columnId = this.context.Schema.FindColumnId(name);

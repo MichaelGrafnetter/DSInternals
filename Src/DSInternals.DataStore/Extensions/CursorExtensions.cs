@@ -46,6 +46,23 @@ namespace DSInternals.DataStore
                 return null;
             }
         }
+
+        public static string[] RetrieveColumnAsStringArray(this Cursor cursor, Columnid columnId)
+        {
+            var record = cursor.Record;
+            var result = new List<string>();
+
+            int valueIndex = 0;
+            while (record.SizeOf(columnId, valueIndex) > 0)
+            {
+                object value = cursor.Record[columnId, valueIndex];
+                result.Add((string)value);
+                valueIndex++;
+            }
+
+            return result.Count > 0 ? result.ToArray() : null;
+        }
+
         public static AttributeMetadataCollection RetrieveColumnAsAttrMeta(this Cursor cursor, Columnid columnId)
         {
             byte[] buffer = cursor.RetrieveColumnAsByteArray(columnId);

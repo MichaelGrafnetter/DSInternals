@@ -32,6 +32,7 @@
         public abstract void ReadAttribute(string name, out int? value);
         public abstract void ReadAttribute(string name, out long? value);
         public abstract void ReadAttribute(string name, out string value);
+        public abstract void ReadAttribute(string name, out string[] values);
         public abstract void ReadAttribute(string name, out RawSecurityDescriptor value);
 
         public abstract string DistinguishedName

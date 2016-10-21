@@ -1,3 +1,6 @@
+Version 2.19
+- Added support for the ServicePrincipalName attribute.
+
 Version 2.18
 - [Module] Added the Get-ADDBKdsRootKey cmdlet to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
 - [Module] The Get-ADReplAccount cmdlet now correctly reports the access denied error.
