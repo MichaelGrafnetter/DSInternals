@@ -167,6 +167,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <None Include="Tests\ConvertTo-OrgIdHashNative.ps1" />
     <None Include="Tests\Set-SamAccountPasswordHash.Tests.ps1" />
     <None Include="Tests\Path.Tests.ps1" />
     <None Include="Tests\ConvertFrom-UnicodePassword.Tests.ps1" />
