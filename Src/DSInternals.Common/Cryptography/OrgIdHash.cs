@@ -13,7 +13,7 @@ namespace DSInternals.Common.Cryptography
         /// The size, in bytes, of the computed hash code.
         /// </summary>
         public const int HashSize = 32;
-        private const int Iterations = 100;
+        private const int Iterations = 1000;
         private const string HashFormat = "v1;PPH1_MD4,{0},{1},{2};";
         private const string InternalHashFunction = "HMACSHA256";
 

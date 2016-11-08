@@ -12,9 +12,9 @@ namespace DSInternals.Common.Cryptography.Test
         public void OrgIdHash_TestVector1()
         {
             SecureString password = "Pa$$w0rd".ToSecureString();
-            byte[] salt = "317ee9d1dec6508fa510".HexToBinary();
+            byte[] salt = "181a3024085fcee2f70e".HexToBinary();
             string result = OrgIdHash.ComputeFormattedHash(password, salt);
-            string expected = "v1;PPH1_MD4,317ee9d1dec6508fa510,100,f4a257ffec53809081a605ce8ddedfbc9df9777b80256763bc0a6dd895ef404f;";
+            string expected = "v1;PPH1_MD4,181a3024085fcee2f70e,1000,b39525c3bc72a1136fcf7c8a338e0c14313d0450d1a4c98ef0a6ddada3bc5b0a;";
             Assert.AreEqual(expected, result);
         }
         [TestMethod]
@@ -29,9 +29,9 @@ namespace DSInternals.Common.Cryptography.Test
         public void OrgIdHash_EmptyInput()
         {
             SecureString password = string.Empty.ToSecureString();
-            byte[] salt = "317ee9d1dec6508fa510".HexToBinary();
+            byte[] salt = "01cda06eceb9d9bc2621".HexToBinary();
             string result = OrgIdHash.ComputeFormattedHash(password, salt);
-            string expected = "v1;PPH1_MD4,317ee9d1dec6508fa510,100,f56b3637eb57e927438c6d0ebbd69d1d95f8e849912915a6733a33921c8e4806;";
+            string expected = "v1;PPH1_MD4,01cda06eceb9d9bc2621,1000,9d4fc778add44776555d3fa6ccb4f9637f25e34a62dbc5fa0f782ef8c762c902;";
             Assert.AreEqual(expected, result);
         }
         [TestMethod]
@@ -48,6 +48,5 @@ namespace DSInternals.Common.Cryptography.Test
             byte[] hash = OrgIdHash.ComputeHash(pwd, salt);
             Assert.AreEqual(OrgIdHash.HashSize, hash.Length);
         }
-
     }
 }
