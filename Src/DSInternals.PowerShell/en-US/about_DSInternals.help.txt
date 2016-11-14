@@ -148,6 +148,11 @@ LONG DESCRIPTION
 		
 		Saves the output of the Get-ADReplBackupKey and Get-ADDBBackupKey cmdlets to a file.
 
+		Get-SamPasswordPolicy
+		---------------------
+
+		Queries Active Directory for the default password policy.
+
 		ConvertTo-Hex
 		-------------
 		

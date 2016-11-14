@@ -57,5 +57,13 @@ namespace DSInternals.SAM
             Validator.AssertSuccess(result);
             return new SamUser(userHandle);
         }
+
+        public SamDomainPasswordInformation GetPasswordPolicy()
+        {
+            SamDomainPasswordInformation passwordInfo;
+            NtStatus result = NativeMethods.SamQueryInformationDomain(this.Handle, out passwordInfo);
+            Validator.AssertSuccess(result);
+            return passwordInfo;
+        }
     }
 }

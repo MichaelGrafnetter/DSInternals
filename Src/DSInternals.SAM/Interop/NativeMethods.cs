@@ -117,6 +117,28 @@ namespace DSInternals.SAM.Interop
             byte[] binarySid = domainSid.GetBinaryForm();
             return SamOpenDomain(serverHandle, desiredAccess, binarySid, out domainHandle);
         }
+        
+        /// <summary>
+        /// The SamQueryInformationDomain method obtains attributes from a domain object.
+        /// </summary>
+        /// <param name="domainHandle">An RPC context handle, representing a domain object.</param>
+        /// <param name="domainPasswordInformation">The requested attributes on output.</param>
+        internal static NtStatus SamQueryInformationDomain(SafeSamHandle domainHandle, out SamDomainPasswordInformation domainPasswordInformation)
+        {
+            SafeSamPointer buffer;
+            NtStatus result = SamQueryInformationDomain(domainHandle, SamDomainInformationClass.PasswordInformation, out buffer);
+            domainPasswordInformation = buffer != null ? Marshal.PtrToStructure<SamDomainPasswordInformation>(buffer.DangerousGetHandle()) : new SamDomainPasswordInformation();
+            return result;
+        }
+        
+        /// <summary>
+        /// The SamQueryInformationDomain method obtains attributes from a domain object.
+        /// </summary>
+        /// <param name="domainHandle">An RPC context handle, representing a domain object.</param>
+        /// <param name="domainInformationClass">An enumeration indicating which attributes to return.</param>
+        /// <param name="buffer">The requested attributes on output.</param>
+        [DllImport(SamLib, SetLastError = true)]
+        private static extern NtStatus SamQueryInformationDomain(SafeSamHandle domainHandle, SamDomainInformationClass domainInformationClass, out SafeSamPointer buffer);
 
         /// <summary>
         /// This API opens an existing user in the account database.  The user is specified by SID value.  The operations that will be performed on the user must be declared at this time. This call returns a handle to the newly opened user that may be used for successive operations on the user.  This handle may be closed with the SamCloseHandle API.
@@ -260,5 +282,8 @@ namespace DSInternals.SAM.Interop
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [DllImport(SamLib, SetLastError = true)]
         internal static extern NtStatus SamCloseHandle([In] IntPtr samHandle);
+
+        [DllImport(SamLib, SetLastError = true)]
+        internal static extern NtStatus SamFreeMemory([In] IntPtr buffer);
     }
 }

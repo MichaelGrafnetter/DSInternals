@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using DSInternals.Common.Interop;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Security;
 
@@ -20,7 +21,7 @@ namespace DSInternals.SAM.Interop
         [SecurityCritical]
         protected override bool ReleaseHandle()
         {
-            return NativeMethods.SamCloseHandle(this.handle) == 0;
+            return NativeMethods.SamCloseHandle(this.handle) == NtStatus.Success;
         }
     }
 }

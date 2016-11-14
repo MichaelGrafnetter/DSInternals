@@ -1,36 +1,21 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
     using DSInternals.Common;
-    using DSInternals.Common.Cryptography;
     using DSInternals.Common.Interop;
     using DSInternals.PowerShell.Properties;
     using DSInternals.SAM;
     using DSInternals.SAM.Interop;
-    using System;
     using System.ComponentModel;
     using System.Management.Automation;
-    using System.Net;
-    using System.Security;
     using System.Security.Principal;
 
     [Cmdlet(VerbsCommon.Set, "SamAccountPasswordHash")]
     [OutputType("None")]
-    public class SetSamAccountPasswordHashCommand : PSCmdlet, IDisposable
+    public class SetSamAccountPasswordHashCommand : SamCommandBase
     {
-        private const string DefaultServer = "localhost";
         private const string ParameterSetBySid = "BySid";
         private const string ParameterSetByLogonName = "ByLogonName";
-
-        private string server;
-
-        private SamServer SamServer
-        {
-            get;
-            set;
-        }
-
         // TODO: Support -Force parameter
-        // TODO: Safe Critical everywhere?
 
         #region Parameters
 
@@ -48,7 +33,7 @@
         }
 
         [Parameter(
-            HelpMessage = @"Specify user's domain.",
+            HelpMessage = @"Specify the user's domain.",
             Mandatory = true,
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = ParameterSetByLogonName
@@ -99,71 +84,9 @@
             set;
         }
 
-        [Parameter(
-            HelpMessage = "Specify the user account credentials to use to perform this task. The default credentials are the credentials of the currently logged on user.",
-            Mandatory = false,
-            ValueFromPipeline = false
-        )]
-        [ValidateNotNullOrEmpty]
-        [Credential]
-        public PSCredential Credential
-        {
-            get;
-            set;
-        }
-
-        [Parameter(
-            HelpMessage = "Specify the name of a SAM server.",
-            Mandatory = false,
-            ValueFromPipeline = false
-        )]
-        [PSDefaultValue(Value = DefaultServer)]
-        [ValidateNotNullOrEmpty]
-        public string Server
-        {
-            get
-            {
-                return this.server ?? DefaultServer;
-            }
-            set
-            {
-                this.server = value;
-            }
-        }
-
         #endregion Parameters
 
-        public void Dispose()
-        {
-            this.Dispose(true);
-            System.GC.SuppressFinalize(this);
-        }
-
         #region Cmdlet Overrides
-
-        protected override void BeginProcessing()
-        {
-            /* Connect to the specified SAM server: */
-            // TODO: Extract as resource:
-            WriteDebug(string.Format("Connecting to SAM server {0}.", this.Server));
-            try
-            {
-                NetworkCredential netCred = null;
-                if (this.Credential != null)
-                {
-                    netCred = this.Credential.GetNetworkCredential();
-                    
-                }
-                this.SamServer = new SamServer(this.Server, netCred, SamServerAccessMask.LookupDomain);
-            }
-            catch (Win32Exception ex)
-            {
-                ErrorCategory category = ((Win32ErrorCode)ex.NativeErrorCode).ToPSCategory();
-                ErrorRecord error = new ErrorRecord(ex, "WinAPIErrorConnect", category, this.Server);
-                // Terminate on this error:
-                this.ThrowTerminatingError(error);
-            }
-        }
 
         protected override void ProcessRecord()
         {
@@ -229,14 +152,5 @@
         }
 
         #endregion Cmdlet Overrides
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing && this.SamServer != null)
-            {
-                this.SamServer.Dispose();
-                this.SamServer = null;
-            }
-        }
     }
 }

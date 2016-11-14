@@ -33,6 +33,8 @@ catch [System.IO.FileLoadException]
 
 New-Alias -Name Set-ADAccountPasswordHash        -Value Set-SamAccountPasswordHash
 New-Alias -Name Set-WinUserPasswordHash          -Value Set-SamAccountPasswordHash
+New-Alias -Name Get-ADPasswordPolicy             -Value Get-SamPasswordPolicy
+New-Alias -Name Get-ADDefaultPasswordPolicy      -Value Get-SamPasswordPolicy
 New-Alias -Name ConvertFrom-UnattendXmlPassword  -Value ConvertFrom-UnicodePassword
 New-Alias -Name ConvertTo-AADHash                -Value ConvertTo-OrgIdHash
 New-Alias -Name ConvertTo-MsoPasswordHash        -Value ConvertTo-OrgIdHash

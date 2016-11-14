@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.19'
+ModuleVersion = '2.20'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -59,7 +59,8 @@ ProcessorArchitecture = 'None'
 FormatsToProcess = 'DSInternals.DSAccount.format.ps1xml',
 				   'DSInternals.PasswordQualityTestResult.format.ps1xml',
 				   'DSInternals.KdsRootKey.format.ps1xml',
-				   'DSInternals.Hash.format.ps1xml'
+				   'DSInternals.Hash.format.ps1xml',
+				   'DSInternals.SamDomainPasswordInformation.format.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('DSInternals.PowerShell.dll')
@@ -79,7 +80,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
 			   'ConvertFrom-ADManagedPasswordBlob',
 			   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
 			   'Set-ADDBBootKey','ConvertTo-NTHashDictionary', 'Test-PasswordQuality',
-			   'Get-ADDBKdsRootKey'
+			   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy'
 
 # Variables to export from this module
 # VariablesToExport = @()
@@ -90,7 +91,8 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
 				  'ConvertTo-MsoPasswordHash', 'Get-ADReplicationAccount',
 				  'ConvertFrom-ManagedPasswordBlob', 'Get-SysKey', 'Set-ADDBSysKey',
 				  'New-NTHashSet', 'Test-ADPasswordQuality',
-				  'Test-ADDBPasswordQuality', 'Test-ADReplPasswordQuality' 
+				  'Test-ADDBPasswordQuality', 'Test-ADReplPasswordQuality',
+				  'Get-ADPasswordPolicy','Get-ADDefaultPasswordPolicy'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -120,7 +122,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added support for the ServicePrincipalName attribute.
+- Added the Get-ADPasswordPolicy cmdlet.
+- Synced ConvertTo-OrgIdHash behavior with the current version of Azure AD Connect.
 "@
     } # End of PSData hashtable
 

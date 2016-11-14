@@ -1,3 +1,6 @@
+Version 2.20
+- Added the Get-ADPasswordPolicy cmdlet.
+
 Version 2.19
 - Added support for the ServicePrincipalName attribute.
 
