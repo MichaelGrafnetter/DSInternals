@@ -47,6 +47,7 @@
     <Compile Include="Interop\Enums\SamDomainInformationClass.cs" />
     <Compile Include="Interop\Enums\SamSidType.cs" />
     <Compile Include="Interop\SafeHandles\SafeRpcAuthIdentityHandle.cs" />
+    <Compile Include="Interop\SafeHandles\SafeSamEnumerationBufferPointer.cs" />
     <Compile Include="Interop\SafeHandles\SafeSamPointer.cs" />
     <Compile Include="Interop\SafeHandles\SafeSamHandle.cs" />
     <Compile Include="Interop\Enums\SamServerAccessMask.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Interop\Enums\SamUserInformationClass.cs" />
     <Compile Include="Interop\Structs\SamDomainPasswordInformation.cs" />
     <Compile Include="Interop\Enums\SamDomainPasswordProperties.cs" />
+    <Compile Include="Interop\Structs\SamRidEnumeration.cs" />
     <Compile Include="Interop\Structs\SamUserInternal1Information.cs" />
     <Compile Include="Interop\NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

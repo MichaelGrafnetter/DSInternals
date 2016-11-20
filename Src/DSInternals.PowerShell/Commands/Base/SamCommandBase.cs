@@ -69,7 +69,7 @@ namespace DSInternals.PowerShell.Commands
                     netCred = this.Credential.GetNetworkCredential();
 
                 }
-                this.SamServer = new SamServer(this.Server, netCred, SamServerAccessMask.LookupDomain);
+                this.SamServer = new SamServer(this.Server, netCred, SamServerAccessMask.LookupDomain | SamServerAccessMask.EnumerateDomains);
             }
             catch (Win32Exception ex)
             {

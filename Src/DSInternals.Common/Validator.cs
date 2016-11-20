@@ -22,11 +22,14 @@ namespace DSInternals.Common
         }
         public static void AssertSuccess(Win32ErrorCode code)
         {
-            if(code == Win32ErrorCode.Success)
-            { 
-                // No error occured, so exit gracefully.
-                return;
+            switch(code)
+            {
+                case Win32ErrorCode.Success:
+                case Win32ErrorCode.MORE_DATA:
+                    // No error occured, so exit gracefully.
+                    return;
             }
+
             var genericException = new Win32Exception((int)code);
             Exception exceptionToThrow;
             // We will try to translate the generic Win32 exception to a more specific built-in exception.

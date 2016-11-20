@@ -14,6 +14,7 @@ namespace DSInternals.SAM.Interop
     {
         private const string spnPrefix = "cifs/";
         private const string SamLib = "samlib.dll";
+        private const string SamSrv = "samsrv.dll";
         private const string NtdsApi = "ntdsapi.dll";        
         /// <summary>
         ///  The maximum value of 1,000 is chosen to limit the amount of memory that the client can force the server to allocate.
@@ -96,6 +97,19 @@ namespace DSInternals.SAM.Interop
         /// <see>https://msdn.microsoft.com/en-us/library/ms675979(v=vs.85).aspx</see>
         [DllImport(NtdsApi)]
         internal static extern void DsFreePasswordCredentials([In] IntPtr authIdentity);
+
+
+        /// <summary>
+        /// The SamrEnumerateDomainsInSamServer method obtains a listing of all domains hosted by the server side of this protocol.
+        /// </summary>
+        /// <param name="serverHandle"> An RPC context handle representing a server object.</param>
+        /// <param name="enumerationContext">This value is a cookie that the server can use to continue an enumeration on a subsequent call. It is an opaque value to the client. To initiate a new enumeration, the client sets EnumerationContext to zero. Otherwise the client sets EnumerationContext to a value returned by a previous call to the method.</param>
+        /// <param name="buffer">A listing of domain information.</param>
+        /// <param name="preferedMaximumLength"> The requested maximum number of bytes to return in buffer.</param>
+        /// <param name="countReturned">The count of domain elements returned in buffer.</param>
+        /// <returns></returns>
+        [DllImport(SamLib, SetLastError = true)]
+        internal static extern NtStatus SamEnumerateDomainsInSamServer(SafeSamHandle serverHandle, ref uint enumerationContext, out SafeSamEnumerationBufferPointer buffer, uint preferedMaximumLength, out uint countReturned);
 
         /// <summary>
         /// This API opens a domain object.  It returns a handle to the newly opened domain that must be used for successive operations on the domain. This handle may be closed with the SamCloseHandle API.
@@ -224,7 +238,7 @@ namespace DSInternals.SAM.Interop
         /// </returns>
         /// <see>http://msdn.microsoft.com/en-us/library/cc245712.aspx</see>
         [DllImport(SamLib, SetLastError = true)]
-        private static extern NtStatus SamLookupNamesInDomain(SafeSamHandle domainHandle, int count, UnicodeString[] names, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] out int[] relativeIds, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] out SamSidType[] use);
+        private static extern NtStatus SamLookupNamesInDomain(SafeSamHandle domainHandle, int count, UnicodeString[] names, out SafeSamPointer relativeIds, out SafeSamPointer use);
 
         internal static NtStatus SamLookupNamesInDomain(SafeSamHandle domainHandle, string[] names, out int[] relativeIds, out SamSidType[] use)
         {
@@ -235,15 +249,34 @@ namespace DSInternals.SAM.Interop
                 // TODO: Extract as resource
                 throw new ArgumentOutOfRangeException("names", count, "Cannot translate more than 1000 names at once.");
             }
+
             // Prepare parameters
+            SafeSamPointer relativeIdsPointer;
+            SafeSamPointer usePointer;
             UnicodeString[] unicodeNames = new UnicodeString[count];
             for (int i = 0; i < count; i++)
             {
                 unicodeNames[i] = new UnicodeString(names[i]);
             }
-            // TODO: SamFreeMemory
+
             // Call the native function
-            return SamLookupNamesInDomain(domainHandle, count, unicodeNames, out relativeIds, out use);
+            NtStatus result = SamLookupNamesInDomain(domainHandle, count, unicodeNames, out relativeIdsPointer, out usePointer);
+
+            if(result == NtStatus.Success)
+            {
+                // Marshal pointers into arrays
+                relativeIds = new int[count];
+                use = new SamSidType[count];
+                Marshal.Copy(relativeIdsPointer.DangerousGetHandle(), relativeIds, 0, count);
+                Marshal.Copy(usePointer.DangerousGetHandle(), (int[])(object)use, 0, count);
+            }
+            else
+            {
+                relativeIds = null;
+                use = null;
+            }
+
+            return result;
         }
 
         internal static NtStatus SamLookupNameInDomain(SafeSamHandle domainHandle, string name, out int relativeId, out SamSidType sidType)
@@ -285,5 +318,8 @@ namespace DSInternals.SAM.Interop
 
         [DllImport(SamLib, SetLastError = true)]
         internal static extern NtStatus SamFreeMemory([In] IntPtr buffer);
+
+        [DllImport(SamSrv, SetLastError = true)]
+        internal static extern NtStatus SamIFree_SAMPR_ENUMERATION_BUFFER([In] IntPtr buffer);
     }
 }
