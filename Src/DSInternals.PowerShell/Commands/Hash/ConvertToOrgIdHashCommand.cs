@@ -35,9 +35,10 @@ namespace DSInternals.PowerShell.Commands
             HelpMessage = "Provide a 16-byte NT Hash of user's password in hexadecimal format."
         )]
         [ValidateNotNull]
-        [ValidateHexString(DSInternals.Common.Cryptography.NTHash.HashSize)]
+        [ValidateCount(DSInternals.Common.Cryptography.NTHash.HashSize, DSInternals.Common.Cryptography.NTHash.HashSize)]
+        [AcceptHexString]
         [Alias("h")]
-        public string NTHash
+        public byte[] NTHash
         {
             get;
             set;
@@ -50,9 +51,10 @@ namespace DSInternals.PowerShell.Commands
             HelpMessage = "Provide a 10-byte salt in hexadecimal format."
         )]
         [ValidateNotNull]
-        [ValidateHexString(OrgIdHash.SaltSize)]
+        [AcceptHexString]
+        [ValidateCount(OrgIdHash.SaltSize, OrgIdHash.SaltSize)]
         [Alias("s")]
-        public string Salt
+        public byte[] Salt
         {
             get;
             set;
@@ -67,23 +69,18 @@ namespace DSInternals.PowerShell.Commands
             this.WriteVerbose("Calculating OrgId hash.");
             try
             {
-                byte[] binarySalt = null;
-                if (Salt != null)
-                {
-                    binarySalt = Salt.HexToBinary();
-                }
                 string orgIdHash;
                 // TODO: Switch by parametersetname
-                if (NTHash != null)
+                if (this.NTHash != null)
                 {
                     // Calculate OrgId hash from NT Hash:
-                    byte[] binaryNTHash = NTHash.HexToBinary();
-                    orgIdHash = OrgIdHash.ComputeFormattedHash(binaryNTHash, binarySalt);
+                    byte[] binaryNTHash = NTHash;
+                    orgIdHash = OrgIdHash.ComputeFormattedHash(this.NTHash, this.Salt);
                 }
                 else
                 {
                     // Calculate OrgId hash from password:
-                    orgIdHash = OrgIdHash.ComputeFormattedHash(Password, binarySalt);
+                    orgIdHash = OrgIdHash.ComputeFormattedHash(this.Password, this.Salt);
                 }
                 this.WriteObject(orgIdHash);
             }

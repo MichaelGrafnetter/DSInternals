@@ -13,10 +13,11 @@
             Mandatory = true,
             HelpMessage = "TODO"
         )]
-        [ValidateNotNullOrEmpty]
-        [ValidateHexString(BootKeyRetriever.BootKeyLength)]
+        [ValidateNotNull]
+        [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
+        [AcceptHexString]
         [Alias("OldKey", "Old", "OldSysKey")]
-        public string OldBootKey
+        public byte[] OldBootKey
         {
             get;
             set;
@@ -26,24 +27,22 @@
             Mandatory = false,
             HelpMessage = "TODO"
         )]
-        [ValidateNotNullOrEmpty]
-        [ValidateHexString(BootKeyRetriever.BootKeyLength)]
+        [ValidateNotNull]
+        [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
+        [AcceptHexString]
         [Alias("NewKey", "New", "NewSysKey")]
-        public string NewBootKey
+        public byte[] NewBootKey
         {
             get;
             set;
         }
 
-
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
-            byte[] oldBinaryBootKey = this.OldBootKey.HexToBinary();
-            byte[] newBinaryBootKey = this.NewBootKey.HexToBinary();
             using(var directoryAgent = new DirectoryAgent(this.DirectoryContext))
             {
-                directoryAgent.ChangeBootKey(oldBinaryBootKey, newBinaryBootKey);
+                directoryAgent.ChangeBootKey(this.OldBootKey, this.NewBootKey);
             }
             // TODO: Verbosity
             // TODO: Exception handling

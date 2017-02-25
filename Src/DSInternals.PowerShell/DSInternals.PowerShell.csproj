@@ -87,7 +87,7 @@
     <Compile Include="Types\DomainController.cs" />
     <Compile Include="Types\PasswordQualityTestResult.cs" />
     <Compile Include="Types\SchemaAttribute.cs" />
-    <Compile Include="Utils\ValidateHexStringAttribute.cs" />
+    <Compile Include="Utils\AcceptHexStringAttribute.cs" />
     <Compile Include="Utils\ValidatePasswordLengthAttribute.cs" />
     <Compile Include="Commands\Encryption\ConvertFromGPPrefPasswordCommand.cs" />
     <Compile Include="Commands\Hash\ConvertToOrgIdHashCommand.cs" />

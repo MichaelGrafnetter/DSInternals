@@ -13,7 +13,7 @@ namespace DSInternals.Common
 {
     public static class Validator
     {
-        private const string hexPattern = "^[0-9a-fA-F]+$";
+        private const string hexPattern = "^([0-9a-fA-F][0-9a-fA-F])+$";
 
         public static void AssertSuccess(NtStatus status)
         {

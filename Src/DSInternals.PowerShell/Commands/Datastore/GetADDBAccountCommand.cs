@@ -32,10 +32,11 @@ namespace DSInternals.PowerShell.Commands
             Mandatory = false,
             HelpMessage = "TODO"
         )]
-        [ValidateNotNullOrEmpty]
-        [ValidateHexString(BootKeyRetriever.BootKeyLength)]
+        [ValidateNotNull]
+        [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
+        [AcceptHexString]
         [Alias("key", "SysKey")]
-        public string BootKey
+        public byte[] BootKey
         {
             get;
             set;
@@ -43,16 +44,15 @@ namespace DSInternals.PowerShell.Commands
 
         protected override void ProcessRecord()
         {
-            byte[] binaryBootKey = this.BootKey.HexToBinary();
             // TODO: Exception handling: Object not found, malformed DN, ...
             // TODO: Map DSAccount to transfer object
             if(this.ParameterSetName == parameterSetAll)
             {
-                this.ReturnAllAccounts(binaryBootKey);
+                this.ReturnAllAccounts(this.BootKey);
             }
             else
             {
-                this.ReturnSingleAccount(binaryBootKey);
+                this.ReturnSingleAccount(this.BootKey);
             }
         }
 

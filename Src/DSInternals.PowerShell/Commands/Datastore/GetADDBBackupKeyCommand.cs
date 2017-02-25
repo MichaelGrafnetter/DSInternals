@@ -14,10 +14,11 @@
             Mandatory = true,
             HelpMessage = "TODO"
         )]
-        [ValidateNotNullOrEmpty]
-        [ValidateHexString(BootKeyRetriever.BootKeyLength)]
+        [ValidateNotNull]
+        [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
+        [AcceptHexString]
         [Alias("key", "SysKey")]
-        public string BootKey
+        public byte[] BootKey
         {
             get;
             set;
@@ -26,10 +27,9 @@
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
-            byte[] binaryBootKey = this.BootKey.HexToBinary();
             using(var directoryAgent = new DirectoryAgent(this.DirectoryContext))
             {
-                foreach(var secret in directoryAgent.GetDPAPIBackupKeys(binaryBootKey))
+                foreach(var secret in directoryAgent.GetDPAPIBackupKeys(this.BootKey))
                 {
                     this.WriteObject(secret);
                 }

@@ -63,9 +63,10 @@
             Mandatory = true,
             ValueFromPipelineByPropertyName = true
         )]
-        [ValidateNotNullOrEmpty]
-        [ValidateHexString(DSInternals.Common.Cryptography.NTHash.HashSize)]
-        public string NTHash
+        [ValidateNotNull]
+        [ValidateCount(DSInternals.Common.Cryptography.NTHash.HashSize, DSInternals.Common.Cryptography.NTHash.HashSize)]
+        [AcceptHexString]
+        public byte[] NTHash
         {
             get;
             set;
@@ -76,9 +77,10 @@
             Mandatory = false,
             ValueFromPipelineByPropertyName = true
         )]
-        [ValidateNotNullOrEmpty]
-        [ValidateHexString(DSInternals.Common.Cryptography.LMHash.HashSize)]
-        public string LMHash
+        [ValidateNotNull]
+        [ValidateCount(DSInternals.Common.Cryptography.LMHash.HashSize, DSInternals.Common.Cryptography.LMHash.HashSize)]
+        [AcceptHexString]
+        public byte[] LMHash
         {
             get;
             set;
