@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- NuGet workaround (it does not support passing variables into referenced projects) -->
     <SolutionDir Condition="$(SolutionDir) == ''">..\</SolutionDir>
@@ -34,7 +34,7 @@
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>DSInternals.Replication.Interop</RootNamespace>
     <ProjectName>DSInternals.Replication.Interop</ProjectName>
-    <WindowsTargetPlatformVersion>7</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -273,14 +273,24 @@
     </Midl>
   </ItemGroup>
   <!-- Visual C++ Runtime Redistribution -->
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(PlatformToolsetVersion)' &lt; 141 ">
+    <!-- Definitions for Visual Studio 2013 and 2015 -->
     <VCRuntimePath Condition=" '$(Platform)'=='x64' ">$(VCInstallDir)\redist\x64\Microsoft.VC$(PlatformToolsetVersion).CRT</VCRuntimePath>
     <VCRuntimePath Condition=" '$(Platform)'=='Win32' ">$(VCInstallDir)\redist\x86\Microsoft.VC$(PlatformToolsetVersion).CRT</VCRuntimePath>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(PlatformToolsetVersion)' &gt;= 141 ">
+    <!-- Definitions for Visual Studio 2017 -->
+    <VCRuntimePath Condition=" '$(Platform)'=='x64' ">$(VCInstallDir)\Redist\MSVC\$(VCToolsVersion)\onecore\x64\Microsoft.VC150.CRT</VCRuntimePath>
+    <VCRuntimePath Condition=" '$(Platform)'=='Win32' ">$(VCInstallDir)\Redist\MSVC\$(VCToolsVersion)\onecore\x86\Microsoft.VC150.CRT</VCRuntimePath>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <CustomBuildStep>
-      <Command>xcopy.exe /D /Y "$(VCRuntimePath)\msvc*.dll" "$(OutDir)"</Command>
-      <Outputs>msvcr$(PlatformToolsetVersion).dll;msvcp$(PlatformToolsetVersion).dll</Outputs>
+      <!-- Note: The msvcr140.dll file has been replaced by vcruntime140.dll since Visual Studio 2017. -->
+      <Command>
+        xcopy.exe /D /Y "$(VCRuntimePath)\msvc*.dll" "$(OutDir)"
+        xcopy.exe /D /Y "$(VCRuntimePath)\vcruntime*.dll" "$(OutDir)"
+      </Command>
+      <Outputs>$(OutDir)\msvcr$(PlatformToolsetVersion).dll;$(OutDir)\msvcp$(PlatformToolsetVersion).dll;$(OutDir)\vcruntime$(PlatformToolsetVersion).dll</Outputs>
       <Message>Copying VC Runtime</Message>
     </CustomBuildStep>
   </ItemDefinitionGroup>

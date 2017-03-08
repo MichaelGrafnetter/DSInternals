@@ -30,7 +30,7 @@ namespace DSInternals
 					uuid.Data4[6], uuid.Data4[7]);
 			}
 
-			array<ReplicationCursor^>^ RpcTypeConverter::ToReplicationCursors(midl_ptr<DS_REPL_CURSORS> &&nativeCursors)
+			cli::array<ReplicationCursor^>^ RpcTypeConverter::ToReplicationCursors(midl_ptr<DS_REPL_CURSORS> &&nativeCursors)
 			{
 				if (!nativeCursors)
 				{
@@ -38,7 +38,7 @@ namespace DSInternals
 				}
 
 				DWORD numCursors = nativeCursors->cNumCursors;
-				auto managedCursors = gcnew array<ReplicationCursor^>(numCursors);
+				auto managedCursors = gcnew cli::array<ReplicationCursor^>(numCursors);
 				
 				// Process all cursors, one-by-one
 				for (DWORD i = 0; i < numCursors; i++)

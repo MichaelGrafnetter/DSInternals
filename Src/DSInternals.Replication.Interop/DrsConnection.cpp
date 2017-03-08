@@ -246,11 +246,9 @@ namespace DSInternals
 						// Force the validator to throw the DRA access denied exception.
 						Validator::AssertSuccess(Win32ErrorCode::DS_DRA_ACCESS_DENIED);
 					}
-					else
-					{
-						// Rethrow the original exception, as the object really does not exists.
-						throw;
-					}
+
+					// Rethrow the original exception otherwise, as the object really does not exists.
+					throw;
 				}
 			}
 
@@ -278,11 +276,9 @@ namespace DSInternals
 						// Force the validator to throw the DRA access denied exception.
 						Validator::AssertSuccess(Win32ErrorCode::DS_DRA_ACCESS_DENIED);
 					}
-					else
-					{
-						// Rethrow the original exception, as the object really does not exists.
-						throw;
-					}
+
+					// Rethrow the original exception otherwise, as the object really does not exists.
+					throw;
 				}
 			}
 
