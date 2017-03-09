@@ -365,7 +365,7 @@ function Get-MsTest
 	#>
 	
 	
-	$MsTest = "$(Get-VsCommonTools)..\IDE\MsTest.exe"
+	$MsTest = Join-Path (Get-VsCommonTools) '..\IDE\MsTest.exe'
 	if (Test-Path $MsTest) {$MsTest}
 	else {Write-Error "Unable to find MsTest.exe"}
 }
@@ -381,10 +381,23 @@ function Get-VsCommonTools
 		Current list supports VS14, VS12, VS11 and VS10, you may need to add to this list
 		to satisfy your needs.
 	#>
-	
-	$VsCommonToolsPaths = @(@($env:VS140COMNTOOLS,$env:VS120COMNTOOLS,$env:VS110COMNTOOLS,$env:VS100COMNTOOLS) | Where-Object {$_ -ne $null})
-	if ($VsCommonToolsPaths.Count -ne 0) {$VsCommonToolsPaths[0]}
-	else {Write-Error "Unable to find Visual Studio Common Tool Path."}
+    
+    # We have to use the vswhere.exe tool to locate Visual Studio 2017
+    $vsWhere = Join-Path $PSScriptRoot '..\..\Tools\vswhere.exe'
+    $vs141Instance = & $vsWhere -nologo -format value -property installationPath -latest -requires 'Microsoft.VisualStudio.Component.VC.CLI.Support'
+    $VS141COMNTOOLS = Join-Path $vs141Instance 'Common7\Tools'	
+    
+    # Now test which VS versions are present on the system
+	$VsCommonToolsPath = @($VS141COMNTOOLS,$env:VS140COMNTOOLS,$env:VS120COMNTOOLS,$env:VS110COMNTOOLS,$env:VS100COMNTOOLS) |
+        Where-Object { $_ -ne $null -and (Test-Path -Path $_ -PathType Container) } |
+        Select-Object -First 1
+
+    if ($VsCommonToolsPath -eq $null)
+    {
+        Write-Error "Unable to find Visual Studio Common Tool Path."
+    }
+
+    return $VsCommonToolsPath
 }
 ################################################################################
 Export-ModuleMember -Function Invoke-MsTest,Get-MsTest
