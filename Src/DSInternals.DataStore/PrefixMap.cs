@@ -23,12 +23,10 @@ namespace DSInternals.DataStore
             this.AddBuiltinPrefixes();
 
             // Add user prefixes, if any
-            if(blob == null)
+            if(blob != null)
             {
-                // Do not continue with parsing
-                return;
+                this.InitFromBlob(blob);
             }
-            this.InitFromBlob(blob);
         }
 
         public bool ContainsPrefix(ushort prefixIndex)
@@ -115,38 +113,45 @@ namespace DSInternals.DataStore
         private void AddBuiltinPrefixes()
         {
             // These prefixes are hardcoded in AD, without being present in the map stored in DB.
-            this.AddBuiltinPrefix(0, "5504");
-            this.AddBuiltinPrefix(1, "5506");
-            this.AddBuiltinPrefix(2, "2A864886F7140102");
-            this.AddBuiltinPrefix(3, "2A864886F7140103");
-            this.AddBuiltinPrefix(4, "6086480165020201");
-            this.AddBuiltinPrefix(5, "6086480165020203");
-            this.AddBuiltinPrefix(6, "6086480165020105");
-            this.AddBuiltinPrefix(7, "6086480165020104");
-            this.AddBuiltinPrefix(8, "5505");
-            this.AddBuiltinPrefix(9, "2A864886F7140104");
-            this.AddBuiltinPrefix(10, "2A864886F7140105");
-            // TODO: Are indices 11-18 used?
-            this.AddBuiltinPrefix(19, "0992268993F22C64");
-            this.AddBuiltinPrefix(20, "6086480186F84203");
-            this.AddBuiltinPrefix(21, "0992268993F22C6401");
-            this.AddBuiltinPrefix(22, "6086480186F8420301");
-            this.AddBuiltinPrefix(23, "2A864886F7140105B658");
-            this.AddBuiltinPrefix(24, "5515");
-            this.AddBuiltinPrefix(25, "5512");
-            this.AddBuiltinPrefix(26, "5514");
-            this.AddBuiltinPrefix(27, "2B060104018B3A6577");
-            this.AddBuiltinPrefix(28, "6086480186F8420302");
-            this.AddBuiltinPrefix(29, "2B06010401817A01");
-            this.AddBuiltinPrefix(30, "2A864886F70D0109");
-            this.AddBuiltinPrefix(31, "0992268993F22C6404");
-            this.AddBuiltinPrefix(32, "2A864886F714010617");
-            this.AddBuiltinPrefix(33, "2A864886F71401061201");
-            this.AddBuiltinPrefix(34, "2A864886F71401061202");
-            this.AddBuiltinPrefix(35, "2A864886F71401060D03");
-            this.AddBuiltinPrefix(36, "2A864886F71401060D04");
-            this.AddBuiltinPrefix(37, "2B0601010101");
-            this.AddBuiltinPrefix(38, "2B0601010102");
+            this.AddBuiltinPrefix(0, "5504"); // 2.5.4
+            this.AddBuiltinPrefix(1, "5506"); // 2.5.6
+            this.AddBuiltinPrefix(2, "2A864886F7140102"); // 1.2.840.113556.1.2
+            this.AddBuiltinPrefix(3, "2A864886F7140103"); // 1.2.840.113556.1.3
+            this.AddBuiltinPrefix(4, "6086480165020201"); // 2.16.840.1.101.2.2.1
+            this.AddBuiltinPrefix(5, "6086480165020203"); // 2.16.840.1.101.2.2.3
+            this.AddBuiltinPrefix(6, "6086480165020105"); // 2.16.840.1.101.2.2.5
+            this.AddBuiltinPrefix(7, "6086480165020104"); // 2.16.840.1.101.2.2.4
+            this.AddBuiltinPrefix(8, "5505"); // 2.5.5
+            this.AddBuiltinPrefix(9, "2A864886F7140104"); // 1.2.840.113556.1.4
+            this.AddBuiltinPrefix(10, "2A864886F7140105"); // 1.2.840.113556.1.5
+            this.AddBuiltinPrefix(11, "2A864886F71401048204"); // 1.2.840.113556.1.4.260
+            this.AddBuiltinPrefix(12, "2A864886F714010538"); // 1.2.840.113556.1.5.56
+            this.AddBuiltinPrefix(13, "2A864886F71401048206"); // 1.2.840.113556.1.4.262
+            this.AddBuiltinPrefix(14, "2A864886F714010539"); // 1.2.840.113556.1.5.57
+            this.AddBuiltinPrefix(15, "2A864886F71401048207"); // 1.2.840.113556.1.4.263
+            this.AddBuiltinPrefix(16, "2A864886F71401053A"); // 1.2.840.113556.1.5.58
+            this.AddBuiltinPrefix(17, "2A864886F714010549"); // 1.2.840.113556.1.5.73
+            this.AddBuiltinPrefix(18, "2A864886F71401048231"); // 1.2.840.113556.1.4.305
+            this.AddBuiltinPrefix(19, "0992268993F22C64"); // 0.9.2342.19200300.100
+            this.AddBuiltinPrefix(20, "6086480186F84203"); // 2.16.840.1.113730.3
+            this.AddBuiltinPrefix(21, "0992268993F22C6401"); // 0.9.234219200300.100.1
+            this.AddBuiltinPrefix(22, "6086480186F8420301"); // 2.16.840.1.113730.3.1
+            this.AddBuiltinPrefix(23, "2A864886F7140105B658"); // 1.2.840.113556.1.5.7000
+            this.AddBuiltinPrefix(24, "5515"); // 2.5.21
+            this.AddBuiltinPrefix(25, "5512"); // 2.5.18
+            this.AddBuiltinPrefix(26, "5514"); // 2.5.20
+            this.AddBuiltinPrefix(27, "2B060104018B3A6577"); // 1.3.6.1.4.1.1466.101.119
+            this.AddBuiltinPrefix(28, "6086480186F8420302"); // 2.16.840.1.113730.3.2
+            this.AddBuiltinPrefix(29, "2B06010401817A01"); // 1.3.6.1.4.1.250.1
+            this.AddBuiltinPrefix(30, "2A864886F70D0109"); // 1.2.840.113549.1.9
+            this.AddBuiltinPrefix(31, "0992268993F22C6404"); // 0.9.2342.19200300.100.4
+            this.AddBuiltinPrefix(32, "2A864886F714010617"); // 1.2.840.113556.1.6.23
+            this.AddBuiltinPrefix(33, "2A864886F71401061201"); // 1.2.840.113556.1.6.18.1
+            this.AddBuiltinPrefix(34, "2A864886F71401061202"); // 1.2.840.113556.1.6.18.2
+            this.AddBuiltinPrefix(35, "2A864886F71401060D03"); // 1.2.840.113556.1.6.13.3
+            this.AddBuiltinPrefix(36, "2A864886F71401060D04"); // 1.2.840.113556.1.6.13.4
+            this.AddBuiltinPrefix(37, "2B0601010101"); // 1.3.6.1.1.1.1
+            this.AddBuiltinPrefix(38, "2B0601010102"); // 1.3.6.1.1.1.2
         }
 
         private void AddBuiltinPrefix(ushort index, string encodedPrefix)
