@@ -311,10 +311,16 @@ function Get-VisualStudioCommandPromptPath
 	$vs2012CommandPrompt = $env:VS110COMNTOOLS + "VsDevCmd.bat"
 	$vs2013CommandPrompt = $env:VS120COMNTOOLS + "VsDevCmd.bat"
 	$vs2015CommandPrompt = $env:VS140COMNTOOLS + "VsDevCmd.bat"
-
+    
+    # We have to use the vswhere.exe tool to locate Visual Studio 2017
+    $vsWhere = Join-Path $PSScriptRoot '..\..\Tools\vswhere.exe'
+    $vs2017Instance = & $vsWhere -nologo -format value -property installationPath -latest -requires 'Microsoft.VisualStudio.Component.VC.CLI.Support'
+    $vs2017CommandPrompt = Join-Path $vs2017Instance 'Common7\Tools\VsDevCmd.bat'
+    
 	# Store the VS Command Prompt to do the build in, if one exists.
 	$vsCommandPrompt = $null
-	if (Test-Path $vs2015CommandPrompt) { $vsCommandPrompt = $vs2015CommandPrompt }
+	if (Test-Path $vs2017CommandPrompt) { $vsCommandPrompt = $vs2017CommandPrompt }
+    elseif (Test-Path $vs2015CommandPrompt) { $vsCommandPrompt = $vs2015CommandPrompt }
 	elseif (Test-Path $vs2013CommandPrompt) { $vsCommandPrompt = $vs2013CommandPrompt }
 	elseif (Test-Path $vs2012CommandPrompt) { $vsCommandPrompt = $vs2012CommandPrompt }
 	elseif (Test-Path $vs2010CommandPrompt) { $vsCommandPrompt = $vs2010CommandPrompt }

@@ -21,7 +21,6 @@ mkdir $resultsDir -Force | Out-Null
 # Execute all Visual Studio Unit Tests
 Get-ChildItem -Path $buildDir -Filter *.Test.dll -File -Recurse | foreach {
     $unitTestFile = $_.FullName
-    #Split-Path $_.Name -
     $resultsFile = Join-Path $resultsDir ($_.BaseName + '.trx')
     & $msTest /testcontainer:$unitTestFile /resultsfile:$resultsFile /runconfig:$runConfig
 }

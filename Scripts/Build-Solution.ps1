@@ -14,7 +14,7 @@ $modulePath = Join-Path $PSScriptRoot 'Modules\Invoke-MSBuild'
 Import-Module $modulePath -ErrorAction Stop
 
 $targets = 'Build' # 'Clean'
-$configurations = 'Release' # 'Debug'
+$configurations = 'Release', 'Debug'
 $platforms = 'x86','x64'
 
 # Delete the entire Build directory
@@ -34,7 +34,7 @@ foreach($target in $targets)
             $logDir = Join-Path $logRootDir "$configuration\$platform"
             mkdir $logDir -Force | Out-Null
             $result = Invoke-MsBuild -MsBuildParameters "/target:$target /property:Configuration=$configuration;Platform=$platform" `
-                           -Path $solutionFile -ShowBuildWindow -BuildLogDirectoryPath $logDir -KeepBuildLogOnSuccessfulBuilds
+                           -Path $solutionFile -BuildLogDirectoryPath $logDir -KeepBuildLogOnSuccessfulBuilds
             echo "Success: $result"
         }
     }
