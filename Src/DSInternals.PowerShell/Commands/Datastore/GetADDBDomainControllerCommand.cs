@@ -11,7 +11,7 @@
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
-            Mapper.CreateMap<DSInternals.DataStore.DomainController, DSInternals.PowerShell.DomainController>();
+            Mapper.Initialize(cfg => cfg.CreateMap<DSInternals.DataStore.DomainController, DSInternals.PowerShell.DomainController>());
             var dc = this.DirectoryContext.DomainController;
             var dcTransfer = Mapper.Map<DSInternals.PowerShell.DomainController>(dc);
             this.WriteObject(dcTransfer);

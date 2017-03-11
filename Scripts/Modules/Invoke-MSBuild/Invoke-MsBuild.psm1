@@ -315,7 +315,7 @@ function Get-VisualStudioCommandPromptPath
     # We have to use the vswhere.exe tool to locate Visual Studio 2017
     $vsWhere = Join-Path $PSScriptRoot '..\..\Tools\vswhere.exe'
     $vs2017Instance = & $vsWhere -nologo -format value -property installationPath -latest -requires 'Microsoft.VisualStudio.Component.VC.CLI.Support'
-    $vs2017CommandPrompt = Join-Path $vs2017Instance 'Common7\Tools\VsDevCmd.bat'
+    $vs2017CommandPrompt = $vs2017Instance + '\Common7\Tools\VsDevCmd.bat'
     
 	# Store the VS Command Prompt to do the build in, if one exists.
 	$vsCommandPrompt = $null

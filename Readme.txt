@@ -10,7 +10,6 @@ List of Cmdlets
 To see the list of available cmdlets with their description, run this command:
 
 PS > Get-Help about_DSInternals
-Offline AD Database Access:
 
 System Requirements
 -------------------
