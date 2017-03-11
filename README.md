@@ -1,7 +1,7 @@
 DSInternals PowerShell Module and Framework
 ===========================================
 
-![MIT License](https://img.shields.io/badge/License-MIT-green.svg) ![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg) ![.NET Framework 4.5.1+](https://img.shields.io/badge/.NET%20Framework-4.5.1%2B-007FFF.svg) ![Visual Studio 2013 | 2015](https://img.shields.io/badge/Visual%20Studio-2013%20|%202015-383278.svg)
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg) ![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg) ![.NET Framework 4.5.1+](https://img.shields.io/badge/.NET%20Framework-4.5.1%2B-007FFF.svg) ![Visual Studio 2013 | 2015 | 2017](https://img.shields.io/badge/Visual%20Studio-2013%20|%202015%20|%202017-383278.svg)
 
 The DSInternals project consists of these two parts:
 - The [DSInternals Framework](https://www.nuget.org/profiles/MichaelGrafnetter) exposes several internal and undocumented features of Active Directory and can be used from any .NET application.
