@@ -75,9 +75,10 @@ namespace DSInternals
 				static array<byte>^ ReadValue(const ATTRVAL &value);
 				static array<array<byte>^>^ ReadValues(const ATTRVALBLOCK &values);
 				static ReplicaAttribute^ ReadAttribute(const ATTR &attribute);
+				static ReplicaAttribute^ ReadAttribute(const REPLVALINF_V1 &attribute);
 				static ReplicaAttributeCollection^ ReadAttributes(const ATTRBLOCK &attributes);
 				static ReplicaObject^ ReadObject(const ENTINF &object);
-				static ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST *objects, int count);
+				static ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST *objects, int objectCount, const REPLVALINF_V1 *linkedValues, int valueCount);
 				static Guid ReadGuid(GUID const &guid);
 				static String^ ReadName(const DSNAME* dsName);
 				static SecurityIdentifier^ ReadSid(const DSNAME* dsName);

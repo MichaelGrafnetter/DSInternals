@@ -214,7 +214,7 @@ namespace DSInternals
 
 				auto request = CreateReplicateAllRequest(cookie, partialAttributeSet, maxBytes, maxObjects);
 				auto reply = GetNCChanges(move(request));
-				auto objects = ReadObjects(reply->pObjects, reply->cNumObjects);
+				auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues);
 				USN_VECTOR usnTo = reply->usnvecTo;
 				Guid invocationId = RpcTypeConverter::ToGuid(reply->uuidInvocIdSrc);
 				auto newCookie = gcnew ReplicationCookie(cookie->NamingContext, invocationId, usnTo.usnHighObjUpdate, usnTo.usnHighPropUpdate, usnTo.usnReserved);
@@ -233,7 +233,7 @@ namespace DSInternals
 				{
 					auto request = CreateReplicateSingleRequest(distinguishedName, partialAttributeSet);
 					auto reply = GetNCChanges(move(request));
-					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects);
+					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues);
 					// TODO: Assert objects.Count == 1; It is guaranteed that it is > 0
 					return objects[0];
 				}
@@ -263,7 +263,7 @@ namespace DSInternals
 				{
 					auto request = CreateReplicateSingleRequest(objectGuid, partialAttributeSet);
 					auto reply = GetNCChanges(move(request));
-					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects);
+					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues);
 					// TODO: Assert objects.Count == 1; It is guaranteed that it is > 0
 					return objects[0];
 				}
@@ -477,12 +477,21 @@ namespace DSInternals
 				}
 				return valArray;
 			}
+
 			ReplicaAttribute^ DrsConnection::ReadAttribute(const ATTR &attribute)
 			{
 				auto values = ReadValues(attribute.AttrVal);
 				auto managedAttribute = gcnew ReplicaAttribute(attribute.attrTyp, values);
 				return managedAttribute;
 			}
+
+			ReplicaAttribute^ DrsConnection::ReadAttribute(const REPLVALINF_V1 &attribute)
+			{
+				auto value = ReadValue(attribute.Aval);
+				auto managedAttribute = gcnew ReplicaAttribute(attribute.attrTyp, value);
+				return managedAttribute;
+			}
+
 			ReplicaAttributeCollection^ DrsConnection::ReadAttributes(const ATTRBLOCK &attributes)
 			{
 				auto attributeCount = attributes.attrCount;
@@ -507,13 +516,29 @@ namespace DSInternals
 				auto dn = ReadName(object.pName);
 				return gcnew ReplicaObject(dn, guid, sid, attributes);
 			}
-			ReplicaObjectCollection^ DrsConnection::ReadObjects(const REPLENTINFLIST *objects, int count)
+			ReplicaObjectCollection^ DrsConnection::ReadObjects(const REPLENTINFLIST *objects, int objectCount, const REPLVALINF_V1 *linkedValues, int valueCount)
 			{
-				auto managedObjects = gcnew ReplicaObjectCollection(count);
+				// Read linked values first
+				// TODO: Handle the case when linked attributes of an object are split between reveral responses.
+				auto linkedValueCollection = gcnew ReplicatedLinkedValueCollection();
+				for (int i = 0; i < valueCount; i++)
+				{
+					auto linkedValue = linkedValues[i];
+					if (linkedValue.fIsPresent)
+					{
+						auto objectId = ReadGuid(linkedValue.pObject->Guid);
+						auto attribute = ReadAttribute(linkedValue);
+						linkedValueCollection->Add(objectId, attribute);
+					}
+				}
+
+				// Now read the replicated objects
+				auto managedObjects = gcnew ReplicaObjectCollection(objectCount);
 				auto currentObject = objects;
 				while (currentObject != nullptr)
 				{
 					auto managedObject = ReadObject(currentObject->Entinf);
+					managedObject->LoadLinkedValues(linkedValueCollection);
 					managedObjects->Add(managedObject);
 					currentObject = currentObject->pNextEntInf;
 				}

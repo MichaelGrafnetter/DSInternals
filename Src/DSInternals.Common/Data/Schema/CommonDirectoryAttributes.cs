@@ -78,6 +78,12 @@
         public const string ParentDNTag = "PDNT";
         public const string PEKList = "pekList";
         public const string PEKChangeInterval = "pekKeyChangeInterval";
+        public const string PKIRoamingTimeStamp = "msPKIRoamingTimeStamp";
+        public const int PKIRoamingTimeStampId = 591716;
+        public const string PKIDPAPIMasterKeys = "msPKIDPAPIMasterKeys";
+        public const int PKIDPAPIMasterKeysId = 591717;
+        public const string PKIAccountCredentials = "msPKIAccountCredentials";
+        public const int PKIAccountCredentialsId = 591718;
         public const string PrefixMap = "prefixMap";
         public const string PrimaryGroupId = "primaryGroupID";
         public const int PrimaryGroupIdId = 589922;

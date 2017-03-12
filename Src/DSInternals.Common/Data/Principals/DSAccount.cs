@@ -1,6 +1,7 @@
 ﻿namespace DSInternals.Common.Data
 {
     using DSInternals.Common.Cryptography;
+    using DSInternals.Common.Exceptions;
     using System;
     using System.Security.AccessControl;
     using System.Security.Principal;
@@ -24,7 +25,7 @@
         {
             // Parameter validation
             Validator.AssertNotNull(dsObject, "dsObject");
-            if(!dsObject.IsAccount)
+            if (!dsObject.IsAccount)
             {
                 // TODO: Exteption type
                 throw new Exception("Not an account.");
@@ -35,7 +36,7 @@
 
             // DN:
             this.DistinguishedName = dsObject.DistinguishedName;
-            
+
             // Sid:
             this.Sid = dsObject.Sid;
 
@@ -70,7 +71,7 @@
 
             // Deleted:
             dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out this.isDeleted);
-            
+
             // LastLogon:
             dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out this.lastLogon);
 
@@ -91,7 +92,10 @@
             dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out groupId);
             this.PrimaryGroupId = groupId.Value;
 
-            if(pek == null)
+            // Credential Roaming
+            this.LoadRoamedCredentials(dsObject);
+
+            if (pek == null)
             {
                 // Do not continue if we do not have a decryption key
                 return;
@@ -99,7 +103,7 @@
             // NTHash:
             byte[] encryptedNtHash;
             dsObject.ReadAttribute(CommonDirectoryAttributes.NTHash, out encryptedNtHash);
-            if(encryptedNtHash != null)
+            if (encryptedNtHash != null)
             {
                 this.NTHash = pek.DecryptHash(encryptedNtHash, this.Sid.GetRid());
             }
@@ -263,7 +267,7 @@
         /// <value>
         ///   <c>true</c> if deleted; otherwise, <c>false</c>.
         /// </value>
-        public bool Deleted        
+        public bool Deleted
         {
             get
             {
@@ -300,7 +304,7 @@
                 return this.samAccountName;
             }
         }
-        
+
         public int PrimaryGroupId
         {
             get;
@@ -379,6 +383,55 @@
         {
             get;
             private set;
+        }
+
+        public DateTime? RoamedCredentialsCreated
+        {
+            get;
+            private set;
+        }
+
+        public DateTime? RoamedCredentialsModified
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Loads credential roaming timestamps.
+        /// </summary>
+        protected void LoadRoamedCredentials(DirectoryObject dsObject)
+        {
+            try
+            {
+                byte[] roamingTimeStamp;
+                dsObject.ReadAttribute(CommonDirectoryAttributes.PKIRoamingTimeStamp, out roamingTimeStamp);
+
+                if (roamingTimeStamp == null)
+                {
+                    // This account does not have roamed credentials, so we skip their processing
+                    return;
+                }
+
+                // The 16B of the value consist of two 8B actual time stamps.
+                long createdTimeStamp = BitConverter.ToInt64(roamingTimeStamp, 0);
+                long modifiedTimeStamp = BitConverter.ToInt64(roamingTimeStamp, sizeof(long));
+
+                this.RoamedCredentialsCreated = DateTime.FromFileTime(createdTimeStamp);
+                this.RoamedCredentialsModified = DateTime.FromFileTime(modifiedTimeStamp);
+
+                byte[][] masterKeyBlobs;
+                dsObject.ReadLinkedValues(CommonDirectoryAttributes.PKIDPAPIMasterKeys, out masterKeyBlobs);
+
+                byte[][] credentialBlobs;
+                dsObject.ReadLinkedValues(CommonDirectoryAttributes.PKIAccountCredentials, out credentialBlobs);
+
+                // TODO: Parse the blobs.
+            }
+            catch (SchemaAttributeNotFoundException)
+            {
+                // These attributes have been added in Windows Server 2008, so they might not be present on older DCs.
+            }
         }
     }
 }

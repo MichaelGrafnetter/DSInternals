@@ -1,9 +1,10 @@
 ﻿namespace DSInternals.DataStore
 {
-    using DSInternals.Common.Cryptography;
+    using DSInternals.Common;
     using DSInternals.Common.Data;
     using Microsoft.Database.Isam;
     using System;
+    using System.Linq;
     using System.Security.AccessControl;
     using System.Security.Principal;
 
@@ -20,10 +21,18 @@
         {
             get
             {
+                var dn = this.context.DistinguishedNameResolver.Resolve(this.DNTag);
+                return dn.ToString();
+            }
+        }
+
+        public int DNTag
+        {
+            get
+            {
                 Columnid columnId = this.context.Schema.FindColumnId(CommonDirectoryAttributes.DNTag);
                 int? dnt = cursor.RetrieveColumnAsDNTag(columnId);
-                var dn = this.context.DistinguishedNameResolver.Resolve(dnt.Value);
-                return dn.ToString();
+                return dnt.Value;
             }
         }
 
@@ -144,6 +153,13 @@
             byte[] binaryValue;
             this.ReadAttribute(name, out binaryValue);
             value = new AttributeMetadataCollection(binaryValue);
+        }
+
+        public override void ReadLinkedValues(string attributeName, out byte[][] values)
+        {
+            var rawValues = this.context.LinkResolver.GetLinkedValues(this.DNTag, attributeName);
+            // Cut off the first 4 bytes, which is the length of the entire structure.
+            values = rawValues.Select( rawValue => rawValue.Cut(sizeof(int)) ).ToArray();
         }
 
         public bool SetAttribute<T>(string name, Nullable<T> newValue) where T : struct

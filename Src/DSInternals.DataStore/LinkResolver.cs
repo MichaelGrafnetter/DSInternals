@@ -56,21 +56,11 @@ namespace DSInternals.DataStore
 
         public IEnumerable<int> GetLinkedDNTags(int dnTag, string attributeName)
         {
-            SchemaAttribute attr = this.schema.FindAttribute(attributeName);
-            if(!attr.LinkId.HasValue)
-            {
-                //TODO: Throw a proper exception
-                // TODO: Check that attribute type is DN
-                throw new Exception("This is not a linked multivalue attribute.");
-            }
-            int linkId = attr.LinkId.Value;
-            // Remove the rightmost bit that indicates if this is a forward link or a backlink.
-            int linkBase = linkId >> 1;
-            // Columns order in index: link_DNT, link_base, backlink_DNT
-            Key key = Key.Compose(dnTag, linkBase);
-            key.AddWildcard();
-            cursor.FindRecords(MatchCriteria.EqualTo, key);
-            while(cursor.MoveNext())
+            // TODO: Check that the attribute type is DN
+            this.FindLinkedRecords(dnTag, attributeName);
+
+            // The cursor is now before the first record in the link_table
+            while (cursor.MoveNext())
             {
                 // TODO: Not deactivated?
                 int foundTag = (int)cursor.IndexRecord[backlinkDNCol];
@@ -78,10 +68,18 @@ namespace DSInternals.DataStore
             }
         }
 
-        public IEnumerable<byte[]> GetDNBinaryValues(int dnTag, string attributeName)
+        public IEnumerable<byte[]> GetLinkedValues(int dnTag, string attributeName)
         {
-            // TODO: Implement DN-Binary attribute value retrieval from linktable.
-            throw new NotImplementedException();
+            // TODO: Check that the attribute is DN-Binary.
+            this.FindLinkedRecords(dnTag, attributeName);
+
+            // The cursor is now before the first record in the link_table
+            while (cursor.MoveNext())
+            {
+                // TODO: Not deactivated?
+                byte[] foundValue = cursor.RetrieveColumnAsByteArray(linkDataCol);
+                yield return foundValue;
+            }
         }
 
         public void Dispose()
@@ -96,6 +94,22 @@ namespace DSInternals.DataStore
                 cursor.Dispose();
                 cursor = null;
             }
+        }
+
+        private void FindLinkedRecords(int dnTag, string attributeName)
+        {
+            SchemaAttribute attr = this.schema.FindAttribute(attributeName);
+            if (!attr.LinkId.HasValue)
+            {
+                //TODO: Throw a proper exception
+                throw new Exception("This is not a linked multivalue attribute.");
+            }
+
+            int linkBase = attr.LinkBase.Value;
+            // Columns order in index: link_DNT, link_base, backlink_DNT
+            Key key = Key.Compose(dnTag, linkBase);
+            key.AddWildcard();
+            this.cursor.FindRecords(MatchCriteria.EqualTo, key);
         }
     }
 }

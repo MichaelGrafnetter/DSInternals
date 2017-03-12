@@ -100,6 +100,22 @@
                 }
             }
         }
+
+        public int? LinkBase
+        {
+            get
+            {
+                if (!this.LinkId.HasValue)
+                {
+                    // This attribute is not a linked value.
+                    return null;
+                }
+
+                // Remove the rightmost bit that indicates if this is a forward link or a backlink.
+                return this.LinkId.Value >> 1;
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value that represents the minimum value or length that the schema property can have.
         /// </summary>

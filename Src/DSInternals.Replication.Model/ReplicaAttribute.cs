@@ -9,7 +9,14 @@ namespace DSInternals.Replication.Model
             this.Id = id;
             this.Values = values;
         }
-        
+
+        public ReplicaAttribute(int id, byte[] value)
+        {
+            this.Id = id;
+            this.Values = new byte[1][];
+            this.Values[0] = value;
+        }
+
         public int Id
         {
             get;

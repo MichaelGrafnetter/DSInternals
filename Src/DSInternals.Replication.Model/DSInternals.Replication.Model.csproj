@@ -48,6 +48,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="PartialAttributeSet.cs" />
+    <Compile Include="ReplicatedLinkedValueCollection.cs" />
     <Compile Include="ReplicaAttributeCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReplicaAttribute.cs" />

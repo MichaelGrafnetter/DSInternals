@@ -35,6 +35,8 @@
         public abstract void ReadAttribute(string name, out string[] values);
         public abstract void ReadAttribute(string name, out RawSecurityDescriptor value);
 
+        public abstract void ReadLinkedValues(string attributeName, out byte[][] values);
+
         public abstract string DistinguishedName
         {
             get;

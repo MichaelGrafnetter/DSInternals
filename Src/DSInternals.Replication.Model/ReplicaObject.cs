@@ -1,5 +1,6 @@
 ﻿namespace DSInternals.Replication.Model
 {
+    using DSInternals.Common;
     using DSInternals.Common.Data;
     using System;
     using System.Linq;
@@ -26,6 +27,7 @@
             get;
             set;
         }
+
         public override string DistinguishedName
         {
             get
@@ -54,6 +56,18 @@
         {
             get;
             private set;
+        }
+
+        public void LoadLinkedValues(ReplicatedLinkedValueCollection linkedValueCollection)
+        {
+            var objectAttributes = linkedValueCollection.Get(this.Guid);
+            if(objectAttributes != null)
+            {
+                foreach (var attribute in objectAttributes)
+                {
+                    this.Attributes.Add(attribute);
+                }
+            }
         }
 
         protected bool HasAttribute(int attributeId)
@@ -207,12 +221,52 @@
             value = (binarySecurityDescriptor != null) ? new RawSecurityDescriptor(binarySecurityDescriptor, 0) : null;
         }
 
+        public override void ReadLinkedValues(string attributeName, out byte[][] values)
+        {
+            // The linked values have already been merged with regular attributes using LoadLinkedValues
+            // TODO: We currently only support DN-Binary linked values.
+            // TODO: Check if the attribute exists
+            byte[][] rawValues;
+            this.ReadAttribute(attributeName, out rawValues);
+            values = (rawValues != null) ? rawValues.Select(rawValue => ParseDNBinary(rawValue)).ToArray() : null;
+        }
+
         protected override bool HasBigEndianRid
         {
             get
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Parses the binary data as SYNTAX_DISTNAME_BINARY.
+        /// </summary>
+        /// <param name="blob">SYNTAX_DISTNAME_BINARY structure</param>
+        /// <returns>Binary value</returns>
+        /// <see>https://msdn.microsoft.com/en-us/library/cc228431.aspx</see>
+        protected static byte[] ParseDNBinary(byte[] blob)
+        {
+            // Read structLen (4 bytes): The length of the structure, in bytes, up to and including the field StringName.
+            int structLen = BitConverter.ToInt32(blob, 0);
+
+            // Skip Padding (variable): The padding (bytes with value zero) to align the field dataLen at a double word boundary.
+            int structLengthWithPadding = structLen;
+            while(structLengthWithPadding % sizeof(int) != 0)
+            {
+                structLengthWithPadding++;
+            }
+
+            // Read dataLen (4 bytes): The length of the remaining structure, including this field, in bytes.
+            int dataLen = BitConverter.ToInt32(blob, structLengthWithPadding);
+            int dataOffset = structLengthWithPadding + sizeof(int);
+
+            // Read byteVal(variable): An array of bytes.
+            byte[] value = blob.Cut(dataOffset);
+
+            // TODO: Validate the data length
+            // Return only the binary data, without the DN.
+            return value;
         }
     }
 }
