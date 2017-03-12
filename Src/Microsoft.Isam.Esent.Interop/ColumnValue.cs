@@ -9,12 +9,18 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
 
     /// <summary>
     /// Base class for objects that represent a column value to be set.
     /// </summary>
-    public abstract class ColumnValue
+    public abstract partial class ColumnValue
     {
+        /// <summary>
+        /// Internal grbit.
+        /// </summary>
+        private RetrieveColumnGrbit grbit;
+
         /// <summary>
         /// Initializes a new instance of the ColumnValue class.
         /// </summary>
@@ -42,7 +48,19 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets or sets column retrieval options.
         /// </summary>
-        public RetrieveColumnGrbit RetrieveGrbit { get; set; }
+        public RetrieveColumnGrbit RetrieveGrbit
+        {
+            get
+            {
+                return this.grbit;
+            }
+
+            set
+            {
+                this.ValidateRetrieveGrbit(value);
+                this.grbit = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the column itag sequence.
@@ -269,6 +287,19 @@ namespace Microsoft.Isam.Esent.Interop
         protected abstract void GetValueFromBytes(byte[] value, int startIndex, int count, int err);
 
         /// <summary>
+        /// Validation for the requested retrieve options for the column.
+        /// </summary>
+        /// <param name="grbit">The retrieve options to validate.</param>
+        protected virtual void ValidateRetrieveGrbit(RetrieveColumnGrbit grbit)
+        {
+            // We cannot support this request when there is no way to indicate that a column reference is returned.
+            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
+            {
+                throw new EsentInvalidGrbitException();
+            }
+        }
+
+        /// <summary>
         /// Retrieve the value for columns whose buffers were truncated.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -300,6 +331,17 @@ namespace Microsoft.Isam.Esent.Interop
                                       out actualSize,
                                       columnValues[i].RetrieveGrbit,
                                       retinfo);
+                    }
+
+                    if (JET_wrn.BufferTruncated == (JET_wrn)err)
+                    {
+                        string error = string.Format(
+                            CultureInfo.CurrentCulture,
+                            "Column size changed from {0} to {1}. The record was probably updated by another thread.",
+                            buffer.Length,
+                            actualSize);
+                        Trace.TraceError(error);
+                        throw new InvalidOperationException(error);
                     }
 
                     // Throw errors, but put warnings in the structure

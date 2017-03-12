@@ -27,7 +27,7 @@ namespace Microsoft.Database.Isam.Config
         /// <summary>
         /// The exclusive upper bound on JET_param*.
         /// </summary>
-        internal const int ParamMaxValueInvalid = 195; // should be equal to JET_paramMaxValueInvalid
+        internal const int ParamMaxValueInvalid = 196; // should be equal to JET_paramMaxValueInvalid
     
         /// <summary>
         /// Fills the param table from auto-generated code.
@@ -156,6 +156,7 @@ namespace Microsoft.Database.Isam.Config
             DatabaseConfig.ParamTable[186] = new ParamDef(186, true, typeof(string)); // JET_paramProcessFriendlyName
             DatabaseConfig.ParamTable[187] = new ParamDef(187, false, typeof(IntPtr)); // JET_paramDurableCommitCallback
             DatabaseConfig.ParamTable[189] = new ParamDef(189, false, typeof(string)); // JET_paramConfigStoreSpec
+            DatabaseConfig.ParamTable[193] = new ParamDef(193, false, typeof(int)); // JET_paramPersistedLostFlushDetection
             DatabaseConfig.ParamTable[194] = new ParamDef(194, false, typeof(int)); // JET_paramEngineFormatVersion
         }
 
@@ -1494,6 +1495,15 @@ namespace Microsoft.Database.Isam.Config
         {
             get { return this.GetParam<string>(189); }
             set { this.SetParam(189, value); }
+        }
+
+        /// <summary>
+        /// Configures persisted lost flush detection for databases while attached to an instance.
+        /// </summary>
+        public int PersistedLostFlushDetection
+        {
+            get { return this.GetParam<int>(193); }
+            set { this.SetParam(193, value); }
         }
 
         /// <summary>

@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using System.Diagnostics;
 
     /// <summary>
@@ -13,6 +14,11 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class StringColumnValue : ColumnValue
     {
+        /// <summary>
+        /// Internal value.
+        /// </summary>
+        private string internalValue;
+
         /// <summary>
         /// Gets the last set or retrieved value of the column. The
         /// value is returned as a generic object.
@@ -27,7 +33,19 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets or sets the value of the column. Use <see cref="Api.SetColumns"/> to update a
         /// record with the column value.
         /// </summary>
-        public string Value { get; set; }
+        public string Value
+        {
+            get
+            {
+                return this.internalValue;
+            }
+
+            set
+            {
+                this.internalValue = value;
+                this.Error = value == null ? JET_wrn.ColumnNull : JET_wrn.Success;
+            }
+        }
 
         /// <summary>
         /// Gets the byte length of a column value, which is zero if column is null, otherwise

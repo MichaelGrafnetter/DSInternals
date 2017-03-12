@@ -154,6 +154,11 @@ namespace Microsoft.Isam.Esent.Interop
         BadEmptyPage = -351,
 
         /// <summary>
+        /// Number of lines on the page is too few compared to the line being operated on
+        /// </summary>
+        BadLineCount = -354,
+
+        /// <summary>
         /// Key is too large
         /// </summary>
         KeyTooBig = -408,
@@ -177,6 +182,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// Cannot preread long values when current index secondary
         /// </summary>
         InvalidPreread = -424,
+
+        /// <summary>
+        /// Column reference is invalid
+        /// </summary>
+        InvalidColumnReference = -426,
+
+        /// <summary>
+        /// Column reference is stale
+        /// </summary>
+        StaleColumnReference = -427,
+
+        /// <summary>
+        /// A compression integrity check failed. Decompressing data failed the integrity checksum indicating a data corruption in the compress/decompress pipeline.
+        /// </summary>
+        CompressionIntegrityCheckFailed = -431,
 
         /// <summary>
         /// Logged operation cannot be redone
@@ -547,6 +567,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// The previous log's accumulated segment checksum doesn't match the next log
         /// </summary>
         LogSequenceChecksumMismatch = -590,
+
+        /// <summary>
+        /// Database divergence mismatch. Page was uninitialized on remote node, but initialized on local node.
+        /// </summary>
+        PageInitializedMismatch = -596,
 
         /// <summary>
         /// Unicode translation buffer too small
@@ -1519,7 +1544,7 @@ namespace Microsoft.Isam.Esent.Interop
         InvalidLVChunkSize = -1438,
 
         /// <summary>
-        /// Only JET_coltypLongText and JET_coltypLongBinary columns can be encrypted
+        /// Only JET_coltypLongText and JET_coltypLongBinary columns without default values can be encrypted
         /// </summary>
         ColumnCannotBeEncrypted = -1439,
 

@@ -15,6 +15,11 @@ namespace Microsoft.Isam.Esent.Interop
     public class BytesColumnValue : ColumnValue
     {
         /// <summary>
+        /// Internal value.
+        /// </summary>
+        private byte[] internalValue;
+
+        /// <summary>
         /// Gets the last set or retrieved value of the column. The
         /// value is returned as a generic object.
         /// </summary>
@@ -28,7 +33,19 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets or sets the value of the column. Use <see cref="Api.SetColumns"/> to update a
         /// record with the column value.
         /// </summary>
-        public byte[] Value { get; set; }
+        public byte[] Value
+        {
+            get
+            {
+                return this.internalValue;
+            }
+
+            set
+            {
+                this.internalValue = value;
+                this.Error = value == null ? JET_wrn.ColumnNull : JET_wrn.Success;
+            }
+        }
 
         /// <summary>
         /// Gets the byte length of a column value, which is zero if column is null, otherwise
@@ -110,8 +127,9 @@ namespace Microsoft.Isam.Esent.Interop
             }
             else
             {
-                this.Value = new byte[count];
-                Buffer.BlockCopy(value, startIndex, this.Value, 0, count);
+                var copiedValue = new byte[count];
+                Buffer.BlockCopy(value, startIndex, copiedValue, 0, count);
+                this.Value = copiedValue;
             }
         }
     }

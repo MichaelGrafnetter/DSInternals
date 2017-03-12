@@ -15,6 +15,11 @@ namespace Microsoft.Isam.Esent.Interop
     public abstract class ColumnValueOfStruct<T> : ColumnValue where T : struct, IEquatable<T>
     {
         /// <summary>
+        /// Internal value.
+        /// </summary>
+        private T? internalValue;
+
+        /// <summary>
         /// Gets the last set or retrieved value of the column. The
         /// value is returned as a generic object.
         /// </summary>
@@ -29,7 +34,19 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets or sets the value in the struct.
         /// </summary>
-        public T? Value { get; set; }
+        public T? Value
+        {
+            get
+            {
+                return this.internalValue;
+            }
+
+            set
+            {
+                this.internalValue = value;
+                this.Error = value == null ? JET_wrn.ColumnNull : JET_wrn.Success;
+            }
+        }
 
         /// <summary>
         /// Gets the byte length of a column value, which is zero if column is null, otherwise

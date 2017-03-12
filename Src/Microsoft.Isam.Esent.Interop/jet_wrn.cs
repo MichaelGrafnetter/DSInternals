@@ -44,6 +44,11 @@ namespace Microsoft.Isam.Esent.Interop
         SeparateLongValue = 406,
 
         /// <summary>
+        /// No more records to stream
+        /// </summary>
+        NoMoreRecords = 428,
+
+        /// <summary>
         /// Existing log file has bad signature
         /// </summary>
         ExistingLogFileHasBadSignature = 558,

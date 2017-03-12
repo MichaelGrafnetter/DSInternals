@@ -41,6 +41,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             const int Windows7BuildNumber = 7000; // includes beta as well as RTM (RTM is 7600)
             const int Windows8BuildNumber = 8000; // includes beta as well as RTM (RTM is 9200)
             const int Windows81BuildNumber = 9300; // includes beta as well as RTM (RTM is 9600)
+            const int Windows10BuildNumber = 9900; // includes beta as well as RTM (RTM is TBD)
 
             // Create new capabilities, set as all false. This will allow
             // us to call into Esent.
@@ -94,6 +95,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Windows 8.1 features");
                 this.Capabilities.SupportsWindows81Features = true;
+            }
+
+            if (buildNumber >= Windows10BuildNumber)
+            {
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Windows 10 features");
+                this.Capabilities.SupportsWindows10Features = true;
             }
         }
 

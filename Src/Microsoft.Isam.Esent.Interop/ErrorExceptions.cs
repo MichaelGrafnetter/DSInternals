@@ -1343,6 +1343,38 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.BadLineCount exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentBadLineCountException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentBadLineCountException class.
+        /// </summary>
+        public EsentBadLineCountException() :
+            base("Number of lines on the page is too few compared to the line being operated on", JET_err.BadLineCount)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentBadLineCountException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentBadLineCountException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
     /// Base class for JET_err.KeyTooBig exceptions.
     /// </summary>
     [SuppressMessage(
@@ -1496,6 +1528,102 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentInvalidPrereadException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.InvalidColumnReference exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentInvalidColumnReferenceException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidColumnReferenceException class.
+        /// </summary>
+        public EsentInvalidColumnReferenceException() :
+            base("Column reference is invalid", JET_err.InvalidColumnReference)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidColumnReferenceException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentInvalidColumnReferenceException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.StaleColumnReference exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentStaleColumnReferenceException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentStaleColumnReferenceException class.
+        /// </summary>
+        public EsentStaleColumnReferenceException() :
+            base("Column reference is stale", JET_err.StaleColumnReference)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentStaleColumnReferenceException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentStaleColumnReferenceException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.CompressionIntegrityCheckFailed exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentCompressionIntegrityCheckFailedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentCompressionIntegrityCheckFailedException class.
+        /// </summary>
+        public EsentCompressionIntegrityCheckFailedException() :
+            base("A compression integrity check failed. Decompressing data failed the integrity checksum indicating a data corruption in the compress/decompress pipeline.", JET_err.CompressionIntegrityCheckFailed)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentCompressionIntegrityCheckFailedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentCompressionIntegrityCheckFailedException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -3864,6 +3992,38 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentLogSequenceChecksumMismatchException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.PageInitializedMismatch exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentPageInitializedMismatchException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentPageInitializedMismatchException class.
+        /// </summary>
+        public EsentPageInitializedMismatchException() :
+            base("Database divergence mismatch. Page was uninitialized on remote node, but initialized on local node.", JET_err.PageInitializedMismatch)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentPageInitializedMismatchException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentPageInitializedMismatchException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -10092,7 +10252,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnCannotBeEncryptedException class.
         /// </summary>
         public EsentColumnCannotBeEncryptedException() :
-            base("Only JET_coltypLongText and JET_coltypLongBinary columns can be encrypted", JET_err.ColumnCannotBeEncrypted)
+            base("Only JET_coltypLongText and JET_coltypLongBinary columns without default values can be encrypted", JET_err.ColumnCannotBeEncrypted)
         {
         }
 
@@ -12926,6 +13086,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentDatabaseLeakInSpaceException();
             case JET_err.BadEmptyPage:
                 return new EsentBadEmptyPageException();
+            case JET_err.BadLineCount:
+                return new EsentBadLineCountException();
             case JET_err.KeyTooBig:
                 return new EsentKeyTooBigException();
             case JET_err.CannotSeparateIntrinsicLV:
@@ -12936,6 +13098,12 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentMustBeSeparateLongValueException();
             case JET_err.InvalidPreread:
                 return new EsentInvalidPrereadException();
+            case JET_err.InvalidColumnReference:
+                return new EsentInvalidColumnReferenceException();
+            case JET_err.StaleColumnReference:
+                return new EsentStaleColumnReferenceException();
+            case JET_err.CompressionIntegrityCheckFailed:
+                return new EsentCompressionIntegrityCheckFailedException();
             case JET_err.InvalidLoggedOperation:
                 return new EsentInvalidLoggedOperationException();
             case JET_err.LogFileCorrupt:
@@ -13084,6 +13252,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentCommittedLogFileCorruptException();
             case JET_err.LogSequenceChecksumMismatch:
                 return new EsentLogSequenceChecksumMismatchException();
+            case JET_err.PageInitializedMismatch:
+                return new EsentPageInitializedMismatchException();
             case JET_err.UnicodeTranslationBufferTooSmall:
                 return new EsentUnicodeTranslationBufferTooSmallException();
             case JET_err.UnicodeTranslationFail:

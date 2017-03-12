@@ -944,9 +944,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_DbInfo infoLevel)
         {
             TraceFunctionCall("JetGetDatabaseInfo");
-            int err;
+            int err = (int)JET_err.Success;
+            dbinfomisc = null;
 
-            if (this.Capabilities.SupportsWindows7Features)
+            bool notYetPublishedSupported = false;
+            this.NotYetPublishedGetDbinfomisc(sesid, dbid, ref dbinfomisc, infoLevel, ref notYetPublishedSupported, ref err);
+
+            if (notYetPublishedSupported)
+            {
+                // The not-yet-published function in the other file set the 'ref' parameters.
+            }
+            else if (this.Capabilities.SupportsWindows7Features)
             {
                 NATIVE_DBINFOMISC4 native;
                 err = Err(NativeMethods.JetGetDatabaseInfoW(
@@ -5518,7 +5526,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             CheckNotNegative(dataSize, sizeArgumentName);
             CheckNotNegative(dataOffset, offsetArgumentName);
 
-            if ((null == data && 0 != dataOffset) || (null != data && dataOffset >= data.Count))
+            if ((null == data && 0 != dataOffset) || (null != data && dataOffset > data.Count))
             {
                 Trace.WriteLineIf(TraceSwitch.TraceError, "CheckDataSize failed");
                 throw new ArgumentOutOfRangeException(
@@ -6403,6 +6411,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             ref bool notYetPublishedSupported,
             ref int err);
 
-#endregion
+        /// <summary>
+        /// Provides a hook to allow population of additional fields in
+        /// a different file. These additonal fields are not yet published
+        /// on MSDN.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="dbinfomisc">The output structure to populate.</param>
+        /// <param name="infoLevel">Specifies which information to retrieve.</param>
+        /// <param name="notYetPublishedSupported">Whether the additional fields specified by in <paramref name="infoLevel"/>
+        /// are populated.</param>
+        /// <param name="err">The <see cref="JET_err"/> error code returned.</param>
+        partial void NotYetPublishedGetDbinfomisc(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            ref JET_DBINFOMISC dbinfomisc,
+            JET_DbInfo infoLevel,
+            ref bool notYetPublishedSupported,
+            ref int err);
+
+        #endregion
     }
 }
