@@ -29,7 +29,9 @@ namespace DSInternals.Replication
 
         public ReplicationSecretDecryptor(byte[] key)
         {
-            Validator.AssertLength(key, KeySize, "key");
+            Validator.AssertNotNull(key, "key");
+            // Session key size: NTLM - 16B, Kerberos - 32B
+            Validator.AssertMinLength(key, KeySize, "key");
             this.key = key;
         }
 

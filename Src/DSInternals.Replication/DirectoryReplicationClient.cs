@@ -16,7 +16,11 @@
 
     public class DirectoryReplicationClient : IDisposable
     {
-        private const string DrsNamedPipeName = "\\pipe\\lsass";
+        /// <summary>
+        /// Service principal name (SPN) of the destination server.
+        /// </summary>
+        private const string ServicePrincipalNameFormat = "ldap/{0}";
+        private const string DrsNamedPipeName = @"\pipe\lsass";
         /// <summary>
         /// This magic guid is needed to fetch the whole tree from a Win 2000 Server DC with DsGetNCChanges() as Administrator.
         /// </summary>
@@ -184,9 +188,11 @@
                     // TODO: Extract as string
                     throw new Exception("Unsupported RPC protocol");
             }
-            NetworkCredential rpcCredential = credential ?? Client.Self;
             this.rpcConnection = new NativeClient(binding);
-            this.rpcConnection.AuthenticateAs(rpcCredential);
+
+            NetworkCredential rpcCredential = credential ?? Client.Self;
+            string spn = String.Format(ServicePrincipalNameFormat, server);
+            this.rpcConnection.AuthenticateAs(spn, rpcCredential, RPC_C_AUTHN_LEVEL.RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN.RPC_C_AUTHN_GSS_NEGOTIATE);
         }
 
         public void Dispose()
