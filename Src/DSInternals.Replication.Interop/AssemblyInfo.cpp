@@ -13,8 +13,8 @@ using namespace System::Security::Permissions;
 // associated with an assembly.
 //
 [assembly:AssemblyTitleAttribute(L"DSInternals Replication Interop Library")];
-// Note: Do not forget to change the version in app.rc files.
-[assembly:AssemblyVersionAttribute("2.20.0")];
+// Note: Do not forget to change the version in version.rc files.
+[assembly:AssemblyVersionAttribute("2.21.0")];
 [assembly:AssemblyDescriptionAttribute(L"")];
 [assembly:AssemblyConfigurationAttribute(L"")];
 [assembly:AssemblyCompanyAttribute(L"")];

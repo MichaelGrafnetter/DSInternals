@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.20'
+ModuleVersion = '2.21'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -20,7 +20,7 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) 2015-2016 Michael Grafnetter. All rights reserved.'
+Copyright = '(c) 2015-2017 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'The DSInternals PowerShell Module exposes several internal features of Active Directory.'
@@ -123,8 +123,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Get-ADPasswordPolicy cmdlet.
-- Synced ConvertTo-OrgIdHash behavior with the current version of Azure AD Connect.
+- Added support for roamed credentials.
+- The replication cmdlets now use Kerberos authentication by default.
+- Cmdlets now accept hashes in both byte array and hexadecimal string forms.
+- Updated a couple of libraries.
 "@
     } # End of PSData hashtable
 
