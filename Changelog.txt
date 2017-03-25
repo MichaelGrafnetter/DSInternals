@@ -1,3 +1,11 @@
+Version 2.21
+- [Module] The replication cmdlets now use Kerberos authentication by default. 
+- [Module] Added support for roamed credentials.
+- [Module] Cmdlets now accept hashes in both byte array and hexadecimal string forms.
+- [Framework] Added support for linked value retrieval.
+- [Framework] Updated referenced packages.
+- [Framework] Added the SamEnumerateDomainsInSamServer call.
+
 Version 2.20
 - Added the Get-ADPasswordPolicy cmdlet.
 
