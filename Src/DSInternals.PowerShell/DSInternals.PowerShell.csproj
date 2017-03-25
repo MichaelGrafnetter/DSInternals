@@ -48,6 +48,8 @@
     <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\ADSI\GetADSIAccountCommand.cs" />
+    <Compile Include="Commands\Base\ADSICommandBase.cs" />
     <Compile Include="Commands\Base\ADReplObjectCommandBase.cs" />
     <Compile Include="Commands\Base\ADReplCommandBase.cs" />
     <Compile Include="Commands\Base\PSCmdletEx.cs" />
@@ -161,6 +163,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DSInternals.SamDomainPasswordInformation.format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DSInternals.RoamedCredential.format.ps1xml">
+      <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config">

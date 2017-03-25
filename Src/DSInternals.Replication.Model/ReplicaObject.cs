@@ -208,19 +208,6 @@
             this.ReadAttribute(attributeId, out value);
         }
 
-        public override void ReadAttribute(string name, out RawSecurityDescriptor value)
-        {
-            int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out value);
-        }
-
-        protected void ReadAttribute(int attributeId, out RawSecurityDescriptor value)
-        {
-            byte[] binarySecurityDescriptor;
-            this.ReadAttribute(attributeId, out binarySecurityDescriptor);
-            value = (binarySecurityDescriptor != null) ? new RawSecurityDescriptor(binarySecurityDescriptor, 0) : null;
-        }
-
         public override void ReadLinkedValues(string attributeName, out byte[][] values)
         {
             // The linked values have already been merged with regular attributes using LoadLinkedValues

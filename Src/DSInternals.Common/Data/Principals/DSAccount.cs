@@ -3,6 +3,7 @@
     using DSInternals.Common.Cryptography;
     using DSInternals.Common.Exceptions;
     using System;
+    using System.Collections.Generic;
     using System.Security.AccessControl;
     using System.Security.Principal;
 
@@ -31,117 +32,16 @@
                 throw new Exception("Not an account.");
             }
 
-            // Guid:
-            this.Guid = dsObject.Guid;
-
-            // DN:
-            this.DistinguishedName = dsObject.DistinguishedName;
-
-            // Sid:
-            this.Sid = dsObject.Sid;
-
-            // SidHistory:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SIDHistory, out this.sidHistory);
-
-            // DisplayName:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.DisplayName, out this.displayName);
-
-            // Description
-            dsObject.ReadAttribute(CommonDirectoryAttributes.Description, out this.description);
-
-            // GivenName:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.GivenName, out this.givenName);
-
-            // Surname:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.Surname, out this.surname);
-
-            // Security Descriptor:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out this.securityDescriptor);
-
-            // AdminCount (Although the schema defines it as Int32, it can only have values 0 and 1, so we directly convert it to bool)
-            dsObject.ReadAttribute(CommonDirectoryAttributes.AdminCount, out this.adminCount);
-
-            // Service Principal Name(s)
-            dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out this.spn);
-
-            // UAC:
-            int? numericUac;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out numericUac);
-            this.UserAccountControl = (UserAccountControl)numericUac.Value;
-
-            // Deleted:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out this.isDeleted);
-
-            // LastLogon:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out this.lastLogon);
-
-            // UPN:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out this.upn);
-
-            // SamAccountName:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out this.samAccountName);
-
-            // SamAccountType:
-            // TODO: Move to DirectoryObject?
-            int? numericAccountType;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out numericAccountType);
-            this.SamAccountType = (SamAccountType)numericAccountType.Value;
-
-            // PrimaryGroupId
-            int? groupId;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out groupId);
-            this.PrimaryGroupId = groupId.Value;
+            // Common properties
+            this.LoadAccountInfo(dsObject);
 
             // Credential Roaming
             this.LoadRoamedCredentials(dsObject);
 
-            if (pek == null)
-            {
-                // Do not continue if we do not have a decryption key
-                return;
-            }
-            // NTHash:
-            byte[] encryptedNtHash;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.NTHash, out encryptedNtHash);
-            if (encryptedNtHash != null)
-            {
-                this.NTHash = pek.DecryptHash(encryptedNtHash, this.Sid.GetRid());
-            }
-
-            // LMHash
-            byte[] encryptedLmHash;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.LMHash, out encryptedLmHash);
-            if (encryptedLmHash != null)
-            {
-                this.LMHash = pek.DecryptHash(encryptedLmHash, this.Sid.GetRid());
-            }
-
-            // NTHashHistory:
-            byte[] encryptedNtHashHistory;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.NTHashHistory, out encryptedNtHashHistory);
-            if (encryptedNtHashHistory != null)
-            {
-                this.NTHashHistory = pek.DecryptHashHistory(encryptedNtHashHistory, this.Sid.GetRid());
-            }
-
-            // LMHashHistory:
-            byte[] encryptedLmHashHistory;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.LMHashHistory, out encryptedLmHashHistory);
-            if (encryptedLmHashHistory != null)
-            {
-                this.LMHashHistory = pek.DecryptHashHistory(encryptedLmHashHistory, this.Sid.GetRid());
-            }
-
-            // SupplementalCredentials:
-            byte[] encryptedSupplementalCredentials;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SupplementalCredentials, out encryptedSupplementalCredentials);
-            if (encryptedSupplementalCredentials != null)
-            {
-                byte[] binarySupplementalCredentials = pek.DecryptSecret(encryptedSupplementalCredentials);
-                this.SupplementalCredentials = new SupplementalCredentials(binarySupplementalCredentials);
-            }
-
+            // Hashes and Supplemental Credentials
+            this.LoadHashes(dsObject, pek);
         }
+
         /// <summary>
         /// Gets the distinguished name (DN) for this <see cref="DSAccount"/>.
         /// </summary>
@@ -150,6 +50,7 @@
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the Security ID (SID) of the <see cref="DSAccount"/>.
         /// </summary>
@@ -189,6 +90,7 @@
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the display name for this <see cref="DSAccount"/>.
         /// </summary>
@@ -202,6 +104,7 @@
                 return this.displayName;
             }
         }
+
         /// <summary>
         /// Gets the description of the <see cref="DSAccount"/>.
         /// </summary>
@@ -215,6 +118,7 @@
                 return this.description;
             }
         }
+
         /// <summary>
         /// Gets the given name for the <see cref="DSAccount"/>.
         /// </summary>
@@ -225,6 +129,7 @@
                 return this.givenName;
             }
         }
+
         /// <summary>
         /// Gets the surname for the user <see cref="DSAccount"/>. 
         /// </summary>
@@ -235,6 +140,7 @@
                 return this.surname;
             }
         }
+
         /// <summary>
         /// Gets a boolean value indicating whether this <see cref="DSAccount"/> is enabled.
         /// </summary>
@@ -274,6 +180,7 @@
                 return this.isDeleted;
             }
         }
+
         /// <summary>
         /// Gets the Nullable DateTime that specifies the date and time of the last logon for this <see cref="DSAccount"/>.
         /// </summary>
@@ -284,6 +191,7 @@
                 return this.lastLogon;
             }
         }
+
         /// <summary>
         /// Gets or sets the user principal name (UPN) associated with this <see cref="DSAccount"/>.
         /// </summary>
@@ -294,6 +202,7 @@
                 return this.upn;
             }
         }
+
         /// <summary>
         /// Gets or sets the SAM account name for this <see cref="DSAccount"/>.
         /// </summary>
@@ -397,8 +306,127 @@
             private set;
         }
 
+        public RoamedCredential[] RoamedCredentials
+        {
+            get;
+            private set;
+        }
+
+        protected void LoadAccountInfo(DirectoryObject dsObject)
+        {
+
+            // Guid:
+            this.Guid = dsObject.Guid;
+
+            // DN:
+            this.DistinguishedName = dsObject.DistinguishedName;
+
+            // Sid:
+            this.Sid = dsObject.Sid;
+
+            // SidHistory:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SIDHistory, out this.sidHistory);
+
+            // DisplayName:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.DisplayName, out this.displayName);
+
+            // Description
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Description, out this.description);
+
+            // GivenName:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.GivenName, out this.givenName);
+
+            // Surname:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Surname, out this.surname);
+
+            // Security Descriptor:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out this.securityDescriptor);
+
+            // AdminCount (Although the schema defines it as Int32, it can only have values 0 and 1, so we directly convert it to bool)
+            dsObject.ReadAttribute(CommonDirectoryAttributes.AdminCount, out this.adminCount);
+
+            // Service Principal Name(s)
+            dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out this.spn);
+
+            // UAC:
+            int? numericUac;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out numericUac);
+            this.UserAccountControl = (UserAccountControl)numericUac.Value;
+
+            // Deleted:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out this.isDeleted);
+
+            // LastLogon:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out this.lastLogon);
+
+            // UPN:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out this.upn);
+
+            // SamAccountName:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out this.samAccountName);
+
+            // SamAccountType:
+            int? numericAccountType;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out numericAccountType);
+            this.SamAccountType = (SamAccountType)numericAccountType.Value;
+
+            // PrimaryGroupId
+            int? groupId;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out groupId);
+            this.PrimaryGroupId = groupId.Value;
+        }
+
+        protected void LoadHashes(DirectoryObject dsObject, DirectorySecretDecryptor pek)
+        {
+            if (pek == null)
+            {
+                // Do not continue if we do not have a decryption key
+                return;
+            }
+            // NTHash:
+            byte[] encryptedNtHash;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.NTHash, out encryptedNtHash);
+            if (encryptedNtHash != null)
+            {
+                this.NTHash = pek.DecryptHash(encryptedNtHash, this.Sid.GetRid());
+            }
+
+            // LMHash
+            byte[] encryptedLmHash;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LMHash, out encryptedLmHash);
+            if (encryptedLmHash != null)
+            {
+                this.LMHash = pek.DecryptHash(encryptedLmHash, this.Sid.GetRid());
+            }
+
+            // NTHashHistory:
+            byte[] encryptedNtHashHistory;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.NTHashHistory, out encryptedNtHashHistory);
+            if (encryptedNtHashHistory != null)
+            {
+                this.NTHashHistory = pek.DecryptHashHistory(encryptedNtHashHistory, this.Sid.GetRid());
+            }
+
+            // LMHashHistory:
+            byte[] encryptedLmHashHistory;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LMHashHistory, out encryptedLmHashHistory);
+            if (encryptedLmHashHistory != null)
+            {
+                this.LMHashHistory = pek.DecryptHashHistory(encryptedLmHashHistory, this.Sid.GetRid());
+            }
+
+            // SupplementalCredentials:
+            byte[] encryptedSupplementalCredentials;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SupplementalCredentials, out encryptedSupplementalCredentials);
+            if (encryptedSupplementalCredentials != null)
+            {
+                byte[] binarySupplementalCredentials = pek.DecryptSecret(encryptedSupplementalCredentials);
+                this.SupplementalCredentials = new SupplementalCredentials(binarySupplementalCredentials);
+            }
+        }
+
         /// <summary>
-        /// Loads credential roaming timestamps.
+        /// Loads credential roaming objects and timestamps.
         /// </summary>
         protected void LoadRoamedCredentials(DirectoryObject dsObject)
         {
@@ -426,7 +454,18 @@
                 byte[][] credentialBlobs;
                 dsObject.ReadLinkedValues(CommonDirectoryAttributes.PKIAccountCredentials, out credentialBlobs);
 
-                // TODO: Parse the blobs.
+                // Parse the blobs and combine them into one array.
+                var credentials = new List<RoamedCredential>();
+                foreach (var blob in masterKeyBlobs)
+                {
+                    credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
+                }
+                foreach (var blob in credentialBlobs)
+                {
+                    credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
+                }
+
+                this.RoamedCredentials = credentials.ToArray();
             }
             catch (SchemaAttributeNotFoundException)
             {

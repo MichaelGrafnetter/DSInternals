@@ -10,12 +10,11 @@
     {
         [Parameter(
             Mandatory = true,
-            HelpMessage = "TODO",
             ValueFromPipeline = true
         )]
         [ValidateNotNullOrEmpty]
         [Alias("DPAPIBlob", "Object", "Blob", "BackupKey")]
-        public DPAPIBackupKey DPAPIObject
+        public DPAPIObject DPAPIObject
         {
             get;
             set;
@@ -23,7 +22,7 @@
         
         [Parameter(
             Mandatory = true,
-            HelpMessage = "TODO"
+            Position = 0
         )]
         [ValidateNotNullOrEmpty]
         [Alias("Path")]
@@ -32,13 +31,6 @@
             get;
             set;
         }
-
-
-        protected override void BeginProcessing()
-        {
-            // TODO: Test that the path is a dir
-        }
-
         protected override void ProcessRecord()
         {
             string resolvedPath = this.ResolveSinglePath(this.DirectoryPath);

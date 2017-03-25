@@ -396,7 +396,7 @@
                 <PropertyName>Guid</PropertyName>
               </ExpressionBinding>
               <NewLine />
-             <Text>SamAccountName: </Text>
+              <Text>SamAccountName: </Text>
               <ExpressionBinding>
                 <PropertyName>SamAccountName</PropertyName>
               </ExpressionBinding>
@@ -481,39 +481,75 @@
                 <ScriptBlock>$_.SecurityDescriptor.Owner</ScriptBlock>
               </ExpressionBinding>
               <NewLine />
-              <Text>NTHash: </Text>
-              <ExpressionBinding>
-                <PropertyName>NTHash</PropertyName>
-                <CustomControlName>Hash</CustomControlName>
-              </ExpressionBinding>
-              <NewLine />
-              <Text>LMHash: </Text>
-              <ExpressionBinding>
-                <PropertyName>LMHash</PropertyName>
-                <CustomControlName>Hash</CustomControlName>
-              </ExpressionBinding>
-              <NewLine />
-              <Text>NTHashHistory: </Text>
-              <NewLine />
-              <ExpressionBinding>
-                <PropertyName>NTHashHistory</PropertyName>
-                <CustomControlName>HashCollection</CustomControlName>
-              </ExpressionBinding>
-              <Text>LMHashHistory: </Text>
-              <NewLine />
-              <ExpressionBinding>
-                <PropertyName>LMHashHistory</PropertyName>
-                <CustomControlName>HashCollection</CustomControlName>
-              </ExpressionBinding>
-              <Text>SupplementalCredentials:</Text>
+              <Text>Secrets</Text>
               <NewLine />
               <Frame>
                 <LeftIndent>2</LeftIndent>
                 <CustomItem>
+                  <Text>NTHash: </Text>
                   <ExpressionBinding>
-                    <PropertyName>SupplementalCredentials</PropertyName>
-                    <CustomControlName>SupplementalCredentials</CustomControlName>
+                    <PropertyName>NTHash</PropertyName>
+                    <CustomControlName>Hash</CustomControlName>
                   </ExpressionBinding>
+                  <NewLine />
+                  <Text>LMHash: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>LMHash</PropertyName>
+                    <CustomControlName>Hash</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>NTHashHistory: </Text>
+                  <NewLine />
+                  <ExpressionBinding>
+                    <PropertyName>NTHashHistory</PropertyName>
+                    <CustomControlName>HashCollection</CustomControlName>
+                  </ExpressionBinding>
+                  <Text>LMHashHistory: </Text>
+                  <NewLine />
+                  <ExpressionBinding>
+                    <PropertyName>LMHashHistory</PropertyName>
+                    <CustomControlName>HashCollection</CustomControlName>
+                  </ExpressionBinding>
+                  <Text>SupplementalCredentials:</Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>2</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <PropertyName>SupplementalCredentials</PropertyName>
+                        <CustomControlName>SupplementalCredentials</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </Frame>
+              <Text>Credential Roaming</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <Text>Created: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>RoamedCredentialsCreated</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>Modified: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>RoamedCredentialsModified</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>Credentials: </Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>2</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <PropertyName>RoamedCredentials</PropertyName>
+                        <CustomControlName>RoamedCredential</CustomControlName>
+                        <EnumerateCollection />
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
                 </CustomItem>
               </Frame>
             </CustomItem>

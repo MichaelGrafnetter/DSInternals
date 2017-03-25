@@ -154,7 +154,7 @@
     <value>Path not found.</value>
   </data>
   <data name="UnexpectedLengthMessage" xml:space="preserve">
-    <value>The length of the input is unextected.</value>
+    <value>The length of the input is unexpected.</value>
   </data>
   <data name="UnexpectedSupplementalCredsLengthMessage" xml:space="preserve">
     <value>Unexpected length of the supplemental credentials structure.</value>

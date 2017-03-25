@@ -43,8 +43,7 @@ namespace DSInternals.Common.Interop
             this.DoDisconnect();
             // Connect
             NetResource resource = new NetResource(this.ShareName);
-            // TODO: Use Credential.Domain
-            Win32ErrorCode result = NativeMethods.WNetAddConnection2(ref resource, credential.SecurePassword, credential.UserName, NetConnectOptions.Temporary);
+            Win32ErrorCode result = NativeMethods.WNetAddConnection2(ref resource, credential.SecurePassword, credential.GetLogonName(), NetConnectOptions.Temporary);
             Validator.AssertSuccess(result);
         }
 

@@ -33,7 +33,13 @@
         public abstract void ReadAttribute(string name, out long? value);
         public abstract void ReadAttribute(string name, out string value);
         public abstract void ReadAttribute(string name, out string[] values);
-        public abstract void ReadAttribute(string name, out RawSecurityDescriptor value);
+
+        public virtual void ReadAttribute(string name, out RawSecurityDescriptor value)
+        {
+            byte[] binarySecurityDescriptor;
+            this.ReadAttribute(name, out binarySecurityDescriptor);
+            value = (binarySecurityDescriptor != null) ? new RawSecurityDescriptor(binarySecurityDescriptor, 0) : null;
+        }
 
         public abstract void ReadLinkedValues(string attributeName, out byte[][] values);
 

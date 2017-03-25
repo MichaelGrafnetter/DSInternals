@@ -39,9 +39,16 @@
     <Reference Include="System.DirectoryServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADSI\AdsiClient.cs" />
+    <Compile Include="ADSI\AdsiObjectAdapter.cs" />
     <Compile Include="Cryptography\HashEqualityComparer.cs" />
     <Compile Include="Cryptography\Pbkdf2.cs" />
-    <Compile Include="Data\KdsRootKey.cs" />
+    <Compile Include="Cryptography\PrivateKeyEncryptionType.cs" />
+    <Compile Include="Data\DPAPI\DPAPIObject.cs" />
+    <Compile Include="Data\DPAPI\KdsRootKey.cs" />
+    <Compile Include="Data\DPAPI\RoamedCredential.cs" />
+    <Compile Include="Data\DPAPI\RoamedCredentialFlags.cs" />
+    <Compile Include="Data\DPAPI\RoamedCredentialType.cs" />
     <Compile Include="Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Cryptography\Crc32.cs" />
     <Compile Include="Cryptography\GPPrefPwdObfuscator.cs" />
@@ -53,8 +60,8 @@
     <Compile Include="Data\DistinguishedName.cs" />
     <Compile Include="Data\DistinguishedNameComponent.cs" />
     <Compile Include="Data\InstanceType.cs" />
-    <Compile Include="Data\DPAPIBackupKey.cs" />
-    <Compile Include="Data\DPAPIBackupKeyType.cs" />
+    <Compile Include="Data\DPAPI\DPAPIBackupKey.cs" />
+    <Compile Include="Data\DPAPI\DPAPIBackupKeyType.cs" />
     <Compile Include="Data\Principals\ManagedPassword.cs" />
     <Compile Include="Data\Principals\UserAccountControl.cs" />
     <Compile Include="Data\Schema\AttributeSyntax.cs" />
@@ -78,6 +85,7 @@
     <Compile Include="Exceptions\DirectoryObjectNotFoundException.cs" />
     <Compile Include="Exceptions\DirectoryObjectOperationException.cs" />
     <Compile Include="Exceptions\SchemaAttributeNotFoundException.cs" />
+    <Compile Include="Extensions\NetworkCredentialExtensions.cs" />
     <Compile Include="Interop\CryptoBuffer.cs" />
     <Compile Include="Interop\Enums\NetCancelOptions.cs" />
     <Compile Include="Interop\Enums\NetConnectOptions.cs" />
@@ -123,6 +131,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
