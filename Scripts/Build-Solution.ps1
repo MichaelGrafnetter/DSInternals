@@ -34,8 +34,8 @@ foreach($target in $targets)
             $logDir = Join-Path $logRootDir "$configuration\$platform"
             mkdir $logDir -Force | Out-Null
             $result = Invoke-MsBuild -MsBuildParameters "/target:$target /property:Configuration=$configuration;Platform=$platform" `
-                           -Path $solutionFile -BuildLogDirectoryPath $logDir -KeepBuildLogOnSuccessfulBuilds
-            echo "Success: $result"
+                           -Path $solutionFile -BuildLogDirectoryPath $logDir -KeepBuildLogOnSuccessfulBuilds -ShowBuildOutputInNewWindow
+            echo ('Success: {0}' -f $result.BuildSucceeded)
         }
     }
 }
