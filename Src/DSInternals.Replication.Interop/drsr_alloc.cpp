@@ -50,21 +50,43 @@ midl_ptr<DRS_MSG_CRACKREQ_V1> make_midl_ptr(ULONG numNames)
 }
 
 template<>
+void midl_delete<DRS_MSG_GETCHGREQ_V5>::operator()(DRS_MSG_GETCHGREQ_V5* request) const
+{
+	if (request != nullptr)
+	{
+		// Perform deep free
+		midl_user_free(request->pNC);
+		midl_user_free(request->pUpToDateVecDestV1);
+
+		// Now free the encapsulating object:
+		midl_user_free(request);
+	}
+}
+
+template<>
 void midl_delete<DRS_MSG_GETCHGREQ_V8>::operator()(DRS_MSG_GETCHGREQ_V8* request) const
 {
-	if (request == nullptr)
+	if (request != nullptr)
 	{
-		return;
+		// Perform deep free
+		midl_user_free(request->pPartialAttrSet);
+		midl_user_free(request->pPartialAttrSetEx);
+		// TODO: Free all PrefixTableDest items separately?
+		midl_user_free(request->PrefixTableDest.pPrefixEntry);
+		
+		// The DRS_MSG_GETCHGREQ_V8 message is a superset of DRS_MSG_GETCHGREQ_V5.
+		auto requestV5 = midl_ptr<DRS_MSG_GETCHGREQ_V5>((DRS_MSG_GETCHGREQ_V5*)request);
 	}
-	// Perform deep free
-	midl_user_free(request->pNC);
-	midl_user_free(request->pPartialAttrSet);
-	midl_user_free(request->pPartialAttrSetEx);
-	midl_user_free(request->pUpToDateVecDest);
-	// TODO: Free all PrefixTableDest items separately?
-	midl_user_free(request->PrefixTableDest.pPrefixEntry);
-	// Finally, free the encapsulating object:
-	midl_user_free(request);
+}
+
+template<>
+void midl_delete<DRS_MSG_GETCHGREQ_V10>::operator()(DRS_MSG_GETCHGREQ_V10* request) const
+{
+	if (request != nullptr)
+	{
+		// The DRS_MSG_GETCHGREQ_V10 message is a superset of DRS_MSG_GETCHGREQ_V8.
+		auto requestV8 = midl_ptr<DRS_MSG_GETCHGREQ_V8>((DRS_MSG_GETCHGREQ_V8*)request);
+	}
 }
 
 template<>
@@ -103,7 +125,7 @@ void midl_delete<DRS_MSG_CRACKREPLY_V1>::operator()(DRS_MSG_CRACKREPLY_V1* reply
 }
 
 template<>
-void midl_delete<DRS_MSG_GETCHGREPLY_V6>::operator()(DRS_MSG_GETCHGREPLY_V6* reply) const
+void midl_delete<DRS_MSG_GETCHGREPLY_V1>::operator()(DRS_MSG_GETCHGREPLY_V1* reply) const
 {
 	if (reply == nullptr)
 	{
@@ -112,7 +134,7 @@ void midl_delete<DRS_MSG_GETCHGREPLY_V6>::operator()(DRS_MSG_GETCHGREPLY_V6* rep
 
 	// Perform deep free
 	midl_user_free(reply->pNC);
-	midl_user_free(reply->pUpToDateVecSrc);
+	midl_user_free(reply->pUpToDateVecSrcV1);
 
 	// Free the prefix table:
 	int numPrefixes = reply->PrefixTableSrc.PrefixCount;
@@ -154,18 +176,52 @@ void midl_delete<DRS_MSG_GETCHGREPLY_V6>::operator()(DRS_MSG_GETCHGREPLY_V6* rep
 		currentObject = nextObject;
 	}
 
-	// Free the linked values:
-	DWORD numValues = reply->cNumValues;
-	for (DWORD i = 0; i < numValues; i++)
-	{
-		auto currentValue = reply->rgValues[i];
-		midl_user_free(currentValue.pObject);
-		midl_user_free(currentValue.Aval.pVal);
-	}
-	midl_user_free(reply->rgValues);
-
 	// Finally, free the encapsulating object:
 	midl_user_free(reply);
+}
+
+template<>
+void midl_delete<DRS_MSG_GETCHGREPLY_V6>::operator()(DRS_MSG_GETCHGREPLY_V6* reply) const
+{
+	if (reply != nullptr)
+	{
+		// Free the linked values (REPLVALINF_V1):
+		for (DWORD i = 0; i < reply->cNumValues; i++)
+		{
+			auto currentValue = reply->rgValues[i];
+			midl_user_free(currentValue.pObject);
+			midl_user_free(currentValue.Aval.pVal);
+		}
+
+		// Free the encapsulating array. It does not matter whether it is of type REPLVALINF_V1 or REPLVALINF_V3.
+		midl_user_free(reply->rgValues);
+		
+		// The DRS_MSG_GETCHGREPLY_V6 message is a superset of DRS_MSG_GETCHGREPLY_V1.
+		auto replyV1 = midl_ptr<DRS_MSG_GETCHGREPLY_V1>((DRS_MSG_GETCHGREPLY_V1*)reply);
+	}
+}
+
+template<>
+void midl_delete<DRS_MSG_GETCHGREPLY_V9>::operator()(DRS_MSG_GETCHGREPLY_V9* reply) const
+{
+	if (reply != nullptr)
+	{
+		// Free the linked values (REPLVALINF_V3):
+		for (DWORD i = 0; i < reply->cNumValues; i++)
+		{
+			auto currentValue = reply->rgValues[i];
+			midl_user_free(currentValue.pObject);
+			midl_user_free(currentValue.Aval.pVal);
+		}
+		
+		/* The DRS_MSG_GETCHGREPLY_V6 deleter should not go through these values,
+		   because it would interpret them as REPLVALINF_V1 instead of REPLVALINF_V3.
+		*/
+		reply->cNumValues = 0;
+
+		// The DRS_MSG_GETCHGREPLY_V9 message is a superset of DRS_MSG_GETCHGREPLY_V6.
+		auto replyV6 = midl_ptr<DRS_MSG_GETCHGREPLY_V6>((DRS_MSG_GETCHGREPLY_V6*)reply);
+	}
 }
 
 template<>

@@ -24,6 +24,7 @@ namespace DSInternals
 				array<byte>^ _sessionKey;
 				Guid _clientDsa;
 				Guid _serverSiteObjectGuid;
+				DRS_EXT _serverCapabilities;
 				DWORD _serverReplEpoch;
 				SecurityCallback^ _securityCallback;
 				static const size_t defaultMaxObjects = 1000;
@@ -59,26 +60,30 @@ namespace DSInternals
 			protected:
 				virtual bool ReleaseHandle() override;
 			private:
+				property DWORD MaxSupportedReplicationRequestVersion
+				{
+					DWORD get();
+				}
 				DrsConnection();
 				void Bind(IntPtr rpcHandle);
-				midl_ptr<DRS_MSG_GETCHGREPLY_V6> GetNCChanges(midl_ptr<DRS_MSG_GETCHGREQ_V8> &&request);
+				midl_ptr<DRS_MSG_GETCHGREPLY_V9> GetNCChanges(midl_ptr<DRS_MSG_GETCHGREQ_V10> &&request);
 				midl_ptr<DRS_MSG_CRACKREPLY_V1> CrackNames(midl_ptr<DRS_MSG_CRACKREQ_V1> &&request);
 				String^ TryResolveName(String^ name, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired);
 				midl_ptr<DRS_EXTENSIONS_INT> CreateClientInfo();
-				midl_ptr<DRS_MSG_GETCHGREQ_V8> CreateReplicateAllRequest(ReplicationCookie^ cookie, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects);
-				midl_ptr<DRS_MSG_GETCHGREQ_V8> CreateReplicateSingleRequest(String^ distinguishedName, array<ATTRTYP>^ partialAttributeSet);
-				midl_ptr<DRS_MSG_GETCHGREQ_V8> CreateReplicateSingleRequest(Guid objectGuid, array<ATTRTYP>^ partialAttributeSet);
-				midl_ptr<DRS_MSG_GETCHGREQ_V8> CreateGenericReplicateRequest(midl_ptr<DSNAME> &&dsName, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects);
+				midl_ptr<DRS_MSG_GETCHGREQ_V10> CreateReplicateAllRequest(ReplicationCookie^ cookie, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects);
+				midl_ptr<DRS_MSG_GETCHGREQ_V10> CreateReplicateSingleRequest(String^ distinguishedName, array<ATTRTYP>^ partialAttributeSet);
+				midl_ptr<DRS_MSG_GETCHGREQ_V10> CreateReplicateSingleRequest(Guid objectGuid, array<ATTRTYP>^ partialAttributeSet);
+				midl_ptr<DRS_MSG_GETCHGREQ_V10> CreateGenericReplicateRequest(midl_ptr<DSNAME> &&dsName, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects);
 				void RetrieveSessionKey(void* rpcContext);
 				static midl_ptr<DRS_MSG_GETREPLINFO_REQ_V1> CreateReplicationCursorsRequest(String^ namingContext);
 				static midl_ptr<PARTIAL_ATTR_VECTOR_V1_EXT> CreateNativePas(array<ATTRTYP>^ partialAttributeSet);
 				static array<byte>^ ReadValue(const ATTRVAL &value);
 				static array<array<byte>^>^ ReadValues(const ATTRVALBLOCK &values);
 				static ReplicaAttribute^ ReadAttribute(const ATTR &attribute);
-				static ReplicaAttribute^ ReadAttribute(const REPLVALINF_V1 &attribute);
+				static ReplicaAttribute^ ReadAttribute(const REPLVALINF_V3 &attribute);
 				static ReplicaAttributeCollection^ ReadAttributes(const ATTRBLOCK &attributes);
 				static ReplicaObject^ ReadObject(const ENTINF &object);
-				static ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST *objects, int objectCount, const REPLVALINF_V1 *linkedValues, int valueCount);
+				static ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST *objects, int objectCount, const REPLVALINF_V3 *linkedValues, int valueCount);
 				static Guid ReadGuid(GUID const &guid);
 				static String^ ReadName(const DSNAME* dsName);
 				static SecurityIdentifier^ ReadSid(const DSNAME* dsName);

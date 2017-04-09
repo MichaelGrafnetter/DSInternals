@@ -73,6 +73,7 @@ namespace DSInternals
 				DRS_EXTENSIONS_INT serverInfo = DRS_EXTENSIONS_INT(genericServerInfo);
 				this->_serverSiteObjectGuid = RpcTypeConverter::ToGuid(serverInfo.siteObjGuid);
 				this->_serverReplEpoch = serverInfo.dwReplEpoch;
+				this->_serverCapabilities = serverInfo.dwFlags;
 			}
 
 			array<byte>^ DrsConnection::SessionKey::get()
@@ -89,7 +90,7 @@ namespace DSInternals
 			{
 				auto clientInfo = make_midl_ptr<DRS_EXTENSIONS_INT>();
 				clientInfo->dwFlags = DRS_EXT::ALL_EXT;
-				clientInfo->dwFlagsExt = DRS_EXT2::DRS_EXT_LH_BETA2;
+				clientInfo->dwFlagsExt = DRS_EXT2::DRS_EXT_LH_BETA2 | DRS_EXT2::DRS_EXT_RECYCLE_BIN | DRS_EXT2::DRS_EXT_PAM;
 				clientInfo->dwExtCaps = DRS_EXT2::DRS_EXT_LH_BETA2 | DRS_EXT2::DRS_EXT_RECYCLE_BIN | DRS_EXT2::DRS_EXT_PAM;
 				clientInfo->dwReplEpoch = this->_serverReplEpoch;
 				return clientInfo;
@@ -134,10 +135,10 @@ namespace DSInternals
 				return managedCursors;
 			}
 
-			midl_ptr<DRS_MSG_GETCHGREQ_V8> DrsConnection::CreateGenericReplicateRequest(midl_ptr<DSNAME> &&dsName, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects)
+			midl_ptr<DRS_MSG_GETCHGREQ_V10> DrsConnection::CreateGenericReplicateRequest(midl_ptr<DSNAME> &&dsName, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects)
 			{
 				// TODO: Add support for Windows Server 2003
-				auto request = make_midl_ptr<DRS_MSG_GETCHGREQ_V8>();
+				auto request = make_midl_ptr<DRS_MSG_GETCHGREQ_V10>();
 				// Inset client ID:
 				request->uuidDsaObjDest = RpcTypeConverter::ToUUID(this->_clientDsa);
 				// Insert DSNAME
@@ -164,7 +165,7 @@ namespace DSInternals
 				return request;
 			}
 
-			midl_ptr<DRS_MSG_GETCHGREQ_V8> DrsConnection::CreateReplicateAllRequest(ReplicationCookie^ cookie, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects)
+			midl_ptr<DRS_MSG_GETCHGREQ_V10> DrsConnection::CreateReplicateAllRequest(ReplicationCookie^ cookie, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects)
 			{
 				auto ncToReplicate = RpcTypeConverter::ToDsName(cookie->NamingContext);
 				auto request = CreateGenericReplicateRequest(move(ncToReplicate), partialAttributeSet, maxBytes, maxObjects);
@@ -177,7 +178,7 @@ namespace DSInternals
 				return request;
 			}
 
-			midl_ptr<DRS_MSG_GETCHGREQ_V8> DrsConnection::CreateReplicateSingleRequest(Guid objectGuid, array<ATTRTYP>^ partialAttributeSet)
+			midl_ptr<DRS_MSG_GETCHGREQ_V10> DrsConnection::CreateReplicateSingleRequest(Guid objectGuid, array<ATTRTYP>^ partialAttributeSet)
 			{
 				auto objectToReplicate = RpcTypeConverter::ToDsName(objectGuid);
 				auto request = CreateGenericReplicateRequest(move(objectToReplicate), partialAttributeSet, defaultMaxBytes, defaultMaxObjects);
@@ -187,7 +188,7 @@ namespace DSInternals
 				return request;
 			}
 
-			midl_ptr<DRS_MSG_GETCHGREQ_V8> DrsConnection::CreateReplicateSingleRequest(String^ distinguishedName, array<ATTRTYP>^ partialAttributeSet)
+			midl_ptr<DRS_MSG_GETCHGREQ_V10> DrsConnection::CreateReplicateSingleRequest(String^ distinguishedName, array<ATTRTYP>^ partialAttributeSet)
 			{
 				auto objectToReplicate = RpcTypeConverter::ToDsName(distinguishedName);
 				auto request = CreateGenericReplicateRequest(move(objectToReplicate), partialAttributeSet, defaultMaxBytes, defaultMaxObjects);
@@ -282,7 +283,7 @@ namespace DSInternals
 				}
 			}
 
-			midl_ptr<DRS_MSG_GETCHGREPLY_V6> DrsConnection::GetNCChanges(midl_ptr<DRS_MSG_GETCHGREQ_V8> &&request)
+			midl_ptr<DRS_MSG_GETCHGREPLY_V9> DrsConnection::GetNCChanges(midl_ptr<DRS_MSG_GETCHGREQ_V10> &&request)
 			{
 				// Validate connection
 				if (this->IsInvalid)
@@ -291,17 +292,36 @@ namespace DSInternals
 					throw gcnew Exception("Not connected");
 				}
 				DRS_HANDLE handle = this->handle.ToPointer();
-				const DWORD inVersion = 8;
+				const DWORD inVersion = this->MaxSupportedReplicationRequestVersion;
 				DWORD outVersion = 0;
-				auto reply = make_midl_ptr<DRS_MSG_GETCHGREPLY_V6>();
+				auto reply = make_midl_ptr<DRS_MSG_GETCHGREPLY_V9>();
 				// Send message:
 				auto result = (Win32ErrorCode) IDL_DRSGetNCChanges_NoSEH(handle, inVersion, (DRS_MSG_GETCHGREQ*)request.get(), &outVersion, (DRS_MSG_GETCHGREPLY*)reply.get());
 
 				// Validate result
-				// TODO: Check the returned version
 				Validator::AssertSuccess(result);
+
 				// TODO: Test extended error code:
 				DWORD extendedError = reply->dwDRSError;
+
+				// Check the returned structure version
+				if (outVersion == 6 && reply->cNumValues > 0)
+				{
+					// We will now convert the REPLVALINF_V1 array into REPLVALINF_V3 array so that the caller does not have to differentiate between them.
+					// This convenience comes at the price of a minor performance loss
+					auto valuesV1 = ((DRS_MSG_GETCHGREPLY_V6*)reply.get())->rgValues;
+					auto valuesV3 = make_midl_ptr<REPLVALINF_V3>(reply->cNumValues);
+					
+					for (DWORD i = 0; i < reply->cNumValues; i++)
+					{
+						memcpy(&(valuesV3.get()[i]), &valuesV1[i], sizeof(REPLVALINF_V1));
+					}
+
+					// Assign the new value and delete the old one. Only shallow free must be done.
+					reply->rgValues = valuesV3.release();
+					midl_user_free(valuesV1);
+				}
+
 				return reply;
 			}
 
@@ -485,7 +505,7 @@ namespace DSInternals
 				return managedAttribute;
 			}
 
-			ReplicaAttribute^ DrsConnection::ReadAttribute(const REPLVALINF_V1 &attribute)
+			ReplicaAttribute^ DrsConnection::ReadAttribute(const REPLVALINF_V3 &attribute)
 			{
 				auto value = ReadValue(attribute.Aval);
 				auto managedAttribute = gcnew ReplicaAttribute(attribute.attrTyp, value);
@@ -516,7 +536,7 @@ namespace DSInternals
 				auto dn = ReadName(object.pName);
 				return gcnew ReplicaObject(dn, guid, sid, attributes);
 			}
-			ReplicaObjectCollection^ DrsConnection::ReadObjects(const REPLENTINFLIST *objects, int objectCount, const REPLVALINF_V1 *linkedValues, int valueCount)
+			ReplicaObjectCollection^ DrsConnection::ReadObjects(const REPLENTINFLIST *objects, int objectCount, const REPLVALINF_V3 *linkedValues, int valueCount)
 			{
 				// Read linked values first
 				// TODO: Handle the case when linked attributes of an object are split between reveral responses.
@@ -574,25 +594,22 @@ namespace DSInternals
 				return gcnew SecurityIdentifier(IntPtr((void*)&dsName->Sid));
 			}
 
+			//! This method is called each time a RPC session key is negotiated.
 			void DrsConnection::RetrieveSessionKey(void* rpcContext)
 			{
-				if (this->SessionKey != nullptr)
-				{
-					// This function sometimes gets called twice by Windows, so do not continue, if we already have the session key
-					return;
-				}
 				// Retrieve RPC Security Context
 				PSecHandle securityContext = nullptr;
-				RPC_STATUS status1 = I_RpcBindingInqSecurityContext(rpcContext, (void**)&securityContext);
-				if (status1 != 0)
+				RPC_STATUS rpcStatus = I_RpcBindingInqSecurityContext(rpcContext, (void**)&securityContext);
+				if (rpcStatus != RPC_S_OK)
 				{
-					// TODO: Error
+					// We could not acquire the security context, so do not continue with session key retrieval
+					return;
 				}
 				// Retrieve the Session Key information from Security Context
 				SecPkgContext_SessionKey nativeKey = {};
-				SECURITY_STATUS status2 = QueryContextAttributes(securityContext, SECPKG_ATTR_SESSION_KEY, &nativeKey);
+				SECURITY_STATUS secStatus = QueryContextAttributes(securityContext, SECPKG_ATTR_SESSION_KEY, &nativeKey);
 				// Extract the actual key if the authentication schema uses one
-				if (nativeKey.SessionKey != nullptr)
+				if (secStatus == SEC_E_OK && nativeKey.SessionKey != nullptr)
 				{
 					array<byte>^ managedKey = gcnew array<byte>(nativeKey.SessionKeyLength);
 					// Pin it so the GC does not touch it
@@ -600,9 +617,26 @@ namespace DSInternals
 					// Copy data from native to managed memory
 					memcpy(pinnedManagedKey, nativeKey.SessionKey, nativeKey.SessionKeyLength);
 					// Do not forget to free the unmanaged memory
-					SECURITY_STATUS status3 = FreeContextBuffer(nativeKey.SessionKey);
+					secStatus = FreeContextBuffer(nativeKey.SessionKey);
 					this->_sessionKey = managedKey;
 				}
+			}
+
+			DWORD DrsConnection::MaxSupportedReplicationRequestVersion::get()
+			{
+				DWORD version = 5;
+				
+				if (this->_serverCapabilities & DRS_EXT::DRS_EXT_GETCHGREQ_V8)
+				{
+					version = 8;
+				}
+
+				if (this->_serverCapabilities & DRS_EXT::DRS_EXT_GETCHGREQ_V10)
+				{
+					version = 10;
+				}
+				
+				return version;
 			}
 		}
 	}

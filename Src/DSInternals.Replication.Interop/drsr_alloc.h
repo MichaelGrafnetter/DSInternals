@@ -7,10 +7,22 @@
 // Specialized allocators and deleters:
 
 template<>
+void midl_delete<DRS_MSG_GETCHGREPLY_V1>::operator()(DRS_MSG_GETCHGREPLY_V1* reply) const;
+
+template<>
 void midl_delete<DRS_MSG_GETCHGREPLY_V6>::operator()(DRS_MSG_GETCHGREPLY_V6* reply) const;
 
 template<>
+void midl_delete<DRS_MSG_GETCHGREPLY_V9>::operator()(DRS_MSG_GETCHGREPLY_V9* reply) const;
+
+template<>
+void midl_delete<DRS_MSG_GETCHGREQ_V5>::operator()(DRS_MSG_GETCHGREQ_V5* request) const;
+
+template<>
 void midl_delete<DRS_MSG_GETCHGREQ_V8>::operator()(DRS_MSG_GETCHGREQ_V8* request) const;
+
+template<>
+void midl_delete<DRS_MSG_GETCHGREQ_V10>::operator()(DRS_MSG_GETCHGREQ_V10* request) const;
 
 template<>
 void midl_delete<DRS_MSG_CRACKREQ_V1>::operator()(DRS_MSG_CRACKREQ_V1* request) const;
