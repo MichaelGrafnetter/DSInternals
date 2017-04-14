@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using DSInternals.Common;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace DSInternals.Replication.Model
 {
     public class ReplicaAttributeCollection : Dictionary<int, ReplicaAttribute>
@@ -14,9 +17,22 @@ namespace DSInternals.Replication.Model
 
         public void Add(ReplicaAttribute attribute)
         {
-            // TODO: Validate not null
-            // TODO: Validate if not in collection
-            this.Add(attribute.Id, attribute);
+            Validator.AssertNotNull(attribute, "attribute");
+
+            ReplicaAttribute preexistingAttribute;
+            bool attributeAlreadyPresent = this.TryGetValue(attribute.Id, out preexistingAttribute);
+            
+            if(attributeAlreadyPresent)
+            {
+                // TODO: Under what circumstances does this sometimes occur with linked attributes?
+                // Combine the values into one attribute
+                byte[][] combinedValues = attribute.Values.Concat(preexistingAttribute.Values).ToArray();
+                this[attribute.Id] = new ReplicaAttribute(attribute.Id, combinedValues);
+            }
+            else
+            {
+                this.Add(attribute.Id, attribute);
+            }
         }
     }
 }

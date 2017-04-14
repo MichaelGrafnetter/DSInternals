@@ -61,6 +61,8 @@
         public void LoadLinkedValues(ReplicatedLinkedValueCollection linkedValueCollection)
         {
             var objectAttributes = linkedValueCollection.Get(this.Guid);
+
+            // Only continue if the linked values contain attributes of this AD object
             if(objectAttributes != null)
             {
                 foreach (var attribute in objectAttributes)
