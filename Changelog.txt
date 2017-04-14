@@ -1,3 +1,6 @@
+Version 2.21.1
+- Fixed a bug in linked value replication.
+
 Version 2.21
 - [Module] The replication cmdlets now use Kerberos authentication by default. 
 - [Module] Added support for roamed credentials.
