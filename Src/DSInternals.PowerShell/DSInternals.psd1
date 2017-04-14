@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.21'
+ModuleVersion = '2.21.1'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -123,10 +123,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added support for roamed credentials.
-- The replication cmdlets now use Kerberos authentication by default.
-- Cmdlets now accept hashes in both byte array and hexadecimal string forms.
-- Updated a couple of libraries.
+- Fixed a bug in linked value replication.
 "@
     } # End of PSData hashtable
 
