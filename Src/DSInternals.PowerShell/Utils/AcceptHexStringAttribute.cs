@@ -13,8 +13,21 @@ namespace DSInternals.PowerShell
     {
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
         {
-            // Try to interpret the value as a HEX string
-            string hexString = inputData as string;
+            string hexString;
+
+            // Check if inputData is a String encapsulated in an PSObject
+            PSObject psObject = inputData as PSObject;
+            if(psObject != null)
+            {
+                hexString = psObject.BaseObject as string;
+            }
+            else
+            {
+                // We are not dealing with an PSObject, so try to interpret it as a String
+                hexString = inputData as string;
+            }
+
+            // Now try to interpret the value as a HEX string
             if (hexString != null)
             {
                 // Parse the hex data
@@ -22,7 +35,7 @@ namespace DSInternals.PowerShell
             }
             else
             {
-                // We cannot parse the data as hex string so let system try to do the conversion to byte[].
+                // We cannot parse the data as (encapsulated) hex string so we let the system try to do the conversion to byte[].
                 return inputData;
             }
         }
