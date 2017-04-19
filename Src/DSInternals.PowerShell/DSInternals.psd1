@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.21.1'
+ModuleVersion = '2.21.2'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -123,7 +123,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed a bug in linked value replication.
+- Fixed a couple of bugs. No new functionality added.
 "@
     } # End of PSData hashtable
 
