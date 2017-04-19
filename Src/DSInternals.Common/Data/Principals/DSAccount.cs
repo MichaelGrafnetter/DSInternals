@@ -456,13 +456,21 @@
 
                 // Parse the blobs and combine them into one array.
                 var credentials = new List<RoamedCredential>();
-                foreach (var blob in masterKeyBlobs)
+
+                if (masterKeyBlobs != null)
                 {
-                    credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
+                    foreach (var blob in masterKeyBlobs)
+                    {
+                        credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
+                    }
                 }
-                foreach (var blob in credentialBlobs)
+
+                if(credentialBlobs != null)
                 {
-                    credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
+                    foreach (var blob in credentialBlobs)
+                    {
+                        credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
+                    }
                 }
 
                 this.RoamedCredentials = credentials.ToArray();
