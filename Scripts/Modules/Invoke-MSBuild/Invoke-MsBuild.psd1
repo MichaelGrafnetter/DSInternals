@@ -12,7 +12,10 @@
 RootModule = 'Invoke-MsBuild.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.2.0'
+ModuleVersion = '2.5.1'
+
+# Supported PSEditions
+# CompatiblePSEditions = @()
 
 # ID used to uniquely identify this module
 GUID = '8ca20938-b92a-42a1-bf65-f644e16a8d9e'
@@ -38,10 +41,10 @@ PowerShellVersion = '2.0'
 # Minimum version of the Windows PowerShell host required by this module
 # PowerShellHostVersion = ''
 
-# Minimum version of Microsoft .NET Framework required by this module
+# Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
 # DotNetFrameworkVersion = ''
 
-# Minimum version of the common language runtime (CLR) required by this module
+# Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
 # CLRVersion = ''
 
 # Processor architecture (None, X86, Amd64) required by this module
@@ -65,17 +68,17 @@ PowerShellVersion = '2.0'
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()
 
-# Functions to export from this module
-FunctionsToExport = '*'
+# Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
+FunctionsToExport = @('Invoke-MsBuild')
 
-# Cmdlets to export from this module
-CmdletsToExport = '*'
+# Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
+CmdletsToExport = @()
 
 # Variables to export from this module
-VariablesToExport = '*'
+VariablesToExport = @()
 
-# Aliases to export from this module
-AliasesToExport = '*'
+# Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
+AliasesToExport = @()
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -104,38 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = '- Added LogVerbosityLevel parameter to adjust the verbosity MsBuild uses to write to the log file.
-- Fixed bug that prevented us from finding msbuild.exe on some machines.
-
-----------
-Invoke-MsBuild v2 has the following breaking changes from v1:
-  - A hash table with several properties is returned instead of a simple $true/$false/$null value.
-  - The GetLogPath switch is gone and replaced with the WhatIf switch.
-
-New features in v2 include:
-  - A build log file containing only build errors is created alongside the regular build log file.
-  - The errors build log file can be auto-launched on build failure.
-  - New switch has been added to show the build output in the calling scripts console window (does not work with some 3rd party consoles due to Start-Process cmdlet bug).
-  - A hash table containing the following properties is now returned:
-
-+ BuildSucceeded = $true if the build passed, $false if the build failed, and $null if we are not sure.
-+ BuildLogFilePath = The path to the builds log file.
-+ BuildErrorsLogFilePath = The path to the builds error log file.
-+ ItemToBuildFilePath = The item that MsBuild is ran against.
-+ CommandUsedToBuild = The full command that is used to invoke MsBuild. This can be useful for inspecting what parameters are passed to MsBuild.exe.
-+ Message = A message describing any problems that were encoutered by Invoke-MsBuild. This is typically an empty string unless something went wrong.
-+ MsBuildProcess = The process that was used to execute MsBuild.exe.
-
-Changes to make when updating from v1 to v2:
-- To capture/display the build success result, you must change:
-  Invoke-MsBuild ...
-to:
-  (Invoke-MsBuild ...).BuildSucceeded
-
-- To get the path where the log file will be created, you must change:
-  Invoke-MsBuild ... -GetLogPath
-to:
-  (Invoke-MsBuild ... -WhatIf).BuildLogFilePath'
+        ReleaseNotes = '- Fix to find the "Program Files" location correctly on 32 bit windows without throwing an error.'
 
     } # End of PSData hashtable
 
