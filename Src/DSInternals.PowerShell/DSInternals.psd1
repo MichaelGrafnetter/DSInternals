@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.21.2'
+ModuleVersion = '2.22'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -81,7 +81,8 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
 			   'ConvertFrom-ADManagedPasswordBlob',
 			   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
 			   'Set-ADDBBootKey','ConvertTo-NTHashDictionary', 'Test-PasswordQuality',
-			   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount'
+			   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
+			   'Enable-ADDBAccount', 'Disable-ADDBAccount'
 
 # Variables to export from this module
 # VariablesToExport = @()
@@ -123,7 +124,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed a couple of bugs. No new functionality added.
+- Added the Enable-ADDBAccount and Disable-ADDBAccount cmdlets.
 "@
     } # End of PSData hashtable
 

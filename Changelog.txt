@@ -1,3 +1,7 @@
+Version 2.22
+- [Framework] Added the Enable-ADDBAccount and Disable-ADDBAccount cmdlets.
+- [Module] Added the ability to enable or disable accounts in offline databases.
+
 Version 2.21.2
 - [Framework] Fixed a bug in roamed credentials processing.
 - [Module] Fixed a bug in hexadecimal parameter parsing. 

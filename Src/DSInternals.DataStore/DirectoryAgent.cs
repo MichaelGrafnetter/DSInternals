@@ -371,6 +371,30 @@
             obj.Delete();
         }
 
+        public bool SetAccountStatus(DistinguishedName dn, bool enabled, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(dn);
+            return this.SetAccountStatus(obj, dn, enabled, skipMetaUpdate);
+        }
+
+        public bool SetAccountStatus(string samAccountName, bool enabled, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(samAccountName);
+            return this.SetAccountStatus(obj, samAccountName, enabled, skipMetaUpdate);
+        }
+
+        public bool SetAccountStatus(SecurityIdentifier objectSid, bool enabled, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(objectSid);
+            return this.SetAccountStatus(obj, objectSid, enabled, skipMetaUpdate);
+        }
+
+        public bool SetAccountStatus(Guid objectGuid, bool enabled, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(objectGuid);
+            return this.SetAccountStatus(obj, objectGuid, enabled, skipMetaUpdate);
+        }
+
         public bool SetPrimaryGroupId(DistinguishedName dn, int groupId, bool skipMetaUpdate)
         {
             var obj = this.FindObject(dn);
@@ -447,6 +471,39 @@
             {
                 this.context.Dispose();
                 this.context = null;
+            }
+        }
+
+        protected bool SetAccountStatus(DatastoreObject targetObject, object targetObjectIdentifier, bool enabled, bool skipMetaUpdate)
+        {
+            using (var transaction = this.context.BeginTransaction())
+            {
+                // Read the current value first. We do not want to touch any other flags.
+                int? numericUac;
+                targetObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out numericUac);
+
+                if(!numericUac.HasValue)
+                {
+                    // This object does not have the userAccountControl attribute, so it probably is not an account.
+                    throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
+                }
+
+                var uac = (UserAccountControl)numericUac.Value;
+                if(enabled)
+                {
+                    // Clear the ADS_UF_ACCOUNTDISABLE flag
+                    uac &= ~UserAccountControl.Disabled;
+                }
+                else
+                {
+                    // Set the ADS_UF_ACCOUNTDISABLE flag
+                    uac |= UserAccountControl.Disabled;
+                }
+
+                this.dataTableCursor.BeginEditForUpdate();
+                bool hasChanged = targetObject.SetAttribute<int>(CommonDirectoryAttributes.UserAccountControl, (int?)uac);
+                this.CommitAttributeUpdate(targetObject, CommonDirectoryAttributes.UserAccountControl, transaction, hasChanged, skipMetaUpdate);
+                return hasChanged;
             }
         }
 

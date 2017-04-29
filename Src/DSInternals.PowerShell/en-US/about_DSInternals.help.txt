@@ -16,6 +16,16 @@ LONG DESCRIPTION
 		
 		Reads one or more accounts from a ntds.dit file, including secret attributes.
 		
+		Enable-ADDBAccount
+		------------------
+
+		Enables an Active Directory account in an offline ntds.dit file.
+
+		Disable-ADDBAccount
+		-------------------
+
+		Disables an Active Directory account in an offline ntds.dit file.
+
 		Get-BootKey
 		-----------
 		
