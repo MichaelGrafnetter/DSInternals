@@ -4,6 +4,8 @@
 
 The DSInternals PowerShell Module exposes several internal and undocumented features of Active Directory.
 
+DISCLAIMER: Features exposed through this module are not supported by Microsoft and it is therefore not intended to be used in production environments. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
+
 List of Cmdlets
 ---------------
 
