@@ -23,7 +23,11 @@ CompanyName = 'DSInternals'
 Copyright = '(c) 2015-2017 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'The DSInternals PowerShell Module exposes several internal features of Active Directory.'
+Description = @"
+The DSInternals PowerShell Module exposes several internal features of Active Directory.
+
+DISCLAIMER: Features exposed through this module are not supported by Microsoft and it is therefore not intended to be used in production environments. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
+"@
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
