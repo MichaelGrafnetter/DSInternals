@@ -176,21 +176,36 @@
             bool hasChanged = this.cursor.SetValue (columnId, newValue);
             return hasChanged;
         }
+
         public void UpdateAttributeMeta(string attributeName, long usn, DateTime time)
         {
+            Validator.AssertNotNull(attributeName, "attributeName");
+            this.UpdateAttributeMeta(new string[] { attributeName }, usn, time);
+        }
+
+        public void UpdateAttributeMeta(string[] attributeNames, long usn, DateTime time)
+        {
+            Validator.AssertNotNull(attributeNames, "attributeNames");
 
             ColumnAccessor record = this.cursor.EditRecord;
+            
             // Update the uSNChanged attribute
             this.SetAttribute<long>(CommonDirectoryAttributes.USNChanged, usn);
+            
             // Update the whenChanged attribute
-            // TODO: Add time as parameter?
-            DateTime now = DateTime.Now;
-            this.SetAttribute<long>(CommonDirectoryAttributes.WhenChanged, now.ToGeneralizedTime());
-            // Update the replPropertyMetaData attribute
+            this.SetAttribute<long>(CommonDirectoryAttributes.WhenChanged, time.ToGeneralizedTime());
+
+            // Update the replPropertyMetaData attribute (read-modify-write)
             AttributeMetadataCollection meta;
             this.ReadAttribute(CommonDirectoryAttributes.PropertyMetaData, out meta);
-            int attributeId = this.context.Schema.FindAttribute(attributeName).Id.Value;
-            meta.Update(attributeId, this.context.DomainController.InvocationId, now, usn);
+
+            foreach(var attributeName in attributeNames)
+            {
+                // We go through all attributes that are changed in this transaction
+                int attributeId = this.context.Schema.FindAttribute(attributeName).Id.Value;
+                meta.Update(attributeId, this.context.DomainController.InvocationId, time, usn);
+            }
+            
             this.SetAttribute(CommonDirectoryAttributes.PropertyMetaData, meta.ToByteArray());
         }
     }
