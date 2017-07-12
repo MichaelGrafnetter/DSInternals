@@ -1,5 +1,4 @@
 ﻿using DSInternals.Common.Interop;
-using System;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -27,6 +26,13 @@ namespace DSInternals.Common.Cryptography
         /// <returns>Decrypted data.</returns>
         public abstract byte[] DecryptSecret(byte[] blob);
 
+        /// <summary>
+        /// Encrypts a generic secret to be stored in the DB or sent through replication.
+        /// </summary>
+        /// <param name="blob">Cleartext blob.</param>
+        /// <returns>Encrypted data.</returns>
+        public abstract byte[] EncryptSecret(byte[] secret);
+
         public abstract SecretEncryptionType EncryptionType
         {
             get;
@@ -40,6 +46,15 @@ namespace DSInternals.Common.Cryptography
 
             // Hashes are encrypted using RID in addition to the standard secret encryption:
             return DecryptUsingDES(partiallyDecryptedHash, rid);
+        }
+
+        public byte[] EncryptHash(byte[] hash, int rid)
+        {
+            // Encryption layer 1
+            byte[] partiallyEncryptedHash = EncryptUsingDES(hash, rid);
+
+            // Encryption layer 2
+            return this.EncryptSecret(partiallyEncryptedHash);
         }
 
         public byte[][] DecryptHashHistory(byte[] blob, int rid)
@@ -66,6 +81,13 @@ namespace DSInternals.Common.Cryptography
             byte[] decryptedHash;
             NativeMethods.RtlDecryptNtOwfPwdWithIndex(encryptedHash, rid, out decryptedHash);
             return decryptedHash;
+        }
+
+        protected static byte[] EncryptUsingDES(byte[] hash, int rid)
+        {
+            byte[] encryptedHash;
+            NativeMethods.RtlEncryptNtOwfPwdWithIndex(hash, rid, out encryptedHash);
+            return encryptedHash;
         }
 
         protected static byte[] DecryptUsingRC4(byte[] data, byte[] salt, byte[] decryptionKey, int saltHashRounds = DefaultSaltHashRounds)
@@ -95,6 +117,29 @@ namespace DSInternals.Common.Cryptography
                         using (var cryptoStream = new CryptoStream(inputStream, decryptor, CryptoStreamMode.Read))
                         {
                             using(var outputStream = new MemoryStream(data.Length))
+                            {
+                                cryptoStream.CopyTo(outputStream);
+                                return outputStream.ToArray();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        protected static byte[] EncryptUsingAES(byte[] data, byte[] iv, byte[] key)
+        {
+            using (var aes = AesManaged.Create())
+            {
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.Zeros;
+                using (var encryptor = aes.CreateEncryptor(key, iv))
+                {
+                    using (var inputStream = new MemoryStream(data, false))
+                    {
+                        using (var cryptoStream = new CryptoStream(inputStream, encryptor, CryptoStreamMode.Read))
+                        {
+                            using (var outputStream = new MemoryStream(data.Length))
                             {
                                 cryptoStream.CopyTo(outputStream);
                                 return outputStream.ToArray();

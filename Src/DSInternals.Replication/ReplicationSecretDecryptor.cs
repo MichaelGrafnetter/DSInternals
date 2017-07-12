@@ -7,7 +7,7 @@ namespace DSInternals.Replication
     public class ReplicationSecretDecryptor : DirectorySecretDecryptor
     {
         private const int SaltOffset = 0;
-        private const int BlobMinSize = SaltSize + 1;
+        private const int EncryptedBlobMinSize = SaltSize + 1;
 
         private byte[] key;
 
@@ -38,7 +38,7 @@ namespace DSInternals.Replication
         public override byte[] DecryptSecret(byte[] blob)
         {
             // Blob structure: Salt (16B), Encrypted secret (rest)
-            Validator.AssertMinLength(blob, BlobMinSize, "blob");
+            Validator.AssertMinLength(blob, EncryptedBlobMinSize, "blob");
 
             // Extract salt and the actual encrypted data from the blob
             byte[] salt = blob.Cut(SaltOffset, SaltSize);
@@ -54,6 +54,11 @@ namespace DSInternals.Replication
             Validator.AssertCrcMatches(decryptedSecret, expectedCrc);
 
             return decryptedSecret;
+        }
+
+        public override byte[] EncryptSecret(byte[] secret)
+        {
+            throw new NotImplementedException("We will never act as a replication source so secret encryption is out of scope.");
         }
     }
 }

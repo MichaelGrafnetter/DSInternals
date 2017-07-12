@@ -20,12 +20,14 @@ namespace DSInternals.Common.Interop
         private const string Advapi = "advapi32.dll";
         private const string Ntdll = "ntdll.dll";
         private const string Mpr = "mpr.dll";
-        private const string NTOwfInternalName = "SystemFunction007";
         private const string LMOwfInternalName = "SystemFunction006";
-        private const string NTOwfDecryptInternalName = "SystemFunction027";
+        private const string NTOwfInternalName = "SystemFunction007";
+        private const string LMOwfEncryptInternalName = "SystemFunction024";
         private const string LMOwfDecryptInternalName = "SystemFunction025";
-        private const string RC4DecryptInternalName = "SystemFunction033";
+        private const string NTOwfEncryptInternalName = "SystemFunction026";
+        private const string NTOwfDecryptInternalName = "SystemFunction027";
         private const string RC4EncryptInternalName = "SystemFunction032";
+        private const string RC4DecryptInternalName = "SystemFunction033";
 
         /// <summary>
         /// Converts the specified NTSTATUS code to its equivalent system error code.
@@ -122,6 +124,19 @@ namespace DSInternals.Common.Interop
             // Wrap to get rid of the unnecessary pointer to int
             return RtlDecryptNtOwfPwdWithIndex(encryptedNtOwfPassword, ref index, ntOwfPassword);
         }
+
+        /// <summary>
+        /// Encrypt NtOwfPassword using an index as the key 
+        /// </summary>
+        [DllImport(Advapi, EntryPoint = NTOwfEncryptInternalName, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern NtStatus RtlEncryptNtOwfPwdWithIndex([In] byte[] ntOwfPassword, [In] ref int index, [In, Out] byte[] encryptedNtOwfPassword);
+        internal static NtStatus RtlEncryptNtOwfPwdWithIndex(byte[] ntOwfPassword, int index, out byte[] encryptedNtOwfPassword)
+        {
+            encryptedNtOwfPassword = new byte[NTHashNumBytes];
+            // Wrap to get rid of the unnecessary pointer to int
+            return RtlEncryptNtOwfPwdWithIndex(ntOwfPassword, ref index, encryptedNtOwfPassword);
+        }
+
         /// <summary>
         /// Decrypt LmOwfPassword using an index as the key 
         /// </summary>
@@ -133,6 +148,19 @@ namespace DSInternals.Common.Interop
             // Wrap to get rid of the unnecessary pointer to int
             return RtlDecryptLmOwfPwdWithIndex(encryptedLmOwfPassword, ref index, lmOwfPassword);
         }
+
+        /// <summary>
+        /// Encrypt LmOwfPassword using an index as the key 
+        /// </summary>
+        [DllImport(Advapi, EntryPoint = LMOwfEncryptInternalName, SetLastError = true)]
+        private static extern NtStatus RtlEncryptLmOwfPwdWithIndex([In] byte[] lmOwfPassword, [In] ref int index, [In, Out] byte[] encryptedLmOwfPassword);
+        internal static NtStatus RtlEncryptLmOwfPwdWithIndex(byte[] lmOwfPassword, int index, out byte[] encryptedLmOwfPassword)
+        {
+            encryptedLmOwfPassword = new byte[LMHashNumBytes];
+            // Wrap to get rid of the unnecessary pointer to int
+            return RtlEncryptLmOwfPwdWithIndex(lmOwfPassword, ref index, encryptedLmOwfPassword);
+        }
+        
         /// <summary>
         /// Faster arbitrary length data encryption function (using RC4)
         /// </summary>

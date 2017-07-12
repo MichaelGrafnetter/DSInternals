@@ -1,10 +1,9 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.IO;
+﻿using DSInternals.Common;
 using DSInternals.Common.Cryptography;
-using DSInternals.Common;
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace DSInternals.DataStore
 {
@@ -12,6 +11,9 @@ namespace DSInternals.DataStore
     {
         private const int BootKeySaltHashRounds = 1000;
         private const int EncryptedPekListOffset = sizeof(PekListVersion) + sizeof(PekListFlags) + SaltSize;
+        // The flags field is probably not used by AD and is always 0.
+        private const ushort EncryptedSecretFlags = 0;
+
         /// <summary>
         /// Signature/Authenticator that all decrypted PEK Lists must contain at the beginning to be considered valid.
         /// </summary>
@@ -133,6 +135,58 @@ namespace DSInternals.DataStore
             }
 
             return decryptedSecret;
+        }
+
+        public override byte[] EncryptSecret(byte[] secret)
+        {
+            using (var buffer = new MemoryStream())
+            {
+                using (var writer = new BinaryWriter(buffer))
+                {
+                    // Write Algorithm ID(2B)
+                    writer.Write((ushort)this.EncryptionType);
+
+                    // Write Flags(2B)
+                    writer.Write(EncryptedSecretFlags);
+                    
+                    // Write PEK ID(4B)
+                    writer.Write(this.CurrentKeyIndex);
+                    
+                    // Generate and Write Salt(16B)
+                    byte[] salt = new byte[SaltSize];
+                    using (var rng = RNGCryptoServiceProvider.Create())
+                    {
+                        rng.GetBytes(salt);
+                    }
+                    writer.Write(salt);
+
+                    // Perform the encryption
+                    byte[] encryptedSecret;
+
+                    switch (this.EncryptionType)
+                    {
+                        case SecretEncryptionType.DatabaseAES:
+                            encryptedSecret = EncryptUsingAES(secret, salt, this.CurrentKey);
+                            // Write the Secret Length (4B)
+                            writer.Write(secret.Length);
+                            break;
+                        case SecretEncryptionType.DatabaseRC4WithSalt:
+                            encryptedSecret = EncryptUsingRC4(secret, salt, this.CurrentKey);
+                            break;
+                        default:
+                            // TODO: Extract as resource
+                            var ex = new FormatException("Unsupported encryption type.");
+                            ex.Data.Add("SecretEncryptionType", this.EncryptionType);
+                            throw ex;
+                    }
+
+                    // Write the Encrypted Secret
+                    writer.Write(encryptedSecret);
+
+                    // Return the concatenated contents of the buffer
+                    return buffer.ToArray();
+                }
+            }
         }
 
         private void ParsePekList(byte[] cleartextBlob)

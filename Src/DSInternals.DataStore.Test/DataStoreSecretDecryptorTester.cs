@@ -42,7 +42,7 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStoreNTHash_W2k()
+        public void PasswordEncryptionKey_DataStoreNTHash_W2k_Decrypt()
         {
             // Win 2000 - Win 2012 R2
             byte[] blob = "1100000000000000133c2e574dfc2df435671649180617cfb3cc9ef487c99b1d6cda3fb410a021f5".HexToBinary();
@@ -53,6 +53,23 @@ namespace DSInternals.DataStore.Test
             string result = pek.DecryptHash(blob, rid).ToHex(true);
             string expected = "92937945B518814341DE3F726500D4FF";
             Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void PasswordEncryptionKey_DataStoreNTHash_W2k_Encrypt()
+        {
+            // Win 2000 - Win 2012 R2
+            byte[] originalHash = "92937945B518814341DE3F726500D4FF".HexToBinary();
+            byte[] binaryPek = "56d98148ec91d111905a00c04fc2d4cfb0b0f777efcece0100000000010000000000000004b7b3fd6df689af9d6837e840abdc8c".HexToBinary();
+            int rid = 500;
+
+            // Encrypt the hash and then decrypt it again
+            var pek = new DataStoreSecretDecryptor(binaryPek, PekListVersion.W2k);
+            byte[] encryptedHash = pek.EncryptHash(originalHash, rid);
+            byte[] decryptedHash = pek.DecryptHash(encryptedHash, rid);
+
+            // Now check if we really got the original value.
+            Assert.AreEqual(originalHash.ToHex(), decryptedHash.ToHex());
         }
 
         [TestMethod]
@@ -81,6 +98,23 @@ namespace DSInternals.DataStore.Test
             string result = pek.DecryptHash(blob, rid).ToHex(true);
             string expected = "92937945B518814341DE3F726500D4FF";
             Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void PasswordEncryptionKey_DataStoreNTHash_W2016_Encrypt()
+        {
+            // Win 2000 - Win 2012 R2
+            byte[] originalHash = "92937945B518814341DE3F726500D4FF".HexToBinary();
+            byte[] binaryPek = "56d98148ec91d111905a00c04fc2d4cfd02cd74ef843d1010000000001000000000000006a35d3fc0e9949135463ab766cac7dbb0c0c0c0c0c0c0c0c0c0c0c0ca93445b678ce5fbe02de23c3c71ff800".HexToBinary();
+            int rid = 500;
+
+            // Encrypt the hash and then decrypt it again
+            var pek = new DataStoreSecretDecryptor(binaryPek, PekListVersion.W2016);
+            byte[] encryptedHash = pek.EncryptHash(originalHash, rid);
+            byte[] decryptedHash = pek.DecryptHash(encryptedHash, rid);
+
+            // Now check if we really got the original value.
+            Assert.AreEqual(originalHash.ToHex(), decryptedHash.ToHex());
         }
 
         [TestMethod]
