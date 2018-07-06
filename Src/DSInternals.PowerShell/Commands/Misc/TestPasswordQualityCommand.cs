@@ -184,7 +184,7 @@
                 this.TestWeakHashes();
             }
 
-            if (!this.SkipDuplicatePasswordTest)
+            if (!this.SkipDuplicatePasswordTest.IsPresent)
             {
                 // Find password duplicates
                 this.TestDuplicateHash();
@@ -194,7 +194,10 @@
         protected override void EndProcessing()
         {
             // Process duplicate passwords
-            this.result.DuplicatePasswordGroups = this.duplicatePasswordDictionary.Values.Where(list => list.Count > 1).ToList();
+            if(!this.SkipDuplicatePasswordTest.IsPresent)
+            {
+                this.result.DuplicatePasswordGroups = this.duplicatePasswordDictionary.Values.Where(list => list.Count > 1).ToList();
+            }
 
             // The processing has finished, so return the results.
             this.WriteObject(this.result);
