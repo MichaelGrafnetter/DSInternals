@@ -141,9 +141,10 @@
                     string outputPassword = this.ShowPlainTextPasswords.IsPresent ? this.Account.SupplementalCredentials.ClearText : String.Empty;
                     this.result.ClearTextPassword.Add(this.Account.SamAccountName, outputPassword);
                 }
-                if(this.Account.SupplementalCredentials.KerberosNew == null)
+
+                if(this.Account.SupplementalCredentials.KerberosNew == null && ! this.Account.UserAccountControl.HasFlag(UserAccountControl.SmartCardRequired))
                 {
-                    // Account is missing the AES kerberos keys.
+                    // Account is missing the AES kerberos keys. This is only OK if smart card auth is enforced for this account.
                     this.result.AESKeysMissing.Add(this.Account.SamAccountName);
                 }
             }
