@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.22'
+ModuleVersion = '2.23'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -20,7 +20,7 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) 2015-2017 Michael Grafnetter. All rights reserved.'
+Copyright = '(c) 2015-2018 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
@@ -98,7 +98,7 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
 				  'ConvertFrom-ManagedPasswordBlob', 'Get-SysKey', 'Set-ADDBSysKey',
 				  'New-NTHashSet', 'Test-ADPasswordQuality',
 				  'Test-ADDBPasswordQuality', 'Test-ADReplPasswordQuality',
-				  'Get-ADPasswordPolicy','Get-ADDefaultPasswordPolicy'
+				  'Get-ADPasswordPolicy', 'Get-ADDefaultPasswordPolicy'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -128,7 +128,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Enable-ADDBAccount and Disable-ADDBAccount cmdlets.
+- Fixed 2 minor bugs in the Test-PasswordQuality cmdlet.
 "@
     } # End of PSData hashtable
 
