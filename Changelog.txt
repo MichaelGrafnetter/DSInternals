@@ -1,3 +1,7 @@
+Version 2.23
+- [Module] The Test-PasswordQuality now supports accounts that require smart card authentication.
+- [Module] Fixed a bug in in the processing of the SkipDuplicatePasswordTest switch of the Test-PasswordQuality cmdlet.
+
 Version 2.22
 - [Framework] Added the Enable-ADDBAccount and Disable-ADDBAccount cmdlets.
 - [Module] Added the ability to enable or disable accounts in offline databases.
