@@ -65,7 +65,8 @@ FormatsToProcess = 'DSInternals.DSAccount.format.ps1xml',
 				   'DSInternals.KdsRootKey.format.ps1xml',
 				   'DSInternals.Hash.format.ps1xml',
 				   'DSInternals.SamDomainPasswordInformation.format.ps1xml',
-				   'DSInternals.RoamedCredential.format.ps1xml'
+				   'DSInternals.RoamedCredential.format.ps1xml',
+				   'DSInternals.KeyCredential.format.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('DSInternals.PowerShell.dll')
@@ -86,7 +87,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
 			   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
 			   'Set-ADDBBootKey','ConvertTo-NTHashDictionary', 'Test-PasswordQuality',
 			   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
-			   'Enable-ADDBAccount', 'Disable-ADDBAccount'
+			   'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential'
 
 # Variables to export from this module
 # VariablesToExport = @()
@@ -98,7 +99,8 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
 				  'ConvertFrom-ManagedPasswordBlob', 'Get-SysKey', 'Set-ADDBSysKey',
 				  'New-NTHashSet', 'Test-ADPasswordQuality',
 				  'Test-ADDBPasswordQuality', 'Test-ADReplPasswordQuality',
-				  'Get-ADPasswordPolicy', 'Get-ADDefaultPasswordPolicy'
+				  'Get-ADPasswordPolicy', 'Get-ADDefaultPasswordPolicy', 'Get-KeyCredential',
+				  'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()

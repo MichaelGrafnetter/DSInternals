@@ -49,6 +49,15 @@
     <Compile Include="Data\DPAPI\RoamedCredential.cs" />
     <Compile Include="Data\DPAPI\RoamedCredentialFlags.cs" />
     <Compile Include="Data\DPAPI\RoamedCredentialType.cs" />
+    <Compile Include="Data\Hello\CustomKeyInformation.cs" />
+    <Compile Include="Data\Hello\KeyCredential.cs" />
+    <Compile Include="Data\Hello\KeyCredentialVersion.cs" />
+    <Compile Include="Data\Hello\KeyCredentialEntryType.cs" />
+    <Compile Include="Data\Hello\KeySource.cs" />
+    <Compile Include="Data\Hello\KeyStrength.cs" />
+    <Compile Include="Data\Hello\KeyFlags.cs" />
+    <Compile Include="Data\Hello\VolumeType.cs" />
+    <Compile Include="Data\Hello\KeyUsage.cs" />
     <Compile Include="Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Cryptography\Crc32.cs" />
     <Compile Include="Cryptography\GPPrefPwdObfuscator.cs" />
@@ -86,6 +95,7 @@
     <Compile Include="Exceptions\DirectoryObjectOperationException.cs" />
     <Compile Include="Exceptions\SchemaAttributeNotFoundException.cs" />
     <Compile Include="Extensions\NetworkCredentialExtensions.cs" />
+    <Compile Include="Extensions\RSAExtensions.cs" />
     <Compile Include="Interop\CryptoBuffer.cs" />
     <Compile Include="Interop\Enums\NetCancelOptions.cs" />
     <Compile Include="Interop\Enums\NetConnectOptions.cs" />

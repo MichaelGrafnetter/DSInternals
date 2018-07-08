@@ -523,6 +523,18 @@
                   </Frame>
                 </CustomItem>
               </Frame>
+              <Text>Key Credentials:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>KeyCredentials</PropertyName>
+                    <CustomControlName>KeyCredential</CustomControlName>
+                    <EnumerateCollection />
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
               <Text>Credential Roaming</Text>
               <NewLine />
               <Frame>

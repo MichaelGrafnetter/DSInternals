@@ -33,7 +33,8 @@
             CommonDirectoryAttributes.PrimaryGroupId,
             CommonDirectoryAttributes.PKIAccountCredentials,
             CommonDirectoryAttributes.PKIDPAPIMasterKeys,
-            CommonDirectoryAttributes.PKIRoamingTimeStamp
+            CommonDirectoryAttributes.PKIRoamingTimeStamp,
+            CommonDirectoryAttributes.KeyCredentialLink
         };
 
         private DirectoryEntry searchRoot;

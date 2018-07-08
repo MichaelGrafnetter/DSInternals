@@ -46,6 +46,8 @@
         public const string KdsSecretAgreementParameters = "msKds-SecretAgreementParam";
         public const string KdsEffectiveTime = "msKds-UseStartTime";
         public const string KdsVersion = "msKds-Version";
+        public const string KeyCredentialLink = "msDS-KeyCredentialLink";
+        public const int KeyCredentialLinkId = 592152;
         public const string LastLogon = "lastLogon";
         public const int LastLogonId = 589876;
         public const string LastLogonTimestamp = "lastLogonTimestamp";

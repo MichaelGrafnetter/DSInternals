@@ -38,6 +38,9 @@
             // Credential Roaming
             this.LoadRoamedCredentials(dsObject);
 
+            // Windows Hello for Business
+            this.LoadKeyCredentials(dsObject);
+
             // Hashes and Supplemental Credentials
             this.LoadHashes(dsObject, pek);
         }
@@ -312,6 +315,15 @@
             private set;
         }
 
+        /// <summary>
+        /// Device Registration / Windows Hello for Business Keys
+        /// </summary>
+        public KeyCredential[] KeyCredentials
+        {
+            get;
+            private set;
+        }
+
         protected void LoadAccountInfo(DirectoryObject dsObject)
         {
 
@@ -478,6 +490,35 @@
             catch (SchemaAttributeNotFoundException)
             {
                 // These attributes have been added in Windows Server 2008, so they might not be present on older DCs.
+            }
+        }
+
+        /// <summary>
+        /// Loads key credentials.
+        /// </summary>
+        protected void LoadKeyCredentials(DirectoryObject dsObject)
+        {
+            try
+            {
+                byte[][] keyCredentialBlobs;
+                dsObject.ReadLinkedValues(CommonDirectoryAttributes.KeyCredentialLink, out keyCredentialBlobs);
+
+                // Parse the blobs and combine them into one array.
+                var credentials = new List<KeyCredential>();
+
+                if (keyCredentialBlobs != null)
+                {
+                    foreach (var blob in keyCredentialBlobs)
+                    {
+                        credentials.Add(new KeyCredential(blob));
+                    }
+                }
+
+                this.KeyCredentials = credentials.ToArray();
+            }
+            catch (SchemaAttributeNotFoundException)
+            {
+                // This attribute has been added in Windows Server 2016, so it might not be present on older DCs.
             }
         }
     }

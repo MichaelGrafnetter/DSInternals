@@ -46,6 +46,9 @@ New-Alias -Name New-NTHashDictionary             -Value ConvertTo-NTHashDictiona
 New-Alias -Name Test-ADPasswordQuality           -Value Test-PasswordQuality
 New-Alias -Name Test-ADDBPasswordQuality         -Value Test-PasswordQuality
 New-Alias -Name Test-ADReplPasswordQuality       -Value Test-PasswordQuality
+New-Alias -Name Get-KeyCredential                -Value Get-ADKeyCredential
+New-Alias -Name Get-KeyCredentialLink            -Value Get-ADKeyCredential
+New-Alias -Name Get-ADKeyCredentialLink          -Value Get-ADKeyCredential
 
 # Export the aliases
 Export-ModuleMember -Alias * -Cmdlet *
