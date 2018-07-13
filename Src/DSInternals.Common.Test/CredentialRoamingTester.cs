@@ -46,7 +46,7 @@ D960C85C25BC6433FAE2E0E04ADC96820350FD88B92922F40F3F2855FE2573746A9CE2D3E9B9F7BB
 D696BC1BBA1400000029B473EA61602F51CDCCB15C5982D3F6F83D09EB".Replace(Environment.NewLine, String.Empty).HexToBinary();
 
             var roamedObject = new RoamedCredential(blob, TestUser, TestSID);
-            Assert.AreEqual(@"Administrator\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-500\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e", roamedObject.FileName);
+            Assert.AreEqual(@"Administrator\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-500\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e", roamedObject.FilePath);
             Assert.AreEqual(RoamedCredentialType.RSAPrivateKey, roamedObject.Type);
         }
 
@@ -94,7 +94,7 @@ BAA60416FC595319FB786F77167679F01908519F2BE75A0EF062C90ACF56C117AA3B3416B7FBE60B
 F1C522630C6A625070E8F81671A7A4BBB8D1FFBA4DA094B48C64050810306BB3FB538069FB87DCFBF00501B9D0A99DDF6C93CC0774660C97564E".Replace(Environment.NewLine, String.Empty).HexToBinary();
 
             var roamedObject = new RoamedCredential(blob, TestUser, TestSID);
-            Assert.AreEqual(@"Administrator\SystemCertificates\My\Certificates\3B83BFA7037F6A79B3F3D17D229E1BC097F35B51", roamedObject.FileName);
+            Assert.AreEqual(@"Administrator\SystemCertificates\My\Certificates\3B83BFA7037F6A79B3F3D17D229E1BC097F35B51", roamedObject.FilePath);
             Assert.AreEqual(RoamedCredentialType.CNGCertificate, roamedObject.Type);
         }
 
@@ -118,7 +118,7 @@ DCD2F6E392B6867C0836B85F64D95BC5F506D213070CD973417A049A775C5907E903CE595603AFDE
 248345A9FA22CA076AFF971F55829D1426D3667084194C1318B34587E014C5DF".Replace(Environment.NewLine, String.Empty).HexToBinary();
 
             var roamedObject = new RoamedCredential(blob, TestUser, TestSID);
-            Assert.AreEqual(@"Administrator\Protect\S-1-5-21-4534338-1127018997-2609994386-500\7fc19508-7b85-4a7c-9e5d-15f9e00e7ce5", roamedObject.FileName);
+            Assert.AreEqual(@"Administrator\Protect\S-1-5-21-4534338-1127018997-2609994386-500\7fc19508-7b85-4a7c-9e5d-15f9e00e7ce5", roamedObject.FilePath);
             Assert.AreEqual(RoamedCredentialType.DPAPIMasterKey, roamedObject.Type);
         }
     }

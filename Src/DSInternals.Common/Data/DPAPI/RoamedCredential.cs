@@ -7,6 +7,11 @@
 
     public class RoamedCredential : DPAPIObject
     {
+        private const string MasterKeyCommandFormat = "dpapi::masterkey /in:\"{0}\" /sid:{1}";
+        private const string CapiKeyCommandFormat = "dpapi::capi /in:\"{0}\"";
+        private const string CNGKeyCommandFormat = "dpapi::cng /in:\"{0}\"";
+        private const string CertificateCommandFormat = "crypto::system /file:\"{0}\" /export";
+        private const string CurrentMasterKeyPointerId = "Preferred";
         private const int MinLength = 132;
         private const int IdentifierMaxSize = 93;
         private const int HashSize = 20;
@@ -119,12 +124,12 @@
             private set;
         }
 
-        public override void SaveTo(string directoryPath)
+        public override void Save(string directoryPath)
         {
             // The target directory must exist
             Validator.AssertDirectoryExists(directoryPath);
 
-            string fullFilePath = Path.Combine(directoryPath, this.FileName);
+            string fullFilePath = Path.Combine(directoryPath, this.FilePath);
 
             // Some blobs need to be saved in a specific folder structure that we have to create first
             Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath));
@@ -136,7 +141,7 @@
         /// <summary>
         /// Gets the path to the credential file.
         /// </summary>
-        public string FileName
+        public override string FilePath
         {
             get
             {
@@ -180,9 +185,34 @@
             }
         }
 
+        public override string KiwiCommand
+        {
+            get
+            {
+                switch(this.Type)
+                {
+                    case RoamedCredentialType.DPAPIMasterKey:
+                        return this.Id != CurrentMasterKeyPointerId ? String.Format(MasterKeyCommandFormat, this.FilePath, this.AccountSid) : null;
+                    case RoamedCredentialType.CNGCertificate:
+                    case RoamedCredentialType.CNGRequest:
+                    case RoamedCredentialType.CryptoApiCertificate:
+                    case RoamedCredentialType.CryptoApiRequest:
+                        return String.Format(CertificateCommandFormat, this.FilePath);
+                    case RoamedCredentialType.RSAPrivateKey:
+                    case RoamedCredentialType.DSAPrivateKey:
+                        return String.Format(CapiKeyCommandFormat, this.FilePath);
+                    case RoamedCredentialType.CNGPrivateKey:
+                        return String.Format(CNGKeyCommandFormat, this.FilePath);
+                    default:
+                        // Unknown/future credential type
+                        return null;
+                }
+            }
+        }
+
         public override string ToString()
         {
-            return String.Format("{0}: {1}", this.Type, this.FileName);
+            return String.Format("{0}: {1}", this.Type, this.FilePath);
         }
     }
 }
