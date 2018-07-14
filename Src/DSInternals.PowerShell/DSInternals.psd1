@@ -61,6 +61,8 @@ ProcessorArchitecture = 'None'
 
 # Format files (.ps1xml) to be loaded when importing this module
 FormatsToProcess = 'DSInternals.DSAccount.format.ps1xml',
+				   'DSInternals.DSAccount.ExportViews.format.ps1xml',
+				   'DSInternals.Kerberos.format.ps1xml',
 				   'DSInternals.PasswordQualityTestResult.format.ps1xml',
 				   'DSInternals.KdsRootKey.format.ps1xml',
 				   'DSInternals.Hash.format.ps1xml',

@@ -1,0 +1,311 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <Controls>
+    <Control>
+      <Name>Rid</Name>
+      <!-- Extracts RID from SID -->
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <EnumerateCollection />
+                <ScriptBlock>[DSInternals.Common.SecurityIdentifierExtensions]::GetRid($_)</ScriptBlock>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+  </Controls>
+  <ViewDefinitions>
+    <View>
+      <Name>JohnNT</Name>
+      <!-- Format: <username>:$NT:<hash>:<sid>:: -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>SamAccountName</PropertyName>
+              </ExpressionBinding>
+              <Text>:$NT:</Text>
+              <ExpressionBinding>
+                <PropertyName>NTHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>Sid</PropertyName>
+              </ExpressionBinding>
+              <Text>::</Text>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>JohnNTHistory</Name>
+      <!-- Format: <username>:$NT:<hash>:<sid>:: -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>
+                  $records = [System.Collections.ArrayList]@()
+                  foreach($hash in $PSItem.NTHashHistory)
+                  {
+                  $record = '{0}:$NT:{1}:{2}::' -f $PSItem.SamAccountName, (ConvertTo-Hex $hash), $PSItem.Sid
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
+                </ScriptBlock>
+                <EnumerateCollection/>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>JohnLM</Name>
+      <!-- Format: <username>:<hash>:<sid>:: -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>SamAccountName</PropertyName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>LMHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>Sid</PropertyName>
+              </ExpressionBinding>
+              <Text>::</Text>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>Ophcrack</Name>
+      <!-- Format: <username>::<lmhash>:<nthash>:<sid>:: -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>SamAccountName</PropertyName>
+              </ExpressionBinding>
+              <Text>::</Text>
+              <ExpressionBinding>
+                <PropertyName>LMHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>NTHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>Sid</PropertyName>
+              </ExpressionBinding>
+              <Text>::</Text>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>HashcatNT</Name>
+      <!-- Format: <username>:<hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>SamAccountName</PropertyName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>NTHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>HashcatNTHistory</Name>
+      <!-- Format: <username>:<hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>
+                  $records = [System.Collections.ArrayList]@()
+                  foreach($hash in $PSItem.NTHashHistory)
+                  {
+                  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $hash)
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
+                </ScriptBlock>
+                <EnumerateCollection/>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>HashcatLM</Name>
+      <!-- Format: <username>:<hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>SamAccountName</PropertyName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>LMHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>NTHash</Name>
+      <!-- Format: <hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>NTHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>NTHashHistory</Name>
+      <!-- Format: <hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>
+                  $records = [System.Collections.ArrayList]@()
+                  foreach($hash in $PSItem.NTHashHistory)
+                  {
+                  $record = ConvertTo-Hex $hash
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
+                </ScriptBlock>
+                <EnumerateCollection/>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>LMHash</Name>
+      <!-- Format: <hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>LMHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>PWDump</Name>
+      <!-- Format: <username>:<uid>:<LM-hash>:<NTLM-hash>:<comment>:<homedir>: -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>SamAccountName</PropertyName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>Sid</PropertyName>
+                <CustomControlName>Rid</CustomControlName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>LMHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <Text>:</Text>
+              <ExpressionBinding>
+                <PropertyName>NTHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <Text>:::</Text>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

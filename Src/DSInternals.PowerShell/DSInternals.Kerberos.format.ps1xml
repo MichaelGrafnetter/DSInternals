@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <Controls>
+    <Control>
+      <Name>KerberosKeyData</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>KeyType</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <Text>Key: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>Key</PropertyName>
+                    <CustomControlName>Hash</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <Name>KerberosKeyDataNew</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>KeyType</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <Text>Key: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>Key</PropertyName>
+                    <CustomControlName>Hash</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>Iterations: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>IterationCount</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <Name>KerberosCredential</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>Credentials:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Credentials</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>KerberosKeyData</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>OldCredentials:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>OldCredentials</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>KerberosKeyData</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>Salt: </Text>
+              <ExpressionBinding>
+                <PropertyName>DefaultSalt</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Flags: </Text>
+              <ExpressionBinding>
+                <PropertyName>Flags</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <Name>KerberosCredentialNew</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>Credentials:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Credentials</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>KerberosKeyDataNew</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>OldCredentials:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>OldCredentials</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>KerberosKeyDataNew</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>OlderCredentials:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>OlderCredentials</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>KerberosKeyDataNew</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>ServiceCredentials:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>ServiceCredentials</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>KerberosKeyDataNew</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>Salt: </Text>
+              <ExpressionBinding>
+                <PropertyName>DefaultSalt</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>DefaultIterationCount: </Text>
+              <ExpressionBinding>
+                <PropertyName>DefaultIterationCount</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Flags: </Text>
+              <ExpressionBinding>
+                <PropertyName>Flags</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <Name>SupplementalCredentials</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>ClearText: </Text>
+              <ExpressionBinding>
+                <PropertyName>ClearText</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>NTLMStrongHash: </Text>
+              <ExpressionBinding>
+                <PropertyName>NTLMStrongHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Kerberos:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Kerberos</PropertyName>
+                    <CustomControlName>KerberosCredential</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>KerberosNew:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>KerberosNew</PropertyName>
+                    <CustomControlName>KerberosCredentialNew</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>WDigest:</Text>
+              <NewLine />
+              <ExpressionBinding>
+                <PropertyName>WDigest</PropertyName>
+                <CustomControlName>HashCollection</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+  </Controls>
+  <ViewDefinitions>
+    <View>
+      <Name>SupplementalCredentials</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.SupplementalCredentials</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>SupplementalCredentials</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>KerberosCredential</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.KerberosCredential</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>KerberosCredential</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>KerberosCredentialNew</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.KerberosCredentialNew</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>KerberosCredentialNew</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>KerberosKeyData</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.KerberosKeyData</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>KerberosKeyData</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>KerberosKeyDataNew</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.KerberosKeyDataNew</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>KerberosKeyDataNew</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+   </ViewDefinitions>
+</Configuration>
