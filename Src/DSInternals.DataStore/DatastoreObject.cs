@@ -69,7 +69,6 @@
             Columnid columnId = this.context.Schema.FindColumnId(CommonDirectoryAttributes.SIDHistory);
             bool hasChanged = this.cursor.AddMultiValue(columnId, valuesToAdd);
             return hasChanged;
-
         }
 
         public void Delete()
@@ -85,52 +84,110 @@
 
         public override bool HasAttribute(string name)
         {
-            Columnid columnId = this.context.Schema.FindColumnId(name);
-            long columnSize = cursor.Record.SizeOf(columnId);
-            return columnSize > 0;
+            if(this.context.Schema.ContainsAttribute(name))
+            {
+                // Read the appropriate column and check if it has a value
+                Columnid columnId = this.context.Schema.FindColumnId(name);
+                long columnSize = cursor.Record.SizeOf(columnId);
+                return columnSize > 0;
+            }
+            else
+            {
+                // The schema does not even contain this attribute, so the object cannot have it.
+                return false;
+            }
         }
 
         public override void ReadAttribute(string name, out byte[] value)
         {
-            Columnid columnId = this.context.Schema.FindColumnId(name);
-            value = this.cursor.RetrieveColumnAsByteArray(columnId);
+            if(this.context.Schema.ContainsAttribute(name))
+            {
+                Columnid columnId = this.context.Schema.FindColumnId(name);
+                value = this.cursor.RetrieveColumnAsByteArray(columnId);
+            }
+            else
+            {
+                value = null;
+            }
         }
 
         public override void ReadAttribute(string name, out byte[][] value)
         {
-            Columnid columnId = this.context.Schema.FindColumnId(name);
-            value = this.cursor.RetrieveColumnAsMultiByteArray(columnId);
+            if (this.context.Schema.ContainsAttribute(name))
+            {
+                Columnid columnId = this.context.Schema.FindColumnId(name);
+                value = this.cursor.RetrieveColumnAsMultiByteArray(columnId);
+            }
+            else
+            {
+                value = null;
+            }
         }
 
         public override void ReadAttribute(string name, out int? value)
         {
-            Columnid columnId = this.context.Schema.FindColumnId(name);
-            value = this.cursor.RetrieveColumnAsInt(columnId);
+            if (this.context.Schema.ContainsAttribute(name))
+            {
+                Columnid columnId = this.context.Schema.FindColumnId(name);
+                value = this.cursor.RetrieveColumnAsInt(columnId);
+            }
+            else
+            {
+                value = null;
+            }
         }
 
         public override void ReadAttribute(string name, out string value)
         {
-            Columnid columnId = this.context.Schema.FindColumnId(name);
-            value = this.cursor.RetrieveColumnAsString(columnId);
+            if (this.context.Schema.ContainsAttribute(name))
+            {
+                Columnid columnId = this.context.Schema.FindColumnId(name);
+                value = this.cursor.RetrieveColumnAsString(columnId);
+            }
+            else
+            {
+                value = null;
+            }
         }
 
         public override void ReadAttribute(string name, out string[] values)
         {
-            Columnid columnId = this.context.Schema.FindColumnId(name);
-            values = this.cursor.RetrieveColumnAsStringArray(columnId);
+            if (this.context.Schema.ContainsAttribute(name))
+            {
+                Columnid columnId = this.context.Schema.FindColumnId(name);
+                values = this.cursor.RetrieveColumnAsStringArray(columnId);
+            }
+            else
+            {
+                values = null;
+            }
         }
 
         public override void ReadAttribute(string name, out long? value)
         {
-            Columnid columnId = this.context.Schema.FindColumnId(name);
-            value = this.cursor.RetrieveColumnAsLong(columnId);
+            if (this.context.Schema.ContainsAttribute(name))
+            {
+                Columnid columnId = this.context.Schema.FindColumnId(name);
+                value = this.cursor.RetrieveColumnAsLong(columnId);
+            }
+            else
+            {
+                value = null;
+            }
         }
 
         public override void ReadAttribute(string name, out DistinguishedName value)
         {
-            Columnid columnId = this.context.Schema.FindColumnId(name);
-            var dnt = this.cursor.RetrieveColumnAsDNTag(columnId);
-            value = this.context.DistinguishedNameResolver.Resolve(dnt.Value);
+            if (this.context.Schema.ContainsAttribute(name))
+            {
+                Columnid columnId = this.context.Schema.FindColumnId(name);
+                var dnt = this.cursor.RetrieveColumnAsDNTag(columnId);
+                value = this.context.DistinguishedNameResolver.Resolve(dnt.Value);
+            }
+            else
+            {
+                value = null;
+            }
         }
 
         public override void ReadAttribute(string name, out RawSecurityDescriptor value)
@@ -150,6 +207,7 @@
 
         public void ReadAttribute(string name, out AttributeMetadataCollection value)
         {
+
             byte[] binaryValue;
             this.ReadAttribute(name, out binaryValue);
             value = new AttributeMetadataCollection(binaryValue);

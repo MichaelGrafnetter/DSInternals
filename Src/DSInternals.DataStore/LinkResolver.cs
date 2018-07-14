@@ -1,10 +1,10 @@
-﻿using Microsoft.Database.Isam;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace DSInternals.DataStore
+﻿namespace DSInternals.DataStore
 {
+    using Microsoft.Database.Isam;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class LinkResolver : IDisposable
     {
         // Column names:
@@ -56,6 +56,12 @@ namespace DSInternals.DataStore
 
         public IEnumerable<int> GetLinkedDNTags(int dnTag, string attributeName)
         {
+            if (!this.schema.ContainsAttribute(attributeName))
+            {
+                // If the schema does not contain this attribute at all, we pretend it to have an empty value.
+                yield break;
+            }
+
             // TODO: Check that the attribute type is DN
             this.FindLinkedRecords(dnTag, attributeName);
 
@@ -70,6 +76,12 @@ namespace DSInternals.DataStore
 
         public IEnumerable<byte[]> GetLinkedValues(int dnTag, string attributeName)
         {
+            if(!this.schema.ContainsAttribute(attributeName))
+            {
+                // If the schema does not contain this attribute at all, we pretend it to have an empty value.
+                yield break;
+            }
+
             // TODO: Check that the attribute is DN-Binary.
             this.FindLinkedRecords(dnTag, attributeName);
 
@@ -87,6 +99,7 @@ namespace DSInternals.DataStore
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && cursor != null)
