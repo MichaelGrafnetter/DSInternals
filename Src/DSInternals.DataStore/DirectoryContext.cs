@@ -69,6 +69,12 @@
                 this.LinkResolver = new LinkResolver(this.database, this.Schema);
                 this.DomainController = new DomainController(this);
             }
+            catch (EsentUnicodeTranslationFailException unicodeException)
+            {
+                // This typically happens while opening a Windows Server 2003 DIT on a newer system.
+                this.Dispose();
+                throw new InvalidDatabaseStateException("There was a problem reading the database, which probably comes from a legacy system. Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", dbFilePath, unicodeException);
+            }
             catch
             {
                 // Free resources if anything failed
