@@ -42,6 +42,7 @@
     <Compile Include="ADSI\AdsiClient.cs" />
     <Compile Include="ADSI\AdsiObjectAdapter.cs" />
     <Compile Include="Cryptography\HashEqualityComparer.cs" />
+    <Compile Include="Cryptography\WDigestHash.cs" />
     <Compile Include="Cryptography\Pbkdf2.cs" />
     <Compile Include="Cryptography\PrivateKeyEncryptionType.cs" />
     <Compile Include="Data\DPAPI\DPAPIObject.cs" />
