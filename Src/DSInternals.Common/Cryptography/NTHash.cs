@@ -1,9 +1,8 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Interop;
-using System.Security;
-
-namespace DSInternals.Common.Cryptography
+﻿namespace DSInternals.Common.Cryptography
 {
+    using DSInternals.Common.Interop;
+    using System.Security;
+
     // See http://msdn.microsoft.com/en-us/library/system.security.cryptography.hashalgorithm%28v=vs.110%29.aspx
     public static class NTHash
     {
@@ -26,7 +25,8 @@ namespace DSInternals.Common.Cryptography
 
         public static byte[] ComputeHash(SecureString password)
         {
-            Validator.AssertNotNull(password, "password");
+            Validator.AssertMaxLength(password, MaxInputLength, "password");
+
             byte[] hash;
             using(SafeUnicodeSecureStringPointer passwordPtr = new SafeUnicodeSecureStringPointer(password))
             {
@@ -38,7 +38,8 @@ namespace DSInternals.Common.Cryptography
 
         public static byte[] ComputeHash(string password)
         {
-            Validator.AssertNotNull(password, "password");
+            Validator.AssertMaxLength(password, MaxInputLength, "password");
+
             byte[] hash;
             NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(password, out hash);
             Validator.AssertSuccess(result);

@@ -103,6 +103,7 @@ namespace DSInternals.Common
                 throw new ArgumentOutOfRangeException(paramName, value.Length, Resources.UnexpectedLengthMessage);
             }
         }
+
         public static void AssertMaxLength(SecureString password, int maxLength, string paramName)
         {
             AssertNotNull(password, paramName);
@@ -111,6 +112,16 @@ namespace DSInternals.Common
                 throw new ArgumentOutOfRangeException(paramName, password.Length, Resources.InputLongerThanMaxMessage);
             }
         }
+
+        public static void AssertMaxLength(string input, int maxLength, string paramName)
+        {
+            AssertNotNull(input, paramName);
+            if (input.Length > maxLength)
+            {
+                throw new ArgumentOutOfRangeException(paramName, input.Length, Resources.InputLongerThanMaxMessage);
+            }
+        }
+
         public static void AssertMinLength(byte[] data, int minLength, string paramName)
         {
             AssertNotNull(data, paramName);

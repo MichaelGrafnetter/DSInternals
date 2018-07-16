@@ -1,6 +1,5 @@
-﻿using DSInternals.Common;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Security;
 
 namespace DSInternals.Common.Cryptography.Test
@@ -44,6 +43,14 @@ namespace DSInternals.Common.Cryptography.Test
         public void NTHash_SecureString_LongInput()
         {
             SecureString password = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789".ToSecureString();
+            string result = NTHash.ComputeHash(password).ToHex(true);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void NTHash_String_LongInput()
+        {
+            string password = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
             string result = NTHash.ComputeHash(password).ToHex(true);
         }
 
