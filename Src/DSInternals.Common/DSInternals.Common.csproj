@@ -42,6 +42,7 @@
     <Compile Include="ADSI\AdsiClient.cs" />
     <Compile Include="ADSI\AdsiObjectAdapter.cs" />
     <Compile Include="Cryptography\HashEqualityComparer.cs" />
+    <Compile Include="Cryptography\KerberosKeyDerivation.cs" />
     <Compile Include="Cryptography\WDigestHash.cs" />
     <Compile Include="Cryptography\Pbkdf2.cs" />
     <Compile Include="Cryptography\PrivateKeyEncryptionType.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Interop\Enums\NetResourceScope.cs" />
     <Compile Include="Interop\Enums\NetResourceType.cs" />
     <Compile Include="Interop\Enums\NetResourceUsage.cs" />
+    <Compile Include="Interop\KerberosCryptoSystem.cs" />
     <Compile Include="Interop\NamedPipeConnection.cs" />
     <Compile Include="Interop\NativeMethods.cs" />
     <Compile Include="Interop\NetResource.cs" />

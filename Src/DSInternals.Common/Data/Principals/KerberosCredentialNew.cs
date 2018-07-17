@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DSInternals.Common.Cryptography;
+using System;
 using System.IO;
+using System.Security;
 using System.Text;
 
 namespace DSInternals.Common.Data
@@ -14,6 +16,24 @@ namespace DSInternals.Common.Data
         {
             this.ReadCredentials(blob);
         }
+
+        public KerberosCredentialNew(SecureString password, string principal, string realm)
+        {
+            // Generate salt
+            this.DefaultSalt = KerberosKeyDerivation.DeriveSalt(principal, realm);
+
+            // Generate AES keys
+            this.DefaultIterationCount = KerberosKeyDerivation.DefaultIterationCount;
+
+            byte[] aes128Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
+            var aes128KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, aes128Key, KerberosKeyDerivation.DefaultIterationCount);
+
+            byte[] aes256Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
+            var aes256KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96_PLAIN, aes256Key, KerberosKeyDerivation.DefaultIterationCount);
+
+            this.Credentials = new KerberosKeyDataNew[] { aes128KeyData, aes256KeyData };
+        }
+
         public short Flags
         {
             get;

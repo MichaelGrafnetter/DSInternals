@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DSInternals.Common.Cryptography;
+using System;
 using System.IO;
+using System.Security;
 using System.Text;
 
 namespace DSInternals.Common.Data
@@ -9,10 +11,24 @@ namespace DSInternals.Common.Data
         private const short RequiredRevision = 3;
         private const short RequiredCredentialCount = 2;
         private const short MaxOldCredentialCount = 2;
+
         public KerberosCredential(byte[] blob)
         {
             this.ReadCredentials(blob);
         }
+
+        public KerberosCredential(SecureString password, string principal, string realm)
+        {
+            // Generate salt
+            this.DefaultSalt = KerberosKeyDerivation.DeriveSalt(principal, realm);
+
+            // Generate DES keys
+            byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
+            var desKeyData = new KerberosKeyData(KerberosKeyType.DES_CBC_MD5, desKey);
+
+            this.Credentials = new KerberosKeyData[] { desKeyData };
+        }
+
         public short Flags
         {
             get;
