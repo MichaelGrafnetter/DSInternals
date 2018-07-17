@@ -220,12 +220,18 @@
             values = rawValues.Select( rawValue => rawValue.Cut(sizeof(int)) ).ToArray();
         }
 
-        public bool SetAttribute<T>(string name, Nullable<T> newValue) where T : struct
+        public bool SetAttribute<T>(string name, T? newValue) where T : struct
         {
             // TODO: This must be called from a transaction
             Columnid columnId  = this.context.Schema.FindColumnId(name);
             bool hasChanged = this.cursor.SetValue(columnId, newValue);
             return hasChanged;
+        }
+
+        public bool SetAttribute(string name, DateTime newValue)
+        {
+
+            return this.SetAttribute<long>(name, newValue.ToFileTime());
         }
 
         public bool SetAttribute(string name, byte[] newValue)

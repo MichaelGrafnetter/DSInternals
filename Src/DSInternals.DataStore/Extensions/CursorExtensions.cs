@@ -1,4 +1,5 @@
 ﻿using DSInternals.Common;
+using DSInternals.Common.Cryptography;
 using DSInternals.Common.Data;
 using Microsoft.Database.Isam;
 using Microsoft.Isam.Esent.Interop;
@@ -11,7 +12,6 @@ namespace DSInternals.DataStore
 {
     public static class CursorExtensions
     {
-        private static readonly Func<byte[], byte[], bool> byteArrayComparer = (x, y) => x.SequenceEqual(y);
         // TODO: Move some of these extensions to DirectoryObject
         // TODO: Convert return value to out or template
         public static SearchFlags RetrieveColumnAsSearchFlags(this Cursor cursor, Columnid columnId)
@@ -32,6 +32,11 @@ namespace DSInternals.DataStore
         public static AttributeOmSyntax RetrieveColumnAsAttributeOmSyntax(this Cursor cursor, Columnid columnId)
         {
             return (AttributeOmSyntax)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
+        }
+
+        public static FunctionalLevel RetrieveColumnAsFunctionalLevel(this Cursor cursor, Columnid columnId)
+        {
+            return (FunctionalLevel)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
         }
 
         public static string RetrieveColumnAsString(this Cursor cursor, Columnid columnId)
@@ -263,10 +268,10 @@ namespace DSInternals.DataStore
             //NOTE: Must be in transaction and record must be in editing state.
             var binarySidHistory = valuesToAdd.Select(sid => sid.GetBinaryForm(true));
             // TODO: Create method , bool[][]?
-            return cursor.AddMultiValue(columnId, binarySidHistory, byteArrayComparer);
+            return cursor.AddMultiValue(columnId, binarySidHistory, HashEqualityComparer.GetInstance());
         }
 
-        public static bool AddMultiValue<T>(this Cursor cursor, Columnid columnId, IEnumerable<T> valuesToAdd, Func<T, T, bool> equalityComparer)
+        public static bool AddMultiValue<T>(this Cursor cursor, Columnid columnId, IEnumerable<T> valuesToAdd, IEqualityComparer<T> equalityComparer)
         {
             //NOTE: Must be in transaction and record must be in editing state.
             bool hasChanged = false;
@@ -278,7 +283,7 @@ namespace DSInternals.DataStore
             return hasChanged;
         }
 
-        public static bool AddMultiValue<T>(this Cursor cursor, Columnid columnId, T newValue, Func<T, T, bool> equalityComparer)
+        public static bool AddMultiValue<T>(this Cursor cursor, Columnid columnId, T newValue, IEqualityComparer<T> equalityComparer)
         {
             // Note: Must be in transaction and record must be in editing state.
             ColumnAccessor record = cursor.EditRecord;
@@ -290,7 +295,7 @@ namespace DSInternals.DataStore
             while ((currentObject = record[columnId, insertAtIndex]) != DBNull.Value)
             {
                 T currentValue = (T)currentObject;
-                if (equalityComparer.Invoke(currentValue, newValue))
+                if (equalityComparer.Equals(currentValue, newValue))
                 {
                     // Record already contains the newValue to be inserted, so skip the update
                     doUpdate = false;
@@ -305,12 +310,19 @@ namespace DSInternals.DataStore
             return doUpdate;
         }
 
+        public static bool SetValue<T>(this Cursor cursor, string columnName, Nullable<T> newValue) where T : struct
+        {
+            var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
+            return cursor.SetValue(columnId, newValue);
+        }
+
         public static bool SetValue<T>(this Cursor cursor, Columnid columnId, Nullable<T> newValue) where T : struct
         {
             // Note: Must be in transaction and record must be in editing state.
             ColumnAccessor record = cursor.EditRecord;
             object currentValue = record[columnId];
-            bool hasChanged = !currentValue.Equals(newValue);
+            bool hasChanged =  currentValue != DBNull.Value ? !currentValue.Equals(newValue) : newValue != null;
+
             if (hasChanged)
             {
                 if (newValue.HasValue)
@@ -319,18 +331,26 @@ namespace DSInternals.DataStore
                 }
                 else
                 {
-                    // TODO: Test nulling an attribute
                     record[columnId] = DBNull.Value;
                 }
             }
             return hasChanged;
         }
 
-        public static bool SetValue<T>(this Cursor cursor, Columnid columnId, T newValue, Func<T, T, bool> equalityComparer) where T : class
+        public static bool SetValue<T>(this Cursor cursor, string columnName, T newValue, IEqualityComparer<T> equalityComparer) where T : class
         {
+            var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
+            return cursor.SetValue(columnId, newValue, equalityComparer);
+        }
+
+        public static bool SetValue<T>(this Cursor cursor, Columnid columnId, T newValue, IEqualityComparer<T> equalityComparer) where T : class
+        {
+            // Retrieve the current value and compare it to the new one
             ColumnAccessor record = cursor.EditRecord;
-            T currentValue = (T) record[columnId];
-            bool hasChanged = ! equalityComparer.Invoke(currentValue, newValue);
+            object currentRawValue = record[columnId];
+            T currentValue = currentRawValue != DBNull.Value ? (T) record[columnId] : null;
+            bool hasChanged = ! equalityComparer.Equals(currentValue, newValue);
+
             if (hasChanged)
             {
                 if (newValue != null)
@@ -339,27 +359,56 @@ namespace DSInternals.DataStore
                 }
                 else
                 {
-                    // TODO: Test nulling an attribute
                     record[columnId] = DBNull.Value;
                 }
             }
             return hasChanged;
+        }
 
+        public static bool SetValue(this Cursor cursor, string columnName, byte[] newValue)
+        {
+            var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
+            return cursor.SetValue(columnId, newValue);
         }
 
         public static bool SetValue(this Cursor cursor, Columnid columnId, byte[] newValue)
         {
-            return cursor.SetValue(columnId, newValue, byteArrayComparer);
+            return cursor.SetValue(columnId, newValue, HashEqualityComparer.GetInstance());
+        }
+
+        public static bool SetValue(this Cursor cursor, string columnName, string newValue)
+        {
+            var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
+            return cursor.SetValue(columnId, newValue);
         }
 
         public static bool SetValue(this Cursor cursor, Columnid columnId, string newValue)
         {
-            // TODO: Only one instance of byteArrayComparer
-            Func<string, string, bool> stringComparer = (x, y) => String.Compare(x, y) == 0;
-            return cursor.SetValue(columnId, newValue, stringComparer);
+            return cursor.SetValue(columnId, newValue, StringComparer.InvariantCulture);
         }
 
-        public static bool GotoToParentObject(this Cursor dataTableCursor, DirectorySchema schema)
+        public static bool SetValue(this Cursor cursor, string columnName, DateTime? newValue)
+        {
+            var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
+            return cursor.SetValue(columnId, newValue);
+        }
+        
+        public static bool SetValue(this Cursor cursor, Columnid columnId, DateTime? newValue)
+        {
+            long? newTimeStamp = null;
+
+            // Convert the value if there is any
+            if (newValue.HasValue)
+            {
+                // Treat the value as generalized time
+                newTimeStamp = newValue.Value.ToFileTime() / ADConstants.GeneralizedTimeCoefficient;
+            }
+            
+            // Push the value to the DB
+            return cursor.SetValue(columnId, newTimeStamp);
+        }
+
+        public static bool GotoParentObject(this Cursor dataTableCursor, DirectorySchema schema)
         {
             // TODO: Check if we are really dealing with the datatable.
             // Read parent DN Tag of the current record
@@ -368,6 +417,20 @@ namespace DSInternals.DataStore
             dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.ParentDNTag);
             // Position the cursor to the only matching record
             return dataTableCursor.GotoKey(Key.Compose(parentDNTag));
+        }
+
+        public static bool FindChildren(this Cursor dataTableCursor, DirectorySchema schema)
+        {
+            // TODO: Check if we are really dealing with the datatable.
+
+
+
+            // Read parent DN Tag of the current record
+            int parentDNTag = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.ParentDNTag)).Value;
+            // Set the index to PDNT column
+            dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.ParentDNTag);
+            // Position the cursor to the only matching record
+            dataTableCursor.FindRecords(MatchCriteria.EqualTo, Key.Compose(parentDNTag));
         }
 
         public static bool MoveToFirst(this Cursor cursor)

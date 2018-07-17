@@ -11,18 +11,23 @@
     {
         private const string EpochParameterSet = "Epoch";
         private const string UsnParameterSet = "USN";
+        private const string ExpirationParameterSet = "Expiration";
 
         [ValidateRange(DSInternals.DataStore.DomainController.UsnMinValue, DSInternals.DataStore.DomainController.UsnMaxValue)]
-        [Parameter(HelpMessage = "TODO", Mandatory = true, ParameterSetName = UsnParameterSet)]
+        [Parameter(Mandatory = true, ParameterSetName = UsnParameterSet)]
         [Alias("USN")]
         public long HighestCommittedUsn;
 
         [ValidateRange(DSInternals.DataStore.DomainController.EpochMinValue, DSInternals.DataStore.DomainController.EpochMaxValue)]
-        [Parameter(HelpMessage = "TODO", Mandatory = true, ParameterSetName = EpochParameterSet)]
+        [Parameter(Mandatory = true, ParameterSetName = EpochParameterSet)]
         [Alias("DSAEpoch")]
         public int Epoch;
 
-        [Parameter(HelpMessage = "TODO")]
+        [Parameter(Mandatory = true, ParameterSetName = ExpirationParameterSet)]
+        [Alias("Expiration", "Expire")]
+        public DateTime BackupExpiration;
+
+        [Parameter]
         public SwitchParameter Force
         {
             get;
@@ -36,6 +41,7 @@
                 return false;
             }
         }
+
         // TODO: Extract to base
         protected DirectoryAgent DirectoryAgent
         {
@@ -78,6 +84,10 @@
 
                     case UsnParameterSet:
                         this.DirectoryAgent.SetDomainControllerUsn(this.HighestCommittedUsn);
+                        break;
+
+                    case ExpirationParameterSet:
+                        this.DirectoryAgent.SetDomainControllerBackupExpiration(this.BackupExpiration);
                         break;
 
                     default:

@@ -47,6 +47,10 @@
     <Compile Include="DatabaseFlags.cs" />
     <Compile Include="DatastoreObject.cs" />
     <Compile Include="DirectoryAgent.cs" />
+    <Compile Include="DirectoryAgent.PasswordManagement.cs">
+      <DependentUpon>DirectoryAgent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Enums\FunctionalLevel.cs" />
     <Compile Include="Enums\AttributeSystemFlags.cs" />
     <Compile Include="ADConstants.cs" />
     <Compile Include="Enums\DatabaseState.cs" />

@@ -17,6 +17,7 @@
         public const long UsnMaxValue = long.MaxValue;
         public const long EpochMinValue = 1;
         public const long EpochMaxValue = int.MaxValue;
+        private const string CrossRefContainerRDN = "CN=Partitions";
 
         // List of columns in the hiddentable:
         private const string ntdsSettingsCol = "dsa_col";
@@ -29,10 +30,13 @@
         private const string stateCol = "state_col";
         private const string epochCol = "epoch_col";
         private const string flagsCol = "flags_col";
-        
+
         private Cursor systemTableCursor;
+
+        // Cache for writable attributes
         private long highestUSNCache;
         private int? epochCache;
+        private DateTime? backupExpirationCache;
 
         public DomainController(DirectoryContext context)
         {
@@ -40,26 +44,34 @@
 
             // Open the hiddentable
             this.systemTableCursor = context.OpenSystemTable();
+
             // Go to the first and only record in the hiddentable:
             this.systemTableCursor.MoveToFirst();
+
             // Load attributes from the hiddentable:
             this.NTDSSettingsDNT = this.systemTableCursor.RetrieveColumnAsInt(ntdsSettingsCol).Value;
+
             if(this.systemTableCursor.TableDefinition.Columns.Contains(osVersionMajorCol))
             {
                 // Some databases like the initial adamntds.dit or ntds.dit on Windows Server 2003 do not contain the OS Version
                 this.OSVersionMinor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMinorCol);
                 this.OSVersionMajor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMajorCol);
             }
+
             if (this.systemTableCursor.TableDefinition.Columns.Contains(epochCol))
             {
                 // This is a new feature since Windows Server 2008
                 this.epochCache = this.systemTableCursor.RetrieveColumnAsInt(epochCol);
             }
+
             if (this.systemTableCursor.TableDefinition.Columns.Contains(usnAtIfmCol))
             {
                 this.UsnAtIfm = this.systemTableCursor.RetrieveColumnAsLong(usnAtIfmCol);
             }
-            this.BackupExpiration = this.systemTableCursor.RetrieveColumnAsGeneralizedTime(backupExpirationCol);
+
+            // Load and cache the backup expiration time
+            this.backupExpirationCache = this.systemTableCursor.RetrieveColumnAsGeneralizedTime(backupExpirationCol);
+
             this.BackupUsn = this.systemTableCursor.RetrieveColumnAsLong(backupUsnCol);
             this.State = (DatabaseState) this.systemTableCursor.RetrieveColumnAsInt(stateCol).Value;
             byte[] binaryFlags = this.systemTableCursor.RetrieveColumnAsByteArray(flagsCol);
@@ -76,6 +88,7 @@
                 DirectorySchema schema = context.Schema;
                 dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.DNTag);
                 bool ntdsFound = dataTableCursor.GotoKey(Key.Compose(this.NTDSSettingsDNT));
+
                 // Load data from the NTDS Settings object
                 this.InvocationId = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.InvocationId)).Value;
                 this.DsaGuid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGUID)).Value;
@@ -91,10 +104,13 @@
                 this.SchemaNamingContext = context.DistinguishedNameResolver.Resolve(this.SchemaNamingContextDNT);
 
                 // Goto DC object (parent of NTDS):
-                bool dcFound = dataTableCursor.GotoToParentObject(schema);
+                bool dcFound = dataTableCursor.GotoParentObject(schema);
+                
                 // Load data from the DC object
+                
                 // Load DC name:
                 string dcName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.CommonName));
+                
                 // DC name is null in the initial database, so use NTDS Settings object's CN instead
                 this.Name = dcName ?? ntdsName;
 
@@ -106,9 +122,9 @@
                 this.ServerReferenceDNT = context.LinkResolver.GetLinkedDNTag(dcDNTag, CommonDirectoryAttributes.ServerReference);
 
                 // Goto Servers object (parent of DC):
-                bool serversFound = dataTableCursor.GotoToParentObject(schema);
+                bool serversFound = dataTableCursor.GotoParentObject(schema);
                 // Goto Site object (parent of servers):
-                bool siteFound = dataTableCursor.GotoToParentObject(schema);
+                bool siteFound = dataTableCursor.GotoParentObject(schema);
                 // Load data from the Site object
                 if(siteFound)
                 {
@@ -133,6 +149,9 @@
 
                     // Load domain naming context:
                     this.DomainNamingContext = context.DistinguishedNameResolver.Resolve(this.DomainNamingContextDNT.Value);
+
+                    // Load the domain functional level
+                    this.DomainMode = dataTableCursor.RetrieveColumnAsFunctionalLevel(schema.FindColumnId(CommonDirectoryAttributes.FunctionalLevel));
                 }
 
                 // Goto server object in domain partition
@@ -142,6 +161,17 @@
                     this.OSName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.OperatingSystemName));
                     this.ServerReference = context.DistinguishedNameResolver.Resolve(this.ServerReferenceDNT.Value);
                 }
+
+                // Construct crossRefContainer DN (CN=Partitions,CN=Configuration,...)
+                var crossRefContainer = new DistinguishedName(CrossRefContainerRDN);
+                crossRefContainer.AddParent(this.ConfigurationNamingContext);
+
+                // Goto crossRefContainer
+                var crossRefContainerDNT = context.DistinguishedNameResolver.Resolve(crossRefContainer);
+                bool crossRefContainerFound = dataTableCursor.GotoKey(Key.Compose(crossRefContainerDNT));
+
+                // Read the forest functional level from the crossRefContainer object we just located
+                this.ForestMode = dataTableCursor.RetrieveColumnAsFunctionalLevel(schema.FindColumnId(CommonDirectoryAttributes.FunctionalLevel));
             }
         }
 
@@ -209,6 +239,24 @@
         }
 
         /// <summary>
+        /// Gets the mode that this domain is operating in.
+        /// </summary>
+        public FunctionalLevel DomainMode
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the mode that this forest is operating in.
+        /// </summary>
+        public FunctionalLevel ForestMode
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// DSA Database Epoch
         /// </summary>
         public int? Epoch
@@ -267,10 +315,26 @@
             private set;
         }
 
+        /// <summary>
+        /// Backup expiration time.
+        /// </summary>
         public DateTime? BackupExpiration
         {
-            get;
-            private set;
+            get
+            {
+                return this.backupExpirationCache;
+            }
+
+            set
+            {
+                // Update table
+                this.systemTableCursor.BeginEditForUpdate();
+                this.systemTableCursor.SetValue(backupExpirationCol, value);
+                this.systemTableCursor.AcceptChanges();
+
+                // Cache the value
+                this.backupExpirationCache = value;
+            }
         }
 
         /// <summary>
@@ -340,6 +404,7 @@
                 this.systemTableCursor.BeginEditForUpdate();
                 this.systemTableCursor.EditRecord[highestCommitedUsnCol] = value;
                 this.systemTableCursor.AcceptChanges();
+
                 // Cache the value
                 this.highestUSNCache = value;
             }

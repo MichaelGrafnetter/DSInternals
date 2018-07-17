@@ -18,6 +18,7 @@
         public const string DN = "distinguishedName";
         public const string DNSHostName = "dNSHostName";
         public const string DNTag = "DNT";
+        public const string FunctionalLevel = "msDS-Behavior-Version";
         public const string NamingContextDNTag = "NCDNT";
         public const string DomainComponent = "dc";
         public const string DomainNamingContexts = "msDS-HasDomainNCs";
@@ -78,6 +79,7 @@
         public const string Options = "options";
         public const string OrganizationalUnitName = "ou";
         public const string ParentDNTag = "PDNT";
+        public const string PasswordLastSet = "pwdLastSet";
         public const string PEKList = "pekList";
         public const string PEKChangeInterval = "pekKeyChangeInterval";
         public const string PKIRoamingTimeStamp = "msPKIRoamingTimeStamp";
