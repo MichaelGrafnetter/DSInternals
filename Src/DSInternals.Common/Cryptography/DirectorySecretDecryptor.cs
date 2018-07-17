@@ -76,6 +76,27 @@ namespace DSInternals.Common.Cryptography
             return result;
         }
 
+        public byte[] EncryptHashHistory(byte[][] hashHistory, int rid)
+        {
+            Validator.AssertNotNull(hashHistory, "hashHistory");
+
+            int expectedBufferLength = hashHistory.Length * NTHash.HashSize;
+
+            using (var buffer = new MemoryStream(expectedBufferLength))
+            {
+                // Encryption layer 1: Encrypt the individual hashes
+                foreach(byte[] hash in hashHistory)
+                {
+                    byte[] encryptedHash = EncryptUsingDES(hash, rid);
+                    buffer.Write(encryptedHash, 0, encryptedHash.Length);
+                }
+
+                // Encryption layer 2: Encrypt the entire hash history
+                byte[] encryptedHashHistory = this.EncryptSecret(buffer.ToArray());
+                return encryptedHashHistory;
+            }
+        }
+
         protected static byte[] DecryptUsingDES(byte[] encryptedHash, int rid)
         {
             byte[] decryptedHash;
@@ -104,12 +125,12 @@ namespace DSInternals.Common.Cryptography
             return DecryptUsingRC4(data, salt, encryptionKey, saltHashRounds);
         }
 
-        protected static byte[] DecryptUsingAES(byte[] data, byte[] iv, byte[] key)
+        protected static byte[] DecryptUsingAES(byte[] data, byte[] iv, byte[] key, PaddingMode padding)
         {
-            using(var aes = AesManaged.Create())
+            using(var aes = Aes.Create())
             {
                 aes.Mode = CipherMode.CBC;
-                aes.Padding = PaddingMode.Zeros;
+                aes.Padding = padding;
                 using(var decryptor = aes.CreateDecryptor(key, iv))
                 {
                     using (var inputStream = new MemoryStream(data, false))
@@ -127,12 +148,12 @@ namespace DSInternals.Common.Cryptography
             }
         }
 
-        protected static byte[] EncryptUsingAES(byte[] data, byte[] iv, byte[] key)
+        protected static byte[] EncryptUsingAES(byte[] data, byte[] iv, byte[] key, PaddingMode padding)
         {
-            using (var aes = AesManaged.Create())
+            using (var aes = Aes.Create())
             {
                 aes.Mode = CipherMode.CBC;
-                aes.Padding = PaddingMode.Zeros;
+                aes.Padding = padding;
                 using (var encryptor = aes.CreateEncryptor(key, iv))
                 {
                     using (var inputStream = new MemoryStream(data, false))
@@ -153,7 +174,7 @@ namespace DSInternals.Common.Cryptography
         protected static byte[] ComputeMD5(byte[] key, byte[] salt, int saltHashRounds = DefaultSaltHashRounds)
         {
             // TODO: Test that saltHashRounds >= 1
-            using (var md5 = new MD5CryptoServiceProvider())
+            using (var md5 = MD5.Create())
             {
                 // Hash key
                 md5.TransformBlock(key, 0, key.Length, null, 0);

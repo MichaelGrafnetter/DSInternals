@@ -18,6 +18,32 @@ namespace DSInternals.DataStore.Test
             string expected = "04b7b3fd6df689af9d6837e840abdc8c";
             Assert.AreEqual(expected, pek.CurrentKey.ToHex());
         }
+
+        [TestMethod]
+        public void PasswordEncryptionKey_DataStoreEncryptPEK_W2k()
+        {
+            // Win 2000 - Win 2012 R2
+            byte[] encryptedPEK = "020000000100000042b1f49dbb723edff3b865a4d28e3afbf215961695225991e991d429a02ad382bd89214319f61e7eb4620e89b42ddba3d0de84c0603d6e34ae2fccf79eb9374a9a08d3b1".HexToBinary();
+            byte[] bootKey = "41e34661faa0d182182f6ddf0f0ca0d1".HexToBinary();
+            byte[] bootKey2 = "abcdef0123456789abcdef0123456780".HexToBinary();
+
+            // Decrypt
+            var pek = new DataStoreSecretDecryptor(encryptedPEK, bootKey);
+
+            // Re-encrypt with a different boot key
+            byte[] encryptedPEK2 = pek.ToByteArray(bootKey2);
+
+            // And decrypt again with the new boot key
+            var pek2 = new DataStoreSecretDecryptor(encryptedPEK2, bootKey2);
+
+            // Check if the new PEK looks like the original one
+            Assert.AreEqual(pek.Version, pek2.Version);
+            Assert.AreEqual(pek.LastGenerated, pek2.LastGenerated);
+            Assert.AreEqual(pek.EncryptionType, pek2.EncryptionType);
+            Assert.AreEqual(pek.CurrentKeyIndex, pek2.CurrentKeyIndex);
+            Assert.AreEqual(pek.CurrentKey.ToHex(), pek2.CurrentKey.ToHex());
+        }
+
         [TestMethod]
         public void PasswordEncryptionKey_DataStoreDecryptPEK_W2016()
         {
@@ -27,6 +53,31 @@ namespace DSInternals.DataStore.Test
             var pek = new DataStoreSecretDecryptor(encryptedPEK, bootKey);
             string expected = "6A35D3FC0E9949135463AB766CAC7DBB";
             Assert.AreEqual(expected, pek.CurrentKey.ToHex(true));
+        }
+
+        [TestMethod]
+        public void PasswordEncryptionKey_DataStoreEncryptPEK_W2016()
+        {
+            // Win 2016 TP4+
+            byte[] encryptedPEK = "03000000010000008ACED06423573C329BECD77936128FD61FD3892FAC724D4D24B2F4A5DA48A72B5472BDCB7FB6EEFA4884CDC9B2D2A835931A3E67B434DC766051A28B73DE385285B19961E0DC0CF661BA0AC3B3DD185D00000000000000000000000000000000".HexToBinary();
+            byte[] bootKey = "c0f2efe014aeda56da739a22ae9e9893".HexToBinary();
+            byte[] bootKey2 = "abcdef0123456789abcdef0123456780".HexToBinary();
+
+            // Decrypt
+            var pek = new DataStoreSecretDecryptor(encryptedPEK, bootKey);
+
+            // Re-encrypt with a different boot key
+            byte[] encryptedPEK2 = pek.ToByteArray(bootKey2);
+
+            // And decrypt again with the new boot key
+            var pek2 = new DataStoreSecretDecryptor(encryptedPEK2, bootKey2);
+
+            // Check if the new PEK looks like the original one
+            Assert.AreEqual(pek.Version, pek2.Version);
+            Assert.AreEqual(pek.LastGenerated, pek2.LastGenerated);
+            Assert.AreEqual(pek.EncryptionType, pek2.EncryptionType);
+            Assert.AreEqual(pek.CurrentKeyIndex, pek2.CurrentKeyIndex);
+            Assert.AreEqual(pek.CurrentKey.ToHex(), pek2.CurrentKey.ToHex());
         }
 
         [TestMethod]
@@ -103,7 +154,7 @@ namespace DSInternals.DataStore.Test
         [TestMethod]
         public void PasswordEncryptionKey_DataStoreNTHash_W2016_Encrypt()
         {
-            // Win 2000 - Win 2012 R2
+            // Win 2016
             byte[] originalHash = "92937945B518814341DE3F726500D4FF".HexToBinary();
             byte[] binaryPek = "56d98148ec91d111905a00c04fc2d4cfd02cd74ef843d1010000000001000000000000006a35d3fc0e9949135463ab766cac7dbb0c0c0c0c0c0c0c0c0c0c0c0ca93445b678ce5fbe02de23c3c71ff800".HexToBinary();
             int rid = 500;
@@ -118,7 +169,7 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStoreNTHashHistory_W2k()
+        public void PasswordEncryptionKey_DataStoreNTHashHistory_W2k_Decrypt()
         {
             byte[] binaryPek = "56d98148ec91d111905a00c04fc2d4cfb0b0f777efcece0100000000010000000000000004b7b3fd6df689af9d6837e840abdc8c".HexToBinary();
             var pek = new DataStoreSecretDecryptor(binaryPek, PekListVersion.W2k);
@@ -130,7 +181,31 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStoreNTHashHistory_W2016()
+        public void PasswordEncryptionKey_DataStoreNTHashHistory_W2k_Encrypt()
+        {
+            // Prepare the input data
+            byte[] hash1 = "92937945B518814341DE3F726500D4FF".HexToBinary();
+            byte[] hash2 = "31D6CFE0D16AE931B73C59D7E0C089C0".HexToBinary();
+            byte[][] hashHistory = new byte[][] { hash1, hash2 };
+
+            int rid = 500;
+            byte[] binaryPek = "56d98148ec91d111905a00c04fc2d4cfb0b0f777efcece0100000000010000000000000004b7b3fd6df689af9d6837e840abdc8c".HexToBinary();
+            var pek = new DataStoreSecretDecryptor(binaryPek, PekListVersion.W2k);
+
+            // Encrypt and then decrypt the hash history
+            byte[] encryptedHashHistory = pek.EncryptHashHistory(hashHistory, rid);
+            byte[][] decryptedHashHistory = pek.DecryptHashHistory(encryptedHashHistory, rid);
+
+            // Compare the result with the original data
+            Assert.AreEqual(hashHistory.Length, decryptedHashHistory.Length);
+            for(int i = 0; i < hashHistory.Length; i++)
+            {
+                CollectionAssert.AreEqual(hashHistory[i], decryptedHashHistory[i]);
+            }
+        }
+
+        [TestMethod]
+        public void PasswordEncryptionKey_DataStoreNTHashHistory_W2016_Decrypt()
         {
             byte[] binaryPek = "56d98148ec91d111905a00c04fc2d4cfd02cd74ef843d1010000000001000000000000006a35d3fc0e9949135463ab766cac7dbb0c0c0c0c0c0c0c0c0c0c0c0ca93445b678ce5fbe02de23c3c71ff800".HexToBinary();
             var pek = new DataStoreSecretDecryptor(binaryPek, PekListVersion.W2016);
@@ -142,7 +217,7 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStoreSupplementalCredentials_Decrypt_W2016()
+        public void PasswordEncryptionKey_DataStoreSupplementalCredentials_W2016_Decrypt()
         {
             byte[] binaryPek = "56d98148ec91d111905a00c04fc2d4cfd02cd74ef843d1010000000001000000000000006a35d3fc0e9949135463ab766cac7dbb0c0c0c0c0c0c0c0c0c0c0c0ca93445b678ce5fbe02de23c3c71ff800".HexToBinary();
             var pek = new DataStoreSecretDecryptor(binaryPek, PekListVersion.W2016);

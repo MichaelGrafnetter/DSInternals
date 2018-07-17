@@ -419,20 +419,6 @@ namespace DSInternals.DataStore
             return dataTableCursor.GotoKey(Key.Compose(parentDNTag));
         }
 
-        public static bool FindChildren(this Cursor dataTableCursor, DirectorySchema schema)
-        {
-            // TODO: Check if we are really dealing with the datatable.
-
-
-
-            // Read parent DN Tag of the current record
-            int parentDNTag = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.ParentDNTag)).Value;
-            // Set the index to PDNT column
-            dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.ParentDNTag);
-            // Position the cursor to the only matching record
-            dataTableCursor.FindRecords(MatchCriteria.EqualTo, Key.Compose(parentDNTag));
-        }
-
         public static bool MoveToFirst(this Cursor cursor)
         {
             cursor.MoveBeforeFirst();

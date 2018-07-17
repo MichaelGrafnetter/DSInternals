@@ -124,8 +124,8 @@ namespace DSInternals.DataStore
                     decryptedSecret = DecryptUsingRC4(encryptedSecret, salt, decryptionKey);
                     break;
                 case SecretEncryptionType.DatabaseAES:
-                    byte[] decryptedSecretWithPadding = DecryptUsingAES(encryptedSecret, salt, decryptionKey);
-                    decryptedSecret = decryptedSecretWithPadding.Cut(0, secretLength);
+                    decryptedSecret = DecryptUsingAES(encryptedSecret, salt, decryptionKey, PaddingMode.PKCS7);
+                    // TODO: Check that decryptedSecret.Lenght == secretLength;
                     break;
                 default:
                     // TODO: Extract as resource
@@ -154,7 +154,7 @@ namespace DSInternals.DataStore
                     
                     // Generate and Write Salt(16B)
                     byte[] salt = new byte[SaltSize];
-                    using (var rng = RNGCryptoServiceProvider.Create())
+                    using (var rng = RandomNumberGenerator.Create())
                     {
                         rng.GetBytes(salt);
                     }
@@ -166,7 +166,7 @@ namespace DSInternals.DataStore
                     switch (this.EncryptionType)
                     {
                         case SecretEncryptionType.DatabaseAES:
-                            encryptedSecret = EncryptUsingAES(secret, salt, this.CurrentKey);
+                            encryptedSecret = EncryptUsingAES(secret, salt, this.CurrentKey, PaddingMode.PKCS7);
                             // Write the Secret Length (4B)
                             writer.Write(secret.Length);
                             break;
@@ -230,10 +230,11 @@ namespace DSInternals.DataStore
             }
         }
 
-        private static byte[] EncryptPekList(byte[] cleartextBlob, byte[] bootKey = null)
+        private static byte[] EncryptPekList(byte[] cleartextBlob, PekListVersion pekListVersion, byte[] bootKey = null)
         {
             // Do not encrypt by default.
             PekListFlags flags = PekListFlags.Clear;
+
             if (bootKey != null)
             {
                 // Encrypt if the boot key is provided.
@@ -241,24 +242,23 @@ namespace DSInternals.DataStore
                 flags = PekListFlags.Encrypted;
             }
 
-            int bufferSize = EncryptedPekListOffset + cleartextBlob.Length;
-            byte[] buffer = new byte[bufferSize];
-
             // Generate random salt
             byte[] salt = new byte[SaltSize];
-            using (var rng = new RNGCryptoServiceProvider())
+            using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(salt);
             }
-            using (MemoryStream stream = new MemoryStream(buffer))
+
+            // Encode the data structure
+            using (MemoryStream stream = new MemoryStream())
             {
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     // Header
-                    // TODO: Write version corresponding to the DB or original version!!!
-                    writer.Write((uint)PekListVersion.W2k);
+                    writer.Write((uint)pekListVersion);
                     writer.Write((uint)flags);
                     writer.Write(salt);
+
                     // Data
                     switch(flags)
                     {
@@ -266,14 +266,26 @@ namespace DSInternals.DataStore
                             writer.Write(cleartextBlob);
                             break;
                         case PekListFlags.Encrypted:
-                            byte[] encryptedBlob = EncryptUsingRC4(cleartextBlob, salt, bootKey, BootKeySaltHashRounds);
+                            byte[] encryptedBlob;
+                            switch (pekListVersion)
+                            {
+                                case PekListVersion.W2016:
+                                    encryptedBlob = EncryptUsingAES(cleartextBlob, salt, bootKey, PaddingMode.Zeros);
+                                    break;
+                                case PekListVersion.W2k:
+                                    encryptedBlob = EncryptUsingRC4(cleartextBlob, salt, bootKey, BootKeySaltHashRounds);
+                                    break;
+                                default:
+                                    // TODO: Extract as a resource.
+                                    throw new FormatException("Unsupported PEK list version.");
+                            }
                             writer.Write(encryptedBlob);
                             break;
                     }
                 }
-            }
-            return buffer;
 
+                return stream.ToArray();
+            }
         }
 
         private byte[] DecryptPekList(byte[] encryptedBlob, byte[] bootKey)
@@ -309,7 +321,7 @@ namespace DSInternals.DataStore
                             decryptedPekList = DecryptUsingRC4(encryptedPekList, salt, bootKey, BootKeySaltHashRounds);
                             break;
                         case PekListVersion.W2016:
-                            decryptedPekList = DecryptUsingAES(encryptedPekList, salt, bootKey);
+                            decryptedPekList = DecryptUsingAES(encryptedPekList, salt, bootKey, PaddingMode.Zeros);
                             break;
                         default:
                             // TODO: Extract as resource.
@@ -328,6 +340,11 @@ namespace DSInternals.DataStore
             return decryptedPekList;
         }
 
+        /// <summary>
+        /// Generates a binary version of the password encryption key list.
+        /// </summary>
+        /// <param name="bootKey">Optional boot key.</param>
+        /// <returns>Binary PEK list, optionally encrypted.</returns>
         public byte[] ToByteArray(byte[] bootKey = null)
         {
             if (this.Keys.Length == 0)
@@ -355,7 +372,8 @@ namespace DSInternals.DataStore
                     }
                 }
             }
-            byte[] encryptedPekList = EncryptPekList(buffer, bootKey);
+            
+            byte[] encryptedPekList = EncryptPekList(buffer, this.Version, bootKey);
             return encryptedPekList;
         }
     }
