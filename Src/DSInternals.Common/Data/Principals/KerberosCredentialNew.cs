@@ -14,13 +14,19 @@ namespace DSInternals.Common.Data
 
         public KerberosCredentialNew(byte[] blob)
         {
+            Validator.AssertNotNull(blob, "blob");
             this.ReadCredentials(blob);
         }
 
-        public KerberosCredentialNew(SecureString password, string principal, string realm)
+        public KerberosCredentialNew(SecureString password, string principal, string realm) :
+            this(password, KerberosKeyDerivation.DeriveSalt(principal, realm))
         {
-            // Generate salt
-            this.DefaultSalt = KerberosKeyDerivation.DeriveSalt(principal, realm);
+        }
+
+        public KerberosCredentialNew(SecureString password, string salt)
+        {
+            Validator.AssertNotNull(password, "password");
+            Validator.AssertNotNull(salt, "salt");
 
             // Generate AES keys
             this.DefaultIterationCount = KerberosKeyDerivation.DefaultIterationCount;

@@ -58,6 +58,7 @@
     <Compile Include="Commands\Datastore\DisableADDBAccountCommand.cs" />
     <Compile Include="Commands\Datastore\GetADDBKdsRootKeyCommand.cs" />
     <Compile Include="Commands\Datastore\EnableADDBAccountCommand.cs" />
+    <Compile Include="Commands\Hash\ConvertToKerberosKeyCommand.cs" />
     <Compile Include="Commands\Hash\ConvertToNTHashDictionaryCommand.cs" />
     <Compile Include="Commands\Misc\ConvertFromADManagedPasswordBlobCommand.cs" />
     <Compile Include="Commands\Misc\GetADKeyCredential.cs" />
