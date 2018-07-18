@@ -1,4 +1,7 @@
-﻿namespace DSInternals.Common.Data
+﻿using DSInternals.Common.Cryptography;
+using System.Security;
+
+namespace DSInternals.Common.Data
 {
     // https://msdn.microsoft.com/en-us/library/cc941809.aspx
     public class KerberosKeyData
@@ -8,6 +11,15 @@
             Validator.AssertNotNull(key, "key");
             this.KeyType = keyType;
             this.Key = key;
+        }
+
+        public KerberosKeyData(KerberosKeyType type, SecureString password, string salt)
+        {
+            Validator.AssertNotNull(password, "password");
+            Validator.AssertNotNull(salt, "salt");
+
+            this.KeyType = type;
+            this.Key = KerberosKeyDerivation.DeriveKey(type, password, salt);
         }
 
         public KerberosKeyType KeyType

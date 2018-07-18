@@ -24,6 +24,16 @@
             var status = NativeMethods.CDLocateCSystem(type, out cryptoSystem);
             Validator.AssertSuccess(status);
 
+            switch(type)
+            {
+                case KerberosKeyType.DES_CBC_MD5:
+                case KerberosKeyType.DES_CBC_CRC:
+                    // Some older native implementations (including DES) ignore the salt and expect it to be already appended to the password.
+                    password = password.Copy();
+                    password.Append(salt);
+                    break;
+            }
+
             byte[] key;
             status = cryptoSystem.DeriveKey(password, salt, iterations, out key);
             Validator.AssertSuccess(status);

@@ -16,7 +16,6 @@
             string expected = "76fe3b5bda911a40";
 
             byte[] result = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, salt, iterations);
-            // The DES key generation returns an unexpected output of the right length for an unknown reason.
             Assert.AreEqual(expected, result.ToHex(false));
         }
 
