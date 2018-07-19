@@ -10,27 +10,27 @@
     /// </summary>
     /// <remarks>This structure is undocumented. Kudos to Benjamin Delpy for figuring out the most important parts of it.</remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct KerberosCryptoSystem
+    internal class KerberosCryptoSystem
     {
-        internal KerberosKeyType Type;
-        int BlockSize;
-        KerberosKeyType Type1;
-        internal int KeySize;
-        int Size;
-        int Unknown2;
-        int Unknown3;
+        internal readonly KerberosKeyType Type;
+        readonly int BlockSize;
+        readonly KerberosKeyType Type1;
+        internal readonly int KeySize;
+        readonly int Size;
+        readonly int Unknown2;
+        readonly int Unknown3;
         [MarshalAs(UnmanagedType.LPWStr)]
-        internal string AlgorithmName;
-        IntPtr Initialize;
-        IntPtr Encrypt;
-        IntPtr Decrypt;
-        IntPtr Finish;
-        private KerberosKeyDerivationFunction KeyDerivationFunction;
-        IntPtr RandomKey;
-        IntPtr Control;
-        IntPtr Unknown4;
-        IntPtr Unknown5;
-        IntPtr Unknown6;
+        internal readonly string AlgorithmName;
+        readonly IntPtr Initialize;
+        readonly IntPtr Encrypt;
+        readonly IntPtr Decrypt;
+        readonly IntPtr Finish;
+        readonly KerberosKeyDerivationFunction KeyDerivationFunction;
+        readonly IntPtr RandomKey;
+        readonly IntPtr Control;
+        readonly IntPtr Unknown4;
+        readonly IntPtr Unknown5;
+        readonly IntPtr Unknown6;
 
         delegate NtStatus KerberosKeyDerivationFunction([In] ref SecureUnicodeString password, [In] ref UnicodeString salt, int iterations, [MarshalAs(UnmanagedType.LPArray), In, Out] byte[] key);
 

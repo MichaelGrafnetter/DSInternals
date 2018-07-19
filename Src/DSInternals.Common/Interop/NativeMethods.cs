@@ -14,7 +14,6 @@ namespace DSInternals.Common.Interop
         internal const int LMHashNumBits = 128;
         internal const int LMHashNumBytes = NTHashNumBits / 8;
         internal const int LMPasswordMaxChars = 14;
-        // TODO: Validate NT Hash max chars
         internal const int NTPasswordMaxChars = 127;
 
         private const int MaxRegistryKeyClassSize = 256;
@@ -198,25 +197,7 @@ namespace DSInternals.Common.Interop
         }
 
         [DllImport(CryptDll, CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern NtStatus CDLocateCSystem(KerberosKeyType type, out IntPtr cryptoSystem);
-
-        internal static NtStatus CDLocateCSystem(KerberosKeyType type, out KerberosCryptoSystem cryptoSystem)
-        {
-            IntPtr cryptoSystemPtr;
-            NtStatus status = CDLocateCSystem(type, out cryptoSystemPtr);
-
-            if(status == NtStatus.Success)
-            {
-                cryptoSystem = (KerberosCryptoSystem)Marshal.PtrToStructure(cryptoSystemPtr, typeof(KerberosCryptoSystem));
-            }
-            else
-            {
-                // Return a blank structure
-                cryptoSystem = new KerberosCryptoSystem();
-            }
-
-            return status;
-        }
+        internal static extern NtStatus CDLocateCSystem(KerberosKeyType type, out KerberosCryptoSystem cryptoSystem);
 
         /// <summary>
         /// Creates a subkey under HKEY_USERS or HKEY_LOCAL_MACHINE and loads the data from the specified registry hive into that subkey.

@@ -70,5 +70,18 @@ namespace DSInternals.Common.Cryptography.Test
             string expected = "92937945B518814341DE3F726500D4FF";
             Assert.AreEqual(expected, result);
         }
+
+        [TestMethod]
+        public void NTHash_GenerateRandom()
+        {
+            byte[] randomHash1 = NTHash.GetRandom();
+            byte[] randomHash2 = NTHash.GetRandom();
+
+            // Check hash size
+            Assert.AreEqual(NTHash.HashSize, randomHash1.Length);
+
+            // Check that the hashes are not the same
+            Assert.AreNotEqual(randomHash1.ToHex(), randomHash2.ToHex());
+        }
     }
 }

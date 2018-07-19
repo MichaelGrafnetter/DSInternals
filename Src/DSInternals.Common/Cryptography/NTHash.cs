@@ -2,6 +2,7 @@
 {
     using DSInternals.Common.Interop;
     using System.Security;
+    using System.Security.Cryptography;
 
     // See http://msdn.microsoft.com/en-us/library/system.security.cryptography.hashalgorithm%28v=vs.110%29.aspx
     public static class NTHash
@@ -44,6 +45,16 @@
             NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(password, out hash);
             Validator.AssertSuccess(result);
             return hash;
+        }
+
+        public static byte[] GetRandom()
+        {
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                var randomHash = new byte[HashSize];
+                rng.GetBytes(randomHash);
+                return randomHash;
+            }
         }
     }
 }
