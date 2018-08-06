@@ -14,7 +14,7 @@ namespace DSInternals.Common.Interop
         internal const int LMHashNumBits = 128;
         internal const int LMHashNumBytes = NTHashNumBits / 8;
         internal const int LMPasswordMaxChars = 14;
-        internal const int NTPasswordMaxChars = 127;
+        internal const int NTPasswordMaxChars = 128;
 
         private const int MaxRegistryKeyClassSize = 256;
         private const string Advapi = "advapi32.dll";
@@ -197,7 +197,16 @@ namespace DSInternals.Common.Interop
         }
 
         [DllImport(CryptDll, CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern NtStatus CDLocateCSystem(KerberosKeyType type, out KerberosCryptoSystem cryptoSystem);
+        private static extern NtStatus CDLocateCSystem(KerberosKeyType type, out IntPtr cryptoSystem);
+
+        internal static NtStatus CDLocateCSystem(KerberosKeyType type, out KerberosCryptoSystem cryptoSystem)
+        {
+            IntPtr cryptoSystemPtr;
+            NtStatus status = CDLocateCSystem(type, out cryptoSystemPtr);
+
+            cryptoSystem = (status == NtStatus.Success) ? (KerberosCryptoSystem)Marshal.PtrToStructure(cryptoSystemPtr, typeof(KerberosCryptoSystem)) : null;
+            return status;
+        }
 
         /// <summary>
         /// Creates a subkey under HKEY_USERS or HKEY_LOCAL_MACHINE and loads the data from the specified registry hive into that subkey.

@@ -20,12 +20,5 @@ namespace DSInternals.Common.Test
             string actualHash = NTHash.ComputeHash(pwd.CurrentPassword.ToSecureString()).ToHex(false);
             Assert.AreEqual(expectedHash, actualHash);
         }
-
-        [TestMethod]
-        public void ManagedPassword_Vector2()
-        {
-            // Test PreviousPassword
-            throw new AssertInconclusiveException();
-        }
     }
 }
