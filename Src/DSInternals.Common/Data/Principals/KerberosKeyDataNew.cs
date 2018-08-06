@@ -7,6 +7,9 @@
     // https://msdn.microsoft.com/en-us/library/cc941809.aspx
     public class KerberosKeyDataNew : KerberosKeyData
     {
+        // Size: Reserved1 (2 bytes) + Reserved2 (2 bytes) + Reserved3 (4 bytes) + IterationCount (4 bytes) + KeyType (4 bytes) + KeyLength (4 bytes) + KeyOffset (4 bytes)
+        new internal const int StructureSize = sizeof(short) + sizeof(short) + sizeof(int) + sizeof(int) + sizeof(KerberosKeyType) + sizeof(int) + sizeof(int);
+
         public KerberosKeyDataNew(KerberosKeyType keyType, byte[] key, int iterationCount)
             : base(keyType, key)
         {

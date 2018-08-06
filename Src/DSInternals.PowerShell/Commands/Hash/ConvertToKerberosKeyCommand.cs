@@ -38,18 +38,6 @@
             Mandatory = false,
             Position = 2
         )]
-        [PSDefaultValue(Value = KerberosKeyType.AES256_CTS_HMAC_SHA1_96)]
-        [Alias("e", "ETYPE", "k")]
-        public KerberosKeyType KeyType
-        {
-            get;
-            set;
-        }
-
-        [Parameter(
-            Mandatory = false,
-            Position = 3
-        )]
         [Alias("i")]
         [ValidateNotNull()]
         [ValidateRange(1, int.MaxValue)]
@@ -65,11 +53,6 @@
         protected override void BeginProcessing()
         {
             // Set default values
-            if(this.KeyType == KerberosKeyType.NULL)
-            {
-                this.KeyType = KerberosKeyType.AES256_CTS_HMAC_SHA1_96;
-            }
-
             if(this.Iterations < 1)
             {
                 this.Iterations = KerberosKeyDerivation.DefaultIterationCount;
@@ -78,10 +61,16 @@
 
         protected override void ProcessRecord()
         {
-            this.WriteVerbose("Calculating Kerberos key.");
-            // TODO: Using some unsupported KerberosKeyType values will result in a strange exception.
-            var key = new KerberosKeyDataNew(this.KeyType, this.Password, this.Salt, this.Iterations);
-            this.WriteObject(key);
+            this.WriteVerbose("Calculating Kerberos keys.");
+
+            var aes256 = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, this.Password, this.Salt, this.Iterations);
+            this.WriteObject(aes256);
+
+            var aes128 = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, this.Password, this.Salt, this.Iterations);
+            this.WriteObject(aes128);
+
+            var des = new KerberosKeyDataNew(KerberosKeyType.DES_CBC_MD5, this.Password, this.Salt, this.Iterations);
+            this.WriteObject(des);
         }
         #endregion Cmdlet Overrides
     }

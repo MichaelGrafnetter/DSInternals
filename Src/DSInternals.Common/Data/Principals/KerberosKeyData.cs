@@ -6,6 +6,9 @@ namespace DSInternals.Common.Data
     // https://msdn.microsoft.com/en-us/library/cc941809.aspx
     public class KerberosKeyData
     {
+        // Size: Reserved1 (2 bytes) + Reserved2 (2 bytes) + Reserved3 (4 bytes) + KeyType (4 bytes) + KeyLength (4 bytes) + KeyOffset (4 bytes)
+        internal const int StructureSize = sizeof(short) + sizeof(short) + sizeof(int) + sizeof(KerberosKeyType) + sizeof(int) + sizeof(int);
+
         public KerberosKeyData(KerberosKeyType keyType, byte[] key)
         {
             Validator.AssertNotNull(key, "key");
@@ -38,6 +41,5 @@ namespace DSInternals.Common.Data
         {
             return string.Format("Type: {0}, Key: {1}", this.KeyType, this.Key.ToHex());
         }
-
     }
 }

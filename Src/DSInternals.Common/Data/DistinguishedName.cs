@@ -202,5 +202,15 @@
             }
             return dn;
         }
+
+        public override bool Equals(object obj)
+        {
+            // Check for null values and compare run-time types.
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            // Now simply compare the string representation of both DNs
+            return this.ToString() == obj.ToString();
+        }
     }
 }

@@ -20,6 +20,7 @@
         public const string DNTag = "DNT";
         public const string FunctionalLevel = "msDS-Behavior-Version";
         public const string NamingContextDNTag = "NCDNT";
+        public const string NamingContextName = "nCName";
         public const string DomainComponent = "dc";
         public const string DomainNamingContexts = "msDS-HasDomainNCs";
         public const string GivenName = "givenName";
@@ -63,6 +64,7 @@
         public const string Member = "member";
         public const string Name = "name";
         public const int NameId = 589825;
+        public const string NetBIOSName = "nETBIOSName";
         public const string NTHash = "unicodePwd";
         public const string NTHashHistory = "ntPwdHistory";
         public const int NTHashHistoryId = 589918;

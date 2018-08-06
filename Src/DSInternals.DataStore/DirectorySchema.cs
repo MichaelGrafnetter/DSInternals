@@ -19,6 +19,7 @@
         private const string SystemColSuffix = "_col";
         private const string SystemColIndexSuffix = "_index";
         private const char IndexNameComponentSeparator = '_';
+        private const string ParentDNTagIndex = "PDNT_index";
 
         private IDictionary<int, SchemaAttribute> attributesByInternalId;
         private IDictionary<string, SchemaAttribute> attributesByName;
@@ -154,7 +155,11 @@
                     }
                 }
             }
-        }
+
+            // Manually assign PDNT_index to PDNT_col
+            var pdnt = FindAttribute(CommonDirectoryAttributes.ParentDNTag);
+            pdnt.Index = ParentDNTagIndex;
+    }
 
         private void LoadColumnList(ColumnCollection columns)
         {

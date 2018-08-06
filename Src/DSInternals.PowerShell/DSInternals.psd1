@@ -60,15 +60,15 @@ ProcessorArchitecture = 'None'
 # TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = 'DSInternals.DSAccount.format.ps1xml',
-                   'DSInternals.DSAccount.ExportViews.format.ps1xml',
-                   'DSInternals.Kerberos.format.ps1xml',
-                   'DSInternals.PasswordQualityTestResult.format.ps1xml',
-                   'DSInternals.KdsRootKey.format.ps1xml',
-                   'DSInternals.Hash.format.ps1xml',
-                   'DSInternals.SamDomainPasswordInformation.format.ps1xml',
-                   'DSInternals.RoamedCredential.format.ps1xml',
-                   'DSInternals.KeyCredential.format.ps1xml'
+FormatsToProcess = 'DSInternals.Hash.format.ps1xml',
+                    'DSInternals.RoamedCredential.format.ps1xml',
+                    'DSInternals.Kerberos.format.ps1xml',
+                    'DSInternals.KeyCredential.format.ps1xml',
+                    'DSInternals.DSAccount.format.ps1xml',
+                    'DSInternals.DSAccount.ExportViews.format.ps1xml',
+                    'DSInternals.PasswordQualityTestResult.format.ps1xml',
+                    'DSInternals.KdsRootKey.format.ps1xml',
+                    'DSInternals.SamDomainPasswordInformation.format.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('DSInternals.PowerShell.dll')
@@ -89,7 +89,8 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
                'Set-ADDBBootKey','ConvertTo-NTHashDictionary', 'Test-PasswordQuality',
                'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
-               'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential'
+               'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
+               'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash'
 
 # Variables to export from this module
 # VariablesToExport = @()

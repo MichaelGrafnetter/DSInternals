@@ -123,8 +123,10 @@
 
                 // Goto Servers object (parent of DC):
                 bool serversFound = dataTableCursor.GotoParentObject(schema);
+
                 // Goto Site object (parent of servers):
                 bool siteFound = dataTableCursor.GotoParentObject(schema);
+
                 // Load data from the Site object
                 if(siteFound)
                 {
@@ -172,6 +174,28 @@
 
                 // Read the forest functional level from the crossRefContainer object we just located
                 this.ForestMode = dataTableCursor.RetrieveColumnAsFunctionalLevel(schema.FindColumnId(CommonDirectoryAttributes.FunctionalLevel));
+
+                // Go through all crossRef objects (children of the crossRefContainer)
+                dataTableCursor.FindChildren(schema);
+                while (dataTableCursor.MoveNext())
+                {
+                    // Find the directory partition that is associated with the current crossRef object
+                    var partitionNCNameDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextName));
+
+                    // Note that foreign crossRef objects do not have nCName set
+                    if (partitionNCNameDNT.HasValue)
+                    {
+                        // Get the DN of the target directory partition
+                        var partitionNCName = context.DistinguishedNameResolver.Resolve(partitionNCNameDNT.Value);
+
+                        // We are only interested in domain partition
+                        if (partitionNCName.Equals(this.DomainNamingContext))
+                        {
+                            // This must be the DC's domain crossRef object, so we can retrieve its NetBIOS name
+                            this.NetBIOSDomainName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.NetBIOSName));
+                        }
+                    }
+                }
             }
         }
 
@@ -451,6 +475,12 @@
         }
 
         public DistinguishedName SchemaNamingContext
+        {
+            get;
+            private set;
+        }
+
+        public string NetBIOSDomainName
         {
             get;
             private set;

@@ -2,6 +2,7 @@
 {
     using DSInternals.Common;
     using System;
+    using System.IO;
     using System.Security;
     using System.Security.Cryptography;
     using System.Text;
@@ -26,6 +27,10 @@
         /// This string is used instead of the realm name when calculating some of the hashes.
         /// </summary>
         private const string MagicRealm = "Digest";
+
+        private const byte CurrentVersion = 1;
+
+        private const byte DefaultReserved1Value = (byte)'1';
 
         /// <summary>
         /// Calculates WDigest hashes of a password.
@@ -148,6 +153,81 @@
                 result[28] = md5.ComputeHash(GetBytes(logonName.ToUpper(), MagicRealm, password));
             }
             return result;
+        }
+
+        /// <summary>
+        /// Parses the WDIGEST_CREDENTIALS structure within the supplementalCredentials attribute.
+        /// </summary>
+        /// <see>https://msdn.microsoft.com/en-us/library/cc245502.aspx</see>
+        public static byte[][] Parse(byte[] blob)
+        {
+            using (var stream = new MemoryStream(blob))
+            {
+                using (var reader = new BinaryReader(stream))
+                {
+                    // This value MUST be ignored by the recipient and MAY<22> be set to arbitrary values upon an update to the decryptedSecret attribute.
+                    byte reserved1 = reader.ReadByte();
+
+                    // This value MUST be ignored by the recipient and MUST be set to zero.
+                    byte reserved2 = reader.ReadByte();
+
+                    // This value MUST be set to 1.
+                    byte version = reader.ReadByte();
+
+                    // This value MUST be set to 29 because there are 29 hashes in the array.
+                    byte numberOfHashes = reader.ReadByte();
+
+                    // This value MUST be ignored by the recipient and MUST be set to zero. 
+                    byte[] reserved3 = reader.ReadBytes(12);
+
+                    // Process hashes:
+                    byte[][] hashes = new byte[numberOfHashes][];
+                    for (int i = 0; i < numberOfHashes; i++)
+                    {
+                        hashes[i] = reader.ReadBytes(WDigestHash.HashSize);
+                    }
+
+                    return hashes;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates the WDIGEST_CREDENTIALS structure for use within the supplementalCredentials attribute.
+        /// </summary>
+        public static byte[] Encode(byte[][] hashes)
+        {
+            Validator.AssertNotNull(hashes, "hashes");
+
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new BinaryWriter(stream))
+                {
+                    // Reserved1(1 byte): This value MUST be ignored by the recipient and MAY<23 > be set to arbitrary values upon an update to the supplementalCredentials attribute.
+                    writer.Write(DefaultReserved1Value);
+
+                    // Reserved2(1 byte): This value MUST be ignored by the recipient and MUST be set to zero.
+                    writer.Write(Byte.MinValue);
+
+                    // Version(1 byte): This value MUST be set to 1.
+                    writer.Write(CurrentVersion);
+
+                    // NumberOfHashes(1 byte): This value MUST be set to 29 because there are 29 hashes in the array.
+                    writer.Write((byte)hashes.Length);
+
+                    // Reserved3(12 bytes): This value MUST be ignored by the recipient and MUST be set to zero.
+                    writer.Write(UInt64.MinValue);
+                    writer.Write(UInt32.MinValue);
+
+                    foreach(byte[] hash in hashes)
+                    {
+                        // HashN (16 bytes)
+                        writer.Write(hash);
+                    }
+
+                    return stream.ToArray();
+                }
+            }
         }
 
         private static byte[] GetBytes(string userName, SecureString password)

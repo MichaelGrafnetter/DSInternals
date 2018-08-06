@@ -37,6 +37,12 @@
             set;
         }
 
+        public string NetBIOSDomainName
+        {
+            get;
+            set;
+        }
+
         public SecurityIdentifier DomainSid
         {
             get;

@@ -65,6 +65,8 @@
     <Compile Include="DistinguishedNameTester.cs" />
     <Compile Include="CredentialRoamingTester.cs" />
     <Compile Include="KdsRootKeyTester.cs" />
+    <Compile Include="KerberosCredentialNewTester.cs" />
+    <Compile Include="KerberosCredentialTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Cryptography\SecureStringExtensionsTester.cs" />
     <Compile Include="SecurityIdentifierExtensionsTester.cs" />

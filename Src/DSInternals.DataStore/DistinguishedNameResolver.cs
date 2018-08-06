@@ -10,7 +10,6 @@ namespace DSInternals.DataStore
     // TODO: DistinguishedNameResolver interface
     public class DistinguishedNameResolver : IDisposable
     {
-        private const string parentDNTagIndex = "PDNT_index";
         private Cursor cursor;
         private DirectorySchema schema;
         private IDictionary<int, string> dnCache;
@@ -88,7 +87,10 @@ namespace DSInternals.DataStore
             {
                 throw new ArgumentException("Empty distinguished name provided.", "dn");
             }
-            cursor.CurrentIndex = parentDNTagIndex;
+            
+            // Get the PDNT_index
+            cursor.CurrentIndex = this.schema.FindIndexName(CommonDirectoryAttributes.ParentDNTag);
+
             // Start at the root object
             int currentDNTag = ADConstants.RootDNTag;
             foreach(var component in dn.Components.Reverse())
@@ -99,14 +101,17 @@ namespace DSInternals.DataStore
                 {
                     throw new DirectoryObjectNotFoundException(dn);
                 }
+
                 // Test AttrTyp
                 int foundRdnAttId = cursor.RetrieveColumnAsInt(schema.FindColumnId(CommonDirectoryAttributes.RDNType)).Value;
                 string foundRdnAttName = schema.FindAttribute(foundRdnAttId).Name;
+
                 // Compare the found isRDN attribute with the requested one. Case insensitive.
                 if(String.Compare(component.Name, foundRdnAttName, true) != 0)
                 {
                     throw new DirectoryObjectNotFoundException(dn);
                 }
+
                 // Move to the found object
                 currentDNTag = cursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.DNTag)).Value;
             }

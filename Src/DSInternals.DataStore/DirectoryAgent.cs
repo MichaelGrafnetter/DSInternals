@@ -8,8 +8,10 @@
     using Microsoft.Database.Isam;
     using System;
     using System.Collections.Generic;
+    using System.Security;
     using System.Security.Principal;
-    public class DirectoryAgent : IDisposable
+    
+    public partial class DirectoryAgent : IDisposable
     {
         // 2^30
         public const int RidMax = 1 << 30;
@@ -47,32 +49,12 @@
             }
         }
 
-        public void ChangeBootKey(byte[] oldBootKey, byte[] newBootKey)
+        public void SetDomainControllerBackupExpiration(DateTime expirationTime)
         {
-            // Validate
-            Validator.AssertLength(oldBootKey, BootKeyRetriever.BootKeyLength, "oldBootKey");
-            if (!this.context.DomainController.DomainNamingContextDNT.HasValue)
-            {
-                // The domain object must exist
-                throw new DirectoryObjectNotFoundException("domain");
-            }
-            
-            // Execute
             using (var transaction = this.context.BeginTransaction())
             {
-                // Retrieve and decrypt
-                var domain = this.FindObject(this.context.DomainController.DomainNamingContextDNT.Value);
-                byte[] encryptedPEK;
-                domain.ReadAttribute(CommonDirectoryAttributes.PEKList, out encryptedPEK);
-                var pekList = (DataStoreSecretDecryptor) new DataStoreSecretDecryptor(encryptedPEK, oldBootKey);
-                
-                // Encrypt with the new boot key (if blank, plain encoding is done instead)
-                byte[] binaryPekList = pekList.ToByteArray(newBootKey);
-                
-                // Save the new value
-                this.dataTableCursor.BeginEditForUpdate();
-                bool hasChanged = domain.SetAttribute(CommonDirectoryAttributes.PEKList, binaryPekList);
-                this.CommitAttributeUpdate(domain, CommonDirectoryAttributes.PEKList, transaction, hasChanged, true);
+                this.context.DomainController.BackupExpiration = expirationTime;
+                transaction.Commit(true);
             }
         }
 
@@ -88,7 +70,7 @@
             {
                 var obj = new DatastoreObject(this.dataTableCursor, this.context);
                 // TODO: This probably does not work on RODCs:
-                if(obj.IsDeleted || !obj.IsWritable || !obj.IsAccount)
+                if (obj.IsDeleted || !obj.IsWritable || !obj.IsAccount)
                 {
                     continue;
                 }
@@ -133,24 +115,25 @@
 
         protected DirectorySecretDecryptor GetSecretDecryptor(byte[] bootKey)
         {
-            if (bootKey == null && ! this.context.DomainController.IsADAM)
+            if (bootKey == null && !this.context.DomainController.IsADAM)
             {
                 // This is an AD DS DB, so the BootKey is stored in the registry. Stop processing if it is not provided.
                 return null;
 
             }
-            if(this.context.DomainController.State == DatabaseState.Boot)
+
+            if (this.context.DomainController.State == DatabaseState.Boot)
             {
                 // The initial DB definitely does not contain any secrets.
                 return null;
             }
-           
+
             // HACK: Save the current cursor position, because it is shared.
             var originalLocation = this.dataTableCursor.SaveLocation();
             try
             {
                 int pekListDNT;
-                if(this.context.DomainController.IsADAM)
+                if (this.context.DomainController.IsADAM)
                 {
                     // This is a AD LDS DB, so the BootKey is stored directly in the DB.
                     // Retrieve the pekList attribute of the root object:
@@ -186,13 +169,13 @@
                 this.dataTableCursor.RestoreLocation(originalLocation);
             }
         }
-        
+
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)
         {
             Validator.AssertNotNull(bootKey, "bootKey");
             var pek = this.GetSecretDecryptor(bootKey);
             // TODO: Refactor using Linq
-            foreach(var secret in this.FindObjectsByCategory(CommonDirectoryClasses.Secret))
+            foreach (var secret in this.FindObjectsByCategory(CommonDirectoryClasses.Secret))
             {
                 yield return new DPAPIBackupKey(secret, pek);
             }
@@ -436,14 +419,19 @@
 
         protected void CommitAttributeUpdate(DatastoreObject obj, string attributeName, IsamTransaction transaction, bool hasChanged, bool skipMetaUpdate)
         {
-            if (hasChanged)
+            this.CommitAttributeUpdate(obj, new string[] { attributeName }, transaction, hasChanged, skipMetaUpdate);
+        }
+
+        protected void CommitAttributeUpdate(DatastoreObject obj, string[] attributeNames, IsamTransaction transaction, bool haveChanged, bool skipMetaUpdate)
+        {
+            if (haveChanged)
             {
                 if (!skipMetaUpdate)
                 {
                     // Increment the current USN
                     long currentUsn = ++this.context.DomainController.HighestCommittedUsn;
                     DateTime now = DateTime.Now;
-                    obj.UpdateAttributeMeta(attributeName, currentUsn, now);
+                    obj.UpdateAttributeMeta(attributeNames, currentUsn, now);
                 }
                 this.dataTableCursor.AcceptChanges();
                 transaction.Commit();
@@ -482,14 +470,14 @@
                 int? numericUac;
                 targetObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out numericUac);
 
-                if(!numericUac.HasValue)
+                if (!numericUac.HasValue)
                 {
                     // This object does not have the userAccountControl attribute, so it probably is not an account.
                     throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
                 }
 
                 var uac = (UserAccountControl)numericUac.Value;
-                if(enabled)
+                if (enabled)
                 {
                     // Clear the ADS_UF_ACCOUNTDISABLE flag
                     uac &= ~UserAccountControl.Disabled;

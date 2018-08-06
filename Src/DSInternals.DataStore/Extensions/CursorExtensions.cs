@@ -413,10 +413,25 @@ namespace DSInternals.DataStore
             // TODO: Check if we are really dealing with the datatable.
             // Read parent DN Tag of the current record
             int parentDNTag = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.ParentDNTag)).Value;
+
             // Set the index to PDNT column
-            dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.ParentDNTag);
+            dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.DNTag);
+
             // Position the cursor to the only matching record
             return dataTableCursor.GotoKey(Key.Compose(parentDNTag));
+        }
+
+        public static void FindChildren(this Cursor dataTableCursor, DirectorySchema schema)
+        {
+            // TODO: Check if we are really dealing with the datatable.
+            // Read DN Tag of the current record
+            int dnTag = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.DNTag)).Value;
+            
+            // Set the index to PDNT column to get all children pointing to the current record
+            dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.ParentDNTag);
+
+            // Position the cursor before the first child (Indexed columns: PDNT_col, name)
+            dataTableCursor.FindRecords(MatchCriteria.EqualTo, Key.ComposeWildcard(dnTag));
         }
 
         public static bool MoveToFirst(this Cursor cursor)
