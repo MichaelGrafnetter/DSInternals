@@ -65,5 +65,42 @@
             // Check binary equality
             Assert.AreEqual(blob.ToHex(), newBlob.ToHex());
         }
+
+        [TestMethod]
+        public void KerberosCredential_W2k3_Vector1()
+        {
+            byte[] blob = "030000000200000030003000500000000000000000000000030000000800000080000000000000000000000001000000080000008800000000000000000000000000000000000000000000000000000043004f004e0054004f0053004f002e0043004f004d00410064006d0069006e006900730074007200610074006f007200aed02c52204ca2ceaed02c52204ca2ce00000000000000000000000000000000".HexToBinary();
+            var credential = new KerberosCredential(blob);
+
+            // Check that the structure has been parsed correctly.
+            Assert.AreEqual("CONTOSO.COMAdministrator", credential.DefaultSalt);
+            Assert.AreEqual(2, credential.Credentials.Length);
+            Assert.AreEqual(KerberosKeyType.DES_CBC_MD5, credential.Credentials[0].KeyType);
+
+            // Serialize the structure
+            byte[] newBlob = credential.ToByteArray();
+
+            // Note that we are not expecting binary equality, because Windows Server 2003 used to add some redundand padding to the end of the structure.
+            Assert.AreEqual(blob.Length - 20, newBlob.Length);
+        }
+
+        [TestMethod]
+        public void KerberosCredential_W2k3_Vector2()
+        {
+            byte[] blob = "03000000020002004a004a007800000000000000000000000300000008000000c200000000000000000000000100000008000000ca00000000000000000000000300000008000000d200000000000000000000000100000008000000da00000000000000000000000000000000000000000000000000000043004f004e0054004f0053004f002e0043004f004d0068006f0073007400770069006e0032006b00330072003200650065002e0063006f006e0074006f0073006f002e0063006f006d00d9b33eb064e385dfd9b33eb064e385dff191e9a7b561525df191e9a7b561525d00000000000000000000000000000000".HexToBinary();
+            var credential = new KerberosCredential(blob);
+
+            // Check that the structure has been parsed correctly.
+            Assert.AreEqual("CONTOSO.COMhostwin2k3r2ee.contoso.com", credential.DefaultSalt);
+            Assert.AreEqual(2, credential.Credentials.Length);
+            Assert.AreEqual(KerberosKeyType.DES_CBC_MD5, credential.Credentials[0].KeyType);
+            Assert.AreEqual(2, credential.OldCredentials.Length);
+
+            // Serialize the structure
+            byte[] newBlob = credential.ToByteArray();
+
+            // Note that we are not expecting binary equality, because Windows Server 2003 used to add some redundand padding to the end of the structure.
+            Assert.AreEqual(blob.Length - 20, newBlob.Length);
+        }
     }
 }

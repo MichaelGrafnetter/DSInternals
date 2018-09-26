@@ -111,11 +111,8 @@
                         currentKeyValueOffset += credential.Key.Length;
                     }
 
-                    // Add optional padding
-                    for (short i = credentialCount; i < RequiredCredentialCount; i++)
-                    {
-                        writer.Write(Enumerable.Repeat(Byte.MinValue, KerberosKeyData.StructureSize).ToArray());
-                    }
+                    // Add padding (just to get the same result as Windows Server 2008)
+                    writer.Write(Enumerable.Repeat(Byte.MinValue, KerberosKeyData.StructureSize).ToArray());
 
                     // DefaultSalt (variable): The default salt value.
                     if (defaultSaltLength > 0)

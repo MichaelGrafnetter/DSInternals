@@ -4,13 +4,15 @@
     using DSInternals.Common.Properties;
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
     using System.Security;
     using System.Text;
 
-    // https://msdn.microsoft.com/en-us/library/cc245500.aspx
+    /// <summary>
+    /// Stored credentials for use in authenticating.
+    /// </summary>
+    /// <see>https://msdn.microsoft.com/en-us/library/cc245500.aspx</see>
     public class SupplementalCredentials
     {
         private const int Reserved4Size = 96;
@@ -72,6 +74,12 @@
             private set;
         }
 
+        protected byte Reserved5
+        {
+            get;
+            private set;
+        }
+
         public SupplementalCredentials(byte[] blob)
         {
             // Empty structures can be 13 and 111 bytes long, perhaps even something in between
@@ -118,7 +126,8 @@
                     this.ReadProperties(reader);
 
                     // This value SHOULD<20> be set to zero and MUST be ignored by the recipient.
-                    byte reserved5 = reader.ReadByte();
+                    // We have sometimes seen values different than 0.
+                    this.Reserved5 = reader.ReadByte();
                 }
             }
         }
@@ -183,7 +192,7 @@
                     WriteProperties(writer);
 
                     // Reserved5 (1 byte): This value SHOULD<20> be set to zero and MUST be ignored by the recipient.
-                    writer.Write(Byte.MinValue);
+                    writer.Write(this.Reserved5);
 
                     // We finally know the length of the entire structure, so we can go back and put in the right value
                     writer.Seek(LengthOffset, SeekOrigin.Begin);
@@ -256,7 +265,7 @@
         {
             var propertyNames = new List<string>();
             var propertyValues = new List<byte[]>();
-            
+
             if(this.ClearText != null)
             {
                 propertyNames.Add(PropertyCleartext);
@@ -328,7 +337,9 @@
             writer.Write((short)encodedValue.Length);
 
             // Reserved(2 bytes): This value MUST be ignored by the recipient and MAY < 22 > be set to arbitrary values on update.
-            writer.Write(UInt16.MinValue);
+            // In observed cases, Windows uses 2 for the packages list and 1 for other packages
+            short reserved = (short)(name == PropertyPackages ? 2 : 1);
+            writer.Write(reserved);
 
             // PropertyName(variable): The name of this property as a UTF - 16 encoded string.
             writer.Write(encodedName);
