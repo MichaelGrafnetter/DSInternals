@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DSInternals.PowerShell.Commands.GetADSIAccountCommand" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\ADSI\GetADSIAccountCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.ADSICommandBase">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Members>
+      <Method Name="BeginProcessing" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAABAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAgIAAAQ=</HashCode>
+      <FileName>Commands\Base\ADSICommandBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
