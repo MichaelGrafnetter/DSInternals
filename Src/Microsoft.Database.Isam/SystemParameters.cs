@@ -468,19 +468,38 @@ namespace Microsoft.Database.Isam
         /// <summary>
         /// Gets or sets a system parameter which is an integer type (int).
         /// </summary>
-        public int EnableIndexChecking
+        public bool EnableIndexChecking
         {
             get
             {
-                IntPtr val = IntPtr.Zero;
+                int numericValue = 0;
                 string ignored;
-                Api.JetGetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.EnableIndexChecking, ref val, out ignored, 0);
-                return unchecked((int)val);
+                Api.JetGetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.EnableIndexChecking, ref numericValue, out ignored, 0);
+                return Convert.ToBoolean(numericValue);
             }
 
             set
             {
-                Api.JetSetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.EnableIndexChecking, new IntPtr(value), null);
+                // int numericValue = value ? 1 : 0;
+                Api.JetSetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.EnableIndexChecking, Convert.ToInt32(value), null);
+            }
+        }
+
+        /// <summary>
+        /// Disables or enables all database engine callbacks to application provided functions.
+        /// </summary>
+        public bool DisableCallbacks
+        {
+            get
+            {
+                int numericValue = 0;
+                string ignored;
+                Api.JetGetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.DisableCallbacks, ref numericValue, out ignored, 0);
+                return Convert.ToBoolean(numericValue);
+            }
+            set
+            {
+                Api.JetSetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.DisableCallbacks, Convert.ToInt32(value), null);
             }
         }
 
