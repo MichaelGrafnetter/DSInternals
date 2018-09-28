@@ -44,13 +44,18 @@
             // Calculate NT hash
             byte[] ntHash = NTHash.ComputeHash(newPassword);
 
-            // TODO TODO TODO: Change parameter to DSAccount from DatastoreObject
-            var account = this.GetAccount(targetObject, targetObjectIdentifier, bootKey);
+            // We need to read sAMAccountName and userPrincipalName to be able to generate the supplementalCredentials.
+            string samAccountName;
+            targetObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out samAccountName);
+
+            string userPrincipalName;
+            targetObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out userPrincipalName);
+            
 
             var supplementalCredentials = new SupplementalCredentials(
                 newPassword,
-                account.SamAccountName,
-                account.UserPrincipalName,
+                samAccountName,
+                userPrincipalName,
                 this.context.DomainController.NetBIOSDomainName,
                 this.context.DomainController.Domain);
 
@@ -93,6 +98,7 @@
         {
             // Validate input
             Validator.AssertLength(newNtHash, NTHash.HashSize, "newNtHash");
+            Validator.AssertNotNull(bootKey, "bootKey");
 
             if (!targetObject.IsAccount)
             {

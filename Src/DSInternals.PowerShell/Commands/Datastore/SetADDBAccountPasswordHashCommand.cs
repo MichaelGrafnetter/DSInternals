@@ -3,7 +3,6 @@ using DSInternals.DataStore;
 using DSInternals.PowerShell.Properties;
 using System;
 using System.Management.Automation;
-using System.Security;
 
 namespace DSInternals.PowerShell.Commands
 {
@@ -24,6 +23,7 @@ namespace DSInternals.PowerShell.Commands
 
         [Parameter(Mandatory = false, ValueFromPipelineByPropertyName = true)]
         [Alias("KerberosKeys", "sc", "c")]
+        [ValidateNotNull]
         public SupplementalCredentials SupplementalCredentials
         {
             get;
