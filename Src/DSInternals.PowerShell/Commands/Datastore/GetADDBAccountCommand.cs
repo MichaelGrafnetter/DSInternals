@@ -58,10 +58,31 @@ namespace DSInternals.PowerShell.Commands
 
         private void ReturnAllAccounts(byte[] bootKey)
         {
+            // This operation might take some time so we report its status.
+            var progress = new ProgressRecord(4, "Reading accounts from AD database", "Starting...");
+            int accountCount = 0;
+
+            // Disable the progress bar as we do not know the total number of accounts.
+            progress.PercentComplete = -1;
+            this.WriteProgress(progress);
+
             foreach (var account in this.DirectoryAgent.GetAccounts(bootKey))
             {
                 this.WriteObject(account);
+                accountCount++;
+
+                // Update progress
+                if(accountCount % 10 == 0)
+                {
+                    // We do not want to change the progress too often, for performance reasons.
+                    progress.StatusDescription = String.Format("{0}+ accounts", accountCount);
+                    this.WriteProgress(progress);
+                }
             }
+
+            // Finished
+            progress.RecordType = ProgressRecordType.Completed;
+            this.WriteProgress(progress);
         }
 
         private void ReturnSingleAccount(byte[] bootKey)
