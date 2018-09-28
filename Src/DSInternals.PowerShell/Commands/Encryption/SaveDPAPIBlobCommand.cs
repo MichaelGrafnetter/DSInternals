@@ -59,7 +59,7 @@
 
         protected override void BeginProcessing()
         {
-            this.AbsoluteDirectoryPath = this.ResolveSinglePath(this.DirectoryPath);
+            this.AbsoluteDirectoryPath = this.ResolveDirectoryPath(this.DirectoryPath);
         }
 
         protected override void ProcessRecord()

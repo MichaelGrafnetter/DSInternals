@@ -42,7 +42,7 @@
                 else
                 {
                     // Offline
-                    string hivePathResolved = this.ResolveSinglePath(this.SystemHiveFilePath);
+                    string hivePathResolved = this.ResolveFilePath(this.SystemHiveFilePath);
                     bootKey = BootKeyRetriever.GetBootKey(hivePathResolved);
                 }
                 this.WriteObject(bootKey.ToHex());

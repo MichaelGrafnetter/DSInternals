@@ -1,7 +1,6 @@
 ﻿namespace DSInternals.PowerShell
 {
     using System.Collections.Generic;
-    using System.Collections.Specialized;
 
     /// <summary>
     /// Contains results of Active Directory password quality analysis.
@@ -11,66 +10,61 @@
         /// <summary>
         /// List of accounts whose passwords are stored using reversible encryption.
         /// </summary>
-        public StringDictionary ClearTextPassword = new StringDictionary();
+        public ISet<string> ClearTextPassword = new SortedSet<string>();
 
         /// <summary>
         /// List of accounts whose LM hashes are stored in the database.
         /// </summary>
-        public StringCollection LMHash = new StringCollection();
+        public ISet<string> LMHash = new SortedSet<string>();
 
         /// <summary>
         /// List of accounts that have no password set.
         /// </summary>
-        public StringCollection EmptyPassword = new StringCollection();
+        public ISet<string> EmptyPassword = new SortedSet<string>();
 
         /// <summary>
         /// List of accounts that have a weak password.
         /// </summary>
-        public StringDictionary WeakPassword = new StringDictionary();
-
-        /// <summary>
-        /// List of accounts that had a weak password.
-        /// </summary>
-        public StringDictionary WeakHistoricalPassword = new StringDictionary();
+        public ISet<string> WeakPassword = new SortedSet<string>();
 
         /// <summary>
         /// List of computer accounts with default passwords.
         /// </summary>
-        public StringCollection DefaultComputerPassword = new StringCollection();
+        public ISet<string> DefaultComputerPassword = new SortedSet<string>();
 
         /// <summary>
         /// List of accounts that do not require a password.
         /// </summary>
-        public StringCollection PasswordNotRequired = new StringCollection();
+        public ISet<string> PasswordNotRequired = new SortedSet<string>();
 
         /// <summary>
         /// List of accounts whose passwords never expire.
         /// </summary>
-        public StringCollection PasswordNeverExpires = new StringCollection();
+        public ISet<string> PasswordNeverExpires = new SortedSet<string>();
 
         /// <summary>
         /// List of accounts that are missing AES keys.
         /// </summary>
-        public StringCollection AESKeysMissing = new StringCollection();
+        public ISet<string> AESKeysMissing = new SortedSet<string>();
 
         /// <summary>
         /// List of accounts on which preauthentication is not enforced.
         /// </summary>
-        public StringCollection PreAuthNotRequired = new StringCollection();
+        public ISet<string> PreAuthNotRequired = new SortedSet<string>();
 
         /// <summary>
         /// List of accounts that can only be authenticated using DES.
         /// </summary>
-        public StringCollection DESEncryptionOnly = new StringCollection();
+        public ISet<string> DESEncryptionOnly = new SortedSet<string>();
 
         /// <summary>
         /// List of administrative accounts that can be delegated.
         /// </summary>
-        public StringCollection DelegatableAdmins = new StringCollection();
+        public ISet<string> DelegatableAdmins = new SortedSet<string>();
 
         /// <summary>
         /// List of collections of accounts with the same password hashes.
         /// </summary>
-        public IList<StringCollection> DuplicatePasswordGroups = new List<StringCollection>();
+        public IEnumerable<ISet<string>> DuplicatePasswordGroups = new List<SortedSet<string>>();
     }
 }

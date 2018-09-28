@@ -16,13 +16,7 @@
         /// <summary>
         /// Gets the NT hash of an empty password.
         /// </summary>
-        public static byte[] Empty
-        {
-            get
-            {
-                return ComputeHash(string.Empty);
-            }
-        }
+        public static readonly byte[] Empty = ComputeHash(string.Empty);
 
         public static byte[] ComputeHash(SecureString password)
         {

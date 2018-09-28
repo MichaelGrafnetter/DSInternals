@@ -74,7 +74,7 @@ FormatsToProcess = 'DSInternals.Hash.format.ps1xml',
 NestedModules = @('DSInternals.PowerShell.dll')
 
 # Functions to export from this module
-# FunctionsToExport = @()
+FunctionsToExport = @()
 
 # Cmdlets to export from this module
 CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswordHash',
@@ -93,7 +93,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash'
 
 # Variables to export from this module
-# VariablesToExport = @()
+VariablesToExport = @()
 
 # Aliases to export from this module
 AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',

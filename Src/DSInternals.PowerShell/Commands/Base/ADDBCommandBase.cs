@@ -61,8 +61,8 @@
             try
             {
                 // Resolve possibly relative paths to absolute paths:
-                string dbPathResolved = this.ResolveSinglePath(this.DBPath);
-                string logPathResolved = this.ResolveSinglePath(this.LogPath);
+                string dbPathResolved = this.ResolveFilePath(this.DBPath);
+                string logPathResolved = this.ResolveDirectoryPath(this.LogPath);
                 this.DirectoryContext = new DirectoryContext(dbPathResolved, this.ReadOnly, logPathResolved);
             }
             catch(SessionStateException ex)
