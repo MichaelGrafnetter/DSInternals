@@ -208,8 +208,7 @@
             // Process duplicate passwords
             if (!this.SkipDuplicatePasswordTest.IsPresent)
             {
-
-                this.result.DuplicatePasswordGroups = this.hashToAccountMap.Values.Where(list => list.Count > 1).ToList();
+                this.result.DuplicatePasswordGroups = this.hashToAccountMap.Values.Where(set => set.Count > 1).ToList();
             }
 
             // Process Weak Passwords

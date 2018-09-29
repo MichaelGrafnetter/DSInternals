@@ -12,8 +12,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This package is shared between all other DSInternals packages. It contains implementations of common hash functions used by Windows, including NT hash, LM hash and OrgId hash. It also contains methods for SysKey/BootKey retrieval.</description>
     <summary>This package is shared between all other DSInternals packages.</summary>
-    <releaseNotes>Fixed a bug in roamed credentials processing.</releaseNotes>
-    <copyright>Copyright (c) 2015-2017 Michael Grafnetter. All rights reserved.</copyright>
+    <releaseNotes>Added support for kerberos key derivation and WDigest hash calculation.</releaseNotes>
+    <copyright>Copyright (c) 2015-2018 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security</tags>
   </metadata>
 </package>

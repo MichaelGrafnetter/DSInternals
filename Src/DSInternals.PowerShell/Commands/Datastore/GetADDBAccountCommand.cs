@@ -9,17 +9,16 @@ using System.Management.Automation;
 namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, "ADDBAccount")]
-    // TODO: output type
-    // TODO: Accept *
     [OutputType(typeof(DSAccount))]
     public class GetADDBAccountCommand : ADDBPrincipalCommandBase
     {
-        protected const string parameterSetAll = "All";
+        private const int ProgressReportingInterval = 25;
+        protected const string ParameterSetAll = "All";
 
         [Parameter(
             Mandatory = true,
             HelpMessage = "TODO",
-            ParameterSetName = parameterSetAll
+            ParameterSetName = ParameterSetAll
         )]
         [Alias("AllAccounts", "ReturnAllAccounts")]
         public SwitchParameter All
@@ -46,7 +45,7 @@ namespace DSInternals.PowerShell.Commands
         {
             // TODO: Exception handling: Object not found, malformed DN, ...
             // TODO: Map DSAccount to transfer object
-            if(this.ParameterSetName == parameterSetAll)
+            if(this.ParameterSetName == ParameterSetAll)
             {
                 this.ReturnAllAccounts(this.BootKey);
             }
@@ -72,7 +71,7 @@ namespace DSInternals.PowerShell.Commands
                 accountCount++;
 
                 // Update progress
-                if(accountCount % 10 == 0)
+                if(accountCount % ProgressReportingInterval == 1)
                 {
                     // We do not want to change the progress too often, for performance reasons.
                     progress.StatusDescription = String.Format("{0}+ accounts", accountCount);

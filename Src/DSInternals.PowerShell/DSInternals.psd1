@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.23'
+ModuleVersion = '3.0'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -87,7 +87,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                'Get-ADReplAccount', 'ConvertTo-Hex', 'ConvertTo-KerberosKey',
                'ConvertFrom-ADManagedPasswordBlob',
                'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
-               'Set-ADDBBootKey','ConvertTo-NTHashDictionary', 'Test-PasswordQuality',
+               'Set-ADDBBootKey', 'Test-PasswordQuality',
                'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
                'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
                'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash'
@@ -133,7 +133,18 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed 2 minor bugs in the Test-PasswordQuality cmdlet.
+- Added the Set-ADDBAccountPassword and Set-ADDBAccountPasswordHash for offline password modification.
+- The Test-PasswordQuality cmdlet now supports NTLM hash list from haveibeenpwned.com.
+- Added the Get-ADKeyCredential for linked credential generation (AKA Windows Hello for Business).
+- The Get-ADDBAccount, Get-ADReplAccount and Get-ADSIAccount cmdlets now display linked credentials.
+- Databases from Windows Server 2016 can now be read on non-DCs.
+- Added the ConvertTo-KerberosKey cmdlet for key generation.
+- The Save-DPAPIBlob now generates scripts for mimikatz.
+- The Save-DPAPIBlob cmdlet now accepts pipeline input from both Get-ADDBBackupKey and ADDBAccount cmdlets.
+- Added Views JohnNTHistory, HashcatNTHistory and NTHashHistory.
+- The Get-ADDBDomainController cmdlet now displays domain and forest functional levels.
+- The Set-ADDBDomainController cmdlet can now be used to modify backup expiration.
+- The Get-ADDBAccount cmdlet now reports progress when retrieving multiple accounts.
 "@
     } # End of PSData hashtable
 

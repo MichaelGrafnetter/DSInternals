@@ -1,3 +1,22 @@
+Version 3.0
+- [Module] Added the Set-ADDBAccountPassword and Set-ADDBAccountPasswordHash for offline password modification.
+- [Module] The Test-PasswordQuality cmdlet now supports NTLM hash list from haveibeenpwned.com.
+- [Module] Added the Get-ADKeyCredential for linked credential generation (AKA Windows Hello for Business).
+- [Module] The Get-ADDBAccount, Get-ADReplAccount and Get-ADSIAccount cmdlets now display linked credentials.
+- [Module] Databases from Windows Server 2016 can now be read on non-DCs.
+- [Module] Added the ConvertTo-KerberosKey cmdlet for key generation.
+- [Module] The Save-DPAPIBlob now generates scripts for mimikatz.
+- [Module] The Save-DPAPIBlob cmdlet now accepts pipeline input from both Get-ADDBBackupKey and ADDBAccount cmdlets.
+- [Module] Added Views JohnNTHistory, HashcatNTHistory and NTHashHistory.
+- [Module] The Get-ADDBDomainController now displays domain and forest functional levels.
+- [Module] The Set-ADDBDomainController can now be used to modify backup expiration.
+- [Module] The Get-ADDBAccount cmdlet now reports progress when retrieving multiple accounts.
+- [Module] Removed the ConvertTo-NTHashDictionary cmdlet as its functionality had been integrated into Test-PasswordQuality.
+- [Framework] Added support for offline password changes.
+- [Framework] Added support for kerberos key derivation.
+- [Framework] Added support for WDigest hash calculation.
+- [Framework] Minor bug fixes.
+
 Version 2.23
 - [Module] The Test-PasswordQuality now supports accounts that require smart card authentication.
 - [Module] Fixed a bug in in the processing of the SkipDuplicatePasswordTest switch of the Test-PasswordQuality cmdlet.
