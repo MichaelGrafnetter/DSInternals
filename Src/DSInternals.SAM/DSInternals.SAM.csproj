@@ -42,10 +42,13 @@
     <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Interop\Enums\LsaPolicyAccessMask.cs" />
     <Compile Include="Interop\Enums\SamCommonAccessMask.cs" />
     <Compile Include="Interop\Enums\SamDomainAccessMask.cs" />
+    <Compile Include="Interop\Enums\LsaPolicyInformationClass.cs" />
     <Compile Include="Interop\Enums\SamDomainInformationClass.cs" />
     <Compile Include="Interop\Enums\SamSidType.cs" />
+    <Compile Include="Interop\SafeHandles\SafeLsaPolicyHandle.cs" />
     <Compile Include="Interop\SafeHandles\SafeRpcAuthIdentityHandle.cs" />
     <Compile Include="Interop\SafeHandles\SafeSamEnumerationBufferPointer.cs" />
     <Compile Include="Interop\SafeHandles\SafeSamPointer.cs" />
@@ -53,12 +56,19 @@
     <Compile Include="Interop\Enums\SamServerAccessMask.cs" />
     <Compile Include="Interop\Enums\SamUserAccessMask.cs" />
     <Compile Include="Interop\Enums\SamUserInformationClass.cs" />
-    <Compile Include="Interop\Structs\SamDomainPasswordInformation.cs" />
+    <Compile Include="Wrappers\LsaDomainInformation.cs" />
+    <Compile Include="Wrappers\LsaDnsDomainInformation.cs" />
+    <Compile Include="Interop\Structs\LsaMachineAccountInformationNative.cs" />
+    <Compile Include="Interop\Structs\LsaDomainInformationNative.cs" />
+    <Compile Include="Interop\Structs\LsaDnsDomainInformationNative.cs" />
+    <Compile Include="Interop\Structs\LsaObjectAttributes.cs" />
+    <Compile Include="Wrappers\SamDomainPasswordInformation.cs" />
     <Compile Include="Interop\Enums\SamDomainPasswordProperties.cs" />
     <Compile Include="Interop\Structs\SamRidEnumeration.cs" />
     <Compile Include="Interop\Structs\SamUserInternal1Information.cs" />
     <Compile Include="Interop\NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wrappers\LsaPolicy.cs" />
     <Compile Include="Wrappers\SamDomain.cs" />
     <Compile Include="Wrappers\SamObject.cs" />
     <Compile Include="Wrappers\SamServer.cs" />

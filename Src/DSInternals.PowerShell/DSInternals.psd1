@@ -60,15 +60,16 @@ ProcessorArchitecture = 'None'
 # TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = 'DSInternals.Hash.format.ps1xml',
-                    'DSInternals.RoamedCredential.format.ps1xml',
-                    'DSInternals.Kerberos.format.ps1xml',
-                    'DSInternals.KeyCredential.format.ps1xml',
-                    'DSInternals.DSAccount.format.ps1xml',
-                    'DSInternals.DSAccount.ExportViews.format.ps1xml',
-                    'DSInternals.PasswordQualityTestResult.format.ps1xml',
-                    'DSInternals.KdsRootKey.format.ps1xml',
-                    'DSInternals.SamDomainPasswordInformation.format.ps1xml'
+FormatsToProcess = 'Views\DSInternals.Hash.format.ps1xml',
+                    'Views\DSInternals.RoamedCredential.format.ps1xml',
+                    'Views\DSInternals.Kerberos.format.ps1xml',
+                    'Views\DSInternals.KeyCredential.format.ps1xml',
+                    'Views\DSInternals.DSAccount.format.ps1xml',
+                    'Views\DSInternals.DSAccount.ExportViews.format.ps1xml',
+                    'Views\DSInternals.PasswordQualityTestResult.format.ps1xml',
+                    'Views\DSInternals.KdsRootKey.format.ps1xml',
+                    'Views\DSInternals.SamDomainPasswordInformation.format.ps1xml',
+                    'Views\DSInternals.LsaPolicyInformation.format.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('DSInternals.PowerShell.dll')
@@ -90,7 +91,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                'Set-ADDBBootKey', 'Test-PasswordQuality',
                'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
                'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
-               'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash'
+               'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation'
 
 # Variables to export from this module
 VariablesToExport = @()
@@ -103,7 +104,7 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'New-NTHashSet', 'Test-ADPasswordQuality',
                   'Test-ADDBPasswordQuality', 'Test-ADReplPasswordQuality',
                   'Get-ADPasswordPolicy', 'Get-ADDefaultPasswordPolicy', 'Get-KeyCredential',
-                  'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink'
+                  'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink', 'Get-LsaPolicy'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()

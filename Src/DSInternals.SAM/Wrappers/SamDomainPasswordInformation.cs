@@ -1,7 +1,9 @@
-﻿using System;
-using System.Runtime.InteropServices;
-namespace DSInternals.SAM.Interop
+﻿namespace DSInternals.SAM
 {
+    using DSInternals.SAM.Interop;
+    using System;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// The DOMAIN_PASSWORD_INFORMATION structure contains information
     /// about a domain's password policy, such as the minimum length

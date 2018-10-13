@@ -48,6 +48,7 @@ New-Alias -Name Test-ADReplPasswordQuality       -Value Test-PasswordQuality
 New-Alias -Name Get-KeyCredential                -Value Get-ADKeyCredential
 New-Alias -Name Get-KeyCredentialLink            -Value Get-ADKeyCredential
 New-Alias -Name Get-ADKeyCredentialLink          -Value Get-ADKeyCredential
+New-Alias -Name Get-LsaPolicy                    -Value Get-LsaPolicyInformation
 
 # Export the aliases
 Export-ModuleMember -Alias * -Cmdlet *

@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <Name>LsaPolicyInformation</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.PowerShell.LsaPolicyInformation</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>Domain/Workgroup Name</Label>
+                <ScriptBlock>$PSItem.DnsDomain.Name</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>Forest DNS Name</Label>
+                <ScriptBlock>$PSItem.DnsDomain.DnsForestName</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.DnsDomain.DnsForestName</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Domain DNS Name</Label>
+                <ScriptBlock>$PSItem.DnsDomain.DnsDomainName</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.DnsDomain.DnsDomainName</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Domain GUID</Label>
+                <ScriptBlock>$PSItem.DnsDomain.Guid</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.DnsDomain.Guid</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Domain SID</Label>
+                <ScriptBlock>$PSItem.DnsDomain.Sid</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.DnsDomain.Sid</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Account Domain Name</Label>
+                <ScriptBlock>$PSItem.Domain.Name</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.Domain.Name</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Account Domain SID</Label>
+                <ScriptBlock>$PSItem.Domain.Sid</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.Domain.Sid</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Primary Domain Name</Label>
+                <ScriptBlock>$PSItem.PrimaryDomain.Name</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.PrimaryDomain.Name</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Primary Domain SID</Label>
+                <ScriptBlock>$PSItem.PrimaryDomain.Sid</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.PrimaryDomain.Sid</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Local Domain Name</Label>
+                <ScriptBlock>$PSItem.LocalDomain.Name</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.LocalDomain.Name</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Local Domain SID</Label>
+                <ScriptBlock>$PSItem.LocalDomain.Sid</ScriptBlock>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$PSItem.LocalDomain.Sid</ScriptBlock>
+                </ItemSelectionCondition>
+              </ListItem>
+              <ListItem>
+                <Label>Machine Account SID</Label>
+                <PropertyName>MachineAccountSid</PropertyName>
+                <ItemSelectionCondition>
+                  <PropertyName>MachineAccountSid</PropertyName>
+                </ItemSelectionCondition>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

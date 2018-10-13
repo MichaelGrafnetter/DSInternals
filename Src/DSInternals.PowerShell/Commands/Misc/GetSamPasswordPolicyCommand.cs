@@ -1,15 +1,9 @@
-﻿using DSInternals.Common.Interop;
-using DSInternals.SAM.Interop;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DSInternals.PowerShell.Commands
+﻿namespace DSInternals.PowerShell.Commands
 {
+    using DSInternals.SAM;
+    using DSInternals.SAM.Interop;
+    using System.Management.Automation;
+
     [Cmdlet(VerbsCommon.Get, "SamPasswordPolicy")]
     [OutputType(typeof(SamDomainPasswordInformation))]
     public class GetSamPasswordPolicyCommand : SamCommandBase
