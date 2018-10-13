@@ -63,6 +63,7 @@
     <Compile Include="Commands\Datastore\SetADDBAccountPasswordCommand.cs" />
     <Compile Include="Commands\Misc\ConvertFromADManagedPasswordBlobCommand.cs" />
     <Compile Include="Commands\Misc\GetADKeyCredential.cs" />
+    <Compile Include="Commands\Misc\SetLsaPolicyInformationCommand.cs" />
     <Compile Include="Commands\Misc\GetLsaPolicyInformation.cs" />
     <Compile Include="Commands\Misc\GetSamPasswordPolicyCommand.cs" />
     <Compile Include="Commands\Misc\TestPasswordQualityCommand.cs" />

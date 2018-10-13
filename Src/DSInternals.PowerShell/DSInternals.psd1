@@ -91,7 +91,8 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                'Set-ADDBBootKey', 'Test-PasswordQuality',
                'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
                'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
-               'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation'
+               'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
+               'Set-LSAPolicyInformation'
 
 # Variables to export from this module
 VariablesToExport = @()
@@ -104,7 +105,8 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'New-NTHashSet', 'Test-ADPasswordQuality',
                   'Test-ADDBPasswordQuality', 'Test-ADReplPasswordQuality',
                   'Get-ADPasswordPolicy', 'Get-ADDefaultPasswordPolicy', 'Get-KeyCredential',
-                  'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink', 'Get-LsaPolicy'
+                  'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink', 'Get-LsaPolicy',
+                  'Set-LsaPolicy'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -121,13 +123,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'ActiveDirectory', 'Security', 'PSModule'
+        Tags = 'ActiveDirectory', 'Security', 'SAM', 'LSA', 'PSModule'
 
         # A URL to the license for this module.
         LicenseUri = 'https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/LICENSE.md'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://www.dsinternals.com/en'
+        ProjectUri = 'https://github.com/MichaelGrafnetter/DSInternals'
 
         # A URL to an icon representing this module.
         IconUri = 'https://www.dsinternals.com/wp-content/uploads/ad.png'

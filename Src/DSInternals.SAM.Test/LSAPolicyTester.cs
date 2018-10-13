@@ -92,5 +92,27 @@
                 throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
             }
         }
+
+        [TestMethod]
+        public void LsaPolicy_SetDnsDomainInformation()
+        {
+            try
+            {
+                using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation | LsaPolicyAccessMask.TrustAdmin))
+                {
+                    // Retrieve domain info
+                    var info = policy.QueryDnsDomainInformation();
+                    
+                    // Now try to set it to the same value.
+                    // BE CAREFUL WHEN TESTING THIS!!!
+                    policy.SetDnsDomainInformation(info);
+                }
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                // This is expected.
+                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+            }
+        }
     }
 }

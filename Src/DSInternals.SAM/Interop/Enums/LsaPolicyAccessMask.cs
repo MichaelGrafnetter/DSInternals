@@ -66,40 +66,5 @@
         LookupNames = 0x00000800,
 
         Notification = 0x00001000,
-
-        // TODO: Remove the following
-        /*
-        GENERIC_READ = STANDARD_RIGHTS_READ |
-                    ViewAuditInformation |
-                    GetPrivateInformation,
-
-    GENERIC_WRITE = STANDARD_RIGHTS_WRITE |
-                    TrustAdmin |
-                    CreateAccount |
-                    CreateSecret |
-                    CreatePrivilege |
-                    SetDefaultQuotaLimits |
-                    SetAuditRequirements |
-                    AuditLogAdmin |
-                    ServerAdmin,
-
-    GENERIC_EXECUTE = STANDARD_RIGHTS_EXECUTE |
-                    ViewLocalInformation |
-                    LookupNames,
-
-        ALL_ACCESS = STANDARD_RIGHTS_REQUIRED |
-                    ViewLocalInformation |
-                    ViewAuditInformation |
-                    GetPrivateInformation |
-                    TrustAdmin |
-                    CreateAccount |
-                    CreateSecret |
-                    CreatePrivilege |
-                    SetDefaultQuotaLimits |
-                    SetAuditRequirements |
-                    AuditLogAdmin |
-                    ServerAdmin |
-                    LookupNames
-                    */
     }
 }

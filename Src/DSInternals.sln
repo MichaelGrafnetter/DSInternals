@@ -59,7 +59,41 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{A6D9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{9735D030-AEE6-415A-BF03-074076FF776A}"
 	ProjectSection(SolutionItems) = preProject
+		..\Docs\Add-ADDBSidHistory.md = ..\Docs\Add-ADDBSidHistory.md
 		..\Changelog.txt = ..\Changelog.txt
+		..\Docs\ConvertFrom-ADManagedPasswordBlob.md = ..\Docs\ConvertFrom-ADManagedPasswordBlob.md
+		..\Docs\ConvertFrom-GPPrefPassword.md = ..\Docs\ConvertFrom-GPPrefPassword.md
+		..\Docs\ConvertFrom-UnicodePassword.md = ..\Docs\ConvertFrom-UnicodePassword.md
+		..\Docs\ConvertTo-GPPrefPassword.md = ..\Docs\ConvertTo-GPPrefPassword.md
+		..\Docs\ConvertTo-Hex.md = ..\Docs\ConvertTo-Hex.md
+		..\Docs\ConvertTo-KerberosKey.md = ..\Docs\ConvertTo-KerberosKey.md
+		..\Docs\ConvertTo-LMHash.md = ..\Docs\ConvertTo-LMHash.md
+		..\Docs\ConvertTo-NTHash.md = ..\Docs\ConvertTo-NTHash.md
+		..\Docs\ConvertTo-OrgIdHash.md = ..\Docs\ConvertTo-OrgIdHash.md
+		..\Docs\ConvertTo-UnicodePassword.md = ..\Docs\ConvertTo-UnicodePassword.md
+		..\Docs\Disable-ADDBAccount.md = ..\Docs\Disable-ADDBAccount.md
+		..\Docs\Enable-ADDBAccount.md = ..\Docs\Enable-ADDBAccount.md
+		..\Docs\Get-ADDBAccount.md = ..\Docs\Get-ADDBAccount.md
+		..\Docs\Get-ADDBBackupKey.md = ..\Docs\Get-ADDBBackupKey.md
+		..\Docs\Get-ADDBDomainController.md = ..\Docs\Get-ADDBDomainController.md
+		..\Docs\Get-ADDBKdsRootKey.md = ..\Docs\Get-ADDBKdsRootKey.md
+		..\Docs\Get-ADDBSchemaAttribute.md = ..\Docs\Get-ADDBSchemaAttribute.md
+		..\Docs\Get-ADKeyCredential.md = ..\Docs\Get-ADKeyCredential.md
+		..\Docs\Get-ADReplAccount.md = ..\Docs\Get-ADReplAccount.md
+		..\Docs\Get-ADReplBackupKey.md = ..\Docs\Get-ADReplBackupKey.md
+		..\Docs\Get-ADSIAccount.md = ..\Docs\Get-ADSIAccount.md
+		..\Docs\Get-BootKey.md = ..\Docs\Get-BootKey.md
+		..\Docs\Get-SamPasswordPolicy.md = ..\Docs\Get-SamPasswordPolicy.md
+		..\Docs\Readme.md = ..\Docs\Readme.md
+		..\Docs\Remove-ADDBObject.md = ..\Docs\Remove-ADDBObject.md
+		..\Docs\Save-DPAPIBlob.md = ..\Docs\Save-DPAPIBlob.md
+		..\Docs\Set-ADDBAccountPassword.md = ..\Docs\Set-ADDBAccountPassword.md
+		..\Docs\Set-ADDBAccountPasswordHash.md = ..\Docs\Set-ADDBAccountPasswordHash.md
+		..\Docs\Set-ADDBBootKey.md = ..\Docs\Set-ADDBBootKey.md
+		..\Docs\Set-ADDBDomainController.md = ..\Docs\Set-ADDBDomainController.md
+		..\Docs\Set-ADDBPrimaryGroup.md = ..\Docs\Set-ADDBPrimaryGroup.md
+		..\Docs\Set-SamAccountPasswordHash.md = ..\Docs\Set-SamAccountPasswordHash.md
+		..\Docs\Test-PasswordQuality.md = ..\Docs\Test-PasswordQuality.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Database.Isam", "Microsoft.Database.Isam\Microsoft.Database.Isam.csproj", "{21CC632C-B09A-4DB7-BD6E-7F7D2716F58F}"
@@ -67,6 +101,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Isam.Esent.Interop", "Microsoft.Isam.Esent.Interop\Microsoft.Isam.Esent.Interop.csproj", "{E929E163-52A0-4AAC-917B-6D7FAF70C45E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSInternals.Replication.Model.Test", "DSInternals.Replication.Model.Test\DSInternals.Replication.Model.Test.csproj", "{B7E02A94-DA21-4302-82A6-2D4B7F279F21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSInternals.SAM.Test", "DSInternals.SAM.Test\DSInternals.SAM.Test.csproj", "{7420D8C2-14BE-40F2-B724-A88D27BC6743}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -166,8 +202,17 @@ Global
 		{B7E02A94-DA21-4302-82A6-2D4B7F279F21}.Debug|x86.Build.0 = Debug|Any CPU
 		{B7E02A94-DA21-4302-82A6-2D4B7F279F21}.Release|x64.ActiveCfg = Release|Any CPU
 		{B7E02A94-DA21-4302-82A6-2D4B7F279F21}.Release|x86.ActiveCfg = Release|Any CPU
+		{7420D8C2-14BE-40F2-B724-A88D27BC6743}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7420D8C2-14BE-40F2-B724-A88D27BC6743}.Debug|x64.Build.0 = Debug|Any CPU
+		{7420D8C2-14BE-40F2-B724-A88D27BC6743}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7420D8C2-14BE-40F2-B724-A88D27BC6743}.Debug|x86.Build.0 = Debug|Any CPU
+		{7420D8C2-14BE-40F2-B724-A88D27BC6743}.Release|x64.ActiveCfg = Release|Any CPU
+		{7420D8C2-14BE-40F2-B724-A88D27BC6743}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20AC2CF5-7C26-407B-B0A5-1BDE0FABABA8}
 	EndGlobalSection
 EndGlobal

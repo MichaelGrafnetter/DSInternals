@@ -38,24 +38,6 @@
             }
         }
 
-        public LsaDomainInformation QueryAccountDomainInformation()
-        {
-            IntPtr buffer;
-            var status = NativeMethods.LsaQueryInformationPolicy(this.policyHandle, LsaPolicyInformationClass.AccountDomainInformation, out buffer);
-            Validator.AssertSuccess(status);
-
-            try
-            {
-                var accountInfoNative = Marshal.PtrToStructure<LsaDomainInformationNative>(buffer);
-                return new LsaDomainInformation(accountInfoNative);
-            }
-            finally
-            {
-                // Ignore any errors during memory deallocation.
-                status = NativeMethods.LsaFreeMemory(buffer);
-            }
-        }
-
         public SecurityIdentifier QueryMachineAccountInformation()
         {
             IntPtr buffer;
@@ -82,28 +64,53 @@
             }
         }
 
+        public LsaDomainInformation QueryAccountDomainInformation()
+        {
+            return this.QueryDomainInformation(LsaPolicyInformationClass.AccountDomainInformation);
+        }
+
         public LsaDomainInformation QueryLocalAccountDomainInformation()
         {
-            IntPtr buffer;
-            var status = NativeMethods.LsaQueryInformationPolicy(this.policyHandle, LsaPolicyInformationClass.LocalAccountDomainInformation, out buffer);
-            Validator.AssertSuccess(status);
-
-            try
-            {
-                var domainInfoNative = Marshal.PtrToStructure<LsaDomainInformationNative>(buffer);
-                return new LsaDomainInformation(domainInfoNative);
-            }
-            finally
-            {
-                // Ignore any errors during memory deallocation.
-                status = NativeMethods.LsaFreeMemory(buffer);
-            }
+            return this.QueryDomainInformation(LsaPolicyInformationClass.LocalAccountDomainInformation);
         }
 
         public LsaDomainInformation QueryPrimaryDomainInformation()
         {
+            return this.QueryDomainInformation(LsaPolicyInformationClass.PrimaryDomainInformation);
+        }
+
+        public void SetDnsDomainInformation(LsaDnsDomainInformation newDomainInfo)
+        {
+            // TODO: Validation
+            Validator.AssertNotNull(newDomainInfo, "newDomainInfo");
+
+            // Convert values to unmanaged types
+            byte[] binarySid = newDomainInfo.Sid != null ? newDomainInfo.Sid.GetBinaryForm() : null;
+            var pinnedSid = GCHandle.Alloc(binarySid, GCHandleType.Pinned);
+            try
+            {
+                var nativeInfo = new LsaDnsDomainInformationNative()
+                {
+                    DnsDomainName = new UnicodeString(newDomainInfo.DnsDomainName),
+                    DnsForestName = new UnicodeString(newDomainInfo.DnsForestName),
+                    Name = new UnicodeString(newDomainInfo.Name),
+                    DomainGuid = newDomainInfo.Guid.HasValue ? newDomainInfo.Guid.Value : Guid.Empty,
+                    Sid = pinnedSid.AddrOfPinnedObject()
+                };
+
+                var status = NativeMethods.LsaSetInformationPolicy(this.policyHandle, nativeInfo);
+                Validator.AssertSuccess(status);
+            }
+            finally
+            {
+                pinnedSid.Free();
+            }
+        }
+
+        private LsaDomainInformation QueryDomainInformation(LsaPolicyInformationClass informationClass)
+        {
             IntPtr buffer;
-            var status = NativeMethods.LsaQueryInformationPolicy(this.policyHandle, LsaPolicyInformationClass.PrimaryDomainInformation, out buffer);
+            var status = NativeMethods.LsaQueryInformationPolicy(this.policyHandle, informationClass, out buffer);
             Validator.AssertSuccess(status);
 
             try

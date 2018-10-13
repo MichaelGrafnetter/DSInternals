@@ -346,11 +346,36 @@
         /// Retrieves information about a Policy object.
         /// </summary>
         /// <param name="policyHandle">A handle to a Policy object.</param>
-        /// <param name="informationClass">Indicate the type of information to query.</param>
+        /// <param name="informationClass">Indicates the type of information to query.</param>
         /// <param name="buffer">Pointer to a variable that receives a pointer to a structure containing the requested information.</param>
         /// <returns>If the function succeeds, the return value is STATUS_SUCCESS.</returns>
         [DllImport(Advapi, SetLastError = true)]
         internal static extern NtStatus LsaQueryInformationPolicy(SafeLsaPolicyHandle policyHandle, LsaPolicyInformationClass informationClass, out IntPtr buffer);
+
+        /// <summary>
+        /// Modifies information in a Policy object.
+        /// </summary>
+        /// <param name="policyHandle">A handle to a Policy object.</param>
+        /// <param name="informationClass">Indicates the type of information to set.</param>
+        /// <param name="buffer">Pointer to a structure containing the information to set.</param>
+        /// <returns>If the function succeeds, the return value is STATUS_SUCCESS.</returns>
+        [DllImport(Advapi, SetLastError = true)]
+        private static extern NtStatus LsaSetInformationPolicy(SafeLsaPolicyHandle policyHandle, LsaPolicyInformationClass informationClass, IntPtr buffer);
+
+        /// <summary>
+        /// Modifies information in a Policy object.
+        /// </summary>
+        /// <param name="policyHandle">A handle to a Policy object.</param>
+        /// <param name="informationClass">Indicates the type of information to set.</param>
+        /// <param name="buffer">Pointer to a structure containing the information to set.</param>
+        /// <returns>If the function succeeds, the return value is STATUS_SUCCESS.</returns>
+        [DllImport(Advapi, SetLastError = true)]
+        private static extern NtStatus LsaSetInformationPolicy(SafeLsaPolicyHandle policyHandle, LsaPolicyInformationClass informationClass, [In] ref LsaDnsDomainInformationNative buffer);
+
+        internal static NtStatus LsaSetInformationPolicy(SafeLsaPolicyHandle policyHandle, LsaDnsDomainInformationNative buffer)
+        {
+            return LsaSetInformationPolicy(policyHandle, LsaPolicyInformationClass.DnsDomainInformation, ref buffer);
+        }
 
         /// <summary>
         /// Frees memory allocated for an output buffer by an LSA function call. LSA functions that return variable-length output buffers always allocate the buffer on behalf of the caller. The caller must free this memory by passing the returned buffer pointer to LsaFreeMemory when the memory is no longer required.
