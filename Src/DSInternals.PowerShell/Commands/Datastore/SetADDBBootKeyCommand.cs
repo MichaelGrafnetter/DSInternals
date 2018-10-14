@@ -9,10 +9,7 @@
     [Cmdlet(VerbsCommon.Set, "ADDBBootKey")]
     public class SetADDBBootKeyCommand : ADDBCommandBase
     {
-        [Parameter(
-            Mandatory = true,
-            HelpMessage = "TODO"
-        )]
+        [Parameter(Mandatory = true)]
         [ValidateNotNull]
         [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
         [AcceptHexString]
@@ -23,10 +20,7 @@
             set;
         }
 
-        [Parameter(
-            Mandatory = false,
-            HelpMessage = "TODO"
-        )]
+        [Parameter(Mandatory = false)]
         [ValidateNotNull]
         [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
         [AcceptHexString]

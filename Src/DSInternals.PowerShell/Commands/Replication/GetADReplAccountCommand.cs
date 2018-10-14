@@ -20,7 +20,6 @@
         [Parameter(
             Mandatory = true,
             Position = 0,
-            HelpMessage = "TODO",
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = parameterSetByName
         )]
@@ -34,7 +33,6 @@
         [Parameter(
             Mandatory = true,
             Position = 0,
-            HelpMessage = "TODO",
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = parameterSetByName
         )]
@@ -48,7 +46,6 @@
 
         [Parameter(
             Mandatory = true,
-            HelpMessage = "TODO",
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = parameterSetBySid
         )]

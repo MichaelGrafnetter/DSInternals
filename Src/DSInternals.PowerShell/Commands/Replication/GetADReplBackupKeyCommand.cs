@@ -10,10 +10,7 @@
     [OutputType(typeof(DPAPIBackupKey))]
     public class GetADReplBackupKeyCommand : ADReplCommandBase
     {
-        [Parameter(
-            Mandatory = true,
-            HelpMessage = "TODO"
-        )]
+        [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]
         [Alias("FQDN", "DomainName", "DNSDomainName")]
         public string Domain

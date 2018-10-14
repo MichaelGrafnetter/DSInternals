@@ -10,10 +10,7 @@
     [OutputType(typeof(DSInternals.Common.Data.DPAPIBackupKey))]
     public class GetADDBBackupKeyCommand : ADDBCommandBase
     {
-        [Parameter(
-            Mandatory = true,
-            HelpMessage = "TODO"
-        )]
+        [Parameter(Mandatory = true)]
         [ValidateNotNull]
         [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
         [AcceptHexString]

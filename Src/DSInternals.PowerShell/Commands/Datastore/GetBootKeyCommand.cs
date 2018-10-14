@@ -14,7 +14,7 @@
         private const string OnlineParameterSet = "Online";
         private const string OfflineParameterSet = "Offline";
 
-        [Parameter(Mandatory = true, Position = 0, HelpMessage = "TODO", ParameterSetName = OfflineParameterSet)]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = OfflineParameterSet)]
         [ValidateNotNullOrEmpty]
         [Alias("Path", "FilePath", "SystemHivePath", "HivePath")]
         public string SystemHiveFilePath

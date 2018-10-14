@@ -9,10 +9,7 @@
     public class GetSamPasswordPolicyCommand : SamCommandBase
     {
         #region Parameters
-        [Parameter(
-            HelpMessage = @"Specify AD domain.",
-            Mandatory = true
-        )]
+        [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]
         public string Domain
         {

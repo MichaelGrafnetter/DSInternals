@@ -14,11 +14,7 @@
 
         #region Parameters
 
-        [Parameter(
-            Mandatory = true,
-            HelpMessage = "TODO",
-            ParameterSetName = ParameterSetAll
-        )]
+        [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
         [Alias("AllAccounts", "ReturnAllAccounts")]
         public SwitchParameter All
         {
@@ -28,7 +24,6 @@
 
         [Parameter(
             Mandatory = true,
-            HelpMessage = "TODO",
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = ParameterSetByDN
         )]
@@ -42,7 +37,6 @@
 
         [Parameter(
             Mandatory = true,
-            HelpMessage = "TODO",
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = ParameterSetByGuid
         )]
@@ -54,7 +48,7 @@
             set;
         }
 
-        [Parameter(Mandatory = true, HelpMessage = "TODO", ParameterSetName = ParameterSetAll)]
+        [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
         [ValidateNotNullOrEmpty]
         [Alias("NC", "DomainNC","DomainNamingContext")]
         public string NamingContext

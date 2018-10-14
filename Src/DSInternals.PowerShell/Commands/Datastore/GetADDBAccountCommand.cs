@@ -15,11 +15,7 @@ namespace DSInternals.PowerShell.Commands
         private const int ProgressReportingInterval = 25;
         protected const string ParameterSetAll = "All";
 
-        [Parameter(
-            Mandatory = true,
-            HelpMessage = "TODO",
-            ParameterSetName = ParameterSetAll
-        )]
+        [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
         [Alias("AllAccounts", "ReturnAllAccounts")]
         public SwitchParameter All
         {
@@ -27,10 +23,7 @@ namespace DSInternals.PowerShell.Commands
             set;
         }
 
-        [Parameter(
-            Mandatory = false,
-            HelpMessage = "TODO"
-        )]
+        [Parameter(Mandatory = false)]
         [ValidateNotNull]
         [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
         [AcceptHexString]

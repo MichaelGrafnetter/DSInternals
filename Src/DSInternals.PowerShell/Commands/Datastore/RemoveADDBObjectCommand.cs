@@ -14,7 +14,7 @@
     [OutputType("None")]
     public class RemoveADDBObjectCommand : ADDBObjectCommandBase
     {
-        [Parameter(HelpMessage = "TODO")]
+        [Parameter]
         public SwitchParameter Force
         {
             get;

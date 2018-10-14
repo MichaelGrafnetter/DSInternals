@@ -7,11 +7,7 @@
     [OutputType(typeof(DSInternals.PowerShell.SchemaAttribute))]
     public class GetADDBSchemaAttributeCommand : ADDBCommandBase
     {
-        [Parameter(
-            Position = 0,
-            HelpMessage = "TODO",
-            ValueFromPipeline = true
-        )]
+        [Parameter(Position = 0, ValueFromPipeline = true)]
         [Alias("LdapDisplayName,AttributeName,AttrName,Attr")]
         [ValidateNotNullOrEmpty]
         public string[] Name

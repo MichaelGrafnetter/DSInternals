@@ -9,7 +9,7 @@
         protected const string parameterSetByGuid = "ByGuid";
         protected const string parameterSetByDN = "ByDN";
 
-        [Parameter(Mandatory = true, HelpMessage = "TODO", ValueFromPipelineByPropertyName = true, ParameterSetName = parameterSetByDN)]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, ParameterSetName = parameterSetByDN)]
         [ValidateNotNullOrEmpty]
         [Alias("dn")]
         public string DistinguishedName
@@ -18,7 +18,7 @@
             set;
         }
 
-        [Parameter(Mandatory = true, HelpMessage = "TODO", ValueFromPipelineByPropertyName = true, ParameterSetName = parameterSetByGuid)]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, ParameterSetName = parameterSetByGuid)]
         [ValidateNotNullOrEmpty]
         [Alias("Guid")]
         public Guid ObjectGuid

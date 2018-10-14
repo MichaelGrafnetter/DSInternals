@@ -16,7 +16,7 @@
         /// <remarks>
         /// The DIT must be in a consistent state, that is, the ESE logs must be replayed.
         /// </remarks>
-        [Parameter(Mandatory = true, HelpMessage = "TODO")]
+        [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]
         [Alias("Database", "DatabasePath", "DatabaseFilePath", "DBFilePath")]
         public string DBPath
@@ -31,7 +31,7 @@
         /// <value>
         /// The log path.
         /// </value>
-        [Parameter(Mandatory = false, HelpMessage = "TODO")]
+        [Parameter(Mandatory = false)]
         [ValidateNotNullOrEmpty]
         [Alias("Log", "TransactionLogPath")]
         public string LogPath

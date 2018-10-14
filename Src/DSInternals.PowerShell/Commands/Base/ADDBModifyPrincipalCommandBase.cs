@@ -4,7 +4,7 @@
 
     public abstract class ADDBModifyPrincipalCommandBase : ADDBPrincipalCommandBase
     {
-        [Parameter(Mandatory = false, HelpMessage = "TODO")]
+        [Parameter(Mandatory = false)]
         [Alias("SkipMeta", "NoMetaUpdate", "NoMeta", "SkipObjMeta", "NoObjMeta", "SkipMetaDataUpdate", "NoMetaDataUpdate")]
         public SwitchParameter SkipMetaUpdate
         {

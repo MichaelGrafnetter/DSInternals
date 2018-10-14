@@ -10,7 +10,7 @@
     {
 
         #region Parameters
-        [Parameter(Mandatory = true, HelpMessage = "TODO")]
+        [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]
         [Alias("Host", "DomainController", "DC")]
         public string Server
@@ -19,7 +19,7 @@
             set;
         }
 
-        [Parameter(Mandatory = false, HelpMessage = "TODO")]
+        [Parameter(Mandatory = false)]
         [ValidateNotNull]
         public PSCredential Credential
         {
@@ -27,7 +27,7 @@
             set;
         }
 
-        [Parameter(Mandatory = false, HelpMessage = "TODO")]
+        [Parameter(Mandatory = false)]
         [ValidateNotNull]
         [Alias("Proto", "RPCProtocol", "NCACN")]
         public RpcProtocol Protocol
