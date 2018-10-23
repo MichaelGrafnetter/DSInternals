@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+
     public class DistinguishedName
     {
         private const char escapeChar = '\\';
@@ -12,6 +13,7 @@
         private const char dnSeparator = ',';
         private const char rdnSeparator = '=';
         private const char dnsNameSeparator = '.';
+
         public IList<DistinguishedNameComponent> Components
         {
             get;
@@ -23,14 +25,19 @@
             this.Components = new List<DistinguishedNameComponent>();
         }
 
-        public DistinguishedName(string dn)
+        public DistinguishedName(DistinguishedNameComponent rdn) : this()
         {
-            this.Components = new List<DistinguishedNameComponent>();
-            if(String.IsNullOrEmpty(dn))
+            this.AddParent(rdn);
+        }
+
+        public DistinguishedName(string dn) : this()
+        {
+            if (String.IsNullOrEmpty(dn))
             {
                 // Empty DN
                 return;
             }
+
             string[] dnSegments = SplitDN(dn, false);
             foreach (string segment in dnSegments)
             {
@@ -44,7 +51,7 @@
                     var component = new DistinguishedNameComponent(rdnSegments[0].Trim(), rdnSegments[1].Trim());
                     this.Components.Add(component);
                 }
-                catch(ArgumentNullException)
+                catch (ArgumentNullException)
                 {
                     throw new ArgumentException(Resources.DNParsingErrorMessage, "dn");
                 }
@@ -53,42 +60,62 @@
 
         public string GetDnsName()
         {
-            if(Components.Count == 0)
+            if (Components.Count == 0)
             {
                 // TODO: Throw exception
                 return string.Empty;
             }
+
             var hostName = new StringBuilder();
             hostName.Append(this.Components[0].Value);
-            for(int i = 1; i < this.Components.Count; i++)
+
+            for (int i = 1; i < this.Components.Count; i++)
             {
                 // TODO: Check name if it really is DC=
                 hostName.Append(dnsNameSeparator);
                 hostName.Append(this.Components[i].Value);
             }
+
             return hostName.ToString();
         }
 
         public void AddParent(DistinguishedName dn)
         {
+            if(dn == null)
+            {
+                // There is nothing to add.
+                return;
+            }
+
             foreach (var component in dn.Components)
             {
                 this.AddParent(component);
             }
         }
+
         public void AddParent(string name, string value)
         {
+            // Validation will be done in the DistinguishedNameComponent constructor
             var component = new DistinguishedNameComponent(name, value);
             this.AddParent(component);
         }
 
         public void AddParent(DistinguishedNameComponent component)
         {
-            this.Components.Add(component);
+            if (component != null)
+            {
+                this.Components.Add(component);
+            }
         }
 
         public void AddChild(DistinguishedName dn)
         {
+            if (dn == null)
+            {
+                // There os nothing to add.
+                return;
+            }
+
             foreach (var component in dn.Components.Reverse())
             {
                 this.AddChild(component);
@@ -97,27 +124,33 @@
 
         public void AddChild(string name, string value)
         {
+            // Validation will be performed by the DistinguishedNameComponent contructor.
             var component = new DistinguishedNameComponent(name, value);
             this.AddChild(component);
         }
 
         public void AddChild(DistinguishedNameComponent component)
         {
-            this.Components.Insert(0, component);
+            if (component != null)
+            {
+                this.Components.Insert(0, component);
+            }
         }
 
         public override string ToString()
         {
-            if(Components.Count == 0)
+            if (Components.Count == 0)
             {
                 return String.Empty;
             }
+
             StringBuilder dn = new StringBuilder();
             foreach (var component in this.Components)
             {
                 dn.Append(component);
                 dn.Append(dnSeparator);
             }
+
             // Remove the last separator while returning
             return dn.ToString(0, dn.Length - 1);
         }
@@ -186,20 +219,25 @@
             segments.Add(currentSegment.ToString());
             return segments.ToArray();
         }
+
         public static string GetDnsNameFromDN(string dn)
         {
             var dnParsed = new DistinguishedName(dn);
             return dnParsed.GetDnsName();
         }
+
         public static DistinguishedName GetDNFromDNSName(string domainName)
         {
             Validator.AssertNotNullOrWhiteSpace(domainName, "domainName");
+
             var dn = new DistinguishedName();
             var dnsComponents = domainName.Split(dnsNameSeparator);
-            foreach(var component in dnsComponents)
+
+            foreach (var component in dnsComponents)
             {
                 dn.AddParent(CommonDirectoryAttributes.DomainComponent, component);
             }
+
             return dn;
         }
 
@@ -211,6 +249,12 @@
 
             // Now simply compare the string representation of both DNs
             return this.ToString() == obj.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            // This DN implementation is not immutablem so we do not calculate the hash of the DN.
+            return base.GetHashCode();
         }
     }
 }

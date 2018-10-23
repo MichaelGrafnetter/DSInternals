@@ -2,10 +2,9 @@
 {
     using DSInternals.Common;
     using System;
-    using System.Reflection;
     using System.Text;
 
-    public struct DistinguishedNameComponent
+    public class DistinguishedNameComponent
     {
         public string Name;
         public string Value;

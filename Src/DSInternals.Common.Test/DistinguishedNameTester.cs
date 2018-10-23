@@ -184,6 +184,7 @@
         {
             var dn = new DistinguishedName(@"OU=""John is cool");
         }
+
         [TestMethod]
         public void DistinguishedName_AddParent()
         {
@@ -191,12 +192,31 @@
             dn.AddParent(new DistinguishedName("DC=adatum,DC=com"));
             Assert.AreEqual("CN=Users,DC=adatum,DC=com", dn.ToString());
         }
+
+        [TestMethod]
+        public void DistinguishedName_AddParent_Null()
+        {
+            var dn = new DistinguishedName("CN=Users");
+            dn.AddParent((DistinguishedName)null);
+            dn.AddParent((DistinguishedNameComponent)null);
+            Assert.AreEqual("CN=Users", dn.ToString());
+        }
+
         [TestMethod]
         public void DistinguishedName_AddChild()
         {
             var dn = new DistinguishedName("DC=adatum,DC=com");
             dn.AddChild("CN", "Users");
             Assert.AreEqual("CN=Users,DC=adatum,DC=com", dn.ToString());
+        }
+
+        [TestMethod]
+        public void DistinguishedName_AddChild_Null()
+        {
+            var dn = new DistinguishedName("DC=adatum,DC=com");
+            dn.AddChild((DistinguishedName)null);
+            dn.AddChild((DistinguishedNameComponent)null);
+            Assert.AreEqual("DC=adatum,DC=com", dn.ToString());
         }
     }
 }
