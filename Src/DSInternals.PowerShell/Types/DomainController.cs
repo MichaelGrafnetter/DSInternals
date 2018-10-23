@@ -25,13 +25,13 @@
             set;
         }
 
-        public int NTDSSettingsDNT
+        public string DomainName
         {
             get;
             set;
         }
 
-        public string Domain
+        public string ForestName
         {
             get;
             set;
@@ -44,6 +44,24 @@
         }
 
         public SecurityIdentifier DomainSid
+        {
+            get;
+            set;
+        }
+
+        public Guid? DomainGuid
+        {
+            get;
+            set;
+        }
+
+        public Guid? Guid
+        {
+            get;
+            set;
+        }
+
+        public SecurityIdentifier Sid
         {
             get;
             set;

@@ -1,6 +1,5 @@
 ﻿namespace DSInternals.DataStore
 {
-    using DSInternals.Common;
     using DSInternals.Common.Data;
     using Microsoft.Database.Isam;
     using System;
@@ -149,6 +148,9 @@
                     // Load domain SID
                     this.DomainSid = dataTableCursor.RetrieveColumnAsSid(schema.FindColumnId(CommonDirectoryAttributes.ObjectSid));
 
+                    // Load domain GUID
+                    this.DomainGuid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGUID));
+
                     // Load domain naming context:
                     this.DomainNamingContext = context.DistinguishedNameResolver.Resolve(this.DomainNamingContextDNT.Value);
 
@@ -160,7 +162,17 @@
                 if (this.ServerReferenceDNT.HasValue)
                 {
                     bool serverFound = dataTableCursor.GotoKey(Key.Compose(this.ServerReferenceDNT.Value));
+
+                    // Load DC OS
                     this.OSName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.OperatingSystemName));
+
+                    // Load DC GUID
+                    this.Guid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGUID));
+
+                    // Load DC SID
+                    this.Sid = dataTableCursor.RetrieveColumnAsSid(schema.FindColumnId(CommonDirectoryAttributes.ObjectSid));
+
+                    // Load DC DN
                     this.ServerReference = context.DistinguishedNameResolver.Resolve(this.ServerReferenceDNT.Value);
                 }
 
@@ -183,17 +195,17 @@
                     var partitionNCNameDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextName));
 
                     // Note that foreign crossRef objects do not have nCName set
-                    if (partitionNCNameDNT.HasValue)
-                    {
-                        // Get the DN of the target directory partition
-                        var partitionNCName = context.DistinguishedNameResolver.Resolve(partitionNCNameDNT.Value);
 
-                        // We are only interested in domain partition
-                        if (partitionNCName.Equals(this.DomainNamingContext))
-                        {
-                            // This must be the DC's domain crossRef object, so we can retrieve its NetBIOS name
-                            this.NetBIOSDomainName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.NetBIOSName));
-                        }
+                    if (partitionNCNameDNT == this.DomainNamingContextDNT)
+                    {
+                        // This must be the DC's domain crossRef object, so we can retrieve its NetBIOS name.
+                        this.NetBIOSDomainName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.NetBIOSName));
+                    }
+
+                    if(partitionNCNameDNT == this.ConfigurationNamingContextDNT)
+                    {
+                        // This must be the configuration partition's crossRef object, so we can retrieve the forest DNS name.
+                        this.ForestName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.DNSRoot));
                     }
                 }
             }
@@ -212,6 +224,24 @@
         }
 
         public int ConfigurationNamingContextDNT
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the GUID associated with the DC account.
+        /// </summary>
+        public Guid? Guid
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the Security ID (SID) of the DC account.
+        /// </summary>
+        public SecurityIdentifier Sid
         {
             get;
             private set;
@@ -241,10 +271,11 @@
             get;
             private set;
         }
+
         /// <summary>
-        /// Gets the domain that this domain controller is a member of.
+        /// Gets the name of the domain that this domain controller is a member of.
         /// </summary>
-        public string Domain
+        public string DomainName
         {
             get
             {
@@ -254,9 +285,27 @@
         }
 
         /// <summary>
+        /// Gets the name of the forest that this domain controller is a member of.
+        /// </summary>
+        public string ForestName
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// Gets the SID of the domain.
         /// </summary>
         public SecurityIdentifier DomainSid
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the GUID of the domain.
+        /// </summary>
+        public Guid? DomainGuid
         {
             get;
             private set;

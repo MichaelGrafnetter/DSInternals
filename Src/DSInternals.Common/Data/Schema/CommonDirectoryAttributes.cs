@@ -17,6 +17,7 @@
         public const int DisplayNameId = 131085;
         public const string DN = "distinguishedName";
         public const string DNSHostName = "dNSHostName";
+        public const string DNSRoot = "dnsRoot";
         public const string DNTag = "DNT";
         public const string FunctionalLevel = "msDS-Behavior-Version";
         public const string NamingContextDNTag = "NCDNT";
