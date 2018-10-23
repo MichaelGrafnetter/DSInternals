@@ -28,7 +28,6 @@
                 {
                     DnsDomain = policy.QueryDnsDomainInformation(),
                     Domain = policy.QueryAccountDomainInformation(),
-                    PrimaryDomain = policy.QueryPrimaryDomainInformation(),
                     LocalDomain = policy.QueryLocalAccountDomainInformation(),
                     MachineAccountSid = policy.QueryMachineAccountInformation()
                 };

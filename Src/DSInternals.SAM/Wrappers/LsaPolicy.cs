@@ -74,11 +74,6 @@
             return this.QueryDomainInformation(LsaPolicyInformationClass.LocalAccountDomainInformation);
         }
 
-        public LsaDomainInformation QueryPrimaryDomainInformation()
-        {
-            return this.QueryDomainInformation(LsaPolicyInformationClass.PrimaryDomainInformation);
-        }
-
         public void SetDnsDomainInformation(LsaDnsDomainInformation newDomainInfo)
         {
             // TODO: Validation

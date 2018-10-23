@@ -57,7 +57,7 @@
                 samAccountName,
                 userPrincipalName,
                 this.context.DomainController.NetBIOSDomainName,
-                this.context.DomainController.Domain);
+                this.context.DomainController.DomainName);
 
             return this.SetAccountPasswordHash(
                 targetObject,

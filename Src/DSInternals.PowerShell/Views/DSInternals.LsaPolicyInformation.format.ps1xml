@@ -57,20 +57,6 @@
                 </ItemSelectionCondition>
               </ListItem>
               <ListItem>
-                <Label>Primary Domain Name</Label>
-                <ScriptBlock>$PSItem.PrimaryDomain.Name</ScriptBlock>
-                <ItemSelectionCondition>
-                  <ScriptBlock>$PSItem.PrimaryDomain.Name</ScriptBlock>
-                </ItemSelectionCondition>
-              </ListItem>
-              <ListItem>
-                <Label>Primary Domain SID</Label>
-                <ScriptBlock>$PSItem.PrimaryDomain.Sid</ScriptBlock>
-                <ItemSelectionCondition>
-                  <ScriptBlock>$PSItem.PrimaryDomain.Sid</ScriptBlock>
-                </ItemSelectionCondition>
-              </ListItem>
-              <ListItem>
                 <Label>Local Domain Name</Label>
                 <ScriptBlock>$PSItem.LocalDomain.Name</ScriptBlock>
                 <ItemSelectionCondition>
