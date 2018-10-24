@@ -63,9 +63,9 @@
     <Compile Include="Commands\Datastore\SetADDBAccountPasswordCommand.cs" />
     <Compile Include="Commands\Misc\ConvertFromADManagedPasswordBlobCommand.cs" />
     <Compile Include="Commands\Misc\GetADKeyCredential.cs" />
-    <Compile Include="Commands\Misc\SetLsaPolicyInformationCommand.cs" />
-    <Compile Include="Commands\Misc\GetLsaPolicyInformation.cs" />
-    <Compile Include="Commands\Misc\GetSamPasswordPolicyCommand.cs" />
+    <Compile Include="Commands\LSA\SetLsaPolicyInformationCommand.cs" />
+    <Compile Include="Commands\LSA\GetLsaPolicyInformation.cs" />
+    <Compile Include="Commands\LSA\GetSamPasswordPolicyCommand.cs" />
     <Compile Include="Commands\Misc\TestPasswordQualityCommand.cs" />
     <Compile Include="Commands\Misc\ConvertToHexCommand.cs" />
     <Compile Include="Commands\Datastore\SetADDBBootKeyCommand.cs" />
