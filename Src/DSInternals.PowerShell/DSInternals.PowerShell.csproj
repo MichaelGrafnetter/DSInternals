@@ -58,6 +58,7 @@
     <Compile Include="Commands\Datastore\DisableADDBAccountCommand.cs" />
     <Compile Include="Commands\Datastore\GetADDBKdsRootKeyCommand.cs" />
     <Compile Include="Commands\Datastore\EnableADDBAccountCommand.cs" />
+    <Compile Include="Commands\Datastore\NewADDBRestoreFromMediaScriptCommand.cs" />
     <Compile Include="Commands\Hash\ConvertToKerberosKeyCommand.cs" />
     <Compile Include="Commands\Datastore\SetADDBAccountPasswordHashCommand.cs" />
     <Compile Include="Commands\Datastore\SetADDBAccountPasswordCommand.cs" />
@@ -155,6 +156,7 @@
     <Content Include="en-US\about_DSInternals.help.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="ADDBRestoreFromMediaScriptTemplate.ps1" />
     <None Include="Commands\ADDBCommandHierarchy.cd" />
     <Content Include="en-US\DSInternals.PowerShell.dll-Help.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

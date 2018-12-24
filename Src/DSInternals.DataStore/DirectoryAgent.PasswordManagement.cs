@@ -181,6 +181,19 @@
         {
             // Validate
             Validator.AssertLength(oldBootKey, BootKeyRetriever.BootKeyLength, "oldBootKey");
+            
+            if(newBootKey != null)
+            {
+                // This value is optional. No encryption is used when blank key is provided.
+                Validator.AssertLength(newBootKey, BootKeyRetriever.BootKeyLength, "newBootKey");
+            }
+
+            if(HashEqualityComparer.GetInstance().Equals(oldBootKey, newBootKey))
+            {
+                // Both keys are the same so no change is required.
+                return;
+            }
+
             if (!this.context.DomainController.DomainNamingContextDNT.HasValue)
             {
                 // The domain object must exist
@@ -203,6 +216,81 @@
                 this.dataTableCursor.BeginEditForUpdate();
                 bool hasChanged = domain.SetAttribute(CommonDirectoryAttributes.PEKList, binaryPekList);
                 this.CommitAttributeUpdate(domain, CommonDirectoryAttributes.PEKList, transaction, hasChanged, true);
+            }
+        }
+
+        /// <summary>
+        /// Checks the validity of a given boot key.
+        /// </summary>
+        /// <param name="bootKey">The boot key to be checked.</param>
+        /// <returns>Returns True if and only if the boot key can be used to decrypt the PEK list.</returns>
+        public bool CheckBootKey(byte[] bootKey)
+        {
+            try
+            {
+                var decryptor = this.GetSecretDecryptor(bootKey);
+                return decryptor != null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        protected DirectorySecretDecryptor GetSecretDecryptor(byte[] bootKey)
+        {
+            if (bootKey == null && !this.context.DomainController.IsADAM)
+            {
+                // This is an AD DS DB, so the BootKey is stored in the registry. Stop processing if it is not provided.
+                return null;
+
+            }
+
+            if (this.context.DomainController.State == DatabaseState.Boot)
+            {
+                // The initial DB definitely does not contain any secrets.
+                return null;
+            }
+
+            // HACK: Save the current cursor position, because it is shared.
+            var originalLocation = this.dataTableCursor.SaveLocation();
+            try
+            {
+                int pekListDNT;
+                if (this.context.DomainController.IsADAM)
+                {
+                    // This is a AD LDS DB, so the BootKey is stored directly in the DB.
+                    // Retrieve the pekList attribute of the root object:
+                    byte[] rootPekList;
+                    var rootObject = this.FindObject(ADConstants.RootDNTag);
+                    rootObject.ReadAttribute(CommonDirectoryAttributes.PEKList, out rootPekList);
+
+                    // Retrieve the pekList attribute of the schema object:
+                    byte[] schemaPekList;
+                    var schemaObject = this.FindObject(this.context.DomainController.SchemaNamingContextDNT);
+                    schemaObject.ReadAttribute(CommonDirectoryAttributes.PEKList, out schemaPekList);
+
+                    // Combine these things together into the BootKey/SysKey
+                    bootKey = BootKeyRetriever.GetBootKey(rootPekList, schemaPekList);
+
+                    // The actual PEK list is located on the Configuration NC object.
+                    pekListDNT = this.context.DomainController.ConfigurationNamingContextDNT;
+                }
+                else
+                {
+                    // This is an AD DS DB, so the PEK list is located on the Domain NC object.
+                    pekListDNT = this.context.DomainController.DomainNamingContextDNT.Value;
+                }
+
+                // Load the PEK List attribute from the holding object and decrypt it using Boot Key.
+                var pekListHolder = this.FindObject(pekListDNT);
+                byte[] encryptedPEK;
+                pekListHolder.ReadAttribute(CommonDirectoryAttributes.PEKList, out encryptedPEK);
+                return new DataStoreSecretDecryptor(encryptedPEK, bootKey);
+            }
+            finally
+            {
+                this.dataTableCursor.RestoreLocation(originalLocation);
             }
         }
         #endregion BootKey

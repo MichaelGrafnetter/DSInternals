@@ -12,7 +12,7 @@
         private IsamInstance instance;
         private IsamSession session;
         private IsamDatabase database;
-        private string attachedDatabasePath;
+        private bool isDBAttached = false;
 
         /// <summary>
         /// Creates a new Active Directory database context.
@@ -27,26 +27,30 @@
                 throw new FileNotFoundException("The specified database file does not exist.", dbFilePath);
             }
 
-            ValidateDatabaseState(dbFilePath);
+            this.DSADatabaseFile = dbFilePath;
+            ValidateDatabaseState(this.DSADatabaseFile);
 
-            string dbDirectoryPath = Path.GetDirectoryName(dbFilePath);
-            string checkpointDirectoryPath = dbDirectoryPath;
-            string tempDirectoryPath = dbDirectoryPath;
-            if (logDirectoryPath != null)
+            this.DSAWorkingDirectory = Path.GetDirectoryName(this.DSADatabaseFile);
+            string checkpointDirectoryPath = this.DSAWorkingDirectory;
+            string tempDirectoryPath = this.DSAWorkingDirectory;
+
+            this.DatabaseLogFilesPath = logDirectoryPath;
+            if (this.DatabaseLogFilesPath != null)
             {
-                if (!Directory.Exists(logDirectoryPath))
+                if (!Directory.Exists(this.DatabaseLogFilesPath))
                 {
                     // TODO: Extract as resource
-                    throw new FileNotFoundException("The specified log directory does not exist.", logDirectoryPath);
+                    throw new FileNotFoundException("The specified log directory does not exist.", this.DatabaseLogFilesPath);
                 }
             }
             else
             {
-                logDirectoryPath = dbDirectoryPath;
+                this.DatabaseLogFilesPath = this.DSAWorkingDirectory;
             }
+
             // TODO: Exception handling?
             // HACK: IsamInstance constructor throws AccessDenied Exception when the path does not end with a backslash.
-            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(logDirectoryPath), AddPathSeparator(tempDirectoryPath), ADConstants.EseBaseName, JetInstanceName, readOnly, ADConstants.PageSize);
+            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(this.DatabaseLogFilesPath), AddPathSeparator(tempDirectoryPath), ADConstants.EseBaseName, JetInstanceName, readOnly, ADConstants.PageSize);
             try
             {
                 var isamParameters = this.instance.IsamSystemParameters;
@@ -73,9 +77,9 @@
                 // this.instance.IsamSystemParameters.EnableOnlineDefrag = false;
 
                 this.session = this.instance.CreateSession();
-                this.session.AttachDatabase(dbFilePath);
-                this.attachedDatabasePath = dbFilePath;
-                this.database = this.session.OpenDatabase(dbFilePath);
+                this.session.AttachDatabase(this.DSADatabaseFile);
+                this.isDBAttached = true;
+                this.database = this.session.OpenDatabase(this.DSADatabaseFile);
                 this.Schema = new DirectorySchema(this.database);
                 this.SecurityDescriptorRersolver = new SecurityDescriptorRersolver(this.database);
                 this.DistinguishedNameResolver = new DistinguishedNameResolver(this.database, this.Schema);
@@ -86,7 +90,7 @@
             {
                 // This typically happens while opening a Windows Server 2003 DIT on a newer system.
                 this.Dispose();
-                throw new InvalidDatabaseStateException("There was a problem reading the database, which probably comes from a legacy system. Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", dbFilePath, unicodeException);
+                throw new InvalidDatabaseStateException("There was a problem reading the database, which probably comes from a legacy system. Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", this.DSADatabaseFile, unicodeException);
             }
             catch
             {
@@ -94,6 +98,24 @@
                 this.Dispose();
                 throw;
             }
+        }
+
+        public string DSAWorkingDirectory
+        {
+            get;
+            private set;
+        }
+
+        public string DSADatabaseFile
+        {
+            get;
+            private set;
+        }
+
+        public string DatabaseLogFilesPath
+        {
+            get;
+            private set;
         }
 
         public DirectorySchema Schema
@@ -159,41 +181,49 @@
                 // Do nothing
                 return;
             }
+
             if(this.LinkResolver != null)
             {
                 this.LinkResolver.Dispose();
                 this.LinkResolver = null;
             }
+
             if (this.SecurityDescriptorRersolver != null)
             {
                 this.SecurityDescriptorRersolver.Dispose();
                 this.SecurityDescriptorRersolver = null;
             }
+
             if (this.DistinguishedNameResolver != null)
             {
                 this.DistinguishedNameResolver.Dispose();
                 this.DistinguishedNameResolver = null;
             }
+
             if (this.DomainController != null)
             {
                 this.DomainController.Dispose();
                 this.DomainController = null;
             }
+
             if (this.database != null)
             {
                 this.database.Dispose();
                 this.database = null;
             }
+
             if (this.session != null)
             {
-                if (this.attachedDatabasePath != null)
+                if (this.isDBAttached)
                 {
-                    this.session.DetachDatabase(this.attachedDatabasePath);
-                    this.attachedDatabasePath = null;
+                    this.session.DetachDatabase(this.DSADatabaseFile);
+                    this.isDBAttached = false;
                 }
+
                 this.session.Dispose();
                 this.session = null;
             }
+
             if (this.instance != null)
             {
                 this.instance.Dispose();

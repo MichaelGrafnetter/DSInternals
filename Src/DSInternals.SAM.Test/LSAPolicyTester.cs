@@ -26,23 +26,6 @@
         }
 
         [TestMethod]
-        public void LsaPolicy_QueryPrimaryDomainInformation()
-        {
-            try
-            {
-                using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation))
-                {
-                    var result = policy.QueryPrimaryDomainInformation();
-                }
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                // This is expected.
-                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
-            }
-        }
-
-        [TestMethod]
         public void LsaPolicy_QueryAccountDomainInformation()
         {
             try

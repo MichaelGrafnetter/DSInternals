@@ -27,7 +27,7 @@ namespace DSInternals.PowerShell.Commands
         [ValidateNotNull]
         [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
         [AcceptHexString]
-        [Alias("key", "SysKey")]
+        [Alias("key", "SysKey", "SystemKey")]
         public byte[] BootKey
         {
             get;

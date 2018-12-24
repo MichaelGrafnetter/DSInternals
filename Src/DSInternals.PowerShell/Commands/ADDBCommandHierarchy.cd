@@ -80,9 +80,6 @@
   </Class>
   <Class Name="DSInternals.PowerShell.Commands.GetADDBDomainControllerCommand" Collapsed="true">
     <Position X="3.25" Y="3" Width="2.75" />
-    <Members>
-      <Method Name="BeginProcessing" Hidden="true" />
-    </Members>
     <TypeIdentifier>
       <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Commands\Datastore\GetADDBDomainControllerCommand.cs</FileName>
@@ -142,13 +139,12 @@
   <Class Name="DSInternals.PowerShell.Commands.GetADDBAccountCommand">
     <Position X="3.75" Y="7.5" Width="2.25" />
     <Members>
-      <Field Name="parameterSetAll" Hidden="true" />
       <Method Name="ProcessRecord" Hidden="true" />
       <Method Name="ReturnAllAccounts" Hidden="true" />
       <Method Name="ReturnSingleAccount" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAAAAAAAQAAAAAAAAAAAAAAAIgIAAAAAgA=</HashCode>
+      <HashCode>AAAAAACAAAAAAAAAAQgAAAAAAAAAAAAAAIAIACAAAgA=</HashCode>
       <FileName>Commands\Datastore\GetADDBAccountCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -164,6 +160,9 @@
   </Class>
   <Class Name="DSInternals.PowerShell.Commands.GetADDBKdsRootKeyCommand" Collapsed="true">
     <Position X="20" Y="3" Width="2.5" />
+    <Members>
+      <Method Name="BeginProcessing" Hidden="true" />
+    </Members>
     <TypeIdentifier>
       <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Commands\Datastore\GetADDBKdsRootKeyCommand.cs</FileName>
@@ -222,6 +221,25 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
       <FileName>Commands\Base\ADDBAccountStatusCommandBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.NewADDBRestoreFromMediaScriptCommand">
+    <Position X="22.75" Y="3" Width="3.25" />
+    <Members>
+      <Field Name="DefaultRegistryPath" Hidden="true" />
+      <Field Name="DefaultSysvolPath" Hidden="true" />
+      <Field Name="DSRMPasswordMinLength" Hidden="true" />
+      <Method Name="LoadScriptTemplate" Hidden="true" />
+      <Method Name="ProcessRecord" Hidden="true" />
+      <Field Name="ScriptTemplateResourceName" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AIAAAIAAAgIAAAAAAAAAAABAAQAAAAAAAAAIAAAAAgI=</HashCode>
+      <FileName>Commands\Datastore\NewADDBRestoreFromMediaScriptCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
