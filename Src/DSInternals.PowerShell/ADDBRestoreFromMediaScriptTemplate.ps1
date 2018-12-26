@@ -11,6 +11,11 @@ Michael Grafnetter
 #>
 #Requires -Version 3 -Modules DSInternals -RunAsAdministrator
 
+# Perform a VSS backup before doing anything else.
+Write-Host 'Creating a snapshot of the system drive to make rollback possible...'
+$vssResult = ([wmiclass] 'Win32_ShadowCopy').Create("$env:SystemDrive\", 'ClientAccessible')
+
+# All the other operations will be executed by a restartable workflow running in SYSTEM context.
 $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock {
 	workflow Restore-DomainController
 	{
@@ -28,28 +33,24 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
 		{
 			# A DC promotion is required.
 			# Note: In order to mainstain compatibility with Windows Server 2008 R2, the ADDSDeployment module is not used.
+			# Advice: It is recommenced to change the DSRM password after DC promotion.
 			dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:"{DomainName}" /DomainNetBiosName:"{NetBIOSDomainName}" /DomainLevel:{DomainMode} /ForestLevel:{ForestMode} '/SafeModeAdminPassword:"{DSRMPassword}"' /DatabasePath:"{TargetDBDirPath}" /LogPath:"{TargetLogDirPath}" /SysVolPath:"{TargetSysvolPath}" /AllowDomainReinstall:Yes /CreateDNSDelegation:No /DNSOnNetwork:No /InstallDNS:Yes /RebootOnCompletion:No
+			Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\10 -Name ConfigurationStatus -Value 2 -Force
 		}
 		
-		# Reboot the computer into Directory Services Restore Mode
+		# Reboot the computer into the Directory Services Restore Mode.
 		bcdedit.exe /set safeboot dsrepair 
 		Restart-Computer -Force -Delay 5
 		Suspend-Workflow -Label 'Waiting for reboot'
-
-		# Create a snapshot of the current state as a precaution.
-		InlineScript {
-			# Note: As ntdsutil might not be installed when instantiating the workflow, it needs to be wrapped.
-			ntdsutil.exe 'activate instance ntds' snapshot create quit quit
-		}
 
 		# Re-encrypt the DB with the new boot key.
 		$currentBootKey = Get-BootKey -Online
 		Set-ADDBBootKey -DBPath '{SourceDBPath}' -LogPath '{SourceLogDirPath}' -OldBootKey {OldBootKey} -NewBootKey $currentBootKey
 
 		# Clone the DC account password.
-		$ntdsParams = Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
+		$ntdsParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
 		InlineScript {
-			# Note: SupplementalCredentials do not get serialized properly without using InlineScript.
+			# Note: SupplementalCredentials do not get serialized properly without using the InlineScript activity.
 			$dcAccount = Get-ADDBAccount -SamAccountName '{DCName}$' -DBPath $using:ntdsParams.'DSA Database file' -LogPath $using:ntdsParams.'Database log files path' -BootKey $using:currentBootKey
 			Set-ADDBAccountPasswordHash -ObjectGuid {DCGuid} -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DBPath '{SourceDBPath}' -LogPath '{SourceLogDirPath}' -BootKey $using:currentBootKey
 		}
@@ -59,15 +60,15 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
 		robocopy.exe '{SourceLogDirPath}' $ntdsParams.'Database log files path' *.log *.jrs /MIR /NP /NDL /NJS
 
 		# Replace SYSVOL.
-		$netlogonParams = Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters -Name SysVol
-		robocopy.exe '{SourceSysvolPath}' (Join-Path -Path $netlogonParams.SysVol -ChildPath 'domain') /COPYALL /SECFIX /TIMFIX /DCOPY:DAT /MIR /NP /NDL
+		$netlogonParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters -Name SysVol
+		robocopy.exe '{SourceSysvolPath}' (Join-Path -Path $netlogonParams.SysVol -ChildPath '{DomainName}') /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
 
 		# Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
 		Set-LsaPolicyInformation -DomainName '{NetBIOSDomainName}' -DnsDomainName '{NetBIOSDomainName}' -DnsForestName '{ForestName}' -DomainGuid {DomainGuid} -DomainSid {DomainSid}
 
 		# Tell the DC that its DB has intentionally been restored. A new InvocationID will be generated as soon as the service starts.
-		Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'Database restored from backup' -Value 1 -Force
-		Remove-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'DSA Database Epoch' -Force
+		Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'Database restored from backup' -Value 1 -Force
+		Remove-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'DSA Database Epoch' -Force
 
 		# Disable DSRM and do one last reboot.
 		bcdedit.exe /deletevalue safeboot
@@ -98,6 +99,6 @@ schtasks.exe /Change /TN '\Microsoft\Windows\PowerShell\ScheduledJobs\DSInternal
 schtasks.exe /Change /TN '\Microsoft\Windows\PowerShell\ScheduledJobs\DSInternals-RFM-Resumer' /RU SYSTEM | Out-Null
 
 # Start the workflow task and let the magic happen.
-Write-Host 'The {DCName} domain controller will now be restored. Several reboots will follow.'
+Write-Host 'The {DCName} domain controller will now be restored from media. Up to 3 reboots will follow.'
 pause
 $initTask.RunAsTask()
