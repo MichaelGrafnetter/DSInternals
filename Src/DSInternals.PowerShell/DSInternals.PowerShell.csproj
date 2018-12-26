@@ -150,7 +150,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DSInternals.psm1">
+    <Content Include="DSInternals.Bootstrap.psm1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="en-US\about_DSInternals.help.txt">

@@ -5,7 +5,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = 'DSInternals.psm1'
+RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
 ModuleVersion = '3.0'
