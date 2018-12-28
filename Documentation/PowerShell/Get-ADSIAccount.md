@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-ADSIAccount
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Gets all Active Directory user accounts from a given domain controller using ADSI. 
 
 ## SYNTAX
 

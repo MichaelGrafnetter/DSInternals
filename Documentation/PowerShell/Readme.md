@@ -30,7 +30,7 @@ Converts a password to the format used by Group Policy Preferences.
 Helper cmdlet that converts binary input to hexadecimal string.
 
 ### [ConvertTo-KerberosKey](ConvertTo-KerberosKey.md)
-{{Fill in the Synopsis}}
+Computes Kerberos keys from a given password using Kerberos version 5 Key Derivation Functions.
 
 ### [ConvertTo-LMHash](ConvertTo-LMHash.md)
 Calculates LM hash of a given password.
@@ -66,7 +66,7 @@ Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryptio
 Reads AD schema from a ntds.dit file, including datatable column names.
 
 ### [Get-ADKeyCredential](Get-ADKeyCredential.md)
-{{Fill in the Synopsis}}
+Creates an object representing Windows Hello for Business credentials from its binary representation or an X.509 certificate.
 
 ### [Get-ADReplAccount](Get-ADReplAccount.md)
 Reads one or more accounts through the DRSR protocol, including secret attributes.
@@ -75,16 +75,19 @@ Reads one or more accounts through the DRSR protocol, including secret attribute
 Reads the DPAPI backup keys through the DRSR protocol.
 
 ### [Get-ADSIAccount](Get-ADSIAccount.md)
-{{Fill in the Synopsis}}
+Gets all Active Directory user accounts from a given domain controller using ADSI. 
 
 ### [Get-BootKey](Get-BootKey.md)
-Reads the BootKey/SysKey from an offline SYSTEM registry hive.
+Reads the Boot Key (AKA SysKey or System Key) from an online or offline SYSTEM registry hive.
 
 ### [Get-LsaPolicyInformation](Get-LsaPolicyInformation.md)
-{{Fill in the Synopsis}}
+Retrieves AD-related information from the Local Security Authority Policy of the local computer or a remote one.
 
 ### [Get-SamPasswordPolicy](Get-SamPasswordPolicy.md)
 Queries Active Directory for the default password policy.
+
+### [New-ADDBRestoreFromMediaScript](New-ADDBRestoreFromMediaScript.md)
+Generates a PowerShell script that can be used to restore a domain controller from an IFM-equivalent backup (i.e. ntds.dit + SYSVOL).
 
 ### [Remove-ADDBObject](Remove-ADDBObject.md)
 Physically removes specified object from a ntds.dit file, making it semantically inconsistent. Highly experimental!
@@ -93,10 +96,10 @@ Physically removes specified object from a ntds.dit file, making it semantically
 Saves the output of the Get-ADReplBackupKey and Get-ADDBBackupKey cmdlets to a file.
 
 ### [Set-ADDBAccountPassword](Set-ADDBAccountPassword.md)
-{{Fill in the Synopsis}}
+Sets the password for a user, computer, or service account stored in a ntds.dit file.
 
 ### [Set-ADDBAccountPasswordHash](Set-ADDBAccountPasswordHash.md)
-{{Fill in the Synopsis}}
+Sets the password hash for a user, computer, or service account stored in a ntds.dit file.
 
 ### [Set-ADDBBootKey](Set-ADDBBootKey.md)
 Re-encrypts a ntds.dit with a new BootKey. Highly experimental!
@@ -108,7 +111,7 @@ Writes information about the DC to a ntds.dit file, including the highest commit
 Modifies the primaryGroupId attribute of an object to a ntds.dit file.
 
 ### [Set-LsaPolicyInformation](Set-LsaPolicyInformation.md)
-{{Fill in the Synopsis}}
+Configures AD-related Local Security Authority Policies of the local computer or a remote one.
 
 ### [Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md)
 Sets NT and LM hashes of an account through the SAMR protocol.

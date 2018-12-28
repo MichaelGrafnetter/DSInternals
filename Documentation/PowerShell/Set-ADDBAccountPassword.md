@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-ADDBAccountPassword
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Sets the password for a user, computer, or service account stored in a ntds.dit file.
 
 ## SYNTAX
 
@@ -56,7 +56,7 @@ PS C:\> {{ Add example code here }}
 ```yaml
 Type: Byte[]
 Parameter Sets: (All)
-Aliases: Key, SysKey
+Aliases: Key, SysKey, SystemKey
 
 Required: True
 Position: Named
@@ -111,7 +111,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewPassword
-{{Fill NewPassword Description}}
+Specifies a new password value. This value is stored as an encrypted string.
 
 ```yaml
 Type: SecureString
@@ -200,3 +200,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Set-ADDBAccountPasswordHash](Set-ADDBAccountPasswordHash.md)
+[Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md)
+[Get-BootKey](Get-BootKey.md)
+[Get-ADDBAccount](Get-ADDBAccount.md)

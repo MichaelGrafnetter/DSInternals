@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LsaPolicyInformation
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Retrieves AD-related information from the Local Security Authority Policy of the local computer or a remote one.
 
 ## SYNTAX
 
@@ -23,10 +23,17 @@ Get-LsaPolicyInformation [[-ComputerName] <String>] [<CommonParameters>]
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-LSAPolicyInformation
 ```
 
-{{ Add example description here }}
+Retrieves LSA Policy from the local computer.
+
+### Example 2
+```powershell
+PS C:\> Get-LSAPolicyInformation -ComputerName LON-DC1
+```
+
+Retrieves LSA Policy from a remote computer called LON-DC1.
 
 ## PARAMETERS
 

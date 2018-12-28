@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-ADKeyCredential
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Creates an object representing Windows Hello for Business credentials from its binary representation or an X.509 certificate.
 
 ## SYNTAX
 

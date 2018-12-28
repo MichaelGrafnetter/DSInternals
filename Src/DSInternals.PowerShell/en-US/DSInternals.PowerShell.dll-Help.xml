@@ -874,7 +874,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>KerberosKey</command:noun>
       <maml:description>
-        <maml:para>{{Fill in the Synopsis}}</maml:para>
+        <maml:para>Computes Kerberos keys from a given password using Kerberos version 5 Key Derivation Functions.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -998,6 +998,14 @@
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/ConvertTo-KerberosKey.md</maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>ConvertTo-NTHash</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>ConvertTo-LMHash</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -1082,6 +1090,14 @@
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/ConvertTo-LMHash.md</maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>ConvertTo-NTHash</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>ConvertTo-KerberosKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -1165,6 +1181,14 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/ConvertTo-NTHash.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>ConvertTo-LMHash</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>ConvertTo-KerberosKey</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2186,7 +2210,7 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>TODO</maml:para>
@@ -2225,7 +2249,7 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-ADDBAccount</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>TODO</maml:para>
@@ -2276,7 +2300,7 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-ADDBAccount</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>TODO</maml:para>
@@ -2327,7 +2351,7 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-ADDBAccount</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>TODO</maml:para>
@@ -2390,7 +2414,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>TODO</maml:para>
@@ -2441,7 +2465,7 @@
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
         <maml:name>BootKey</maml:name>
         <maml:Description>
           <maml:para>TODO</maml:para>
@@ -2614,7 +2638,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-ADDBBackupKey</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>TODO</maml:para>
@@ -2653,7 +2677,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
         <maml:name>BootKey</maml:name>
         <maml:Description>
           <maml:para>TODO</maml:para>
@@ -3093,7 +3117,7 @@
       <command:verb>Get</command:verb>
       <command:noun>ADKeyCredential</command:noun>
       <maml:description>
-        <maml:para>{{Fill in the Synopsis}}</maml:para>
+        <maml:para>Creates an object representing Windows Hello for Business credentials from its binary representation or an X.509 certificate.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -3909,7 +3933,7 @@
       <command:verb>Get</command:verb>
       <command:noun>ADSIAccount</command:noun>
       <maml:description>
-        <maml:para>{{Fill in the Synopsis}}</maml:para>
+        <maml:para>Gets all Active Directory user accounts from a given domain controller using ADSI.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -4033,11 +4057,12 @@
       <command:verb>Get</command:verb>
       <command:noun>BootKey</command:noun>
       <maml:description>
-        <maml:para>Reads the BootKey/SysKey from an offline SYSTEM registry hive.</maml:para>
+        <maml:para>Reads the Boot Key (AKA SysKey or System Key) from an online or offline SYSTEM registry hive.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>The BootKey/SysKey is an encryption key that is stored in the Windows SYSTEM registry hive. This key is used by several Windows components to encrypt sensitive information like the AD database, machine account password or system certificates etc.</maml:para>
+      <maml:para>The Boot Key is returned in hexadecimal format.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -4045,7 +4070,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Online</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Online Description}}</maml:para>
+            <maml:para>Specifies that the action is to be taken on the operating system that is currently running on the local computer.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -4059,7 +4084,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="Path, FilePath, SystemHivePath, HivePath">
           <maml:name>SystemHiveFilePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Path to an offline SYSTEM registry hive.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -4074,7 +4099,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Online</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Online Description}}</maml:para>
+          <maml:para>Specifies that the action is to be taken on the operating system that is currently running on the local computer.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -4086,7 +4111,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="Path, FilePath, SystemHivePath, HivePath">
         <maml:name>SystemHiveFilePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Path to an offline SYSTEM registry hive.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -4124,9 +4149,17 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-BootKey -Online</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Retrieves the BootKey from the currently running OS.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; reg.exe SAVE HKLM\SYSTEM C:\RegBackup\SYSTEM.hiv
+PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
+        <dev:remarks>
+          <maml:para>Creates a backup of the SYSTEM registry hive and then retrieves the BootKey from this backup.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -4134,6 +4167,22 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-BootKey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBAccountPassword</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBAccountPasswordHash</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -4143,7 +4192,7 @@
       <command:verb>Get</command:verb>
       <command:noun>LsaPolicyInformation</command:noun>
       <maml:description>
-        <maml:para>{{Fill in the Synopsis}}</maml:para>
+        <maml:para>Retrieves AD-related information from the Local Security Authority Policy of the local computer or a remote one.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -4208,9 +4257,16 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-LSAPolicyInformation</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Retrieves LSA Policy from the local computer.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-LSAPolicyInformation -ComputerName LON-DC1</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves LSA Policy from a remote computer called LON-DC1.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -4350,6 +4406,327 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-SamPasswordPolicy.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-ADDBRestoreFromMediaScript</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>ADDBRestoreFromMediaScript</command:noun>
+      <maml:description>
+        <maml:para>Generates a PowerShell script that can be used to restore a domain controller from an IFM-equivalent backup (i.e. ntds.dit + SYSVOL).</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>WARNING: This recovery procedure is NOT SUPPORTED by Microsoft. Use at your own risk in situations when you are facing Active Directory forest reinstallation.</maml:para>
+      <maml:para>To perform a Restore from Media (RFM, &amp;copy; Michael Grafnetter) operation, you need to have the following: - A full Install from Media (IFM) backup of a domain controller or equivalent file-level backup. The backup must contain these files: 	- Domain database file (ntds.dit) 	- SYSTEM registry hive 	- SYSVOL directory - A freshly installed Windows Server of the same version as the domain controller originally running the database that is to be restored. This information can be retrieved from the corresponding ntds.dit file using the Get-ADDBDomainController (Get-ADDBDomainController.md)cmdlet. - An isolated VLAN / virtual network as connectivity to any existing production domain controllers would have unforseen consequences.</maml:para>
+      <maml:para>Follow these steps on the target server in order to restore the domain controller: 1. In case of Windows Server 2008 (R2), run the `$PSVersionTable.PSVersion` to verify that at least PowerShell 3 is installed. Upgrade (https://docs.microsoft.com/en-us/powershell/wmf/overview)if necessary.  2. Verify that the PowerShell Script Execution Policy (https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-6)is set to RemoteSigned, Unrestricted or Bypass in the LocalMachine scope. 3. Install (https://github.com/MichaelGrafnetter/DSInternals/wiki/Installation)the DSInternals PowerShell module for all users. 4. Copy the backup data to a local drive, e.g. C:\Backup. 5. Run the `New-ADDBRestoreFromMediaScript -DBPath 'C:\Backup\Active Directory\ntds.dit' | Invoke-Expression` command. 6. Sit back and watch the magic happen. Up to 3 reboots will follow and the entire process may take up to 20 minutes to finish. You should then end up with a fully functional domain controller.</maml:para>
+      <maml:para>The script that is generated by the `New-ADDBRestoreFromMediaScript` cmdlet does the following actions: - Rename the server to match the original domain controller.</maml:para>
+      <maml:para>- Install a new forest by promoting the server to a domain controller.</maml:para>
+      <maml:para>- Replace the newly generated database file (ntds.dit) and SYSVOL directory by the original ones.</maml:para>
+      <maml:para>- Re-encrypt the database</maml:para>
+      <maml:para>- Clone password</maml:para>
+      <maml:para>- Update the LSA Policy to match the SID and GUID of the domain that is being restored.</maml:para>
+      <maml:para>- Reset the InvocationID of the domain controller.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-ADDBRestoreFromMediaScript</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
+          <maml:name>BootKey</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the system key that encrypts secrets stored in the database specified by the -DBPath parameter. If none is specified, it is automatically extracted from a backup of the SYSTEM registry hive, provided that it is present in the ..\registry\SYSTEM path relative to the -DBPath parameter.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
+          <maml:name>DBPath</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a non-UNC path to the backup of domain database (ntds.dit file) that will be used to restore the domain controller.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+          <maml:name>LogPath</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a non-UNC path to a directory that contains the backup of domain log files. If not specified, the value of the DBPath parameter is used.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SafeModeAdminPassword, AdminPassword, DSRMPassword">
+          <maml:name>SafeModeAdministratorPassword</maml:name>
+          <maml:Description>
+            <maml:para>Supplies the password for the administrator account when the computer is started in Safe Mode or a variant of Safe Mode, such as Directory Services Restore Mode. If no value is specified for this parameter, the cmdlet prompts you to enter and confirm a masked password. If specified with a value, the value must be a secure string.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
+          <dev:type>
+            <maml:name>SecureString</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SysVol">
+          <maml:name>SysvolPath</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a non-UNC path to a directory that contains the backup of Sysvol data. If none is specified, the ..\SYSVOL\ path relative to the -DBPath parameter is used.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
+        <maml:name>BootKey</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the system key that encrypts secrets stored in the database specified by the -DBPath parameter. If none is specified, it is automatically extracted from a backup of the SYSTEM registry hive, provided that it is present in the ..\registry\SYSTEM path relative to the -DBPath parameter.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Byte[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
+        <maml:name>DBPath</maml:name>
+        <maml:Description>
+          <maml:para>Specifies a non-UNC path to the backup of domain database (ntds.dit file) that will be used to restore the domain controller.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+        <maml:name>LogPath</maml:name>
+        <maml:Description>
+          <maml:para>Specifies a non-UNC path to a directory that contains the backup of domain log files. If not specified, the value of the DBPath parameter is used.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SafeModeAdminPassword, AdminPassword, DSRMPassword">
+        <maml:name>SafeModeAdministratorPassword</maml:name>
+        <maml:Description>
+          <maml:para>Supplies the password for the administrator account when the computer is started in Safe Mode or a variant of Safe Mode, such as Directory Services Restore Mode. If no value is specified for this parameter, the cmdlet prompts you to enter and confirm a masked password. If specified with a value, the value must be a secure string.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
+        <dev:type>
+          <maml:name>SecureString</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SysVol">
+        <maml:name>SysvolPath</maml:name>
+        <maml:Description>
+          <maml:para>Specifies a non-UNC path to a directory that contains the backup of Sysvol data. If none is specified, the ..\SYSVOL\ path relative to the -DBPath parameter is used.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; New-ADDBRestoreFromMediaScript -DBPath 'C:\IFM\Active Directory\ntds.dit' | Invoke-Expression</dev:code>
+        <dev:remarks>
+          <maml:para>Restores a domain controller from a previously created IFM backup.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; New-ADDBRestoreFromMediaScript -DBPath 'C:\IFM\Active Directory\ntds.dit' -BootKey 610bc29e6f62ca7004e9872cd51a0116 -SysvolPath 'C:\IFM\SYSVOL'</dev:code>
+        <dev:remarks>
+          <maml:para>Generates a domain controller restoration script from a previously created IFM backup. The script can then be reviewed, modified if necessary and executed manually.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>ntdsutil.exe "activate instance ntds" ifm "create sysvol full c:\IFM" quit quit</dev:code>
+        <dev:remarks>
+          <maml:para>Creates an Install From Media (IFM) backup of a running domain controller. This backup can later be used by the New-ADDBRestoreFromMediaScript cmdlet.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>&lt;#
+.SYNOPSIS
+Restores the LON-DC1 domain controller from ntds.dit.
+
+.REMARKS
+This script should only be executed on a freshly installed Windows Server 2012 R2 Datacenter Evaluation. Use at your own risk
+The DSInternals PowerShell module must be installed for all users on the target server.
+
+.AUTHOR
+Michael Grafnetter
+#&gt;
+#Requires -Version 3 -Modules DSInternals -RunAsAdministrator
+
+# Perform a VSS backup before doing anything else.
+Write-Host 'Creating a snapshot of the system drive to make rollback possible...'
+$vssResult = ([wmiclass] 'Win32_ShadowCopy').Create("$env:SystemDrive\", 'ClientAccessible')
+
+# All the other operations will be executed by a restartable workflow running in SYSTEM context.
+$initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock {
+        workflow Restore-DomainController
+        {
+                if ($env:COMPUTERNAME -ne 'LON-DC1')
+                {
+                        # A server rename operation is required.
+                        Rename-Computer -NewName 'LON-DC1' -Force
+
+                        # We explicitly suspend the workflow as Restart-Computer with the -Wait parameter does not survive local reboots.
+                        Restart-Computer -Force -Delay 5
+                        Suspend-Workflow -Label 'Waiting for reboot'
+                }
+
+                if ((Get-Service NTDS -ErrorAction SilentlyContinue) -eq $null)
+                {
+                        # A DC promotion is required.
+                        # Note: In order to mainstain compatibility with Windows Server 2008 R2, the ADDSDeployment module is not used.
+                        # Advice: It is recommenced to change the DSRM password after DC promotion.
+                        dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:"Adatum.com" /DomainNetBiosName:"ADATUM" /DomainLevel:6 /ForestLevel:6 '/SafeModeAdminPassword:"Pa$$w0rd"' /DatabasePath:"$env:SYSTEMROOT\NTDS" /LogPath:"$env:SYSTEMROOT\NTDS" /SysVolPath:"$env:SYSTEMROOT\SYSVOL" /AllowDomainReinstall:Yes /CreateDNSDelegation:No /DNSOnNetwork:No /InstallDNS:Yes /RebootOnCompletion:No
+                        Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\10 -Name ConfigurationStatus -Value 2 -Force
+                }
+
+                # Reboot the computer into the Directory Services Restore Mode.
+                bcdedit.exe /set safeboot dsrepair
+                Restart-Computer -Force -Delay 5
+                Suspend-Workflow -Label 'Waiting for reboot'
+
+                # Re-encrypt the DB with the new boot key.
+                $currentBootKey = Get-BootKey -Online
+                Set-ADDBBootKey -DBPath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -OldBootKey 610bc29e6f62ca7004e9872cd51a0116 -NewBootKey $currentBootKey
+
+                # Clone the DC account password.
+                $ntdsParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
+                InlineScript {
+                        # Note: SupplementalCredentials do not get serialized properly without using the InlineScript activity.
+                        $dcAccount = Get-ADDBAccount -SamAccountName 'LON-DC1$' -DBPath $using:ntdsParams.'DSA Database file' -LogPath $using:ntdsParams.'Database log files path' -BootKey $using:currentBootKey
+                        Set-ADDBAccountPasswordHash -ObjectGuid 9bb4d6f4-060a-4585-9f18-625774e7c088 -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DBPath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -BootKey $using:currentBootKey
+                }
+
+                # Replace the database and transaction logs.
+                robocopy.exe 'C:\Backup\Active Directory' $ntdsParams.'DSA Working Directory' *.dit *.edb *.chk *.jfm /MIR /NP /NDL /NJS
+                robocopy.exe 'C:\Backup\Active Directory' $ntdsParams.'Database log files path' *.log *.jrs /MIR /NP /NDL /NJS
+
+                # Replace SYSVOL.
+                $netlogonParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters -Name SysVol
+                robocopy.exe 'C:\Backup\SYSVOL\Adatum.com' (Join-Path -Path $netlogonParams.SysVol -ChildPath 'Adatum.com') /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
+
+                # Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
+                Set-LsaPolicyInformation -DomainName 'ADATUM' -DnsDomainName 'Adatum.com' -DnsForestName 'Adatum.com' -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 -DomainSid S-1-5-21-1817670852-3242289776-1304069626
+
+                # Tell the DC that its DB has intentionally been restored. A new InvocationID will be generated as soon as the service starts.
+                Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'Database restored from backup' -Value 1 -Force
+                Remove-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'DSA Database Epoch' -Force
+
+                # Disable DSRM and do one last reboot.
+                bcdedit.exe /deletevalue safeboot
+                Restart-Computer -Force -Delay 5
+                Suspend-Workflow -Label 'Waiting for reboot'
+        }
+
+        # Delete any pre-existing workflows with the same name before starting a new one.
+        Remove-Job -Name DSInternals-RFM-Workflow -Force -ErrorAction SilentlyContinue
+
+        # Start the workflow.
+        Restore-DomainController -JobName DSInternals-RFM-Workflow
+}
+
+$resumeTask = Register-ScheduledJob -Name DSInternals-RFM-Resumer -Trigger (New-JobTrigger -AtStartup) -ScriptBlock {
+        # Resume the workflow after the computer is rebooted.
+        Resume-Job -Name DSInternals-RFM-Workflow -Wait | Wait-Job | where State -In Completed,Failed,Stopped | foreach {
+                # Perform cleanup when finished.
+                Remove-Job -Job $PSItem -Force
+                Unregister-ScheduledJob -Name DSInternals-RFM-Initializer -Force
+                Unregister-ScheduledJob -Name DSInternals-RFM-Resumer -Force
+        }
+}
+
+# Configure the scheduled tasks to run under the SYSTEM account.
+# Note: In order to maintain compatibility with Windows Server 2008 R2, the ScheduledTasks module is not used.
+schtasks.exe /Change /TN '\Microsoft\Windows\PowerShell\ScheduledJobs\DSInternals-RFM-Initializer' /RU SYSTEM | Out-Null
+schtasks.exe /Change /TN '\Microsoft\Windows\PowerShell\ScheduledJobs\DSInternals-RFM-Resumer' /RU SYSTEM | Out-Null
+
+# Start the workflow task and let the magic happen.
+Write-Host 'The LON-DC1 domain controller will now be restored from media. Up to 3 reboots will follow.'
+pause
+$initTask.RunAsTask()</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-BootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDomainController</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -4807,7 +5184,7 @@
       <command:verb>Set</command:verb>
       <command:noun>ADDBAccountPassword</command:noun>
       <maml:description>
-        <maml:para>{{Fill in the Synopsis}}</maml:para>
+        <maml:para>Sets the password for a user, computer, or service account stored in a ntds.dit file.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -4816,7 +5193,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-ADDBAccountPassword</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -4867,7 +5244,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Password, Pwd, Pass, AccountPassword, p">
           <maml:name>NewPassword</maml:name>
           <maml:Description>
-            <maml:para>{{Fill NewPassword Description}}</maml:para>
+            <maml:para>Specifies a new password value. This value is stored as an encrypted string.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
           <dev:type>
@@ -4890,7 +5267,7 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-ADDBAccountPassword</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -4929,7 +5306,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Password, Pwd, Pass, AccountPassword, p">
           <maml:name>NewPassword</maml:name>
           <maml:Description>
-            <maml:para>{{Fill NewPassword Description}}</maml:para>
+            <maml:para>Specifies a new password value. This value is stored as an encrypted string.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
           <dev:type>
@@ -4964,7 +5341,7 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-ADDBAccountPassword</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -5003,7 +5380,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Password, Pwd, Pass, AccountPassword, p">
           <maml:name>NewPassword</maml:name>
           <maml:Description>
-            <maml:para>{{Fill NewPassword Description}}</maml:para>
+            <maml:para>Specifies a new password value. This value is stored as an encrypted string.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
           <dev:type>
@@ -5050,7 +5427,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -5089,7 +5466,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Password, Pwd, Pass, AccountPassword, p">
           <maml:name>NewPassword</maml:name>
           <maml:Description>
-            <maml:para>{{Fill NewPassword Description}}</maml:para>
+            <maml:para>Specifies a new password value. This value is stored as an encrypted string.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
           <dev:type>
@@ -5112,7 +5489,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
         <maml:name>BootKey</maml:name>
         <maml:Description>
           <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -5163,7 +5540,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Password, Pwd, Pass, AccountPassword, p">
         <maml:name>NewPassword</maml:name>
         <maml:Description>
-          <maml:para>{{Fill NewPassword Description}}</maml:para>
+          <maml:para>Specifies a new password value. This value is stored as an encrypted string.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
         <dev:type>
@@ -5284,6 +5661,22 @@
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBAccountPassword.md</maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBAccountPasswordHash</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-SamAccountPasswordHash</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-BootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -5292,7 +5685,7 @@
       <command:verb>Set</command:verb>
       <command:noun>ADDBAccountPasswordHash</command:noun>
       <maml:description>
-        <maml:para>{{Fill in the Synopsis}}</maml:para>
+        <maml:para>Sets the password hash for a user, computer, or service account stored in a ntds.dit file.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -5301,7 +5694,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-ADDBAccountPasswordHash</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -5387,7 +5780,7 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-ADDBAccountPasswordHash</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -5473,7 +5866,7 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-ADDBAccountPasswordHash</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -5571,7 +5964,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
             <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -5645,7 +6038,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
         <maml:name>BootKey</maml:name>
         <maml:Description>
           <maml:para>{{Fill BootKey Description}}</maml:para>
@@ -5836,6 +6229,22 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBAccountPasswordHash.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBAccountPassword</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-SamAccountPasswordHash</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-BootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -6705,7 +7114,7 @@
       <command:verb>Set</command:verb>
       <command:noun>LsaPolicyInformation</command:noun>
       <maml:description>
-        <maml:para>{{Fill in the Synopsis}}</maml:para>
+        <maml:para>Configures AD-related Local Security Authority Policies of the local computer or a remote one.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -6890,9 +7299,9 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Set-LsaPolicyInformation -DomainName 'ADATUM' -DnsDomainName 'Adatum.com' -DnsForestName 'Adatum.com' -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 -DomainSid S-1-5-21-1817670852-3242289776-1304069626</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Configures AD-related LSA Policy Information of the local computer.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

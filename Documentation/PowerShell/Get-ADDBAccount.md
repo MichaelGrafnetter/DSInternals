@@ -76,7 +76,7 @@ TODO
 ```yaml
 Type: Byte[]
 Parameter Sets: (All)
-Aliases: key, SysKey
+Aliases: key, SysKey, SystemKey
 
 Required: False
 Position: Named

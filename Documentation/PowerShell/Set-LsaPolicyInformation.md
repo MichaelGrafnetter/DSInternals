@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LsaPolicyInformation
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Configures AD-related Local Security Authority Policies of the local computer or a remote one.
 
 ## SYNTAX
 
@@ -24,10 +24,10 @@ Set-LsaPolicyInformation -DomainName <String> -DnsDomainName <String> -DnsForest
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-LsaPolicyInformation -DomainName 'ADATUM' -DnsDomainName 'Adatum.com' -DnsForestName 'Adatum.com' -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 -DomainSid S-1-5-21-1817670852-3242289776-1304069626
 ```
 
-{{ Add example description here }}
+Configures AD-related LSA Policy Information of the local computer.
 
 ## PARAMETERS
 

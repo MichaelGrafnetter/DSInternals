@@ -1,23 +1,22 @@
-﻿#Requires -Version 5 -Module platyPS
-<#
+﻿<#
 .SYNOPSIS
 Refreshes MD documentation files and builds MAML files.
 
 .AUTHOR
 Przemysław Kłys (@PrzemyslawKlys)
 #>
+#Requires -Version 5 -Module platyPS
 
 # Set directory paths
 $rootDir = Split-Path $PSScriptRoot -Parent
 $locale = 'en-US'
 $dsInternalsModulePath = Join-Path $rootDir 'Build\bin\Release\DSInternals'
-$dsInternalsModuleManifestPath = Join-Path $dsInternalsModulePath 'DSInternals.psd1'
 $mdHelpPath = Join-Path $rootDir 'Documentation\PowerShell'
 $xmlHelpPath = Join-Path $rootDir "Src\DSInternals.PowerShell\$locale"
 
 # Import dependencies
 Import-Module -Name platyPS
-Import-Module -Name $dsInternalsModuleManifestPath
+Import-Module -Name $dsInternalsModulePath
 
 <#
 Note: This code has been used to create the initial version of the help files:

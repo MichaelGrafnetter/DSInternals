@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-ADDBAccountPasswordHash
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Sets the password hash for a user, computer, or service account stored in a ntds.dit file.
 
 ## SYNTAX
 
@@ -60,7 +60,7 @@ PS C:\> {{ Add example code here }}
 ```yaml
 Type: Byte[]
 Parameter Sets: (All)
-Aliases: Key, SysKey
+Aliases: Key, SysKey, SystemKey
 
 Required: True
 Position: Named
@@ -220,3 +220,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Set-ADDBAccountPassword](Set-ADDBAccountPassword.md)
+[Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md)
+[Get-BootKey](Get-BootKey.md)
+[Get-ADDBAccount](Get-ADDBAccount.md)

@@ -57,3 +57,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[ConvertTo-NTHash](ConvertTo-NTHash.md)
+[ConvertTo-KerberosKey](ConvertTo-KerberosKey.md)

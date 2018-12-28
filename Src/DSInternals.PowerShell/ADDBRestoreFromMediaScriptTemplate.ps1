@@ -64,7 +64,7 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
 		robocopy.exe '{SourceSysvolPath}' (Join-Path -Path $netlogonParams.SysVol -ChildPath '{DomainName}') /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
 
 		# Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
-		Set-LsaPolicyInformation -DomainName '{NetBIOSDomainName}' -DnsDomainName '{NetBIOSDomainName}' -DnsForestName '{ForestName}' -DomainGuid {DomainGuid} -DomainSid {DomainSid}
+		Set-LsaPolicyInformation -DomainName '{NetBIOSDomainName}' -DnsDomainName '{DomainName}' -DnsForestName '{ForestName}' -DomainGuid {DomainGuid} -DomainSid {DomainSid}
 
 		# Tell the DC that its DB has intentionally been restored. A new InvocationID will be generated as soon as the service starts.
 		Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'Database restored from backup' -Value 1 -Force

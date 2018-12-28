@@ -8,7 +8,7 @@ schema: 2.0.0
 # ConvertTo-KerberosKey
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Computes Kerberos keys from a given password using Kerberos version 5 Key Derivation Functions.
 
 ## SYNTAX
 
@@ -87,3 +87,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[ConvertTo-NTHash](ConvertTo-NTHash.md)
+[ConvertTo-LMHash](ConvertTo-LMHash.md)
