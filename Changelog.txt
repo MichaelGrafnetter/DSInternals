@@ -1,3 +1,12 @@
+Version 3.1
+- [Module] Added the New-ADDBRestoreFromMediaScript cmdlet to aid with file-level DC recovery process.
+- [Module] Added the Get-LSAPolicyInformation and Set-LSAPolicyInformation cmdlets that can be used to retrieve and change domain-related LSA Policies.
+- [Module] Extended the information returned by the The Get-ADDBDomainController cmdlet.
+- [Module] Added MAML documentation for Get-Help.
+- [Module] Path to the DSInternals.psd1 file now does not need to be specified when loading the module from a non-default location.
+- [Framework] Implemented distinguished name (DN) caching in the database access layer.
+- [Framework] Added support for LSA Policy retrieval and modification.
+
 Version 3.0
 - [Module] Added the Set-ADDBAccountPassword and Set-ADDBAccountPasswordHash for offline password modification.
 - [Module] The Test-PasswordQuality cmdlet now supports NTLM hash list from haveibeenpwned.com.

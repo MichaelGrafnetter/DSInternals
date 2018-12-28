@@ -41,6 +41,7 @@ New-Alias -Name ConvertTo-MsoPasswordHash        -Value ConvertTo-OrgIdHash
 New-Alias -Name Get-ADReplicationAccount         -Value Get-ADReplAccount
 New-Alias -Name ConvertFrom-ManagedPasswordBlob  -Value ConvertFrom-ADManagedPasswordBlob
 New-Alias -Name Get-SysKey                       -Value Get-BootKey
+New-Alias -Name Get-SystemKey                    -Value Get-BootKey
 New-Alias -Name Set-ADDBSysKey                   -Value Set-ADDBBootKey
 New-Alias -Name Test-ADPasswordQuality           -Value Test-PasswordQuality
 New-Alias -Name Test-ADDBPasswordQuality         -Value Test-PasswordQuality

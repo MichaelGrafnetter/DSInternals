@@ -253,7 +253,7 @@
 
         public override int GetHashCode()
         {
-            // This DN implementation is not immutablem so we do not calculate the hash of the DN.
+            // This DN implementation is not immutable so we do not calculate the hash of the DN.
             return base.GetHashCode();
         }
     }

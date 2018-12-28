@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.0'
+ModuleVersion = '3.1'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -20,7 +20,7 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) 2015-2018 Michael Grafnetter. All rights reserved.'
+Copyright = '(c) 2015-2019 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
@@ -106,7 +106,7 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'Test-ADDBPasswordQuality', 'Test-ADReplPasswordQuality',
                   'Get-ADPasswordPolicy', 'Get-ADDefaultPasswordPolicy', 'Get-KeyCredential',
                   'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink', 'Get-LsaPolicy',
-                  'Set-LsaPolicy'
+                  'Set-LsaPolicy', 'Get-SystemKey'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -136,18 +136,11 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Set-ADDBAccountPassword and Set-ADDBAccountPasswordHash for offline password modification.
-- The Test-PasswordQuality cmdlet now supports NTLM hash list from haveibeenpwned.com.
-- Added the Get-ADKeyCredential for linked credential generation (AKA Windows Hello for Business).
-- The Get-ADDBAccount, Get-ADReplAccount and Get-ADSIAccount cmdlets now display linked credentials.
-- Databases from Windows Server 2016 can now be read on non-DCs.
-- Added the ConvertTo-KerberosKey cmdlet for key generation.
-- The Save-DPAPIBlob now generates scripts for mimikatz.
-- The Save-DPAPIBlob cmdlet now accepts pipeline input from both Get-ADDBBackupKey and ADDBAccount cmdlets.
-- Added Views JohnNTHistory, HashcatNTHistory and NTHashHistory.
-- The Get-ADDBDomainController cmdlet now displays domain and forest functional levels.
-- The Set-ADDBDomainController cmdlet can now be used to modify backup expiration.
-- The Get-ADDBAccount cmdlet now reports progress when retrieving multiple accounts.
+- Added the New-ADDBRestoreFromMediaScript cmdlet to aid with file-level DC recovery process.
+- Added the Get-LSAPolicyInformation and Set-LSAPolicyInformation cmdlets that can be used to retrieve and change domain-related LSA Policies.
+- Extended the information returned by the The Get-ADDBDomainController cmdlet.
+- Added MAML documentation for Get-Help.
+- Path to the DSInternals.psd1 file now does not need to be specified when loading the module from a non-default location.
 "@
     } # End of PSData hashtable
 

@@ -34,7 +34,7 @@
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>DSInternals.Replication.Interop</RootNamespace>
     <ProjectName>DSInternals.Replication.Interop</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -280,17 +280,17 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(PlatformToolsetVersion)' &gt;= 141 ">
     <!-- Definitions for Visual Studio 2017 -->
-    <VCRuntimePath Condition=" '$(Platform)'=='x64' ">$(VCInstallDir)\Redist\MSVC\$(VCToolsVersion)\onecore\x64\Microsoft.VC150.CRT</VCRuntimePath>
-    <VCRuntimePath Condition=" '$(Platform)'=='Win32' ">$(VCInstallDir)\Redist\MSVC\$(VCToolsVersion)\onecore\x86\Microsoft.VC150.CRT</VCRuntimePath>
+    <VCRuntimePath Condition=" '$(Platform)'=='x64' ">$(VCInstallDir)\Tools\MSVC\$(VCToolsVersion)\bin\Hostx64\x64</VCRuntimePath>
+    <VCRuntimePath Condition=" '$(Platform)'=='Win32' ">$(VCInstallDir)\Tools\MSVC\$(VCToolsVersion)\bin\Hostx86\x86</VCRuntimePath>
   </PropertyGroup>
-  <ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)' == 'Release'">
     <CustomBuildStep>
-      <!-- Note: The msvcr140.dll file has been replaced by vcruntime140.dll since Visual Studio 2017. -->
+      <!-- Note: The msvcr140.dll file has been replaced by vcruntime140.dll since Visual Studio 2017. Moreover, $(PlatformToolsetVersion) equals to 150 instead of 140 and thus does not match the names of the runtime files.-->
       <Command>
-        xcopy.exe /D /Y "$(VCRuntimePath)\msvc*.dll" "$(OutDir)"
-        xcopy.exe /D /Y "$(VCRuntimePath)\vcruntime*.dll" "$(OutDir)"
+        robocopy.exe "$(VCRuntimePath)" "$(OutDir)\." "msvcp*.dll" "msvcr*.dll" "vcruntime*.dll" /xf "msvcp*_*.dll" /FP /NP /NDL /NS /NJH /NJS
+        IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0
       </Command>
-      <Outputs>$(OutDir)\msvcr$(PlatformToolsetVersion).dll;$(OutDir)\msvcp$(PlatformToolsetVersion).dll;$(OutDir)\vcruntime$(PlatformToolsetVersion).dll</Outputs>
+      <Outputs>$(OutDir)\msvcr$(PlatformToolsetVersion).dll;$(OutDir)\msvcp$(PlatformToolsetVersion).dll;$(OutDir)\vcruntime$(PlatformToolsetVersion).dll;$(OutDir)\msvcp140.dll;$(OutDir)\vcruntime140.dll</Outputs>
       <Message>Copying VC Runtime</Message>
     </CustomBuildStep>
   </ItemDefinitionGroup>
