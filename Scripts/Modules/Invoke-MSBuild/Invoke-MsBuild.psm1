@@ -77,6 +77,11 @@ function Invoke-MsBuild
 	If you installed Visual Studio in a non-standard location, or want to force the use of an older Visual Studio Command Prompt version, you may pass in the file path to
 	the Visual Studio Command Prompt to use. The filename is typically VsDevCmd.bat.
 
+	.PARAMETER BypassVisualStudioDeveloperCommandPrompt
+	By default this script will locate and use the latest version of the Visual Studio Developer Command Prompt to run MsBuild.
+	The Visual Studio Developer Command Prompt loads additional variables and paths, so it is sometimes able to build project types that MsBuild cannot build by itself alone.
+	However, loading those additional variables and paths sometimes may have a performance impact, so this switch may be provided to bypass it and just use MsBuild directly.
+
 	.PARAMETER PassThru
 	If set, this switch will cause the calling script not to wait until the build (launched in another process) completes before continuing execution.
 	Instead the build will be started in a new process and that process will immediately be returned, allowing the calling script to continue
@@ -203,13 +208,13 @@ function Invoke-MsBuild
 	.NOTES
 	Name:   Invoke-MsBuild
 	Author: Daniel Schroeder (originally based on the module at http://geekswithblogs.net/dwdii/archive/2011/05/27/part-2-automating-a-visual-studio-build-with-powershell.aspx)
-	Version: 2.5.1
+	Version: 2.6.2
 #>
-	[CmdletBinding(DefaultParameterSetName="Wait")]
+	[CmdletBinding(SupportsShouldProcess, DefaultParameterSetName="Wait")]
 	param
 	(
 		[parameter(Position=0,Mandatory=$true,ValueFromPipeline=$true,HelpMessage="The path to the file to build with MsBuild (e.g. a .sln or .csproj file).")]
-		[ValidateScript({Test-Path $_})]
+		[ValidateScript({Test-Path -LiteralPath $_ -PathType Leaf})]
 		[string] $Path,
 
 		[parameter(Mandatory=$false)]
@@ -251,18 +256,18 @@ function Invoke-MsBuild
 		[switch] $PromptForInputBeforeClosing,
 
 		[parameter(Mandatory=$false)]
-		[ValidateScript({Test-Path $_})]
+		[ValidateScript({Test-Path -LiteralPath $_ -PathType Leaf})]
 		[string] $MsBuildFilePath,
 
 		[parameter(Mandatory=$false)]
-		[ValidateScript({Test-Path $_})]
+		[ValidateScript({Test-Path -LiteralPath $_ -PathType Leaf})]
 		[string] $VisualStudioDeveloperCommandPromptFilePath,
 
-		[parameter(Mandatory=$false,ParameterSetName="PassThru")]
-		[switch] $PassThru,
-
 		[parameter(Mandatory=$false)]
-		[switch] $WhatIf
+		[switch] $BypassVisualStudioDeveloperCommandPrompt,
+
+		[parameter(Mandatory=$false,ParameterSetName="PassThru")]
+		[switch] $PassThru
 	)
 
 	BEGIN { }
@@ -294,9 +299,9 @@ function Invoke-MsBuild
 		$BuildLogDirectoryPath = [System.IO.Path]::GetFullPath($BuildLogDirectoryPath)
 
 		# Local Variables.
-		$solutionFileName = (Get-ItemProperty -Path $Path).Name
+		$solutionFileName = (Get-ItemProperty -LiteralPath $Path).Name
 		$buildLogFilePath = (Join-Path -Path $BuildLogDirectoryPath -ChildPath $solutionFileName) + ".msbuild.log"
-		$buildErrorsLogFilePath = (Join-Path -Path $BuildLogDirectoryPath -ChildPath $solutionFileName) + ".msbulid.errors.log"
+		$buildErrorsLogFilePath = (Join-Path -Path $BuildLogDirectoryPath -ChildPath $solutionFileName) + ".msbuild.errors.log"
 		$windowStyleOfNewWindow = if ($ShowBuildOutputInNewWindow) { "Normal" } else { "Hidden" }
 
 		# Build our hash table that will be returned.
@@ -340,21 +345,27 @@ function Invoke-MsBuild
 				$msBuildPath = Get-LatestMsBuildPath -Use32BitMsBuild:$Use32BitMsBuild
 			}
 
-			# Get the path to the Visual Studio Developer Command Prompt file.
-			$vsCommandPromptPath = $VisualStudioDeveloperCommandPromptFilePath
-			[bool] $vsCommandPromptPathWasNotProvided = [string]::IsNullOrEmpty($vsCommandPromptPath)
-			if ($vsCommandPromptPathWasNotProvided)
+			# If we plan on trying to use the VS Command Prompt, we'll need to get the path to it.
+			[bool] $vsCommandPromptPathWasFound = $false
+			if (!$BypassVisualStudioDeveloperCommandPrompt)
 			{
-				$vsCommandPromptPath = Get-LatestVisualStudioCommandPromptPath
+				# Get the path to the Visual Studio Developer Command Prompt file.
+				$vsCommandPromptPath = $VisualStudioDeveloperCommandPromptFilePath
+				[bool] $vsCommandPromptPathWasNotProvided = [string]::IsNullOrEmpty($vsCommandPromptPath)
+				if ($vsCommandPromptPathWasNotProvided)
+				{
+					$vsCommandPromptPath = Get-LatestVisualStudioCommandPromptPath
+				}
+				$vsCommandPromptPathWasFound = ![string]::IsNullOrEmpty($vsCommandPromptPath)
 			}
 
-			# If a VS Command Prompt was found, call MsBuild from that since it sets environmental variables that may be needed to build some projects types (e.g. XNA).
-			[bool] $vsCommandPromptPathWasFound = ![string]::IsNullOrEmpty($vsCommandPromptPath)
-			if ($vsCommandPromptPathWasFound)
+			# If we should use the VS Command Prompt, call MsBuild from that since it sets environmental variables that may be needed to build some projects types (e.g. XNA).
+			$useVsCommandPrompt = !$BypassVisualStudioDeveloperCommandPrompt -and $vsCommandPromptPathWasFound
+			if ($useVsCommandPrompt)
 			{
 				$cmdArgumentsToRunMsBuild = "/k "" ""$vsCommandPromptPath"" & ""$msBuildPath"" "
 			}
-			# Else the VS Command Prompt was not found, so just build using MsBuild directly.
+			# Else we won't be using the VS Command Prompt, so just build using MsBuild directly.
 			else
 			{
 				$cmdArgumentsToRunMsBuild = "/k "" ""$msBuildPath"" "
@@ -376,8 +387,8 @@ function Invoke-MsBuild
 			# Record the exact command used to perform the build to make it easier to troubleshoot issues with builds.
 			$result.CommandUsedToBuild = "cmd.exe $cmdArgumentsToRunMsBuild"
 
-			# If we don't actually want to perform a build, return .
-			if ($WhatIf)
+			# If we don't actually want to perform a build (i.e. the -WhatIf parameter was specified), return the object without actually doing the build.
+			if (!($pscmdlet.ShouldProcess($result.ItemToBuildFilePath, 'MsBuild')))
 			{
 				$result.BuildSucceeded = $null
 				$result.Message = "The '-WhatIf' switch was specified, so a build was not invoked."
@@ -428,7 +439,7 @@ function Invoke-MsBuild
 		}
 
 		# If we can't find the build's log file in order to inspect it, write a warning and return null.
-		if (!(Test-Path -Path $buildLogFilePath))
+		if (!(Test-Path -LiteralPath $buildLogFilePath -PathType Leaf))
 		{
 			$result.BuildSucceeded = $null
 			$result.Message = "Cannot find the build log file at '$buildLogFilePath', so unable to determine if build succeeded or not."
@@ -437,8 +448,10 @@ function Invoke-MsBuild
 			return $result
 		}
 
-		# Get if the build failed or not by looking at the log file.
-		$buildSucceeded = (((Select-String -Path $buildLogFilePath -Pattern "Build FAILED." -SimpleMatch) -eq $null) -and $result.MsBuildProcess.ExitCode -eq 0)
+		# Get if the build succeeded or not.
+		[bool] $buildOutputDoesNotContainFailureMessage = (Select-String -Path $buildLogFilePath -Pattern "Build FAILED." -SimpleMatch) -eq $null
+		[bool] $buildReturnedSuccessfulExitCode = $result.MsBuildProcess.ExitCode -eq 0
+		$buildSucceeded = $buildOutputDoesNotContainFailureMessage -and $buildReturnedSuccessfulExitCode
 
 		# If the build succeeded.
 		if ($buildSucceeded)
@@ -448,8 +461,8 @@ function Invoke-MsBuild
 			# If we shouldn't keep the log files around, delete them.
 			if (!$KeepBuildLogOnSuccessfulBuilds)
 			{
-				if (Test-Path $buildLogFilePath -PathType Leaf) { Remove-Item -Path $buildLogFilePath -Force }
-				if (Test-Path $buildErrorsLogFilePath -PathType Leaf) { Remove-Item -Path $buildErrorsLogFilePath -Force }
+				if (Test-Path -LiteralPath $buildLogFilePath -PathType Leaf) { Remove-Item -LiteralPath $buildLogFilePath -Force }
+				if (Test-Path -LiteralPath $buildErrorsLogFilePath -PathType Leaf) { Remove-Item -LiteralPath $buildErrorsLogFilePath -Force }
 			}
 		}
 		# Else at least one of the projects failed to build.
@@ -479,7 +492,7 @@ function Invoke-MsBuild
 
 function Open-BuildLogFileWithDefaultProgram([string]$FilePathToOpen, [ref]$Result)
 {
-	if (Test-Path -Path $FilePathToOpen -PathType Leaf)
+	if (Test-Path -LiteralPath $FilePathToOpen -PathType Leaf)
 	{
 		Start-Process -verb "Open" $FilePathToOpen
 	}
@@ -557,7 +570,7 @@ function Get-VisualStudioCommandPromptPathForVisualStudio2015AndPrior
 	$newestVsCommandPromptPath = $null
 	foreach ($path in $potentialVsCommandPromptPaths)
 	{
-		[bool] $pathExists = (![string]::IsNullOrEmpty($path)) -and (Test-Path -Path $path -PathType Leaf)
+		[bool] $pathExists = (![string]::IsNullOrEmpty($path)) -and (Test-Path -LiteralPath $path -PathType Leaf)
 		if ($pathExists)
 		{
 			$newestVsCommandPromptPath = $path
@@ -594,7 +607,7 @@ function Get-LatestMsBuildPath([switch] $Use32BitMsBuild)
 		throw 'Could not determine where to find MsBuild.exe.'
 	}
 
-	[bool] $msBuildExistsAtThePathFound = (Test-Path $msBuildPath -PathType Leaf)
+	[bool] $msBuildExistsAtThePathFound = (Test-Path -LiteralPath $msBuildPath -PathType Leaf)
 	if(!$msBuildExistsAtThePathFound)
 	{
 		throw "MsBuild.exe does not exist at the expected path, '$msBuildPath'."
@@ -693,7 +706,7 @@ function Get-CommonVisualStudioDirectoryPath
 	}
 
 	# If we're on a 32-bit machine, we need to go straight after the "Program Files" directory.
-	if (!(Test-Path -Path $programFilesDirectory -PathType Container))
+	if (!(Test-Path -LiteralPath $programFilesDirectory -PathType Container))
 	{
 		try
 		{
@@ -712,7 +725,7 @@ function Get-CommonVisualStudioDirectoryPath
 
 	[string] $visualStudioDirectoryPath = Join-Path -Path $programFilesDirectory -ChildPath 'Microsoft Visual Studio'
 
-	[bool] $visualStudioDirectoryPathExists = (Test-Path -Path $visualStudioDirectoryPath -PathType Container)
+	[bool] $visualStudioDirectoryPathExists = (Test-Path -LiteralPath $visualStudioDirectoryPath -PathType Container)
 	if (!$visualStudioDirectoryPathExists)
 	{
 		return $null

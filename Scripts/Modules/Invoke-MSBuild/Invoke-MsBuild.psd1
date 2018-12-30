@@ -12,7 +12,7 @@
 RootModule = 'Invoke-MsBuild.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.5.1'
+ModuleVersion = '2.6.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -107,7 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = '- Fix to find the "Program Files" location correctly on 32 bit windows without throwing an error.'
+        ReleaseNotes = '- Use native -WhatIf parameter functionality.'
 
     } # End of PSData hashtable
 
