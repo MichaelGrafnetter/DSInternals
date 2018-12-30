@@ -11,11 +11,13 @@ steps:
 - task: NuGetToolInstaller@0
 
 - task: NuGetCommand@2
+  displayName: 'NuGet Restore Packages'
   inputs:
     command: 'restore'
     restoreSolution: '$(solution)'
 
 - task: VSBuild@1
+  displayName: 'VSBuild ($(platform) $(buildConfiguration))'
   inputs:
     solution: '$(solution)'
     platform: 'x86'
@@ -23,6 +25,7 @@ steps:
     restoreNugetPackages: false
 
 - task: VSBuild@1
+  displayName: 'VSBuild ($(platform) $(buildConfiguration))'
   inputs:
     solution: '$(solution)'
     platform: 'x64'
