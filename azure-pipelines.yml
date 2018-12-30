@@ -26,7 +26,7 @@ steps:
   inputs:
     sourceFolder: '$(Agent.TempDirectory)'
     contents: '*.snk' 
-    targetFolder: Keys
+    targetFolder: '$(Build.SourcesDirectory)/Keys'
 
 - task: VSBuild@1
   displayName: 'VSBuild ($(buildConfiguration) x86)'
