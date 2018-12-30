@@ -1,14 +1,10 @@
-# .NET Desktop
-# Build and run tests for .NET Desktop or Windows classic desktop solutions.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+# Azure Pipelines Build Configuration
 
 pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
   solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
@@ -16,15 +12,24 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
+    command: 'restore'
     restoreSolution: '$(solution)'
 
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    platform: '$(buildPlatform)'
+    platform: 'x86'
     configuration: '$(buildConfiguration)'
+    restoreNugetPackages: false
 
-- task: VSTest@2
+- task: VSBuild@1
   inputs:
-    platform: '$(buildPlatform)'
+    solution: '$(solution)'
+    platform: 'x64'
     configuration: '$(buildConfiguration)'
+    restoreNugetPackages: false
+
+# - task: VSTest@2
+#   inputs:
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
