@@ -16,21 +16,17 @@ steps:
     command: 'restore'
     restoreSolution: '$(solution)'
 
-# The following task requires the secret variable encodedSNK to contain a BASE64-encoded SNK.
-# Its content can be generated using this command:
-# [System.IO.File]::ReadAllBytes("DSInternals\Keys\DSInternals.Private.snk")
-
-- task: PowerShell@2
-  displayName: 'Restore SNK File (DSInternals.Private.snk)'
+- task: DownloadSecureFile@1
+  displayName: 'Download SNK File'
   inputs:
-    targetType: 'inline'
-    script: |
-      $key = [System.Convert]::FromBase64String("$(encodedSNK)")
-      $workingFolderPath = Resolve-Path -Path .
-      $keyFilePath = Join-Path $workingFolderPath "DSInternals.Private.snk"
-      [System.IO.File]::WriteAllBytes($keyFilePath, $key)
-      Get-ChildItem -Path $workingFolderPath
-    workingDirectory: 'Keys'
+    secureFile: 'DSInternals.Private.snk'
+
+- task: CopyFiles@2
+  displayName:  'Copy SNK File to Keys'
+  inputs:
+    sourceFolder: '$(Agent.TempDirectory)'
+    contents: '*.snk' 
+    targetFolder: Keys
 
 - task: VSBuild@1
   displayName: 'VSBuild ($(buildConfiguration) x86)'
