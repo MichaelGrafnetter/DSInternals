@@ -202,3 +202,6 @@ FakesAssemblies/
 
 # Visual C++ 2015 OpenDB
 *.VC.opendb
+
+# Binary Tools
+*.exe

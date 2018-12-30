@@ -2,6 +2,10 @@
 <!-- This file contains settings that are common for all C# projects. -->
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="Common.props" />
+  <!-- Set default platform for MSBuild. -->
+  <PropertyGroup>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+  </PropertyGroup>
   <!-- Output Directory Paths -->
   <PropertyGroup>
     <OutputPath>$(BinPath)</OutputPath>
