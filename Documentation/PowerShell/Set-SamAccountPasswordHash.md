@@ -120,7 +120,7 @@ Specify the name of a SAM server.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: ComputerName, Computer
 
 Required: False
 Position: Named

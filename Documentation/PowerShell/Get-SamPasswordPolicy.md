@@ -62,12 +62,15 @@ Accept wildcard characters: False
 ```
 
 ### -Server
-Specify the name of a SAM server.
+
+Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.
+
+The default is the local computer. To specify the local computer, such as in a list of computer names, use "localhost", the local computer name, or a dot (.).
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: ComputerName, Computer
 
 Required: False
 Position: Named

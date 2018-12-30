@@ -8,7 +8,7 @@
 
     [Cmdlet(VerbsCommon.Set, "LsaPolicyInformation")]
     [OutputType("None")]
-    public class SetLsaPolicyInformationCommand : PSCmdlet
+    public class SetLsaPolicyInformationCommand : LsaPolicyCommandBase
     {
         #region Parameters
         [Parameter(Mandatory = true)]
@@ -51,34 +51,25 @@
             get;
             set;
         }
-
-        [Parameter(Mandatory = false)]
-        [ValidateNotNullOrEmpty]
-        [Alias("Computer", "Machine", "MachineName", "System", "SystemName")]
-        public string ComputerName
-        {
-            get;
-            set;
-        }
         #endregion Parameters
 
         #region Cmdlet Overrides
         protected override void ProcessRecord()
         {
-            using (var policy = new LsaPolicy(this.ComputerName, LsaPolicyAccessMask.ViewLocalInformation | LsaPolicyAccessMask.TrustAdmin))
+            var newInfo = new LsaDnsDomainInformation()
             {
-                var newInfo = new LsaDnsDomainInformation()
-                {
-                    DnsDomainName = this.DnsDomainName,
-                    DnsForestName = this.DnsForestName,
-                    Guid = this.DomainGuid,
-                    Name = this.DomainName,
-                    Sid = this.DomainSid
-                };
+                DnsDomainName = this.DnsDomainName,
+                DnsForestName = this.DnsForestName,
+                Guid = this.DomainGuid,
+                Name = this.DomainName,
+                Sid = this.DomainSid
+            };
 
-                policy.SetDnsDomainInformation(newInfo);
-            }
+            this.LsaPolicy.SetDnsDomainInformation(newInfo);
         }
+
+        protected override LsaPolicyAccessMask RequiredAccessMask => LsaPolicyAccessMask.ViewLocalInformation |
+                                                                     LsaPolicyAccessMask.TrustAdmin;
         #endregion Cmdlet Overrides
     }
 }

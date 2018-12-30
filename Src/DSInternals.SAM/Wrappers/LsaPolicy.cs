@@ -1,6 +1,7 @@
 ﻿namespace DSInternals.SAM
 {
     using DSInternals.Common;
+    using DSInternals.Common.Data;
     using DSInternals.Common.Interop;
     using DSInternals.SAM.Interop;
     using System;
@@ -100,6 +101,29 @@
             {
                 pinnedSid.Free();
             }
+        }
+
+        public byte[] RetrievePrivateData(string keyName)
+        {
+            Validator.AssertNotNullOrWhiteSpace(keyName, "keyName");
+            byte[] privateData;
+            NtStatus status = NativeMethods.LsaRetrievePrivateData(this.policyHandle, keyName, out privateData);
+            Validator.AssertSuccess(status);
+            return privateData;
+        }
+
+        public DPAPIBackupKey[] GetDPAPIBackupKeys()
+        {
+            Guid rsaKeyId = new Guid(this.RetrievePrivateData(DPAPIBackupKey.PreferredRSAKeyName));
+            Guid legacyKeyId = new Guid(this.RetrievePrivateData(DPAPIBackupKey.PreferredLegacyKeyName));
+
+            byte[] rsaKeyData = this.RetrievePrivateData(DPAPIBackupKey.GetKeyName(rsaKeyId));
+            byte[] legacyKeyData = this.RetrievePrivateData(DPAPIBackupKey.GetKeyName(legacyKeyId));
+
+            DPAPIBackupKey rsaKey = new DPAPIBackupKey(rsaKeyId, rsaKeyData);
+            DPAPIBackupKey legacyKey = new DPAPIBackupKey(legacyKeyId, legacyKeyData);
+
+            return new DPAPIBackupKey[] { rsaKey, legacyKey };
         }
 
         private LsaDomainInformation QueryDomainInformation(LsaPolicyInformationClass informationClass)

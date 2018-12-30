@@ -96,6 +96,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\Get-ADReplBackupKey.md = ..\Documentation\PowerShell\Get-ADReplBackupKey.md
 		..\Documentation\PowerShell\Get-ADSIAccount.md = ..\Documentation\PowerShell\Get-ADSIAccount.md
 		..\Documentation\PowerShell\Get-BootKey.md = ..\Documentation\PowerShell\Get-BootKey.md
+		..\Documentation\PowerShell\Get-LsaBackupKey.md = ..\Documentation\PowerShell\Get-LsaBackupKey.md
 		..\Documentation\PowerShell\Get-LsaPolicyInformation.md = ..\Documentation\PowerShell\Get-LsaPolicyInformation.md
 		..\Documentation\PowerShell\Get-SamPasswordPolicy.md = ..\Documentation\PowerShell\Get-SamPasswordPolicy.md
 		..\Documentation\PowerShell\New-ADDBRestoreFromMediaScript.md = ..\Documentation\PowerShell\New-ADDBRestoreFromMediaScript.md

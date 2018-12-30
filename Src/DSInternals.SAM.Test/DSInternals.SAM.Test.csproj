@@ -55,6 +55,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj">
+      <Project>{7D47F040-D3A9-43CA-9F69-EF91FAF2C23A}</Project>
+      <Name>DSInternals.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DSInternals.SAM\DSInternals.SAM.csproj">
       <Project>{924f67c0-8fff-4714-891a-fc0799f46727}</Project>
       <Name>DSInternals.SAM</Name>

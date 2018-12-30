@@ -14,6 +14,7 @@
         private const int RSAPrivateKeySizeOffset = KeyVersionOffset + KeyVersionSize;
         private const int RSACertificateSizeOffset = RSAPrivateKeySizeOffset + sizeof(int);
         private const int RSAPrivateKeyOffset = RSACertificateSizeOffset + sizeof(int);
+        private const string BackupKeyNameFormat = "G$BCKUPKEY_{0}";
         private const string BackupKeyDNFormat = "CN=BCKUPKEY_{0} Secret,CN=System,{1}";
         private const string BackupKeyDNRegex = "CN=BCKUPKEY_(.*) Secret,CN=System,.*";
         private const string PreferredLegacyKeyPointerName = "P";
@@ -53,6 +54,14 @@
             Validator.AssertNotNull(blob, "blob");
 
             this.Initialize(distinguishedName, blob);
+        }
+
+        public DPAPIBackupKey(Guid keyId, byte[] blob)
+        {
+            Validator.AssertNotNull(blob, "blob");
+            this.KeyId = keyId;
+            this.Type = GetKeyType(blob);
+            this.Data = blob;
         }
 
         public override string FilePath
@@ -184,14 +193,35 @@
                 default:
                     // Actual Key, so we parse its Guid and version
                     this.KeyId = Guid.Parse(keyName);
-                    this.Type = (DPAPIBackupKeyType)BitConverter.ToInt32(blob, KeyVersionOffset);
+                    this.Type = GetKeyType(blob);
                     break;
+            }
+        }
+
+        public static string PreferredRSAKeyName
+        {
+            get
+            {
+                return String.Format(BackupKeyNameFormat, PreferredRSAKeyPointerName);
+            }
+        }
+
+        public static string PreferredLegacyKeyName
+        {
+            get
+            {
+                return String.Format(BackupKeyNameFormat, PreferredLegacyKeyPointerName);
             }
         }
 
         public static string GetKeyDN(Guid keyId, string domainDN)
         {
             return String.Format(BackupKeyDNFormat, keyId, domainDN);
+        }
+
+        public static string GetKeyName(Guid keyId)
+        {
+            return String.Format(BackupKeyNameFormat, keyId);
         }
 
         public static string GetPreferredRSAKeyPointerDN(string domainDN)
@@ -255,6 +285,11 @@
             }
 
             return pvk;
+        }
+
+        private static DPAPIBackupKeyType GetKeyType(byte[] blob)
+        {
+            return (DPAPIBackupKeyType)BitConverter.ToInt32(blob, KeyVersionOffset);
         }
     }
 }

@@ -94,3 +94,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Get-ADDBBackupKey](Get-ADDBBackupKey.md)
+[Get-ADReplBackupKey](Get-ADReplBackupKey.md)
+[Get-LsaBackupKey](Get-LsaBackupKey.md)

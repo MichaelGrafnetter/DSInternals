@@ -53,6 +53,7 @@
     <Compile Include="Commands\Base\ADReplObjectCommandBase.cs" />
     <Compile Include="Commands\Base\ADReplCommandBase.cs" />
     <Compile Include="Commands\Base\PSCmdletEx.cs" />
+    <Compile Include="Commands\Base\LsaPolicyCommandBase.cs" />
     <Compile Include="Commands\Base\SamCommandBase.cs" />
     <Compile Include="Commands\Base\ADDBAccountStatusCommandBase.cs" />
     <Compile Include="Commands\Datastore\DisableADDBAccountCommand.cs" />
@@ -62,10 +63,11 @@
     <Compile Include="Commands\Hash\ConvertToKerberosKeyCommand.cs" />
     <Compile Include="Commands\Datastore\SetADDBAccountPasswordHashCommand.cs" />
     <Compile Include="Commands\Datastore\SetADDBAccountPasswordCommand.cs" />
+    <Compile Include="Commands\LSA\GetLsaBackupKeyCommand.cs" />
     <Compile Include="Commands\Misc\ConvertFromADManagedPasswordBlobCommand.cs" />
     <Compile Include="Commands\Misc\GetADKeyCredential.cs" />
     <Compile Include="Commands\LSA\SetLsaPolicyInformationCommand.cs" />
-    <Compile Include="Commands\LSA\GetLsaPolicyInformation.cs" />
+    <Compile Include="Commands\LSA\GetLsaPolicyInformationCommand.cs" />
     <Compile Include="Commands\LSA\GetSamPasswordPolicyCommand.cs" />
     <Compile Include="Commands\Misc\TestPasswordQualityCommand.cs" />
     <Compile Include="Commands\Misc\ConvertToHexCommand.cs" />

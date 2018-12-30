@@ -38,6 +38,7 @@ namespace DSInternals.PowerShell.Commands
             Mandatory = false,
             ValueFromPipeline = false
         )]
+        [Alias("ComputerName", "Computer")]
         [PSDefaultValue(Value = DefaultServer)]
         [ValidateNotNullOrEmpty]
         public string Server

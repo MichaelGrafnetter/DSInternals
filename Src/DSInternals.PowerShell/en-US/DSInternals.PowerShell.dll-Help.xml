@@ -3925,6 +3925,10 @@
         <maml:linkText>Get-ADDBBackupKey</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-LsaBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -4188,23 +4192,24 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-LsaPolicyInformation</command:name>
+      <command:name>Get-LsaBackupKey</command:name>
       <command:verb>Get</command:verb>
-      <command:noun>LsaPolicyInformation</command:noun>
+      <command:noun>LsaBackupKey</command:noun>
       <maml:description>
-        <maml:para>Retrieves AD-related information from the Local Security Authority Policy of the local computer or a remote one.</maml:para>
+        <maml:para>Reads the DPAPI backup keys from a domain controller through the LSARPC protocol.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>The Data Protection API (DPAPI) is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Get-LsaPolicyInformation</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Machine, MachineName, System, SystemName">
+        <maml:name>Get-LsaBackupKey</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Server, ServerName, Computer, Machine, MachineName, System, SystemName">
           <maml:name>ComputerName</maml:name>
           <maml:Description>
-            <maml:para>{{Fill ComputerName Description}}</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+            <maml:para>The default is the local computer. To specify the local computer, such as in a list of computer names, use "localhost", the local computer name, or a dot (.).</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -4216,10 +4221,132 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Machine, MachineName, System, SystemName">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Server, ServerName, Computer, Machine, MachineName, System, SystemName">
         <maml:name>ComputerName</maml:name>
         <maml:Description>
-          <maml:para>{{Fill ComputerName Description}}</maml:para>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          <maml:para>The default is the local computer. To specify the local computer, such as in a list of computer names, use "localhost", the local computer name, or a dot (.).</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.Data.DPAPIBackupKey</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Administrative permissions on the target domain controller (DC) are required in order to retrieve DPAPI backup keys.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-LsaBackupKey -ComputerName LON-DC1
+
+FilePath          : ntds_capi_b1c56a3e-ddf7-41dd-a5f3-44a2ed27a96d.pvk
+KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey command:
+                    /pvk:"ntds_capi_b1c56a3e-ddf7-41dd-a5f3-44a2ed27a96d.pvk"
+Type              : RSAKey
+DistinguishedName :
+KeyId             : b1c56a3e-ddf7-41dd-a5f3-44a2ed27a96d
+Data              : {2, 0, 0, 0...}
+
+FilePath          : ntds_legacy_7882b20e-96ef-4ce5-a2b9-3efdccbbce28.key
+KiwiCommand       :
+Type              : LegacyKey
+DistinguishedName :
+KeyId             : 7882b20e-96ef-4ce5-a2b9-3efdccbbce28
+Data              : {1, 0, 0, 0...}</dev:code>
+        <dev:remarks>
+          <maml:para>Displays the DPAPI domain backup keys.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-LsaBackupKey -ComputerName LON-DC1 | Save-DPAPIBlob -DirectoryPath .\</dev:code>
+        <dev:remarks>
+          <maml:para>Saves the DPAPI domain backup keys to the working directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-LsaBackupKey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Save-DPAPIBlob</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-LsaPolicyInformation</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>LsaPolicyInformation</command:noun>
+      <maml:description>
+        <maml:para>Retrieves AD-related information from the Local Security Authority Policy of the local computer or a remote one.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Local Security Authority (LSA) is a protected subsystem of Windows that maintains information about all aspects of local security on a system, collectively known as the local security policy of the system.</maml:para>
+      <maml:para>The local security policy of a system is a set of information about the security of a local computer.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-LsaPolicyInformation</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Server, ServerName, Computer, Machine, MachineName, System, SystemName">
+          <maml:name>ComputerName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+            <maml:para>The default is the local computer. To specify the local computer, such as in a list of computer names, use "localhost", the local computer name, or a dot (.).</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Server, ServerName, Computer, Machine, MachineName, System, SystemName">
+        <maml:name>ComputerName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          <maml:para>The default is the local computer. To specify the local computer, such as in a list of computer names, use "localhost", the local computer name, or a dot (.).</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -4257,14 +4384,30 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-LSAPolicyInformation</dev:code>
+        <dev:code>PS C:\&gt; Get-LSAPolicyInformation
+
+Domain/Workgroup Name : WORKGROUP
+Account Domain Name   : MYPC
+Account Domain SID    : S-1-5-21-2814909047-1086830290-2660982408
+Local Domain Name     : MYPC
+Local Domain SID      : S-1-5-21-2814909047-1086830290-2660982408</dev:code>
         <dev:remarks>
           <maml:para>Retrieves LSA Policy from the local computer.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-LSAPolicyInformation -ComputerName LON-DC1</dev:code>
+        <dev:code>PS C:\&gt; Get-LSAPolicyInformation -ComputerName LON-DC1
+
+Domain/Workgroup Name : ADATUM
+Forest DNS Name       : Adatum.com
+Domain DNS Name       : Adatum.com
+Domain GUID           : 281582b4-9d3e-449d-a238-676bd5844f56
+Domain SID            : S-1-5-21-3180365339-800773672-3767752645
+Account Domain Name   : ADATUM
+Account Domain SID    : S-1-5-21-3180365339-800773672-3767752645
+Local Domain Name     : LON-DC1
+Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
         <dev:remarks>
           <maml:para>Retrieves LSA Policy from a remote computer called LON-DC1.</maml:para>
         </dev:remarks>
@@ -4274,6 +4417,18 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-LsaPolicyInformation.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-LsaPolicyInformation</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-LsaBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>LSA Policy</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/windows/desktop/secmgmt/lsa-policy</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -4316,10 +4471,11 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, Computer">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>Specify the name of a SAM server.</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+            <maml:para>The default is the local computer. To specify the local computer, such as in a list of computer names, use "localhost", the local computer name, or a dot (.).</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -4355,10 +4511,11 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, Computer">
         <maml:name>Server</maml:name>
         <maml:Description>
-          <maml:para>Specify the name of a SAM server.</maml:para>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          <maml:para>The default is the local computer. To specify the local computer, such as in a list of computer names, use "localhost", the local computer name, or a dot (.).</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -4439,8 +4596,8 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
       <maml:para>- Rename the server to match the original domain controller.</maml:para>
       <maml:para>- Install a new forest by promoting the server to a domain controller.</maml:para>
       <maml:para>- Replace the newly generated database file (ntds.dit) and SYSVOL directory by the original ones.</maml:para>
-      <maml:para>- Re-encrypt the database </maml:para>
-      <maml:para>- Clone password</maml:para>
+      <maml:para>- Re-encrypt the database using the local Boot Key.</maml:para>
+      <maml:para>- Write the newly generated machine account password into ntds.dit.</maml:para>
       <maml:para>- Update the LSA Policy to match the SID and GUID of the domain that is being restored.</maml:para>
       <maml:para>- Reset the Invocation ID of the domain controller.</maml:para>
     </maml:description>
@@ -5189,6 +5346,18 @@ $initTask.RunAsTask()</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Save-DPAPIBlob.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-LsaBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -7137,10 +7306,11 @@ $initTask.RunAsTask()</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-LsaPolicyInformation</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Computer, Machine, MachineName, System, SystemName">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Server, ServerName, Computer, Machine, MachineName, System, SystemName">
           <maml:name>ComputerName</maml:name>
           <maml:Description>
-            <maml:para>{{Fill ComputerName Description}}</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+            <maml:para>The default is the local computer. To specify the local computer, such as in a list of computer names, use "localhost", the local computer name, or a dot (.).</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7212,10 +7382,11 @@ $initTask.RunAsTask()</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Computer, Machine, MachineName, System, SystemName">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Server, ServerName, Computer, Machine, MachineName, System, SystemName">
         <maml:name>ComputerName</maml:name>
         <maml:Description>
-          <maml:para>{{Fill ComputerName Description}}</maml:para>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          <maml:para>The default is the local computer. To specify the local computer, such as in a list of computer names, use "localhost", the local computer name, or a dot (.).</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -7401,7 +7572,7 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, Computer">
           <maml:name>Server</maml:name>
           <maml:Description>
             <maml:para>Specify the name of a SAM server.</maml:para>
@@ -7452,7 +7623,7 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, Computer">
           <maml:name>Server</maml:name>
           <maml:Description>
             <maml:para>Specify the name of a SAM server.</maml:para>
@@ -7539,7 +7710,7 @@ $initTask.RunAsTask()</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, Computer">
         <maml:name>Server</maml:name>
         <maml:Description>
           <maml:para>Specify the name of a SAM server.</maml:para>

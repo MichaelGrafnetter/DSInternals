@@ -107,3 +107,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Save-DPAPIBlob](Save-DPAPIBlob.md)
 [Get-ADDBBackupKey](Get-ADDBBackupKey.md)
+[Get-LsaBackupKey](Get-LsaBackupKey.md)

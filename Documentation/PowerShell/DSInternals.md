@@ -80,6 +80,9 @@ Gets all Active Directory user accounts from a given domain controller using ADS
 ### [Get-BootKey](Get-BootKey.md)
 Reads the Boot Key (AKA SysKey or System Key) from an online or offline SYSTEM registry hive.
 
+### [Get-LsaBackupKey](Get-LsaBackupKey.md)
+Reads the DPAPI backup keys from a domain controller through the LSARPC protocol.
+
 ### [Get-LsaPolicyInformation](Get-LsaPolicyInformation.md)
 Retrieves AD-related information from the Local Security Authority Policy of the local computer or a remote one.
 

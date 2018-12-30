@@ -56,6 +56,7 @@
     <Compile Include="Interop\Enums\SamServerAccessMask.cs" />
     <Compile Include="Interop\Enums\SamUserAccessMask.cs" />
     <Compile Include="Interop\Enums\SamUserInformationClass.cs" />
+    <Compile Include="Interop\Structs\LsaBuffer.cs" />
     <Compile Include="Wrappers\LsaDomainInformation.cs" />
     <Compile Include="Wrappers\LsaDnsDomainInformation.cs" />
     <Compile Include="Interop\Structs\LsaMachineAccountInformationNative.cs" />
@@ -67,6 +68,12 @@
     <Compile Include="Interop\Structs\SamRidEnumeration.cs" />
     <Compile Include="Interop\Structs\SamUserInternal1Information.cs" />
     <Compile Include="Interop\NativeMethods.cs" />
+    <Compile Include="Interop\NativeMethods.Lsa.cs">
+      <DependentUpon>NativeMethods.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interop\NativeMethods.Sam.cs">
+      <DependentUpon>NativeMethods.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wrappers\LsaPolicy.cs" />
     <Compile Include="Wrappers\SamDomain.cs" />

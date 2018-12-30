@@ -38,6 +38,9 @@ namespace DSInternals.Common
                 case Win32ErrorCode.DS_INVALID_DN_SYNTAX:
                     exceptionToThrow = new ArgumentException(genericException.Message, genericException);
                     break;
+                case Win32ErrorCode.FILE_NOT_FOUND:
+                    exceptionToThrow = new FileNotFoundException(genericException.Message, genericException);
+                    break;
                 case Win32ErrorCode.ACCESS_DENIED:
                 case Win32ErrorCode.DS_DRA_ACCESS_DENIED:
                 case Win32ErrorCode.WRONG_PASSWORD:

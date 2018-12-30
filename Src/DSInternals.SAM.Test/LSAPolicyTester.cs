@@ -4,6 +4,7 @@
     using DSInternals.SAM.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
+    using System.IO;
 
     [TestClass]
     public class LSAPolicyTester
@@ -89,6 +90,41 @@
                     // Now try to set it to the same value.
                     // BE CAREFUL WHEN TESTING THIS!!!
                     policy.SetDnsDomainInformation(info);
+                }
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                // This is expected.
+                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+            }
+        }
+
+        [TestMethod]
+        public void LsaPolicy_LsaRetrievePrivateData_Existing()
+        {
+            try
+            {
+                using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
+                {
+                    policy.RetrievePrivateData("DPAPI_SYSTEM");
+                }
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                // This is expected.
+                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void LsaPolicy_LsaRetrievePrivateData_NonExisting()
+        {
+            try
+            {
+                using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
+                {
+                    policy.RetrievePrivateData("bflmpsvz");
                 }
             }
             catch (UnauthorizedAccessException e)
