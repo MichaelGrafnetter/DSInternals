@@ -1,14 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\Configuration\Common.csproj.props" />
   <PropertyGroup>
-    <!-- NuGet workaround (it does not support passing variables into referenced projects) -->
-    <SolutionDir Condition="$(SolutionDir) == ''">..\</SolutionDir>
-    <Configuration Condition="$(Confiruration) == ''">Release</Configuration>
-  </PropertyGroup>
-  <Import Project="$(SolutionDir)\Configuration\Common.csproj.props" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</ProjectGuid>
