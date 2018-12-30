@@ -49,9 +49,40 @@ steps:
     restoreNugetPackages: false
 
 - task: NuGetCommand@2
+  displayName: 'NuGet Pack (DSInternals.Common)'
   inputs:
     command: 'pack'
-    packagesToPack: '**/*.csproj'
+    packagesToPack: '**/DSInternals.Common.csproj'
+    configuration: '$(BuildConfiguration)'
+    packDestination: '$(Build.ArtifactStagingDirectory)'
+    includeReferencedProjects: true
+    verbosityPack: 'detailed'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet Pack (DSInternals.DataStore)'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/DSInternals.DataStore.csproj'
+    configuration: '$(BuildConfiguration)'
+    packDestination: '$(Build.ArtifactStagingDirectory)'
+    includeReferencedProjects: true
+    verbosityPack: 'detailed'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet Pack (DSInternals.Replication)'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/DSInternals.Replication.csproj'
+    configuration: '$(BuildConfiguration)'
+    packDestination: '$(Build.ArtifactStagingDirectory)'
+    includeReferencedProjects: true
+    verbosityPack: 'detailed'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet Pack (DSInternals.SAM)'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/DSInternals.SAM.csproj'
     configuration: '$(BuildConfiguration)'
     packDestination: '$(Build.ArtifactStagingDirectory)'
     includeReferencedProjects: true
