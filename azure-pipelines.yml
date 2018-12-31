@@ -6,6 +6,7 @@ pool:
 variables:
   solution: '**/*.sln'
   buildConfiguration: 'Release'
+  packagesFolder: 'Build/packages'
 
 steps:
 - task: NuGetToolInstaller@0
@@ -26,7 +27,7 @@ steps:
   inputs:
     sourceFolder: '$(Agent.TempDirectory)'
     contents: '*.snk' 
-    targetFolder: '$(Build.SourcesDirectory)/Keys'
+    targetFolder: 'Keys'
 
 - task: VSBuild@1
   displayName: 'VSBuild ($(buildConfiguration) x86)'
@@ -44,13 +45,26 @@ steps:
     configuration: '$(buildConfiguration)'
     restoreNugetPackages: false
 
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Raw PowerShell Module'
+  inputs:
+    pathtoPublish: 'Build/bin/Release/DSInternals'
+    artifactName: 'DSInternals' 
+
+- task: PowerShell@2
+  displayName: 'Pack PowerShell Module'
+  inputs:
+    targetType: 'filePath'
+    filePath: 'Scripts/Pack-PSModule.ps1'
+    arguments: ''
+
 - task: NuGetCommand@2
   displayName: 'NuGet Pack (DSInternals.Common)'
   inputs:
     command: 'pack'
     packagesToPack: '**/DSInternals.Common.csproj'
     configuration: '$(BuildConfiguration)'
-    packDestination: '$(Build.ArtifactStagingDirectory)'
+    packDestination: '$(packagesFolder)'
     includeReferencedProjects: true
     verbosityPack: 'detailed'
 
@@ -60,7 +74,7 @@ steps:
     command: 'pack'
     packagesToPack: '**/DSInternals.DataStore.csproj'
     configuration: '$(BuildConfiguration)'
-    packDestination: '$(Build.ArtifactStagingDirectory)'
+    packDestination: '$(packagesFolder)'
     includeReferencedProjects: true
     verbosityPack: 'detailed'
 
@@ -70,7 +84,7 @@ steps:
     command: 'pack'
     packagesToPack: '**/DSInternals.Replication.csproj'
     configuration: '$(BuildConfiguration)'
-    packDestination: '$(Build.ArtifactStagingDirectory)'
+    packDestination: '$(packagesFolder)'
     includeReferencedProjects: true
     verbosityPack: 'detailed'
 
@@ -80,9 +94,16 @@ steps:
     command: 'pack'
     packagesToPack: '**/DSInternals.SAM.csproj'
     configuration: '$(BuildConfiguration)'
-    packDestination: '$(Build.ArtifactStagingDirectory)'
+    packDestination: '$(packagesFolder)'
     includeReferencedProjects: true
     verbosityPack: 'detailed'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish NuGet Packages'
+  inputs:
+    pathtoPublish: '$(packagesFolder)'
+    artifactName: 'NuGet' 
+
 
 # - task: VSTest@2
 #   inputs:
