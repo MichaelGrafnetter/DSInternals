@@ -47,6 +47,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{A6D948F4-1847-47B5-8997-83EEBD971892}"
 	ProjectSection(SolutionItems) = preProject
 		..\Scripts\Build-Solution.ps1 = ..\Scripts\Build-Solution.ps1
+		..\Scripts\Invoke-SmokeTests.ps1 = ..\Scripts\Invoke-SmokeTests.ps1
 		..\Scripts\Make.ps1 = ..\Scripts\Make.ps1
 		..\Scripts\Pack-NuGetPackages.ps1 = ..\Scripts\Pack-NuGetPackages.ps1
 		..\Scripts\Pack-PSModule.ps1 = ..\Scripts\Pack-PSModule.ps1

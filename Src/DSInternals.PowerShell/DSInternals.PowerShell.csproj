@@ -138,12 +138,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.PowerShell.3.ReferenceAssemblies.1.0.0\lib\net4\System.Management.Automation.dll</HintPath>
       <Private>False</Private>
@@ -206,8 +204,8 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Tests\ConvertTo-OrgIdHashNative.ps1" />
+    <None Include="Tests\DSInternals.Smoke.Tests.ps1" />
     <None Include="Tests\Set-SamAccountPasswordHash.Tests.ps1" />
-    <None Include="Tests\Path.Tests.ps1" />
     <None Include="Tests\ConvertFrom-UnicodePassword.Tests.ps1" />
     <None Include="Tests\ConvertTo-UnicodePassword.Tests.ps1" />
     <None Include="Tests\ConvertTo-AADHash.Tests.ps1" />
