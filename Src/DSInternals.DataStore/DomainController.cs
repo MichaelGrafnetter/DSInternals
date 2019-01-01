@@ -176,36 +176,40 @@
                     this.ServerReference = context.DistinguishedNameResolver.Resolve(this.ServerReferenceDNT.Value);
                 }
 
-                // Construct crossRefContainer DN (CN=Partitions,CN=Configuration,...)
-                var crossRefContainer = new DistinguishedName(CrossRefContainerRDN);
-                crossRefContainer.AddParent(this.ConfigurationNamingContext);
-
-                // Goto crossRefContainer
-                var crossRefContainerDNT = context.DistinguishedNameResolver.Resolve(crossRefContainer);
-                bool crossRefContainerFound = dataTableCursor.GotoKey(Key.Compose(crossRefContainerDNT));
-
-                // Read the forest functional level from the crossRefContainer object we just located
-                this.ForestMode = dataTableCursor.RetrieveColumnAsFunctionalLevel(schema.FindColumnId(CommonDirectoryAttributes.FunctionalLevel));
-
-                // Go through all crossRef objects (children of the crossRefContainer)
-                dataTableCursor.FindChildren(schema);
-                while (dataTableCursor.MoveNext())
+                // The crossRefContainer does not exist in initial DBs, as it is created during dcpromo.
+                if (this.State != DatabaseState.Boot)
                 {
-                    // Find the directory partition that is associated with the current crossRef object
-                    var partitionNCNameDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextName));
+                    // Construct crossRefContainer DN (CN=Partitions,CN=Configuration,...)
+                    var crossRefContainer = new DistinguishedName(CrossRefContainerRDN);
+                    crossRefContainer.AddParent(this.ConfigurationNamingContext);
 
-                    // Note that foreign crossRef objects do not have nCName set
+                    // Goto crossRefContainer
+                    var crossRefContainerDNT = context.DistinguishedNameResolver.Resolve(crossRefContainer);
+                    bool crossRefContainerFound = dataTableCursor.GotoKey(Key.Compose(crossRefContainerDNT));
 
-                    if (partitionNCNameDNT == this.DomainNamingContextDNT)
+                    // Read the forest functional level from the crossRefContainer object we just located
+                    this.ForestMode = dataTableCursor.RetrieveColumnAsFunctionalLevel(schema.FindColumnId(CommonDirectoryAttributes.FunctionalLevel));
+
+                    // Go through all crossRef objects (children of the crossRefContainer)
+                    dataTableCursor.FindChildren(schema);
+                    while (dataTableCursor.MoveNext())
                     {
-                        // This must be the DC's domain crossRef object, so we can retrieve its NetBIOS name.
-                        this.NetBIOSDomainName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.NetBIOSName));
-                    }
+                        // Find the directory partition that is associated with the current crossRef object
+                        var partitionNCNameDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextName));
 
-                    if(partitionNCNameDNT == this.ConfigurationNamingContextDNT)
-                    {
-                        // This must be the configuration partition's crossRef object, so we can retrieve the forest DNS name.
-                        this.ForestName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.DNSRoot));
+                        // Note that foreign crossRef objects do not have nCName set
+
+                        if (partitionNCNameDNT == this.DomainNamingContextDNT)
+                        {
+                            // This must be the DC's domain crossRef object, so we can retrieve its NetBIOS name.
+                            this.NetBIOSDomainName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.NetBIOSName));
+                        }
+
+                        if (partitionNCNameDNT == this.ConfigurationNamingContextDNT)
+                        {
+                            // This must be the configuration partition's crossRef object, so we can retrieve the forest DNS name.
+                            this.ForestName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.DNSRoot));
+                        }
                     }
                 }
             }
