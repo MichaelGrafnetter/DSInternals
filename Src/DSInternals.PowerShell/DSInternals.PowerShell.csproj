@@ -204,8 +204,8 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Tests\ConvertTo-OrgIdHashNative.ps1" />
+    <None Include="Tests\DSInternals.Smoke.Tests.ps1" />
     <None Include="Tests\Set-SamAccountPasswordHash.Tests.ps1" />
-    <None Include="Tests\Path.Tests.ps1" />
     <None Include="Tests\ConvertFrom-UnicodePassword.Tests.ps1" />
     <None Include="Tests\ConvertTo-UnicodePassword.Tests.ps1" />
     <None Include="Tests\ConvertTo-AADHash.Tests.ps1" />
