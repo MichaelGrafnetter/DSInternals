@@ -3,14 +3,16 @@
 trigger:
   batch: true
   paths:
-    include: 'Src/*'
+    include:
+      - 'Src/*'
 
 pr:
   branches:
     include:
     - master
   paths:
-      exclude: '**/*.md'
+      exclude:
+        - '**/*.md'
 
 pool:
   vmImage: 'VS2017-Win2016'
