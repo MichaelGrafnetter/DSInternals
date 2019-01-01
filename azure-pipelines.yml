@@ -1,118 +1,139 @@
 # Azure Pipelines Build Configuration
 
+trigger:
+  batch: true
+  paths:
+    include: 'Src/*'
+
+pr:
+  branches:
+    include:
+    - master
+  paths:
+      exclude: '**/*.md'
+
 pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
   solution: '**/*.sln'
-  buildConfiguration: 'Release'
   packagesFolder: 'Build/packages'
 
-steps:
-- task: NuGetToolInstaller@0
+jobs:
+  -job: Test
+    variables:
+      buildConfiguration: 'Debug'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet Restore Packages'
-  inputs:
-    command: 'restore'
-    restoreSolution: '$(solution)'
+  -job: Release
+    displayName: 'Release'
+    dependsOn: Test
+    condition: succeeded()
+    variables:
+      buildConfiguration: 'Release'
+    steps:
+    - task: NuGetToolInstaller@0
 
-- task: DownloadSecureFile@1
-  displayName: 'Download SNK File'
-  inputs:
-    secureFile: 'DSInternals.Private.snk'
+    - task: NuGetCommand@2
+      displayName: 'NuGet Restore Packages'
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(solution)'
 
-- task: CopyFiles@2
-  displayName:  'Copy SNK File to Keys'
-  inputs:
-    sourceFolder: '$(Agent.TempDirectory)'
-    contents: '*.snk' 
-    targetFolder: 'Keys'
+    - task: DownloadSecureFile@1
+      displayName: 'Download SNK File'
+      inputs:
+        secureFile: 'DSInternals.Private.snk'
 
-- task: VSBuild@1
-  displayName: 'VSBuild ($(buildConfiguration) x86)'
-  inputs:
-    solution: '$(solution)'
-    platform: 'x86'
-    configuration: '$(buildConfiguration)'
-    restoreNugetPackages: false
+    - task: CopyFiles@2
+      displayName:  'Copy SNK File to Keys'
+      inputs:
+        sourceFolder: '$(Agent.TempDirectory)'
+        contents: '*.snk' 
+        targetFolder: 'Keys'
 
-- task: VSBuild@1
-  displayName: 'VSBuild ($(buildConfiguration) x64)'
-  inputs:
-    solution: '$(solution)'
-    platform: 'x64'
-    configuration: '$(buildConfiguration)'
-    restoreNugetPackages: false
+    - task: VSBuild@1
+      displayName: 'VSBuild ($(buildConfiguration) x86)'
+      inputs:
+        solution: '$(solution)'
+        platform: 'x86'
+        configuration: '$(buildConfiguration)'
+        restoreNugetPackages: false
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Raw PowerShell Module'
-  inputs:
-    pathtoPublish: 'Build/bin/Release/DSInternals'
-    artifactName: 'DSInternals' 
+    - task: VSBuild@1
+      displayName: 'VSBuild ($(buildConfiguration) x64)'
+      inputs:
+        solution: '$(solution)'
+        platform: 'x64'
+        configuration: '$(buildConfiguration)'
+        restoreNugetPackages: false
 
-- task: PowerShell@2
-  displayName: 'Pack PowerShell Module'
-  inputs:
-    targetType: 'filePath'
-    filePath: 'Scripts/Pack-PSModule.ps1'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Raw PowerShell Module'
+      inputs:
+        pathtoPublish: 'Build/bin/Release/DSInternals'
+        artifactName: 'DSInternals' 
 
-- task: NuGetCommand@2
-  displayName: 'NuGet Pack (DSInternals.Common)'
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/DSInternals.Common.csproj'
-    configuration: '$(BuildConfiguration)'
-    packDestination: '$(packagesFolder)'
-    includeReferencedProjects: true
-    verbosityPack: 'detailed'
+    - task: PowerShell@2
+      displayName: 'Pack PowerShell Module'
+      inputs:
+        targetType: 'filePath'
+        filePath: 'Scripts/Pack-PSModule.ps1'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet Pack (DSInternals.DataStore)'
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/DSInternals.DataStore.csproj'
-    configuration: '$(BuildConfiguration)'
-    packDestination: '$(packagesFolder)'
-    includeReferencedProjects: true
-    verbosityPack: 'detailed'
+    - task: NuGetCommand@2
+      displayName: 'NuGet Pack (DSInternals.Common)'
+      inputs:
+        command: 'pack'
+        packagesToPack: '**/DSInternals.Common.csproj'
+        configuration: '$(BuildConfiguration)'
+        packDestination: '$(packagesFolder)'
+        includeReferencedProjects: true
+        verbosityPack: 'detailed'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet Pack (DSInternals.Replication)'
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/DSInternals.Replication.csproj'
-    configuration: '$(BuildConfiguration)'
-    packDestination: '$(packagesFolder)'
-    includeReferencedProjects: true
-    verbosityPack: 'detailed'
+    - task: NuGetCommand@2
+      displayName: 'NuGet Pack (DSInternals.DataStore)'
+      inputs:
+        command: 'pack'
+        packagesToPack: '**/DSInternals.DataStore.csproj'
+        configuration: '$(BuildConfiguration)'
+        packDestination: '$(packagesFolder)'
+        includeReferencedProjects: true
+        verbosityPack: 'detailed'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet Pack (DSInternals.SAM)'
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/DSInternals.SAM.csproj'
-    configuration: '$(BuildConfiguration)'
-    packDestination: '$(packagesFolder)'
-    includeReferencedProjects: true
-    verbosityPack: 'detailed'
+    - task: NuGetCommand@2
+      displayName: 'NuGet Pack (DSInternals.Replication)'
+      inputs:
+        command: 'pack'
+        packagesToPack: '**/DSInternals.Replication.csproj'
+        configuration: '$(BuildConfiguration)'
+        packDestination: '$(packagesFolder)'
+        includeReferencedProjects: true
+        verbosityPack: 'detailed'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish NuGet Packages'
-  inputs:
-    pathtoPublish: '$(packagesFolder)'
-    artifactName: 'NuGet' 
+    - task: NuGetCommand@2
+      displayName: 'NuGet Pack (DSInternals.SAM)'
+      inputs:
+        command: 'pack'
+        packagesToPack: '**/DSInternals.SAM.csproj'
+        configuration: '$(BuildConfiguration)'
+        packDestination: '$(packagesFolder)'
+        includeReferencedProjects: true
+        verbosityPack: 'detailed'
 
-- task: PowerShell@2
-  displayName: 'Run Smoke Tests'
-  inputs:
-    targetType: 'filePath'
-    filePath: 'Scripts/Invoke-SmokeTests.ps1'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish NuGet Packages'
+      inputs:
+        pathtoPublish: '$(packagesFolder)'
+        artifactName: 'NuGet' 
 
-- task: PublishTestResults@2
-  displayName: 'Publish Smoke Test Results'
-  inputs:
-    testResultsFormat: 'NUnit'
-    testResultsFiles: '**/*.xml' 
-    searchFolder: 'TestResults'
-    #testRunTitle: # Optional
+    - task: PowerShell@2
+      displayName: 'Run Smoke Tests'
+      inputs:
+        targetType: 'filePath'
+        filePath: 'Scripts/Invoke-SmokeTests.ps1'
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Smoke Test Results'
+      inputs:
+        testResultsFormat: 'NUnit'
+        testResultsFiles: '**/*.xml' 
+        searchFolder: 'TestResults'
