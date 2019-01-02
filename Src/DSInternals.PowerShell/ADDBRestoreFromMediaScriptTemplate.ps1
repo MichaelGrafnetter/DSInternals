@@ -25,7 +25,7 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
 			Rename-Computer -NewName '{DCName}' -Force
 			
 			# We explicitly suspend the workflow as Restart-Computer with the -Wait parameter does not survive local reboots.
-			Restart-Computer -Force -Delay 5
+			shutdown.exe /r /t 5
 			Suspend-Workflow -Label 'Waiting for reboot'
 		}
 
@@ -40,7 +40,7 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
 		
 		# Reboot the computer into the Directory Services Restore Mode.
 		bcdedit.exe /set safeboot dsrepair 
-		Restart-Computer -Force -Delay 5
+		shutdown.exe /r /t 5
 		Suspend-Workflow -Label 'Waiting for reboot'
 
 		# Re-encrypt the DB with the new boot key.
@@ -72,7 +72,7 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
 
 		# Disable DSRM and do one last reboot.
 		bcdedit.exe /deletevalue safeboot
-		Restart-Computer -Force -Delay 5
+		shutdown.exe /r /t 5
 		Suspend-Workflow -Label 'Waiting for reboot'
 	}
 
