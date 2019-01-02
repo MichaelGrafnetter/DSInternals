@@ -5,20 +5,20 @@ param(
 )
 
 Describe 'DSInternals PowerShell Module' {
-    
-    Context 'Module Manifest' {
+
+    Context 'Manifest' {
 
         $moduleManifestPath = Join-Path $ModulePath DSInternals.psd1
 
-        It 'should exist' {
+        It 'exists' {
             $moduleManifestPath | Should -Exist
         }
 
-        It 'should be valid' {
+        It 'is valid' {
             Test-ModuleManifest -Path $moduleManifestPath -ErrorAction Stop
         }
 
-        It 'should have the same version as the binary module' {
+        It 'has the same version as the binary module' {
             # Load the assembly
             $assemblyPath = Join-Path $ModulePath 'DSInternals.PowerShell.dll'
             $assembly = [System.Reflection.AssemblyName]::GetAssemblyName($assemblyPath)
@@ -32,41 +32,37 @@ Describe 'DSInternals PowerShell Module' {
         }
     }
 
-    Context 'Module File Structure' {
+    Context 'File Structure' {
         
-        It 'should contain MAML help' {
+        It 'contains MAML help' {
             Join-Path $ModulePath en-US\DSInternals.PowerShell.dll-Help.xml | Should -Exist
         }
 
-        It 'should contain About topic' {
+        It 'contains About topic' {
             Join-Path $ModulePath en-US\about_DSInternals.help.txt | Should -Exist
         }
         
-        It 'should contain Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' } -Test {
+        It 'contains Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' } -Test {
             param([string] $Platform)
 
             # Regardless of the runtime version, we expect 2 additional DLLs to be present in the x86/amd64 directory
             $platformSpecificPath = Join-Path $ModulePath $Platform
             Get-ChildItem -Path $platformSpecificPath -Recurse -Include msvc*,vcruntime* |
-                Measure-Object |
-                Select-Object -ExpandProperty Count |
-                Should -BeExactly 2
+                Should -HaveCount 2
         }
 
-        It 'should not contain debug symbols' {
+        It 'does not contain debug symbols' {
             # Only the DSInternals.DataStore.pdb should be present to simplify troubleshooting.
 
             Get-ChildItem -Path $ModulePath -Recurse -Filter *.pdb |
-                Measure-Object |
-                Select-Object -ExpandProperty Count |
-                Should -BeExactly 1
+                Should -HaveCount 1
         }
 
-        It 'should not contain unit tests' {
+        It 'does not contain unit tests' {
             Get-ChildItem -Path $ModulePath -Recurse -Filter *.Test.* | Should -BeNull
         }
 
-        It 'should not contain .NET XML documentation' {
+        It 'does not contain .NET XML documentation' {
             Get-ChildItem -Path $ModulePath -Recurse -Filter *.xml -Exclude *.dll-Help.xml | Should -BeNull
         }
     }
@@ -94,44 +90,90 @@ Describe 'DSInternals PowerShell Module' {
         It 'should have file details' {
              Get-ChildItem $ModulePath -Recurse -Filter DSInternals.*.dll |
                 where { $PSItem.VersionInfo.ProductName -eq $null } |
-                Should -BeNull       
+                Should -BeNull
         }
 
-        It 'should have up-to-date copyright information' {
+        It 'has up-to-date copyright information' {
             $expectedInfo = '*© 2015-{0}*' -f (Get-Date).Year
              Get-ChildItem $ModulePath -Recurse -Filter DSInternals.*.dll |
                 where { $PSItem.VersionInfo.LegalCopyright -notlike $expectedInfo } |
-                Should -BeNull 
+                Should -BeNull
+        }
+    }
+}
+
+Describe 'Powershell Cmdlets' {
+
+    # Import the DSInternals PowerShell Module
+    Import-Module $ModulePath
+
+    Context 'Hash Calculation' {
+
+        It 'ConvertTo-NTHash should be working' {
+            $password = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force 
+            ConvertTo-NTHash -Password $password |
+                Should Be '92937945B518814341DE3F726500D4FF'
+        }
+
+        It 'ConvertTo-KerberosKey should be working' {
+            # Check that 3 types of kerberos keys are generated from a given password.
+            $password = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force
+            ConvertTo-KerberosKey -Password $password -Salt 'CONTOSOAdministrator' |
+                Should -HaveCount 3
         }
     }
 
-    Context 'Hash Calculation Cmdlets' {
-        It 'should be working' {
+    Context 'Database Manipulation' {
+
+        It 'Get-BootKey is working in online mode' {
+            (Get-BootKey -Online).Length | Should -Be 32
+        }
+
+        It 'Get-ADDBDomainController can open the initial ntds.dit' {
+            # This test only works on Windows Server
+            $initialDBPath = "$env:SystemRoot\System32\ntds.dit"
+
+            if (Test-Path $initialDBPath)
+            {
+                $workingNTDSCopy = Copy-Item $initialDBPath TestDrive:\ -PassThru
+                Get-ADDBDomainController -DBPath $workingNTDSCopy | Should -Not -BeNull
+
+            }
+            else
+            {
+                Set-TestInconclusive 'The initial DB is not present in client SKUs.'
+            }
+        }
+
+        It 'Get-ADDBDomainController works repeatedly' {
+            if (Test-Path TestDrive:\ntds.dit)
+            {
+                # This actually checks proper Automapper initialization in the powershell.exe process.
+                Get-ADDBDomainController -DBPath TestDrive:\ntds.dit | Should -Not -BeNull
+            }
+            else
+            {
+                Set-TestInconclusive 'The initial DB is not present in client SKUs.'
+            }
         }
     }
 
-    Context 'Database Manipulation Cmdlets' {
-        It 'should be working' {
+    Context 'Replication' {
+        It 'Get-ADReplAccount is trying to establish an RPC connection' {
+            # We do not have a test server, so we try to connect to a dummy address.
+            # This will just check that the Interop stuff is compiled correctly, which is a good start.
+            { Get-ADReplAccount -Server NonExistingServer -All -NamingContext 'DC=doesnotexist,DC=local' } |
+                Should -Throw 'The RPC server is unavailable'
         }
     }
 
-    Context 'Replication Cmdlets' {
-        It 'should be working' {
+    Context 'SAM/LSA' {
+        It 'Get-SamPasswordPolicy is returning some info' {
+            Get-SamPasswordPolicy -Domain Builtin | Should -Not -BeNull
         }
-    }
 
-    Context 'SAM Cmdlets' {
-        It 'should be working' {
-        }
-    }
-
-    Context 'LSA Cmdlets' {
-        It 'should be working' {
-        }
-    }
-
-    Context 'Misc Cmdlets' {
-        It 'should be working' {
+        It 'Get-LsaPolicyInformation is returning computer info' {
+            (Get-LsaPolicyInformation).LocalDomain.Name | Should -Be $env:COMPUTERNAME
         }
     }
 }
