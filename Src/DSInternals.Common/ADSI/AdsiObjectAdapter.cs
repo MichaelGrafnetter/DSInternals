@@ -8,7 +8,6 @@
 
     public class AdsiObjectAdapter : DirectoryObject
     {
-        private const char DBWithBinarySeparator = ':';
         protected SearchResult directoryEntry;
 
         public AdsiObjectAdapter(SearchResult directoryEntry)
@@ -98,7 +97,7 @@
         {
             // Parse the DN with binary value
             string[] textValues = this.ReadAttributeMulti<string>(attributeName);
-            values = textValues.Select(textValue => textValue.Split(DBWithBinarySeparator)[2].HexToBinary()).ToArray();
+            values = textValues.Select(textValue => textValue.FromDNWithBinary()).ToArray();
         }
 
         protected TResult ReadAttributeSingle<TResult>(string name)

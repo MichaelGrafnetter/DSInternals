@@ -3126,6 +3126,21 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-ADKeyCredential</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>BinaryData</maml:name>
+          <maml:Description>
+            <maml:para>{{Fill BinaryData Description}}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-ADKeyCredential</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>Certificate</maml:name>
           <maml:Description>
@@ -3153,14 +3168,14 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-ADKeyCredential</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
-          <maml:name>Input</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>DNWithBinaryData</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Input Description}}</maml:para>
+            <maml:para>{{Fill DNWithBinaryData Description}}</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
-            <maml:name>Byte[]</maml:name>
+            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -3168,6 +3183,18 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>BinaryData</maml:name>
+        <maml:Description>
+          <maml:para>{{Fill BinaryData Description}}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Byte[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>Certificate</maml:name>
         <maml:Description>
@@ -3192,14 +3219,14 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
-        <maml:name>Input</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>DNWithBinaryData</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Input Description}}</maml:para>
+          <maml:para>{{Fill DNWithBinaryData Description}}</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
-          <maml:name>Byte[]</maml:name>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>

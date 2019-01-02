@@ -17,9 +17,14 @@ Creates an object representing Windows Hello for Business credentials from its b
 Get-ADKeyCredential [-Certificate] <X509Certificate2> [-DeviceId] <Guid> [<CommonParameters>]
 ```
 
+### FromDNBinary
+```
+Get-ADKeyCredential -DNWithBinaryData <String> [<CommonParameters>]
+```
+
 ### FromBinary
 ```
-Get-ADKeyCredential [-Input] <Byte[]> [<CommonParameters>]
+Get-ADKeyCredential -BinaryData <Byte[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -35,6 +40,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -BinaryData
+{{Fill BinaryData Description}}
+
+```yaml
+Type: Byte[]
+Parameter Sets: FromBinary
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Certificate
 {{Fill Certificate Description}}
@@ -66,18 +86,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Input
-{{Fill Input Description}}
+### -DNWithBinaryData
+{{Fill DNWithBinaryData Description}}
 
 ```yaml
-Type: Byte[]
-Parameter Sets: FromBinary
+Type: String
+Parameter Sets: FromDNBinary
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 

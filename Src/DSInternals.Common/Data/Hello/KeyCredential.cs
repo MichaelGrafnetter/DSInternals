@@ -299,6 +299,11 @@ namespace DSInternals.Common.Data
             }
         }
 
+        public string ToDNWithBinary(string distinguishedName)
+        {
+            return this.ToByteArray().ToDNWithBinary(distinguishedName);
+        }
+
         private static DateTime ConvertFromBinaryTime(byte[] binaryTime, KeySource source, KeyCredentialVersion version)
         {
             long timeStamp = BitConverter.ToInt64(binaryTime, 0);

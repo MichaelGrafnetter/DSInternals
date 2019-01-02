@@ -13,14 +13,26 @@
         #region Parameters
         private const string ParamSetFromCertificate = "FromCertificate";
         private const string ParamSetFromBinary = "FromBinary";
+        private const string ParamSetFromDNBinary = "FromDNBinary";
 
         [Parameter(
             Mandatory = true,
             Position = 0,
+            ParameterSetName = ParamSetFromDNBinary,
+            ValueFromPipeline = true
+        )]
+        public string DNWithBinaryData
+        {
+            get;
+            set;
+        }
+
+        [Parameter(
+            Mandatory = true,
             ParameterSetName = ParamSetFromBinary
         )]
         [AcceptHexString]
-        public byte[] Input
+        public byte[] BinaryData
         {
             get;
             set;
@@ -56,8 +68,11 @@
             KeyCredential keyCredential;
             switch(this.ParameterSetName)
             {
+                case ParamSetFromDNBinary:
+                    keyCredential = new KeyCredential(this.DNWithBinaryData.FromDNWithBinary());
+                    break;
                 case ParamSetFromBinary:
-                    keyCredential = new KeyCredential(this.Input);
+                    keyCredential = new KeyCredential(this.BinaryData);
                     break;
                 case ParamSetFromCertificate:
                 default:
