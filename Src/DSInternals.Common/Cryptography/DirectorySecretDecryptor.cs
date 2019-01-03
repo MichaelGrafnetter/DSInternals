@@ -188,5 +188,15 @@ namespace DSInternals.Common.Cryptography
                 return md5.Hash;
             }
         }
+
+        protected static byte[] GenerateSalt(int size)
+        {
+            byte[] salt = new byte[size];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+                return salt;
+            }
+        }
     }
 }

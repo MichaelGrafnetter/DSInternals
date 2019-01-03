@@ -81,6 +81,30 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
+        public void PasswordEncryptionKey_DataStorePEK_W2019()
+        {
+            // Win 2019 RTM (Format is the same as WS 2016)
+            byte[] encryptedPEK = "030000000100000065DB55C82F7AB29C7FF2CC3518C0DC00433C80629D23D64420D9264BB2FE54288C3121B396CD4DC9BF094EDCBF559DAD3545C52399B883BD0F374EEAF3FA35C71C75DD1447FD0A59C81C60F6703F9B7000000000000000000000000000000000".HexToBinary();
+            byte[] bootKey = "f51aa1df3bb0175efbd6842bffba81c9".HexToBinary();
+            byte[] bootKey2 = "c965a6c04ac771ae10932f25efd8d85c".HexToBinary();
+
+            // Decrypt
+            var pek = new DataStoreSecretDecryptor(encryptedPEK, bootKey);
+
+            // Re-encrypt with a different boot key
+            byte[] encryptedPEK2 = pek.ToByteArray(bootKey2);
+
+            // Decrypt again with the new boot key
+            var pek2 = new DataStoreSecretDecryptor(encryptedPEK2, bootKey2);
+
+            // And re-encrypt with the original BootKey
+            byte[] encryptedPEK3 = pek2.ToByteArray(bootKey);
+
+            // Check if the newly encrypted PEK has the same length as the original one
+            Assert.AreEqual(encryptedPEK.Length, encryptedPEK3.Length);
+        }
+
+        [TestMethod]
         public void PasswordEncryptionKey_DataStoreDecryptPEK_LDS()
         {
             // AD LDS/ADAM

@@ -11,6 +11,7 @@ namespace DSInternals.DataStore
     {
         private const int BootKeySaltHashRounds = 1000;
         private const int EncryptedPekListOffset = sizeof(PekListVersion) + sizeof(PekListFlags) + SaltSize;
+        private const int AESBlockSize = 16;
         // The flags field is probably not used by AD and is always 0.
         private const ushort EncryptedSecretFlags = 0;
 
@@ -85,8 +86,8 @@ namespace DSInternals.DataStore
             // Blob structure Win2k:   Algorithm ID (2B), Flags (2B), PEK ID (4B), Salt (16B), Encrypted secret (rest)
             const int EncryptedDataOffsetDES = 2 * sizeof(short) + sizeof(uint) + SaltSize;
             // Blob structure Win2016: Algorithm ID (2B), Flags (2B), PEK ID (4B), Salt (16B), Secret Length (4B), Encrypted secret (rest)
-            const int EncryptedDataOffsetAES = 2 * sizeof(short) + SaltSize + sizeof(ulong);
-            
+            // const int EncryptedDataOffsetAES = 2 * sizeof(short) + SaltSize + sizeof(ulong);
+
             // Validate (DES has shorter blob)
             Validator.AssertMinLength(blob, EncryptedDataOffsetDES + 1, "blob");
 
@@ -116,6 +117,7 @@ namespace DSInternals.DataStore
                     encryptedSecret = stream.ReadToEnd();    
                 }
             }
+
             // Decrypt
             byte[] decryptedSecret;
             switch (encryptionType)
@@ -151,13 +153,9 @@ namespace DSInternals.DataStore
                     
                     // Write PEK ID(4B)
                     writer.Write(this.CurrentKeyIndex);
-                    
+
                     // Generate and Write Salt(16B)
-                    byte[] salt = new byte[SaltSize];
-                    using (var rng = RandomNumberGenerator.Create())
-                    {
-                        rng.GetBytes(salt);
-                    }
+                    byte[] salt = GenerateSalt(SaltSize);
                     writer.Write(salt);
 
                     // Perform the encryption
@@ -243,11 +241,7 @@ namespace DSInternals.DataStore
             }
 
             // Generate random salt
-            byte[] salt = new byte[SaltSize];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
+            byte[] salt = GenerateSalt(SaltSize);
 
             // Encode the data structure
             using (MemoryStream stream = new MemoryStream())
@@ -270,7 +264,24 @@ namespace DSInternals.DataStore
                             switch (pekListVersion)
                             {
                                 case PekListVersion.W2016:
-                                    encryptedBlob = EncryptUsingAES(cleartextBlob, salt, bootKey, PaddingMode.Zeros);
+                                    // We need to add some additional salt and padding to the data:
+                                    byte[] salt2 = GenerateSalt(SaltSize);
+                                    int cleartextWithSalt2Size = cleartextBlob.Length + SaltSize;
+                                    int paddingSize = (AESBlockSize - cleartextWithSalt2Size % AESBlockSize) % AESBlockSize;
+                                    byte[] paddedBlob = new byte[cleartextWithSalt2Size+paddingSize];
+                                    cleartextBlob.CopyTo(paddedBlob, 0);
+
+                                    // Fill the blob with padding bytes (similar to PKCS#7 padding mode)
+                                    for (int i = cleartextBlob.Length; i < cleartextBlob.Length + paddingSize; i++)
+                                    {
+                                        paddedBlob[i] = (byte)paddingSize;
+                                    }
+
+                                    // Add the salt to the end:
+                                    salt2.CopyTo(paddedBlob, cleartextBlob.Length + paddingSize);
+
+                                    // We can finally do the encryption
+                                    encryptedBlob = EncryptUsingAES(paddedBlob, salt, bootKey, PaddingMode.Zeros);
                                     break;
                                 case PekListVersion.W2k:
                                     encryptedBlob = EncryptUsingRC4(cleartextBlob, salt, bootKey, BootKeySaltHashRounds);
