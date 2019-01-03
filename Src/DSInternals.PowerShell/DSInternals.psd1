@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.1'
+ModuleVersion = '3.2'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -146,11 +146,9 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the New-ADDBRestoreFromMediaScript cmdlet to aid with file-level DC recovery process.
-- Added the Get-LSAPolicyInformation and Set-LSAPolicyInformation cmdlets that can be used to retrieve and change domain-related LSA Policies.
-- Extended the information returned by the The Get-ADDBDomainController cmdlet.
-- Added MAML documentation for Get-Help.
-- Path to the DSInternals.psd1 file now does not need to be specified when loading the module from a non-default location.
+- Added the Get-LsaBackupKey cmdlet for DPAPI domain backup key retrieval through LSARPC.
+- The Set-ADDBBootKey cmdlet now works with Windows Server 2000-2019 databases.
+- The New-ADDBRestoreFromMediaScript cmdlet now uses shutdown.exe instead of Restart-Computer.
 "@
     } # End of PSData hashtable
 

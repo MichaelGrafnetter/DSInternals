@@ -1,3 +1,11 @@
+Version 3.2
+- [Module] Added the Get-LsaBackupKey cmdlet for DPAPI domain backup key retrieval through LSARPC.
+- [Module] The Set-ADDBBootKey cmdlet now works with Windows Server 2000-2019 databases.
+- [Module] The New-ADDBRestoreFromMediaScript cmdlet now uses shutdown.exe instead of Restart-Computer.
+- [Framework] Added support for DPAPI domain backup key retrieval from LSA Policy.
+- [Framework] Updated package references.
+- [Framework] Fixed DSInternals.Replication.Interop assembly versioning.
+
 Version 3.1
 - [Module] Added the New-ADDBRestoreFromMediaScript cmdlet to aid with file-level DC recovery process.
 - [Module] Added the Get-LSAPolicyInformation and Set-LSAPolicyInformation cmdlets that can be used to retrieve and change domain-related LSA Policies.
