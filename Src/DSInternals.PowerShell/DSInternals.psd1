@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.2'
+ModuleVersion = '3.2.1'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'

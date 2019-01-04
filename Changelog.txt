@@ -1,3 +1,6 @@
+Version 3.2.1
+- The implementation of database re-encryption now behaves more closely to Windows Server 2016.
+
 Version 3.2
 - [Module] Added the Get-LsaBackupKey cmdlet for DPAPI domain backup key retrieval through LSARPC.
 - [Module] The Set-ADDBBootKey cmdlet now works with Windows Server 2000-2019 databases.

@@ -25,10 +25,15 @@ Describe 'DSInternals PowerShell Module' {
 
             # Load the module manifest
             $manifest =  Import-PowerShellDataFile -Path $moduleManifestPath
-            $adjustedModuleVersion = [version]::Parse($manifest.ModuleVersion + '.0.0')
+            [version] $moduleVersion = [version]::Parse($manifest.ModuleVersion)
+            if($moduleVersion.Build -eq -1)
+            {
+                # Parser uses -1 instead of 0 for unused numbers
+                $moduleVersion = [version]::new($moduleVersion.Major, $moduleVersion.Minor, 0, 0)
+            }
 
             # Compare their versions
-            $adjustedModuleVersion | Should -BeExactly $assembly.Version
+            $moduleVersion | Should -BeExactly $assembly.Version
         }
     }
 
