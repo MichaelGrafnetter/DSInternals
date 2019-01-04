@@ -1,7 +1,6 @@
 ﻿using DSInternals.Common;
 using DSInternals.Common.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Text;
 
 namespace DSInternals.DataStore.Test
 {
@@ -9,7 +8,7 @@ namespace DSInternals.DataStore.Test
     public class DataStoreSecretDecryptorTester
     {
         [TestMethod]
-        public void PasswordEncryptionKey_DataStoreDecryptPEK_W2k()
+        public void PasswordEncryptionKey_DataStorePEK_W2k_Decrypt()
         {
             // Win 2000 - Win 2012 R2
             byte[] encryptedPEK = "020000000100000042b1f49dbb723edff3b865a4d28e3afbf215961695225991e991d429a02ad382bd89214319f61e7eb4620e89b42ddba3d0de84c0603d6e34ae2fccf79eb9374a9a08d3b1".HexToBinary();
@@ -20,7 +19,7 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStoreEncryptPEK_W2k()
+        public void PasswordEncryptionKey_DataStorePEK_W2k_Encrypt()
         {
             // Win 2000 - Win 2012 R2
             byte[] encryptedPEK = "020000000100000042b1f49dbb723edff3b865a4d28e3afbf215961695225991e991d429a02ad382bd89214319f61e7eb4620e89b42ddba3d0de84c0603d6e34ae2fccf79eb9374a9a08d3b1".HexToBinary();
@@ -45,7 +44,7 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStoreDecryptPEK_W2016()
+        public void PasswordEncryptionKey_DataStorePEK_W2016_Decrypt()
         {
             // Win 2016 TP4+
             byte[] encryptedPEK = "03000000010000008ACED06423573C329BECD77936128FD61FD3892FAC724D4D24B2F4A5DA48A72B5472BDCB7FB6EEFA4884CDC9B2D2A835931A3E67B434DC766051A28B73DE385285B19961E0DC0CF661BA0AC3B3DD185D00000000000000000000000000000000".HexToBinary();
@@ -56,7 +55,7 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStoreEncryptPEK_W2016()
+        public void PasswordEncryptionKey_DataStorePEK_W2016_Encrypt()
         {
             // Win 2016 TP4+
             byte[] encryptedPEK = "03000000010000008ACED06423573C329BECD77936128FD61FD3892FAC724D4D24B2F4A5DA48A72B5472BDCB7FB6EEFA4884CDC9B2D2A835931A3E67B434DC766051A28B73DE385285B19961E0DC0CF661BA0AC3B3DD185D00000000000000000000000000000000".HexToBinary();
@@ -81,7 +80,7 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStorePEK_W2019()
+        public void PasswordEncryptionKey_DataStorePEK_W2019_Encrypt()
         {
             // Win 2019 RTM (Format is the same as WS 2016)
             byte[] encryptedPEK = "030000000100000065DB55C82F7AB29C7FF2CC3518C0DC00433C80629D23D64420D9264BB2FE54288C3121B396CD4DC9BF094EDCBF559DAD3545C52399B883BD0F374EEAF3FA35C71C75DD1447FD0A59C81C60F6703F9B7000000000000000000000000000000000".HexToBinary();
@@ -105,7 +104,7 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStoreDecryptPEK_LDS()
+        public void PasswordEncryptionKey_DataStorePEK_LDS_W2012_Decrypt()
         {
             // AD LDS/ADAM
             byte[] configNCPekList = "0200000001000000a2e75ba77d90fc28ccedc89c7ab4097a9101394114c7f549105376a00fb70645408defb7d28448e0de5a0298dc90a2744a875e1a927f8f038b6ac9e7c5d67c1dbde114c4".HexToBinary();
@@ -114,6 +113,24 @@ namespace DSInternals.DataStore.Test
 
             string expected = "85f273f46d6699da896c26e359106ebc";
             Assert.AreEqual(expected, pek.CurrentKey.ToHex(false));
+        }
+
+        [TestMethod]
+        public void PasswordEncryptionKey_DataStorePEK_LDS_W2019_Decrypt()
+        {
+            byte[] rootObjectPekList = "6d94991d9c0fe72837db099c28aa12f81ea1fc285c893f51fdd9e062d8d2a3ed6eb4ac1457e1fdd3".HexToBinary();
+            byte[] schemaObjectPekList = "e657f7626023770ce6a0bc7e9a1e8468c34abf61abea225824c9e100a3e789aab2814796a5cb8b07".HexToBinary();
+            byte[] configNCPekList = "0300000001000000f25b8e6b334557b94514ade0bc4c36d706b7fc0250897ce8a87f0c4edb47280303f18e4cfc4caf56fdce7eadcdae0becef361f92d7db50c69745c82604a0f52b767410638342fb66b638cd965edc90d300000000000000000000000000000000".HexToBinary();
+
+            // Combine the fake pekLists
+            byte[] bootKey = BootKeyRetriever.GetBootKey(rootObjectPekList, schemaObjectPekList);
+
+            // Decrypt the actual pekList
+            var pek = new DataStoreSecretDecryptor(configNCPekList, bootKey);
+
+            // Perform some sanity checks
+            Assert.AreEqual(PekListVersion.W2016, pek.Version);
+            Assert.AreEqual(16, pek.CurrentKey.Length);
         }
 
         [TestMethod]
@@ -162,6 +179,47 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
+        public void PasswordEncryptionKey_DataStoreNTHash_LDS_W2019_Decrypt()
+        {
+            // Input
+            byte[] bootKey = "999cd9db28620f9ccbf74aa5ab7e220c".HexToBinary();
+            byte[] pekList = "0300000001000000f25b8e6b334557b94514ade0bc4c36d706b7fc0250897ce8a87f0c4edb47280303f18e4cfc4caf56fdce7eadcdae0becef361f92d7db50c69745c82604a0f52b767410638342fb66b638cd965edc90d300000000000000000000000000000000".HexToBinary();
+            byte[] unicodePwd = "1300000000000000CB5C6EC9A999D969B3FBD6C28625B7E710000000A5C55D65D8FD2B884D369CA73E3DD0B8D034CD3A600DF9AC76B40F5B8862C21E".HexToBinary();
+            string expectedHash = "92937945B518814341DE3F726500D4FF";
+
+            // Decrypt
+            var pek = new DataStoreSecretDecryptor(pekList, bootKey);
+            string result = pek.DecryptSecret(unicodePwd).ToHex(true);
+            
+            // Validate
+            Assert.AreEqual(expectedHash, result);
+        }
+
+        [TestMethod]
+        public void PasswordEncryptionKey_DataStoreNTHash_LDS_W2012_Decrypt()
+        {
+            // Input
+            byte[] rootObjectPekList = "9BB87C8DBF9FA23A75D59E9B8F2F993C2BF966B31F097BB9FB0C9478F00F83B1F3797B8D7D35C0B5".HexToBinary();
+            byte[] schemaObjectPekList = "22EEA8E5F33566076049AF604B4930108FB3FF08FDC3348F02BAB3CE84BBB045ED42D2DD580893CA".HexToBinary();
+            byte[] configNCPekList = "02000000010000006124C9825F761BCAF07C2B65161CBC1B3240F1C9169BB1478CEB3B38C47FB6FC7BDB8B206DB6AD31A3DF20F35A9DEF6A49312EE7D6A4B80963A0FA2D75F3F7CB239F8E61".HexToBinary();
+            byte[] unicodePwd = "1100000000000000BC0BF58E1B2238CDC5005612D1EE97E50699858A2CC8A46C1F0A47F99AB477D3".HexToBinary();
+            byte[] ntPwdHistory = "1100000000000000F87413526E2F737110ACC36C7A82E7459B4C130C62D70A00C47659931A5EE26D10DD85F55AEDF165".HexToBinary();
+            byte[] supplementalCredentials = "11000000000000003D51AE44B7F7450101DBD1398FF5A068F0013803B8DD11DF9E2E96731CDFDE462F14F685536104D42E4533FC00F8867419F1BFC179FFCCB2EA7FA7F152944341BB1BABD18DA0C6231B2AC68002B10A5BC2306814F5F8ADEB42BB7C13EC2C8082DF7886FBB61D86457D3F30AFB447AE69B6E96D849CE087A1E3EDF0D1C2625884C1B3E022EEF667FAE104B2E5A8752810E65260BBB60AD8D349DB1BF676760D588EE5C3A06862F2375A0B186764A1E08002A724842BE2108575836B1B752D453E8E55352EC69875BD92B77D79EE60D2C86EE5393A07E8E4F027E9F41F432134B6931685CC42FA8D5ABEAA05937342029659A52F60775EF8B042087CF8AD01567D06AEC228971D24F4D884445B972BE6AB9553E4023D22E002A3B88A117075253F24EC1750FDDAB092190B28C6CC4A3CBC52F3C1DF9AD330A7B8B87D7ED86EE01FDC5A7C5A3A9437205855FFAC40D93474E8B1D70C1F84FFC2E4FE6B6E0386DEADD5EC27EE8975FD6BD7578AB10690D11474AA147CCC603CAF2F5B7EE1A2513422D3F02DB1F51843D8079BD52CDC70B7494183DA2DFAF3ED4A3D8A4416D85900303A4208449C2D8DD483174F0E83C852FE75B54C0B4F7E2EC3AB297AAF8F4F7A78BCD88B2416F7B992E6D87C2437E971582EDD747C4FDA7A92D89BF10524327C505D910CC99EFD68A3CFDE37EB8BDECA70F7216AE51D5FC3F7B0038F315C6ECC11CA4FDA86546F78E2".HexToBinary();
+
+            string expectedHash = "92937945B518814341DE3F726500D4FF";
+
+            // Perform decryption
+            byte[] bootKey = BootKeyRetriever.GetBootKey(rootObjectPekList, schemaObjectPekList);
+            var pek = new DataStoreSecretDecryptor(configNCPekList, bootKey);
+            string decryptedNTHash = pek.DecryptSecret(unicodePwd).ToHex(true);
+
+            // Validate
+            Assert.AreEqual(expectedHash, decryptedNTHash);
+
+            throw new AssertInconclusiveException("Checks for NT history have to be added.");
+        }
+
+        [TestMethod]
         public void PasswordEncryptionKey_DataStoreNTHash_W2016_TestVector2()
         {
             // Win 2016 TP4+
@@ -202,6 +260,26 @@ namespace DSInternals.DataStore.Test
             var result = pek.DecryptHashHistory(blob, rid);
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("92937945B518814341DE3F726500D4FF", result[0].ToHex(true));
+        }
+
+        [TestMethod]
+        public void PasswordEncryptionKey_DataStoreNTHashHistory_LDS_W2019_Decrypt()
+        {
+            // Input
+            byte[] rootObjectPekList = "6d94991d9c0fe72837db099c28aa12f81ea1fc285c893f51fdd9e062d8d2a3ed6eb4ac1457e1fdd3".HexToBinary();
+            byte[] schemaObjectPekList = "e657f7626023770ce6a0bc7e9a1e8468c34abf61abea225824c9e100a3e789aab2814796a5cb8b07".HexToBinary();
+            byte[] configNCPekList = "0300000001000000f25b8e6b334557b94514ade0bc4c36d706b7fc0250897ce8a87f0c4edb47280303f18e4cfc4caf56fdce7eadcdae0becef361f92d7db50c69745c82604a0f52b767410638342fb66b638cd965edc90d300000000000000000000000000000000".HexToBinary();
+            byte[] ntPwdHistory = "130000000000000023E9D52A9EBA23C2F2A0705F58334F05400000001335D99AA6A65ACDE2E94F152D84665F2E29555606B48F5065070000972900582C5F83C01E9144434A2A00A0D27225C2590F8EEFA6ACC820EF885B0CCD4A18699AE57C7C6101FF299AFDA4CF0F92C5B0".HexToBinary();
+            byte[] supplementalCredentials = "130000000000000006B86D54B0917E6645995FC38C311335F8010000778DE4911A7E5E359EF018AFE3862E20874C1CFDDCF71C9C6C19FC7D953BEEF96FE017E75DF74F40F3C3AB7F765B179C9D07B74E3E9F375E6DCDDE1FEC2280902403D4959025AC80D151B681A1F25993AB1BF786FA7CB17FD5850D20D4B65E739E3B780E4F5921A297BD3D37C3893554D0B5B5077F815E70A45D8BCD25A2727ED01245EBD884DD0728AC6CE77DAFE29687A5B5A4AFBBD017B7170DE0FC04988FB7F7CFDC916F86BD0368F132287DF4600B181B046B2BCEF58ECE0BC2E94BA8C126B2364FFE83D76C6F5B80995FFC357B25635C56A70019821E17D9ECA319A7D120141703EF4F94A9A75D0E6E597F53988A8520A668972CBC5D5692976A9D508AF8E892C4FBB1C0C72005E3A330B8BC98169FC7C76F1B002BFC0228FD8721706DD862EE7BD6A66758036DEAADCA9BAC62DB5ABD8AB3762A08CE2FD9DCC7107DCBCB5E31AE5068E3525A5ED3405A6DFB1DFB9A2FFD3944638ADB17CAE5688003ED617E384C1C8EA39FC56EEE01731A95E807BB288E8E9072844382E522E491F6C3042289181E8C776E8509EC610DFAE1BCA2906797AF8FACC1B45B34FFDC57A33F0E4EEB06DD3B83A9A341FB7DA6AF1082F959AE83533B9D806B75D191AB66FE95C3E37756B8478B40B1BA8FF5A20AB0FB4ADED58C2CF9D00256CC8066B64B80A702337A2D3292D0C3159F9E9786B78C6576E00659BA24BE0CA3CF7FA6327539D8".HexToBinary();
+
+            // Decrypt
+            byte[] bootKey = BootKeyRetriever.GetBootKey(rootObjectPekList, schemaObjectPekList);
+            var pek = new DataStoreSecretDecryptor(configNCPekList, bootKey);
+            byte[] decryptedNTPwdHistory = pek.DecryptSecret(ntPwdHistory);
+
+            // Validate
+            throw new AssertInconclusiveException("NT hash decryption needs to be implemented.");
+            // Sample: 0300000010000000e24106942bf38bcf57a6a4b29016eff6100000009d978dda95e5185bbeda9b3ae00f84b41000000092937945b518814341de3f726500d4ff
         }
 
         [TestMethod]

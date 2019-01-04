@@ -237,7 +237,7 @@
             }
         }
 
-        protected DirectorySecretDecryptor GetSecretDecryptor(byte[] bootKey)
+        public DirectorySecretDecryptor GetSecretDecryptor(byte[] bootKey = null)
         {
             if (bootKey == null && !this.context.DomainController.IsADAM)
             {

@@ -125,12 +125,12 @@ namespace DSInternals.Common.Cryptography
             return DecryptUsingRC4(data, salt, encryptionKey, saltHashRounds);
         }
 
-        protected static byte[] DecryptUsingAES(byte[] data, byte[] iv, byte[] key, PaddingMode padding)
+        protected static byte[] DecryptUsingAES(byte[] data, byte[] iv, byte[] key)
         {
             using(var aes = Aes.Create())
             {
                 aes.Mode = CipherMode.CBC;
-                aes.Padding = padding;
+                aes.Padding = PaddingMode.PKCS7;
                 using(var decryptor = aes.CreateDecryptor(key, iv))
                 {
                     using (var inputStream = new MemoryStream(data, false))
@@ -148,12 +148,12 @@ namespace DSInternals.Common.Cryptography
             }
         }
 
-        protected static byte[] EncryptUsingAES(byte[] data, byte[] iv, byte[] key, PaddingMode padding)
+        protected static byte[] EncryptUsingAES(byte[] data, byte[] iv, byte[] key)
         {
             using (var aes = Aes.Create())
             {
                 aes.Mode = CipherMode.CBC;
-                aes.Padding = padding;
+                aes.Padding = PaddingMode.PKCS7;
                 using (var encryptor = aes.CreateEncryptor(key, iv))
                 {
                     using (var inputStream = new MemoryStream(data, false))

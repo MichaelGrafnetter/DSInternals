@@ -14,10 +14,7 @@
 
         public static void ZeroFill(this byte[] array)
         {
-            for (int i = 0; i < array.Length; i++)
-            {
-                array[i] = 0;
-            }
+            Array.Clear(array, 0, array.Length);
         }
 
         public static byte[] HexToBinary(this string hex)

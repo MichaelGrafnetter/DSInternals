@@ -12,6 +12,7 @@ namespace DSInternals.DataStore
         private const int BootKeySaltHashRounds = 1000;
         private const int EncryptedPekListOffset = sizeof(PekListVersion) + sizeof(PekListFlags) + SaltSize;
         private const int AESBlockSize = 16;
+        private const int PekListV3PaddingSize = 16;
         // The flags field is probably not used by AD and is always 0.
         private const ushort EncryptedSecretFlags = 0;
 
@@ -126,7 +127,7 @@ namespace DSInternals.DataStore
                     decryptedSecret = DecryptUsingRC4(encryptedSecret, salt, decryptionKey);
                     break;
                 case SecretEncryptionType.DatabaseAES:
-                    decryptedSecret = DecryptUsingAES(encryptedSecret, salt, decryptionKey, PaddingMode.PKCS7);
+                    decryptedSecret = DecryptUsingAES(encryptedSecret, salt, decryptionKey);
                     // TODO: Check that decryptedSecret.Lenght == secretLength;
                     break;
                 default:
@@ -164,7 +165,7 @@ namespace DSInternals.DataStore
                     switch (this.EncryptionType)
                     {
                         case SecretEncryptionType.DatabaseAES:
-                            encryptedSecret = EncryptUsingAES(secret, salt, this.CurrentKey, PaddingMode.PKCS7);
+                            encryptedSecret = EncryptUsingAES(secret, salt, this.CurrentKey);
                             // Write the Secret Length (4B)
                             writer.Write(secret.Length);
                             break;
@@ -264,33 +265,20 @@ namespace DSInternals.DataStore
                             switch (pekListVersion)
                             {
                                 case PekListVersion.W2016:
-                                    // We need to add some additional salt and padding to the data:
-                                    byte[] salt2 = GenerateSalt(SaltSize);
-                                    int cleartextWithSalt2Size = cleartextBlob.Length + SaltSize;
-                                    int paddingSize = (AESBlockSize - cleartextWithSalt2Size % AESBlockSize) % AESBlockSize;
-                                    byte[] paddedBlob = new byte[cleartextWithSalt2Size+paddingSize];
-                                    cleartextBlob.CopyTo(paddedBlob, 0);
-
-                                    // Fill the blob with padding bytes (similar to PKCS#7 padding mode)
-                                    for (int i = cleartextBlob.Length; i < cleartextBlob.Length + paddingSize; i++)
-                                    {
-                                        paddedBlob[i] = (byte)paddingSize;
-                                    }
-
-                                    // Add the salt to the end:
-                                    salt2.CopyTo(paddedBlob, cleartextBlob.Length + paddingSize);
-
-                                    // We can finally do the encryption
-                                    encryptedBlob = EncryptUsingAES(paddedBlob, salt, bootKey, PaddingMode.Zeros);
+                                    encryptedBlob = EncryptUsingAES(cleartextBlob, salt, bootKey);
+                                    writer.Write(encryptedBlob);
+                                    // Add 16B zeroed padding. The purpose in unknown and NTDS even works without it.
+                                    byte[] padding = new byte[PekListV3PaddingSize];
+                                    writer.Write(padding);
                                     break;
                                 case PekListVersion.W2k:
                                     encryptedBlob = EncryptUsingRC4(cleartextBlob, salt, bootKey, BootKeySaltHashRounds);
+                                    writer.Write(encryptedBlob);
                                     break;
                                 default:
                                     // TODO: Extract as a resource.
                                     throw new FormatException("Unsupported PEK list version.");
                             }
-                            writer.Write(encryptedBlob);
                             break;
                     }
                 }
@@ -332,7 +320,9 @@ namespace DSInternals.DataStore
                             decryptedPekList = DecryptUsingRC4(encryptedPekList, salt, bootKey, BootKeySaltHashRounds);
                             break;
                         case PekListVersion.W2016:
-                            decryptedPekList = DecryptUsingAES(encryptedPekList, salt, bootKey, PaddingMode.Zeros);
+                            // Remove the trailing zeroes. The structure always fits into exactly 4 AES blocks.
+                            encryptedPekList = encryptedPekList.Cut(0, 4 * AESBlockSize);
+                            decryptedPekList = DecryptUsingAES(encryptedPekList, salt, bootKey);
                             break;
                         default:
                             // TODO: Extract as resource.
@@ -383,9 +373,8 @@ namespace DSInternals.DataStore
                     }
                 }
             }
-            
-            byte[] encryptedPekList = EncryptPekList(buffer, this.Version, bootKey);
-            return encryptedPekList;
+
+            return EncryptPekList(buffer, this.Version, bootKey);
         }
     }
 }

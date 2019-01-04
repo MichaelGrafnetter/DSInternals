@@ -93,7 +93,7 @@ Describe 'DSInternals PowerShell Module' {
                 Should -BeNull
         }
 
-        It 'has up-to-date copyright information' {
+        It 'have up-to-date copyright information' {
             $expectedInfo = '*© 2015-{0}*' -f (Get-Date).Year
              Get-ChildItem $ModulePath -Recurse -Filter DSInternals.*.dll |
                 where { $PSItem.VersionInfo.LegalCopyright -notlike $expectedInfo } |
