@@ -86,11 +86,12 @@
                 this.LinkResolver = new LinkResolver(this.database, this.Schema);
                 this.DomainController = new DomainController(this);
             }
-            catch (EsentUnicodeTranslationFailException unicodeException)
+            catch (EsentErrorException e)
             {
-                // This typically happens while opening a Windows Server 2003 DIT on a newer system.
+                // EsentUnicodeTranslationFailException - This typically happens while opening a Windows Server 2003 DIT on a newer system.
+                // EsentSecondaryIndexCorruptedException - This typically happens when opening a Windows Server 2012 R2 DIT on Windows 7.
                 this.Dispose();
-                throw new InvalidDatabaseStateException("There was a problem reading the database, which probably comes from a legacy system. Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", this.DSADatabaseFile, unicodeException);
+                throw new InvalidDatabaseStateException("There was a problem reading the database, which probably comes from a different OS. Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", this.DSADatabaseFile, e);
             }
             catch
             {
