@@ -26,12 +26,15 @@ Describe 'DSInternals PowerShell Module' {
             # Load the module manifest
             $manifest =  Import-PowerShellDataFile -Path $moduleManifestPath
             [version] $moduleVersion = [version]::Parse($manifest.ModuleVersion)
+            # Parser uses -1 instead of 0 for unused numbers, so we need to fix that
             if($moduleVersion.Build -eq -1)
             {
-                # Parser uses -1 instead of 0 for unused numbers
                 $moduleVersion = [version]::new($moduleVersion.Major, $moduleVersion.Minor, 0, 0)
             }
-
+            else
+            {
+                $moduleVersion = [version]::new($moduleVersion.Major, $moduleVersion.Minor, $moduleVersion.Build, 0)
+            }
             # Compare their versions
             $moduleVersion | Should -BeExactly $assembly.Version
         }
