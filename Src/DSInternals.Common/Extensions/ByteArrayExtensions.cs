@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Security;
     using System.Security.Principal;
     using System.Text;
 
@@ -62,22 +63,29 @@
             }
         }
 
-        public static string ReadWString(this byte[] buffer, int startIndex)
+        public static SecureString ReadSecureWString(this byte[] buffer, int startIndex)
         {
-            Validator.AssertNotNull(buffer, "buffer");
+            Validator.AssertNotNull(buffer, nameof(buffer));
             // TODO: Assert startIndex > 0
             int maxLength = buffer.Length - startIndex;
-            var sb = new StringBuilder(maxLength);
+
+            // Prepare an empty SecureString that will eventually be returned
+            var result = new SecureString();
+
             for (int i = startIndex; i < buffer.Length; i += UnicodeEncoding.CharSize)
             {
+                // Convert the next 2 bytes from the byte array into a unicode character
                 char c = BitConverter.ToChar(buffer, i);
+
                 if (c == Char.MinValue)
                 {
-                    // End of string reached
-                    return sb.ToString();
+                    // End of string has been reached
+                    return result;
                 }
-                sb.Append(c);
+
+                result.AppendChar(c);
             }
+
             // If we reached this point, the \0 char has not been found, so throw an exception.
             // TODO: Add a reasonable exception message
             throw new ArgumentException();

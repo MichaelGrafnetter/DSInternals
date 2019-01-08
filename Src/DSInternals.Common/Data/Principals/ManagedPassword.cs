@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Text;
-
-namespace DSInternals.Common.Data
+﻿namespace DSInternals.Common.Data
 {
+    using System;
+    using System.IO;
+    using System.Security;
+
     /// <summary>
     /// Represents a group-managed service account's password information.
     /// </summary>
@@ -26,6 +26,17 @@ namespace DSInternals.Common.Data
         /// </summary>
         public string CurrentPassword
         {
+            get
+            {
+                return this.SecureCurrentPassword.ToUnicodeString();
+            }
+        }
+
+        /// <summary>
+        /// Gets the current password.
+        /// </summary>
+        public SecureString SecureCurrentPassword
+        {
             get;
             private set;
         }
@@ -34,6 +45,17 @@ namespace DSInternals.Common.Data
         /// Gets the previous password.
         /// </summary>
         public string PreviousPassword
+        {
+            get
+            {
+                return this.SecurePreviousPassword.ToUnicodeString();
+            }
+        }
+
+        /// <summary>
+        /// Gets the previous password.
+        /// </summary>
+        public SecureString SecurePreviousPassword
         {
             get;
             private set;
@@ -86,13 +108,13 @@ namespace DSInternals.Common.Data
 
                     // A 16-bit offset, in bytes, from the beginning of this structure to the CurrentPassword field. The CurrentPasswordOffset field MUST NOT be set to 0x0000.
                     short currentPasswordOffset = reader.ReadInt16();
-                    this.CurrentPassword = blob.ReadWString(currentPasswordOffset);
+                    this.SecureCurrentPassword = blob.ReadSecureWString(currentPasswordOffset);
 
                     // A 16-bit offset, in bytes, from the beginning of this structure to the PreviousPassword field. If this field is set to 0x0000, then the account has no previous password.
                     short previousPasswordOffset = reader.ReadInt16();
                     if(previousPasswordOffset > 0)
                     {
-                        this.PreviousPassword = blob.ReadWString(previousPasswordOffset);
+                        this.SecurePreviousPassword = blob.ReadSecureWString(previousPasswordOffset);
                     }
 
                     // A 16-bit offset, in bytes, from the beginning of this structure to the QueryPasswordInterval field.
