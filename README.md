@@ -9,7 +9,7 @@
 ## Introduction
 
 The DSInternals project consists of these two parts:
-- The [DSInternals Framework](https://www.nuget.org/profiles/MichaelGrafnetter) exposes several internal features of [Active Directory](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview) and can be used from any .NET application. The codebase has already been integrated into several 3rd party commercial products that use it in scenarios like Active Directory disaster recovery, identity management, cross-forest migrations and password strength auditing.
+- The [DSInternals Framework](https://www.nuget.org/profiles/MichaelGrafnetter) exposes several internal features of [Active Directory](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview) and can be used from any .NET application. The codebase has already been integrated into several 3<sup>rd</sup> party commercial products that use it in scenarios like Active Directory disaster recovery, identity management, cross-forest migrations and password strength auditing.
 - The [DSInternals PowerShell Module](https://www.powershellgallery.com/packages/DSInternals/) provides easy-to-use cmdlets that are built on top of the Framework. These are the main features:
   - Offline [ntds.dit file](https://technet.microsoft.com/en-us/library/cc961761.aspx) manipulation, including [hash dumping](Documentation/PowerShell/Get-ADDBAccount.md), [password resets](Documentation/PowerShell/Set-ADDBAccountPassword.md), [group membership changes](Documentation/PowerShell/Set-ADDBPrimaryGroup.md), [SID History injection](Documentation/PowerShell/Add-ADDBSidHistory.md) and [enabling](Documentation/PowerShell/Enable-ADDBAccount.md)/[disabling](Documentation/PowerShell/Disable-ADDBAccount.md) accounts.
   - [Online password hash dumping](Documentation/PowerShell/Get-ADReplAccount.md) through the [Directory Replication Service (DRS) Remote Protocol (MS-DRSR)](https://msdn.microsoft.com/en-us/library/cc228086.aspx). This feature is commonly called DCSync.
@@ -90,9 +90,19 @@ I have also published a series of articles about the DSInternals module on [my b
 --- | ---
 | [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master) | [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Test)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master) |
 
+## Acknowledgements
+
+This project utilizes the following 3<sup>rd</sup> party copyrighted material:
+
+- [ManagedEsent](https://github.com/Microsoft/ManagedEsent) - Provides managed access to esent.dll, the embeddable database engine native to Windows.
+- [AutoMapper](https://github.com/AutoMapper/AutoMapper) - A convention-based object-object mapper in .NET.
+- [NDceRpc](https://github.com/OpenSharp/NDceRpc) - Integration of WCF and .NET with MS-RPC and binary serialization.
+- [PBKDF2.NET](https://github.com/therealmagicmike/PBKDF2.NET) - Provides PBKDF2 for .NET Framework.
+
 ## Related Projects
 
 - [Mimikatz](https://github.com/gentilkiwi/mimikatz) - The No.1 tool for pass-the-hash attacks. Can use the credentials extracted by the DSInternals module to do some nasty stuff.
 - [NTDSXtract](https://github.com/csababarta/ntdsxtract) - A framework for ntds.dit parsing written in Python.
 - [Impacket](https://github.com/SecureAuthCorp/impacket) - Various MSRPC-based protocols implemented in Python.
+- [DIT Snapshot Viewer](https://github.com/yosqueoy/ditsnap) - A graphical inspection tool for Active Directory databases.
 - [Esent Workbench](https://bitbucket.org/orthoprog/esentworkbench/wiki/Home) - Great tool for displaying the structure of ntds.dit files.
