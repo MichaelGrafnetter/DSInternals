@@ -94,6 +94,8 @@
                 Replace("{DomainSid}", dc.DomainSid.ToString()).
                 Replace("{DomainMode}", ((int)dc.DomainMode).ToString()).
                 Replace("{ForestMode}", ((int)dc.ForestMode).ToString()).
+                Replace("{DomainModeString}", (dc.DomainMode).ToString()).
+                Replace("{ForestModeString}", (dc.ForestMode).ToString()).
                 Replace("{OSName}", dc.OSName).
                 Replace("{OldBootKey}", this.BootKey.ToHex()).
                 Replace("{SourceDBPath}", this.DirectoryContext.DSADatabaseFile).
