@@ -29,6 +29,9 @@ $Error[0].Exception.Message
 # The entire exception stack trace
 $Error[0].Exception.StackTrace
 
+# Version of the DSInternals module
+(Get-Module -Name DSInternals -ListAvailable).Version.ToString()
+
 # OS on which the command was running
 (Get-WmiObject -Class Win32_OperatingSystem).Caption
 
