@@ -14,8 +14,5 @@ $manifestPath = Join-Path $releaseDir 'DSInternals\DSInternals.psd1'
 $moduleVersion = Test-ModuleManifest -Path $manifestPath -ErrorAction Stop | select -ExpandProperty Version
 $archiveName = 'DSInternals_v{0}.zip' -f $moduleVersion
 
-# Copy documentation files next to the built module
-Copy-Item -Path $rootDir\*.txt -Destination $releaseDir -Force
-
 # Create the target ZIP archive
 Compress-Archive -Path $releaseDir\* $releaseDir\$archiveName -Force

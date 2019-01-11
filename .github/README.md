@@ -11,14 +11,14 @@
 The DSInternals project consists of these two parts:
 - The [DSInternals Framework](https://www.nuget.org/profiles/MichaelGrafnetter) exposes several internal features of [Active Directory](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview) and can be used from any .NET application. The codebase has already been integrated into several 3<sup>rd</sup> party commercial products that use it in scenarios like Active Directory disaster recovery, identity management, cross-forest migrations and password strength auditing.
 - The [DSInternals PowerShell Module](https://www.powershellgallery.com/packages/DSInternals/) provides easy-to-use cmdlets that are built on top of the Framework. These are the main features:
-  - Offline [ntds.dit file](https://technet.microsoft.com/en-us/library/cc961761.aspx) manipulation, including [hash dumping](Documentation/PowerShell/Get-ADDBAccount.md), [password resets](Documentation/PowerShell/Set-ADDBAccountPassword.md), [group membership changes](Documentation/PowerShell/Set-ADDBPrimaryGroup.md), [SID History injection](Documentation/PowerShell/Add-ADDBSidHistory.md) and [enabling](Documentation/PowerShell/Enable-ADDBAccount.md)/[disabling](Documentation/PowerShell/Disable-ADDBAccount.md) accounts.
-  - [Online password hash dumping](Documentation/PowerShell/Get-ADReplAccount.md) through the [Directory Replication Service (DRS) Remote Protocol (MS-DRSR)](https://msdn.microsoft.com/en-us/library/cc228086.aspx). This feature is commonly called DCSync.
-  - [Active Directory password auditing](Documentation/PowerShell/Test-PasswordQuality.md) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
-  - [Domain or local account password hash injection](Documentation/PowerShell/Set-SamAccountPasswordHash.md) through the [Security Account Manager (SAM) Remote Protocol (MS-SAMR)](https://msdn.microsoft.com/en-us/library/cc245476.aspx) or [directly into the database](Documentation/PowerShell/Set-ADDBAccountPasswordHash.md).
-  - [LSA Policy modification](Documentation/PowerShell/Set-LsaPolicyInformation.md) through the [Local Security Authority (Domain Policy) Remote Protocol (MS-LSAD / LSARPC)](https://msdn.microsoft.com/en-us/library/cc234225.aspx).
-  - [Extracting credential roaming data](Documentation/PowerShell/Save-DPAPIBlob.md) and DPAPI domain backup keys, either online through [directory replication](Documentation/PowerShell/Get-ADReplBackupKey.md) and [LSARPC](Documentation/PowerShell/Get-LsaBackupKey.md) or [offline from ntds.dit](Documentation/PowerShell/Get-ADDBBackupKey.md).
-  - [Bare-metal recovery of domain controllers](Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md) from just IFM backups (ntds.dit + SYSVOL). 
-  - Password hash calculation, including [NT hash](Documentation/PowerShell/ConvertTo-NTHash.md), [LM hash](Documentation/PowerShell/ConvertTo-LMHash.md) and [kerberos keys](Documentation/PowerShell/ConvertTo-KerberosKey.md).
+  - Offline [ntds.dit file](https://technet.microsoft.com/en-us/library/cc961761.aspx) manipulation, including [hash dumping](../Documentation/PowerShell/Get-ADDBAccount.md), [password resets](../Documentation/PowerShell/Set-ADDBAccountPassword.md), [group membership changes](../Documentation/PowerShell/Set-ADDBPrimaryGroup.md), [SID History injection](../Documentation/PowerShell/Add-ADDBSidHistory.md) and [enabling](../Documentation/PowerShell/Enable-ADDBAccount.md)/[disabling](../Documentation/PowerShell/Disable-ADDBAccount.md) accounts.
+  - [Online password hash dumping](../Documentation/PowerShell/Get-ADReplAccount.md) through the [Directory Replication Service (DRS) Remote Protocol (MS-DRSR)](https://msdn.microsoft.com/en-us/library/cc228086.aspx). This feature is commonly called DCSync.
+  - [Active Directory password auditing](../Documentation/PowerShell/Test-PasswordQuality.md) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
+  - [Domain or local account password hash injection](../Documentation/PowerShell/Set-SamAccountPasswordHash.md) through the [Security Account Manager (SAM) Remote Protocol (MS-SAMR)](https://msdn.microsoft.com/en-us/library/cc245476.aspx) or [directly into the database](../Documentation/PowerShell/Set-ADDBAccountPasswordHash.md).
+  - [LSA Policy modification](../Documentation/PowerShell/Set-LsaPolicyInformation.md) through the [Local Security Authority (Domain Policy) Remote Protocol (MS-LSAD / LSARPC)](https://msdn.microsoft.com/en-us/library/cc234225.aspx).
+  - [Extracting credential roaming data](../Documentation/PowerShell/Save-DPAPIBlob.md) and DPAPI domain backup keys, either online through [directory replication](../Documentation/PowerShell/Get-ADReplBackupKey.md) and [LSARPC](../Documentation/PowerShell/Get-LsaBackupKey.md) or [offline from ntds.dit](../Documentation/PowerShell/Get-ADDBBackupKey.md).
+  - [Bare-metal recovery of domain controllers](../Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md) from just IFM backups (ntds.dit + SYSVOL). 
+  - Password hash calculation, including [NT hash](../Documentation/PowerShell/ConvertTo-NTHash.md), [LM hash](../Documentation/PowerShell/ConvertTo-LMHash.md) and [kerberos keys](../Documentation/PowerShell/ConvertTo-KerberosKey.md).
 
 > DISCLAIMER: Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
 
@@ -65,7 +65,7 @@ You can of course review the source code and compile the Module/Framework yourse
 ## Documentation
 
 ### Get-Help
-The online version of [PowerShell Get-Help documentation](Documentation/PowerShell/Readme.md) contains the list of all cmdlets and some usage examples.
+The online version of [PowerShell Get-Help documentation](../Documentation/PowerShell/Readme.md) contains the list of all cmdlets and some usage examples.
 
 ### Blog Posts
 
