@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
-- Implemented a slightly more secure handling of [GMSA passwords]("../Src/DSInternals.Common/Data/Principals/ManagedPassword.cs).
+- Implemented a slightly more secure handling of [GMSA passwords](../Src/DSInternals.Common/Data/Principals/ManagedPassword.cs).
 
 ### Fixed
 - A more explanatory exception is now thrown when opening databases that originate from different OS versions.
