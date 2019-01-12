@@ -54,12 +54,12 @@ jobs:
         restoreNugetPackages: false
 
     - task: VSTest@2
-      displayName: 'VSTest - Unit Tests'
+      displayName: 'VSTest Unit Tests'
       inputs:
+        testRunTitle: 'VSTest Unit Tests'
         testSelector: 'testAssemblies'
         testAssemblyVer2: 'Build/**/DSInternals/*.Test.dll'
-        #testFiltercriteria:
-        codeCoverageEnabled: true
+        codeCoverageEnabled: false
         configuration: '$(buildConfiguration)'
 
  # Only proceed with the Release build if Test succeeds and the build was requested manually.
@@ -176,6 +176,7 @@ jobs:
     - task: PublishTestResults@2
       displayName: 'Publish Smoke Test Results'
       inputs:
+        testRunTitle: 'Pester Smoke Tests'
         testResultsFormat: 'NUnit'
         testResultsFiles: '**/*.xml' 
         searchFolder: 'TestResults'
