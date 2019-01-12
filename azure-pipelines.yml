@@ -2,9 +2,12 @@
 
 trigger:
   batch: true
+  branches:
+    include:
+    - master
   paths:
     include:
-      - 'Src/*'
+    - Src/*
 
 pr:
   branches:
@@ -12,7 +15,7 @@ pr:
     - master
   paths:
       exclude:
-        - '**/*.md'
+      - '**/*.md'
 
 variables:
   solution: '**/*.sln'
