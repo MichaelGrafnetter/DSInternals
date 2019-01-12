@@ -2,171 +2,38 @@
     about_DSInternals
 
 SHORT DESCRIPTION
-    The DSInternals PowerShell Module exposes several internal
-	and undocumented features of Active Directory.
+    The Directory Services Internals (DSInternals) PowerShell Module exposes
+    several internal and undocumented features of Active Directory.
 
 LONG DESCRIPTION
-	
-	LIST OF CMDLETS
+    The main features of the DSInternals PowerShell Module include:
+    - Offline ntds.dit file manipulation, including hash dumping, password
+    resets, group membership changes, SID History injection and
+    enabling/disabling accounts.
+    - Online password hash dumping through the Directory Replication Service
+    Remote Protocol (MS-DRSR).
+    - Active Directory password auditing that discovers accounts sharing the
+    same passwords or having passwords in a public database like HaveIBeenPwned
+    or in a custom dictionary.
+    - Domain or local account password hash injection through the Security
+    Account Manager Remote Protocol (MS-SAMR) or directly into the database.
+    - LSA Policy modification through the Local Security Authority Remote
+    Protocol (MS-LSAD / LSARPC).
+    - Extracting credential roaming data and DPAPI domain backup keys, either
+    online through MS-DRSR and LSARPC or offline from ntds.dit.
+    - Bare-metal recovery of domain controllers from just IFM backups (ntds.dit
+    + SYSVOL).
+    - Password hash calculation, including NT hash, LM hash and kerberos keys.
 
-	Offline operations with the Active Directory database
-
-		Get-ADDBAccount
-		---------------
-		
-		Reads one or more accounts from a ntds.dit file, including secret attributes.
-		
-		Enable-ADDBAccount
-		------------------
-
-		Enables an Active Directory account in an offline ntds.dit file.
-
-		Disable-ADDBAccount
-		-------------------
-
-		Disables an Active Directory account in an offline ntds.dit file.
-
-		Get-BootKey
-		-----------
-		
-		Reads the BootKey/SysKey from an offline SYSTEM registry hive.
-
-		Set-ADDBBootKey
-		---------------
-
-		Re-encrypts a ntds.dit with a new BootKey. Highly experimental!
-		
-		Get-ADDBBackupKey
-		-----------------
-
-		Reads the DPAPI backup keys from a ntds.dit file.
-
-		Get-ADDBKdsRootKey
-		------------------
-
-		Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryption,
-		e.g. SID-protected PFX files.
-		
-		Add-ADDBSidHistory
-		------------------
-		
-		Adds one or more values to the sIDHistory attribute of an object in a ntds.dit file.
-		
-		Set-ADDBPrimaryGroup
-		--------------------
-		
-		Modifies the primaryGroupId attribute of an object to a ntds.dit file.
-		
-		Get-ADDBDomainController
-		------------------------
-		
-		Reads information about the originating DC from a ntds.dit file,
-		including domain name, domain SID, DC name and DC site.
-		
-		Set-ADDBDomainController
-		------------------------
-
-		Writes information about the DC to a ntds.dit file,
-		including the highest commited USN and database epoch.
-		
-		Get-ADDBSchemaAttribute
-		-----------------------
-		
-		Reads AD schema from a ntds.dit file, including datatable column names.
-		
-		Remove-ADDBObject
-		-----------------
-		
-		Physically removes specified object from a ntds.dit file,
-		making it semantically inconsistent. Highly experimental!
-	
-	Online operations with Active Directory database
-		
-		Get-ADReplAccount
-		-----------------
-		
-		Reads one or more accounts through the DRSR protocol, including secret attributes.
-
-		Get-ADReplBackupKey
-		-------------------
-		
-		Reads the DPAPI backup keys through the DRSR protocol.
-		
-		Set-SamAccountPasswordHash
-		--------------------------
-		
-		Sets NT and LM hashes of an account through the SAMR protocol.
-
-	Hash calculation
-		
-		ConvertTo-NTHash
-		----------------
-		
-		Calculates NT hash of a given password.
-
-		ConvertTo-NTHashDictionary
-		--------------------------
-		
-		Creates a hash->password dictionary for use with the Test-PasswordQuality cmdlet.
-		
-		ConvertTo-LMHash
-		----------------
-		
-		Calculates LM hash of a given password.
-		
-		ConvertTo-OrgIdHash
-		-------------------
-		
-		Calculates OrgId hash of a given password. Used by Azure Active Directory Sync.
-
-	Password decryption
-		
-		ConvertFrom-GPPrefPassword
-		--------------------------
-		
-		Decodes a password from the format used by Group Policy Preferences.
-		
-		ConvertTo-GPPrefPassword
-		------------------------
-		
-		Converts a password to the format used by Group Policy Preferences.
-		
-		ConvertFrom-UnattendXmlPassword
-		-------------------------------
-
-		Decodes a password from the format used in unattend.xml files.
-		
-		ConvertTo-UnicodePassword
-		-------------------------
-
-		Converts a password to the format used in unattend.xml or *.ldif files.
-
-		ConvertFrom-ADManagedPasswordBlob
-		---------------------------------
-
-		Decodes the value of the msDS-ManagedPassword attribute of a Group Managed Service Account.
-
-	Misc
-		
-		Test-PasswordQuality
-		--------------------
-		
-		Performs AD audit, including checks for weak, duplicate, default and empty passwords.
-		
-		Save-DPAPIBlob
-		--------------
-		
-		Saves the output of the Get-ADReplBackupKey and Get-ADDBBackupKey cmdlets to a file.
-
-		Get-SamPasswordPolicy
-		---------------------
-
-		Queries Active Directory for the default password policy.
-
-		ConvertTo-Hex
-		-------------
-		
-		Helper cmdlet that converts binary input to hexadecimal string.
+NOTE
+    Features exposed through these tools are not supported by Microsoft.
+    Improper use might cause irreversible damage to domain controllers or
+    negatively impact domain security.
 
 SEE ALSO
-	about_ActiveDirectory
+    Get-ADDBAccount
+    Get-ADReplAccount
+    Test-PasswordQuality
+    New-ADDBRestoreFromMediaScript
+    ConvertTo-NTHash
+

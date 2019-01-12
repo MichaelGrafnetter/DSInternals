@@ -47,7 +47,7 @@ $PSVersion
 If you want to build the module from source code yourself, you need to install these programs first:
 - [Microsoft Visual Studio Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx) 2015 or 2017 with these features installed:
    * Common Tools for Visual C++
-   * Windows SDK (you have to retarget the [DSInternals.Replication.Interop](Src/DSInternals.Replication.Interop/DSInternals.Replication.Interop.vcxproj) project to the version you have)
+   * Windows SDK (you have to retarget the [DSInternals.Replication.Interop](../Src/DSInternals.Replication.Interop/DSInternals.Replication.Interop.vcxproj) project to the version you have)
    * PowerShell Tools for Visual Studio (optional)
    * Git for Windows (optional)
    * GitHub Extension for Visual Studio (optional)
@@ -56,14 +56,14 @@ If you want to build the module from source code yourself, you need to install t
 ### Build Steps
 1. Install the prerequisities.
 2. Checkout or download the source codes.
-3. Run the [Scripts\Make.ps1](Scripts/Make.ps1) script from PowerShell.
+3. Run the [Scripts\Make.ps1](../Scripts/Make.ps1) script from PowerShell.
 4. The resulting module will appear in the *Build\bin\Release* folder.
 
 ### Debugging
 
-1. Open the [Src\DSInternals.sln](Src/DSInternals.sln) file in Visual Studio.
-2. Put any cmdlets you wish to debug into the [Src\DSInternals.PowerShell\Run-Cmdlets.ps1](Src/DSInternals.PowerShell/Run-Cmdlets.ps1) script.
-3. Set the [DSInternals.PowerShell](Src/DSInternals.PowerShell/DSInternals.PowerShell.csproj) project as StartUp Project.
+1. Open the [Src\DSInternals.sln](../Src/DSInternals.sln) file in Visual Studio.
+2. Put any cmdlets you wish to debug into the [Src\DSInternals.PowerShell\Run-Cmdlets.ps1](../Src/DSInternals.PowerShell/Run-Cmdlets.ps1) script.
+3. Set the [DSInternals.PowerShell](../Src/DSInternals.PowerShell/DSInternals.PowerShell.csproj) project as StartUp Project.
 4. Switch to the _Debug_ configuration.
 5. Start debugging (F5).
 
@@ -73,4 +73,4 @@ If you want to build the module from source code yourself, you need to install t
 --- | ---
 | [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master) | [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Test)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master) |
 
-Automatic build configuration is in the [azure-pipelines.yml](azure-pipelines.yml) file.
+Automatic build configuration is in the [azure-pipelines.yml](../azure-pipelines.yml) file.

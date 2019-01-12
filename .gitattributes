@@ -15,4 +15,5 @@
 ###############################################################################
 Src/Microsoft.Database.Isam/* linguist-vendored
 Src/Microsoft.Isam.Esent.Interop/* linguist-vendored
+Scripts/Modules/* linguist-vendored
 drsr.* linguist-vendored
