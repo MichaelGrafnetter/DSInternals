@@ -57,7 +57,7 @@ jobs:
       displayName: 'VSTest - Unit Tests'
       inputs:
         testSelector: 'testAssemblies'
-        testAssemblyVer2: '**/*.Test.dll'
+        testAssemblyVer2: 'Build/**/DSInternals/*.Test.dll'
         #testFiltercriteria:
         codeCoverageEnabled: true
         configuration: '$(buildConfiguration)'
