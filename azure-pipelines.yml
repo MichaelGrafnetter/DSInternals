@@ -28,11 +28,46 @@ jobs:
       vmImage: 'VS2017-Win2016'
     variables:
       buildConfiguration: 'Debug'
+    steps:
+    - task: NuGetToolInstaller@0
+
+    - task: NuGetCommand@2
+      displayName: 'NuGet Restore Packages'
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      displayName: 'VSBuild ($(buildConfiguration) x86)'
+      inputs:
+        solution: '$(solution)'
+        platform: 'x86'
+        configuration: '$(buildConfiguration)'
+        restoreNugetPackages: false
+
+    - task: VSBuild@1
+      displayName: 'VSBuild ($(buildConfiguration) x64)'
+      inputs:
+        solution: '$(solution)'
+        platform: 'x64'
+        configuration: '$(buildConfiguration)'
+        restoreNugetPackages: false
+
+    - task: VSTest@2
+      displayName: 'VSTest - Unit Tests'
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: '**/*.Test.dll'
+        #testFiltercriteria:
+        codeCoverageEnabled: true
+        configuration: '$(buildConfiguration)'
+
+ # Only proceed with the Release build if Test succeeds and the build was requested manually.
 
   - job: Release
     displayName: 'Release'
     dependsOn: Test
-    condition: succeeded()
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
     pool:
       vmImage: 'VS2017-Win2016'
     variables:
