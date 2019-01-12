@@ -1,57 +1,31 @@
 ﻿# DSInternals
 ## about_DSInternals
 
-```
-ABOUT TOPIC NOTE:
-The first header of the about topic should be the topic name.
-The second header contains the lookup name used by the help system.
-
-IE:
-# Some Help Topic Name
-## SomeHelpTopicFileName
-
-This will be transformed into the text file
-as `about_SomeHelpTopicFileName`.
-Do not include file extensions.
-The second header should have no spaces.
-```
-
 # SHORT DESCRIPTION
-{{ Short Description Placeholder }}
 
-```
-ABOUT TOPIC NOTE:
-About topics can be no longer than 80 characters wide when rendered to text.
-Any topics greater than 80 characters will be automatically wrapped.
-The generated about topic will be encoded UTF-8.
-```
+The Directory Services Internals (DSInternals) PowerShell Module exposes several internal
+and undocumented features of Active Directory.
 
 # LONG DESCRIPTION
-{{ Long Description Placeholder }}
 
-## Optional Subtopics
-{{ Optional Subtopic Placeholder }}
+The main features of the DSInternals PowerShell Module include:
 
-# EXAMPLES
-{{ Code or descriptive examples of how to leverage the functions described. }}
+- Offline ntds.dit file manipulation, including hash dumping, password resets, group membership changes, SID History injection and enabling/disabling accounts.
+- Online password hash dumping through the Directory Replication Service Remote Protocol (MS-DRSR).
+- Active Directory password auditing that discovers accounts sharing the same passwords or having passwords in a public database like HaveIBeenPwned or in a custom dictionary.
+- Domain or local account password hash injection through the Security Account Manager Remote Protocol (MS-SAMR) or directly into the database.
+- LSA Policy modification through the Local Security Authority Remote Protocol (MS-LSAD / LSARPC).
+- Extracting credential roaming data and DPAPI domain backup keys, either online through MS-DRSR and LSARPC or offline from ntds.dit.
+- Bare-metal recovery of domain controllers from just IFM backups (ntds.dit + SYSVOL).
+- Password hash calculation, including NT hash, LM hash and kerberos keys.
 
 # NOTE
-{{ Note Placeholder - Additional information that a user needs to know.}}
-
-# TROUBLESHOOTING NOTE
-{{ Troubleshooting Placeholder - Warns users of bugs}}
-
-{{ Explains behavior that is likely to change with fixes }}
+Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
 
 # SEE ALSO
-{{ See also placeholder }}
 
-{{ You can also list related articles, blogs, and video URLs. }}
-
-# KEYWORDS
-{{List alternate names or titles for this topic that readers might use.}}
-
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
+[Get-ADDBAccount](Get-ADDBAccount.md)
+[Get-ADReplAccount](Get-ADReplAccount.md)
+[Test-PasswordQuality](Test-PasswordQuality.md)
+[New-ADDBRestoreFromMediaScript](New-ADDBRestoreFromMediaScript.md)
+[ConvertTo-NTHash](ConvertTo-NTHash.md)

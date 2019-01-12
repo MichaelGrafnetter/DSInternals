@@ -12,6 +12,7 @@ $rootDir = Split-Path $PSScriptRoot -Parent
 $locale = 'en-US'
 $dsInternalsModulePath = Join-Path $rootDir 'Build\bin\Release\DSInternals'
 $mdHelpPath = Join-Path $rootDir 'Documentation\PowerShell'
+$modulePagePath = Join-Path $mdHelpPath 'Readme.md'
 $xmlHelpPath = Join-Path $rootDir "Src\DSInternals.PowerShell\$locale"
 
 # Import dependencies
@@ -25,12 +26,7 @@ New-MarkdownAboutHelp -AboutName DSInternals -OutputFolder $mdHelpPath
 #>
 
 # Update MD files
-Update-MarkdownHelpModule -Path $mdHelpPath -RefreshModulePage -AlphabeticParamsOrder -UpdateInputOutput
-
-# Copy the DSInternals.md to readme.md so that it is displayed at GitHub
-$moduleModuleMDPath = Join-Path $mdHelpPath 'DSInternals.md'
-$readmeMDPath = Join-Path $mdHelpPath 'Readme.md'
-Copy-Item -Path $moduleModuleMDPath -Destination $readmeMDPath -Force
+Update-MarkdownHelpModule -Path $mdHelpPath -ModulePagePath $modulePagePath -RefreshModulePage -AlphabeticParamsOrder -UpdateInputOutput
 
 # Generate the MAML file
-New-ExternalHelp -Path $mdHelpPath -OutputPath $xmlHelpPath -Force
+New-ExternalHelp -Path $mdHelpPath -OutputPath $xmlHelpPath -Force -ShowProgress
