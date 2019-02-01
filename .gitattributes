@@ -11,8 +11,9 @@
 *.zip filter=lfs diff=lfs merge=lfs -text
 
 ###############################################################################
-# Exclude the following paths from GitHub repo statistics
+# Fix GitHub repo statistics
 ###############################################################################
+*.h linguist-language=C++
 Src/Microsoft.Database.Isam/* linguist-vendored
 Src/Microsoft.Isam.Esent.Interop/* linguist-vendored
 Scripts/Modules/* linguist-vendored
