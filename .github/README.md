@@ -4,7 +4,6 @@
 ![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg)
 ![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019-007bb8.svg)
 ![.NET Framework 4.5.1+](https://img.shields.io/badge/.NET%20Framework-4.5.1%2B-007FFF.svg)
-![Visual Studio 2015 | 2017](https://img.shields.io/badge/Visual%20Studio-2015%20|%202017-383278.svg)
 
 ## Introduction
 
@@ -60,7 +59,11 @@ The easiest way of integrating the DSInternals functionality into .NET applicati
 
 ### Building from Source Code
 
-You can of course review the source code and compile the Module/Framework yourself. See the [CONTRIBUTING](CONTRIBUTING.md) guide for more info.
+![Visual Studio 2015 | 2017](https://img.shields.io/badge/Visual%20Studio-2015%20|%202017-383278.svg)
+[![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master)
+![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results)
+
+You can of course download the [source code](https://github.com/MichaelGrafnetter/DSInternals/archive/master.zip), perform a review and compile the Module/Framework yourself. See the [CONTRIBUTING](CONTRIBUTING.md#building-from-source-code) guide for more info.
 
 ## Documentation
 
@@ -83,12 +86,6 @@ I have also published a series of articles about the DSInternals module on [my b
 ### Slide Decks
 
 - [HipConf 2018: Offline Attacks on Active Directory](https://www.dsinternals.com/wp-content/uploads/HIP_AD_Offline_Attacks.pdf)
-
-## Continuous Integration
-
-| Release Build + Smoke Tests  |  Debug Build + Unit Tests |
---- | ---
-| [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master) | [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Test)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master) |
 
 ## Acknowledgements
 

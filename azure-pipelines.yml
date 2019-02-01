@@ -2,9 +2,12 @@
 
 trigger:
   batch: true
+  branches:
+    include:
+    - master
   paths:
     include:
-      - 'Src/*'
+    - Src/*
 
 pr:
   branches:
@@ -12,7 +15,7 @@ pr:
     - master
   paths:
       exclude:
-        - '**/*.md'
+      - '**/*.md'
 
 variables:
   solution: '**/*.sln'
@@ -25,11 +28,46 @@ jobs:
       vmImage: 'VS2017-Win2016'
     variables:
       buildConfiguration: 'Debug'
+    steps:
+    - task: NuGetToolInstaller@0
+
+    - task: NuGetCommand@2
+      displayName: 'NuGet Restore Packages'
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      displayName: 'VSBuild ($(buildConfiguration) x86)'
+      inputs:
+        solution: '$(solution)'
+        platform: 'x86'
+        configuration: '$(buildConfiguration)'
+        restoreNugetPackages: false
+
+    - task: VSBuild@1
+      displayName: 'VSBuild ($(buildConfiguration) x64)'
+      inputs:
+        solution: '$(solution)'
+        platform: 'x64'
+        configuration: '$(buildConfiguration)'
+        restoreNugetPackages: false
+
+    - task: VSTest@2
+      displayName: 'VSTest Unit Tests'
+      inputs:
+        testRunTitle: 'VSTest Unit Tests'
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: 'Build/**/DSInternals/*.Test.dll'
+        codeCoverageEnabled: false
+        configuration: '$(buildConfiguration)'
+
+ # Only proceed with the Release build if Test succeeds and the build was requested manually.
 
   - job: Release
     displayName: 'Release'
     dependsOn: Test
-    condition: succeeded()
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
     pool:
       vmImage: 'VS2017-Win2016'
     variables:
@@ -138,6 +176,7 @@ jobs:
     - task: PublishTestResults@2
       displayName: 'Publish Smoke Test Results'
       inputs:
+        testRunTitle: 'Pester Smoke Tests'
         testResultsFormat: 'NUnit'
         testResultsFiles: '**/*.xml' 
         searchFolder: 'TestResults'

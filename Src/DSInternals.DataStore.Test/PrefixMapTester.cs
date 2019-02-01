@@ -18,8 +18,8 @@ namespace DSInternals.DataStore.Test
         {
             var map = new PrefixMap(ExchangeBinaryPrefixMap);
 
-            // Should contain 31 builtin refixes + 6 new
-            Assert.AreEqual(37, map.Count);
+            // Should contain 39 builtin prefixes + 6 new
+            Assert.AreEqual(45, map.Count);
 
             // Test one of the decoded prefixes
             bool contains1 = map.ContainsPrefix(18467);
@@ -38,8 +38,8 @@ namespace DSInternals.DataStore.Test
         {
             var map = new PrefixMap(SamplePrefixMap);
 
-            // Should contain 31 builtin refixes + 14 additional
-            Assert.AreEqual(45, map.Count);
+            // Should contain 39 builtin refixes + 14 additional
+            Assert.AreEqual(53, map.Count);
         }
 
         [TestMethod]
@@ -84,8 +84,9 @@ namespace DSInternals.DataStore.Test
         {
             byte[] binaryPrefixMap = null;
             var map = new PrefixMap(binaryPrefixMap);
-            // Should only contain 31 builtin prefixes
-            Assert.AreEqual(31, map.Count);
+            
+            // Should only contain 39 builtin prefixes
+            Assert.AreEqual(39, map.Count);
         }
 
         [TestMethod]

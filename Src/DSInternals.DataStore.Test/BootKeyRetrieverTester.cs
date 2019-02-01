@@ -14,11 +14,7 @@ namespace DSInternals.DataStore.Test
         [TestMethod]
         public void BootKeyRetriever_Hive1()
         {
-            // HACK: Use relative path.
-            string path = @"C:\Users\michael\Source\Workspaces\Workspace\DSInternals\TestData\IFM\registry\SYSTEM";
-            string bootKey = BootKeyRetriever.GetBootKey(path).ToHex();
-            string expected = "41e34661faa0d182182f6ddf0f0ca0d1";
-            Assert.AreEqual(expected, bootKey);
+            throw new AssertInconclusiveException("There are no test registry hives available yet.");
         }
         [TestMethod]
         [ExpectedException(typeof(FileNotFoundException))]

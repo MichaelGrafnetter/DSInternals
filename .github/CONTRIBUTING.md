@@ -44,6 +44,7 @@ $PSVersion
 ## Building from Source Code
 
 ### Development Environment
+
 If you want to build the module from source code yourself, you need to install these programs first:
 - [Microsoft Visual Studio Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx) 2015 or 2017 with these features installed:
    * Common Tools for Visual C++
@@ -69,8 +70,7 @@ If you want to build the module from source code yourself, you need to install t
 
 ### Continuous Integration
 
-| Release Build + Smoke Tests  |  Debug Build + Unit Tests |
---- | ---
-| [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master) | [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Test)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master) |
+[![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master)
+![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results&logo=azuredevops)
 
 Automatic build configuration is in the [azure-pipelines.yml](../azure-pipelines.yml) file.
