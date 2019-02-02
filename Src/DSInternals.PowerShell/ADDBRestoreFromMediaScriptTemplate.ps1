@@ -10,7 +10,7 @@ The DSInternals PowerShell module must be installed for all users on the target 
 Author: Michael Grafnetter
 
 #>
-#Requires -Version 3 -Modules DSInternals -RunAsAdministrator
+#Requires -Version 3 -Modules DSInternals,ActiveDirectory -RunAsAdministrator
 
 # Perform a VSS backup before doing anything else.
 Write-Host 'Creating a snapshot of the system drive to make rollback possible...'
@@ -78,8 +78,7 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
         robocopy.exe '{SourceLogDirPath}' $ntdsParams.'Database log files path' *.log *.jrs /MIR /NP /NDL /NJS
 
         # Replace SYSVOL.
-        $netlogonParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters -Name SysVol
-        robocopy.exe '{SourceSysvolPath}' (Join-Path -Path $netlogonParams.SysVol -ChildPath '{DomainName}') /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
+        robocopy.exe '{SourceSysvolPath}' "{TargetSysvolPath}\domain" /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
 
         # Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
         Set-LsaPolicyInformation -DomainName '{NetBIOSDomainName}' -DnsDomainName '{DomainName}' -DnsForestName '{ForestName}' -DomainGuid {DomainGuid} -DomainSid {DomainSid}
@@ -92,6 +91,17 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
         bcdedit.exe /deletevalue safeboot
         shutdown.exe /r /t 5
         Suspend-Workflow -Label 'Waiting for reboot'
+
+        # Reconfigure SYSVOL replication in case it has been restored to a different path.
+        # Note: This will fail if the domain is still using FRS instead of DFS-R.
+        $dfsrSubscription = 'CN=SYSVOL Subscription,CN=Domain System Volume,CN=DFSR-LocalSettings,{DCDistinguishedName}'
+        Set-ADObject -Identity $dfsrSubscription -Server localhost -Replace @{
+            'msDFSR-RootPath' = "{TargetSysvolPath}\domain";
+            'msDFSR-StagingPath' = "{TargetSysvolPath}\staging areas\{DomainName}"
+        }
+
+        # Download the updated DFS-R configuration from AD.
+        Invoke-WmiMethod -Class DfsrConfig -Name PollDsNow -ArgumentList localhost -Namespace ROOT\MicrosoftDfs
     }
 
     # Delete any pre-existing workflows with the same name before starting a new one.

@@ -87,6 +87,7 @@
             var script = new StringBuilder(template).
                 Replace("{DCName}", dc.Name).
                 Replace("{DCGuid}", dc.Guid.ToString()).
+                Replace("{DCDistinguishedName}", dc.ServerReference.ToString()).
                 Replace("{DomainName}", dc.DomainName).
                 Replace("{NetBIOSDomainName}", dc.NetBIOSDomainName).
                 Replace("{ForestName}", dc.ForestName).

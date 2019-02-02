@@ -58,6 +58,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{A6D9
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{9735D030-AEE6-415A-BF03-074076FF776A}"
+	ProjectSection(SolutionItems) = preProject
+		..\Documentation\CHANGELOG.md = ..\Documentation\CHANGELOG.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Database.Isam", "Microsoft.Database.Isam\Microsoft.Database.Isam.csproj", "{21CC632C-B09A-4DB7-BD6E-7F7D2716F58F}"
 EndProject

@@ -155,8 +155,7 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
                 robocopy.exe 'C:\Backup\Active Directory' $ntdsParams.'Database log files path' *.log *.jrs /MIR /NP /NDL /NJS
 
                 # Replace SYSVOL.
-                $netlogonParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters -Name SysVol
-                robocopy.exe 'C:\Backup\SYSVOL\Adatum.com' (Join-Path -Path $netlogonParams.SysVol -ChildPath 'Adatum.com') /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
+                robocopy.exe 'C:\Backup\SYSVOL\Adatum.com' "$env:SYSTEMROOT\SYSVOL\domain" /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
 
                 # Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
                 Set-LsaPolicyInformation -DomainName 'ADATUM' -DnsDomainName 'Adatum.com' -DnsForestName 'Adatum.com' -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 -DomainSid S-1-5-21-1817670852-3242289776-1304069626
@@ -169,6 +168,17 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
                 bcdedit.exe /deletevalue safeboot
                 shutdown.exe /r /t 5
                 Suspend-Workflow -Label 'Waiting for reboot'
+
+                # Reconfigure SYSVOL replication in case it has been restored to a different path.
+                # Note: This will fail if the domain is still using FRS instead of DFS-R.
+                $dfsrSubscription = 'CN=SYSVOL Subscription,CN=Domain System Volume,CN=DFSR-LocalSettings,CN=LON-DC1,OU=Domain Controllers,DC=Adatum,DC=com'
+                Set-ADObject -Identity $dfsrSubscription -Server localhost -Replace @{
+                    'msDFSR-RootPath' = "$env:SYSTEMROOT\SYSVOL\domain";
+                    'msDFSR-StagingPath' = "$env:SYSTEMROOT\SYSVOL\staging areas\Adatum.com"
+                }
+
+                # Download the updated DFS-R configuration from AD.
+                Invoke-WmiMethod -Class DfsrConfig -Name PollDsNow -ArgumentList localhost -Namespace ROOT\MicrosoftDfs
         }
 
         # Delete any pre-existing workflows with the same name before starting a new one.
