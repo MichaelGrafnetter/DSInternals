@@ -10,18 +10,45 @@
 #       as it only supports restricted language mode.
 #
 
-$interopAssemblyPath = Join-Path $PSScriptRoot "$env:PROCESSOR_ARCHITECTURE\DSInternals.Replication.Interop.dll"
+[string] $interopAssemblyPath = Join-Path $PSScriptRoot "$env:PROCESSOR_ARCHITECTURE\DSInternals.Replication.Interop.dll"
 try
 {
     Add-Type -Path $interopAssemblyPath
 }
-catch [System.IO.FileLoadException]
+catch [System.IO.IOException]
 {
-    # This usually happens to users of the ZIP distribution who forget to unblock it before extracting the files.
-    $message = 'Could not load assembly "{0}". Try unblocking it using either the Properties dialog or the Unblock-File cmdlet and reload the DSInternals module afterwards. ' -f $interopAssemblyPath
+    #
+    # Make the error message more meaningful by checking common failure reasons.
+    #
+
+    [string] $message = 'The Get-ADRepl* cmdlets will not work properly, because the "{0}" assembly could not be loaded.' -f $interopAssemblyPath
+    [System.Management.Automation.ErrorCategory] $errorCategory = [System.Management.Automation.ErrorCategory]::OpenError
+
+    # Check the presence of the Universal C Runtime
+    [string] $ucrtPath = Join-Path ([System.Environment]::SystemDirectory) 'ucrtbase.dll'
+    [bool] $ucrtPresent = Test-Path $ucrtPath
+
+    if(-not $ucrtPresent)
+    {
+        # This can happen on systems prior to Windows 10 with missing updates.
+        $message += ' The Universal C Runtime is missing. Run Windows Update or install it manually and reload the DSInternals module afterwards.'
+        $errorCategory = [System.Management.Automation.ErrorCategory]::NotInstalled
+    }
+
+    # Check if the interop assembly is blocked
+    [object] $zoneIdentifier = Get-Item $interopAssemblyPath -Stream 'Zone.Identifier' -ErrorAction SilentlyContinue
+
+    if($zoneIdentifier -ne $null)
+    {
+        # This usually happens to users of the ZIP distribution who forget to unblock it before extracting the files.
+        $message += ' Unblock the assembly using either the Properties dialog or the Unblock-File cmdlet and reload the DSInternals module afterwards.'
+        $errorCategory = [System.Management.Automation.ErrorCategory]::SecurityError
+    }
+
+    # Build the error report
     Write-Error -Message $message `
                 -Exception $PSItem.Exception `
-                -Category SecurityError `
+                -Category $errorCategory `
                 -CategoryTargetName $interopAssemblyPath `
                 -CategoryActivity $PSItem.CategoryInfo.Activity `
                 -CategoryReason $PSItem.CategoryInfo.Reason
