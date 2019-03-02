@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. The format 
 - A more explanatory exception is now thrown when opening databases that originate from different OS versions.
 - A more explanatory exception is now thrown when the *Universal C Runtime* is missing from Windows.
 - A more explanatory exception is now thrown when the assemblies are blocked.
+- PEK list decryption exceptions now contain troubleshooting data.
 - Minor improvement in C++ build speed.
 
 ## [3.2.1] - 2019-01-04

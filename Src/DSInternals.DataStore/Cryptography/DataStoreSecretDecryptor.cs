@@ -70,10 +70,22 @@ namespace DSInternals.DataStore
 
         public DataStoreSecretDecryptor(byte[] encryptedPEKListBlob, byte[] bootKey)
         {
-            // Decrypt and set version
-            byte[] decryptedPekList = this.DecryptPekList(encryptedPEKListBlob, bootKey);
-            // Parse the inner structure
-            this.ParsePekList(decryptedPekList);
+            try
+            {
+                // Decrypt and set version
+                byte[] decryptedPekList = this.DecryptPekList(encryptedPEKListBlob, bootKey);
+
+                // Parse the inner structure
+                this.ParsePekList(decryptedPekList);
+            }
+            catch(Exception originalException)
+            {
+                // TODO: Extract as resource
+                var newException = new FormatException("Could not decrypt or parse the PEK list.", originalException);
+                newException.Data.Add(nameof(encryptedPEKListBlob), encryptedPEKListBlob.ToHex());
+                newException.Data.Add(nameof(bootKey), bootKey.ToHex());
+                throw newException;
+            }
         }
 
         public DataStoreSecretDecryptor(byte[] cleartextPEKListBlob, PekListVersion version)
