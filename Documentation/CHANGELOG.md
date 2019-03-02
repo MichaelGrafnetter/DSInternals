@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [3.3] - 2019-03-02
 ### Changed
 - Implemented a slightly more secure handling of [GMSA passwords](../Src/DSInternals.Common/Data/Principals/ManagedPassword.cs).
 - The .NET Framework 4.5.1 requirement is now enforced.
@@ -268,7 +268,8 @@ All notable changes to this project will be documented in this file. The format 
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.2.1...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.3...HEAD
+[3.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.2.1...v3.3
 [3.2.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.2...v3.2.1
 [3.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.1...v3.2
 [3.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.0...v3.1
