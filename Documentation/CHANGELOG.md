@@ -68,9 +68,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Removed
 - [Module] Removed the `ConvertTo-NTHashDictionary` cmdlet as its functionality had been integrated into the `Test-PasswordQuality` cmdlet.
+- [Module] Removed the `-ShowPlainTextPasswords` parameter of the `Test-PasspasswordQualiy` cmdlet. It might be re-added in the future.
 
 ## [2.23] - 2018-07-07
-### CHanged
+### Changed
 - [Module] The `Test-PasswordQuality` now supports accounts that require smart card authentication.
 
 ### Fixed
