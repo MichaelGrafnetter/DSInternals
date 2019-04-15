@@ -1694,7 +1694,7 @@ namespace Microsoft.Isam.Esent.Interop
         RecordNoCopy = -1602,
 
         /// <summary>
-        /// Currency not on a record
+        /// Currently not on a record
         /// </summary>
         NoCurrentRecord = -1603,
 

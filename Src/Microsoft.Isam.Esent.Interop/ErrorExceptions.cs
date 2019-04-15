@@ -11212,7 +11212,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNoCurrentRecordException class.
         /// </summary>
         public EsentNoCurrentRecordException() :
-            base("Currency not on a record", JET_err.NoCurrentRecord)
+            base("Currently not on a record", JET_err.NoCurrentRecord)
         {
         }
 
