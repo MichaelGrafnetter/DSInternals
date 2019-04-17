@@ -12,7 +12,7 @@
 
     [Cmdlet(VerbsDiagnostic.Test, "PasswordQuality")]
     [OutputType(new Type[] { typeof(PasswordQualityTestResult) })]
-    public class TestPasswordQualityCommand : PSCmdletEx
+    public class TestPasswordQualityCommand : PSCmdletEx, IDisposable
     {
         #region Constants
         /// <summary>
@@ -76,6 +76,14 @@
             get;
             set;
         }
+
+        [Parameter]
+        [ValidateNotNullOrEmpty]
+        public string WeakPasswordHashesSortedFile
+        {
+            get;
+            set;
+        }
         #endregion Parameters
 
         #region Fields
@@ -87,6 +95,7 @@
 
         private PasswordQualityTestResult result;
 
+        private SortedFileSearcher sortedHashFileSearcher;
         #endregion Fields
 
         #region Cmdlet Overrides
@@ -97,7 +106,14 @@
             this.ResolveFilePath(this.WeakPasswordHashesFile);
             this.ResolveFilePath(this.WeakPasswordsFile);
 
-            if (this.ShouldTestWeakPasswords || !this.SkipDuplicatePasswordTest.IsPresent)
+            // Open the sorted weak password hashes file, as we will be searching it on-the-fly.
+            string sortedHashesFile = this.ResolveFilePath(this.WeakPasswordHashesSortedFile);
+            if(sortedHashesFile != null)
+            {
+                this.sortedHashFileSearcher = new SortedFileSearcher(sortedHashesFile);
+            }
+
+            if (this.ShouldTestWeakPasswordsInMemory || !this.SkipDuplicatePasswordTest.IsPresent)
             {
                 // We need to cache NT hashes of all accounts for the Duplicate and Weak Password Tests.
                 this.hashToAccountMap = new Dictionary<byte[], SortedSet<string>>(PasswordDictionaryInitialCapacity, HashEqualityComparer.GetInstance());
@@ -195,6 +211,10 @@
                 // Check if the computer has a default password.
                 this.TestComputerDefaultPassword();
             }
+            else
+            {
+                this.LookupAccountNTHashInSortedFile();
+            }
 
             if (this.hashToAccountMap != null)
             {
@@ -212,27 +232,56 @@
             }
 
             // Process Weak Passwords
-            this.TestWeakPasswords();
+            this.TestWeakPasswordsInMemory();
 
             // The processing has finished, so return the results.
             this.WriteObject(this.result);
+
+            // Perform cleanup
+            this.sortedHashFileSearcher.Dispose();
+            this.sortedHashFileSearcher = null;
         }
 
         #endregion Cmdlet Overrides
 
         #region Helper Methods
-        private bool ShouldTestWeakPasswords
+        private bool ShouldTestWeakPasswordsInMemory
         {
             get
             {
                 // Weak passwords must be provided in at least one way.
+                // Note: The Sorted Hash File is handled independently
                 return this.WeakPasswords != null || this.WeakPasswordsFile != null || WeakPasswordHashesFile != null;
             }
         }
 
-        private void TestWeakPasswords()
+        private void LookupAccountNTHashInSortedFile()
+        {
+            if (this.sortedHashFileSearcher != null)
+            {
+                // Check the password on the fly in the sorted file using binary search
+                bool found = this.sortedHashFileSearcher.FindString(this.Account.NTHash.ToHex());
+                if (found)
+                {
+                    this.result.WeakPassword.UnionWith(new string[] { this.Account.SamAccountName });
+                }
+            }
+        }
+
+        private void TestWeakPasswordsInMemory()
         {
             // Process the list of weak passwords, if present
+            this.TestWeakPasswordsFromList();
+
+            // Process the file containing weak passwords, if present
+            this.TestWeakPasswordsFromUnsortedFile();
+
+            // Process the file containing weak password hashes, if present
+            this.TestWeakNTHashesFromUnsortedFile();
+        }
+
+        private void TestWeakPasswordsFromList()
+        {
             if (this.WeakPasswords != null)
             {
                 foreach (string weakPassword in this.WeakPasswords)
@@ -240,15 +289,9 @@
                     this.TestWeakPassword(weakPassword);
                 }
             }
-
-            // Process the file containing weak passwords, if present
-            this.TestWeakPasswordsFromFile();
-
-            // Process the file containing weak password hashes, if present
-            this.TestWeakPasswordHashesFromFile();
         }
 
-        private void TestWeakPasswordsFromFile()
+        private void TestWeakPasswordsFromUnsortedFile()
         {
             if (this.WeakPasswordsFile == null)
             {
@@ -273,7 +316,7 @@
             }
         }
 
-        private void TestWeakPasswordHashesFromFile()
+        private void TestWeakNTHashesFromUnsortedFile()
         {
             if (this.WeakPasswordHashesFile == null)
             {
@@ -295,7 +338,7 @@
                 {
                     string weakHash = line.Split(HashSeparator)[0];
                     // TODO: Handle malformed lines
-                    this.TestWeakPasswordHash(weakHash.HexToBinary());
+                    this.TestWeakNTHash(weakHash.HexToBinary());
                     this.ReportProgress(reader.BaseStream, progress);
                 }
             }
@@ -331,11 +374,11 @@
             if (weakPassword.Length <= NTHash.MaxInputLength)
             {
                 byte[] weakHash = NTHash.ComputeHash(weakPassword);
-                this.TestWeakPasswordHash(weakHash);
+                this.TestWeakNTHash(weakHash);
             }
         }
 
-        private void TestWeakPasswordHash(byte[] weakHash)
+        private void TestWeakNTHash(byte[] weakHash)
         {
             SortedSet<string> matchingAccounts;
             bool foundAccounts = this.hashToAccountMap.TryGetValue(weakHash, out matchingAccounts);
@@ -373,5 +416,23 @@
             }
         }
         #endregion Helper Methods
+
+        #region IDisposable Support
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && this.sortedHashFileSearcher != null)
+            {
+                this.sortedHashFileSearcher.Dispose();
+                this.sortedHashFileSearcher = null;
+            }
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+        }
+        #endregion IDisposable Support
     }
 }

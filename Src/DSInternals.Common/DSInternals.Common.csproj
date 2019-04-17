@@ -41,6 +41,7 @@
     <Compile Include="ADSI\AdsiObjectAdapter.cs" />
     <Compile Include="Cryptography\HashEqualityComparer.cs" />
     <Compile Include="Cryptography\KerberosKeyDerivation.cs" />
+    <Compile Include="Cryptography\SortedFileSearcher.cs" />
     <Compile Include="Cryptography\WDigestHash.cs" />
     <Compile Include="Cryptography\Pbkdf2.cs" />
     <Compile Include="Cryptography\PrivateKeyEncryptionType.cs" />

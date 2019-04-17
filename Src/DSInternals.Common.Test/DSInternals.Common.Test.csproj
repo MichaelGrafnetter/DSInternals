@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="ByteArrayExtensionsTester.cs" />
     <Compile Include="Cryptography\KerberosKeyDerivationTester.cs" />
+    <Compile Include="Cryptography\SortedFileSearcherTester.cs" />
     <Compile Include="Cryptography\WDigestHashTester.cs" />
     <Compile Include="DPAPIBackupKeyTester.cs" />
     <Compile Include="Cryptography\GPPrefPwdObfuscatorTester.cs" />

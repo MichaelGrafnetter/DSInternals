@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md) cmdlet now has a parameter called `-WeakPasswordHashesSortedFile`. This parameter should be used with ordered hash files downloaded from [HaveIBeenPwned](https://haveibeenpwned.com/Passwords) as it has huge performance benefits over the older `-WeakPasswordHashesFile` parameter due to the usage of binary search algorithm.
+- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md) cmdlet now has a proper documentation, including usage examples.
+
 ## [3.3] - 2019-03-02
 ### Changed
 - Implemented a slightly more secure handling of [GMSA passwords](../Src/DSInternals.Common/Data/Principals/ManagedPassword.cs).

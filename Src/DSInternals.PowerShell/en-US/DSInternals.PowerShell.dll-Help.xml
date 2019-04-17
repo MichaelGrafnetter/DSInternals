@@ -4627,6 +4627,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       <maml:para>- Write the newly generated machine account password into ntds.dit.</maml:para>
       <maml:para>- Update the LSA Policy to match the SID and GUID of the domain that is being restored.</maml:para>
       <maml:para>- Reset the Invocation ID of the domain controller.</maml:para>
+      <maml:para>- Reconfigure SYSVOL replication in case it has been restored to a different path.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -4866,8 +4867,7 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
                 robocopy.exe 'C:\Backup\Active Directory' $ntdsParams.'Database log files path' *.log *.jrs /MIR /NP /NDL /NJS
 
                 # Replace SYSVOL.
-                $netlogonParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters -Name SysVol
-                robocopy.exe 'C:\Backup\SYSVOL\Adatum.com' (Join-Path -Path $netlogonParams.SysVol -ChildPath 'Adatum.com') /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
+                robocopy.exe 'C:\Backup\SYSVOL\Adatum.com' "$env:SYSTEMROOT\SYSVOL\domain" /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
 
                 # Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
                 Set-LsaPolicyInformation -DomainName 'ADATUM' -DnsDomainName 'Adatum.com' -DnsForestName 'Adatum.com' -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 -DomainSid S-1-5-21-1817670852-3242289776-1304069626
@@ -4880,6 +4880,17 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
                 bcdedit.exe /deletevalue safeboot
                 shutdown.exe /r /t 5
                 Suspend-Workflow -Label 'Waiting for reboot'
+
+                # Reconfigure SYSVOL replication in case it has been restored to a different path.
+                # Note: This will fail if the domain is still using FRS instead of DFS-R.
+                $dfsrSubscription = 'CN=SYSVOL Subscription,CN=Domain System Volume,CN=DFSR-LocalSettings,CN=LON-DC1,OU=Domain Controllers,DC=Adatum,DC=com'
+                Set-ADObject -Identity $dfsrSubscription -Server localhost -Replace @{
+                    'msDFSR-RootPath' = "$env:SYSTEMROOT\SYSVOL\domain";
+                    'msDFSR-StagingPath' = "$env:SYSTEMROOT\SYSVOL\staging areas\Adatum.com"
+                }
+
+                # Download the updated DFS-R configuration from AD.
+                Invoke-WmiMethod -Class DfsrConfig -Name PollDsNow -ArgumentList localhost -Namespace ROOT\MicrosoftDfs
         }
 
         # Delete any pre-existing workflows with the same name before starting a new one.
@@ -7829,7 +7840,9 @@ $initTask.RunAsTask()</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>The Test-PasswordQuality cmdlet is a simple tool for Active Directory password auditing. It can detect weak, duplicate, default, non-expiring or empty passwords and find accounts that are violating security best practices. The cmdlet accepts output of the Get-ADDBAccount and Get-ADReplAccount cmdlets, so both offline (ntds.dit) and online (DCSync) password analysis can be done.</maml:para>
+      <maml:para>Lists of leaked passwords that can be obtained from HaveIBeenPwned are fully supported. Be sure to download the list that is marked as "NTLM (ordered by hash)" and extract the archive to your HDD.</maml:para>
+      <maml:para>Although the cmdlet output is formatted in a human readable fashion, it is still an object, whose properties can be accessed separately (e.g. $result.WeakPassword) to produce a desired output. When scripted, it can be used to audit Active Directory passwords on a regular basis.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -7837,7 +7850,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="ADAccount, DSAccount">
           <maml:name>Account</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Account Description}}</maml:para>
+            <maml:para>Active Directory account to check. The accounts are typically piped in from the Get-ADDBAccount and Get-ADReplAccount cmdlets.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">DSAccount</command:parameterValue>
           <dev:type>
@@ -7849,7 +7862,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>IncludeDisabledAccounts</maml:name>
           <maml:Description>
-            <maml:para>{{Fill IncludeDisabledAccounts Description}}</maml:para>
+            <maml:para>Process even accounts that are disabled. Such accounts are skipped otherwise.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -7860,7 +7873,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SkipDuplicatePasswordTest</maml:name>
           <maml:Description>
-            <maml:para>{{Fill SkipDuplicatePasswordTest Description}}</maml:para>
+            <maml:para>Do not compare account hashes with each other.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -7871,7 +7884,19 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WeakPasswordHashesFile</maml:name>
           <maml:Description>
-            <maml:para>{{Fill WeakPasswordHashesFile Description}}</maml:para>
+            <maml:para>Path to a file that contains NT hashes of weak passwords, one hash in HEX format per line. For performance reasons, the -WeakPasswordHashesSortedFile parameter should be used instead.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>WeakPasswordHashesSortedFile</maml:name>
+          <maml:Description>
+            <maml:para>Path to a file that contains NT hashes of weak passwords, one hash in HEX format per line. The hashes must be sorted alphabetically, because a binary search is performed. This parameter is typically used with a list of leaked password hashes from HaveIBeenPwned.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7883,7 +7908,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WeakPasswords</maml:name>
           <maml:Description>
-            <maml:para>{{Fill WeakPasswords Description}}</maml:para>
+            <maml:para>List of passwords that are considered weak, e.g. Password123 or April2019.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -7895,7 +7920,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WeakPasswordsFile</maml:name>
           <maml:Description>
-            <maml:para>{{Fill WeakPasswordsFile Description}}</maml:para>
+            <maml:para>Path to a file that contains weak passwords, one password per line.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7910,7 +7935,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="ADAccount, DSAccount">
         <maml:name>Account</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Account Description}}</maml:para>
+          <maml:para>Active Directory account to check. The accounts are typically piped in from the Get-ADDBAccount and Get-ADReplAccount cmdlets.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">DSAccount</command:parameterValue>
         <dev:type>
@@ -7922,7 +7947,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>IncludeDisabledAccounts</maml:name>
         <maml:Description>
-          <maml:para>{{Fill IncludeDisabledAccounts Description}}</maml:para>
+          <maml:para>Process even accounts that are disabled. Such accounts are skipped otherwise.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -7934,7 +7959,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SkipDuplicatePasswordTest</maml:name>
         <maml:Description>
-          <maml:para>{{Fill SkipDuplicatePasswordTest Description}}</maml:para>
+          <maml:para>Do not compare account hashes with each other.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -7946,7 +7971,19 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>WeakPasswordHashesFile</maml:name>
         <maml:Description>
-          <maml:para>{{Fill WeakPasswordHashesFile Description}}</maml:para>
+          <maml:para>Path to a file that contains NT hashes of weak passwords, one hash in HEX format per line. For performance reasons, the -WeakPasswordHashesSortedFile parameter should be used instead.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>WeakPasswordHashesSortedFile</maml:name>
+        <maml:Description>
+          <maml:para>Path to a file that contains NT hashes of weak passwords, one hash in HEX format per line. The hashes must be sorted alphabetically, because a binary search is performed. This parameter is typically used with a list of leaked password hashes from HaveIBeenPwned.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -7958,7 +7995,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>WeakPasswords</maml:name>
         <maml:Description>
-          <maml:para>{{Fill WeakPasswords Description}}</maml:para>
+          <maml:para>List of passwords that are considered weak, e.g. Password123 or April2019.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -7970,7 +8007,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>WeakPasswordsFile</maml:name>
         <maml:Description>
-          <maml:para>{{Fill WeakPasswordsFile Description}}</maml:para>
+          <maml:para>Path to a file that contains weak passwords, one password per line.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -8008,9 +8045,86 @@ $initTask.RunAsTask()</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-ADDBAccount -All -DBPath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
+            Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
+&lt;# Sample Output
+
+Active Directory Password Quality Report
+----------------------------------------
+
+Passwords of these accounts are stored using reversible encryption:
+  smith
+  doe
+
+LM hashes of passwords of these accounts are present:
+  hodge
+
+These accounts have no password set:
+  test01
+  test02
+
+Passwords of these accounts have been found in the dictionary:
+  Administrator
+
+These groups of accounts have the same passwords:
+  Group 1:
+    graham
+    graham_admin
+  Group 1:
+    admin
+    sql_svc01
+
+These computer accounts have default passwords:
+  DESKTOP27$
+
+Kerberos AES keys are missing from these accounts:
+  sql_svc01
+
+Kerberos pre-authentication is not required for these accounts:
+  jboss
+
+Only DES encryption is allowed to be used with these accounts:
+  sql_svc01
+
+These administrative accounts are allowed to be delegated to a service:
+  AdatumAdmin
+  Administrator
+
+Passwords of these accounts will never expire:
+  admin
+  sql_svc01
+
+These accounts are not required to have a password:
+  gonzales
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Performs an offline credential hygiene audit of AD database against HIBP.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $results = Get-ADReplAccount -All -NamingContext 'DC=contoso,DC=com' -Server LON-DC1 |
+                   Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' -WeakPasswordHashesFile pwned-passwords-ntlm-ordered-by-hash-v4.txt</dev:code>
+        <dev:remarks>
+          <maml:para>Performs an online credential hygiene audit of AD against HIBP + a custom wordlist.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $pwnedUsers = $accounts |
+                      Test-PasswordQuality -WeakPasswordsFile rockyou.txt -SkipDuplicatePasswordTest |
+                      Select-Object -ExpandProperty WeakPassword</dev:code>
+        <dev:remarks>
+          <maml:para>Performs a dictionary attack against a set of accounts. The Test-PasswordQuality cmdlet always returns structured data.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBAccount -All -DBPath ntds.dit -BootKey $key |
+            where DistinguishedName -like '*OU=Employees,DC=contoso,DC=com' |
+            Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt</dev:code>
+        <dev:remarks>
+          <maml:para>Performs an offline credential hygiene audit of a selected OU from AD database against HIBP.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
