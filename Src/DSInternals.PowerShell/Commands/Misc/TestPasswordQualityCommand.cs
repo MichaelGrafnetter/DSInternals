@@ -16,9 +16,19 @@
     {
         #region Constants
         /// <summary>
-        /// Expected number of users being processed
+        /// Expected number of users being processed.
         /// </summary>
         private const int PasswordDictionaryInitialCapacity = 10000;
+
+        /// <summary>
+        /// Size of buffer to use when reading input files. We use 64K.
+        /// </summary>
+        private const int SequentialReadBufferSize = 65536;
+
+        /// <summary>
+        /// Report progress every 1000 lines.
+        /// </summary>
+        private const long FileReadProgressFrequency = 1000;
 
         /// <summary>
         /// Separator of hashes in the file from HaveIBeenPwned.
@@ -225,6 +235,13 @@
 
         protected override void EndProcessing()
         {
+            // Close any open files (we can do it sooner than during dispose)
+            if (this.sortedHashFileSearcher != null)
+            {
+                this.sortedHashFileSearcher.Dispose();
+                this.sortedHashFileSearcher = null;
+            }
+
             // Process duplicate passwords
             if (!this.SkipDuplicatePasswordTest.IsPresent)
             {
@@ -236,10 +253,6 @@
 
             // The processing has finished, so return the results.
             this.WriteObject(this.result);
-
-            // Perform cleanup
-            this.sortedHashFileSearcher.Dispose();
-            this.sortedHashFileSearcher = null;
         }
 
         #endregion Cmdlet Overrides
@@ -305,14 +318,25 @@
             var progress = new ProgressRecord(2, "Weak Password Test", "Checking accounts against weak passwords.");
 
             // We expect the file to contain one UTF8 password per line
-            using (var reader = new StreamReader(resolvedPath, Encoding.UTF8))
+            using (var reader = new StreamReader(resolvedPath, Encoding.UTF8, true, SequentialReadBufferSize))
             {
+                long fileLength = reader.BaseStream.Length;
+                long linesRead = 0;
                 string weakPassword;
+
                 while ((weakPassword = reader.ReadLine()) != null)
                 {
                     this.TestWeakPassword(weakPassword);
-                    this.ReportProgress(reader.BaseStream, progress);
+
+                    // For performance reasons, we do not want to report progress too often.
+                    if (linesRead++ % FileReadProgressFrequency == 0)
+                    {
+                        this.ReportProgress(fileLength, reader.BaseStream.Position, progress);
+                    }
                 }
+
+                // Report progress completion just to be sure
+                this.ReportProgress(fileLength, fileLength, progress);
             }
         }
 
@@ -331,29 +355,46 @@
 
             // We expect the file to contain one HEX NT hash per line.
             // Note that the hash list from haveibeenpwned.com also contains cardinalities, e.g. "32ED87BDB5FDC5E9CBA88547376818D4:22390492", so we need to cut them off.
-            using (var reader = new StreamReader(resolvedPath, Encoding.UTF8))
+            using (var reader = new StreamReader(resolvedPath, Encoding.ASCII, true, SequentialReadBufferSize))
             {
+                long fileLength = reader.BaseStream.Length;
+                long linesRead = 0;
                 string line;
+
                 while ((line = reader.ReadLine()) != null)
                 {
-                    string weakHash = line.Split(HashSeparator)[0];
+                    // Files from HIBP have this format: <NT Hash>:<Cardinality>
+                    int hashLength = line.IndexOf(HashSeparator);
+                    if (hashLength == -1)
+                    {
+                        hashLength = line.Length;
+                    }
+
                     // TODO: Handle malformed lines
-                    this.TestWeakNTHash(weakHash.HexToBinary());
-                    this.ReportProgress(reader.BaseStream, progress);
+                    this.TestWeakNTHash(line.HexToBinary(0, hashLength));
+
+                    // For performance reasons, we do not want to report progress too often.
+                    if (linesRead++ % FileReadProgressFrequency == 0)
+                    {
+                        this.ReportProgress(fileLength, reader.BaseStream.Position, progress);
+                    }
                 }
+
+                // Report progress completion just to be sure
+                this.ReportProgress(fileLength, fileLength, progress);
             }
         }
 
-        private void ReportProgress(Stream stream, ProgressRecord progress)
+        private void ReportProgress(long fileLength, long position, ProgressRecord progress)
         {
-            if (stream.Position >= stream.Length)
+            if (position >= fileLength)
             {
                 // Report operation completion
                 progress.RecordType = ProgressRecordType.Completed;
             }
 
             // Calculate the current progress
-            int percentComplete = (int)(stream.Position * 100.0 / stream.Length);
+            int percentComplete = (int)(position * 100.0 / fileLength);
 
             if (percentComplete != progress.PercentComplete)
             {

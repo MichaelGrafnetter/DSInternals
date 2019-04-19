@@ -6,6 +6,11 @@
 
     public class SortedFileSearcher : IDisposable
     {
+        /// <summary>
+        /// Size of the file read buffer. We are using the smallest possible value.
+        /// </summary>
+        private const int BufferSize = 128;
+
         private StreamReader reader;
 
         public SortedFileSearcher(string filePath)
@@ -13,13 +18,13 @@
             Validator.AssertNotNullOrWhiteSpace(filePath, nameof(filePath));
             Validator.AssertFileExists(filePath);
 
-            this.reader = new StreamReader(filePath, Encoding.ASCII);
+            this.reader = new StreamReader(filePath, Encoding.ASCII, false, BufferSize);
         }
 
         public SortedFileSearcher(Stream inputStream)
         {
             Validator.AssertNotNull(inputStream, nameof(inputStream));
-            this.reader = new StreamReader(inputStream, Encoding.ASCII);
+            this.reader = new StreamReader(inputStream, Encoding.ASCII, true, BufferSize, true);
         }
 
         public bool FindString(string query)

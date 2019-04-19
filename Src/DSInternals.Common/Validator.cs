@@ -13,13 +13,12 @@ namespace DSInternals.Common
 {
     public static class Validator
     {
-        private const string hexPattern = "^([0-9a-fA-F][0-9a-fA-F])+$";
-
         public static void AssertSuccess(NtStatus status)
         {
             Win32ErrorCode code = NativeMethods.RtlNtStatusToDosError(status);
             AssertSuccess(code);
         }
+
         public static void AssertSuccess(Win32ErrorCode code)
         {
             switch(code)
@@ -73,17 +72,6 @@ namespace DSInternals.Common
             throw exceptionToThrow;
         }
 
-        public static void AssertIsHex(string value, string paramName)
-        {
-            bool isHexString = Regex.IsMatch(value, hexPattern);
-            if (!isHexString)
-            {
-                var exception = new ArgumentException(Resources.NotHexStringMessage, paramName);
-                exception.Data.Add("Value", value);
-                throw exception;
-            }
-        }
-
         public static void AssertNotNull(object value, string paramName)
         {
             if(value == null)
@@ -98,6 +86,7 @@ namespace DSInternals.Common
                 throw new ArgumentNullException(paramName);
             }
         }
+
         public static void AssertLength(string value, int length, string paramName)
         {
             AssertNotNull(value, paramName);

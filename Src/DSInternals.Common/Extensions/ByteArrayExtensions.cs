@@ -5,37 +5,82 @@
     using System.Security;
     using System.Security.Principal;
     using System.Text;
+    using DSInternals.Common.Properties;
 
     public static class ByteArrayExtensions
     {
-        private const string HexDigits = "0123456789ABCDEF";
-        private static readonly byte[] HexValues = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
-                                                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                                                0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+        private const string HexDigitsUpper = "0123456789ABCDEF";
+        private const string HexDigitsLower = "0123456789abcdef";
 
         public static void ZeroFill(this byte[] array)
         {
             Array.Clear(array, 0, array.Length);
         }
 
-        public static byte[] HexToBinary(this string hex)
+        public static byte[] HexToBinary(this string hex, int startIndex, int length)
         {
-            if (string.IsNullOrEmpty(hex))
-            {
-                return null;
-            }
-            // Test that input is a hex string
-            Validator.AssertIsHex(hex, "hex");
+            // Input validation
+            Validator.AssertNotNull(hex, nameof(hex));
 
-            // Finally, do the conversion:
-            byte[] bytes = new byte[hex.Length / 2];
-            for (int x = 0, i = 0; i < hex.Length; i += 2, x += 1)
+            if (length % 2 != 0)
             {
-                bytes[x] = (byte)(HexValues[Char.ToUpper(hex[i + 0]) - '0'] << 4 |
-                                  HexValues[Char.ToUpper(hex[i + 1]) - '0']);
+                // Each byte in a HEX string must be encoded using 2 characters.
+                var exception = new ArgumentException(Resources.NotHexStringMessage, nameof(hex));
+                exception.Data.Add("Value", hex);
+                throw exception;
+            }
+            
+            if(startIndex < 0 || startIndex >= hex.Length )
+            {
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+            }
+
+            if (length < 0 || startIndex + length > hex.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
+
+            // Prepare the result
+            byte[] bytes = new byte[length / 2];
+
+            // Perform the conversion
+            for (int nibbleIndex = 0, byteIndex = 0; nibbleIndex < length; byteIndex = ++nibbleIndex / 2)
+            {
+                char nibble = hex[startIndex + nibbleIndex];
+
+                if ('0' <= nibble && nibble <= '9')
+                {
+                    bytes[byteIndex] = (byte)((bytes[byteIndex] << 4) | (nibble - '0'));
+                }
+                else if ('a' <= nibble && nibble <= 'f')
+                {
+                    bytes[byteIndex] = (byte)((bytes[byteIndex] << 4) | (nibble - 'a' + 0xA));
+                }
+                else if ('A' <= nibble && nibble <= 'F')
+                {
+                    bytes[byteIndex] = (byte)((bytes[byteIndex] << 4) | (nibble - 'A' + 0xA));
+                }
+                else
+                {
+                    // Invalid digit
+                    var exception = new ArgumentException(Resources.NotHexStringMessage, nameof(hex));
+                    exception.Data.Add("Value", hex);
+                    throw exception;
+                }
             }
 
             return bytes;
+        }
+
+        public static byte[] HexToBinary(this string hex)
+        {
+            // Trivial case
+            if (String.IsNullOrEmpty(hex))
+            {
+                return null;
+            }
+
+            return hex.HexToBinary(0, hex.Length);
         }
 
         public static string ToHex(this byte[] bytes, bool caps = false)
@@ -45,22 +90,16 @@
                 return null;
             }
 
+            string hexDigits = caps ? HexDigitsUpper : HexDigitsLower;
+
             StringBuilder hex = new StringBuilder(bytes.Length * 2);
             foreach(byte currentByte in bytes)
             {
-                hex.Append(HexDigits[(int)(currentByte >> 4)]);
-                hex.Append(HexDigits[(int)(currentByte & 0xF)]);
+                hex.Append(hexDigits[(int)(currentByte >> 4)]);
+                hex.Append(hexDigits[(int)(currentByte & 0xF)]);
             }
 
-            if (caps)
-            {
-                // Uppercase string is calculated by default
-                return hex.ToString();
-            }
-            else
-            {
-                return hex.ToString().ToLower();
-            }
+            return hex.ToString();
         }
 
         public static SecureString ReadSecureWString(this byte[] buffer, int startIndex)
