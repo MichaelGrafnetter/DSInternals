@@ -89,7 +89,7 @@ Performs an offline credential hygiene audit of AD database against HIBP.
 ### Example 2
 ```powershell
 PS C:\> $results = Get-ADReplAccount -All -NamingContext 'DC=contoso,DC=com' -Server LON-DC1 |
-                   Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' -WeakPasswordHashesFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
+                   Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
 ```
 
 Performs an online credential hygiene audit of AD against HIBP + a custom wordlist.
@@ -190,7 +190,7 @@ Accept wildcard characters: False
 ```
 
 ### -WeakPasswords
-List of passwords that are considered weak, e.g. Password123 or April2019.
+List of passwords that are considered weak, e.g. Password123 or April2019. If more than a handful passwords are to be tested, the WeakPasswordsFile parameter should be used instead.
 
 ```yaml
 Type: String[]

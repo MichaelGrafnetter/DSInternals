@@ -7908,7 +7908,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WeakPasswords</maml:name>
           <maml:Description>
-            <maml:para>List of passwords that are considered weak, e.g. Password123 or April2019.</maml:para>
+            <maml:para>List of passwords that are considered weak, e.g. Password123 or April2019. If more than a handful passwords are to be tested, the WeakPasswordsFile parameter should be used instead.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -7995,7 +7995,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>WeakPasswords</maml:name>
         <maml:Description>
-          <maml:para>List of passwords that are considered weak, e.g. Password123 or April2019.</maml:para>
+          <maml:para>List of passwords that are considered weak, e.g. Password123 or April2019. If more than a handful passwords are to be tested, the WeakPasswordsFile parameter should be used instead.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -8104,7 +8104,7 @@ These accounts are not required to have a password:
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $results = Get-ADReplAccount -All -NamingContext 'DC=contoso,DC=com' -Server LON-DC1 |
-                   Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' -WeakPasswordHashesFile pwned-passwords-ntlm-ordered-by-hash-v4.txt</dev:code>
+                   Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt</dev:code>
         <dev:remarks>
           <maml:para>Performs an online credential hygiene audit of AD against HIBP + a custom wordlist.</maml:para>
         </dev:remarks>

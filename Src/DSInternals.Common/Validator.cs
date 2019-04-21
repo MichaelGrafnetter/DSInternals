@@ -79,6 +79,15 @@ namespace DSInternals.Common
                 throw new ArgumentNullException(paramName);
             }
         }
+
+        public static void AssertNotNullOrEmpty(string value, string paramName)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException(paramName);
+            }
+        }
+
         public static void AssertNotNullOrWhiteSpace(string value, string paramName)
         {
             if(string.IsNullOrWhiteSpace(value))
