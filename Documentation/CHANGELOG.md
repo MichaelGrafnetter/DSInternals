@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [3.4] - 2019-04-21
 
 ### Added
 - The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md) cmdlet now has a parameter called `-WeakPasswordHashesSortedFile`. This parameter should be used with ordered hash files downloaded from [HaveIBeenPwned](https://haveibeenpwned.com/Passwords) as it has huge performance benefits over the older `-WeakPasswordHashesFile` parameter due to the usage of binary search algorithm.
@@ -279,7 +279,8 @@ All notable changes to this project will be documented in this file. The format 
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.3...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.4...HEAD
+[3.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.3...v3.4
 [3.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.2.1...v3.3
 [3.2.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.2...v3.2.1
 [3.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.1...v3.2
