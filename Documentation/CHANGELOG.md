@@ -1,15 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [3.4] - 2019-04-21
+## [3.4] - 2019-04-23
 
 ### Added
 - The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md) cmdlet now has a parameter called `-WeakPasswordHashesSortedFile`. This parameter should be used with ordered hash files downloaded from [HaveIBeenPwned](https://haveibeenpwned.com/Passwords) as it has huge performance benefits over the older `-WeakPasswordHashesFile` parameter due to the usage of binary search algorithm.
 - The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md) cmdlet now has a proper documentation, including usage examples.
 
 ### Fixed
+  - The PWDump export format is now more compatible with some 3rd party tools, e.g. ElcomSoft Distributed Password Recovery, although the ASCII encoding still must be enforced.
   - The speed of processing the `-WeakPasswordHashesFile` and `-WeakPasswordsFile` parameters of the [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md) cmdlet has significantly been increased.
   - Parsing of roamed credentials is now slightly faster.
+  - Documentation improvements!
 
 ## [3.3] - 2019-03-02
 ### Changed

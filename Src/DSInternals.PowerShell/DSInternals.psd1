@@ -123,6 +123,7 @@ PrivateData = @{
         # ReleaseNotes of this module
         ReleaseNotes = @"
 - The performance of the Test-PasswordQuality cmdlet had significantly been increased, expecially when used with HaveIBeenPwned.
+- The PWDump export format is now more compatible with some 3rd party tools, e.g. ElcomSoft Distributed Password Recovery.
 "@
     } # End of PSData hashtable
 

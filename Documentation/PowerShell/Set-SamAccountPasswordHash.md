@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-SamAccountPasswordHash
 
 ## SYNOPSIS
-Sets NT and LM hashes of an account through the SAMR protocol.
+Sets NT and LM hashes of an Active Directory or local account through the MS-SAMR protocol.
 
 ## SYNTAX
 

@@ -26,7 +26,7 @@ New-MarkdownAboutHelp -AboutName DSInternals -OutputFolder $mdHelpPath
 #>
 
 # Update MD files
-Update-MarkdownHelpModule -Path $mdHelpPath -ModulePagePath $modulePagePath -RefreshModulePage -AlphabeticParamsOrder -UpdateInputOutput
+Update-MarkdownHelpModule -Path $mdHelpPath -ModulePagePath $modulePagePath -RefreshModulePage:$false -AlphabeticParamsOrder -UpdateInputOutput
 
 # Generate the MAML file
 New-ExternalHelp -Path $mdHelpPath -OutputPath $xmlHelpPath -Force -ShowProgress

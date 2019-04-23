@@ -8,7 +8,7 @@ schema: 2.0.0
 # Save-DPAPIBlob
 
 ## SYNOPSIS
-Saves the output of the Get-ADReplBackupKey and Get-ADDBBackupKey cmdlets to a file.
+Saves DPAPI and Credential Roaming data returned by the [Get-ADReplBackupKey](Get-ADReplBackupKey.md), [Get-ADDBBackupKey](Get-ADDBBackupKey.md), [Get-ADReplAccount](Get-ADReplAccount.md), [Get-ADDBAccount](Get-ADDBAccount.md) and [Get-ADSIAccount](Get-ADSIAccount.md) cmdlets to files for further processing.
 
 ## SYNTAX
 

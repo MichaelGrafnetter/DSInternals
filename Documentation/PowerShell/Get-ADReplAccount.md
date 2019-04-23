@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-ADReplAccount
 
 ## SYNOPSIS
-Reads one or more accounts through the DRSR protocol, including secret attributes.
+Reads one or more accounts through the MS-DRSR protocol, including secret attributes.
 
 ## SYNTAX
 

@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-ADSIAccount
 
 ## SYNOPSIS
-Gets all Active Directory user accounts from a given domain controller using ADSI. 
+Gets all Active Directory user accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.
 
 ## SYNTAX
 

@@ -8,7 +8,7 @@ schema: 2.0.0
 # ConvertTo-OrgIdHash
 
 ## SYNOPSIS
-Calculates OrgId hash of a given password. Used by Azure Active Directory Sync.
+Calculates OrgId hash of a given password. Used by Azure Active Directory Connect.
 
 ## SYNTAX
 

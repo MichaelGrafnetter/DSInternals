@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-ADReplBackupKey
 
 ## SYNOPSIS
-Reads the DPAPI backup keys through the DRSR protocol.
+Reads the DPAPI backup keys through the MS-DRSR protocol.
 
 ## SYNTAX
 

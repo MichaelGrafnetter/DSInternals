@@ -296,10 +296,16 @@
                 <PropertyName>LMHash</PropertyName>
                 <CustomControlName>Hash</CustomControlName>
               </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>if($PSItem.LMHash -eq $null) { 'NO PASSWORD*********************' }</ScriptBlock>
+              </ExpressionBinding>
               <Text>:</Text>
               <ExpressionBinding>
                 <PropertyName>NTHash</PropertyName>
                 <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <ExpressionBinding>
+                <ScriptBlock>if($PSItem.NTHash -eq $null) { 'NO PASSWORD*********************' }</ScriptBlock>
               </ExpressionBinding>
               <Text>:::</Text>
             </CustomItem>

@@ -85,7 +85,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\ConvertTo-OrgIdHash.md = ..\Documentation\PowerShell\ConvertTo-OrgIdHash.md
 		..\Documentation\PowerShell\ConvertTo-UnicodePassword.md = ..\Documentation\PowerShell\ConvertTo-UnicodePassword.md
 		..\Documentation\PowerShell\Disable-ADDBAccount.md = ..\Documentation\PowerShell\Disable-ADDBAccount.md
-		..\Documentation\PowerShell\DSInternals.md = ..\Documentation\PowerShell\DSInternals.md
 		..\Documentation\PowerShell\Enable-ADDBAccount.md = ..\Documentation\PowerShell\Enable-ADDBAccount.md
 		..\Documentation\PowerShell\Get-ADDBAccount.md = ..\Documentation\PowerShell\Get-ADDBAccount.md
 		..\Documentation\PowerShell\Get-ADDBBackupKey.md = ..\Documentation\PowerShell\Get-ADDBBackupKey.md

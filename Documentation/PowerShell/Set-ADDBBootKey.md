@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-ADDBBootKey
 
 ## SYNOPSIS
-Re-encrypts a ntds.dit with a new BootKey. Highly experimental!
+Re-encrypts a ntds.dit with a new BootKey/SysKey. Highly experimental!
 
 ## SYNTAX
 

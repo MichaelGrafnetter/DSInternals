@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-ADDBPrimaryGroup
 
 ## SYNOPSIS
-Modifies the primaryGroupId attribute of an object to a ntds.dit file.
+Modifies the primaryGroupId attribute of an object in a ntds.dit file.
 
 ## SYNTAX
 

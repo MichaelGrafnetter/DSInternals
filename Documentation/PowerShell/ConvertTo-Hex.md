@@ -8,7 +8,7 @@ schema: 2.0.0
 # ConvertTo-Hex
 
 ## SYNOPSIS
-Helper cmdlet that converts binary input to hexadecimal string.
+Helper cmdlet that converts binary input to a hexadecimal string.
 
 ## SYNTAX
 

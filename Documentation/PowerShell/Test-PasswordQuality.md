@@ -8,7 +8,7 @@ schema: 2.0.0
 # Test-PasswordQuality
 
 ## SYNOPSIS
-Performs AD audit, including checks for weak, duplicate, default and empty passwords.
+Performs AD audit, including checks for weak, duplicate, default and empty passwords. Accepts input from the Get-ADReplAccount and Get-ADDBAccount cmdlets.
 
 ## SYNTAX
 

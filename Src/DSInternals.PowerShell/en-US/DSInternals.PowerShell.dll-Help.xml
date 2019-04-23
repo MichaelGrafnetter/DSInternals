@@ -767,7 +767,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>Hex</command:noun>
       <maml:description>
-        <maml:para>Helper cmdlet that converts binary input to hexadecimal string.</maml:para>
+        <maml:para>Helper cmdlet that converts binary input to a hexadecimal string.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1198,7 +1198,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>OrgIdHash</command:noun>
       <maml:description>
-        <maml:para>Calculates OrgId hash of a given password. Used by Azure Active Directory Sync.</maml:para>
+        <maml:para>Calculates OrgId hash of a given password. Used by Azure Active Directory Connect.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -3279,7 +3279,7 @@
       <command:verb>Get</command:verb>
       <command:noun>ADReplAccount</command:noun>
       <maml:description>
-        <maml:para>Reads one or more accounts through the DRSR protocol, including secret attributes.</maml:para>
+        <maml:para>Reads one or more accounts through the MS-DRSR protocol, including secret attributes.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -3791,7 +3791,7 @@
       <command:verb>Get</command:verb>
       <command:noun>ADReplBackupKey</command:noun>
       <maml:description>
-        <maml:para>Reads the DPAPI backup keys through the DRSR protocol.</maml:para>
+        <maml:para>Reads the DPAPI backup keys through the MS-DRSR protocol.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -3964,7 +3964,7 @@
       <command:verb>Get</command:verb>
       <command:noun>ADSIAccount</command:noun>
       <maml:description>
-        <maml:para>Gets all Active Directory user accounts from a given domain controller using ADSI.</maml:para>
+        <maml:para>Gets all Active Directory user accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -5238,7 +5238,7 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Save</command:verb>
       <command:noun>DPAPIBlob</command:noun>
       <maml:description>
-        <maml:para>Saves the output of the Get-ADReplBackupKey and Get-ADDBBackupKey cmdlets to a file.</maml:para>
+        <maml:para>Saves DPAPI and Credential Roaming data returned by the Get-ADReplBackupKey (Get-ADReplBackupKey.md), [Get-ADDBBackupKey](Get-ADDBBackupKey.md), [Get-ADReplAccount](Get-ADReplAccount.md), [Get-ADDBAccount](Get-ADDBAccount.md) and [Get-ADSIAccount](Get-ADSIAccount.md)cmdlets to files for further processing.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -6475,7 +6475,7 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Set</command:verb>
       <command:noun>ADDBBootKey</command:noun>
       <maml:description>
-        <maml:para>Re-encrypts a ntds.dit with a new BootKey. Highly experimental!</maml:para>
+        <maml:para>Re-encrypts a ntds.dit with a new BootKey/SysKey. Highly experimental!</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -6910,7 +6910,7 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Set</command:verb>
       <command:noun>ADDBPrimaryGroup</command:noun>
       <maml:description>
-        <maml:para>Modifies the primaryGroupId attribute of an object to a ntds.dit file.</maml:para>
+        <maml:para>Modifies the primaryGroupId attribute of an object in a ntds.dit file.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -7541,7 +7541,7 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Set</command:verb>
       <command:noun>SamAccountPasswordHash</command:noun>
       <maml:description>
-        <maml:para>Sets NT and LM hashes of an account through the SAMR protocol.</maml:para>
+        <maml:para>Sets NT and LM hashes of an Active Directory or local account through the MS-SAMR protocol.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -7836,7 +7836,7 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Test</command:verb>
       <command:noun>PasswordQuality</command:noun>
       <maml:description>
-        <maml:para>Performs AD audit, including checks for weak, duplicate, default and empty passwords.</maml:para>
+        <maml:para>Performs AD audit, including checks for weak, duplicate, default and empty passwords. Accepts input from the Get-ADReplAccount and Get-ADDBAccount cmdlets.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
