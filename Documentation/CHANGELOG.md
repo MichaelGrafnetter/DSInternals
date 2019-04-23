@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file. The format 
 - The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md) cmdlet now has a proper documentation, including usage examples.
 
 ### Fixed
-  - The PWDump export format is now more compatible with some 3rd party tools, e.g. ElcomSoft Distributed Password Recovery, although the ASCII encoding still must be enforced.
+  - The [PWDump](PowerShell/Readme.md#other-formats) export format is now more compatible with some 3rd party tools, e.g. ElcomSoft Distributed Password Recovery, although the ASCII encoding still must be enforced.
   - The speed of processing the `-WeakPasswordHashesFile` and `-WeakPasswordsFile` parameters of the [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md) cmdlet has significantly been increased.
   - Parsing of roamed credentials is now slightly faster.
   - Documentation improvements!
