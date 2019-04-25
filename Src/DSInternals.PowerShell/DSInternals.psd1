@@ -109,10 +109,10 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'ActiveDirectory', 'Security', 'SAM', 'LSA', 'PSModule'
+        Tags = 'ActiveDirectory', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/LICENSE.md'
+        LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/LICENSE.md'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/MichaelGrafnetter/DSInternals'
