@@ -170,10 +170,11 @@
             <CustomItem>
               <ExpressionBinding>
                 <ScriptBlock>
+                  $historyNumber = 1
                   $records = [System.Collections.ArrayList]@()
                   foreach($hash in $PSItem.NTHashHistory)
                   {
-                  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $hash)
+                  $record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, $historyNumber++, (ConvertTo-Hex $hash)
                   $position = $records.Add($record)
                   }
                   $records -join [Environment]::NewLine
