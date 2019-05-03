@@ -1,22 +1,22 @@
 # DSInternals PowerShell Module and Framework
 
-![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
-![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg)
-![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019-007bb8.svg)
-![.NET Framework 4.5.1+](https://img.shields.io/badge/.NET%20Framework-4.5.1%2B-007FFF.svg)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
+[![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg)](#)
+[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019-007bb8.svg)](#)
+[![.NET Framework 4.5.1+](https://img.shields.io/badge/.NET%20Framework-4.5.1%2B-007FFF.svg)](#)
 
 ## Introduction
 
 The DSInternals project consists of these two parts:
 - The [DSInternals Framework](https://www.nuget.org/profiles/MichaelGrafnetter) exposes several internal features of *Active Directory* and can be used from any .NET application. The codebase has already been integrated into several 3<sup>rd</sup> party commercial products that use it in scenarios like Active Directory disaster recovery, identity management, cross-forest migrations and password strength auditing.
 - The [DSInternals PowerShell Module](https://www.powershellgallery.com/packages/DSInternals/) provides easy-to-use cmdlets that are built on top of the Framework. These are the main features:
+  - [Active Directory password auditing](../Documentation/PowerShell/Test-PasswordQuality.md) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
+  - [Bare-metal recovery of domain controllers](../Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md) from just IFM backups (ntds.dit + SYSVOL).
   - Offline ntds.dit file manipulation, including [hash dumping](../Documentation/PowerShell/Get-ADDBAccount.md), [password resets](../Documentation/PowerShell/Set-ADDBAccountPassword.md), [group membership changes](../Documentation/PowerShell/Set-ADDBPrimaryGroup.md), [SID History injection](../Documentation/PowerShell/Add-ADDBSidHistory.md) and [enabling](../Documentation/PowerShell/Enable-ADDBAccount.md)/[disabling](../Documentation/PowerShell/Disable-ADDBAccount.md) accounts.
   - [Online password hash dumping](../Documentation/PowerShell/Get-ADReplAccount.md) through the Directory Replication Service (DRS) Remote Protocol (MS-DRSR). This feature is commonly called DCSync.
-  - [Active Directory password auditing](../Documentation/PowerShell/Test-PasswordQuality.md) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
   - [Domain or local account password hash injection](../Documentation/PowerShell/Set-SamAccountPasswordHash.md) through the Security Account Manager (SAM) Remote Protocol (MS-SAMR) or [directly into the database](../Documentation/PowerShell/Set-ADDBAccountPasswordHash.md).
   - [LSA Policy modification](../Documentation/PowerShell/Set-LsaPolicyInformation.md) through the Local Security Authority (Domain Policy) Remote Protocol (MS-LSAD / LSARPC).
   - [Extracting credential roaming data](../Documentation/PowerShell/Save-DPAPIBlob.md) and DPAPI domain backup keys, either online through [directory replication](../Documentation/PowerShell/Get-ADReplBackupKey.md), [LSARPC](../Documentation/PowerShell/Get-LsaBackupKey.md) and [offline from ntds.dit](../Documentation/PowerShell/Get-ADDBBackupKey.md).
-  - [Bare-metal recovery of domain controllers](../Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md) from just IFM backups (ntds.dit + SYSVOL). 
   - Password hash calculation, including [NT hash](../Documentation/PowerShell/ConvertTo-NTHash.md), [LM hash](../Documentation/PowerShell/ConvertTo-LMHash.md) and [kerberos keys](../Documentation/PowerShell/ConvertTo-KerberosKey.md).
 
 > DISCLAIMER: Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
@@ -29,9 +29,17 @@ The DSInternals project consists of these two parts:
 [![Blog](https://img.shields.io/badge/Blog-www.dsinternals.com-2A6496.svg)](https://www.dsinternals.com/en)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-grafnetter-0077B5.svg)](https://www.linkedin.com/in/grafnetter)
 
-I have created these tools in my spare time and I am using them while performing AD security audits and also in my lectures to demonstrate how Active Directory works internally. The code has many flaws and I could definitely do better if I had more free time.
+I have created these tools in my spare time and I am using them while performing AD security audits and also in my lectures to demonstrate how Active Directory works internally.
 
 I would like to thank all people who have contributed to the project by [sending their feedback](https://github.com/MichaelGrafnetter/DSInternals/issues) or by [submitting their code](https://github.com/MichaelGrafnetter/DSInternals/graphs/contributors). In case you would also like to help with this project, please see the [CONTRIBUTING](CONTRIBUTING.md) document.
+
+Several people who use DSInternals during AD security audits have asked to donate. I have therefore set up a PayPal account:
+
+<p align="center">
+<a href="https://paypal.me/dsinternals">
+<img src="https://img.shields.io/badge/Donate-2A6496.svg?logo=paypal" height="40px" alt="Donate" align="center" />
+</a>
+</p>
 
 ## Downloads
 [![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/DSInternals.svg?label=PowerShell%20Gallery%20Downloads)](https://www.powershellgallery.com/packages/DSInternals/)
@@ -63,9 +71,9 @@ The easiest way of integrating the DSInternals functionality into .NET applicati
 
 ### Building from Source Code
 
-![Visual Studio 2015 | 2017](https://img.shields.io/badge/Visual%20Studio-2015%20|%202017-383278.svg)
+[![Visual Studio 2015 | 2017](https://img.shields.io/badge/Visual%20Studio-2015%20|%202017-383278.svg)](#)
 [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master)
-![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results)
+[![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results)](#)
 
 You can of course download the [source code](https://github.com/MichaelGrafnetter/DSInternals/archive/master.zip), perform a review and compile the Module/Framework yourself. See the [CONTRIBUTING](CONTRIBUTING.md#building-from-source-code) guide for more info.
 
