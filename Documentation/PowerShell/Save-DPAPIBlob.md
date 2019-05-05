@@ -8,7 +8,7 @@ schema: 2.0.0
 # Save-DPAPIBlob
 
 ## SYNOPSIS
-Saves DPAPI and Credential Roaming data returned by the [Get-ADReplBackupKey](Get-ADReplBackupKey.md), [Get-ADDBBackupKey](Get-ADDBBackupKey.md), [Get-ADReplAccount](Get-ADReplAccount.md), [Get-ADDBAccount](Get-ADDBAccount.md) and [Get-ADSIAccount](Get-ADSIAccount.md) cmdlets to files for further processing.
+Saves DPAPI and Credential Roaming data returned by the Get-ADReplBackupKey, Get-ADDBBackupKey, Get-ADReplAccount, Get-ADDBAccount and Get-ADSIAccount cmdlets to files for further processing.
 
 ## SYNTAX
 
@@ -98,3 +98,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Get-ADDBBackupKey](Get-ADDBBackupKey.md)
 [Get-ADReplBackupKey](Get-ADReplBackupKey.md)
 [Get-LsaBackupKey](Get-LsaBackupKey.md)
+[Get-ADReplAccount](Get-ADReplAccount.md)
+[Get-ADDBAccount](Get-ADDBAccount.md) 

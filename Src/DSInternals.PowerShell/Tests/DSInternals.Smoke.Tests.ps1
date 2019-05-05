@@ -1,7 +1,12 @@
 param(
     [Parameter(Mandatory = $true)]
     [string]
-    $ModulePath
+    $ModulePath,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $MarkdownDocumentationPath
 )
 
 Describe 'DSInternals PowerShell Module' {
@@ -46,10 +51,16 @@ Describe 'DSInternals PowerShell Module' {
             Join-Path $ModulePath en-US\DSInternals.PowerShell.dll-Help.xml | Should -Exist
         }
 
-        It 'contains About topic' {
-            Join-Path $ModulePath en-US\about_DSInternals.help.txt | Should -Exist
+        $aboutPagePath = Join-Path $ModulePath 'en-US\about_DSInternals.help.txt'
+
+        It 'contains an About topic' {
+            $aboutPagePath | Should -Exist
         }
         
+        It 'has a properly named About topic' {
+            Select-String -Path $aboutPagePath -Pattern 'about_DSInternals' -CaseSensitive -SimpleMatch -Quiet | Should Be $true
+        }
+
         It 'contains Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' } -Test {
             param([string] $Platform)
 
@@ -108,6 +119,58 @@ Describe 'DSInternals PowerShell Module' {
                 Should -BeNull
         }
     }
+
+    if(-not [string]::IsNullOrEmpty($MarkdownDocumentationPath)) {
+        Context 'Markdown Documentation' {
+            It 'CHANGELOG should be up-to-date' {
+                $changeLogPath = Join-Path $MarkdownDocumentationPath 'CHANGELOG.md'
+                
+                # Get the module version
+                $moduleManifestPath = Join-Path $ModulePath DSInternals.psd1
+                $manifest =  Import-PowerShellDataFile -Path $moduleManifestPath
+                $moduleVersion = $manifest.ModuleVersion
+                
+                # Check that the verisons match
+                Select-String -Path $changeLogPath -Pattern "## [$moduleVersion]" -SimpleMatch -Quiet | Should Be $true
+            }
+
+            $modulePagePath = Join-Path $MarkdownDocumentationPath 'PowerShell\Readme.md'
+
+            # Parse Views
+            $exportViewFormatsPath = Join-Path $ModulePath 'Views\DSInternals.DSAccount.ExportViews.format.ps1xml'
+            $views = Select-Xml -Path $exportViewFormatsPath -XPath 'Configuration/ViewDefinitions/View/Name/text()' |
+                        foreach { @{ View = $PSItem.Node.Value }  }
+
+            It 'contains the <View> view' -TestCases $views -Test {
+                param([string] $View)
+
+                Select-String -Path $modulePagePath -Pattern "- **$View**" -SimpleMatch -CaseSensitive -Quiet | Should Be $true
+            }
+                        
+            # Parse MAML
+            $mamlPath = Join-Path $ModulePath 'en-US\DSInternals.PowerShell.dll-Help.xml'
+            $maml = [xml] (Get-Content -Path $mamlPath -ErrorAction Stop)
+            $cmdlets = $maml.helpItems.command.details | foreach {
+                            @{ Cmdlet = $PSItem.name;
+                                Description = $PSItem.description.para
+                            } }
+
+            It 'contains the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {
+                param([string] $Cmdlet, [string] $Description)
+                
+                Select-String -Path $modulePagePath -Pattern "### [$Cmdlet]($Cmdlet.md)" -SimpleMatch -CaseSensitive -Quiet | Should Be $true
+            }
+
+            It 'contains proper description of the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {
+                param([string] $Cmdlet, [string] $Description)
+
+                # Remove markdown links before searching
+                Get-Content -Path $modulePagePath |
+                    foreach { $PSItem -replace '\[([a-zA-Z\-]+)\]\(([([a-zA-Z\-]+)\.md\)','$1' } |
+                    where { $PSItem -ceq $Description } | Should -HaveCount 1
+            }
+        }
+    }
 }
 
 Describe 'Powershell Cmdlets' {
@@ -149,7 +212,7 @@ Describe 'Powershell Cmdlets' {
             }
             else
             {
-                Set-TestInconclusive 'The initial DB is not present in client SKUs.'
+                Set-ItResult -Inconclusive -Because 'The initial DB is not present in client SKUs.'
             }
         }
 
@@ -161,7 +224,7 @@ Describe 'Powershell Cmdlets' {
             }
             else
             {
-                Set-TestInconclusive 'The initial DB is not present in client SKUs.'
+                Set-ItResult -Inconclusive -Because 'The initial DB is not present in client SKUs.'
             }
         }
     }

@@ -5238,7 +5238,7 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Save</command:verb>
       <command:noun>DPAPIBlob</command:noun>
       <maml:description>
-        <maml:para>Saves DPAPI and Credential Roaming data returned by the Get-ADReplBackupKey (Get-ADReplBackupKey.md), [Get-ADDBBackupKey](Get-ADDBBackupKey.md), [Get-ADReplAccount](Get-ADReplAccount.md), [Get-ADDBAccount](Get-ADDBAccount.md) and [Get-ADSIAccount](Get-ADSIAccount.md)cmdlets to files for further processing.</maml:para>
+        <maml:para>Saves DPAPI and Credential Roaming data returned by the Get-ADReplBackupKey, Get-ADDBBackupKey, Get-ADReplAccount, Get-ADDBAccount and Get-ADSIAccount cmdlets to files for further processing.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -5395,6 +5395,14 @@ $initTask.RunAsTask()</dev:code>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-LsaBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBAccount</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -6475,7 +6483,7 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Set</command:verb>
       <command:noun>ADDBBootKey</command:noun>
       <maml:description>
-        <maml:para>Re-encrypts a ntds.dit with a new BootKey/SysKey. Highly experimental!</maml:para>
+        <maml:para>Re-encrypts a ntds.dit file with a new BootKey/SysKey. Highly experimental!</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
