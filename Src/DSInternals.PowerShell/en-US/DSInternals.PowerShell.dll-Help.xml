@@ -6639,7 +6639,7 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Set</command:verb>
       <command:noun>ADDBDomainController</command:noun>
       <maml:description>
-        <maml:para>Writes information about the DC to a ntds.dit file, including the highest commited USN and database epoch.</maml:para>
+        <maml:para>Writes information about the DC to a ntds.dit file, including the highest committed USN and database epoch.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>

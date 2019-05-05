@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-ADDBDomainController
 
 ## SYNOPSIS
-Writes information about the DC to a ntds.dit file, including the highest commited USN and database epoch.
+Writes information about the DC to a ntds.dit file, including the highest committed USN and database epoch.
 
 ## SYNTAX
 

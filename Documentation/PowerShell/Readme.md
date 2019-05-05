@@ -44,7 +44,7 @@ Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryptio
 Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name and DC site.
 
 ### [Set-ADDBDomainController](Set-ADDBDomainController.md)
-Writes information about the DC to a ntds.dit file, including the highest commited USN and database epoch.
+Writes information about the DC to a ntds.dit file, including the highest committed USN and database epoch.
 
 ### [Get-ADDBSchemaAttribute](Get-ADDBSchemaAttribute.md)
 Reads AD schema from a ntds.dit file, including datatable column names.
