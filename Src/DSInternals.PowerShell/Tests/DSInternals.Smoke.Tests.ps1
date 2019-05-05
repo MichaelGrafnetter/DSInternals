@@ -122,19 +122,26 @@ Describe 'DSInternals PowerShell Module' {
 
     if(-not [string]::IsNullOrEmpty($MarkdownDocumentationPath)) {
         Context 'Markdown Documentation' {
+            # Get the module manifest
+            $moduleManifestPath = Join-Path $ModulePath DSInternals.psd1
+            $manifest =  Import-PowerShellDataFile -Path $moduleManifestPath
+
             It 'CHANGELOG should be up-to-date' {
                 $changeLogPath = Join-Path $MarkdownDocumentationPath 'CHANGELOG.md'
-                
-                # Get the module version
-                $moduleManifestPath = Join-Path $ModulePath DSInternals.psd1
-                $manifest =  Import-PowerShellDataFile -Path $moduleManifestPath
-                $moduleVersion = $manifest.ModuleVersion
-                
+
                 # Check that the verisons match
+                $moduleVersion = $manifest.ModuleVersion
                 Select-String -Path $changeLogPath -Pattern "## [$moduleVersion]" -SimpleMatch -Quiet | Should Be $true
             }
 
             $modulePagePath = Join-Path $MarkdownDocumentationPath 'PowerShell\Readme.md'
+            $modulePage = Get-Content -Path $modulePagePath -ErrorAction Stop
+
+            It 'contains proper module description' {
+                $moduleDescription = ($manifest.Description -split 'DISCLAIMER:')[0].Trim()
+
+                $modulePage | where { $PSItem -ceq $moduleDescription } | Should -HaveCount 1
+            }
 
             # Parse Views
             $exportViewFormatsPath = Join-Path $ModulePath 'Views\DSInternals.DSAccount.ExportViews.format.ps1xml'
@@ -144,7 +151,7 @@ Describe 'DSInternals PowerShell Module' {
             It 'contains the <View> view' -TestCases $views -Test {
                 param([string] $View)
 
-                Select-String -Path $modulePagePath -Pattern "- **$View**" -SimpleMatch -CaseSensitive -Quiet | Should Be $true
+                $modulePage | where { $PSItem.StartsWith("- **$View**") } | Should -HaveCount 1
             }
                         
             # Parse MAML
@@ -158,15 +165,14 @@ Describe 'DSInternals PowerShell Module' {
             It 'contains the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {
                 param([string] $Cmdlet, [string] $Description)
                 
-                Select-String -Path $modulePagePath -Pattern "### [$Cmdlet]($Cmdlet.md)" -SimpleMatch -CaseSensitive -Quiet | Should Be $true
+                $modulePage | where { $PSItem -ceq "### [$Cmdlet]($Cmdlet.md)" } | Should -HaveCount 1
             }
 
             It 'contains proper description of the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {
                 param([string] $Cmdlet, [string] $Description)
 
                 # Remove markdown links before searching
-                Get-Content -Path $modulePagePath |
-                    foreach { $PSItem -replace '\[([a-zA-Z\-]+)\]\(([([a-zA-Z\-]+)\.md\)','$1' } |
+                $modulePage | foreach { $PSItem -replace '\[([a-zA-Z\-]+)\]\(([([a-zA-Z\-]+)\.md\)','$1' } |
                     where { $PSItem -ceq $Description } | Should -HaveCount 1
             }
         }
