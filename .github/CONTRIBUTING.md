@@ -46,7 +46,7 @@ $PSVersion
 ### Development Environment
 
 If you want to build the module from source code yourself, you need to install these programs first:
-- [Microsoft Visual Studio Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx) 2015 or 2017 with these features installed:
+- [Microsoft Visual Studio Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx) 2015, 2017 or 2019 with these features installed:
    * Common Tools for Visual C++
    * Windows SDK (you have to retarget the [DSInternals.Replication.Interop](../Src/DSInternals.Replication.Interop/DSInternals.Replication.Interop.vcxproj) project to the version you have)
    * PowerShell Tools for Visual Studio (optional)

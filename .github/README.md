@@ -71,7 +71,7 @@ The easiest way of integrating the DSInternals functionality into .NET applicati
 
 ### Building from Source Code
 
-[![Visual Studio 2015 | 2017](https://img.shields.io/badge/Visual%20Studio-2015%20|%202017-383278.svg)](#)
+[![Visual Studio 2015 | 2017 | 2019](https://img.shields.io/badge/Visual%20Studio-2015%20|%202017%20|%202019-383278.svg)](#)
 [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master)
 [![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results)](#)
 
