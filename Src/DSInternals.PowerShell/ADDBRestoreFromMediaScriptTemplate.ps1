@@ -10,13 +10,23 @@ The DSInternals PowerShell module must be installed for all users on the target 
 Author: Michael Grafnetter
 
 #>
-#Requires -Version 3 -Modules DSInternals,ActiveDirectory -RunAsAdministrator
+#Requires -Version 3 -Modules DSInternals,ServerManager,PSScheduledJob -RunAsAdministrator
 
 # Perform a VSS backup before doing anything else.
 Write-Host 'Creating a snapshot of the system drive to make rollback possible...'
 $vssResult = ([wmiclass] 'Win32_ShadowCopy').Create("$env:SystemDrive\", 'ClientAccessible')
 
+# The PS module must be present as workflows cannot contain non-existing activities.
+Write-Host 'Installing the Active Directory module for Windows PowerShell...'
+Install-WindowsFeature -Name RSAT-AD-PowerShell -ErrorAction Stop 
+
 # All the other operations will be executed by a restartable workflow running in SYSTEM context.
+Write-Host 'Registering restartable workflows...'
+
+# Delete any pre-existing scheduled jobs with the same names before registering new ones.
+Unregister-ScheduledJob -Name DSInternals-RFM-Initializer,DSInternals-RFM-Resumer -Force -ErrorAction SilentlyContinue
+
+# The DSInternals-RFM-Initializer job will only be executed once in order to register the workflow and to invoke it for the first time.
 $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock {
     workflow Restore-DomainController
     {
@@ -33,7 +43,7 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
         if ((Get-Service NTDS -ErrorAction SilentlyContinue) -eq $null)
         {
             # A DC promotion is required.
-            # Note: In order to mainstain compatibility with Windows Server 2008 R2, the ADDSDeployment module is not used.
+            # Note: In order to maintain compatibility with Windows Server 2008 R2, the ADDSDeployment module is not used.
             # Advice: It is recommenced to change the DSRM password after DC promotion.
             dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:"{DomainName}" /DomainNetBiosName:"{NetBIOSDomainName}" /DomainLevel:{DomainMode} /ForestLevel:{ForestMode} '/SafeModeAdminPassword:"{DSRMPassword}"' /DatabasePath:"{TargetDBDirPath}" /LogPath:"{TargetLogDirPath}" /SysVolPath:"{TargetSysvolPath}" /AllowDomainReinstall:Yes /CreateDNSDelegation:No /DNSOnNetwork:No /InstallDNS:Yes /RebootOnCompletion:No
             Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\10 -Name ConfigurationStatus -Value 2 -Force
@@ -111,12 +121,15 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
     Restore-DomainController -JobName DSInternals-RFM-Workflow
 }
 
+# The DSInternals-RFM-Resumer job will be executed after each reboot to unpause the workflow.
 $resumeTask = Register-ScheduledJob -Name DSInternals-RFM-Resumer -Trigger (New-JobTrigger -AtStartup) -ScriptBlock {
+    # Unregister the one-time task that must already have been executed.
+    Unregister-ScheduledJob -Name DSInternals-RFM-Initializer -Force -ErrorAction SilentlyContinue
+
     # Resume the workflow after the computer is rebooted.
     Resume-Job -Name DSInternals-RFM-Workflow -Wait | Wait-Job | where State -In Completed,Failed,Stopped | foreach {
         # Perform cleanup when finished.
         Remove-Job -Job $PSItem -Force
-        Unregister-ScheduledJob -Name DSInternals-RFM-Initializer -Force
         Unregister-ScheduledJob -Name DSInternals-RFM-Resumer -Force
     }
 }
