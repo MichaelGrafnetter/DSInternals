@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>DSInternals</id>
+    <version>3.4</version>
+    <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals</packageSourceUrl>
+    <owners>MichaelGrafnetter</owners>
+    <title>DSInternals PowerShell Module</title>
+    <authors>Michael Grafnetter</authors>
+    <projectUrl>https://github.com/MichaelGrafnetter/DSInternals</projectUrl>
+    <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
+    <copyright>(c) 2015-2019 Michael Grafnetter. All rights reserved.</copyright>
+    <licenseUrl>https://github.com/MichaelGrafnetter/DSInternals/blob/master/LICENSE.md</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src</projectSourceUrl>
+    <docsUrl>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Readme.md</docsUrl>
+    <bugTrackerUrl>https://github.com/MichaelGrafnetter/DSInternals/issues</bugTrackerUrl>
+    <tags>admin dsinternals powershell activedirectory ad security ntds passwords dpapi lsa sam audit</tags>
+    <summary>The DSInternals PowerShell Module exposes several internal features of Active Directory. These include offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.</summary>
+    <description>
+      The [DSInternals PowerShell Module](https://www.powershellgallery.com/packages/DSInternals/) has these main features:
+      - [Active Directory password auditing](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Test-PasswordQuality.md) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
+      - [Bare-metal recovery of domain controllers](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md) from just IFM backups (ntds.dit + SYSVOL).
+      - Offline ntds.dit file manipulation, including [hash dumping](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBAccount.md), [password resets](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBAccountPassword.md), [group membership changes](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBPrimaryGroup.md), [SID History injection](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Add-ADDBSidHistory.md) and [enabling](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Enable-ADDBAccount.md)/[disabling](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Disable-ADDBAccount.md) accounts.
+      - [Online password hash dumping](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADReplAccount.md) through the Directory Replication Service (DRS) Remote Protocol (MS-DRSR). This feature is commonly called DCSync.
+      - [Domain or local account password hash injection](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-SamAccountPasswordHash.md) through the Security Account Manager (SAM) Remote Protocol (MS-SAMR) or [directly into the database](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBAccountPasswordHash.md).
+      - [LSA Policy modification](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-LsaPolicyInformation.md) through the Local Security Authority (Domain Policy) Remote Protocol (MS-LSAD / LSARPC).
+      - [Extracting credential roaming data](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Save-DPAPIBlob.md) and DPAPI domain backup keys, either online through [directory replication](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADReplBackupKey.md), [LSARPC](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-LsaBackupKey.md) and [offline from ntds.dit](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBBackupKey.md).
+      - Password hash calculation, including [NT hash](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/ConvertTo-NTHash.md), [LM hash](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/ConvertTo-LMHash.md) and [kerberos keys](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/ConvertTo-KerberosKey.md).
+
+      &gt; Installation Notes: The module will be installed to the *$PSHome\Modules* directory. This is to avoid conflicts with the *PowerShell Gallery* and still support module autoloading.
+      
+      &gt; DISCLAIMER: Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
+    </description>
+    <releaseNotes>
+      - The performance of the Test-PasswordQuality cmdlet had significantly been increased, expecially when used with HaveIBeenPwned.
+      - The PWDump export format is now more compatible with some 3rd party tools, e.g. ElcomSoft Distributed Password Recovery.
+    </releaseNotes>
+    <dependencies>
+      <!-- Windows Management Framework 3+. For OS prior to Windows 8 or Windows Server 2012. -->
+      <dependency id="powershell" version="[3.0.20121027]" />
+      <!-- Universal C Runtime. For RTM OS prior to Windows 10 and Windows Server 2016. -->
+      <dependency id="kb2999226" />
+      <!-- .NET Framework 4.5.1+. For RTM OS prior to Windows 8.1 and Windows Server 2012 R2. -->
+      <dependency id="dotnet4.5.1" />
+    </dependencies>
+    <conflicts>dsinternals-psmodule</conflicts>
+    <replaces>dsinternals-psmodule</replaces>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+    <file src="..\..\Build\bin\Release\DSInternals\**" target="DSInternals" />
+  </files>
+</package>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSInternals.PowerShell", "DSInternals.PowerShell\DSInternals.PowerShell.csproj", "{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}"
 EndProject
@@ -49,6 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{A6D9
 		..\Scripts\Build-Solution.ps1 = ..\Scripts\Build-Solution.ps1
 		..\Scripts\Invoke-SmokeTests.ps1 = ..\Scripts\Invoke-SmokeTests.ps1
 		..\Scripts\Make.ps1 = ..\Scripts\Make.ps1
+		..\Scripts\Pack-Chocolatey.ps1 = ..\Scripts\Pack-Chocolatey.ps1
 		..\Scripts\Pack-NuGetPackages.ps1 = ..\Scripts\Pack-NuGetPackages.ps1
 		..\Scripts\Pack-PSModule.ps1 = ..\Scripts\Pack-PSModule.ps1
 		..\Scripts\Publish-NuGetPackages.ps1 = ..\Scripts\Publish-NuGetPackages.ps1
@@ -111,6 +112,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\Set-LsaPolicyInformation.md = ..\Documentation\PowerShell\Set-LsaPolicyInformation.md
 		..\Documentation\PowerShell\Set-SamAccountPasswordHash.md = ..\Documentation\PowerShell\Set-SamAccountPasswordHash.md
 		..\Documentation\PowerShell\Test-PasswordQuality.md = ..\Documentation\PowerShell\Test-PasswordQuality.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DSInternals.PowerShell.Chocolatey", "DSInternals.PowerShell.Chocolatey", "{DA5C8A2B-710B-417A-B646-A512C3B90801}"
+	ProjectSection(SolutionItems) = preProject
+		DSInternals.PowerShell.Chocolatey\dsinternals.nuspec = DSInternals.PowerShell.Chocolatey\dsinternals.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{AFB60B81-6978-434C-9224-C7A63960A6A1}"
+	ProjectSection(SolutionItems) = preProject
+		DSInternals.PowerShell.Chocolatey\tools\chocolateyinstall.ps1 = DSInternals.PowerShell.Chocolatey\tools\chocolateyinstall.ps1
+		DSInternals.PowerShell.Chocolatey\tools\chocolateyuninstall.ps1 = DSInternals.PowerShell.Chocolatey\tools\chocolateyuninstall.ps1
+		DSInternals.PowerShell.Chocolatey\tools\VERIFICATION.txt = DSInternals.PowerShell.Chocolatey\tools\VERIFICATION.txt
 	EndProjectSection
 EndProject
 Global
@@ -223,6 +236,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A47D652E-5EF7-44C0-AD85-4F0F9B738567} = {9735D030-AEE6-415A-BF03-074076FF776A}
+		{AFB60B81-6978-434C-9224-C7A63960A6A1} = {DA5C8A2B-710B-417A-B646-A512C3B90801}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20AC2CF5-7C26-407B-B0A5-1BDE0FABABA8}

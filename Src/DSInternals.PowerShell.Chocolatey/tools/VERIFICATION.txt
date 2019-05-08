@@ -1,0 +1,5 @@
+﻿VERIFICATION
+
+This is the official DSInternals PowerShell Module Chocolatey package.
+
+The package is self-contained and contains the same files as the GitHub ZIP release (https://github.com/MichaelGrafnetter/DSInternals/releases).

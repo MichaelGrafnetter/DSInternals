@@ -6,7 +6,7 @@ Generates NuGet Packages.
 
 $repoRoot = Join-Path $PSScriptRoot '..\'
 $solutionDir = Join-Path $repoRoot 'Src\'
-$outputDir = Join-Path  $repoRoot 'Build\packages\'
+$outputDir = Join-Path  $repoRoot 'Build\packages\NuGet\'
 $toolsDir = Join-Path $repoRoot 'Scripts\Tools'
 $nuget = Join-Path $toolsDir 'nuget.exe'
 
