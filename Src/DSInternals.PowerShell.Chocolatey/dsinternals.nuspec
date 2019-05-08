@@ -4,7 +4,7 @@
   <metadata>
     <id>DSInternals</id>
     <version>3.4</version>
-    <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals</packageSourceUrl>
+    <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell.Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
     <authors>Michael Grafnetter</authors>
@@ -51,5 +51,6 @@
   <files>
     <file src="tools\**" target="tools" />
     <file src="..\..\Build\bin\Release\DSInternals\**" target="DSInternals" />
+    <file src="..\..\Build\bin\Release\DSInternals.cat" target="tools\DSInternals.cat" />
   </files>
 </package>

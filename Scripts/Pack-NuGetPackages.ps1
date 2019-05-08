@@ -23,7 +23,7 @@ if(-not (Test-Path $nuget))
 }
 
 # Pack all *.csproj files that have a corresponding *.nuspec file
-Get-ChildItem -Path $repoRoot -Filter *.nuspec -Recurse -File |
+Get-ChildItem -Path $repoRoot -Filter *.nuspec -Exclude DSInternals.nuspec -Recurse -File |
     ForEach-Object { $PSItem.FullName.Replace('.nuspec', '.csproj') } |
     ForEach-Object {
         $solutionFile = $PSItem

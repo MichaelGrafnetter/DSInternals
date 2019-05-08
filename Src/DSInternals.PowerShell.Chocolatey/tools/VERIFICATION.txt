@@ -3,3 +3,9 @@
 This is the official DSInternals PowerShell Module Chocolatey package.
 
 The package is self-contained and contains the same files as the GitHub ZIP release (https://github.com/MichaelGrafnetter/DSInternals/releases).
+
+File integrity can be checked against the catalog file using the following PowerShell 5 command:
+
+Test-FileCatalog -CatalogFilePath tools\DSInternals.cat -Path DSInternals -Detailed
+
+Note that the catalog file is not digitally signed (for now).
