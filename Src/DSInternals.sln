@@ -52,6 +52,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{A6D9
 		..\Scripts\Pack-Chocolatey.ps1 = ..\Scripts\Pack-Chocolatey.ps1
 		..\Scripts\Pack-NuGetPackages.ps1 = ..\Scripts\Pack-NuGetPackages.ps1
 		..\Scripts\Pack-PSModule.ps1 = ..\Scripts\Pack-PSModule.ps1
+		..\Scripts\Publish-Chocolatey.ps1 = ..\Scripts\Publish-Chocolatey.ps1
 		..\Scripts\Publish-NuGetPackages.ps1 = ..\Scripts\Publish-NuGetPackages.ps1
 		..\Scripts\Publish-PSModule.ps1 = ..\Scripts\Publish-PSModule.ps1
 		..\Scripts\Run-Tests.ps1 = ..\Scripts\Run-Tests.ps1
