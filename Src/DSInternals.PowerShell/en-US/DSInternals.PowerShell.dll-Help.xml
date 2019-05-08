@@ -4813,101 +4813,149 @@ Restores the LON-DC1 domain controller from ntds.dit.
 This script should only be executed on a freshly installed Windows Server 2012 R2 Datacenter Evaluation. Use at your own risk
 The DSInternals PowerShell module must be installed for all users on the target server.
 
-.AUTHOR
-Michael Grafnetter
+
+Author: Michael Grafnetter
+
 #&gt;
-#Requires -Version 3 -Modules DSInternals -RunAsAdministrator
+#Requires -Version 3 -Modules DSInternals,ServerManager,PSScheduledJob -RunAsAdministrator
 
 # Perform a VSS backup before doing anything else.
 Write-Host 'Creating a snapshot of the system drive to make rollback possible...'
 $vssResult = ([wmiclass] 'Win32_ShadowCopy').Create("$env:SystemDrive\", 'ClientAccessible')
 
+# The PS module must be present as workflows cannot contain non-existing activities.
+Write-Host 'Installing the Active Directory module for Windows PowerShell...'
+Add-WindowsFeature -Name RSAT-AD-PowerShell -ErrorAction Stop 
+
 # All the other operations will be executed by a restartable workflow running in SYSTEM context.
+Write-Host 'Registering restartable workflows...'
+
+# Delete any pre-existing scheduled jobs with the same names before registering new ones.
+Unregister-ScheduledJob -Name DSInternals-RFM-Initializer,DSInternals-RFM-Resumer -Force -ErrorAction SilentlyContinue
+
+# The DSInternals-RFM-Initializer job will only be executed once in order to register the workflow and to invoke it for the first time.
 $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock {
-        workflow Restore-DomainController
+    workflow Restore-DomainController
+    {
+        if ($env:COMPUTERNAME -ne 'LON-DC1')
         {
-                if ($env:COMPUTERNAME -ne 'LON-DC1')
-                {
-                        # A server rename operation is required.
-                        Rename-Computer -NewName 'LON-DC1' -Force
-
-                        # We explicitly suspend the workflow as Restart-Computer with the -Wait parameter does not survive local reboots.
-                        shutdown.exe /r /t 5
-                        Suspend-Workflow -Label 'Waiting for reboot'
-                }
-
-                if ((Get-Service NTDS -ErrorAction SilentlyContinue) -eq $null)
-                {
-                        # A DC promotion is required.
-                        # Note: In order to mainstain compatibility with Windows Server 2008 R2, the ADDSDeployment module is not used.
-                        # Advice: It is recommenced to change the DSRM password after DC promotion.
-                        dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:"Adatum.com" /DomainNetBiosName:"ADATUM" /DomainLevel:6 /ForestLevel:6 '/SafeModeAdminPassword:"Pa$$w0rd"' /DatabasePath:"$env:SYSTEMROOT\NTDS" /LogPath:"$env:SYSTEMROOT\NTDS" /SysVolPath:"$env:SYSTEMROOT\SYSVOL" /AllowDomainReinstall:Yes /CreateDNSDelegation:No /DNSOnNetwork:No /InstallDNS:Yes /RebootOnCompletion:No
-                        Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\10 -Name ConfigurationStatus -Value 2 -Force
-                }
-
-                # Reboot the computer into the Directory Services Restore Mode.
-                bcdedit.exe /set safeboot dsrepair
-                shutdown.exe /r /t 5
-                Suspend-Workflow -Label 'Waiting for reboot'
-
-                # Re-encrypt the DB with the new boot key.
-                $currentBootKey = Get-BootKey -Online
-                Set-ADDBBootKey -DBPath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -OldBootKey 610bc29e6f62ca7004e9872cd51a0116 -NewBootKey $currentBootKey
-
-                # Clone the DC account password.
-                $ntdsParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
-                InlineScript {
-                        # Note: SupplementalCredentials do not get serialized properly without using the InlineScript activity.
-                        $dcAccount = Get-ADDBAccount -SamAccountName 'LON-DC1$' -DBPath $using:ntdsParams.'DSA Database file' -LogPath $using:ntdsParams.'Database log files path' -BootKey $using:currentBootKey
-                        Set-ADDBAccountPasswordHash -ObjectGuid 9bb4d6f4-060a-4585-9f18-625774e7c088 -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DBPath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -BootKey $using:currentBootKey
-                }
-
-                # Replace the database and transaction logs.
-                robocopy.exe 'C:\Backup\Active Directory' $ntdsParams.'DSA Working Directory' *.dit *.edb *.chk *.jfm /MIR /NP /NDL /NJS
-                robocopy.exe 'C:\Backup\Active Directory' $ntdsParams.'Database log files path' *.log *.jrs /MIR /NP /NDL /NJS
-
-                # Replace SYSVOL.
-                robocopy.exe 'C:\Backup\SYSVOL\Adatum.com' "$env:SYSTEMROOT\SYSVOL\domain" /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
-
-                # Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
-                Set-LsaPolicyInformation -DomainName 'ADATUM' -DnsDomainName 'Adatum.com' -DnsForestName 'Adatum.com' -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 -DomainSid S-1-5-21-1817670852-3242289776-1304069626
-
-                # Tell the DC that its DB has intentionally been restored. A new InvocationID will be generated as soon as the service starts.
-                Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'Database restored from backup' -Value 1 -Force
-                Remove-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'DSA Database Epoch' -Force
-
-                # Disable DSRM and do one last reboot.
-                bcdedit.exe /deletevalue safeboot
-                shutdown.exe /r /t 5
-                Suspend-Workflow -Label 'Waiting for reboot'
-
-                # Reconfigure SYSVOL replication in case it has been restored to a different path.
-                # Note: This will fail if the domain is still using FRS instead of DFS-R.
-                $dfsrSubscription = 'CN=SYSVOL Subscription,CN=Domain System Volume,CN=DFSR-LocalSettings,CN=LON-DC1,OU=Domain Controllers,DC=Adatum,DC=com'
-                Set-ADObject -Identity $dfsrSubscription -Server localhost -Replace @{
-                    'msDFSR-RootPath' = "$env:SYSTEMROOT\SYSVOL\domain";
-                    'msDFSR-StagingPath' = "$env:SYSTEMROOT\SYSVOL\staging areas\Adatum.com"
-                }
-
-                # Download the updated DFS-R configuration from AD.
-                Invoke-WmiMethod -Class DfsrConfig -Name PollDsNow -ArgumentList localhost -Namespace ROOT\MicrosoftDfs
+            # A server rename operation is required.
+            Rename-Computer -NewName 'LON-DC1' -Force
+            
+            # We explicitly suspend the workflow as Restart-Computer with the -Wait parameter does not survive local reboots.
+            shutdown.exe /r /t 5
+            Suspend-Workflow -Label 'Waiting for reboot'
         }
 
-        # Delete any pre-existing workflows with the same name before starting a new one.
-        Remove-Job -Name DSInternals-RFM-Workflow -Force -ErrorAction SilentlyContinue
+        if ((Get-Service NTDS -ErrorAction SilentlyContinue) -eq $null)
+        {
+            # A DC promotion is required.
+            # Note: In order to maintain compatibility with Windows Server 2008 R2, the ADDSDeployment module is not used.
+            # Advice: It is recommenced to change the DSRM password after DC promotion.
+            dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:"adatum.com" /DomainNetBiosName:"ADATUM" /DomainLevel:7 /ForestLevel:7 '/SafeModeAdminPassword:"Pa$$w0rd"' /DatabasePath:"$env:SYSTEMROOT\NTDS" /LogPath:"$env:SYSTEMROOT\NTDS" /SysVolPath:"$env:SYSTEMROOT\SYSVOL" /AllowDomainReinstall:Yes /CreateDNSDelegation:No /DNSOnNetwork:No /InstallDNS:Yes /RebootOnCompletion:No
+            Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\10 -Name ConfigurationStatus -Value 2 -Force
 
-        # Start the workflow.
-        Restore-DomainController -JobName DSInternals-RFM-Workflow
+            &lt;# Alternative approach for Winows Server 2012+
+            Install-WindowsFeature -Name AD-Domain-Services
+            Install-ADDSForest -DomainName 'adatum.com' `
+                               -DomainNetbiosName 'ADATUM' `
+                               -ForestMode WinThreshold `
+                               -DomainMode WinThreshold `
+                               -DatabasePath "$env:SYSTEMROOT\NTDS" `
+                               -LogPath "$env:SYSTEMROOT\NTDS" `
+                               -SysvolPath "$env:SYSTEMROOT\SYSVOL" `
+                               -InstallDns `
+                               -CreateDnsDelegation:$false `
+                               -NoDnsOnNetwork `
+                               -SafeModeAdministratorPassword (ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force)`
+                               -NoRebootOnCompletion `
+                               -Force
+            #&gt;
+        }
+
+        # Reboot the computer into the Directory Services Restore Mode.
+        bcdedit.exe /set safeboot dsrepair 
+        shutdown.exe /r /t 5
+        Suspend-Workflow -Label 'Waiting for reboot'
+
+        # Re-encrypt the DB with the new boot key.
+        $currentBootKey = Get-BootKey -Online
+        Set-ADDBBootKey -DBPath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -OldBootKey 610bc29e6f62ca7004e9872cd51a0116 -NewBootKey $currentBootKey
+
+        # Clone the DC account password.
+        $ntdsParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
+        InlineScript {
+            # Note: SupplementalCredentials do not get serialized properly without using the InlineScript activity.
+            $dcAccount = Get-ADDBAccount -SamAccountName 'LON-DC1$' -DBPath $using:ntdsParams.'DSA Database file' -LogPath $using:ntdsParams.'Database log files path' -BootKey $using:currentBootKey
+            Set-ADDBAccountPasswordHash -ObjectGuid 9bb4d6f4-060a-4585-9f18-625774e7c088 -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DBPath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -BootKey $using:currentBootKey
+        }
+
+        # Replace the database and transaction logs.
+        robocopy.exe 'C:\Backup\Active Directory' $ntdsParams.'DSA Working Directory' *.dit *.edb *.chk *.jfm /MIR /NP /NDL /NJS
+        robocopy.exe 'C:\Backup\Active Directory' $ntdsParams.'Database log files path' *.log *.jrs /MIR /NP /NDL /NJS
+
+        # Replace SYSVOL.
+        robocopy.exe 'C:\Backup\SYSVOL\Adatum.com' "$env:SYSTEMROOT\SYSVOL\domain" /MIR /XD DfsrPrivate /XJ /COPYALL /SECFIX /TIMFIX /NP /NDL
+
+        # Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
+        Set-LsaPolicyInformation -DomainName 'ADATUM' -DnsDomainName 'Adatum.com' -DnsForestName 'Adatum.com' -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 -DomainSid S-1-5-21-1817670852-3242289776-1304069626
+
+        # Tell the DC that its DB has intentionally been restored. A new InvocationID will be generated as soon as the service starts.
+        Set-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'Database restored from backup' -Value 1 -Force
+        Remove-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters -Name 'DSA Database Epoch' -Force
+
+        # Disable DSRM and do one last reboot.
+        bcdedit.exe /deletevalue safeboot
+        shutdown.exe /r /t 5
+        Suspend-Workflow -Label 'Waiting for reboot'
+
+        # Reconfigure SYSVOL replication in case it has been restored to a different path.
+
+        # Update DFS-R subscription if present in AD.
+        $dfsrSubscriptionDN = 'CN=SYSVOL Subscription,CN=Domain System Volume,CN=DFSR-LocalSettings,CN=LON-DC1,OU=Domain Controllers,DC=Adatum,DC=com'
+        $dfsrSubscription = Set-ADObject -Identity $dfsrSubscriptionDN -Server localhost -PassThru -ErrorAction SilentlyContinue -Replace @{
+            'msDFSR-RootPath' = "$env:SYSTEMROOT\SYSVOL\domain";
+            'msDFSR-StagingPath' = "$env:SYSTEMROOT\SYSVOL\staging areas\Adatum.com"
+        }
+
+        if($dfsrSubscription -ne $null)
+        {
+            # Download the updated DFS-R configuration from AD.
+            Invoke-WmiMethod -Class DfsrConfig -Name PollDsNow -ArgumentList localhost -Namespace ROOT\MicrosoftDfs
+        }
+
+        # Update FRS subscription if present in AD.
+        $frsSubscriptionDN = 'CN=Domain System Volume (SYSVOL share),CN=NTFRS Subscriptions,CN=LON-DC1,OU=Domain Controllers,DC=Adatum,DC=com'
+        $frsSubscription = Set-ADObject -Identity $frsSubscriptionDN -Server localhost -PassThru -ErrorAction SilentlyContinue -Replace @{
+            'fRSRootPath' = "$env:SYSTEMROOT\SYSVOL\domain";
+            'fRSStagingPath' = "$env:SYSTEMROOT\SYSVOL\staging\domain"
+        }
+
+        if($frsSubscription -ne $null)
+        {
+            # Download the updated FRS configuration from AD.
+            InlineScript { ntfrsutl.exe poll /now }
+        }
+    }
+
+    # Delete any pre-existing workflows with the same name before starting a new one.
+    Remove-Job -Name DSInternals-RFM-Workflow -Force -ErrorAction SilentlyContinue
+
+    # Start the workflow.
+    Restore-DomainController -JobName DSInternals-RFM-Workflow
 }
 
+# The DSInternals-RFM-Resumer job will be executed after each reboot to unpause the workflow.
 $resumeTask = Register-ScheduledJob -Name DSInternals-RFM-Resumer -Trigger (New-JobTrigger -AtStartup) -ScriptBlock {
-        # Resume the workflow after the computer is rebooted.
-        Resume-Job -Name DSInternals-RFM-Workflow -Wait | Wait-Job | where State -In Completed,Failed,Stopped | foreach {
-                # Perform cleanup when finished.
-                Remove-Job -Job $PSItem -Force
-                Unregister-ScheduledJob -Name DSInternals-RFM-Initializer -Force
-                Unregister-ScheduledJob -Name DSInternals-RFM-Resumer -Force
-        }
+    # Unregister the one-time task that must already have been executed.
+    Unregister-ScheduledJob -Name DSInternals-RFM-Initializer -Force -ErrorAction SilentlyContinue
+
+    # Resume the workflow after the computer is rebooted.
+    Resume-Job -Name DSInternals-RFM-Workflow -Wait | Wait-Job | where State -In Completed,Failed,Stopped | foreach {
+        # Perform cleanup when finished.
+        Remove-Job -Job $PSItem -Force
+        Unregister-ScheduledJob -Name DSInternals-RFM-Resumer -Force
+    }
 }
 
 # Configure the scheduled tasks to run under the SYSTEM account.

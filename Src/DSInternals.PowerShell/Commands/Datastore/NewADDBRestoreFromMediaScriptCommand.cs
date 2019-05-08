@@ -74,7 +74,7 @@
             if (this.SysvolPath == null)
             {
                 // Presume that the database is part of an IFM backup:
-                this.SysvolPath = Path.Combine(this.DirectoryContext.DSAWorkingDirectory, DefaultSysvolPath, dc.DomainName);
+                this.SysvolPath = Path.Combine(this.DirectoryContext.DSAWorkingDirectory, DefaultSysvolPath);
             }
 
             // TODO: Check that the DC is a GC

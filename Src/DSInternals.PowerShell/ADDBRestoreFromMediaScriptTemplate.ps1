@@ -18,7 +18,7 @@ $vssResult = ([wmiclass] 'Win32_ShadowCopy').Create("$env:SystemDrive\", 'Client
 
 # The PS module must be present as workflows cannot contain non-existing activities.
 Write-Host 'Installing the Active Directory module for Windows PowerShell...'
-Install-WindowsFeature -Name RSAT-AD-PowerShell -ErrorAction Stop 
+Add-WindowsFeature -Name RSAT-AD-PowerShell -ErrorAction Stop 
 
 # All the other operations will be executed by a restartable workflow running in SYSTEM context.
 Write-Host 'Registering restartable workflows...'
@@ -88,7 +88,7 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
         robocopy.exe '{SourceLogDirPath}' $ntdsParams.'Database log files path' *.log *.jrs /MIR /NP /NDL /NJS
 
         # Replace SYSVOL.
-        robocopy.exe '{SourceSysvolPath}' "{TargetSysvolPath}\domain" /MIR /XD DfsrPrivate /XJ /COPYALL /DCOPY:DAT /SECFIX /TIMFIX /NP /NDL
+        robocopy.exe '{SourceSysvolPath}\{DomainName}' "{TargetSysvolPath}\domain" /MIR /XD DfsrPrivate /XJ /COPYALL /SECFIX /TIMFIX /NP /NDL
 
         # Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
         Set-LsaPolicyInformation -DomainName '{NetBIOSDomainName}' -DnsDomainName '{DomainName}' -DnsForestName '{ForestName}' -DomainGuid {DomainGuid} -DomainSid {DomainSid}
@@ -103,15 +103,32 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
         Suspend-Workflow -Label 'Waiting for reboot'
 
         # Reconfigure SYSVOL replication in case it has been restored to a different path.
-        # Note: This will fail if the domain is still using FRS instead of DFS-R.
-        $dfsrSubscription = 'CN=SYSVOL Subscription,CN=Domain System Volume,CN=DFSR-LocalSettings,{DCDistinguishedName}'
-        Set-ADObject -Identity $dfsrSubscription -Server localhost -Replace @{
+
+        # Update DFS-R subscription if present in AD.
+        $dfsrSubscriptionDN = 'CN=SYSVOL Subscription,CN=Domain System Volume,CN=DFSR-LocalSettings,{DCDistinguishedName}'
+        $dfsrSubscription = Set-ADObject -Identity $dfsrSubscriptionDN -Server localhost -PassThru -ErrorAction SilentlyContinue -Replace @{
             'msDFSR-RootPath' = "{TargetSysvolPath}\domain";
             'msDFSR-StagingPath' = "{TargetSysvolPath}\staging areas\{DomainName}"
         }
 
-        # Download the updated DFS-R configuration from AD.
-        Invoke-WmiMethod -Class DfsrConfig -Name PollDsNow -ArgumentList localhost -Namespace ROOT\MicrosoftDfs
+        if($dfsrSubscription -ne $null)
+        {
+            # Download the updated DFS-R configuration from AD.
+            Invoke-WmiMethod -Class DfsrConfig -Name PollDsNow -ArgumentList localhost -Namespace ROOT\MicrosoftDfs
+        }
+
+        # Update FRS subscription if present in AD.
+        $frsSubscriptionDN = 'CN=Domain System Volume (SYSVOL share),CN=NTFRS Subscriptions,{DCDistinguishedName}'
+        $frsSubscription = Set-ADObject -Identity $frsSubscriptionDN -Server localhost -PassThru -ErrorAction SilentlyContinue -Replace @{
+            'fRSRootPath' = "{TargetSysvolPath}\domain";
+            'fRSStagingPath' = "{TargetSysvolPath}\staging\domain"
+        }
+
+        if($frsSubscription -ne $null)
+        {
+            # Download the updated FRS configuration from AD.
+            InlineScript { ntfrsutl.exe poll /now }
+        }
     }
 
     # Delete any pre-existing workflows with the same name before starting a new one.
