@@ -3,7 +3,7 @@
 Restores the {DCName} domain controller from ntds.dit.
 
 .REMARKS
-This script should only be executed on a freshly installed {OSName}. Use at your own risk
+This script should only be executed on a freshly installed {OSName}. Use at your own risk.
 The DSInternals PowerShell module must be installed for all users on the target server.
 
 

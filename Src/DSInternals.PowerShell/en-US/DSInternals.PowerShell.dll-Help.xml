@@ -4810,7 +4810,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
 Restores the LON-DC1 domain controller from ntds.dit.
 
 .REMARKS
-This script should only be executed on a freshly installed Windows Server 2012 R2 Datacenter Evaluation. Use at your own risk
+This script should only be executed on a freshly installed Windows Server 2012 R2 Datacenter Evaluation. Use at your own risk.
 The DSInternals PowerShell module must be installed for all users on the target server.
 
 
