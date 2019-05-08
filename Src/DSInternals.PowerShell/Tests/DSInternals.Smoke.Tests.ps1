@@ -6,14 +6,19 @@ param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $MarkdownDocumentationPath
+    $MarkdownDocumentationPath,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $ChocolateySpecPath
 )
 
 Describe 'DSInternals PowerShell Module' {
 
-    Context 'Manifest' {
+    $moduleManifestPath = Join-Path $ModulePath DSInternals.psd1
 
-        $moduleManifestPath = Join-Path $ModulePath DSInternals.psd1
+    Context 'Manifest' {
 
         It 'exists' {
             $moduleManifestPath | Should -Exist
@@ -88,42 +93,36 @@ Describe 'DSInternals PowerShell Module' {
 
     Context 'Assemblies' {
 
-        It 'should have strong names' {
-            Get-ChildItem $ModulePath -Recurse -Filter *.dll | foreach {
-                try
-                {
-                    $assemblyName = [System.Reflection.AssemblyName]::GetAssemblyName($PSItem.FullName)
-                    $isSigned = $assemblyName.Flags.HasFlag([System.Reflection.AssemblyNameFlags]::PublicKey)
-                    if(-not $isSigned)
-                    {
-                        throw "The assembly $PSItem does not have a strong name."
-                    }
-                }
-                catch [System.BadImageFormatException]
-                {
-                    # The DLL file is not a .NET assembly. We can ignore this error, because it is probably the Visual C++ Runtime. 
-                }
-            }
+        $assemblies = Get-ChildItem $ModulePath -Recurse -Filter *.dll | 
+            where Name -NotLike msvcp* |
+            where Name -NotLike msvcr* |
+            where Name -NotLike vcruntime* |
+            foreach { @{ Assembly = $PSItem } }
+
+        $ownedAssemblies = $assemblies | where { $PSItem.Assembly.Name -like 'DSInternals.*.dll' }
+
+        It '<Assembly> has a strong name' -TestCases $assemblies -Test {
+            param($Assembly)
+            $assemblyName = [System.Reflection.AssemblyName]::GetAssemblyName($Assembly.FullName)
+            $assemblyName.Flags.HasFlag([System.Reflection.AssemblyNameFlags]::PublicKey) | Should -Be $true
         }
 
-        It 'should have file details' {
-             Get-ChildItem $ModulePath -Recurse -Filter DSInternals.*.dll |
-                where { $PSItem.VersionInfo.ProductName -eq $null } |
-                Should -BeNull
+        It '<Assembly> has file details' -TestCases $ownedAssemblies -Test {
+            param($Assembly)
+            $Assembly.VersionInfo.ProductName | Should -Not -BeNullOrEmpty
         }
 
-        It 'have up-to-date copyright information' {
-            $expectedInfo = '*© 2015-{0}*' -f (Get-Date).Year
-             Get-ChildItem $ModulePath -Recurse -Filter DSInternals.*.dll |
-                where { $PSItem.VersionInfo.LegalCopyright -notlike $expectedInfo } |
-                Should -BeNull
+        $expectedCopyrightInfo = '*© 2015-{0}*' -f (Get-Date).Year
+
+        It '<Assembly> has up-to-date copyright information' -TestCases $ownedAssemblies -Test {
+            param($Assembly)
+            $Assembly.VersionInfo.LegalCopyright | Should -BeLike $expectedCopyrightInfo
         }
     }
 
     if(-not [string]::IsNullOrEmpty($MarkdownDocumentationPath)) {
         Context 'Markdown Documentation' {
             # Get the module manifest
-            $moduleManifestPath = Join-Path $ModulePath DSInternals.psd1
             $manifest =  Import-PowerShellDataFile -Path $moduleManifestPath
 
             It 'CHANGELOG should be up-to-date' {
@@ -174,6 +173,47 @@ Describe 'DSInternals PowerShell Module' {
                 # Remove markdown links before searching
                 $modulePage | foreach { $PSItem -replace '\[([a-zA-Z\-]+)\]\(([([a-zA-Z\-]+)\.md\)','$1' } |
                     where { $PSItem -ceq $Description } | Should -HaveCount 1
+            }
+        }
+    }
+
+    if(-not [string]::IsNullOrEmpty($ChocolateySpecPath)) {
+        Context 'Chocolatey Package' {
+
+            # Get the module manifest
+            $manifest =  Import-PowerShellDataFile -Path $moduleManifestPath
+
+            # Get the Chocolatey package specification
+            $chocolateySpec = [xml] (Get-Content -Path $ChocolateySpecPath)
+
+            # Now compare the shared values
+
+            It 'has the same version as the module' {
+                $chocolateySpec.package.metadata.version | Should Be $manifest.ModuleVersion
+            }
+
+            It 'has the same release notes as the module' {
+                $chocolateySpec.package.metadata.releaseNotes.Replace("`r`n","`n").Trim() | Should Be $manifest.PrivateData.PSData.ReleaseNotes.Replace("`r`n","`n").Trim()
+            }
+
+            It 'has the same copyright info as the module' {
+                $chocolateySpec.package.metadata.copyright | Should Be $manifest.Copyright
+            }
+
+            It 'has the same icon as the module' {
+                $chocolateySpec.package.metadata.iconUrl | Should Be $manifest.PrivateData.PSData.IconUri
+            }
+
+            It 'has the same license as the module' {
+                $chocolateySpec.package.metadata.licenseUrl | Should Be $manifest.PrivateData.PSData.LicenseUri
+            }
+
+            It 'has the same project URI the module' {
+                $chocolateySpec.package.metadata.projectUrl | Should Be $manifest.PrivateData.PSData.ProjectUri
+            }
+
+            It 'has the same author as the module' {
+                $chocolateySpec.package.metadata.authors | Should Be $manifest.Author
             }
         }
     }
@@ -253,4 +293,7 @@ Describe 'Powershell Cmdlets' {
             (Get-LsaPolicyInformation).LocalDomain.Name | Should -Be $env:COMPUTERNAME
         }
     }
+
+    # Unload the module. The assemblies might stay loaded.
+    Remove-Module -Name DSInternals -Force
 }
