@@ -4,7 +4,7 @@ Generates a Chocolatey package. Requires Chocolatey to be installed.
 #>
 #Requires -Version 5
 
-$repoRoot = Join-Path $PSScriptRoot '..\'
+$repoRoot = Join-Path $PSScriptRoot '..\' -Resolve
 $nuspecPath = Join-Path $repoRoot 'Src\DSInternals.PowerShell.Chocolatey\DSInternals.nuspec'
 $outputDir = Join-Path  $repoRoot 'Build\packages\Chocolatey'
 $moduleDir = Join-Path $repoRoot 'Build\bin\Release\DSInternals'
@@ -15,11 +15,11 @@ $catalogIsValid = (Test-Path -Path $catalogPath) -and
                   (Test-FileCatalog -CatalogFilePath $catalogPath -Path $moduleDir) -eq [System.Management.Automation.CatalogValidationStatus]::Valid
 if(-not $catalogIsValid)
 {
-    New-FileCatalog -CatalogFilePath $catalogPath -Path $moduleDir -CatalogVersion 1.0 -ErrorAction Stop | Out-Null
+    New-FileCatalog -CatalogFilePath $catalogPath -Path $moduleDir -CatalogVersion 1.0 -ErrorAction Stop
 } 
 
 # Create target folder
-mkdir $outputDir -Force | Out-Null
+mkdir $outputDir -Force
 
 # Pack using Chocolatey
-choco pack $nuspecPath --outputdirectory $outputDir
+choco pack $nuspecPath --outputdirectory $outputDir --timeout 60 --confirm --verbose
