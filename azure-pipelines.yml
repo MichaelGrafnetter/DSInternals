@@ -109,17 +109,17 @@ jobs:
         configuration: '$(buildConfiguration)'
         restoreNugetPackages: false
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Raw PowerShell Module'
-      inputs:
-        pathtoPublish: 'Build/bin/Release/DSInternals'
-        artifactName: 'DSInternals' 
-
     - task: PowerShell@2
-      displayName: 'Pack PowerShell Module'
+      displayName: 'ZIP Pack (PowerShell Module)'
       inputs:
         targetType: 'filePath'
         filePath: 'Scripts/Pack-PSModule.ps1'
+
+    - task: PowerShell@2
+      displayName: 'Chocolatey Pack (PowerShell Module)'
+      inputs:
+        targetType: 'filePath'
+        filePath: 'Scripts/Pack-Chocolatey.ps1'
 
     - task: NuGetCommand@2
       displayName: 'NuGet Pack (DSInternals.Common)'
@@ -127,7 +127,7 @@ jobs:
         command: 'pack'
         packagesToPack: '**/DSInternals.Common.csproj'
         configuration: '$(BuildConfiguration)'
-        packDestination: '$(packagesFolder)'
+        packDestination: '$(packagesFolder)/NuGet'
         includeReferencedProjects: true
         verbosityPack: 'detailed'
 
@@ -137,7 +137,7 @@ jobs:
         command: 'pack'
         packagesToPack: '**/DSInternals.DataStore.csproj'
         configuration: '$(BuildConfiguration)'
-        packDestination: '$(packagesFolder)'
+        packDestination: '$(packagesFolder)/NuGet'
         includeReferencedProjects: true
         verbosityPack: 'detailed'
 
@@ -147,7 +147,7 @@ jobs:
         command: 'pack'
         packagesToPack: '**/DSInternals.Replication.csproj'
         configuration: '$(BuildConfiguration)'
-        packDestination: '$(packagesFolder)'
+        packDestination: '$(packagesFolder)/NuGet'
         includeReferencedProjects: true
         verbosityPack: 'detailed'
 
@@ -157,15 +157,27 @@ jobs:
         command: 'pack'
         packagesToPack: '**/DSInternals.SAM.csproj'
         configuration: '$(BuildConfiguration)'
-        packDestination: '$(packagesFolder)'
+        packDestination: '$(packagesFolder)/NuGet'
         includeReferencedProjects: true
         verbosityPack: 'detailed'
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish NuGet Packages'
       inputs:
-        pathtoPublish: '$(packagesFolder)'
+        pathtoPublish: '$(packagesFolder)/NuGet'
         artifactName: 'NuGet' 
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Chocolatey Package'
+      inputs:
+        pathtoPublish: '$(packagesFolder)/Chocolatey'
+        artifactName: 'Chocolatey' 
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish GitHub Package'
+      inputs:
+        pathtoPublish: '$(packagesFolder)/Module'
+        artifactName: 'GitHub' 
 
     - task: PowerShell@2
       displayName: 'Run Smoke Tests'
