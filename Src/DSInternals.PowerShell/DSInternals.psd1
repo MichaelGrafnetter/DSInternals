@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.4'
+ModuleVersion = '3.5'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -122,8 +122,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The performance of the Test-PasswordQuality cmdlet had significantly been increased, expecially when used with HaveIBeenPwned.
-- The PWDump export format is now more compatible with some 3rd party tools, e.g. ElcomSoft Distributed Password Recovery.
+- Added new and improved existing password hash export formats.
+- Windows Server 2008 R2 and FRS replication are now fully supported by the New-ADDBRestoreFromMediaScript cmdlet.
 "@
     } # End of PSData hashtable
 

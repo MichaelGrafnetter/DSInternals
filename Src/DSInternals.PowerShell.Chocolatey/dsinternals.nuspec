@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals</id>
-    <version>3.4</version>
+    <version>3.5</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell.Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -34,8 +34,8 @@
       &gt; DISCLAIMER: Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
     </description>
     <releaseNotes>
-- The performance of the Test-PasswordQuality cmdlet had significantly been increased, expecially when used with HaveIBeenPwned.
-- The PWDump export format is now more compatible with some 3rd party tools, e.g. ElcomSoft Distributed Password Recovery.
+- Added new and improved existing password hash export formats.
+- Windows Server 2008 R2 and FRS replication are now fully supported by the New-ADDBRestoreFromMediaScript cmdlet.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 or Windows Server 2012. -->

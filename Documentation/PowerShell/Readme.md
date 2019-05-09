@@ -93,12 +93,14 @@ The output of the [Get-ADDBAccount](Get-ADDBAccount.md) and [Get-ADReplAccount](
 - **HashcatNT** – NT hashes in Hashcat's format.
 - **HashcatLM** – LM hashes in Hashcat's format.
 - **HashcatNTHistory** – NT hashes, including historical ones, in Hashcat's format.
+- **HashcatLMHistory** – LM hashes, including historical ones, in Hashcat's format.
 
 ### John the Ripper
 
 - **JohnNT** – NT hashes in the format supported by John the Ripper.
 - **JohnLM** – LM hashes in the format supported by John the Ripper.
 - **JohnNTHistory** – NT hashes, including historical ones, in the format supported by John the Ripper.
+- **JohnLMHistory** – LM hashes, including historical ones, in the format supported by John the Ripper.
 
 ### Ophcrack
 
@@ -107,9 +109,23 @@ The output of the [Get-ADDBAccount](Get-ADDBAccount.md) and [Get-ADReplAccount](
 ### Other Formats
 
 - **PWDump** - NT and LM hashes in the pwdump format that is supported various password cracking tools, e.g. *ElcomSoft Distributed Password Recovery*, *rcracki-mt* or *John the Ripper*.
+- **PWDumpHistory** - NT and LM hashes, including historical ones, in the pwdump format.
 - **NTHash** - NT hashes only, without account names.
 - **LMHash** - LM hashes only, without account names.
 - **NTHashHistory** - NT hashes, including historical ones, without account names.
+- **LMHashHistory** - LM hashes, including historical ones, without account names.
+
+### Example 1
+
+```powershell
+Get-ADDBAccount -All -DBPath ntds.dit -BootKey $key | Format-Custom -View PwDump | Out-File -FilePath users.pwdump -Encoding ascii
+```
+
+### Example 2
+
+```powershell
+Get-ADReplAccount -All -NamingContext 'DC=adatum,DC=com' -Server LON-DC1 | Format-Custom -View JohnNT | Out-File -FilePath users.txt -Encoding ascii
+```
 
 ## Cmdlets for Password Hash Calculation
 
