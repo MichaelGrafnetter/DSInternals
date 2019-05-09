@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Configuration>
   <Controls>
     <Control>
@@ -21,7 +21,7 @@
   <ViewDefinitions>
     <View>
       <Name>JohnNT</Name>
-      <!-- Format: <username>:$NT:<hash>:<sid>:: -->
+      <!-- Format: <username>:$NT$<NT-hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -32,16 +32,11 @@
               <ExpressionBinding>
                 <PropertyName>SamAccountName</PropertyName>
               </ExpressionBinding>
-              <Text>:$NT:</Text>
+              <Text>:$NT$</Text>
               <ExpressionBinding>
                 <PropertyName>NTHash</PropertyName>
                 <CustomControlName>Hash</CustomControlName>
               </ExpressionBinding>
-              <Text>:</Text>
-              <ExpressionBinding>
-                <PropertyName>Sid</PropertyName>
-              </ExpressionBinding>
-              <Text>::</Text>
             </CustomItem>
           </CustomEntry>
         </CustomEntries>
@@ -49,7 +44,7 @@
     </View>
     <View>
       <Name>JohnNTHistory</Name>
-      <!-- Format: <username>:$NT:<hash>:<sid>:: -->
+      <!-- Format: <username>:$NT$<NT-hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -59,13 +54,15 @@
             <CustomItem>
               <ExpressionBinding>
                 <ScriptBlock>
-                  $records = [System.Collections.ArrayList]@()
-                  foreach($hash in $PSItem.NTHashHistory)
-                  {
-                  $record = '{0}:$NT:{1}:{2}::' -f $PSItem.SamAccountName, (ConvertTo-Hex $hash), $PSItem.Sid
-                  $position = $records.Add($record)
-                  }
-                  $records -join [Environment]::NewLine
+				  $records = [System.Collections.ArrayList]@()
+				  $record = '{0}:$NT${1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.NTHash)
+				  $position = $records.Add($record)
+				  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
+				  {
+					$record = '{0}_history{1}:$NT${2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.NTHashHistory[$i])
+					$position = $records.Add($record)
+				  }
+				  $records -join [Environment]::NewLine
                 </ScriptBlock>
                 <EnumerateCollection/>
               </ExpressionBinding>
@@ -76,7 +73,7 @@
     </View>
     <View>
       <Name>JohnLM</Name>
-      <!-- Format: <username>:<hash>:<sid>:: -->
+      <!-- Format: <username>:<LM-hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -92,11 +89,35 @@
                 <PropertyName>LMHash</PropertyName>
                 <CustomControlName>Hash</CustomControlName>
               </ExpressionBinding>
-              <Text>:</Text>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+	<View>
+      <Name>JohnLMHistory</Name>
+      <!-- Format: <username>:<LM-hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
               <ExpressionBinding>
-                <PropertyName>Sid</PropertyName>
+                <ScriptBlock>
+				  $records = [System.Collections.ArrayList]@()
+				  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.LMHash)
+				  $position = $records.Add($record)
+				  for($i=1; $i -lt $PSItem.LMHashHistory.Count; $i++)
+				  {
+					$record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.LMHashHistory[$i])
+					$position = $records.Add($record)
+				  }
+				  $records -join [Environment]::NewLine
+                </ScriptBlock>
+                <EnumerateCollection/>
               </ExpressionBinding>
-              <Text>::</Text>
             </CustomItem>
           </CustomEntry>
         </CustomEntries>
@@ -104,7 +125,7 @@
     </View>
     <View>
       <Name>Ophcrack</Name>
-      <!-- Format: <username>::<lmhash>:<nthash>:<sid>:: -->
+      <!-- Format: <username>::<LM-hash>:<NT-hash>:<sid>:: -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -137,7 +158,7 @@
     </View>
     <View>
       <Name>HashcatNT</Name>
-      <!-- Format: <username>:<hash> -->
+      <!-- Format: <username>:<NT-hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -160,7 +181,7 @@
     </View>
     <View>
       <Name>HashcatNTHistory</Name>
-      <!-- Format: <username>:<hash> -->
+      <!-- Format: <username>:<NT-hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -170,14 +191,15 @@
             <CustomItem>
               <ExpressionBinding>
                 <ScriptBlock>
-                  $historyNumber = 1
                   $records = [System.Collections.ArrayList]@()
-                  foreach($hash in $PSItem.NTHashHistory)
-                  {
-                  $record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, $historyNumber++, (ConvertTo-Hex $hash)
-                  $position = $records.Add($record)
-                  }
-                  $records -join [Environment]::NewLine
+				  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.NTHash)
+				  $position = $records.Add($record)
+				  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
+				  {
+					$record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.NTHashHistory[$i])
+					$position = $records.Add($record)
+				  }
+				  $records -join [Environment]::NewLine
                 </ScriptBlock>
                 <EnumerateCollection/>
               </ExpressionBinding>
@@ -188,7 +210,7 @@
     </View>
     <View>
       <Name>HashcatLM</Name>
-      <!-- Format: <username>:<hash> -->
+      <!-- Format: <username>:<LM-hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -209,9 +231,38 @@
         </CustomEntries>
       </CustomControl>
     </View>
+	<View>
+      <Name>HashcatLMHistory</Name>
+      <!-- Format: <username>:<LM-hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>
+                  $records = [System.Collections.ArrayList]@()
+				  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.LMHash)
+				  $position = $records.Add($record)
+				  for($i=1; $i -lt $PSItem.LMHashHistory.Count; $i++)
+				  {
+					$record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.LMHashHistory[$i])
+					$position = $records.Add($record)
+				  }
+				  $records -join [Environment]::NewLine
+                </ScriptBlock>
+                <EnumerateCollection/>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
     <View>
       <Name>NTHash</Name>
-      <!-- Format: <hash> -->
+      <!-- Format: <NT-hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -230,7 +281,7 @@
     </View>
     <View>
       <Name>NTHashHistory</Name>
-      <!-- Format: <hash> -->
+      <!-- Format: <NT-hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -241,14 +292,12 @@
               <ExpressionBinding>
                 <ScriptBlock>
                   $records = [System.Collections.ArrayList]@()
-				  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.NTHashHistory[0])
-				  $position = $records.Add($record)
-				  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
-				  {
-					$record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.NTHashHistory[$i])
-					$position = $records.Add($record)
-				  }
-				  $records -join [Environment]::NewLine
+                  foreach($hash in $PSItem.NTHashHistory)
+                  {
+                  $record = ConvertTo-Hex $hash
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
                 </ScriptBlock>
                 <EnumerateCollection/>
               </ExpressionBinding>
@@ -259,7 +308,7 @@
     </View>
     <View>
       <Name>LMHash</Name>
-      <!-- Format: <hash> -->
+      <!-- Format: <LM-hash> -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -276,9 +325,36 @@
         </CustomEntries>
       </CustomControl>
     </View>
+	<View>
+	  <Name>LMHashHistory</Name>
+      <!-- Format: <LM-hash> -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>
+                  $records = [System.Collections.ArrayList]@()
+                  foreach($hash in $PSItem.LMHashHistory)
+                  {
+                  $record = ConvertTo-Hex $hash
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
+                </ScriptBlock>
+                <EnumerateCollection/>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
     <View>
       <Name>PWDump</Name>
-      <!-- Format: <username>:<uid>:<LM-hash>:<NTLM-hash>:<comment>:<homedir>: -->
+      <!-- Format: <username>:<uid>:<LM-hash>:<NT-hash>:<comment>:<homedir>: -->
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
       </ViewSelectedBy>
@@ -300,7 +376,7 @@
                 <CustomControlName>Hash</CustomControlName>
               </ExpressionBinding>
               <ExpressionBinding>
-                <ScriptBlock>if($PSItem.LMHash -eq $null) { 'NO PASSWORD*********************' }</ScriptBlock>
+                <ScriptBlock>if($PSItem.LMHash -eq $null) { 'NO LM-HASH**********************' }</ScriptBlock>
               </ExpressionBinding>
               <Text>:</Text>
               <ExpressionBinding>
@@ -308,9 +384,52 @@
                 <CustomControlName>Hash</CustomControlName>
               </ExpressionBinding>
               <ExpressionBinding>
-                <ScriptBlock>if($PSItem.NTHash -eq $null) { 'NO PASSWORD*********************' }</ScriptBlock>
+                <ScriptBlock>if($PSItem.NTHash -eq $null) { 'NO NT-HASH**********************' }</ScriptBlock>
               </ExpressionBinding>
               <Text>:::</Text>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+	<View>
+      <Name>PWDumpHistory</Name>
+      <!-- Format: <username>:<uid>:<LM-hash>:<NT-hash>:<comment>:<homedir>: -->
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSAccount</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>
+                  $records = [System.Collections.ArrayList]@()
+				  
+				  $samAccountName = $PSItem.SamAccountName
+				  $rid = [DSInternals.Common.SecurityIdentifierExtensions]::GetRid($PSItem.Sid)
+				  if($PSItem.LMHash -eq $null -Or (ConvertTo-Hex $PSItem.LMHash) -eq 'aad3b435b51404eeaad3b435b51404ee') { $lmHash = 'NO LM-HASH**********************' }
+				  else { $lmHash = ConvertTo-Hex $PSItem.LMHash }
+				  if($PSItem.NTHash -eq $null) { $ntHash = 'NO NT-HASH**********************' }
+				  else { $ntHash = ConvertTo-Hex $PSItem.NTHash }
+				  
+				  $record = '{0}:{1}:{2}:{3}:::' -f $SamAccountName, $rid, $lmHash, $ntHash
+				  $position = $records.Add($record)
+				  
+				  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
+				  {
+					if($PSItem.LMHashHistory[$i] -eq $null -Or (ConvertTo-Hex $PSItem.LMHashHistory[$i]) -eq 'aad3b435b51404eeaad3b435b51404ee') { $lmHash = 'NO LM-HASH**********************' }
+					else { $lmHash = ConvertTo-Hex $PSItem.LMHashHistory[$i] }
+					if($PSItem.NTHashHistory[$i] -eq $null) { $ntHash = 'NO NT-HASH**********************' }
+					else { $ntHash = ConvertTo-Hex $PSItem.NTHashHistory[$i] }
+					
+					$record = '{0}_history{1}:{2}:{3}:{4}:::' -f $SamAccountName, ($i-1), $rid, $lmHash, $ntHash
+					$position = $records.Add($record)
+				  }
+				  $records -join [Environment]::NewLine
+                </ScriptBlock>
+                <EnumerateCollection/>
+              </ExpressionBinding>
             </CustomItem>
           </CustomEntry>
         </CustomEntries>
