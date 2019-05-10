@@ -5,7 +5,7 @@ Generates a Chocolatey package. Requires Chocolatey to be installed.
 #Requires -Version 5
 
 $repoRoot = Join-Path $PSScriptRoot '..\' -Resolve
-$nuspecPath = Join-Path $repoRoot 'Src\DSInternals.PowerShell.Chocolatey\DSInternals.nuspec'
+$nuspecPath = Join-Path $repoRoot 'Src\DSInternals.PowerShell\Chocolatey\*.nuspec' -Resolve
 $outputDir = Join-Path  $repoRoot 'Build\packages\Chocolatey'
 $moduleDir = Join-Path $repoRoot 'Build\bin\Release\DSInternals'
 

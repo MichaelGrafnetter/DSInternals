@@ -115,18 +115,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\Test-PasswordQuality.md = ..\Documentation\PowerShell\Test-PasswordQuality.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DSInternals.PowerShell.Chocolatey", "DSInternals.PowerShell.Chocolatey", "{DA5C8A2B-710B-417A-B646-A512C3B90801}"
-	ProjectSection(SolutionItems) = preProject
-		DSInternals.PowerShell.Chocolatey\dsinternals.nuspec = DSInternals.PowerShell.Chocolatey\dsinternals.nuspec
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{AFB60B81-6978-434C-9224-C7A63960A6A1}"
-	ProjectSection(SolutionItems) = preProject
-		DSInternals.PowerShell.Chocolatey\tools\chocolateyinstall.ps1 = DSInternals.PowerShell.Chocolatey\tools\chocolateyinstall.ps1
-		DSInternals.PowerShell.Chocolatey\tools\chocolateyuninstall.ps1 = DSInternals.PowerShell.Chocolatey\tools\chocolateyuninstall.ps1
-		DSInternals.PowerShell.Chocolatey\tools\VERIFICATION.txt = DSInternals.PowerShell.Chocolatey\tools\VERIFICATION.txt
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -237,7 +225,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A47D652E-5EF7-44C0-AD85-4F0F9B738567} = {9735D030-AEE6-415A-BF03-074076FF776A}
-		{AFB60B81-6978-434C-9224-C7A63960A6A1} = {DA5C8A2B-710B-417A-B646-A512C3B90801}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20AC2CF5-7C26-407B-B0A5-1BDE0FABABA8}

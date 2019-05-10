@@ -1,9 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [3.5] - 2019-05-10
 
 ### Added
+- Official [Chocolatey Package](https://chocolatey.org/packages/dsinternals-psmodule)
 - New password hash export formats: [JohnLMHistory](PowerShell/Readme.md#john-the-ripper), [HashcatLMHistory](PowerShell/Readme.md#hashcat), [PWDumpHistory](PowerShell/Readme.md#other-formats) and [LMHashHistory](PowerShell/Readme.md#other-formats).
 
 ### Changed
@@ -295,7 +296,8 @@ All notable changes to this project will be documented in this file. The format 
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.4...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.5...HEAD
+[3.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.4...v3.5
 [3.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.3...v3.4
 [3.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.2.1...v3.3
 [3.2.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.2...v3.2.1

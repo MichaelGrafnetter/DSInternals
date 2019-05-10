@@ -9,7 +9,7 @@ $pesterModulePath = Join-Path $root Src\packages\Pester*\tools\Pester.psd1 -Reso
 $testsPath = Join-Path $root Src\DSInternals.PowerShell\Tests\
 $resultsPath = Join-Path $root 'TestResults'
 $docPath = Join-Path $root 'Documentation'
-$nuspecPath = Join-Path $root 'Src\DSInternals.PowerShell.Chocolatey\DSInternals.nuspec'
+$nuspecPath = Join-Path $root 'Src\DSInternals.PowerShell\Chocolatey\*.nuspec' -Resolve
 
 # Create output dir if it does not exist
 New-Item $resultsPath -ItemType Directory -Force | Out-Null

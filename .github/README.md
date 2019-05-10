@@ -42,9 +42,11 @@ Several people who use DSInternals during AD security audits have asked to donat
 </p>
 
 ## Downloads
-[![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/DSInternals.svg?label=PowerShell%20Gallery%20Downloads)](https://www.powershellgallery.com/packages/DSInternals/)
-[![NuGet Gallery Downloads](https://img.shields.io/nuget/dt/DSInternals.Common.svg?label=NuGet%20Gallery%20Downloads)](https://www.nuget.org/profiles/MichaelGrafnetter)
-[![GitHub Downloads](https://img.shields.io/github/downloads/MichaelGrafnetter/DSInternals/total.svg?label=GitHub%20Downloads)](https://github.com/MichaelGrafnetter/DSInternals/releases)
+
+[![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/DSInternals.svg?label=PowerShell%20Gallery%20Downloads&logo=PowerShell)](https://www.powershellgallery.com/packages/DSInternals/)
+[![Chocolatey Downloads](https://img.shields.io/chocolatey/dt/dsinternals-psmodule.svg?label=Chocolatey%20Downloads&logo=NuGet)](https://chocolatey.org/packages/dsinternals-psmodule)
+[![GitHub Downloads](https://img.shields.io/github/downloads/MichaelGrafnetter/DSInternals/total.svg?label=GitHub%20Downloads&logo=GitHub)](https://github.com/MichaelGrafnetter/DSInternals/releases)
+[![NuGet Gallery Downloads](https://img.shields.io/nuget/dt/DSInternals.Common.svg?label=NuGet%20Gallery%20Downloads&logo=NuGet)](https://www.nuget.org/profiles/MichaelGrafnetter)
 
 ### PowerShell Gallery (PowerShell 5+)
 
@@ -54,6 +56,16 @@ Since PowerShell 5, you can install the DSInternals module directly from the off
 Install-Module DSInternals -Force
 ```
 
+### Chocolatey Package
+
+You can install the official [Chocolatey package](https://chocolatey.org/packages/dsinternals-psmodule) using the following Chocolatey command:
+
+```bat
+choco install dsinternals-psmodule 
+```
+
+This package is self-contained and it will also install all dependencies.
+
 ### Offline Module Distribution (PowerShell 3+)
 
 1. Download the [current release](https://github.com/MichaelGrafnetter/DSInternals/releases) from GitHub.
@@ -62,8 +74,8 @@ Install-Module DSInternals -Force
 4. (Optional) If you copied the module to a different directory than advised in the previous step, you have to manually import it using the `Import-Module` cmdlet.
 
 ### Commando VM
-The DSInternals PowerShell module is part of FireEye's [Commando VM](https://github.com/fireeye/commando-vm), the Windows-based alternative to Kali Linux.
 
+The DSInternals PowerShell module is part of FireEye's [Commando VM](https://github.com/fireeye/commando-vm), the Windows-based alternative to Kali Linux.
 
 ### NuGet Packages
 
@@ -80,6 +92,7 @@ You can of course download the [source code](https://github.com/MichaelGrafnette
 ## Documentation
 
 ### Get-Help
+
 The online version of [PowerShell Get-Help documentation](../Documentation/PowerShell/Readme.md) contains the list of all cmdlets and some usage examples.
 
 ### Blog Posts

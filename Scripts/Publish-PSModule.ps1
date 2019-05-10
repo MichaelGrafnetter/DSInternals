@@ -21,4 +21,4 @@ $modulePath = Join-Path $rootDir 'Build\bin\Release\DSInternals'
 
 Publish-Module -Path $modulePath `
                -NuGetApiKey $apiKey `
-               -Repository PSGallery
+               -Repository PSGallery -Force

@@ -2,9 +2,9 @@
 <!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-    <id>DSInternals</id>
+    <id>DSInternals-PSModule</id>
     <version>3.5</version>
-    <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell.Chocolatey</packageSourceUrl>
+    <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
     <authors>Michael Grafnetter</authors>
@@ -45,8 +45,6 @@
       <!-- .NET Framework 4.5.1+. For RTM OS prior to Windows 8.1 and Windows Server 2012 R2. -->
       <dependency id="dotnet4.5.1" />
     </dependencies>
-    <conflicts>dsinternals-psmodule</conflicts>
-    <replaces>dsinternals-psmodule</replaces>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
