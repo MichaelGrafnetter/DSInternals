@@ -1,8 +1,8 @@
 # DSInternals PowerShell Module and Framework
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
-[![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg)](#)
-[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019-007bb8.svg)](#)
+[![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg?logo=PowerShell)](#)
+[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019-007bb8.svg?logo=Windows)](#)
 [![.NET Framework 4.5.1+](https://img.shields.io/badge/.NET%20Framework-4.5.1%2B-007FFF.svg)](#)
 
 ## Introduction
@@ -58,13 +58,13 @@ Install-Module DSInternals -Force
 
 ### Chocolatey Package
 
-You can install the official [Chocolatey package](https://chocolatey.org/packages/dsinternals-psmodule) using the following Chocolatey command:
+The DSInternals PowerShell Module can also be installed using the official [Chocolatey package](https://chocolatey.org/packages/dsinternals-psmodule) by executing the following Chocolatey command:
 
-```bat
+```powershell
 choco install dsinternals-psmodule 
 ```
 
-This package is self-contained and it will also install all dependencies.
+This package is self-contained and it will also install all dependencies. Note that package versions prior to 3.5 were not official.
 
 ### Offline Module Distribution (PowerShell 3+)
 
