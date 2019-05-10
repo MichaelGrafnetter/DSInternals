@@ -48,7 +48,7 @@
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
-    <file src="..\..\Build\bin\Release\DSInternals\**" target="DSInternals" />
-    <file src="..\..\Build\bin\Release\DSInternals.cat" target="tools\DSInternals.cat" />
+    <file src="..\..\..\Build\bin\Release\DSInternals\**" target="DSInternals" />
+    <file src="..\..\..\Build\bin\Release\DSInternals.cat" target="tools\DSInternals.cat" />
   </files>
 </package>
