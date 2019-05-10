@@ -25,9 +25,9 @@ The DSInternals project consists of these two parts:
 
 ### Michael Grafnetter
 
-[![Twitter](https://img.shields.io/twitter/follow/MGrafnetter.svg?label=@MGrafnetter&style=social)](https://twitter.com/MGrafnetter)
+[![Twitter](https://img.shields.io/twitter/follow/MGrafnetter.svg?label=Twitter%20@MGrafnetter&style=social)](https://twitter.com/MGrafnetter)
 [![Blog](https://img.shields.io/badge/Blog-www.dsinternals.com-2A6496.svg)](https://www.dsinternals.com/en)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-grafnetter-0077B5.svg)](https://www.linkedin.com/in/grafnetter)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-grafnetter-0077B5.svg?logo=LinkedIn)](https://www.linkedin.com/in/grafnetter)
 
 I have created these tools in my spare time and I am using them while performing AD security audits and also in my lectures to demonstrate how Active Directory works internally.
 
@@ -83,9 +83,9 @@ The easiest way of integrating the DSInternals functionality into .NET applicati
 
 ### Building from Source Code
 
-[![Visual Studio 2015 | 2017 | 2019](https://img.shields.io/badge/Visual%20Studio-2015%20|%202017%20|%202019-383278.svg)](#)
-[![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master)
-[![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results)](#)
+[![Visual Studio 2015 | 2017 | 2019](https://img.shields.io/badge/Visual%20Studio-2015%20|%202017%20|%202019-383278.svg?logo=Visual-Studio-Code)](CONTRIBUTING.md#building-from-source-code)
+[![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/DSInternals?branchName=master)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2&branchName=master)
+[![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results&logo=Azure-DevOps)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2&branchName=master)
 
 You can of course download the [source code](https://github.com/MichaelGrafnetter/DSInternals/archive/master.zip), perform a review and compile the Module/Framework yourself. See the [CONTRIBUTING](CONTRIBUTING.md#building-from-source-code) guide for more info.
 
