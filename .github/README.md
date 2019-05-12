@@ -31,7 +31,7 @@ The DSInternals project consists of these two parts:
 
 I have created these tools in my spare time and I am using them while performing AD security audits and also in my lectures to demonstrate how Active Directory works internally.
 
-I would like to thank all people who have contributed to the project by [sending their feedback](https://github.com/MichaelGrafnetter/DSInternals/issues) or by [submitting their code](https://github.com/MichaelGrafnetter/DSInternals/graphs/contributors). In case you would also like to help with this project, please see the [CONTRIBUTING](CONTRIBUTING.md) document.
+I would like to thank all people who have contributed to the project by [sending their feedback](https://github.com/MichaelGrafnetter/DSInternals/issues) or by [submitting their code](https://github.com/MichaelGrafnetter/DSInternals/graphs/contributors). In case you would also like to help with this project, please see the [CONTRIBUTING](CONTRIBUTING.md#contributing-to-dsinternals) document.
 
 Several people who use DSInternals during AD security audits have asked to donate. I have therefore set up a PayPal account:
 
@@ -93,7 +93,7 @@ You can of course download the [source code](https://github.com/MichaelGrafnette
 
 ### Get-Help
 
-The online version of [PowerShell Get-Help documentation](../Documentation/PowerShell/Readme.md) contains the list of all cmdlets and some usage examples.
+The online version of [PowerShell Get-Help documentation](../Documentation/PowerShell/Readme.md#dsinternals-powershell-module) contains the list of all cmdlets and some usage examples.
 
 ### Blog Posts
 

@@ -16,5 +16,5 @@ $apiKeyPath = Join-Path $rootDir 'Keys\Chocolatey.key'
 $apiKey = Get-Content $apiKeyPath -ErrorAction Stop
 
 # Publish
-$packagePath = Join-Path $rootDir 'Build\packages\Chocolatey\DSInternals.*.nupkg' -Resolve -ErrorAction Stop
+$packagePath = Join-Path $rootDir 'Build\packages\Chocolatey\DSInternals-PSModule.*.nupkg' -Resolve -ErrorAction Stop
 choco push $packagePath --apikey $apiKey --source 'https://push.chocolatey.org/'

@@ -191,6 +191,11 @@ Describe 'DSInternals PowerShell Module' {
             # Get the Chocolatey package specification
             $chocolateySpec = [xml] (Get-Content -Path $ChocolateySpecPath)
 
+            It 'does not exceed the maximum Description length' {
+                # Package upload would fail otherwise
+                $chocolateySpec.package.metadata.description.Length | Should -BeLessOrEqual 4000
+            }
+
             # Now compare the shared values
 
             It 'has the same version as the module' {
