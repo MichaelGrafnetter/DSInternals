@@ -10,14 +10,14 @@
 The DSInternals project consists of these two parts:
 - The [DSInternals Framework](https://www.nuget.org/profiles/MichaelGrafnetter) exposes several internal features of *Active Directory* and can be used from any .NET application. The codebase has already been integrated into several 3<sup>rd</sup> party commercial products that use it in scenarios like Active Directory disaster recovery, identity management, cross-forest migrations and password strength auditing.
 - The [DSInternals PowerShell Module](https://www.powershellgallery.com/packages/DSInternals/) provides easy-to-use cmdlets that are built on top of the Framework. These are the main features:
-  - [Active Directory password auditing](../Documentation/PowerShell/Test-PasswordQuality.md) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
-  - [Bare-metal recovery of domain controllers](../Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md) from just IFM backups (ntds.dit + SYSVOL).
-  - Offline ntds.dit file manipulation, including [hash dumping](../Documentation/PowerShell/Get-ADDBAccount.md), [password resets](../Documentation/PowerShell/Set-ADDBAccountPassword.md), [group membership changes](../Documentation/PowerShell/Set-ADDBPrimaryGroup.md), [SID History injection](../Documentation/PowerShell/Add-ADDBSidHistory.md) and [enabling](../Documentation/PowerShell/Enable-ADDBAccount.md)/[disabling](../Documentation/PowerShell/Disable-ADDBAccount.md) accounts.
-  - [Online password hash dumping](../Documentation/PowerShell/Get-ADReplAccount.md) through the Directory Replication Service (DRS) Remote Protocol (MS-DRSR). This feature is commonly called DCSync.
-  - [Domain or local account password hash injection](../Documentation/PowerShell/Set-SamAccountPasswordHash.md) through the Security Account Manager (SAM) Remote Protocol (MS-SAMR) or [directly into the database](../Documentation/PowerShell/Set-ADDBAccountPasswordHash.md).
-  - [LSA Policy modification](../Documentation/PowerShell/Set-LsaPolicyInformation.md) through the Local Security Authority (Domain Policy) Remote Protocol (MS-LSAD / LSARPC).
-  - [Extracting credential roaming data](../Documentation/PowerShell/Save-DPAPIBlob.md) and DPAPI domain backup keys, either online through [directory replication](../Documentation/PowerShell/Get-ADReplBackupKey.md), [LSARPC](../Documentation/PowerShell/Get-LsaBackupKey.md) and [offline from ntds.dit](../Documentation/PowerShell/Get-ADDBBackupKey.md).
-  - Password hash calculation, including [NT hash](../Documentation/PowerShell/ConvertTo-NTHash.md), [LM hash](../Documentation/PowerShell/ConvertTo-LMHash.md) and [kerberos keys](../Documentation/PowerShell/ConvertTo-KerberosKey.md).
+  - [Active Directory password auditing](../Documentation/PowerShell/Test-PasswordQuality.md#test-passwordquality) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
+  - [Bare-metal recovery of domain controllers](../Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) from just IFM backups (ntds.dit + SYSVOL).
+  - Offline ntds.dit file manipulation, including [hash dumping](../Documentation/PowerShell/Get-ADDBAccount.md#get-addbaccount), [password resets](../Documentation/PowerShell/Set-ADDBAccountPassword.md#set-addbaccountpassword), [group membership changes](../Documentation/PowerShell/Set-ADDBPrimaryGroup.md#set-addbprimarygroup), [SID History injection](../Documentation/PowerShell/Add-ADDBSidHistory.md#add-addbsidhistory) and [enabling](../Documentation/PowerShell/Enable-ADDBAccount.md#enable-addbaccount)/[disabling](../Documentation/PowerShell/Disable-ADDBAccount.md#disable-addbaccount) accounts.
+  - [Online password hash dumping](../Documentation/PowerShell/Get-ADReplAccount.md#get-adreplaccount) through the Directory Replication Service (DRS) Remote Protocol (MS-DRSR). This feature is commonly called DCSync.
+  - [Domain or local account password hash injection](../Documentation/PowerShell/Set-SamAccountPasswordHash.md#set-samaccountpasswordhash) through the Security Account Manager (SAM) Remote Protocol (MS-SAMR) or [directly into the database](../Documentation/PowerShell/Set-ADDBAccountPasswordHash.md#set-addbaccountpasswordhash).
+  - [LSA Policy modification](../Documentation/PowerShell/Set-LsaPolicyInformation.md#set-lsapolicyinformation) through the Local Security Authority (Domain Policy) Remote Protocol (MS-LSAD / LSARPC).
+  - [Extracting credential roaming data](../Documentation/PowerShell/Save-DPAPIBlob.md#save-dpapiblob) and DPAPI domain backup keys, either online through [directory replication](../Documentation/PowerShell/Get-ADReplBackupKey.md#get-adreplbackupkey), [LSARPC](../Documentation/PowerShell/Get-LsaBackupKey.md#get-lsabackupkey) and [offline from ntds.dit](../Documentation/PowerShell/Get-ADDBBackupKey.md#get-addbbackupkey).
+  - Password hash calculation, including [NT hash](../Documentation/PowerShell/ConvertTo-NTHash.md#convertto-nthash), [LM hash](../Documentation/PowerShell/ConvertTo-LMHash.md#convertto-lmhash) and [kerberos keys](../Documentation/PowerShell/ConvertTo-KerberosKey.md#convertto-kerberoskey).
 
 > DISCLAIMER: Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
 
@@ -61,7 +61,7 @@ Install-Module DSInternals -Force
 The DSInternals PowerShell Module can also be installed using the official [Chocolatey package](https://chocolatey.org/packages/dsinternals-psmodule) by executing the following Chocolatey command:
 
 ```powershell
-choco install dsinternals-psmodule 
+choco install dsinternals-psmodule --confirm
 ```
 
 This package is self-contained and it will also install all dependencies. Note that package versions prior to 3.5 were not official.
