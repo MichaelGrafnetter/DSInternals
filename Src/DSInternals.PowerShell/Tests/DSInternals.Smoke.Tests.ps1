@@ -66,6 +66,10 @@ Describe 'DSInternals PowerShell Module' {
             Select-String -Path $aboutPagePath -Pattern 'about_DSInternals' -CaseSensitive -SimpleMatch -Quiet | Should Be $true
         }
 
+        It 'contains the License.txt file' {
+            Join-Path $ModulePath 'License.txt' | Should -Exist
+        }
+
         It 'contains Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' } -Test {
             param([string] $Platform)
 
@@ -164,14 +168,15 @@ Describe 'DSInternals PowerShell Module' {
             It 'contains the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {
                 param([string] $Cmdlet, [string] $Description)
                 
-                $modulePage | where { $PSItem -ceq "### [$Cmdlet]($Cmdlet.md)" } | Should -HaveCount 1
+                $cmdletLinkFormat = '### [{0}]({0}.md#{1})' -f $Cmdlet,$Cmdlet.ToLower()
+                $modulePage | where { $PSItem -ceq $cmdletLinkFormat } | Should -HaveCount 1
             }
 
             It 'contains proper description of the <Cmdlet> cmdlet' -TestCases $cmdlets -Test {
                 param([string] $Cmdlet, [string] $Description)
 
                 # Remove markdown links before searching
-                $modulePage | foreach { $PSItem -replace '\[([a-zA-Z\-]+)\]\(([([a-zA-Z\-]+)\.md\)','$1' } |
+                $modulePage | foreach { $PSItem -replace '\[([a-zA-Z\-]+)\]\(([([a-zA-Z\-]+)\.md#[a-z\-]+\)','$1' } |
                     where { $PSItem -ceq $Description } | Should -HaveCount 1
             }
         }
@@ -193,7 +198,7 @@ Describe 'DSInternals PowerShell Module' {
             }
 
             It 'has the same release notes as the module' {
-                $chocolateySpec.package.metadata.releaseNotes.Replace("`r`n","`n").Trim() | Should Be $manifest.PrivateData.PSData.ReleaseNotes.Replace("`r`n","`n").Trim()
+                $chocolateySpec.package.metadata.releaseNotes.Replace("`r`n","`n").Trim() | Should Be $manifest.PrivateData.PSData.ReleaseNotes.Replace("`r`n","`n").Replace('- ','* ').Trim()
             }
 
             It 'has the same copyright info as the module' {
