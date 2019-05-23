@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 3.5.1 - 2019-05-23
+
+This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-only release.
+
+### Fixed
+- Temporarily removed the package dependency on PowerShell 3, which caused some [issues](https://github.com/MichaelGrafnetter/DSInternals/issues/85). Will be resolved in a future release.
+
 ## [3.5] - 2019-05-10
 
 ### Added
