@@ -33,7 +33,7 @@
         private const byte DefaultReserved1Value = (byte)'1';
 
         /// <summary>
-        /// Calculates WDigest hashes of a password.
+        /// Calculates WDigest hashes of a password, as used by AD DS.
         /// </summary>
         /// <param name="password">User's password.</param>
         /// <param name="userPrincipalName">The userPrincipalName attribute value.</param>
@@ -47,11 +47,11 @@
             // Validate the input
             Validator.AssertNotNull(password, "password");
             Validator.AssertNotNullOrWhiteSpace(samAccountName, "samAccountName");
-            Validator.AssertNotNullOrWhiteSpace(netBiosDomainName, "netBiosDomainName");
-            Validator.AssertNotNullOrWhiteSpace(dnsDomainName, "dnsDomainName");
+            Validator.AssertNotNull(netBiosDomainName, "netBiosDomainName");
+            Validator.AssertNotNull(dnsDomainName, "dnsDomainName");
             
             // Note that a user does not need to have a UPN.
-            if(String.IsNullOrEmpty(userPrincipalName))
+            if(userPrincipalName == null)
             {
                 // Construct the UPN as samAccountName@dnsDomainName
                 userPrincipalName = String.Format(@"{0}@{1}", samAccountName, dnsDomainName);
@@ -153,6 +153,19 @@
                 result[28] = md5.ComputeHash(GetBytes(logonName.ToUpper(), MagicRealm, password));
             }
             return result;
+        }
+
+        /// <summary>
+        /// Calculates WDigest hashes of a password, as used by AD LDS.
+        /// </summary>
+        /// <param name="password">Account's password.</param>
+        /// <param name="accountDN">Distinguished name of the account.</param>
+        /// <param name="namingContext">Distinguished name of the account's naming context.</param>
+        /// <returns>29 MD5 hashes.</returns>
+        /// <remarks>SecureString is copied into managed memory while calculating the hashes, which is not the best way to deal with it.</remarks>
+        public static byte[][] ComputeHash(SecureString password, string accountDN, string namingContext)
+        {
+            return ComputeHash(password, String.Empty, accountDN, String.Empty, namingContext);
         }
 
         /// <summary>
