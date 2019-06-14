@@ -15,10 +15,10 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Add-ADDBSidHistory</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -42,7 +42,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -77,10 +77,10 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Add-ADDBSidHistory</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -92,7 +92,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -139,10 +139,10 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Add-ADDBSidHistory</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -154,7 +154,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -213,10 +213,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -228,7 +228,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -263,10 +263,10 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -290,7 +290,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1469,10 +1469,10 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Disable-ADDBAccount</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1496,7 +1496,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1519,10 +1519,10 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Disable-ADDBAccount</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1534,7 +1534,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1569,10 +1569,10 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Disable-ADDBAccount</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1584,7 +1584,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1631,10 +1631,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1646,7 +1646,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1669,10 +1669,10 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1696,7 +1696,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1834,10 +1834,10 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Enable-ADDBAccount</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1861,7 +1861,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1884,10 +1884,10 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Enable-ADDBAccount</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1899,7 +1899,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1934,10 +1934,10 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Enable-ADDBAccount</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1949,7 +1949,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1996,10 +1996,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2011,7 +2011,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2034,10 +2034,10 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2061,7 +2061,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2222,10 +2222,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2237,7 +2237,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2261,10 +2261,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2288,7 +2288,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2312,10 +2312,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2327,7 +2327,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2363,10 +2363,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2378,7 +2378,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2426,10 +2426,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2441,7 +2441,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2477,10 +2477,10 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2504,7 +2504,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2650,10 +2650,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2665,7 +2665,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2689,10 +2689,10 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2704,7 +2704,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2778,10 +2778,10 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-ADDBDomainController</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2793,7 +2793,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2805,10 +2805,10 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2820,7 +2820,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2886,10 +2886,10 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-ADDBKdsRootKey</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2901,7 +2901,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2913,10 +2913,10 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2928,7 +2928,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -3006,10 +3006,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3021,7 +3021,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3033,10 +3033,10 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -3048,7 +3048,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -4617,7 +4617,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       <maml:para>2. Verify that the PowerShell Script Execution Policy (https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-6)is set to RemoteSigned, Unrestricted or Bypass in the LocalMachine scope.</maml:para>
       <maml:para>3. Install (https://github.com/MichaelGrafnetter/DSInternals/wiki/Installation)the DSInternals PowerShell module for all users.</maml:para>
       <maml:para>4. Copy the backup data to a local drive, e.g. C:\Backup.</maml:para>
-      <maml:para>5. Run the `New-ADDBRestoreFromMediaScript -DBPath 'C:\Backup\Active Directory\ntds.dit' | Invoke-Expression` command.</maml:para>
+      <maml:para>5. Run the `New-ADDBRestoreFromMediaScript -DatabasePath 'C:\Backup\Active Directory\ntds.dit' | Invoke-Expression` command.</maml:para>
       <maml:para>6. Sit back and watch the magic happen. Up to 3 reboots will follow and the entire process may take up to 20 minutes to finish. You should then end up with a fully functional domain controller.</maml:para>
       <maml:para>The script that is generated by the `New-ADDBRestoreFromMediaScript` cmdlet does the following actions:</maml:para>
       <maml:para>- Rename the server to match the original domain controller.</maml:para>
@@ -4635,7 +4635,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>Specifies the system key that encrypts secrets stored in the database specified by the -DBPath parameter. If none is specified, it is automatically extracted from a backup of the SYSTEM registry hive, provided that it is present in the ..\registry\SYSTEM path relative to the -DBPath parameter.</maml:para>
+            <maml:para>Specifies the system key that encrypts secrets stored in the database specified by the -DatabasePath parameter. If none is specified, it is automatically extracted from a backup of the SYSTEM registry hive, provided that it is present in the ..\registry\SYSTEM path relative to the -DatabasePath parameter.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -4644,8 +4644,8 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
             <maml:para>Specifies a non-UNC path to the backup of domain database (ntds.dit file) that will be used to restore the domain controller.</maml:para>
           </maml:Description>
@@ -4659,7 +4659,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>Specifies a non-UNC path to a directory that contains the backup of domain log files. If not specified, the value of the DBPath parameter is used.</maml:para>
+            <maml:para>Specifies a non-UNC path to a directory that contains the backup of domain log files. If not specified, the value of the DatabasePath parameter is used.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -4683,7 +4683,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SysVol">
           <maml:name>SysvolPath</maml:name>
           <maml:Description>
-            <maml:para>Specifies a non-UNC path to a directory that contains the backup of Sysvol data. If none is specified, the ..\SYSVOL\ path relative to the -DBPath parameter is used.</maml:para>
+            <maml:para>Specifies a non-UNC path to a directory that contains the backup of Sysvol data. If none is specified, the ..\SYSVOL\ path relative to the -DatabasePath parameter is used.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -4698,7 +4698,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
         <maml:name>BootKey</maml:name>
         <maml:Description>
-          <maml:para>Specifies the system key that encrypts secrets stored in the database specified by the -DBPath parameter. If none is specified, it is automatically extracted from a backup of the SYSTEM registry hive, provided that it is present in the ..\registry\SYSTEM path relative to the -DBPath parameter.</maml:para>
+          <maml:para>Specifies the system key that encrypts secrets stored in the database specified by the -DatabasePath parameter. If none is specified, it is automatically extracted from a backup of the SYSTEM registry hive, provided that it is present in the ..\registry\SYSTEM path relative to the -DatabasePath parameter.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -4707,8 +4707,8 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
           <maml:para>Specifies a non-UNC path to the backup of domain database (ntds.dit file) that will be used to restore the domain controller.</maml:para>
         </maml:Description>
@@ -4722,7 +4722,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>Specifies a non-UNC path to a directory that contains the backup of domain log files. If not specified, the value of the DBPath parameter is used.</maml:para>
+          <maml:para>Specifies a non-UNC path to a directory that contains the backup of domain log files. If not specified, the value of the DatabasePath parameter is used.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -4746,7 +4746,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SysVol">
         <maml:name>SysvolPath</maml:name>
         <maml:Description>
-          <maml:para>Specifies a non-UNC path to a directory that contains the backup of Sysvol data. If none is specified, the ..\SYSVOL\ path relative to the -DBPath parameter is used.</maml:para>
+          <maml:para>Specifies a non-UNC path to a directory that contains the backup of Sysvol data. If none is specified, the ..\SYSVOL\ path relative to the -DatabasePath parameter is used.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -4784,14 +4784,14 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; New-ADDBRestoreFromMediaScript -DBPath 'C:\IFM\Active Directory\ntds.dit' | Invoke-Expression</dev:code>
+        <dev:code>PS C:\&gt; New-ADDBRestoreFromMediaScript -DatabasePath 'C:\IFM\Active Directory\ntds.dit' | Invoke-Expression</dev:code>
         <dev:remarks>
           <maml:para>Restores a domain controller from a previously created IFM backup.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; New-ADDBRestoreFromMediaScript -DBPath 'C:\IFM\Active Directory\ntds.dit' -BootKey 610bc29e6f62ca7004e9872cd51a0116 -SysvolPath 'C:\IFM\SYSVOL'</dev:code>
+        <dev:code>PS C:\&gt; New-ADDBRestoreFromMediaScript -DatabasePath 'C:\IFM\Active Directory\ntds.dit' -BootKey 610bc29e6f62ca7004e9872cd51a0116 -SysvolPath 'C:\IFM\SYSVOL'</dev:code>
         <dev:remarks>
           <maml:para>Generates a domain controller restoration script from a previously created IFM backup. The script can then be reviewed, modified if necessary and executed manually.</maml:para>
         </dev:remarks>
@@ -4880,14 +4880,14 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
 
         # Re-encrypt the DB with the new boot key.
         $currentBootKey = Get-BootKey -Online
-        Set-ADDBBootKey -DBPath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -OldBootKey 610bc29e6f62ca7004e9872cd51a0116 -NewBootKey $currentBootKey
+        Set-ADDBBootKey -DatabasePath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -OldBootKey 610bc29e6f62ca7004e9872cd51a0116 -NewBootKey $currentBootKey
 
         # Clone the DC account password.
         $ntdsParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
         InlineScript {
             # Note: SupplementalCredentials do not get serialized properly without using the InlineScript activity.
-            $dcAccount = Get-ADDBAccount -SamAccountName 'LON-DC1$' -DBPath $using:ntdsParams.'DSA Database file' -LogPath $using:ntdsParams.'Database log files path' -BootKey $using:currentBootKey
-            Set-ADDBAccountPasswordHash -ObjectGuid 9bb4d6f4-060a-4585-9f18-625774e7c088 -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DBPath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -BootKey $using:currentBootKey
+            $dcAccount = Get-ADDBAccount -SamAccountName 'LON-DC1$' -DatabasePath $using:ntdsParams.'DSA Database file' -LogPath $using:ntdsParams.'Database log files path' -BootKey $using:currentBootKey
+            Set-ADDBAccountPasswordHash -ObjectGuid 9bb4d6f4-060a-4585-9f18-625774e7c088 -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DatabasePath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -BootKey $using:currentBootKey
         }
 
         # Replace the database and transaction logs.
@@ -5002,10 +5002,10 @@ $initTask.RunAsTask()</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Remove-ADDBObject</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5040,7 +5040,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5074,10 +5074,10 @@ $initTask.RunAsTask()</dev:code>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Remove-ADDBObject</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5100,7 +5100,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5146,10 +5146,10 @@ $initTask.RunAsTask()</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5185,7 +5185,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5482,10 +5482,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5509,7 +5509,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5556,10 +5556,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5571,7 +5571,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5630,10 +5630,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5645,7 +5645,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5716,10 +5716,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5731,7 +5731,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5778,10 +5778,10 @@ $initTask.RunAsTask()</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5805,7 +5805,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5983,10 +5983,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6010,7 +6010,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6069,10 +6069,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6084,7 +6084,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6155,10 +6155,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6170,7 +6170,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6253,10 +6253,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6268,7 +6268,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6327,10 +6327,10 @@ $initTask.RunAsTask()</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -6354,7 +6354,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -6540,10 +6540,10 @@ $initTask.RunAsTask()</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-ADDBBootKey</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6555,7 +6555,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6591,10 +6591,10 @@ $initTask.RunAsTask()</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -6606,7 +6606,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -6708,10 +6708,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6734,7 +6734,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6746,10 +6746,10 @@ $initTask.RunAsTask()</dev:code>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-ADDBDomainController</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6784,7 +6784,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6796,10 +6796,10 @@ $initTask.RunAsTask()</dev:code>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-ADDBDomainController</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6834,7 +6834,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6858,10 +6858,10 @@ $initTask.RunAsTask()</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -6909,7 +6909,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -6975,10 +6975,10 @@ $initTask.RunAsTask()</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-ADDBPrimaryGroup</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7002,7 +7002,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7037,10 +7037,10 @@ $initTask.RunAsTask()</dev:code>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-ADDBPrimaryGroup</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7052,7 +7052,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7099,10 +7099,10 @@ $initTask.RunAsTask()</dev:code>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-ADDBPrimaryGroup</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7114,7 +7114,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7173,10 +7173,10 @@ $initTask.RunAsTask()</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-          <maml:name>DBPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7188,7 +7188,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7223,10 +7223,10 @@ $initTask.RunAsTask()</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DatabasePath, DatabaseFilePath, DBFilePath">
-        <maml:name>DBPath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -7250,7 +7250,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -8101,7 +8101,7 @@ $initTask.RunAsTask()</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-ADDBAccount -All -DBPath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
+        <dev:code>PS C:\&gt; Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
             Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
 &lt;# Sample Output
 
@@ -8176,7 +8176,7 @@ These accounts are not required to have a password:
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 4 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-ADDBAccount -All -DBPath ntds.dit -BootKey $key |
+        <dev:code>PS C:\&gt; Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
             where DistinguishedName -like '*OU=Employees,DC=contoso,DC=com' |
             Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt</dev:code>
         <dev:remarks>

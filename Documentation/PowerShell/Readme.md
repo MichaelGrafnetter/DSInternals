@@ -118,7 +118,7 @@ The output of the [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount) and [Get
 ### Example 1
 
 ```powershell
-Get-ADDBAccount -All -DBPath ntds.dit -BootKey $key | Format-Custom -View PwDump | Out-File -FilePath users.pwdump -Encoding ascii
+Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key | Format-Custom -View PwDump | Out-File -FilePath users.pwdump -Encoding ascii
 ```
 
 ### Example 2

@@ -11,7 +11,7 @@
     [OutputType("None")]
     public class AddADDBSidHistoryCommand : ADDBModifyPrincipalCommandBase
     {
-        [Parameter(Mandatory = true, HelpMessage = "TODO", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]
         [Alias("hist", "History")]
         [ValidateNotNull]
         public SecurityIdentifier[] SidHistory

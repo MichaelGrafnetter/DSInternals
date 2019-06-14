@@ -13,7 +13,7 @@ Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryptio
 ## SYNTAX
 
 ```
-Get-ADDBKdsRootKey -DBPath <String> [-LogPath <String>] [<CommonParameters>]
+Get-ADDBKdsRootKey -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,13 +30,13 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DBPath
-TODO
+### -DatabasePath
+Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Database, DatabasePath, DatabaseFilePath, DBFilePath
+Aliases: Database, DBPath, DatabaseFilePath, DBFilePath
 
 Required: True
 Position: Named
@@ -46,7 +46,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogPath
-TODO
+Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.
 
 ```yaml
 Type: String

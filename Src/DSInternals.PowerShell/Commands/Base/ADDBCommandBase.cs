@@ -3,7 +3,6 @@
     using System;
     using System.Management.Automation;
     using DSInternals.DataStore;
-    using Microsoft.PowerShell.Commands;
 
     public abstract class ADDBCommandBase : PSCmdletEx, IDisposable
     {
@@ -18,8 +17,8 @@
         /// </remarks>
         [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]
-        [Alias("Database", "DatabasePath", "DatabaseFilePath", "DBFilePath")]
-        public string DBPath
+        [Alias("Database", "DBPath", "DatabaseFilePath", "DBFilePath")]
+        public string DatabasePath
         {
             get;
             set;
@@ -61,7 +60,7 @@
             try
             {
                 // Resolve possibly relative paths to absolute paths:
-                string dbPathResolved = this.ResolveFilePath(this.DBPath);
+                string dbPathResolved = this.ResolveFilePath(this.DatabasePath);
                 string logPathResolved = this.ResolveDirectoryPath(this.LogPath);
                 this.DirectoryContext = new DirectoryContext(dbPathResolved, this.ReadOnly, logPathResolved);
             }

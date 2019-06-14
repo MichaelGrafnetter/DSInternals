@@ -15,28 +15,28 @@ Sets the password hash for a user, computer, or service account stored in a ntds
 ### ByName
 ```
 Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] [-SamAccountName] <String> -DBPath <String> [-LogPath <String>]
+ -BootKey <Byte[]> [-SkipMetaUpdate] [-SamAccountName] <String> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
 ### BySID
 ```
 Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] -ObjectSid <SecurityIdentifier> -DBPath <String> [-LogPath <String>]
+ -BootKey <Byte[]> [-SkipMetaUpdate] -ObjectSid <SecurityIdentifier> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
 ### ByDN
 ```
 Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] -DistinguishedName <String> -DBPath <String> [-LogPath <String>]
+ -BootKey <Byte[]> [-SkipMetaUpdate] -DistinguishedName <String> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
 Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] -ObjectGuid <Guid> -DBPath <String> [-LogPath <String>]
+ -BootKey <Byte[]> [-SkipMetaUpdate] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
@@ -69,13 +69,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DBPath
-TODO
+### -DatabasePath
+Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Database, DatabasePath, DatabaseFilePath, DBFilePath
+Aliases: Database, DBPath, DatabaseFilePath, DBFilePath
 
 Required: True
 Position: Named
@@ -100,7 +100,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogPath
-TODO
+Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.
 
 ```yaml
 Type: String

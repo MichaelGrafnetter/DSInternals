@@ -15,25 +15,25 @@ Sets the password for a user, computer, or service account stored in a ntds.dit 
 ### ByName
 ```
 Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate]
- [-SamAccountName] <String> -DBPath <String> [-LogPath <String>] [<CommonParameters>]
+ [-SamAccountName] <String> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
 Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate]
- -ObjectSid <SecurityIdentifier> -DBPath <String> [-LogPath <String>] [<CommonParameters>]
+ -ObjectSid <SecurityIdentifier> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
 Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate]
- -DistinguishedName <String> -DBPath <String> [-LogPath <String>] [<CommonParameters>]
+ -DistinguishedName <String> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
 Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] -ObjectGuid <Guid>
- -DBPath <String> [-LogPath <String>] [<CommonParameters>]
+ -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,13 +65,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DBPath
-TODO
+### -DatabasePath
+Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Database, DatabasePath, DatabaseFilePath, DBFilePath
+Aliases: Database, DBPath, DatabaseFilePath, DBFilePath
 
 Required: True
 Position: Named
@@ -96,7 +96,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogPath
-TODO
+Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.
 
 ```yaml
 Type: String

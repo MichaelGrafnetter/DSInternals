@@ -13,7 +13,7 @@ Re-encrypts a ntds.dit file with a new BootKey/SysKey. Highly experimental!
 ## SYNTAX
 
 ```
-Set-ADDBBootKey -OldBootKey <Byte[]> [-NewBootKey <Byte[]>] -DBPath <String> [-LogPath <String>]
+Set-ADDBBootKey -OldBootKey <Byte[]> [-NewBootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
@@ -31,13 +31,13 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DBPath
-TODO
+### -DatabasePath
+Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Database, DatabasePath, DatabaseFilePath, DBFilePath
+Aliases: Database, DBPath, DatabaseFilePath, DBFilePath
 
 Required: True
 Position: Named
@@ -47,7 +47,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogPath
-TODO
+Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.
 
 ```yaml
 Type: String

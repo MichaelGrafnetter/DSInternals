@@ -263,7 +263,7 @@ Describe 'Powershell Cmdlets' {
             if (Test-Path $initialDBPath)
             {
                 $workingNTDSCopy = Copy-Item $initialDBPath TestDrive:\ -PassThru
-                Get-ADDBDomainController -DBPath $workingNTDSCopy | Should -Not -BeNull
+                Get-ADDBDomainController -DatabasePath $workingNTDSCopy | Should -Not -BeNull
 
             }
             else
@@ -276,7 +276,7 @@ Describe 'Powershell Cmdlets' {
             if (Test-Path TestDrive:\ntds.dit)
             {
                 # This actually checks proper Automapper initialization in the powershell.exe process.
-                Get-ADDBDomainController -DBPath TestDrive:\ntds.dit | Should -Not -BeNull
+                Get-ADDBDomainController -DatabasePath TestDrive:\ntds.dit | Should -Not -BeNull
             }
             else
             {

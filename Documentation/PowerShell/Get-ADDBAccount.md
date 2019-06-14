@@ -14,30 +14,30 @@ Reads one or more accounts from a ntds.dit file, including secret attributes.
 
 ### All
 ```
-Get-ADDBAccount [-All] [-BootKey <Byte[]>] -DBPath <String> [-LogPath <String>] [<CommonParameters>]
+Get-ADDBAccount [-All] [-BootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByName
 ```
-Get-ADDBAccount [-BootKey <Byte[]>] [-SamAccountName] <String> -DBPath <String> [-LogPath <String>]
+Get-ADDBAccount [-BootKey <Byte[]>] [-SamAccountName] <String> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Get-ADDBAccount [-BootKey <Byte[]>] -ObjectSid <SecurityIdentifier> -DBPath <String> [-LogPath <String>]
+Get-ADDBAccount [-BootKey <Byte[]>] -ObjectSid <SecurityIdentifier> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Get-ADDBAccount [-BootKey <Byte[]>] -DistinguishedName <String> -DBPath <String> [-LogPath <String>]
+Get-ADDBAccount [-BootKey <Byte[]>] -DistinguishedName <String> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Get-ADDBAccount [-BootKey <Byte[]>] -ObjectGuid <Guid> -DBPath <String> [-LogPath <String>]
+Get-ADDBAccount [-BootKey <Byte[]>] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
@@ -85,13 +85,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DBPath
-TODO
+### -DatabasePath
+Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Database, DatabasePath, DatabaseFilePath, DBFilePath
+Aliases: Database, DBPath, DatabaseFilePath, DBFilePath
 
 Required: True
 Position: Named
@@ -116,7 +116,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogPath
-TODO
+Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.
 
 ```yaml
 Type: String

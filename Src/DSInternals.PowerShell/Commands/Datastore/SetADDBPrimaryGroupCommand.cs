@@ -10,7 +10,7 @@ namespace DSInternals.PowerShell.Commands
     [OutputType("None")]
     public class SetADDBPrimaryGroupCommand : ADDBModifyPrincipalCommandBase
     {
-        [Parameter(Mandatory = true, HelpMessage = "TODO", ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]
         [Alias("gid", "Group", "PrimaryGroup", "GroupId")]
         [ValidateRange(DirectoryAgent.RidMin, DirectoryAgent.RidMax)]
         public int PrimaryGroupId

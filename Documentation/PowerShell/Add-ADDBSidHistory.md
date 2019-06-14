@@ -15,25 +15,25 @@ Adds one or more values to the sIDHistory attribute of an object in a ntds.dit f
 ### ByName
 ```
 Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] [-SamAccountName] <String>
- -DBPath <String> [-LogPath <String>] [<CommonParameters>]
+ -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
 Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] -ObjectSid <SecurityIdentifier>
- -DBPath <String> [-LogPath <String>] [<CommonParameters>]
+ -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
 Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] -DistinguishedName <String>
- -DBPath <String> [-LogPath <String>] [<CommonParameters>]
+ -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] -ObjectGuid <Guid> -DBPath <String>
- [-LogPath <String>] [<CommonParameters>]
+Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] -ObjectGuid <Guid>
+ -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,13 +50,13 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DBPath
-TODO
+### -DatabasePath
+Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Database, DatabasePath, DatabaseFilePath, DBFilePath
+Aliases: Database, DBPath, DatabaseFilePath, DBFilePath
 
 Required: True
 Position: Named
@@ -81,7 +81,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogPath
-TODO
+Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.
 
 ```yaml
 Type: String

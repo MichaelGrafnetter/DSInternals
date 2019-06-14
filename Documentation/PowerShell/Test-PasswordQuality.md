@@ -30,7 +30,7 @@ Although the cmdlet output is formatted in a human readable fashion, it is still
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBAccount -All -DBPath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
+PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
             Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
 <# Sample Output
 
@@ -105,7 +105,7 @@ Performs a dictionary attack against a set of accounts. The Test-PasswordQuality
 
 ### Example 4
 ```powershell
-PS C:\> Get-ADDBAccount -All -DBPath ntds.dit -BootKey $key |
+PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
             where DistinguishedName -like '*OU=Employees,DC=contoso,DC=com' |
             Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
 ```
