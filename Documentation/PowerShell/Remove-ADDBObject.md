@@ -54,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -DistinguishedName
-TODO
+Specifies the identifier of an object on which to perform this operation.
 
 ```yaml
 Type: String
@@ -69,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -Force
-TODO
+Forces the cmdlet to remove the specified object from the target database.
 
 ```yaml
 Type: SwitchParameter
@@ -99,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectGuid
-TODO
+Specifies the identifier of an object on which to perform this operation.
 
 ```yaml
 Type: Guid

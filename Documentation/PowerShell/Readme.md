@@ -90,21 +90,21 @@ The output of the [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount) and [Get
 
 ### Hashcat
 
-- **HashcatNT** – NT hashes in Hashcat's format.
-- **HashcatLM** – LM hashes in Hashcat's format.
-- **HashcatNTHistory** – NT hashes, including historical ones, in Hashcat's format.
-- **HashcatLMHistory** – LM hashes, including historical ones, in Hashcat's format.
+- **HashcatNT** - NT hashes in Hashcat's format.
+- **HashcatLM** - LM hashes in Hashcat's format.
+- **HashcatNTHistory** - NT hashes, including historical ones, in Hashcat's format.
+- **HashcatLMHistory** - LM hashes, including historical ones, in Hashcat's format.
 
 ### John the Ripper
 
-- **JohnNT** – NT hashes in the format supported by John the Ripper.
-- **JohnLM** – LM hashes in the format supported by John the Ripper.
-- **JohnNTHistory** – NT hashes, including historical ones, in the format supported by John the Ripper.
-- **JohnLMHistory** – LM hashes, including historical ones, in the format supported by John the Ripper.
+- **JohnNT** - NT hashes in the format supported by John the Ripper.
+- **JohnLM** - LM hashes in the format supported by John the Ripper.
+- **JohnNTHistory** - NT hashes, including historical ones, in the format supported by John the Ripper.
+- **JohnLMHistory** - LM hashes, including historical ones, in the format supported by John the Ripper.
 
 ### Ophcrack
 
-- **Ophcrack** – NT and LM hashes in Ophcrack's format.
+- **Ophcrack** - NT and LM hashes in Ophcrack's format.
 
 ### Other Formats
 

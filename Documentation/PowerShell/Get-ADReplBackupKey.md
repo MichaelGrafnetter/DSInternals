@@ -32,7 +32,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Credential
-TODO
+Specifies a user account that has permission to perform this action. The default is the current user.
 
 ```yaml
 Type: PSCredential
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -Protocol
-TODO
+Specifies the protocol sequence that is used for RPC communication.
 
 ```yaml
 Type: RpcProtocol
@@ -78,7 +78,7 @@ Accept wildcard characters: False
 ```
 
 ### -Server
-TODO
+Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.
 
 ```yaml
 Type: String

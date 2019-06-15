@@ -66,7 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -DistinguishedName
-TODO
+Specifies the identifier of an object on which to perform this operation.
 
 ```yaml
 Type: String
@@ -96,7 +96,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectGuid
-TODO
+Specifies the identifier of an object on which to perform this operation.
 
 ```yaml
 Type: Guid
@@ -111,7 +111,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectSid
-TODO
+Specifies the identifier of an object on which to perform this operation.
 
 ```yaml
 Type: SecurityIdentifier
@@ -126,7 +126,7 @@ Accept wildcard characters: False
 ```
 
 ### -PrimaryGroupId
-TODO
+Specifies the new primary group relative identifier (RID) that will be written to the database.
 
 ```yaml
 Type: Int32
@@ -141,7 +141,7 @@ Accept wildcard characters: False
 ```
 
 ### -SamAccountName
-TODO
+Specifies the identifier of an object on which to perform this operation.
 
 ```yaml
 Type: String
@@ -156,7 +156,7 @@ Accept wildcard characters: False
 ```
 
 ### -SkipMetaUpdate
-TODO
+Indicates that the replication metadata of the affected object should not be updated.
 
 ```yaml
 Type: SwitchParameter
@@ -185,3 +185,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Add-ADDBSidHistory](Add-ADDBSidHistory.md)
+[Get-ADDBAccount](Get-ADDBAccount.md)

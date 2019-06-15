@@ -31,7 +31,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Blob
-{{Fill Blob Description}}
+Specifies the binary value stored in the msDS-ManagedPassword attribute.
 
 ```yaml
 Type: Byte[]

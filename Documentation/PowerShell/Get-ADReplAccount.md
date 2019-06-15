@@ -57,7 +57,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -All
-TODO
+Indidates that all accounts will be replicated from the target domain controller.
 
 ```yaml
 Type: SwitchParameter
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 ```
 
 ### -Credential
-TODO
+Specifies a user account that has permission to perform this action. The default is the current user.
 
 ```yaml
 Type: PSCredential
@@ -87,7 +87,7 @@ Accept wildcard characters: False
 ```
 
 ### -DistinguishedName
-TODO
+Specifies the identifier of an account that will be replicated.
 
 ```yaml
 Type: String
@@ -117,7 +117,7 @@ Accept wildcard characters: False
 ```
 
 ### -NamingContext
-TODO
+Specifies the naming context root of the replica to replicate.
 
 ```yaml
 Type: String
@@ -132,7 +132,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectGuid
-TODO
+Specifies the identifier of an account that will be replicated.
 
 ```yaml
 Type: Guid
@@ -147,7 +147,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectSid
-TODO
+Specifies the identifier of an account that will be replicated.
 
 ```yaml
 Type: SecurityIdentifier
@@ -162,7 +162,7 @@ Accept wildcard characters: False
 ```
 
 ### -Protocol
-TODO
+Specifies the protocol sequence that is used for RPC communication.
 
 ```yaml
 Type: RpcProtocol
@@ -172,13 +172,13 @@ Accepted values: TCP, SMB, HTTP
 
 Required: False
 Position: Named
-Default value: None
+Default value: TCP
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -SamAccountName
-TODO
+Specifies the identifier of an account that will be replicated.
 
 ```yaml
 Type: String
@@ -193,7 +193,7 @@ Accept wildcard characters: False
 ```
 
 ### -Server
-TODO
+Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.
 
 ```yaml
 Type: String

@@ -56,7 +56,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -All
-TODO
+Indicates that all accounts will be read from the selected database.
 
 ```yaml
 Type: SwitchParameter
@@ -71,7 +71,7 @@ Accept wildcard characters: False
 ```
 
 ### -BootKey
-TODO
+Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.
 
 ```yaml
 Type: Byte[]
@@ -101,7 +101,7 @@ Accept wildcard characters: False
 ```
 
 ### -DistinguishedName
-TODO
+Specifies the identifier of an account that will be retrieved from the database.
 
 ```yaml
 Type: String
@@ -131,7 +131,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectGuid
-TODO
+Specifies the identifier of an account that will be retrieved from the database.
 
 ```yaml
 Type: Guid
@@ -146,7 +146,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectSid
-TODO
+Specifies the identifier of an account that will be retrieved from the database.
 
 ```yaml
 Type: SecurityIdentifier
@@ -161,7 +161,7 @@ Accept wildcard characters: False
 ```
 
 ### -SamAccountName
-TODO
+Specifies the identifier of an account that will be retrieved from the database.
 
 ```yaml
 Type: String

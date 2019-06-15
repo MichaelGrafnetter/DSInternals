@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewBootKey
-TODO
+Specifies the new boot key (AKA system key) that will be used to re-encrypt the password encryption key (pekList) stored in the target Active Directory database.
 
 ```yaml
 Type: Byte[]
@@ -77,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -OldBootKey
-TODO
+Specifies the current boot key (AKA system key) that will be used to decrypt the password encryption key (pekList) stored in the target Active Directory database.
 
 ```yaml
 Type: Byte[]

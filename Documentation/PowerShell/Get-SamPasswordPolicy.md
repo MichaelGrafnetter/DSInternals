@@ -74,7 +74,7 @@ Aliases: ComputerName, Computer
 
 Required: False
 Position: Named
-Default value: None
+Default value: localhost
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

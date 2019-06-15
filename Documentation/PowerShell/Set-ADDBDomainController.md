@@ -45,7 +45,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -BackupExpiration
-{{Fill BackupExpiration Description}}
+Specifies the database backup expiration time.
 
 ```yaml
 Type: DateTime
@@ -75,7 +75,7 @@ Accept wildcard characters: False
 ```
 
 ### -Epoch
-{{Fill Epoch Description}}
+Specifies the database epoch which must be consistent with the information in the registry.
 
 ```yaml
 Type: Int32
@@ -90,7 +90,7 @@ Accept wildcard characters: False
 ```
 
 ### -Force
-{{Fill Force Description}}
+Confirms that you understand the implications of using this cmdlet and still want to use it.
 
 ```yaml
 Type: SwitchParameter
@@ -105,7 +105,7 @@ Accept wildcard characters: False
 ```
 
 ### -HighestCommittedUsn
-{{Fill HighestCommittedUsn Description}}
+Specifies the highest committed USN for the database.
 
 ```yaml
 Type: Int64

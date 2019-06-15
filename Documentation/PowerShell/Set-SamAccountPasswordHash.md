@@ -115,7 +115,7 @@ Accept wildcard characters: False
 ```
 
 ### -Server
-Specify the name of a SAM server.
+Specifies the name of a SAM server.
 
 ```yaml
 Type: String
@@ -124,7 +124,7 @@ Aliases: ComputerName, Computer
 
 Required: False
 Position: Named
-Default value: None
+Default value: localhost
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

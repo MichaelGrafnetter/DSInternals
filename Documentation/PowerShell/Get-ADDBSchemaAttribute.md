@@ -61,7 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-TODO
+Specifies the name of a specific attribute to retrieve.
 
 ```yaml
 Type: String[]

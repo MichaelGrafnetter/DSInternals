@@ -31,7 +31,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Iterations
-{{Fill Iterations Description}}
+Specifies the iteration count parameter of the string-to-key functions.
 
 ```yaml
 Type: Int32
@@ -40,13 +40,13 @@ Aliases: i
 
 Required: False
 Position: 2
-Default value: None
+Default value: 4096
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Password
-Provide a password in the form of a SecureString.
+Specifies an input password from which kerberos keys will be derived.
 
 ```yaml
 Type: SecureString
@@ -61,7 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -Salt
-{{Fill Salt Description}}
+Specifies the salt parameter of the string-to-key functions.
 
 ```yaml
 Type: String

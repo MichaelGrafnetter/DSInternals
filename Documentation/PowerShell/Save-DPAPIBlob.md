@@ -37,7 +37,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Account
-{{Fill Account Description}}
+Specifies an Active Directory account whose DPAPI-related attribute values will be exported to the target directory.
 
 ```yaml
 Type: DSAccount
@@ -52,7 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### -DirectoryPath
-{{Fill DirectoryPath Description}}
+Specifies the path to a target directory where the output file(s) will be saved.
 
 ```yaml
 Type: String
@@ -67,7 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -DPAPIObject
-{{Fill DPAPIObject Description}}
+Specifies a DPAPI object (e.g. Domain Backup Key or Master Key) that will be saved to the target directory.
 
 ```yaml
 Type: DPAPIObject

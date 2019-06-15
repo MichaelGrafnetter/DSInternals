@@ -55,7 +55,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -BootKey
-{{Fill BootKey Description}}
+Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.
 
 ```yaml
 Type: Byte[]
@@ -85,7 +85,7 @@ Accept wildcard characters: False
 ```
 
 ### -DistinguishedName
-TODO
+Specifies the identifier of an account on which to perform this operation.
 
 ```yaml
 Type: String
@@ -115,7 +115,7 @@ Accept wildcard characters: False
 ```
 
 ### -NTHash
-{{Fill NTHash Description}}
+Specifies the NT hash of a password that will be written to the target AD database.
 
 ```yaml
 Type: Byte[]
@@ -130,7 +130,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectGuid
-TODO
+Specifies the identifier of an account on which to perform this operation.
 
 ```yaml
 Type: Guid
@@ -145,7 +145,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectSid
-TODO
+Specifies the identifier of an account on which to perform this operation.
 
 ```yaml
 Type: SecurityIdentifier
@@ -160,7 +160,7 @@ Accept wildcard characters: False
 ```
 
 ### -SamAccountName
-TODO
+Specifies the identifier of an account on which to perform this operation.
 
 ```yaml
 Type: String
@@ -175,7 +175,7 @@ Accept wildcard characters: False
 ```
 
 ### -SkipMetaUpdate
-TODO
+Indicates that the replication metadata of the affected object should not be updated.
 
 ```yaml
 Type: SwitchParameter
@@ -190,7 +190,7 @@ Accept wildcard characters: False
 ```
 
 ### -SupplementalCredentials
-{{Fill SupplementalCredentials Description}}
+Specifies the kerberos keys and WDigest hashes that will be written to the target AD database.
 
 ```yaml
 Type: SupplementalCredentials

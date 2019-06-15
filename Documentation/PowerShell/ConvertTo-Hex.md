@@ -31,7 +31,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -Input
-{{Fill Input Description}}
+Specifies the binary input in the form of an array of bytes.
 
 ```yaml
 Type: Byte[]
@@ -46,7 +46,7 @@ Accept wildcard characters: False
 ```
 
 ### -UpperCase
-{{Fill UpperCase Description}}
+Indicates that the output should be encoded using uppercase characters instead of lowercase ones.
 
 ```yaml
 Type: SwitchParameter

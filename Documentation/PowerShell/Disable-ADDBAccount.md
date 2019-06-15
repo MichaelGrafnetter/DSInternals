@@ -66,7 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -DistinguishedName
-TODO
+Specifies the identifier of an account on which to perform this operation.
 
 ```yaml
 Type: String
@@ -96,7 +96,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectGuid
-TODO
+Specifies the identifier of an account on which to perform this operation.
 
 ```yaml
 Type: Guid
@@ -111,7 +111,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectSid
-TODO
+Specifies the identifier of an account on which to perform this operation.
 
 ```yaml
 Type: SecurityIdentifier
@@ -126,7 +126,7 @@ Accept wildcard characters: False
 ```
 
 ### -SamAccountName
-TODO
+Specifies the identifier of an account on which to perform this operation.
 
 ```yaml
 Type: String
@@ -141,7 +141,7 @@ Accept wildcard characters: False
 ```
 
 ### -SkipMetaUpdate
-TODO
+Indicates that the replication metadata of the affected object should not be updated.
 
 ```yaml
 Type: SwitchParameter

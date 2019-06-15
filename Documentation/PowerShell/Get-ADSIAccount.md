@@ -46,7 +46,7 @@ Accept wildcard characters: False
 ```
 
 ### -Server
-{{Fill Server Description}}
+Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.
 
 ```yaml
 Type: String

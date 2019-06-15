@@ -30,7 +30,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -54,7 +54,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
           <maml:name>SidHistory</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
           <dev:type>
@@ -66,7 +66,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -104,7 +104,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
           <maml:name>ObjectGuid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -116,7 +116,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
           <maml:name>SidHistory</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
           <dev:type>
@@ -128,7 +128,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -166,7 +166,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
           <maml:name>ObjectSid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -178,7 +178,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
           <maml:name>SidHistory</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
           <dev:type>
@@ -190,7 +190,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -204,7 +204,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -240,7 +240,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
           <maml:name>SidHistory</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
           <dev:type>
@@ -252,7 +252,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -278,7 +278,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
         <maml:name>DistinguishedName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -302,7 +302,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
         <maml:name>ObjectGuid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -314,7 +314,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
         <maml:name>ObjectSid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -326,7 +326,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -338,7 +338,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
         <maml:name>SidHistory</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
         <dev:type>
@@ -350,7 +350,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
         <maml:name>SkipMetaUpdate</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -423,6 +423,14 @@
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Add-ADDBSidHistory.md</maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBPrimaryGroup</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -443,7 +451,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="msDS-ManagedPassword, ManagedPassword, ManagedPasswordBlob">
           <maml:name>Blob</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Blob Description}}</maml:para>
+            <maml:para>Specifies the binary value stored in the msDS-ManagedPassword attribute.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -458,7 +466,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="msDS-ManagedPassword, ManagedPassword, ManagedPasswordBlob">
         <maml:name>Blob</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Blob Description}}</maml:para>
+          <maml:para>Specifies the binary value stored in the msDS-ManagedPassword attribute.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -611,7 +619,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>UnicodePassword</maml:name>
           <maml:Description>
-            <maml:para>{{Fill UnicodePassword Description}}</maml:para>
+            <maml:para>Specifies the encoded password that should be decoded.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -626,7 +634,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>UnicodePassword</maml:name>
         <maml:Description>
-          <maml:para>{{Fill UnicodePassword Description}}</maml:para>
+          <maml:para>Specifies the encoded password that should be decoded.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -779,7 +787,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="none">
           <maml:name>Input</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Input Description}}</maml:para>
+            <maml:para>Specifies the binary input in the form of an array of bytes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -791,7 +799,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>UpperCase</maml:name>
           <maml:Description>
-            <maml:para>{{Fill UpperCase Description}}</maml:para>
+            <maml:para>Indicates that the output should be encoded using uppercase characters instead of lowercase ones.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -805,7 +813,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="none">
         <maml:name>Input</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Input Description}}</maml:para>
+          <maml:para>Specifies the binary input in the form of an array of bytes.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -817,7 +825,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>UpperCase</maml:name>
         <maml:Description>
-          <maml:para>{{Fill UpperCase Description}}</maml:para>
+          <maml:para>Indicates that the output should be encoded using uppercase characters instead of lowercase ones.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -886,7 +894,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="p">
           <maml:name>Password</maml:name>
           <maml:Description>
-            <maml:para>Provide a password in the form of a SecureString.</maml:para>
+            <maml:para>Specifies an input password from which kerberos keys will be derived.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
           <dev:type>
@@ -898,7 +906,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="s">
           <maml:name>Salt</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Salt Description}}</maml:para>
+            <maml:para>Specifies the salt parameter of the string-to-key functions.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -910,14 +918,14 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="i">
           <maml:name>Iterations</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Iterations Description}}</maml:para>
+            <maml:para>Specifies the iteration count parameter of the string-to-key functions.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
             <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>4096</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -925,19 +933,19 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="i">
         <maml:name>Iterations</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Iterations Description}}</maml:para>
+          <maml:para>Specifies the iteration count parameter of the string-to-key functions.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
           <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>4096</dev:defaultValue>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="p">
         <maml:name>Password</maml:name>
         <maml:Description>
-          <maml:para>Provide a password in the form of a SecureString.</maml:para>
+          <maml:para>Specifies an input password from which kerberos keys will be derived.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
         <dev:type>
@@ -949,7 +957,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="s">
         <maml:name>Salt</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Salt Description}}</maml:para>
+          <maml:para>Specifies the salt parameter of the string-to-key functions.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1365,7 +1373,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>Password</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Password Description}}</maml:para>
+            <maml:para>Specifies a password that will be converted to the specifiet format.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
           <dev:type>
@@ -1377,7 +1385,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>IsUnattendPassword</maml:name>
           <maml:Description>
-            <maml:para>{{Fill IsUnattendPassword Description}}</maml:para>
+            <maml:para>Indicates that the result should be in the format for unattend.xml instead of *.ldif.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1391,7 +1399,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>IsUnattendPassword</maml:name>
         <maml:Description>
-          <maml:para>{{Fill IsUnattendPassword Description}}</maml:para>
+          <maml:para>Indicates that the result should be in the format for unattend.xml instead of *.ldif.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1403,7 +1411,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>Password</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Password Description}}</maml:para>
+          <maml:para>Specifies a password that will be converted to the specifiet format.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
         <dev:type>
@@ -1484,7 +1492,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1508,7 +1516,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1546,7 +1554,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
           <maml:name>ObjectGuid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -1558,7 +1566,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1596,7 +1604,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
           <maml:name>ObjectSid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -1608,7 +1616,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1622,7 +1630,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1658,7 +1666,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1684,7 +1692,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
         <maml:name>DistinguishedName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1708,7 +1716,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
         <maml:name>ObjectGuid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -1720,7 +1728,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
         <maml:name>ObjectSid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -1732,7 +1740,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1744,7 +1752,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
         <maml:name>SkipMetaUpdate</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1849,7 +1857,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1873,7 +1881,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1911,7 +1919,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
           <maml:name>ObjectGuid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -1923,7 +1931,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1961,7 +1969,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
           <maml:name>ObjectSid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -1973,7 +1981,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1987,7 +1995,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2023,7 +2031,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -2049,7 +2057,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
         <maml:name>DistinguishedName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2073,7 +2081,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
         <maml:name>ObjectGuid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -2085,7 +2093,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
         <maml:name>ObjectSid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -2097,7 +2105,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2109,7 +2117,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
         <maml:name>SkipMetaUpdate</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -2202,7 +2210,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="AllAccounts, ReturnAllAccounts">
           <maml:name>All</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that all accounts will be read from the selected database.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -2213,7 +2221,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -2252,7 +2260,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -2276,7 +2284,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account that will be retrieved from the database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2303,7 +2311,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -2339,7 +2347,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
           <maml:name>ObjectGuid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account that will be retrieved from the database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -2354,7 +2362,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -2390,7 +2398,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
           <maml:name>ObjectSid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account that will be retrieved from the database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -2405,7 +2413,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account that will be retrieved from the database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2417,7 +2425,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -2456,7 +2464,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="AllAccounts, ReturnAllAccounts">
         <maml:name>All</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Indicates that all accounts will be read from the selected database.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -2468,7 +2476,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
         <maml:name>BootKey</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -2492,7 +2500,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
         <maml:name>DistinguishedName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account that will be retrieved from the database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2516,7 +2524,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
         <maml:name>ObjectGuid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account that will be retrieved from the database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -2528,7 +2536,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
         <maml:name>ObjectSid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account that will be retrieved from the database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -2540,7 +2548,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account that will be retrieved from the database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2641,7 +2649,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -2680,7 +2688,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="key, SysKey, SystemKey">
         <maml:name>BootKey</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -2997,7 +3005,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="LdapDisplayName, AttributeName, AttrName, Attr">
           <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the name of a specific attribute to retrieve.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -3060,7 +3068,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="LdapDisplayName, AttributeName, AttrName, Attr">
         <maml:name>Name</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the name of a specific attribute to retrieve.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -3291,7 +3299,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="AllAccounts, ReturnAllAccounts">
           <maml:name>All</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indidates that all accounts will be replicated from the target domain controller.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -3302,7 +3310,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -3314,7 +3322,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NC, DomainNC, DomainNamingContext">
           <maml:name>NamingContext</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the naming context root of the replica to replicate.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3326,7 +3334,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
           <maml:name>Protocol</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
           </maml:Description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
@@ -3338,12 +3346,12 @@
             <maml:name>RpcProtocol</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>TCP</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3358,7 +3366,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -3370,7 +3378,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account that will be replicated.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3382,7 +3390,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
           <maml:name>Protocol</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
           </maml:Description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
@@ -3394,12 +3402,12 @@
             <maml:name>RpcProtocol</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>TCP</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3426,7 +3434,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account that will be replicated.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3438,7 +3446,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -3450,7 +3458,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
           <maml:name>Protocol</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
           </maml:Description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
@@ -3462,12 +3470,12 @@
             <maml:name>RpcProtocol</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>TCP</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3482,7 +3490,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -3494,7 +3502,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
           <maml:name>ObjectGuid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account that will be replicated.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -3506,7 +3514,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
           <maml:name>Protocol</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
           </maml:Description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
@@ -3518,12 +3526,12 @@
             <maml:name>RpcProtocol</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>TCP</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3538,7 +3546,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -3550,7 +3558,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
           <maml:name>ObjectSid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account that will be replicated.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -3562,7 +3570,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
           <maml:name>Protocol</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
           </maml:Description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
@@ -3574,12 +3582,12 @@
             <maml:name>RpcProtocol</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>TCP</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3594,7 +3602,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="AllAccounts, ReturnAllAccounts">
         <maml:name>All</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Indidates that all accounts will be replicated from the target domain controller.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -3606,7 +3614,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
         <dev:type>
@@ -3618,7 +3626,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
         <maml:name>DistinguishedName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account that will be replicated.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -3642,7 +3650,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NC, DomainNC, DomainNamingContext">
         <maml:name>NamingContext</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the naming context root of the replica to replicate.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -3654,7 +3662,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
         <maml:name>ObjectGuid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account that will be replicated.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -3666,7 +3674,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
         <maml:name>ObjectSid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account that will be replicated.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -3678,19 +3686,19 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
         <maml:name>Protocol</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
         <dev:type>
           <maml:name>RpcProtocol</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>TCP</dev:defaultValue>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account that will be replicated.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -3702,7 +3710,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
         <maml:name>Server</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -3803,7 +3811,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -3827,7 +3835,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
           <maml:name>Protocol</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
           </maml:Description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
@@ -3844,7 +3852,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -3859,7 +3867,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
         <dev:type>
@@ -3883,7 +3891,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
         <maml:name>Protocol</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
         <dev:type>
@@ -3895,7 +3903,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
         <maml:name>Server</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -3988,7 +3996,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Server Description}}</maml:para>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -4015,7 +4023,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
         <maml:name>Server</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Server Description}}</maml:para>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -4509,7 +4517,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>localhost</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -4549,7 +4557,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>localhost</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -5017,7 +5025,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5029,7 +5037,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Forces the cmdlet to remove the specified object from the target database.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -5089,7 +5097,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Forces the cmdlet to remove the specified object from the target database.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -5112,7 +5120,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
           <maml:name>ObjectGuid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -5161,7 +5169,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
         <maml:name>DistinguishedName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5173,7 +5181,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Forces the cmdlet to remove the specified object from the target database.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -5197,7 +5205,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
         <maml:name>ObjectGuid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -5298,7 +5306,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="Path, OutputPath">
           <maml:name>DirectoryPath</maml:name>
           <maml:Description>
-            <maml:para>{{Fill DirectoryPath Description}}</maml:para>
+            <maml:para>Specifies the path to a target directory where the output file(s) will be saved.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5310,7 +5318,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
           <maml:name>Account</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Account Description}}</maml:para>
+            <maml:para>Specifies an Active Directory account whose DPAPI-related attribute values will be exported to the target directory.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">DSAccount</command:parameterValue>
           <dev:type>
@@ -5325,7 +5333,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="Path, OutputPath">
           <maml:name>DirectoryPath</maml:name>
           <maml:Description>
-            <maml:para>{{Fill DirectoryPath Description}}</maml:para>
+            <maml:para>Specifies the path to a target directory where the output file(s) will be saved.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5337,7 +5345,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="DPAPIBlob, Object, Blob, BackupKey">
           <maml:name>DPAPIObject</maml:name>
           <maml:Description>
-            <maml:para>{{Fill DPAPIObject Description}}</maml:para>
+            <maml:para>Specifies a DPAPI object (e.g. Domain Backup Key or Master Key) that will be saved to the target directory.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">DPAPIObject</command:parameterValue>
           <dev:type>
@@ -5352,7 +5360,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
         <maml:name>Account</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Account Description}}</maml:para>
+          <maml:para>Specifies an Active Directory account whose DPAPI-related attribute values will be exported to the target directory.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">DSAccount</command:parameterValue>
         <dev:type>
@@ -5364,7 +5372,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="Path, OutputPath">
         <maml:name>DirectoryPath</maml:name>
         <maml:Description>
-          <maml:para>{{Fill DirectoryPath Description}}</maml:para>
+          <maml:para>Specifies the path to a target directory where the output file(s) will be saved.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5376,7 +5384,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="DPAPIBlob, Object, Blob, BackupKey">
         <maml:name>DPAPIObject</maml:name>
         <maml:Description>
-          <maml:para>{{Fill DPAPIObject Description}}</maml:para>
+          <maml:para>Specifies a DPAPI object (e.g. Domain Backup Key or Master Key) that will be saved to the target directory.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">DPAPIObject</command:parameterValue>
         <dev:type>
@@ -5473,7 +5481,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>{{Fill BootKey Description}}</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -5497,7 +5505,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5533,7 +5541,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -5547,7 +5555,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>{{Fill BootKey Description}}</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -5595,7 +5603,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
           <maml:name>ObjectGuid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -5607,7 +5615,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -5621,7 +5629,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>{{Fill BootKey Description}}</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -5669,7 +5677,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
           <maml:name>ObjectSid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -5681,7 +5689,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -5695,7 +5703,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5707,7 +5715,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>{{Fill BootKey Description}}</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -5755,7 +5763,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -5769,7 +5777,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
         <maml:name>BootKey</maml:name>
         <maml:Description>
-          <maml:para>{{Fill BootKey Description}}</maml:para>
+          <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -5793,7 +5801,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
         <maml:name>DistinguishedName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5829,7 +5837,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
         <maml:name>ObjectGuid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -5841,7 +5849,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
         <maml:name>ObjectSid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -5853,7 +5861,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5865,7 +5873,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
         <maml:name>SkipMetaUpdate</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -5974,7 +5982,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>{{Fill BootKey Description}}</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -5998,7 +6006,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6022,7 +6030,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Hash, PasswordHash, NTLMHash, MD4Hash, h">
           <maml:name>NTHash</maml:name>
           <maml:Description>
-            <maml:para>{{Fill NTHash Description}}</maml:para>
+            <maml:para>Specifies the NT hash of a password that will be written to the target AD database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -6034,7 +6042,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -6045,7 +6053,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="KerberosKeys, sc, c">
           <maml:name>SupplementalCredentials</maml:name>
           <maml:Description>
-            <maml:para>{{Fill SupplementalCredentials Description}}</maml:para>
+            <maml:para>Specifies the kerberos keys and WDigest hashes that will be written to the target AD database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SupplementalCredentials</command:parameterValue>
           <dev:type>
@@ -6060,7 +6068,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>{{Fill BootKey Description}}</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -6096,7 +6104,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Hash, PasswordHash, NTLMHash, MD4Hash, h">
           <maml:name>NTHash</maml:name>
           <maml:Description>
-            <maml:para>{{Fill NTHash Description}}</maml:para>
+            <maml:para>Specifies the NT hash of a password that will be written to the target AD database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -6108,7 +6116,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
           <maml:name>ObjectGuid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -6120,7 +6128,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -6131,7 +6139,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="KerberosKeys, sc, c">
           <maml:name>SupplementalCredentials</maml:name>
           <maml:Description>
-            <maml:para>{{Fill SupplementalCredentials Description}}</maml:para>
+            <maml:para>Specifies the kerberos keys and WDigest hashes that will be written to the target AD database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SupplementalCredentials</command:parameterValue>
           <dev:type>
@@ -6146,7 +6154,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>{{Fill BootKey Description}}</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -6182,7 +6190,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Hash, PasswordHash, NTLMHash, MD4Hash, h">
           <maml:name>NTHash</maml:name>
           <maml:Description>
-            <maml:para>{{Fill NTHash Description}}</maml:para>
+            <maml:para>Specifies the NT hash of a password that will be written to the target AD database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -6194,7 +6202,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
           <maml:name>ObjectSid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -6206,7 +6214,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -6217,7 +6225,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="KerberosKeys, sc, c">
           <maml:name>SupplementalCredentials</maml:name>
           <maml:Description>
-            <maml:para>{{Fill SupplementalCredentials Description}}</maml:para>
+            <maml:para>Specifies the kerberos keys and WDigest hashes that will be written to the target AD database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SupplementalCredentials</command:parameterValue>
           <dev:type>
@@ -6232,7 +6240,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -6244,7 +6252,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
           <maml:name>BootKey</maml:name>
           <maml:Description>
-            <maml:para>{{Fill BootKey Description}}</maml:para>
+            <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -6280,7 +6288,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Hash, PasswordHash, NTLMHash, MD4Hash, h">
           <maml:name>NTHash</maml:name>
           <maml:Description>
-            <maml:para>{{Fill NTHash Description}}</maml:para>
+            <maml:para>Specifies the NT hash of a password that will be written to the target AD database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -6292,7 +6300,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -6303,7 +6311,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="KerberosKeys, sc, c">
           <maml:name>SupplementalCredentials</maml:name>
           <maml:Description>
-            <maml:para>{{Fill SupplementalCredentials Description}}</maml:para>
+            <maml:para>Specifies the kerberos keys and WDigest hashes that will be written to the target AD database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SupplementalCredentials</command:parameterValue>
           <dev:type>
@@ -6318,7 +6326,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Key, SysKey, SystemKey">
         <maml:name>BootKey</maml:name>
         <maml:Description>
-          <maml:para>{{Fill BootKey Description}}</maml:para>
+          <maml:para>Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -6342,7 +6350,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
         <maml:name>DistinguishedName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -6366,7 +6374,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Hash, PasswordHash, NTLMHash, MD4Hash, h">
         <maml:name>NTHash</maml:name>
         <maml:Description>
-          <maml:para>{{Fill NTHash Description}}</maml:para>
+          <maml:para>Specifies the NT hash of a password that will be written to the target AD database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -6378,7 +6386,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
         <maml:name>ObjectGuid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -6390,7 +6398,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
         <maml:name>ObjectSid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -6402,7 +6410,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an account on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -6414,7 +6422,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
         <maml:name>SkipMetaUpdate</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -6426,7 +6434,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="KerberosKeys, sc, c">
         <maml:name>SupplementalCredentials</maml:name>
         <maml:Description>
-          <maml:para>{{Fill SupplementalCredentials Description}}</maml:para>
+          <maml:para>Specifies the kerberos keys and WDigest hashes that will be written to the target AD database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SupplementalCredentials</command:parameterValue>
         <dev:type>
@@ -6567,7 +6575,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NewKey, New, NewSysKey">
           <maml:name>NewBootKey</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the new boot key (AKA system key) that will be used to re-encrypt the password encryption key (pekList) stored in the target Active Directory database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -6579,7 +6587,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="OldKey, Old, OldSysKey">
           <maml:name>OldBootKey</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the current boot key (AKA system key) that will be used to decrypt the password encryption key (pekList) stored in the target Active Directory database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -6618,7 +6626,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NewKey, New, NewSysKey">
         <maml:name>NewBootKey</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the new boot key (AKA system key) that will be used to re-encrypt the password encryption key (pekList) stored in the target Active Directory database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -6630,7 +6638,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="OldKey, Old, OldSysKey">
         <maml:name>OldBootKey</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the current boot key (AKA system key) that will be used to decrypt the password encryption key (pekList) stored in the target Active Directory database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -6699,7 +6707,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Expiration, Expire">
           <maml:name>BackupExpiration</maml:name>
           <maml:Description>
-            <maml:para>{{Fill BackupExpiration Description}}</maml:para>
+            <maml:para>Specifies the database backup expiration time.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
           <dev:type>
@@ -6723,7 +6731,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Force Description}}</maml:para>
+            <maml:para>Confirms that you understand the implications of using this cmdlet and still want to use it.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -6761,7 +6769,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DSAEpoch">
           <maml:name>Epoch</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Epoch Description}}</maml:para>
+            <maml:para>Specifies the database epoch which must be consistent with the information in the registry.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -6773,7 +6781,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Force Description}}</maml:para>
+            <maml:para>Confirms that you understand the implications of using this cmdlet and still want to use it.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -6811,7 +6819,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Force Description}}</maml:para>
+            <maml:para>Confirms that you understand the implications of using this cmdlet and still want to use it.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -6822,7 +6830,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="USN">
           <maml:name>HighestCommittedUsn</maml:name>
           <maml:Description>
-            <maml:para>{{Fill HighestCommittedUsn Description}}</maml:para>
+            <maml:para>Specifies the highest committed USN for the database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Int64</command:parameterValue>
           <dev:type>
@@ -6849,7 +6857,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Expiration, Expire">
         <maml:name>BackupExpiration</maml:name>
         <maml:Description>
-          <maml:para>{{Fill BackupExpiration Description}}</maml:para>
+          <maml:para>Specifies the database backup expiration time.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
         <dev:type>
@@ -6873,7 +6881,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DSAEpoch">
         <maml:name>Epoch</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Epoch Description}}</maml:para>
+          <maml:para>Specifies the database epoch which must be consistent with the information in the registry.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
@@ -6885,7 +6893,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Force Description}}</maml:para>
+          <maml:para>Confirms that you understand the implications of using this cmdlet and still want to use it.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -6897,7 +6905,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="USN">
         <maml:name>HighestCommittedUsn</maml:name>
         <maml:Description>
-          <maml:para>{{Fill HighestCommittedUsn Description}}</maml:para>
+          <maml:para>Specifies the highest committed USN for the database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Int64</command:parameterValue>
         <dev:type>
@@ -6990,7 +6998,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7014,7 +7022,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="gid, Group, PrimaryGroup, GroupId">
           <maml:name>PrimaryGroupId</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the new primary group relative identifier (RID) that will be written to the database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -7026,7 +7034,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -7064,7 +7072,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
           <maml:name>ObjectGuid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -7076,7 +7084,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="gid, Group, PrimaryGroup, GroupId">
           <maml:name>PrimaryGroupId</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the new primary group relative identifier (RID) that will be written to the database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -7088,7 +7096,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -7126,7 +7134,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
           <maml:name>ObjectSid</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -7138,7 +7146,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="gid, Group, PrimaryGroup, GroupId">
           <maml:name>PrimaryGroupId</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the new primary group relative identifier (RID) that will be written to the database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -7150,7 +7158,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -7164,7 +7172,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7200,7 +7208,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="gid, Group, PrimaryGroup, GroupId">
           <maml:name>PrimaryGroupId</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the new primary group relative identifier (RID) that will be written to the database.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -7212,7 +7220,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
           <maml:name>SkipMetaUpdate</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -7238,7 +7246,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
         <maml:name>DistinguishedName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -7262,7 +7270,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
         <maml:name>ObjectGuid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -7274,7 +7282,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
         <maml:name>ObjectSid</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -7286,7 +7294,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="gid, Group, PrimaryGroup, GroupId">
         <maml:name>PrimaryGroupId</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the new primary group relative identifier (RID) that will be written to the database.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
@@ -7298,7 +7306,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -7310,7 +7318,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
         <maml:name>SkipMetaUpdate</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -7383,6 +7391,14 @@ $initTask.RunAsTask()</dev:code>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBPrimaryGroup.md</maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Add-ADDBSidHistory</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -7416,7 +7432,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>DnsDomainName</maml:name>
           <maml:Description>
-            <maml:para>{{Fill DnsDomainName Description}}</maml:para>
+            <maml:para>Specifies the DNS name of the primary domain.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7428,7 +7444,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>DnsForestName</maml:name>
           <maml:Description>
-            <maml:para>{{Fill DnsForestName Description}}</maml:para>
+            <maml:para>Specifies the DNS forest name of the primary domain. This is the DNS name of the domain at the root of the enterprise.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7440,7 +7456,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>DomainGuid</maml:name>
           <maml:Description>
-            <maml:para>{{Fill DomainGuid Description}}</maml:para>
+            <maml:para>Specifies the GUID of the primary domain.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -7452,7 +7468,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NetBIOSDomainName, Workgroup">
           <maml:name>DomainName</maml:name>
           <maml:Description>
-            <maml:para>{{Fill DomainName Description}}</maml:para>
+            <maml:para>Specifies the name of the primary domain.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -7464,7 +7480,7 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>DomainSid</maml:name>
           <maml:Description>
-            <maml:para>{{Fill DomainSid Description}}</maml:para>
+            <maml:para>Specifies the SID of the primary domain.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -7492,7 +7508,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DnsDomainName</maml:name>
         <maml:Description>
-          <maml:para>{{Fill DnsDomainName Description}}</maml:para>
+          <maml:para>Specifies the DNS name of the primary domain.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -7504,7 +7520,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DnsForestName</maml:name>
         <maml:Description>
-          <maml:para>{{Fill DnsForestName Description}}</maml:para>
+          <maml:para>Specifies the DNS forest name of the primary domain. This is the DNS name of the domain at the root of the enterprise.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -7516,7 +7532,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DomainGuid</maml:name>
         <maml:Description>
-          <maml:para>{{Fill DomainGuid Description}}</maml:para>
+          <maml:para>Specifies the GUID of the primary domain.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -7528,7 +7544,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NetBIOSDomainName, Workgroup">
         <maml:name>DomainName</maml:name>
         <maml:Description>
-          <maml:para>{{Fill DomainName Description}}</maml:para>
+          <maml:para>Specifies the name of the primary domain.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -7540,7 +7556,7 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DomainSid</maml:name>
         <maml:Description>
-          <maml:para>{{Fill DomainSid Description}}</maml:para>
+          <maml:para>Specifies the SID of the primary domain.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -7669,14 +7685,14 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, Computer">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>Specify the name of a SAM server.</maml:para>
+            <maml:para>Specifies the name of a SAM server.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>localhost</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
       <command:syntaxItem>
@@ -7720,14 +7736,14 @@ $initTask.RunAsTask()</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, Computer">
           <maml:name>Server</maml:name>
           <maml:Description>
-            <maml:para>Specify the name of a SAM server.</maml:para>
+            <maml:para>Specifies the name of a SAM server.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>localhost</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>Sid</maml:name>
@@ -7807,14 +7823,14 @@ $initTask.RunAsTask()</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, Computer">
         <maml:name>Server</maml:name>
         <maml:Description>
-          <maml:para>Specify the name of a SAM server.</maml:para>
+          <maml:para>Specifies the name of a SAM server.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>localhost</dev:defaultValue>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
         <maml:name>Sid</maml:name>

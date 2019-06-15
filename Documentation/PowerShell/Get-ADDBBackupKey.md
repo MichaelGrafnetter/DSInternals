@@ -31,7 +31,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -BootKey
-TODO
+Specifies the boot key (AKA system key) that will be used to decrypt values of secret attributes.
 
 ```yaml
 Type: Byte[]

@@ -50,7 +50,7 @@ Accept wildcard characters: False
 ```
 
 ### -DnsDomainName
-{{Fill DnsDomainName Description}}
+Specifies the DNS name of the primary domain.
 
 ```yaml
 Type: String
@@ -65,7 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -DnsForestName
-{{Fill DnsForestName Description}}
+Specifies the DNS forest name of the primary domain. This is the DNS name of the domain at the root of the enterprise.
 
 ```yaml
 Type: String
@@ -80,7 +80,7 @@ Accept wildcard characters: False
 ```
 
 ### -DomainGuid
-{{Fill DomainGuid Description}}
+Specifies the GUID of the primary domain.
 
 ```yaml
 Type: Guid
@@ -95,7 +95,7 @@ Accept wildcard characters: False
 ```
 
 ### -DomainName
-{{Fill DomainName Description}}
+Specifies the name of the primary domain. 
 
 ```yaml
 Type: String
@@ -110,7 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### -DomainSid
-{{Fill DomainSid Description}}
+Specifies the SID of the primary domain.
 
 ```yaml
 Type: SecurityIdentifier

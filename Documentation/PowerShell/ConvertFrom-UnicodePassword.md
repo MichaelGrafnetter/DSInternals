@@ -31,7 +31,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -UnicodePassword
-{{Fill UnicodePassword Description}}
+Specifies the encoded password that should be decoded.
 
 ```yaml
 Type: String

@@ -31,7 +31,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -IsUnattendPassword
-{{Fill IsUnattendPassword Description}}
+Indicates that the result should be in the format for unattend.xml instead of *.ldif.
 
 ```yaml
 Type: SwitchParameter
@@ -46,7 +46,7 @@ Accept wildcard characters: False
 ```
 
 ### -Password
-{{Fill Password Description}}
+Specifies a password that will be converted to the specifiet format.
 
 ```yaml
 Type: SecureString
