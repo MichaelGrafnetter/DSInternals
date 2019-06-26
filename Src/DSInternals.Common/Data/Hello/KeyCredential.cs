@@ -17,11 +17,6 @@ namespace DSInternals.Common.Data
         private const int MinLength = sizeof(uint); // Version
 
         /// <summary>
-        /// Value returned by the BinaryReader if no more characters are available.
-        /// </summary>
-        private const int NoMoreChars = -1;
-
-        /// <summary>
         /// V0 structure alignment in bytes.
         /// </summary>
         private const ushort PackSize = 4;
@@ -196,7 +191,7 @@ namespace DSInternals.Common.Data
                                 // Unknown entry type. We will just ignore it.
                                 break;
                         }
-                    } while (reader.PeekChar() != NoMoreChars);
+                    } while (reader.BaseStream.Position != reader.BaseStream.Length);
                 }
             }
         }
