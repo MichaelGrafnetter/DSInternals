@@ -141,7 +141,7 @@ Zulu";
                 // Find first
                 Assert.IsTrue(searcher.FindString("1AE188AB6DF35626E09C77F2880CAD75"));
 
-                    // Find last
+                // Find last
                 Assert.IsTrue(searcher.FindString("1AE189A6FFF7DB51548F12F063491E36"));
 
                 // Find middle
@@ -229,7 +229,13 @@ Zulu";
                     // Find middle
                     Assert.IsTrue(searcher.FindString("1AE188FF3AF08946C275C9A7E2B894F2"));
 
-                    // Find non-existing
+                    // Find non-existing (before first)
+                    Assert.IsFalse(searcher.FindString("0AE188AB6DF35626E09C77F2880CAD75"));
+
+                    // Find non-existing (in the middle)
+                    Assert.IsFalse(searcher.FindString("1AE188FF3AF08946C275C9A7E2B894F1"));
+
+                    // Find non-existing (after last)
                     Assert.IsFalse(searcher.FindString("F7EB9C06FAFAA23C4BCF22BA6781C1E2"));
                 }
             }
