@@ -1,10 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## 3.6 - 2019-06-28
 
 ### Changed
-- Renamed the `-DBPath` parameter into `-DatabasePath`.
+- Renamed the `-DBPath` parameter of [database cmdlets](PowerShell/Readme.md#cmdlets-for-offline-active-directory-operations) to `-DatabasePath`.
+- Improved [Get-Help documentation](PowerShell/Readme.md#dsinternals-powershell-module).
+
+### Fixed
+- Resolved issue #88 (Test-PasswordQuality errors out with "Offset and length must refer to a position in the string").
 
 ## 3.5.1 - 2019-05-23
 
@@ -308,7 +312,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.5...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6...HEAD
+[3.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.5...v3.6
 [3.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.4...v3.5
 [3.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.3...v3.4
 [3.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.2.1...v3.3

@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.5'
+ModuleVersion = '3.6'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -122,8 +122,9 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added new and improved existing password hash export formats.
-- Windows Server 2008 R2 and FRS replication are now fully supported by the New-ADDBRestoreFromMediaScript cmdlet.
+- Fixed a bug in the Test-PasswordQuality cmdlet.
+- Renamed the -DBPath parameter of database cmdlets to -DatabasePath.
+- Improved Get-Help documentation.
 "@
     } # End of PSData hashtable
 
