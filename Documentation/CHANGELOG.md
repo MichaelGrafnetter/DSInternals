@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## 3.6 - 2019-06-28
+## [3.6] - 2019-06-28
 
 ### Changed
 - Renamed the `-DBPath` parameter of [database cmdlets](PowerShell/Readme.md#cmdlets-for-offline-active-directory-operations) to `-DatabasePath`.
