@@ -3,7 +3,6 @@
     using System;
     using System.Management.Automation;
     using System.Security.Cryptography.X509Certificates;
-    using DSInternals.Common;
     using DSInternals.Common.Data;
 
     [Cmdlet(VerbsCommon.Get, "ADKeyCredential", DefaultParameterSetName = ParamSetFromCertificate)]
@@ -21,6 +20,7 @@
             ParameterSetName = ParamSetFromDNBinary,
             ValueFromPipeline = true
         )]
+        [Alias("DNWithBinary", "DistinguishedNameWithBinary")]
         public string DNWithBinaryData
         {
             get;
@@ -32,6 +32,7 @@
             ParameterSetName = ParamSetFromBinary
         )]
         [AcceptHexString]
+        [Alias("Binary")]
         public byte[] BinaryData
         {
             get;
@@ -54,7 +55,24 @@
             Position = 1,
             ParameterSetName = ParamSetFromCertificate
         )]
+        [Alias("ComputerId", "ComputerGuid")]
         public Guid  DeviceId
+        {
+            get;
+            set;
+        }
+
+        [Parameter(
+            Mandatory = true,
+            ParameterSetName = ParamSetFromBinary
+        )]
+        [Parameter(
+            Mandatory = true,
+            Position = 2,
+            ParameterSetName = ParamSetFromCertificate
+        )]
+        [Alias("DistinguishedName", "DN", "ObjectDN")]
+        public string HolderDN
         {
             get;
             set;
@@ -69,15 +87,14 @@
             switch(this.ParameterSetName)
             {
                 case ParamSetFromDNBinary:
-                    keyCredential = new KeyCredential(this.DNWithBinaryData.FromDNWithBinary());
+                    keyCredential = KeyCredential.Parse(this.DNWithBinaryData);
                     break;
                 case ParamSetFromBinary:
-                    keyCredential = new KeyCredential(this.BinaryData);
+                    keyCredential = new KeyCredential(this.BinaryData, this.HolderDN);
                     break;
                 case ParamSetFromCertificate:
                 default:
-                    byte[] publicKey = this.Certificate.ExportPublicKeyBlob();
-                    keyCredential = new KeyCredential(publicKey, this.DeviceId);
+                    keyCredential = new KeyCredential(this.Certificate, this.DeviceId, this.HolderDN);
                     break;
             }
             this.WriteObject(keyCredential);

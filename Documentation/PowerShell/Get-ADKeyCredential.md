@@ -8,13 +8,14 @@ schema: 2.0.0
 # Get-ADKeyCredential
 
 ## SYNOPSIS
-Creates an object representing Windows Hello for Business credentials from its binary representation or an X.509 certificate.
+Creates an object representing Windows Hello for Business or FIDO credentials from its binary representation or an X.509 certificate.
 
 ## SYNTAX
 
 ### FromCertificate (Default)
 ```
-Get-ADKeyCredential [-Certificate] <X509Certificate2> [-DeviceId] <Guid> [<CommonParameters>]
+Get-ADKeyCredential [-Certificate] <X509Certificate2> [-DeviceId] <Guid> -HolderDN <String>
+ [<CommonParameters>]
 ```
 
 ### FromDNBinary
@@ -24,7 +25,7 @@ Get-ADKeyCredential -DNWithBinaryData <String> [<CommonParameters>]
 
 ### FromBinary
 ```
-Get-ADKeyCredential -BinaryData <Byte[]> [<CommonParameters>]
+Get-ADKeyCredential -BinaryData <Byte[]> -HolderDN <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,12 +43,12 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -BinaryData
-{{Fill BinaryData Description}}
+Specifies the credentials in binary/hexadecimal format.
 
 ```yaml
 Type: Byte[]
 Parameter Sets: FromBinary
-Aliases:
+Aliases: Binary
 
 Required: True
 Position: Named
@@ -57,7 +58,7 @@ Accept wildcard characters: False
 ```
 
 ### -Certificate
-{{Fill Certificate Description}}
+Specifies a certificate that wraps a NGC key.
 
 ```yaml
 Type: X509Certificate2
@@ -72,12 +73,12 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceId
-{{Fill DeviceId Description}}
+Specifies an identifier (typically objectGUID) of the associated computer.
 
 ```yaml
 Type: Guid
 Parameter Sets: FromCertificate
-Aliases:
+Aliases: ComputerId, ComputerGuid
 
 Required: True
 Position: 1
@@ -87,17 +88,32 @@ Accept wildcard characters: False
 ```
 
 ### -DNWithBinaryData
-{{Fill DNWithBinaryData Description}}
+Specifies the credentials in the DN-Binary syntax.
 
 ```yaml
 Type: String
 Parameter Sets: FromDNBinary
-Aliases:
+Aliases: DNWithBinary, DistinguishedNameWithBinary
 
 Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -HolderDN
+Specifies the distinguished name (DN) of the object that these credentials are associated with.
+
+```yaml
+Type: String
+Parameter Sets: FromCertificate, FromBinary
+Aliases: DistinguishedName, DN, ObjectDN
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

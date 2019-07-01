@@ -97,7 +97,7 @@
         {
             // Parse the DN with binary value
             string[] textValues = this.ReadAttributeMulti<string>(attributeName);
-            values = textValues.Select(textValue => textValue.FromDNWithBinary()).ToArray();
+            values = textValues.Select(textValue => DNWithBinary.Parse(textValue).Binary).ToArray();
         }
 
         protected TResult ReadAttributeSingle<TResult>(string name)

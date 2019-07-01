@@ -45,6 +45,7 @@
     <Compile Include="Cryptography\KerberosKeyDerivationTester.cs" />
     <Compile Include="Cryptography\SortedFileSearcherTester.cs" />
     <Compile Include="Cryptography\WDigestHashTester.cs" />
+    <Compile Include="DNWithBinaryTester.cs" />
     <Compile Include="DPAPIBackupKeyTester.cs" />
     <Compile Include="Cryptography\GPPrefPwdObfuscatorTester.cs" />
     <Compile Include="Cryptography\LMHashTester.cs" />
