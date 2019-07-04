@@ -1,18 +1,17 @@
 ﻿namespace DSInternals.Common.Data
 {
+    using System;
+    using System.IO;
+
+    /// <summary>
+    /// Represents the CUSTOM_KEY_INFORMATION structure.
+    /// </summary>
+    /// <see>https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/701a55dc-d062-4032-a2da-dbdfc384c8cf</see>
     public class CustomKeyInformation
     {
         private const byte CurrentVersion = 1;
-        private const int MinLength = sizeof(byte) + sizeof(byte); // Version + KeyFlags
-        private const int VersionOffset = 0;
-        private const int FlagsOffset = 1;
-        private const int VolumeTypeOffset = 2;
-        private const int SupportsNotificationOffset = 3;
-        private const int FekKeyVersionOffset = 4;
-        private const int KeyStrengthOffset = 5;
-        private const int ReservedOffset = 6;
-        private const int EncodedExtendedCKIOffset = 16;
-
+        private const int ShortRepresentationSize = sizeof(byte) + sizeof(KeyFlags); // Version + KeyFlags
+        private const int ReservedSize = 10 * sizeof(byte);
 
         public byte Version
         {
@@ -26,25 +25,52 @@
             private set;
         }
 
-        public VolumeType VolumeType
+        public VolumeType? VolumeType
         {
             get;
             private set;
         }
 
-        public bool SupportsNotification
+        /// <summary>
+        /// Specifies whether the device associated with this credential supports notification.
+        /// </summary>
+        public bool? SupportsNotification
         {
             get;
             private set;
         }
 
-        public byte FekKeyVersion
+        /// <summary>
+        /// Specifies the version of the File Encryption Key (FEK).
+        /// </summary>
+        public byte? FekKeyVersion
         {
             get;
             private set;
         }
 
-        public KeyStrength Strength
+        /// <summary>
+        /// Specifies the strength of the NGC key.
+        /// </summary>
+        public KeyStrength? Strength
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Reserved for future use.
+        /// </summary>
+        public byte[] Reserved
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Extended custom key information.
+        /// </summary>
+        public byte[] EncodedExtendedCKI
         {
             get;
             private set;
@@ -63,60 +89,98 @@
         public CustomKeyInformation(byte[] blob)
         {
             // Validate the input
-            Validator.AssertNotNull(blob, "blob");
-            Validator.AssertMinLength(blob, MinLength, "blob");
+            Validator.AssertNotNull(blob, nameof(blob));
+            Validator.AssertMinLength(blob, ShortRepresentationSize, nameof(blob));
 
-            // Parse:
-            // An 8 - bit unsigned integer that must be set to 1:
-            this.Version = blob[VersionOffset];
-
-            // An 8-bit unsigned integer that specifies zero or more bit-flag values.
-            this.Flags = (KeyFlags)blob[FlagsOffset];
-
-            if(blob.Length <= VolumeTypeOffset)
+            using (var stream = new MemoryStream(blob, false))
             {
-                // This structure has two possible representations. In the first representation, only the Version and Flags fields are present; in this case the structure has a total size of two bytes.In the second representation, all additional fields shown below are also present; in this case, the structure's total size is variable. Differentiating between the two representations must be inferred using only the total size.
-                return;
+                // An 8-bit unsigned integer that must be set to 1:
+                this.Version = (byte)stream.ReadByte();
+
+                // An 8-bit unsigned integer that specifies zero or more bit-flag values.
+                this.Flags = (KeyFlags)stream.ReadByte();
+
+                // Note: This structure has two possible representations. In the first representation, only the Version and Flags fields are present; in this case the structure has a total size of two bytes. In the second representation, all additional fields shown below are also present; in this case, the structure's total size is variable. Differentiating between the two representations must be inferred using only the total size.
+                if (stream.Position < stream.Length)
+                {
+                    // An 8-bit unsigned integer that specifies one of the volume types.
+                    this.VolumeType = (VolumeType)stream.ReadByte();
+                }
+
+                if(stream.Position < stream.Length)
+                {
+                    // An 8-bit unsigned integer that specifies whether the device associated with this credential supports notification.
+                    this.SupportsNotification = Convert.ToBoolean(stream.ReadByte());
+                }
+
+                if(stream.Position < stream.Length)
+                {
+                    // An 8-bit unsigned integer that specifies the version of the File Encryption Key (FEK). This field must be set to 1.
+                    this.FekKeyVersion = (byte)stream.ReadByte();
+                }
+
+                if (stream.Position < stream.Length)
+                {
+                    // An 8-bit unsigned integer that specifies the strength of the NGC key.
+                    this.Strength = (KeyStrength)stream.ReadByte();
+                }
+
+                if (stream.Position < stream.Length)
+                {
+                    // 10 bytes reserved for future use.
+                    // Note: With FIDO, Azure incorrectly puts here 9 bytes instead of 10.
+                    int actualReservedSize = (int)Math.Min(ReservedSize, stream.Length - stream.Position);
+                    this.Reserved = new byte[actualReservedSize];
+                    stream.Read(this.Reserved, 0, actualReservedSize);
+                }
+
+                if(stream.Position < stream.Length)
+                {
+                    // Extended custom key information.
+                    this.EncodedExtendedCKI = stream.ReadToEnd();
+                }
             }
-
-            // An 8-bit unsigned integer that specifies one of the volume types.
-            this.VolumeType = (VolumeType)blob[VolumeTypeOffset];
-
-            if(blob.Length <= SupportsNotificationOffset)
-            {
-                return;
-            }
-
-            // An 8 - bit unsigned integer that specifies whether the device associated with this credential supports notification.
-            this.SupportsNotification = blob[SupportsNotificationOffset] != 0;
-
-            if (blob.Length <= FekKeyVersionOffset)
-            {
-                return;
-            }
-
-            // An 8-bit unsigned integer that specifies the version of the File Encryption Key (FEK). This field must be set to 1.
-            this.FekKeyVersion = blob[FekKeyVersionOffset];
-
-            if (blob.Length <= KeyStrengthOffset)
-            {
-                return;
-            }
-
-            // An 8 - bit unsigned integer that specifies the strength of the NGC key.
-            this.Strength = (KeyStrength)blob[KeyStrengthOffset];
-
-            // TODO: Read Reserved: 10 bytes reserved for future use.
-            // TODO: Read EncodedExtendedCKI: Extended custom key information.
         }
 
         public byte[] ToByteArray()
         {
-            // We only support the short 2-byte format, which is more than enough for NGC generation.
-            var blob = new byte[MinLength];
-            blob[VersionOffset] = this.Version;
-            blob[FlagsOffset] = (byte)this.Flags;
-            return blob;
+            using(var stream = new MemoryStream())
+            {
+                stream.WriteByte(this.Version);
+                stream.WriteByte((byte)this.Flags);
+
+                if(this.VolumeType.HasValue)
+                {
+                    stream.WriteByte((byte)this.VolumeType.Value);
+                }
+
+                if (this.SupportsNotification.HasValue)
+                {
+                    stream.WriteByte(Convert.ToByte(this.SupportsNotification.Value));
+                }
+
+                if(this.FekKeyVersion.HasValue)
+                {
+                    stream.WriteByte(this.FekKeyVersion.Value);
+                }
+
+                if (this.Strength.HasValue)
+                {
+                    stream.WriteByte((byte)this.Strength.Value);
+                }
+
+                if (this.Reserved != null)
+                {
+                    stream.Write(this.Reserved, 0, Reserved.Length);
+                }
+
+                if(this.EncodedExtendedCKI != null)
+                {
+                    stream.Write(this.EncodedExtendedCKI, 0, this.EncodedExtendedCKI.Length);
+                }
+
+                return stream.ToArray();
+            }
         }
     }
 }

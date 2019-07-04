@@ -49,6 +49,12 @@
                 // Read the current line
                 string line = this.reader.ReadLine();
 
+                if(line == null)
+                {
+                    // We have reached the end of the file, so the search is over
+                    break;
+                }
+
                 switch (String.Compare(line, 0, query, 0, query.Length, true))
                 {
                     case -1:

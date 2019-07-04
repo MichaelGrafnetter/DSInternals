@@ -502,7 +502,7 @@
             {
                 foreach (var blob in keyCredentialBlobs)
                 {
-                    credentials.Add(new KeyCredential(blob));
+                    credentials.Add(new KeyCredential(blob, this.DistinguishedName));
                 }
             }
 

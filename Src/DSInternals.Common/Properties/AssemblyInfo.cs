@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DSInternals Common Library")]
-[assembly: AssemblyVersion("3.4")]
-[assembly: AssemblyFileVersion("3.4")]
+[assembly: AssemblyVersion("3.6")]
+[assembly: AssemblyFileVersion("3.6")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]

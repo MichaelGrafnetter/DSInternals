@@ -54,6 +54,7 @@
     <Compile Include="Cryptography\WDigestHash.cs" />
     <Compile Include="Cryptography\Pbkdf2.cs" />
     <Compile Include="Cryptography\PrivateKeyEncryptionType.cs" />
+    <Compile Include="Data\DNWithBinary.cs" />
     <Compile Include="Data\DPAPI\DPAPIObject.cs" />
     <Compile Include="Data\DPAPI\KdsRootKey.cs" />
     <Compile Include="Data\DPAPI\RoamedCredential.cs" />

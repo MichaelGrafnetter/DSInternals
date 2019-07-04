@@ -1,10 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
-using Newtonsoft.Json;
-
 namespace DSInternals.Common.Data
 {
+    using System;
+    using System.IO;
+    using System.Security.Cryptography;
+    using System.Security.Cryptography.X509Certificates;
+    using Newtonsoft.Json;
+
     /// <summary>
     ///  This class represents a single credential stored as a series of values, corresponding to the KEYCREDENTIALLINK_BLOB structure.
     /// </summary>
@@ -109,13 +110,42 @@ namespace DSInternals.Common.Data
             private set;
         }
 
-        public KeyCredential(byte[] publicKey, Guid deviceId) : this(publicKey, deviceId, DateTime.Now)
+        /// <summary>
+        /// Distinguished name of the AD object that holds this key credential.
+        /// </summary>
+        public string HolderDN
+        {
+            get;
+            private set;
+        }
+
+        public KeyCredential(X509Certificate2 certificate, Guid deviceId, string holderDN) : this(certificate, deviceId, holderDN, DateTime.Now)
         {
         }
 
-        public KeyCredential(byte[] publicKey, Guid deviceId, DateTime currentTime)
+        public KeyCredential(X509Certificate2 certificate, Guid deviceId, string holderDN, DateTime currentTime)
         {
-            Validator.AssertNotNull(publicKey, "publicKey");
+            Validator.AssertNotNull(certificate, nameof(certificate));
+
+            byte[] publicKey = certificate.ExportPublicKeyBlob();
+            this.Initialize(publicKey, deviceId, holderDN, currentTime);
+        }
+
+        public KeyCredential(byte[] publicKey, Guid deviceId, string holderDN) : this(publicKey, deviceId, holderDN, DateTime.Now)
+        {
+        }
+
+        public KeyCredential(byte[] publicKey, Guid deviceId, string holderDN, DateTime currentTime)
+        {
+            Validator.AssertNotNull(publicKey, nameof(publicKey));
+            this.Initialize(publicKey, deviceId, holderDN, currentTime);
+        }
+
+        private void Initialize(byte[] publicKey, Guid deviceId, string holderDN, DateTime currentTime)
+        {
+            // Prodess holder DN
+            Validator.AssertNotNullOrEmpty(holderDN, nameof(holderDN));
+            this.HolderDN = holderDN;
 
             // Initialize the Key Credential based on requirements stated in MS-KPP Processing Details:
             this.Version = KeyCredentialVersion.Version2;
@@ -129,13 +159,17 @@ namespace DSInternals.Common.Data
             this.DeviceId = deviceId;
         }
 
-        public KeyCredential(byte[] blob)
+        public KeyCredential(byte[] blob, string holderDN)
         {
             // Input validation
-            Validator.AssertNotNull(blob, "blob");
-            Validator.AssertMinLength(blob, MinLength, "blob");
+            Validator.AssertNotNull(blob, nameof(blob));
+            Validator.AssertMinLength(blob, MinLength, nameof(blob));
+            Validator.AssertNotNullOrEmpty(holderDN, nameof(holderDN));
+            
+            // Init
+            this.HolderDN = holderDN;
 
-            // Input parsing
+            // Parse binary input
             using (var stream = new MemoryStream(blob, false))
             {
                 using (var reader = new BinaryReader(stream))
@@ -307,9 +341,16 @@ namespace DSInternals.Common.Data
             }
         }
 
-        public string ToDNWithBinary(string distinguishedName)
+        public string ToDNWithBinary()
         {
-            return this.ToByteArray().ToDNWithBinary(distinguishedName);
+            return new DNWithBinary(this.HolderDN, this.ToByteArray()).ToString();
+        }
+
+        public static KeyCredential Parse(string dnWithBinary)
+        {
+            Validator.AssertNotNullOrEmpty(dnWithBinary, nameof(dnWithBinary));
+            var parsed = DNWithBinary.Parse(dnWithBinary);
+            return new KeyCredential(parsed.Binary, parsed.DistinguishedName);
         }
 
         private static DateTime ConvertFromBinaryTime(byte[] binaryTime, KeySource source, KeyCredentialVersion version)
