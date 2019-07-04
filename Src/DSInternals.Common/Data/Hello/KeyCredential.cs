@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
 
 namespace DSInternals.Common.Data
 {
@@ -57,13 +58,25 @@ namespace DSInternals.Common.Data
             private set;
         }
 
-        /// <summary>
-        /// Key material of the credential.
-        /// </summary>
-        public byte[] KeyMaterial
+        internal byte[] RawKeyMaterial
         {
             get;
             private set;
+        }
+        /// <summary>
+        /// Key material of the credential.
+        /// </summary>
+        public object KeyMaterial
+        {
+            get
+            {
+                if (Usage == KeyUsage.FIDO)
+                {
+                    var fidoCredString = System.Text.Encoding.UTF8.GetString(RawKeyMaterial, 0, RawKeyMaterial.Length);
+                    return JsonConvert.DeserializeObject<KeyMaterialFido>(fidoCredString);
+                }
+                else return RawKeyMaterial;
+            }
         }
 
         public CustomKeyInformation CustomKeyInfo
@@ -109,7 +122,7 @@ namespace DSInternals.Common.Data
             this.Identifier = ComputeKeyIdentifier(publicKey, this.Version);
             this.CreationTime = currentTime;
             this.LastLogonTime = currentTime;
-            this.KeyMaterial = publicKey;
+            this.RawKeyMaterial = publicKey;
             this.Usage = KeyUsage.NGC;
             this.CustomKeyInfo = new CustomKeyInformation(KeyFlags.None);
             this.Source = KeySource.ActiveDirectory;
@@ -158,7 +171,7 @@ namespace DSInternals.Common.Data
                                 // We do not need to validate the integrity of the data by the hash
                                 break;
                             case KeyCredentialEntryType.KeyMaterial:
-                                this.KeyMaterial = value;
+                                this.RawKeyMaterial = value;
                                 break;
                             case KeyCredentialEntryType.KeyUsage:
                                 if(length == sizeof(byte))
@@ -218,9 +231,9 @@ namespace DSInternals.Common.Data
                 using (var propertyWriter = new BinaryWriter(propertyStream))
                 {
                     // Key Material
-                    propertyWriter.Write((ushort)this.KeyMaterial.Length);
+                    propertyWriter.Write((ushort)this.RawKeyMaterial.Length);
                     propertyWriter.Write((byte)KeyCredentialEntryType.KeyMaterial);
-                    propertyWriter.Write(this.KeyMaterial);
+                    propertyWriter.Write(this.RawKeyMaterial);
 
                     // Key Usage
                     propertyWriter.Write((ushort)sizeof(KeyUsage));

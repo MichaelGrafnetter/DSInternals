@@ -76,6 +76,22 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AzureActiveDirectory, key.Source);
             Assert.AreEqual(KeyFlags.Attestation, key.CustomKeyInfo.Flags);
             Assert.AreEqual("WEe6PFT+3MT+pJ2VfR/4jQ==", key.Identifier);
+            Assert.IsInstanceOfType(key.KeyMaterial, typeof(KeyMaterialFido));
+            var km = (KeyMaterialFido)key.KeyMaterial;
+            Assert.AreEqual("Yubikey 5", km.DisplayName);
+            var expectedRpIdHash = new byte[] { 0x35, 0x6c, 0x9e, 0xd4, 0xa0, 0x93, 0x21, 0xb9, 0x69, 0x5f, 0x1e, 0xaf, 0x91, 0x82, 0x03, 0xf1, 0xb5, 0x5f, 0x68, 0x9d, 0xa6, 0x1f, 0xbc, 0x96, 0x18, 0x4c, 0x15, 0x7d, 0xda, 0x68, 0x0c, 0x81 };
+            Assert.AreEqual(expectedRpIdHash.ToHex(true), km.AuthenticatorData.RpIdHash.ToHex(true));
+            Assert.AreEqual(Data.Fido.AuthenticatorFlags.UP | Data.Fido.AuthenticatorFlags.UV | Data.Fido.AuthenticatorFlags.AT | Data.Fido.AuthenticatorFlags.ED, km.AuthenticatorData.Flags);
+            Assert.AreEqual((uint)0x32, km.AuthenticatorData.SignCount);
+            Assert.AreEqual(new Guid("fa2b99dc-9e39-4257-8f92-4a30d23c4118"), km.AuthenticatorData.AttestedCredentialData.AaGuid);
+            var expectedCredentialId = new byte[] { 0x58, 0x47, 0xba, 0x3c, 0x54, 0xfe, 0xdc, 0xc4, 0xfe, 0xa4, 0x9d, 0x95, 0x7d, 0x1f, 0xf8, 0x8d };
+            Assert.AreEqual(expectedCredentialId.ToHex(true), km.AuthenticatorData.AttestedCredentialData.CredentialID.ToHex(true));
+            var strAcd = km.AuthenticatorData.AttestedCredentialData.ToString();
+            var expectedStrAcd = "AAGUID: fa2b99dc-9e39-4257-8f92-4a30d23c4118, CredentialID: 5847BA3C54FEDCC4FEA49D957D1FF88D, CredentialPublicKey: {1: 2, 3: -7, -1: 1, -2: h'8475E0274D47D8AE61F331B4B9DFEFF8D816ACE3CBAE893DBFA3429B585FA2F9', -3: h'92BEF2CFCC4A1FC71D8C803FCE4F7CE09573D7CDC5852BA50B59770F653D176F'}";
+            Assert.AreEqual(expectedStrAcd, strAcd);
+            var strExts = km.AuthenticatorData.Extensions.ToString();
+            var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
+            Assert.AreEqual(expectedStrExts, strExts);
         }
 
         [TestMethod]
