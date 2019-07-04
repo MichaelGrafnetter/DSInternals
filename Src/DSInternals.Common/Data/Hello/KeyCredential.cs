@@ -67,6 +67,31 @@
             private set;
         }
 
+        public RSAParameters? NGCPublicKey
+        {
+            get
+            {
+                if (this.Usage == KeyUsage.NGC && this.KeyMaterial != null)
+                {
+                    // The key material is a 2048-bit RSA public key.
+                    return this.KeyMaterial.ToRSAParameters();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public string NGCModulus
+        {
+            get
+            {
+                var publicKey = this.NGCPublicKey;
+                return publicKey.HasValue ? Convert.ToBase64String(publicKey.Value.Modulus) : null;
+            }
+        }
+
         public CustomKeyInformation CustomKeyInfo
         {
             get;
