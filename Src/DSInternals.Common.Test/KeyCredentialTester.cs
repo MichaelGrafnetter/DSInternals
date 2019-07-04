@@ -20,6 +20,11 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
             Assert.AreEqual(KeySource.ActiveDirectory, key.Source);
             Assert.IsTrue(key.CustomKeyInfo.Flags.HasFlag(KeyFlags.MFANotUsed));
+
+            // Serialize
+            byte[] serialized = key.ToByteArray();
+            Assert.AreEqual(blob.Length, serialized.Length);
+            CollectionAssert.AreEqual(blob, serialized);
         }
 
         [TestMethod]
@@ -33,6 +38,11 @@ namespace DSInternals.Common.Test
             Assert.AreEqual("IHF64FL8z1RqrQ1R6Hiq1pzgT9w59ajY4866a8tNoOc=", key.Identifier);
             Assert.AreEqual("47f577e3-d2d0-4a0a-8aca-e0501098bde4", key.DeviceId.ToString());
             Assert.IsNotNull(key.CustomKeyInfo);
+
+            // Serialize
+            byte[] serialized = key.ToByteArray();
+            Assert.AreEqual(blob.Length, serialized.Length);
+            CollectionAssert.AreEqual(blob, serialized);
         }
 
         [TestMethod]
@@ -43,7 +53,12 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
             Assert.AreEqual(KeySource.AzureActiveDirectory, key.Source);
-            Assert.IsTrue(key.CustomKeyInfo.SupportsNotification);
+            Assert.IsTrue(key.CustomKeyInfo.SupportsNotification.Value);
+
+            // Serialize
+            byte[] serialized = key.ToByteArray();
+            Assert.AreEqual(blob.Length, serialized.Length);
+            CollectionAssert.AreEqual(blob, serialized);
         }
 
         [TestMethod]
@@ -55,6 +70,11 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
             Assert.AreEqual(KeySource.AzureActiveDirectory, key.Source);
             Assert.AreEqual(KeyFlags.None, key.CustomKeyInfo.Flags);
+
+            // Serialize
+            byte[] serialized = key.ToByteArray();
+            Assert.AreEqual(blob.Length, serialized.Length);
+            CollectionAssert.AreEqual(blob, serialized);
         }
 
         [TestMethod]
@@ -66,6 +86,11 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
             Assert.AreEqual(KeySource.AzureActiveDirectory, key.Source);
             Assert.AreEqual(KeyFlags.None, key.CustomKeyInfo.Flags);
+
+            // Serialize
+            byte[] serialized = key.ToByteArray();
+            Assert.AreEqual(blob.Length, serialized.Length);
+            CollectionAssert.AreEqual(blob, serialized);
         }
 
         [TestMethod]
@@ -78,6 +103,11 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AzureActiveDirectory, key.Source);
             Assert.AreEqual(KeyFlags.Attestation, key.CustomKeyInfo.Flags);
             Assert.AreEqual("WEe6PFT+3MT+pJ2VfR/4jQ==", key.Identifier);
+
+            // Serialize
+            byte[] serialized = key.ToByteArray();
+            Assert.AreEqual(blob.Length, serialized.Length);
+            CollectionAssert.AreEqual(blob, serialized);
         }
 
         [TestMethod]
@@ -90,17 +120,29 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.ActiveDirectory, key.Source);
             Assert.AreEqual("c+a+uKm1sIKDiEdue/3V+OehE+wIB+8lwPvPOc60MRE=", key.Identifier);
             Assert.IsNotNull(key.CustomKeyInfo);
+
+            // Serialize
+            byte[] serialized = key.ToByteArray();
+            Assert.AreEqual(blob.Length, serialized.Length);
+            CollectionAssert.AreEqual(blob, serialized);
         }
 
         [TestMethod]
         public void KeyCredential_Parse_ComputerKey()
         {
             byte[] blob = "000200002000019C00E026B615793DE47951FF58A15F1F967297980C3EDAAF60B9E08FC9986F1320000204B8D485B4691C934E291D38B873B78390D4074B5D5391A851BF12C7466FEEC40E01033082010A0282010100B851C9219527F52E8A51582243E2CCA390B634FE5DE16B2BCA2E225257F3FF20BFE478C98B36095C49D897D42A67E2545D77003D38B9DF18682AF6FBFF281895CE61DADD5F72E13B40DA34E47833D380E58175F7D509DFA5E9971068756626AF1425B7CE0393BDB28AFF8E25CC601DE4542672E723B5BBB4E7D3963C2ACFB445171B43C14683DF0ED6524BD11F583D5BBEEBBA1DE6DE3384DF598E0D8BADACFBF1667890DC72CE61AF746084364BC288D982F23A6CD123E9BB6B701E00B096BE899876FE93BDD8B1C56FC107F36F7B2C8CE1AFB715FCDECA192634BE961B6104F21BFD84C97305123FF69D05D685CC8760CE54D9788457882D9DD39AFDA1D77D0203010001010004010100050008000831FF708C3402D401080009A962ABD55AF6D301".HexToBinary();
+
+            // Parse
             var key = new KeyCredential(blob, DummyDN);
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
             Assert.AreEqual(KeySource.ActiveDirectory, key.Source);
             Assert.IsNull(key.CustomKeyInfo);
+
+            // Serialize
+            byte[] serialized = key.ToByteArray();
+            Assert.AreEqual(blob.Length, serialized.Length);
+            CollectionAssert.AreEqual(blob, serialized);
         }
 
         [TestMethod]

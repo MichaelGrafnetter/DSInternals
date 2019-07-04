@@ -77,10 +77,20 @@
             get;
             set;
         }
+
+        [Parameter(
+            Mandatory = false,
+            ParameterSetName = ParamSetFromCertificate
+        )]
+        [Alias("CreatedTime", "TimeCreated", "TimeGenerated")]
+        public DateTime? CreationTime
+        {
+            get;
+            set;
+        }
         #endregion Parameters
 
         #region Cmdlet Overrides
-
         protected override void ProcessRecord()
         {
             KeyCredential keyCredential;
@@ -94,12 +104,18 @@
                     break;
                 case ParamSetFromCertificate:
                 default:
-                    keyCredential = new KeyCredential(this.Certificate, this.DeviceId, this.HolderDN);
+                    if(this.CreationTime.HasValue)
+                    {
+                        keyCredential = new KeyCredential(this.Certificate, this.DeviceId, this.HolderDN, this.CreationTime.Value);
+                    }
+                    else
+                    {
+                        keyCredential = new KeyCredential(this.Certificate, this.DeviceId, this.HolderDN);
+                    }
                     break;
             }
             this.WriteObject(keyCredential);
         }
-
         #endregion Cmdlet Overrides
     }
 }
