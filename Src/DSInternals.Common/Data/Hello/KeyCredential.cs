@@ -67,27 +67,36 @@
             private set;
         }
 
-        public RSAParameters? NGCPublicKey
+        public RSAParameters? RSAPublicKey
         {
             get
             {
-                if (this.Usage == KeyUsage.NGC && this.KeyMaterial != null)
+                // Only NGC and STK directly contain a RSA 2048-bit public key.
+                bool usageHasPublicKey = this.Usage == KeyUsage.NGC || this.Usage == KeyUsage.STK;
+                if (this.KeyMaterial == null || !usageHasPublicKey)
                 {
-                    // The key material is a 2048-bit RSA public key.
-                    return this.KeyMaterial.ToRSAParameters();
+                    return null;
+                }
+
+                // The 2048-bit RSA public key may be encoded in several ways.
+                if (this.KeyMaterial.IsBCryptRSAPublicKeyBlob())
+                {
+                    // This public key is in DER format. This is typically true for device/computer keys.
+                    return this.KeyMaterial.ImportBCryptRSAPublicKey();
                 }
                 else
                 {
-                    return null;
+                    // This public key is encoded as BCRYPT_RSAKEY_BLOB. This is typically true for user keys.
+                    return this.KeyMaterial.ImportDERPublicKey();
                 }
             }
         }
 
-        public string NGCModulus
+        public string RSAModulus
         {
             get
             {
-                var publicKey = this.NGCPublicKey;
+                var publicKey = this.RSAPublicKey;
                 return publicKey.HasValue ? Convert.ToBase64String(publicKey.Value.Modulus) : null;
             }
         }
@@ -139,7 +148,7 @@
         {
             Validator.AssertNotNull(certificate, nameof(certificate));
 
-            byte[] publicKey = certificate.ExportPublicKeyBlob();
+            byte[] publicKey = certificate.ExportBCryptRSAPublicKey();
             this.Initialize(publicKey, deviceId, holderDN, currentTime);
         }
 
