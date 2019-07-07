@@ -146,7 +146,7 @@ indent_size = 2
 indent_size = 2
 
 # Xml files
-[*.{xml,stylecop,resx,ruleset}]
+[*.{xml,ps1xml,stylecop,resx,ruleset}]
 indent_size = 2
 
 # Xml config files

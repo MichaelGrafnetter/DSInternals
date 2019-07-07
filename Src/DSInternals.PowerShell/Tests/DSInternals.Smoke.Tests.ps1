@@ -48,6 +48,14 @@ Describe 'DSInternals PowerShell Module' {
             # Compare their versions
             $moduleVersion | Should -BeExactly $assembly.Version
         }
+
+        $bundledFiles = Get-ChildItem -Path $ModulePath -Recurse -File -Exclude *.pdb,*.psd1,msvcp*.dll,msvcr*.dll,vcruntime*.dll | foreach { @{ FileName = $PSItem.Name } }
+
+        It 'references the <FileName> file.' -TestCases $bundledFiles -Test {
+            param($FileName)
+            
+            $moduleManifestPath | Should -FileContentMatch $FileName
+        }
     }
 
     Context 'File Structure' {

@@ -176,7 +176,7 @@
             this.KeyMaterial = publicKey;
             this.Usage = KeyUsage.NGC;
             this.CustomKeyInfo = new CustomKeyInformation(KeyFlags.None);
-            this.Source = KeySource.ActiveDirectory;
+            this.Source = KeySource.AD;
             this.DeviceId = deviceId;
         }
 
@@ -386,7 +386,7 @@
                     return DateTime.FromBinary(timeStamp);
                 case KeyCredentialVersion.Version2:
                 default:
-                    return source == KeySource.ActiveDirectory ? DateTime.FromFileTime(timeStamp) : DateTime.FromBinary(timeStamp);
+                    return source == KeySource.AD ? DateTime.FromFileTime(timeStamp) : DateTime.FromBinary(timeStamp);
             }
         }
 
@@ -403,7 +403,7 @@
                     break;
                 case KeyCredentialVersion.Version2:
                 default:
-                    timeStamp = source == KeySource.ActiveDirectory ? time.ToFileTime() : time.ToBinary();
+                    timeStamp = source == KeySource.AD ? time.ToFileTime() : time.ToBinary();
                     break;
             }
 

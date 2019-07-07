@@ -19,7 +19,7 @@ namespace DSInternals.Common.Test
             var key = new KeyCredential(blob, DummyDN);
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
-            Assert.AreEqual(KeySource.ActiveDirectory, key.Source);
+            Assert.AreEqual(KeySource.AD, key.Source);
             Assert.IsTrue(key.CustomKeyInfo.Flags.HasFlag(KeyFlags.MFANotUsed));
 
             Assert.IsNotNull(key.RSAPublicKey);
@@ -38,7 +38,7 @@ namespace DSInternals.Common.Test
             var key = new KeyCredential(blob, DummyDN);
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
-            Assert.AreEqual(KeySource.ActiveDirectory, key.Source);
+            Assert.AreEqual(KeySource.AD, key.Source);
             Assert.AreEqual("IHF64FL8z1RqrQ1R6Hiq1pzgT9w59ajY4866a8tNoOc=", key.Identifier);
             Assert.AreEqual("47f577e3-d2d0-4a0a-8aca-e0501098bde4", key.DeviceId.ToString());
             Assert.IsNotNull(key.CustomKeyInfo);
@@ -56,7 +56,7 @@ namespace DSInternals.Common.Test
             var key = new KeyCredential(blob, DummyDN);
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
-            Assert.AreEqual(KeySource.AzureActiveDirectory, key.Source);
+            Assert.AreEqual(KeySource.AzureAD, key.Source);
             Assert.IsTrue(key.CustomKeyInfo.SupportsNotification.Value);
 
             // Serialize
@@ -72,7 +72,7 @@ namespace DSInternals.Common.Test
             var key = new KeyCredential(blob, DummyDN);
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
-            Assert.AreEqual(KeySource.AzureActiveDirectory, key.Source);
+            Assert.AreEqual(KeySource.AzureAD, key.Source);
             Assert.AreEqual(KeyFlags.None, key.CustomKeyInfo.Flags);
 
             // Serialize
@@ -88,7 +88,7 @@ namespace DSInternals.Common.Test
             var key = new KeyCredential(blob, DummyDN);
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
-            Assert.AreEqual(KeySource.AzureActiveDirectory, key.Source);
+            Assert.AreEqual(KeySource.AzureAD, key.Source);
             Assert.AreEqual(KeyFlags.None, key.CustomKeyInfo.Flags);
 
             // Serialize
@@ -104,7 +104,7 @@ namespace DSInternals.Common.Test
             var key = new KeyCredential(blob, DummyDN);
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.FIDO, key.Usage);
-            Assert.AreEqual(KeySource.AzureActiveDirectory, key.Source);
+            Assert.AreEqual(KeySource.AzureAD, key.Source);
             Assert.AreEqual(KeyFlags.Attestation, key.CustomKeyInfo.Flags);
             Assert.AreEqual("WEe6PFT+3MT+pJ2VfR/4jQ==", key.Identifier);
             Assert.IsNull(key.RSAPublicKey);
@@ -122,7 +122,7 @@ namespace DSInternals.Common.Test
             var key = new KeyCredential(blob, DummyDN);
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.STK, key.Usage);
-            Assert.AreEqual(KeySource.ActiveDirectory, key.Source);
+            Assert.AreEqual(KeySource.AD, key.Source);
             Assert.AreEqual("c+a+uKm1sIKDiEdue/3V+OehE+wIB+8lwPvPOc60MRE=", key.Identifier);
             Assert.IsNotNull(key.CustomKeyInfo);
             Assert.IsNotNull(key.RSAPublicKey);
@@ -142,7 +142,7 @@ namespace DSInternals.Common.Test
             var key = new KeyCredential(blob, DummyDN);
             Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
-            Assert.AreEqual(KeySource.ActiveDirectory, key.Source);
+            Assert.AreEqual(KeySource.AD, key.Source);
             Assert.IsNull(key.CustomKeyInfo);
             Assert.IsNotNull(key.RSAPublicKey);
 
