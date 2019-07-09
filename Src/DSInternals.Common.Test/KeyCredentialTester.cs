@@ -24,6 +24,7 @@ namespace DSInternals.Common.Test
 
             Assert.IsNotNull(key.RSAPublicKey);
             Assert.IsNotNull(key.RSAModulus);
+            Assert.AreEqual(256, key.RSAPublicKey.Value.Modulus.Length);
 
             // Serialize
             byte[] serialized = key.ToByteArray();

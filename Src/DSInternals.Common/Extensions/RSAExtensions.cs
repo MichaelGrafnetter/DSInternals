@@ -112,8 +112,8 @@ namespace DSInternals.Common
             var rsaPublicKey = RsaPublicKeyStructure.GetInstance(asn1);
             return new RSAParameters()
             {
-                Modulus = rsaPublicKey.Modulus.ToByteArray(),
-                Exponent = rsaPublicKey.PublicExponent.ToByteArray()
+                Modulus = rsaPublicKey.Modulus.ToByteArrayUnsigned(),
+                Exponent = rsaPublicKey.PublicExponent.ToByteArrayUnsigned()
             };
         }
 
