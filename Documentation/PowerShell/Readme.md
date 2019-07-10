@@ -150,7 +150,7 @@ Saves DPAPI and Credential Roaming data returned by the [Get-ADReplBackupKey](Ge
 Decodes the value of the msDS-ManagedPassword attribute of a Group Managed Service Account.
 
 ### [Get-ADKeyCredential](Get-ADKeyCredential.md#get-adkeycredential)
-Creates an object representing Windows Hello for Business credentials from its binary representation or an X.509 certificate.
+Creates an object representing Windows Hello for Business or FIDO credentials from its binary representation or an X.509 certificate.
 
 ### [ConvertFrom-GPPrefPassword](ConvertFrom-GPPrefPassword.md#convertfrom-gpprefpassword)
 Decodes a password from the format used by Group Policy Preferences.

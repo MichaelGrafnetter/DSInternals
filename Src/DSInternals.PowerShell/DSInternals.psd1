@@ -91,7 +91,9 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'Set-LsaPolicy', 'Get-SystemKey'
 
 # List of all files packaged with this module
-FileList = 'AutoMapper.dll',
+FileList = 
+           'AutoMapper.dll',
+           'BouncyCastle.Crypto.dll',
            'DSInternals.Common.dll',
            'DSInternals.DataStore.dll',
            'DSInternals.Replication.dll',
@@ -99,9 +101,12 @@ FileList = 'AutoMapper.dll',
            'DSInternals.SAM.dll',
            'Esent.Interop.dll',
            'Esent.Isam.dll',
+           'License.txt',
            'NDceRpc.Microsoft.dll',
            'amd64\DSInternals.Replication.Interop.dll',
-           'x86\DSInternals.Replication.Interop.dll'
+           'x86\DSInternals.Replication.Interop.dll',
+           'en-US\about_DSInternals.help.txt',
+           'en-US\DSInternals.PowerShell.dll-Help.xml'
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{

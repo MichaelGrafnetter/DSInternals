@@ -14,16 +14,16 @@
         /// <summary>
         /// Operating system volume.
         /// </summary>
-        OSV = 0x01,
+        OperatingSystem = 0x01,
 
         /// <summary>
         /// Fixed data volume.
         /// </summary>
-        FDV = 0x02,
+        Fixed = 0x02,
 
         /// <summary>
         /// Removable data volume.
         /// </summary>
-        RDV = 0x03
+        Removable = 0x03
     }
 }

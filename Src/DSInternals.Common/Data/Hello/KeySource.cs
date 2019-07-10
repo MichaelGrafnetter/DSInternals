@@ -9,11 +9,11 @@
         /// <summary>
         /// On Premises Key Trust
         /// </summary>
-        ActiveDirectory = 0x00,
+        AD = 0x00,
 
         /// <summary>
         /// Hybrid Azure AD Key Trust
         /// </summary>
-        AzureActiveDirectory = 0x01
+        AzureAD = 0x01
     }
 }

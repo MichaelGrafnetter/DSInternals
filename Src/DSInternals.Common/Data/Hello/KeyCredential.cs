@@ -123,6 +123,40 @@ namespace DSInternals.Common.Data
             }
         }
 
+        public RSAParameters? RSAPublicKey
+        {
+            get
+            {
+                // Only NGC and STK directly contain a RSA 2048-bit public key.
+                bool usageHasPublicKey = this.Usage == KeyUsage.NGC || this.Usage == KeyUsage.STK;
+                if (this.KeyMaterial == null || !usageHasPublicKey)
+                {
+                    return null;
+                }
+
+                // The 2048-bit RSA public key may be encoded in several ways.
+                if (this.KeyMaterial.IsBCryptRSAPublicKeyBlob())
+                {
+                    // This public key is in DER format. This is typically true for device/computer keys.
+                    return this.KeyMaterial.ImportBCryptRSAPublicKey();
+                }
+                else
+                {
+                    // This public key is encoded as BCRYPT_RSAKEY_BLOB. This is typically true for user keys.
+                    return this.KeyMaterial.ImportDERPublicKey();
+                }
+            }
+        }
+
+        public string RSAModulus
+        {
+            get
+            {
+                var publicKey = this.RSAPublicKey;
+                return publicKey.HasValue ? Convert.ToBase64String(publicKey.Value.Modulus) : null;
+            }
+        }
+
         public CustomKeyInformation CustomKeyInfo
         {
             get;
@@ -170,7 +204,7 @@ namespace DSInternals.Common.Data
         {
             Validator.AssertNotNull(certificate, nameof(certificate));
 
-            byte[] publicKey = certificate.ExportPublicKeyBlob();
+            byte[] publicKey = certificate.ExportBCryptRSAPublicKey();
             this.Initialize(publicKey, deviceId, holderDN, currentTime);
         }
 
@@ -198,7 +232,7 @@ namespace DSInternals.Common.Data
             this.RawKeyMaterial = publicKey;
             this.Usage = KeyUsage.NGC;
             this.CustomKeyInfo = new CustomKeyInformation(KeyFlags.None);
-            this.Source = KeySource.ActiveDirectory;
+            this.Source = KeySource.AD;
             this.DeviceId = deviceId;
         }
 
@@ -408,7 +442,7 @@ namespace DSInternals.Common.Data
                     return DateTime.FromBinary(timeStamp);
                 case KeyCredentialVersion.Version2:
                 default:
-                    return source == KeySource.ActiveDirectory ? DateTime.FromFileTime(timeStamp) : DateTime.FromBinary(timeStamp);
+                    return source == KeySource.AD ? DateTime.FromFileTime(timeStamp) : DateTime.FromBinary(timeStamp);
             }
         }
 
@@ -425,7 +459,7 @@ namespace DSInternals.Common.Data
                     break;
                 case KeyCredentialVersion.Version2:
                 default:
-                    timeStamp = source == KeySource.ActiveDirectory ? time.ToFileTime() : time.ToBinary();
+                    timeStamp = source == KeySource.AD ? time.ToFileTime() : time.ToBinary();
                     break;
             }
 

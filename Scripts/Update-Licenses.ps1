@@ -19,6 +19,15 @@ $products = @(
      }, @{
         Name = 'PBKDF2.NET';
         LicenseUrl = 'https://raw.githubusercontent.com/therealmagicmike/PBKDF2.NET/master/License.txt'
+     }, @{
+        Name = 'Bouncy Castle';
+        LicenseUrl = 'https://raw.githubusercontent.com/bcgit/bc-csharp/master/crypto/License.html'
+     }, @{
+        Name = 'Json.NET';
+        LicenseUrl = 'https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/master/LICENSE.md'
+     }, @{
+        Name = 'Peter O. CBOR Library';
+        LicenseUrl = 'https://raw.githubusercontent.com/peteroupc/CBOR/master/LICENSE.md'
      }
 )
 
@@ -44,7 +53,13 @@ foreach($product in $products)
     $licenses.AppendLine() > $null
 
     # License Text
-    $license = Invoke-WebRequest -Uri $product.LicenseUrl
+    $license = Invoke-WebRequest -Uri $product.LicenseUrl -UseBasicParsing
+	if($product.LicenseUrl.EndsWith('.html'))
+	{
+		# Remove HTML tags
+		$tagsRemoved = $license.Content -replace '</?[^<]+>',''
+		$license = $tagsRemoved.Trim()
+	}
     $licenses.Append($license) > $null
 }
 
