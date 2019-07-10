@@ -27,7 +27,7 @@ namespace DSInternals.Common.Data.Fido
         /// Section 7 of RFC8152, using the CTAP2 canonical CBOR encoding form.
         /// <see cref="https://www.w3.org/TR/webauthn/#credential-public-key"/>
         /// </summary>
-        public byte[] CredentialPublicKey { get; private set; }
+        public CredentialPublicKey CredentialPublicKey { get; private set; }
 
         /// <summary>
         /// AAGUID is sent as big endian byte array, this converter is for little endian systems.
@@ -52,8 +52,6 @@ namespace DSInternals.Common.Data.Fido
         /// <summary>
         /// Decodes attested credential data.
         /// </summary>
-        /// <param name="attData">Byte array starting with the attested credential data, may have extension data appended.</param>
-        /// <param name="acdLen">Length of attested credential data. Critical to finding the start of the extensions data.</param>
         public AttestedCredentialData(BinaryReader reader)
         {
             // First 16 bytes is AAGUID
@@ -93,14 +91,14 @@ namespace DSInternals.Common.Data.Fido
             var cpk = PeterO.Cbor.CBORObject.Read(reader.BaseStream);
 
             // Encode the CBOR object back to a byte array.
-            CredentialPublicKey = cpk.EncodeToBytes(new PeterO.Cbor.CBOREncodeOptions(false, false, true));
+            CredentialPublicKey = new CredentialPublicKey(cpk);
         }
         public override string ToString()
         {
             return string.Format("AAGUID: {0}, CredentialID: {1}, CredentialPublicKey: {2}",
                 AaGuid.ToString(),
                 CredentialID.ToHex(true),
-                PeterO.Cbor.CBORObject.DecodeFromBytes(CredentialPublicKey));
+                CredentialPublicKey.ToString());
         }
     }
 }

@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DSInternals.Common</RootNamespace>
     <AssemblyName>DSInternals.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -65,6 +65,8 @@
     <Compile Include="Data\Hello\FidoAuthenticatorData.cs" />
     <Compile Include="Data\Hello\FidoAuthenticatorExtensions.cs" />
     <Compile Include="Data\Hello\FidoAuthenticatorFlags.cs" />
+    <Compile Include="Data\Hello\FidoCose.cs" />
+    <Compile Include="Data\Hello\FidoCredentialPublicKey.cs" />
     <Compile Include="Data\Hello\KeyCredential.cs" />
     <Compile Include="Data\Hello\KeyCredentialVersion.cs" />
     <Compile Include="Data\Hello\KeyCredentialEntryType.cs" />

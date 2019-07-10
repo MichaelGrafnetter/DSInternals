@@ -1,10 +1,14 @@
+﻿using System;
+using System.IO;
+using System.Security.Cryptography;
+using Newtonsoft.Json;
+
 namespace DSInternals.Common.Data
 {
     using System;
     using System.IO;
     using System.Security.Cryptography;
     using System.Security.Cryptography.X509Certificates;
-    using Newtonsoft.Json;
 
     /// <summary>
     ///  This class represents a single credential stored as a series of values, corresponding to the KEYCREDENTIALLINK_BLOB structure.
@@ -77,6 +81,45 @@ namespace DSInternals.Common.Data
                     return JsonConvert.DeserializeObject<KeyMaterialFido>(fidoCredString);
                 }
                 else return RawKeyMaterial;
+            }
+        }
+        public ECParameters? ECParams
+        {
+            get
+            {
+                if (this.Usage == KeyUsage.FIDO)
+                {
+                    var km = (KeyMaterialFido)this.KeyMaterial;
+                    if (km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type.Equals(Fido.COSE.KeyType.EC2))
+                    {
+                        return km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.ECDsa.ExportParameters(false);
+                    }
+                }
+                return null;
+            }
+        }
+        public RSAParameters? RSAParams
+        {
+            get
+            {
+                if (this.Usage == KeyUsage.FIDO)
+                {
+                    var km = (KeyMaterialFido)this.KeyMaterial;
+                    if (km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type.Equals(Fido.COSE.KeyType.RSA))
+                    {
+                        return km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.RSA.ExportParameters(false);
+                    }
+                }
+                    return null;
+            }
+        }
+
+        public string RSAModulus
+        {
+            get
+            {
+                var publicKey = this.RSAParams;
+                return publicKey.HasValue ? Convert.ToBase64String(publicKey.Value.Modulus) : null;
             }
         }
 

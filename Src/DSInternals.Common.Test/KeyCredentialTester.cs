@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using DSInternals.Common.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -119,6 +120,11 @@ namespace DSInternals.Common.Test
             var strExts = km.AuthenticatorData.Extensions.ToString();
             var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
             Assert.AreEqual(expectedStrExts, strExts);
+            Assert.IsNull(key.RSAParams);
+            Assert.IsNotNull(key.ECParams);
+            Assert.AreEqual("nistP256", key.ECParams.Value.Curve.Oid.FriendlyName);
+            Assert.AreEqual("8475e0274d47d8ae61f331b4b9dfeff8d816ace3cbae893dbfa3429b585fa2f9", key.ECParams.Value.Q.X.ToHex());
+            Assert.AreEqual("92bef2cfcc4a1fc71d8c803fce4f7ce09573d7cdc5852ba50b59770f653d176f", key.ECParams.Value.Q.Y.ToHex());
 
             // Serialize
             byte[] serialized = key.ToByteArray();

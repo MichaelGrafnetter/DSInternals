@@ -81,7 +81,7 @@ namespace DSInternals.Common.Data.Fido
                         var ext = PeterO.Cbor.CBORObject.Read(reader.BaseStream);
 
                         // Encode the CBOR object back to a byte array.
-                        Extensions = new Extensions(ext.EncodeToBytes(new PeterO.Cbor.CBOREncodeOptions(false, false, true)));
+                        Extensions = new Extensions(ext.EncodeToBytes());
                     }
                     // There should be no bytes left over after decoding all data from the structure
                     Validator.Equals(stream.Position, stream.Length);
