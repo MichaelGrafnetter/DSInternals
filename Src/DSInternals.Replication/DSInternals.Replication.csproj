@@ -37,11 +37,28 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NDceRpc.Microsoft">
+    <Reference Include="NDceRpc.Microsoft, Version=0.2.1.0, Culture=neutral, PublicKeyToken=7ef76aa0ad6f5cef, processorArchitecture=MSIL">
       <HintPath>..\packages\NDceRpc.0.2.1.0\lib\NET40\NDceRpc.Microsoft.dll</HintPath>
-      <Private>True</Private>
+    </Reference>
+    <Reference Include="NDceRpc.ServiceModel, Version=0.2.1.0, Culture=neutral, PublicKeyToken=7ef76aa0ad6f5cef, processorArchitecture=MSIL">
+      <HintPath>..\packages\NDceRpc.0.2.1.0\lib\NET40\NDceRpc.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="NDceRpc.ServiceModel.Core, Version=0.2.1.0, Culture=neutral, PublicKeyToken=7ef76aa0ad6f5cef, processorArchitecture=MSIL">
+      <HintPath>..\packages\NDceRpc.0.2.1.0\lib\NET40\NDceRpc.ServiceModel.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NDceRpc.ServiceModel.Protobuf, Version=0.0.0.0, Culture=neutral, PublicKeyToken=7ef76aa0ad6f5cef, processorArchitecture=MSIL">
+      <HintPath>..\packages\NDceRpc.0.2.1.0\lib\NET40\NDceRpc.ServiceModel.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="NDceRpc.ServiceModel.Protobuf.Serializers, Version=0.0.0.0, Culture=neutral, PublicKeyToken=7ef76aa0ad6f5cef, processorArchitecture=MSIL">
+      <HintPath>..\packages\NDceRpc.0.2.1.0\lib\NET40\NDceRpc.ServiceModel.Protobuf.Serializers.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.4.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.2.4.0\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
@@ -71,6 +88,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="DSInternals.Replication.nuspec">
       <SubType>Designer</SubType>
     </None>

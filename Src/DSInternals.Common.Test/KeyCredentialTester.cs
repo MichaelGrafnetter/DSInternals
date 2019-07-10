@@ -22,9 +22,9 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AD, key.Source);
             Assert.IsTrue(key.CustomKeyInfo.Flags.HasFlag(KeyFlags.MFANotUsed));
 
-            Assert.IsNotNull(key.RSAPublicKey);
+            Assert.IsNotNull(key.RSAParams);
             Assert.IsNotNull(key.RSAModulus);
-            Assert.AreEqual(256, key.RSAPublicKey.Value.Modulus.Length);
+            Assert.AreEqual(256, key.RSAParams.Value.Modulus.Length);
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -146,7 +146,7 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AD, key.Source);
             Assert.AreEqual("c+a+uKm1sIKDiEdue/3V+OehE+wIB+8lwPvPOc60MRE=", key.Identifier);
             Assert.IsNotNull(key.CustomKeyInfo);
-            Assert.IsNotNull(key.RSAPublicKey);
+            Assert.IsNotNull(key.RSAParams);
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -165,7 +165,7 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
             Assert.AreEqual(KeySource.AD, key.Source);
             Assert.IsNull(key.CustomKeyInfo);
-            Assert.IsNotNull(key.RSAPublicKey);
+            Assert.IsNotNull(key.RSAParams);
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -189,8 +189,8 @@ namespace DSInternals.Common.Test
 
             // Check
             Assert.AreEqual(expectedPublicKeyBlob, publicKeyBlob.ToHex(true));
-            CollectionAssert.AreEqual(expectedRSAParameters.Modulus, key.RSAPublicKey.Value.Modulus);
-            CollectionAssert.AreEqual(expectedRSAParameters.Exponent, key.RSAPublicKey.Value.Exponent);
+            CollectionAssert.AreEqual(expectedRSAParameters.Modulus, key.RSAParams.Value.Modulus);
+            CollectionAssert.AreEqual(expectedRSAParameters.Exponent, key.RSAParams.Value.Exponent);
             Assert.AreEqual(expectedModulus, key.RSAModulus);
         }
 

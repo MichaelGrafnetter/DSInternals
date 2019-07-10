@@ -95,6 +95,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="DSInternals.DataStore.nuspec" />
     <None Include="package\install.ps1" />
   </ItemGroup>
