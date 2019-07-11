@@ -68,19 +68,19 @@
             /// <summary> 
             /// Identification of the key type	
             /// </summary>
-            kty = 1,
+            KeyType = 1,
             /// <summary> 
             /// Key identification value - match to kid in message	
             /// </summary>
-            kid = 2,
+            KeyId = 2,
             /// <summary> 
             /// Key usage restriction to this algorithm	
             /// </summary>
-            alg = 3,
+            Alg = 3,
             /// <summary> 
             /// Restrict set of permissible operations	
             /// </summary>
-            key_ops = 4,
+            KeyOps = 4,
             /// <summary> 
             /// Base IV to be XORed with Partial IVs	
             /// </summary>
@@ -95,27 +95,27 @@
             /// <summary> 
             /// EC identifier
             /// </summary>
-            crv = -1,
+            Crv = -1,
             /// <summary> 
             /// Key Value	
             /// </summary>
-            k = -1,
+            K = -1,
             /// <summary> 
             /// x-coordinate	
             /// </summary>
-            x = -2,
+            X = -2,
             /// <summary> 
             /// y-coordinate	
             /// </summary>
-            y = -3,
+            Y = -3,
             /// <summary> 
             /// the RSA modulus n	
             /// </summary>
-            n = -1,
+            N = -1,
             /// <summary> 
             /// the RSA public exponent e	
             /// </summary>
-            e = -2
+            E = -2
         }
 
         /// <summary>

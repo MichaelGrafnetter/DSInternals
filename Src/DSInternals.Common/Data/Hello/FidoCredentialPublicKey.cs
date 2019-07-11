@@ -15,8 +15,8 @@
                     rsa.ImportParameters(
                         new RSAParameters()
                         {
-                            Modulus = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.n)].GetByteString(),
-                            Exponent = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.e)].GetByteString()
+                            Modulus = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.N)].GetByteString(),
+                            Exponent = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.E)].GetByteString()
                         }
                     );
                     return rsa;
@@ -32,11 +32,11 @@
                 {
                     var point = new ECPoint
                     {
-                        X = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.x)].GetByteString(),
-                        Y = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.y)].GetByteString(),
+                        X = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.X)].GetByteString(),
+                        Y = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.Y)].GetByteString(),
                     };
                     ECCurve curve;
-                    var crv = (COSE.EllipticCurve)_cpk[CBORObject.FromObject(COSE.KeyTypeParameter.crv)].AsInt32();
+                    var crv = (COSE.EllipticCurve)_cpk[CBORObject.FromObject(COSE.KeyTypeParameter.Crv)].AsInt32();
                     switch (Alg)
                     {
                         case COSE.Algorithm.ES256:
@@ -118,11 +118,11 @@
                     switch (Alg) // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
                     {
                         case COSE.Algorithm.EdDSA:
-                            var crv = (COSE.EllipticCurve)_cpk[CBORObject.FromObject(COSE.KeyTypeParameter.crv)].AsInt32();
+                            var crv = (COSE.EllipticCurve)_cpk[CBORObject.FromObject(COSE.KeyTypeParameter.Crv)].AsInt32();
                             switch (crv) // https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
                             {
                                 case COSE.EllipticCurve.Ed25519:
-                                    var publicKey = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.x)].GetByteString();
+                                    var publicKey = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.X)].GetByteString();
                                     return publicKey;
                                 default:
                                     throw new ArgumentOutOfRangeException(string.Format("Missing or unknown crv {0}", crv.ToString()));
@@ -141,8 +141,8 @@
         public CredentialPublicKey(CBORObject cpk)
         {
             _cpk = cpk;
-            Type = (COSE.KeyType) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.kty)].AsInt32();
-            Alg = (COSE.Algorithm) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.alg)].AsInt32();
+            Type = (COSE.KeyType) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.KeyType)].AsInt32();
+            Alg = (COSE.Algorithm) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.Alg)].AsInt32();
         }
         public override string ToString()
         {
