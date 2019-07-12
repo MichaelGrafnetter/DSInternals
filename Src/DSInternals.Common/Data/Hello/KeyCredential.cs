@@ -1,4 +1,9 @@
-﻿namespace DSInternals.Common.Data
+﻿using System;
+using System.IO;
+using System.Security.Cryptography;
+using Newtonsoft.Json;
+
+namespace DSInternals.Common.Data
 {
     using System;
     using System.IO;
@@ -58,19 +63,55 @@
             private set;
         }
 
-        /// <summary>
-        /// Key material of the credential.
-        /// </summary>
-        public byte[] KeyMaterial
+        internal byte[] RawKeyMaterial
         {
             get;
             private set;
+        }
+        /// <summary>
+        /// Key material of the credential.
+        /// </summary>
+        public object KeyMaterial
+        {
+            get
+            {
+                if (Usage == KeyUsage.FIDO)
+                {
+                    var fidoCredString = System.Text.Encoding.UTF8.GetString(RawKeyMaterial, 0, RawKeyMaterial.Length);
+                    return JsonConvert.DeserializeObject<KeyMaterialFido>(fidoCredString);
+                }
+                else return RawKeyMaterial;
+            }
+        }
+        public ECParameters? ECPublicKey
+        {
+            get
+            {
+                if (this.Usage == KeyUsage.FIDO)
+                {
+                    var km = (KeyMaterialFido)this.KeyMaterial;
+                    if (km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type.Equals(Fido.COSE.KeyType.EC2))
+                    {
+                        return km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.ECDsa.ExportParameters(false);
+                    }
+                }
+                return null;
+            }
         }
 
         public RSAParameters? RSAPublicKey
         {
             get
             {
+                if (this.Usage == KeyUsage.FIDO)
+                {
+                    var km = (KeyMaterialFido)this.KeyMaterial;
+                    if (km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type.Equals(Fido.COSE.KeyType.RSA))
+                    {
+                        return km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.RSA.ExportParameters(false);
+                    }
+                }
+
                 // Only NGC and STK directly contain a RSA 2048-bit public key.
                 bool usageHasPublicKey = this.Usage == KeyUsage.NGC || this.Usage == KeyUsage.STK;
                 if (this.KeyMaterial == null || !usageHasPublicKey)
@@ -79,15 +120,15 @@
                 }
 
                 // The 2048-bit RSA public key may be encoded in several ways.
-                if (this.KeyMaterial.IsBCryptRSAPublicKeyBlob())
+                if (this.RawKeyMaterial.IsBCryptRSAPublicKeyBlob())
                 {
                     // This public key is in DER format. This is typically true for device/computer keys.
-                    return this.KeyMaterial.ImportBCryptRSAPublicKey();
+                    return this.RawKeyMaterial.ImportBCryptRSAPublicKey();
                 }
                 else
                 {
                     // This public key is encoded as BCRYPT_RSAKEY_BLOB. This is typically true for user keys.
-                    return this.KeyMaterial.ImportDERPublicKey();
+                    return this.RawKeyMaterial.ImportDERPublicKey();
                 }
             }
         }
@@ -173,7 +214,7 @@
             this.Identifier = ComputeKeyIdentifier(publicKey, this.Version);
             this.CreationTime = currentTime;
             this.LastLogonTime = currentTime;
-            this.KeyMaterial = publicKey;
+            this.RawKeyMaterial = publicKey;
             this.Usage = KeyUsage.NGC;
             this.CustomKeyInfo = new CustomKeyInformation(KeyFlags.None);
             this.Source = KeySource.AD;
@@ -226,7 +267,7 @@
                                 // We do not need to validate the integrity of the data by the hash
                                 break;
                             case KeyCredentialEntryType.KeyMaterial:
-                                this.KeyMaterial = value;
+                                this.RawKeyMaterial = value;
                                 break;
                             case KeyCredentialEntryType.KeyUsage:
                                 if(length == sizeof(byte))
@@ -286,9 +327,9 @@
                 using (var propertyWriter = new BinaryWriter(propertyStream))
                 {
                     // Key Material
-                    propertyWriter.Write((ushort)this.KeyMaterial.Length);
+                    propertyWriter.Write((ushort)this.RawKeyMaterial.Length);
                     propertyWriter.Write((byte)KeyCredentialEntryType.KeyMaterial);
-                    propertyWriter.Write(this.KeyMaterial);
+                    propertyWriter.Write(this.RawKeyMaterial);
 
                     // Key Usage
                     propertyWriter.Write((ushort)sizeof(KeyUsage));

@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DSInternals.Common</RootNamespace>
     <AssemblyName>DSInternals.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -36,6 +36,15 @@
     <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
+    <Reference Include="CBOR, Version=3.0.3.0, Culture=neutral, PublicKeyToken=9cd62db60ea5554c, processorArchitecture=MSIL">
+      <HintPath>..\packages\PeterO.Cbor.3.0.3\lib\netstandard1.0\CBOR.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Numbers, Version=1.2.2.0, Culture=neutral, PublicKeyToken=9cd62db60ea5554c, processorArchitecture=MSIL">
+      <HintPath>..\packages\PeterO.Numbers.1.2.2\lib\net40\Numbers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.DirectoryServices" />
   </ItemGroup>
@@ -55,12 +64,19 @@
     <Compile Include="Data\DPAPI\RoamedCredentialFlags.cs" />
     <Compile Include="Data\DPAPI\RoamedCredentialType.cs" />
     <Compile Include="Data\Hello\CustomKeyInformation.cs" />
+    <Compile Include="Data\Hello\FidoAttestedCredentialData.cs" />
+    <Compile Include="Data\Hello\FidoAuthenticatorData.cs" />
+    <Compile Include="Data\Hello\FidoAuthenticatorExtensions.cs" />
+    <Compile Include="Data\Hello\FidoAuthenticatorFlags.cs" />
+    <Compile Include="Data\Hello\FidoCose.cs" />
+    <Compile Include="Data\Hello\FidoCredentialPublicKey.cs" />
     <Compile Include="Data\Hello\KeyCredential.cs" />
     <Compile Include="Data\Hello\KeyCredentialVersion.cs" />
     <Compile Include="Data\Hello\KeyCredentialEntryType.cs" />
     <Compile Include="Data\Hello\KeySource.cs" />
     <Compile Include="Data\Hello\KeyStrength.cs" />
     <Compile Include="Data\Hello\KeyFlags.cs" />
+    <Compile Include="Data\Hello\KeyMaterialFido.cs" />
     <Compile Include="Data\Hello\VolumeType.cs" />
     <Compile Include="Data\Hello\KeyUsage.cs" />
     <Compile Include="Extensions\ByteArrayExtensions.cs" />
