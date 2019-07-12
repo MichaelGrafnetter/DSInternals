@@ -154,7 +154,6 @@
     <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Data\DSDataRepresentation.cd" />
     <None Include="DSInternals.Common.nuspec">
       <SubType>Designer</SubType>

@@ -83,7 +83,7 @@ namespace DSInternals.Common.Data
                 else return RawKeyMaterial;
             }
         }
-        public ECParameters? ECParams
+        public ECParameters? ECPublicKey
         {
             get
             {
@@ -99,7 +99,7 @@ namespace DSInternals.Common.Data
             }
         }
 
-        public RSAParameters? RSAParams
+        public RSAParameters? RSAPublicKey
         {
             get
             {
@@ -137,7 +137,7 @@ namespace DSInternals.Common.Data
         {
             get
             {
-                var publicKey = this.RSAParams;
+                var publicKey = this.RSAPublicKey;
                 return publicKey.HasValue ? Convert.ToBase64String(publicKey.Value.Modulus) : null;
             }
         }

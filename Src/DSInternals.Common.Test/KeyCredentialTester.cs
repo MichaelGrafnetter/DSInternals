@@ -22,9 +22,9 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AD, key.Source);
             Assert.IsTrue(key.CustomKeyInfo.Flags.HasFlag(KeyFlags.MFANotUsed));
 
-            Assert.IsNotNull(key.RSAParams);
+            Assert.IsNotNull(key.RSAPublicKey);
             Assert.IsNotNull(key.RSAModulus);
-            Assert.AreEqual(256, key.RSAParams.Value.Modulus.Length);
+            Assert.AreEqual(256, key.RSAPublicKey.Value.Modulus.Length);
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -124,11 +124,11 @@ namespace DSInternals.Common.Test
             var strExts = km.AuthenticatorData.Extensions.ToString();
             var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
             Assert.AreEqual(expectedStrExts, strExts);
-            Assert.IsNull(key.RSAParams);
-            Assert.IsNotNull(key.ECParams);
-            Assert.AreEqual("nistP256", key.ECParams.Value.Curve.Oid.FriendlyName);
-            Assert.AreEqual("8475e0274d47d8ae61f331b4b9dfeff8d816ace3cbae893dbfa3429b585fa2f9", key.ECParams.Value.Q.X.ToHex());
-            Assert.AreEqual("92bef2cfcc4a1fc71d8c803fce4f7ce09573d7cdc5852ba50b59770f653d176f", key.ECParams.Value.Q.Y.ToHex());
+            Assert.IsNull(key.RSAPublicKey);
+            Assert.IsNotNull(key.ECPublicKey);
+            Assert.AreEqual("nistP256", key.ECPublicKey.Value.Curve.Oid.FriendlyName);
+            Assert.AreEqual("8475e0274d47d8ae61f331b4b9dfeff8d816ace3cbae893dbfa3429b585fa2f9", key.ECPublicKey.Value.Q.X.ToHex());
+            Assert.AreEqual("92bef2cfcc4a1fc71d8c803fce4f7ce09573d7cdc5852ba50b59770f653d176f", key.ECPublicKey.Value.Q.Y.ToHex());
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -162,11 +162,11 @@ namespace DSInternals.Common.Test
             var strExts = km.AuthenticatorData.Extensions.ToString();
             var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
             Assert.AreEqual(expectedStrExts, strExts);
-            Assert.IsNull(key.RSAParams);
-            Assert.IsNotNull(key.ECParams);
-            Assert.AreEqual("nistP256", key.ECParams.Value.Curve.Oid.FriendlyName);
-            Assert.AreEqual("a74a4dc3cce38f19364ed643291992aeda217dd4d8b02c10d48aaa1ed137deae", key.ECParams.Value.Q.X.ToHex());
-            Assert.AreEqual("0038620a5fd70e8ea0c2e170e13fd0155aee8f16cec21ba36d99cb6dd4b181a8", key.ECParams.Value.Q.Y.ToHex());
+            Assert.IsNull(key.RSAPublicKey);
+            Assert.IsNotNull(key.ECPublicKey);
+            Assert.AreEqual("nistP256", key.ECPublicKey.Value.Curve.Oid.FriendlyName);
+            Assert.AreEqual("a74a4dc3cce38f19364ed643291992aeda217dd4d8b02c10d48aaa1ed137deae", key.ECPublicKey.Value.Q.X.ToHex());
+            Assert.AreEqual("0038620a5fd70e8ea0c2e170e13fd0155aee8f16cec21ba36d99cb6dd4b181a8", key.ECPublicKey.Value.Q.Y.ToHex());
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -200,11 +200,11 @@ namespace DSInternals.Common.Test
             var strExts = km.AuthenticatorData.Extensions.ToString();
             var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
             Assert.AreEqual(expectedStrExts, strExts);
-            Assert.IsNull(key.RSAParams);
-            Assert.IsNotNull(key.ECParams);
-            Assert.AreEqual("nistP256", key.ECParams.Value.Curve.Oid.FriendlyName);
-            Assert.AreEqual("4a82e3391ca1cc45b7963dce12ca933cfceed56e4c2eef54f56f85113d65243c", key.ECParams.Value.Q.X.ToHex());
-            Assert.AreEqual("da3cae1fdecda63c3b4156286d5514c58b84e04e770bbb3f1bc20e50a105ccd0", key.ECParams.Value.Q.Y.ToHex());
+            Assert.IsNull(key.RSAPublicKey);
+            Assert.IsNotNull(key.ECPublicKey);
+            Assert.AreEqual("nistP256", key.ECPublicKey.Value.Curve.Oid.FriendlyName);
+            Assert.AreEqual("4a82e3391ca1cc45b7963dce12ca933cfceed56e4c2eef54f56f85113d65243c", key.ECPublicKey.Value.Q.X.ToHex());
+            Assert.AreEqual("da3cae1fdecda63c3b4156286d5514c58b84e04e770bbb3f1bc20e50a105ccd0", key.ECPublicKey.Value.Q.Y.ToHex());
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -238,11 +238,11 @@ namespace DSInternals.Common.Test
             var strExts = km.AuthenticatorData.Extensions.ToString();
             var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
             Assert.AreEqual(expectedStrExts, strExts);
-            Assert.IsNull(key.RSAParams);
-            Assert.IsNotNull(key.ECParams);
-            Assert.AreEqual("nistP256", key.ECParams.Value.Curve.Oid.FriendlyName);
-            Assert.AreEqual("405de7db7e6d48c3ab4cf5363cf973a23d5ed0c21c87322c2223b0313e938f0c", key.ECParams.Value.Q.X.ToHex());
-            Assert.AreEqual("106479b76dc2c558ae44d0fb459524d36c76162b320ce96311e559a062597df3", key.ECParams.Value.Q.Y.ToHex());
+            Assert.IsNull(key.RSAPublicKey);
+            Assert.IsNotNull(key.ECPublicKey);
+            Assert.AreEqual("nistP256", key.ECPublicKey.Value.Curve.Oid.FriendlyName);
+            Assert.AreEqual("405de7db7e6d48c3ab4cf5363cf973a23d5ed0c21c87322c2223b0313e938f0c", key.ECPublicKey.Value.Q.X.ToHex());
+            Assert.AreEqual("106479b76dc2c558ae44d0fb459524d36c76162b320ce96311e559a062597df3", key.ECPublicKey.Value.Q.Y.ToHex());
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -250,6 +250,7 @@ namespace DSInternals.Common.Test
             CollectionAssert.AreEqual(blob, serialized);
         }
 
+        /* For EdDSA keys, if they become available and are supported
         [TestMethod]
         public void KeyCredential_Parse_UserKeyFIDO_EdDSA()
         {
@@ -265,6 +266,7 @@ namespace DSInternals.Common.Test
             var expectedEdDSAKey = new byte[] { 0x01, 0x8F, 0xC5, 0x82, 0xA0, 0x68, 0xD4, 0xBF, 0x43, 0x24, 0x7B, 0x04, 0x8F, 0x65, 0xEE, 0xC2, 0x4B, 0xC2, 0xA7, 0xDD, 0x80, 0x94, 0x4E, 0xC0, 0x48, 0x24, 0xE6, 0x1F, 0x22, 0xDF, 0x90, 0xA1 };
             Assert.AreEqual(expectedEdDSAKey.ToHex(true), cpk.EdDSAPublicKey.ToHex(true));
         }
+        */
 
         [TestMethod]
         public void KeyCredential_Parse_DeviceKey()
@@ -276,7 +278,7 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AD, key.Source);
             Assert.AreEqual("c+a+uKm1sIKDiEdue/3V+OehE+wIB+8lwPvPOc60MRE=", key.Identifier);
             Assert.IsNotNull(key.CustomKeyInfo);
-            Assert.IsNotNull(key.RSAParams);
+            Assert.IsNotNull(key.RSAPublicKey);
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -295,7 +297,7 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeyUsage.NGC, key.Usage);
             Assert.AreEqual(KeySource.AD, key.Source);
             Assert.IsNull(key.CustomKeyInfo);
-            Assert.IsNotNull(key.RSAParams);
+            Assert.IsNotNull(key.RSAPublicKey);
 
             // Serialize
             byte[] serialized = key.ToByteArray();
@@ -319,8 +321,8 @@ namespace DSInternals.Common.Test
 
             // Check
             Assert.AreEqual(expectedPublicKeyBlob, publicKeyBlob.ToHex(true));
-            CollectionAssert.AreEqual(expectedRSAParameters.Modulus, key.RSAParams.Value.Modulus);
-            CollectionAssert.AreEqual(expectedRSAParameters.Exponent, key.RSAParams.Value.Exponent);
+            CollectionAssert.AreEqual(expectedRSAParameters.Modulus, key.RSAPublicKey.Value.Modulus);
+            CollectionAssert.AreEqual(expectedRSAParameters.Exponent, key.RSAPublicKey.Value.Exponent);
             Assert.AreEqual(expectedModulus, key.RSAModulus);
         }
 

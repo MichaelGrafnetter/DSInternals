@@ -10,7 +10,7 @@ namespace DSInternals.Common.Data.Fido
         /// Minimum length of the authenticator data structure.
         /// <see cref="https://www.w3.org/TR/webauthn/#sec-authenticator-data"/>
         /// </summary>
-        private const int MinLength = 37;
+        private const int MinLength = SHA256HashLenBytes + sizeof(AuthenticatorFlags) + sizeof(UInt32);
 
         private const int SHA256HashLenBytes = 32; // 256 bits, 8 bits per byte
         /// <summary>

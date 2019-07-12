@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace DSInternals.Common.Data.Fido
 {
@@ -34,28 +35,21 @@ namespace DSInternals.Common.Data.Fido
         /// </summary>
         private static Guid FromBigEndian(byte[] Aaguid)
         {
-            byte[] guid = new byte[16];
-            for (int i = 8; i < 16; i++)
-            {
-                guid[i] = Aaguid[i];
-            }
-            guid[3] = Aaguid[0];
-            guid[2] = Aaguid[1];
-            guid[1] = Aaguid[2];
-            guid[0] = Aaguid[3];
-            guid[5] = Aaguid[4];
-            guid[4] = Aaguid[5];
-            guid[6] = Aaguid[7];
-            guid[7] = Aaguid[6];
-            return new Guid(guid);
+            Aaguid.SwapBytes(0, 3);
+            Aaguid.SwapBytes(1, 2);
+            Aaguid.SwapBytes(4, 5);
+            Aaguid.SwapBytes(6, 7);
+
+            return new Guid(Aaguid);
         }
+
         /// <summary>
         /// Decodes attested credential data.
         /// </summary>
         public AttestedCredentialData(BinaryReader reader)
         {
             // First 16 bytes is AAGUID
-            var aaguidBytes = reader.ReadBytes(Guid.Empty.ToByteArray().Length);
+            var aaguidBytes = reader.ReadBytes(Marshal.SizeOf(typeof(Guid)));
 
             if (BitConverter.IsLittleEndian)
             {
@@ -93,6 +87,7 @@ namespace DSInternals.Common.Data.Fido
             // Encode the CBOR object back to a byte array.
             CredentialPublicKey = new CredentialPublicKey(cpk);
         }
+
         public override string ToString()
         {
             return string.Format("AAGUID: {0}, CredentialID: {1}, CredentialPublicKey: {2}",

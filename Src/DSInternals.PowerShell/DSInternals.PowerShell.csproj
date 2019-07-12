@@ -157,7 +157,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="ADDBRestoreFromMediaScriptTemplate.ps1" />
-    <None Include="app.config" />
     <None Include="Chocolatey\dsinternals-psmodule.nuspec" />
     <None Include="Chocolatey\tools\chocolateyinstall.ps1" />
     <None Include="Chocolatey\tools\chocolateyuninstall.ps1" />
