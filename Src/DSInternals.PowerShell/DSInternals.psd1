@@ -33,10 +33,10 @@ DISCLAIMER: Features exposed through this module are not supported by Microsoft 
 PowerShellVersion = '3.0'
 
 # Minimum version of Microsoft .NET Framework required by this module
-DotNetFrameworkVersion = '4.5.1' # This requirement is not enforced by older versions of PS.
+DotNetFrameworkVersion = '4.7' # This requirement is not enforced by older versions of PS.
 
 # Minimum version of the common language runtime (CLR) required by this module
-CLRVersion = '4.0.30319.18408' # Corresponds to .NET Framework 4.5.1
+CLRVersion = '4.0.30319.42000' # Corresponds to .NET Framework 4.6 and later
 
 # Processor architecture (None, X86, Amd64) required by this module
 ProcessorArchitecture = 'None'
@@ -94,6 +94,7 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
 FileList = 
            'AutoMapper.dll',
            'BouncyCastle.Crypto.dll',
+           'CBOR.dll',
            'DSInternals.Common.dll',
            'DSInternals.DataStore.dll',
            'DSInternals.Replication.dll',
@@ -103,6 +104,8 @@ FileList =
            'Esent.Isam.dll',
            'License.txt',
            'NDceRpc.Microsoft.dll',
+           'Newtonsoft.Json.dll',
+           'Numbers.dll',
            'amd64\DSInternals.Replication.Interop.dll',
            'x86\DSInternals.Replication.Interop.dll',
            'en-US\about_DSInternals.help.txt',

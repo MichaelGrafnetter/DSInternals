@@ -120,6 +120,7 @@
     <ProjectReference Include="..\DSInternals.DataStore\DSInternals.DataStore.csproj">
       <Project>{8a857b97-1be0-4bae-a4e8-dee870858bfd}</Project>
       <Name>DSInternals.DataStore</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\DSInternals.Replication.Model\DSInternals.Replication.Model.csproj">
       <Project>{0bca513c-5f12-48b6-8288-d3a95ec2994a}</Project>
@@ -138,13 +139,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=8.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.PowerShell.3.ReferenceAssemblies.1.0.0\lib\net4\System.Management.Automation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>

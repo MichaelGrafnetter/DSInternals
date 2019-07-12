@@ -32,7 +32,6 @@
 ## Installation Notes
 
 * The module will be installed to the *$PSHome\Modules* directory. This is to avoid conflicts with the *PowerShell Gallery* and still support module autoloading.
-* On Windows 7 and Windows Server 2008 R2, PowerShell has to be [upgraded](https://chocolatey.org/packages/PowerShell) first.
 
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
@@ -42,12 +41,12 @@ Features exposed through these tools are not supported by Microsoft. Improper us
 * Improved Get-Help documentation.
     </releaseNotes>
     <dependencies>
-      <!-- Windows Management Framework 3+. For OS prior to Windows 8 or Windows Server 2012. -->
-      <!--<dependency id="powershell" version="[3.0.20121027]" />-->
+      <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->
+      <dependency id="powershell" version="3.0.20121027" />
       <!-- Universal C Runtime. For RTM OS prior to Windows 10 and Windows Server 2016. -->
       <dependency id="kb2999226" version="1.0.20181019" />
-      <!-- .NET Framework 4.5.1+. For RTM OS prior to Windows 8.1 and Windows Server 2012 R2. -->
-      <dependency id="dotnet4.5.1" version="4.5.1.20140606"  />
+      <!-- .NET Framework 4.7+. For RTM OS prior to Windows 10 1703 and Windows Server 1709. -->
+      <dependency id="dotnetfx" version="4.7.0.0"  />
     </dependencies>
   </metadata>
   <files>

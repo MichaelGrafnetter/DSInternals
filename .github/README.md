@@ -3,7 +3,7 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
 [![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg?logo=PowerShell)](#)
 [![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019-007bb8.svg?logo=Windows)](#)
-[![.NET Framework 4.5.1+](https://img.shields.io/badge/.NET%20Framework-4.5.1%2B-007FFF.svg)](#)
+[![.NET Framework 4.7+](https://img.shields.io/badge/.NET%20Framework-4.7%2B-007FFF.svg)](#)
 
 ## Introduction
 
@@ -83,7 +83,7 @@ The easiest way of integrating the DSInternals functionality into .NET applicati
 
 ### Building from Source Code
 
-[![Visual Studio 2015 | 2017 | 2019](https://img.shields.io/badge/Visual%20Studio-2015%20|%202017%20|%202019-383278.svg?logo=Visual-Studio-Code)](CONTRIBUTING.md#building-from-source-code)
+[![Visual Studio 2017 | 2019](https://img.shields.io/badge/Visual%20Studio-2017%20|%202019-383278.svg?logo=Visual-Studio-Code)](CONTRIBUTING.md#building-from-source-code)
 [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/DSInternals?branchName=master)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2&branchName=master)
 [![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results&logo=Azure-DevOps)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2&branchName=master)
 
