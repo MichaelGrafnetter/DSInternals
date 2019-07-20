@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Configuration>
+<Configuration xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/felixfbecker/PowerShellXSD/master/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ViewDefinitions>
     <View>
       <Name>DSAccount</Name>
@@ -159,8 +159,8 @@
                 <CustomItem>
                   <ExpressionBinding>
                     <PropertyName>KeyCredentials</PropertyName>
-                    <CustomControlName>KeyCredential</CustomControlName>
                     <EnumerateCollection />
+                    <CustomControlName>KeyCredential</CustomControlName>
                   </ExpressionBinding>
                 </CustomItem>
               </Frame>
@@ -186,8 +186,8 @@
                     <CustomItem>
                       <ExpressionBinding>
                         <PropertyName>RoamedCredentials</PropertyName>
-                        <CustomControlName>RoamedCredential</CustomControlName>
                         <EnumerateCollection />
+                        <CustomControlName>RoamedCredential</CustomControlName>
                       </ExpressionBinding>
                     </CustomItem>
                   </Frame>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Configuration>
+<Configuration xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/felixfbecker/PowerShellXSD/master/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ViewDefinitions>
     <View>
       <Name>LsaPolicyInformation</Name>
