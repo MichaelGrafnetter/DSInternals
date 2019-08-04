@@ -54,6 +54,13 @@ If you want to build the module from source code yourself, you need to install t
    * GitHub Extension for Visual Studio (optional)
 - [Windows Management Framework 5](https://www.microsoft.com/en-us/download/details.aspx?id=50395).
 
+To make IntelliSense work with *.psm1 files, the following code needs to be added to the `C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Xml\Schemas\catalog.xml` file:
+
+```xml
+<Association extension="ps1xml" schema="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" enableValidation="true"/>
+<Association extension="ps1xml" schema="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Types.xsd" enableValidation="true"/>
+```
+
 ### Build Steps
 1. Install the prerequisities.
 2. Checkout or download the source codes.

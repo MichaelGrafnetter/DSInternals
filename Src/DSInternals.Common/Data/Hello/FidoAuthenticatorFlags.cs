@@ -13,7 +13,7 @@ namespace DSInternals.Common.Data.Fido
         /// User Present indicates that the user presence test has completed successfully.
         /// <see cref="https://www.w3.org/TR/webauthn/#up"/>
         /// </summary>
-        UP = 0x1,
+        UserPresent = 0x1,
 
         /// <summary>
         /// Reserved for future use (RFU1)
@@ -24,7 +24,7 @@ namespace DSInternals.Common.Data.Fido
         /// User Verified indicates that the user verification process has completed successfully.
         /// <see cref="https://www.w3.org/TR/webauthn/#uv"/>
         /// </summary>
-        UV = 0x4,
+        UserVerified = 0x4,
 
         /// <summary>
         /// Reserved for future use (RFU2)
@@ -45,12 +45,12 @@ namespace DSInternals.Common.Data.Fido
         /// Attested credential data included indicates that the authenticator added attested credential data to the authenticator data.
         /// <see cref="https://www.w3.org/TR/webauthn/#attested-credential-data"/>
         /// </summary>
-        AT = 0x40,
+        AttestationData = 0x40,
 
         /// <summary>
         /// Extension data included indicates that the authenticator added extension data to the authenticator data.
         /// <see cref="https://www.w3.org/TR/webauthn/#authdataextensions"/>
         /// </summary>
-        ED = 0x80,
+        ExtensionData = 0x80,
     }
 }

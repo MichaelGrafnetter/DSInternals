@@ -382,8 +382,7 @@
             if(BitConverter.IsLittleEndian)
             {
                 // Reverse byte order
-                binaryAttributeId.SwapBytes(0, 3);
-                binaryAttributeId.SwapBytes(1, 2);
+                Array.Reverse(binaryAttributeId);
             }
             return BitConverter.ToInt32(binaryAttributeId, 0);
         }

@@ -103,6 +103,24 @@ Describe 'DSInternals PowerShell Module' {
         }
     }
 
+    Context 'Views' {
+        
+        # Get all .NET types referenced by Views
+        $typeNames = Get-ChildItem -Filter *.format.ps1xml -Path $ModulePath -Recurse -File |
+                        Select-Xml -XPath '//TypeName/text()' |
+                        ForEach-Object { $PSItem.Node.Value } |
+                        Sort-Object -Unique |
+                        ForEach-Object { @{ TypeName = $PSItem } }
+
+        # Import the DSInternals PowerShell Module
+        Import-Module $ModulePath
+
+        It 'referenced type <TypeName> exists' -TestCases $typeNames -Test {
+            param($TypeName)
+            ($TypeName -as [Type]) | Should -Not -BeNull
+        }
+    }
+
     Context 'Assemblies' {
 
         $assemblies = Get-ChildItem $ModulePath -Recurse -Filter *.dll | 

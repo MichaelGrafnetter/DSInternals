@@ -66,7 +66,6 @@
     <Compile Include="Data\Hello\CustomKeyInformation.cs" />
     <Compile Include="Data\Hello\FidoAttestedCredentialData.cs" />
     <Compile Include="Data\Hello\FidoAuthenticatorData.cs" />
-    <Compile Include="Data\Hello\FidoAuthenticatorExtensions.cs" />
     <Compile Include="Data\Hello\FidoAuthenticatorFlags.cs" />
     <Compile Include="Data\Hello\FidoCose.cs" />
     <Compile Include="Data\Hello\FidoCredentialPublicKey.cs" />

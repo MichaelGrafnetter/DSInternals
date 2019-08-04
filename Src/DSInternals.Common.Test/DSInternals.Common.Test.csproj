@@ -35,6 +35,9 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CBOR, Version=3.5.2.0, Culture=neutral, PublicKeyToken=9cd62db60ea5554c, processorArchitecture=MSIL">
+      <HintPath>..\packages\PeterO.Cbor.3.5.2\lib\net40\CBOR.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.4.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
       <Private>True</Private>
@@ -43,12 +46,16 @@
       <HintPath>..\packages\MSTest.TestFramework.1.4.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Numbers, Version=1.4.3.0, Culture=neutral, PublicKeyToken=9cd62db60ea5554c, processorArchitecture=MSIL">
+      <HintPath>..\packages\PeterO.Numbers.1.4.3\lib\net40\Numbers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ByteArrayExtensionsTester.cs" />
     <Compile Include="Cryptography\KerberosKeyDerivationTester.cs" />
     <Compile Include="Cryptography\SortedFileSearcherTester.cs" />
+    <Compile Include="Cryptography\RSAExtensionsTester.cs" />
     <Compile Include="Cryptography\WDigestHashTester.cs" />
     <Compile Include="DNWithBinaryTester.cs" />
     <Compile Include="DPAPIBackupKeyTester.cs" />

@@ -1,102 +1,65 @@
 ﻿using System;
-using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
+using Org.BouncyCastle.Security;
 
 namespace DSInternals.Common
 {
     public static class RSAExtensions
     {
-        private const uint BCryptRSAPublicKeyMagic = 0x31415352; // "RSA1" in ASCII
+        private static readonly CngKeyBlobFormat BCryptRSAPublicKeyFormat = new CngKeyBlobFormat("RSAPUBLICBLOB");
         private const int BCryptKeyBlobHeaderSize = 6 * sizeof(uint);
+        private const uint BCryptRSAPublicKeyMagic = 0x31415352; // "RSA1" in ASCII
 
         /// <summary>
         /// Converts a RSA public key to BCRYPT_RSAKEY_BLOB.
         /// </summary>
-        public static byte[] ExportBCryptRSAPublicKey(this RSAParameters publicKey)
+        public static byte[] ExportRSAPublicKeyBCrypt(this X509Certificate2 certificate)
         {
-            // HACK: Use System.Security.Cryptography.RSACng instead of a custom implementation!
-            using (var stream = new MemoryStream())
-            {
-                using (var writer = new BinaryWriter(stream))
-                {
-                    // Public key magic identifier
-                    writer.Write(BCryptRSAPublicKeyMagic);
+            Validator.AssertNotNull(certificate, nameof(certificate));
 
-                    // Modulus and Exponent lengths
-                    writer.Write(publicKey.Modulus.Length * 8);
-                    writer.Write(publicKey.Exponent.Length);
-                    writer.Write(publicKey.Modulus.Length);
-
-                    // Zero prime lengths, as we are not exporting the corresponding private key
-                    writer.Write(UInt32.MinValue);
-                    writer.Write(UInt32.MinValue);
-
-                    // Now come the actual values
-                    writer.Write(publicKey.Exponent);
-                    writer.Write(publicKey.Modulus);
-                }
-                return stream.ToArray();
-            }
+            var publicKey = (RSACryptoServiceProvider)certificate.PublicKey.Key;
+            return publicKey.ExportRSAPublicKeyBCrypt();
         }
 
         /// <summary>
         /// Converts a RSA public key to BCRYPT_RSAKEY_BLOB.
         /// </summary>
-        public static byte[] ExportPublicKeyBlob(this RSACryptoServiceProvider publicKey)
+        public static byte[] ExportRSAPublicKeyBCrypt(this RSACryptoServiceProvider publicKey)
         {
             var parameters = publicKey.ExportParameters(false);
-            return parameters.ExportBCryptRSAPublicKey();
+            return parameters.ExportRSAPublicKeyBCrypt();
         }
 
         /// <summary>
         /// Converts a RSA public key to BCRYPT_RSAKEY_BLOB.
         /// </summary>
-        public static byte[] ExportBCryptRSAPublicKey(this X509Certificate2 certificate)
+        public static byte[] ExportRSAPublicKeyBCrypt(this RSAParameters publicKey)
         {
-            // TODO: We currently only support RSA certificates.
-            var publicKey = (RSACryptoServiceProvider)certificate.PublicKey.Key;
-            return publicKey.ExportPublicKeyBlob();
+            using (var rsa = new RSACng())
+            {
+                rsa.ImportParameters(publicKey);
+                using (var key = rsa.Key)
+                {
+                    return key.Export(BCryptRSAPublicKeyFormat);
+                }
+            }
         }
 
         /// <summary>
         /// Decodes a public key from a BCRYPT_RSAKEY_BLOB structure.
         /// </summary>
-        public static RSAParameters ImportBCryptRSAPublicKey(this byte[] blob)
+        public static RSAParameters ImportRSAPublicKeyBCrypt(this byte[] blob)
         {
             Validator.AssertNotNull(blob, nameof(blob));
-            Validator.AssertMinLength(blob, BCryptKeyBlobHeaderSize, nameof(blob));
 
-            // HACK: Use System.Security.Cryptography.RSACng instead of a custom implementation!
-            using (var stream = new MemoryStream(blob, false))
+            using (var key = CngKey.Import(blob, BCryptRSAPublicKeyFormat))
             {
-                using (var reader = new BinaryReader(stream))
+                using (var rsa = new RSACng(key))
                 {
-                    // Public key magic identifier
-                    uint magic = reader.ReadUInt32();
-                    if (magic != BCryptRSAPublicKeyMagic)
-                    {
-                        // TODO: Extract Exception text as a resouce.
-                        throw new ArgumentException("The input data does not correspond to a RSA public key.", nameof(blob));
-                    }
-
-                    // Modulus and Exponent lengths
-                    int bitLength = reader.ReadInt32();
-                    int cbPublicExp = reader.ReadInt32();
-                    int cbModulus = reader.ReadInt32();
-                    int cbPrime1 = reader.ReadInt32();
-                    int cbPrime2 = reader.ReadInt32();
-
-                    // Validate the length of the remainder.
-                    int expectedLength = BCryptKeyBlobHeaderSize + cbPublicExp + cbModulus + cbPrime1 + cbPrime2;
-                    Validator.AssertLength(blob, expectedLength, nameof(blob));
-
-                    var result = new RSAParameters();
-                    result.Exponent = reader.ReadBytes(cbPublicExp);
-                    result.Modulus = reader.ReadBytes(cbModulus);
-                    return result;
+                    return rsa.ExportParameters(false);
                 }
             }
         }
@@ -104,12 +67,13 @@ namespace DSInternals.Common
         /// <summary>
         /// Decodes a DER RSA public key.
         /// </summary>
-        public static RSAParameters ImportDERPublicKey(this byte[] blob)
+        public static RSAParameters ImportRSAPublicKeyDER(this byte[] blob)
         {
             Validator.AssertNotNull(blob, nameof(blob));
 
             var asn1 = Asn1Object.FromByteArray(blob);
             var rsaPublicKey = RsaPublicKeyStructure.GetInstance(asn1);
+
             return new RSAParameters()
             {
                 Modulus = rsaPublicKey.Modulus.ToByteArrayUnsigned(),
@@ -117,6 +81,39 @@ namespace DSInternals.Common
             };
         }
 
+        /// <summary>
+        /// Exports a RSA public key to the DER format.
+        /// </summary>
+        public static byte[] ExportRSAPublicKeyDER(this X509Certificate2 certificate)
+        {
+            Validator.AssertNotNull(certificate, nameof(certificate));
+
+            var publicKey = (RSACryptoServiceProvider)certificate.PublicKey.Key;
+            return publicKey.ExportRSAPublicKeyDER();
+        }
+
+        /// <summary>
+        /// Exports a RSA public key to the DER format.
+        /// </summary>
+        public static byte[] ExportRSAPublicKeyDER(this RSACryptoServiceProvider publicKey)
+        {
+            var rsaParameters = publicKey.ExportParameters(false);
+            return rsaParameters.ExportRSAPublicKeyDER();
+        }
+
+        /// <summary>
+        /// Exports a RSA public key to the DER format.
+        /// </summary>
+        public static byte[] ExportRSAPublicKeyDER(this RSAParameters publicKey)
+        {
+            var bouncyPublicKey = DotNetUtilities.GetRsaPublicKey(publicKey);
+            var asn1PublicKey = new RsaPublicKeyStructure(bouncyPublicKey.Modulus, bouncyPublicKey.Exponent);
+            return asn1PublicKey.GetDerEncoded();
+        }
+
+        /// <summary>
+        /// CHecks whether the input blob is in the BCRYPT_RSAKEY_BLOB format.
+        /// </summary>
         public static bool IsBCryptRSAPublicKeyBlob(this byte[] blob)
         {
             if (blob == null || blob.Length < BCryptKeyBlobHeaderSize)

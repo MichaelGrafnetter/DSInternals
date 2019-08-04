@@ -5,12 +5,13 @@
     using System.Security.Cryptography.X509Certificates;
     using DSInternals.Common.Data;
 
-    [Cmdlet(VerbsCommon.Get, "ADKeyCredential", DefaultParameterSetName = ParamSetFromCertificate)]
+    [Cmdlet(VerbsCommon.Get, "ADKeyCredential", DefaultParameterSetName = ParamSetFromUserCertificate)]
     [OutputType(new Type[] { typeof(KeyCredential) })]
     public class GetADKeyCredentialCommand : PSCmdlet
     {
         #region Parameters
-        private const string ParamSetFromCertificate = "FromCertificate";
+        private const string ParamSetFromUserCertificate = "FromUserCertificate";
+        private const string ParamSetFromComputerCertificate = "FromComputerCertificate";
         private const string ParamSetFromBinary = "FromBinary";
         private const string ParamSetFromDNBinary = "FromDNBinary";
 
@@ -21,7 +22,7 @@
             ValueFromPipeline = true
         )]
         [Alias("DNWithBinary", "DistinguishedNameWithBinary")]
-        public string DNWithBinaryData
+        public string[] DNWithBinaryData
         {
             get;
             set;
@@ -42,7 +43,12 @@
         [Parameter(
             Mandatory = true,
             Position = 0,
-            ParameterSetName = ParamSetFromCertificate
+            ParameterSetName = ParamSetFromUserCertificate
+        )]
+        [Parameter(
+            Mandatory = true,
+            Position = 0,
+            ParameterSetName = ParamSetFromComputerCertificate
         )]
         public X509Certificate2 Certificate
         {
@@ -53,10 +59,10 @@
         [Parameter(
             Mandatory = true,
             Position = 1,
-            ParameterSetName = ParamSetFromCertificate
+            ParameterSetName = ParamSetFromUserCertificate
         )]
         [Alias("ComputerId", "ComputerGuid")]
-        public Guid  DeviceId
+        public Guid?  DeviceId
         {
             get;
             set;
@@ -69,7 +75,12 @@
         [Parameter(
             Mandatory = true,
             Position = 2,
-            ParameterSetName = ParamSetFromCertificate
+            ParameterSetName = ParamSetFromUserCertificate
+        )]
+        [Parameter(
+            Mandatory = true,
+            Position = 1,
+            ParameterSetName = ParamSetFromComputerCertificate
         )]
         [Alias("DistinguishedName", "DN", "ObjectDN")]
         public string HolderDN
@@ -80,10 +91,24 @@
 
         [Parameter(
             Mandatory = false,
-            ParameterSetName = ParamSetFromCertificate
+            ParameterSetName = ParamSetFromUserCertificate
+        )]
+        [Parameter(
+            Mandatory = false,
+            ParameterSetName = ParamSetFromComputerCertificate
         )]
         [Alias("CreatedTime", "TimeCreated", "TimeGenerated")]
         public DateTime? CreationTime
+        {
+            get;
+            set;
+        }
+
+        [Parameter(
+            Mandatory = true,
+            ParameterSetName = ParamSetFromComputerCertificate
+        )]
+        public SwitchParameter IsComputerKey
         {
             get;
             set;
@@ -94,27 +119,26 @@
         protected override void ProcessRecord()
         {
             KeyCredential keyCredential;
+
             switch(this.ParameterSetName)
             {
                 case ParamSetFromDNBinary:
-                    keyCredential = KeyCredential.Parse(this.DNWithBinaryData);
+                    foreach (string singleValue in this.DNWithBinaryData)
+                    {
+                        keyCredential = KeyCredential.Parse(singleValue);
+                        this.WriteObject(keyCredential);
+                    }
                     break;
                 case ParamSetFromBinary:
                     keyCredential = new KeyCredential(this.BinaryData, this.HolderDN);
+                    this.WriteObject(keyCredential);
                     break;
-                case ParamSetFromCertificate:
-                default:
-                    if(this.CreationTime.HasValue)
-                    {
-                        keyCredential = new KeyCredential(this.Certificate, this.DeviceId, this.HolderDN, this.CreationTime.Value);
-                    }
-                    else
-                    {
-                        keyCredential = new KeyCredential(this.Certificate, this.DeviceId, this.HolderDN);
-                    }
+                case ParamSetFromUserCertificate:
+                case ParamSetFromComputerCertificate:
+                    keyCredential = new KeyCredential(this.Certificate, this.DeviceId, this.HolderDN, this.CreationTime, this.IsComputerKey.IsPresent);
+                    this.WriteObject(keyCredential);
                     break;
             }
-            this.WriteObject(keyCredential);
         }
         #endregion Cmdlet Overrides
     }

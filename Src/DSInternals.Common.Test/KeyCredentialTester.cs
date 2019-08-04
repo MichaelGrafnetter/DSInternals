@@ -108,13 +108,12 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AzureAD, key.Source);
             Assert.AreEqual(KeyFlags.Attestation, key.CustomKeyInfo.Flags);
             Assert.AreEqual("WEe6PFT+3MT+pJ2VfR/4jQ==", key.Identifier);
-            Assert.IsInstanceOfType(key.KeyMaterial, typeof(KeyMaterialFido));
-            var km = (KeyMaterialFido)key.KeyMaterial;
+            var km = key.FidoKeyMaterial;
             Assert.AreEqual("Yubikey 5", km.DisplayName);
             var expectedRpIdHash = new byte[] { 0x35, 0x6c, 0x9e, 0xd4, 0xa0, 0x93, 0x21, 0xb9, 0x69, 0x5f, 0x1e, 0xaf, 0x91, 0x82, 0x03, 0xf1, 0xb5, 0x5f, 0x68, 0x9d, 0xa6, 0x1f, 0xbc, 0x96, 0x18, 0x4c, 0x15, 0x7d, 0xda, 0x68, 0x0c, 0x81 };
-            Assert.AreEqual(expectedRpIdHash.ToHex(true), km.AuthenticatorData.RpIdHash.ToHex(true));
-            Assert.AreEqual(Data.Fido.AuthenticatorFlags.UP | Data.Fido.AuthenticatorFlags.UV | Data.Fido.AuthenticatorFlags.AT | Data.Fido.AuthenticatorFlags.ED, km.AuthenticatorData.Flags);
-            Assert.AreEqual((uint)0x32, km.AuthenticatorData.SignCount);
+            Assert.AreEqual(expectedRpIdHash.ToHex(true), km.AuthenticatorData.RelyingPartyIdHash.ToHex(true));
+            Assert.AreEqual(Data.Fido.AuthenticatorFlags.UserPresent | Data.Fido.AuthenticatorFlags.UserVerified | Data.Fido.AuthenticatorFlags.AttestationData | Data.Fido.AuthenticatorFlags.ExtensionData, km.AuthenticatorData.Flags);
+            Assert.AreEqual((uint)0x32, km.AuthenticatorData.SignatureCount);
             Assert.AreEqual(new Guid("fa2b99dc-9e39-4257-8f92-4a30d23c4118"), km.AuthenticatorData.AttestedCredentialData.AaGuid);
             var expectedCredentialId = new byte[] { 0x58, 0x47, 0xba, 0x3c, 0x54, 0xfe, 0xdc, 0xc4, 0xfe, 0xa4, 0x9d, 0x95, 0x7d, 0x1f, 0xf8, 0x8d };
             Assert.AreEqual(expectedCredentialId.ToHex(true), km.AuthenticatorData.AttestedCredentialData.CredentialID.ToHex(true));
@@ -122,7 +121,7 @@ namespace DSInternals.Common.Test
             var expectedStrAcd = "AAGUID: fa2b99dc-9e39-4257-8f92-4a30d23c4118, CredentialID: 5847BA3C54FEDCC4FEA49D957D1FF88D, CredentialPublicKey: {1: 2, 3: -7, -1: 1, -2: h'8475E0274D47D8AE61F331B4B9DFEFF8D816ACE3CBAE893DBFA3429B585FA2F9', -3: h'92BEF2CFCC4A1FC71D8C803FCE4F7CE09573D7CDC5852BA50B59770F653D176F'}";
             Assert.AreEqual(expectedStrAcd, strAcd);
             var strExts = km.AuthenticatorData.Extensions.ToString();
-            var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
+            var expectedStrExts = "{\"hmac-secret\": true}";
             Assert.AreEqual(expectedStrExts, strExts);
             Assert.IsNull(key.RSAPublicKey);
             Assert.IsNotNull(key.ECPublicKey);
@@ -146,13 +145,12 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AzureAD, key.Source);
             Assert.AreEqual(KeyFlags.Attestation, key.CustomKeyInfo.Flags);
             Assert.AreEqual("NKZy6iVabclmRWejUyXl2g==", key.Identifier);
-            Assert.IsInstanceOfType(key.KeyMaterial, typeof(KeyMaterialFido));
-            var km = (KeyMaterialFido)key.KeyMaterial;
+            var km = key.FidoKeyMaterial;
             Assert.AreEqual("YubiKey FIDO2", km.DisplayName);
             var expectedRpIdHash = new byte[] { 0x35, 0x6c, 0x9e, 0xd4, 0xa0, 0x93, 0x21, 0xb9, 0x69, 0x5f, 0x1e, 0xaf, 0x91, 0x82, 0x03, 0xf1, 0xb5, 0x5f, 0x68, 0x9d, 0xa6, 0x1f, 0xbc, 0x96, 0x18, 0x4c, 0x15, 0x7d, 0xda, 0x68, 0x0c, 0x81 };
-            Assert.AreEqual(expectedRpIdHash.ToHex(true), km.AuthenticatorData.RpIdHash.ToHex(true));
-            Assert.AreEqual(Data.Fido.AuthenticatorFlags.UP | Data.Fido.AuthenticatorFlags.UV | Data.Fido.AuthenticatorFlags.AT | Data.Fido.AuthenticatorFlags.ED, km.AuthenticatorData.Flags);
-            Assert.AreEqual((uint)0xc0, km.AuthenticatorData.SignCount);
+            Assert.AreEqual(expectedRpIdHash.ToHex(true), km.AuthenticatorData.RelyingPartyIdHash.ToHex(true));
+            Assert.AreEqual(Data.Fido.AuthenticatorFlags.UserPresent | Data.Fido.AuthenticatorFlags.UserVerified | Data.Fido.AuthenticatorFlags.AttestationData | Data.Fido.AuthenticatorFlags.ExtensionData, km.AuthenticatorData.Flags);
+            Assert.AreEqual((uint)0xc0, km.AuthenticatorData.SignatureCount);
             Assert.AreEqual(new Guid("f8a011f3-8c0a-4d15-8006-17111f9edc7d"), km.AuthenticatorData.AttestedCredentialData.AaGuid);
             var expectedCredentialId = new byte[] { 0x34, 0xa6, 0x72, 0xea, 0x25, 0x5a, 0x6d, 0xc9, 0x66, 0x45, 0x67, 0xa3, 0x53, 0x25, 0xe5, 0xda };
             Assert.AreEqual(expectedCredentialId.ToHex(true), km.AuthenticatorData.AttestedCredentialData.CredentialID.ToHex(true));
@@ -160,7 +158,7 @@ namespace DSInternals.Common.Test
             var expectedStrAcd = "AAGUID: f8a011f3-8c0a-4d15-8006-17111f9edc7d, CredentialID: 34A672EA255A6DC9664567A35325E5DA, CredentialPublicKey: {1: 2, 3: -7, -1: 1, -2: h'A74A4DC3CCE38F19364ED643291992AEDA217DD4D8B02C10D48AAA1ED137DEAE', -3: h'0038620A5FD70E8EA0C2E170E13FD0155AEE8F16CEC21BA36D99CB6DD4B181A8'}";
             Assert.AreEqual(expectedStrAcd, strAcd);
             var strExts = km.AuthenticatorData.Extensions.ToString();
-            var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
+            var expectedStrExts = "{\"hmac-secret\": true}";
             Assert.AreEqual(expectedStrExts, strExts);
             Assert.IsNull(key.RSAPublicKey);
             Assert.IsNotNull(key.ECPublicKey);
@@ -184,13 +182,12 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AzureAD, key.Source);
             Assert.AreEqual(KeyFlags.None, key.CustomKeyInfo.Flags);
             Assert.AreEqual("4DQ35/k/ZgsKV/TTGpC4z+F1w4L4zT2heRy+0pTdVcTlbDVsntSgkyG5aV8er5GCA/G1X2idph+8lhhMFX3aaAyBCAEAAA==", key.Identifier);
-            Assert.IsInstanceOfType(key.KeyMaterial, typeof(KeyMaterialFido));
-            var km = (KeyMaterialFido)key.KeyMaterial;
+            var km = key.FidoKeyMaterial;
             Assert.AreEqual("SoloKeys Solo", km.DisplayName);
             var expectedRpIdHash = new byte[] { 0x35, 0x6c, 0x9e, 0xd4, 0xa0, 0x93, 0x21, 0xb9, 0x69, 0x5f, 0x1e, 0xaf, 0x91, 0x82, 0x03, 0xf1, 0xb5, 0x5f, 0x68, 0x9d, 0xa6, 0x1f, 0xbc, 0x96, 0x18, 0x4c, 0x15, 0x7d, 0xda, 0x68, 0x0c, 0x81 };
-            Assert.AreEqual(expectedRpIdHash.ToHex(true), km.AuthenticatorData.RpIdHash.ToHex(true));
-            Assert.AreEqual(Data.Fido.AuthenticatorFlags.UP | Data.Fido.AuthenticatorFlags.UV | Data.Fido.AuthenticatorFlags.AT | Data.Fido.AuthenticatorFlags.ED, km.AuthenticatorData.Flags);
-            Assert.AreEqual((uint)0x108, km.AuthenticatorData.SignCount);
+            Assert.AreEqual(expectedRpIdHash.ToHex(true), km.AuthenticatorData.RelyingPartyIdHash.ToHex(true));
+            Assert.AreEqual(Data.Fido.AuthenticatorFlags.UserPresent | Data.Fido.AuthenticatorFlags.UserVerified | Data.Fido.AuthenticatorFlags.AttestationData | Data.Fido.AuthenticatorFlags.ExtensionData, km.AuthenticatorData.Flags);
+            Assert.AreEqual((uint)0x108, km.AuthenticatorData.SignatureCount);
             Assert.AreEqual(new Guid("8876631b-d4a0-427f-5773-0ec71c9e0279"), km.AuthenticatorData.AttestedCredentialData.AaGuid);
             var expectedCredentialId = "E03437E7F93F660B0A57F4D31A90B8CFE175C382F8CD3DA1791CBED294DD55C4E56C356C9ED4A09321B9695F1EAF918203F1B55F689DA61FBC96184C157DDA680C8108010000";
             Assert.AreEqual(expectedCredentialId, km.AuthenticatorData.AttestedCredentialData.CredentialID.ToHex(true));
@@ -198,7 +195,7 @@ namespace DSInternals.Common.Test
             var expectedStrAcd = "AAGUID: 8876631b-d4a0-427f-5773-0ec71c9e0279, CredentialID: E03437E7F93F660B0A57F4D31A90B8CFE175C382F8CD3DA1791CBED294DD55C4E56C356C9ED4A09321B9695F1EAF918203F1B55F689DA61FBC96184C157DDA680C8108010000, CredentialPublicKey: {1: 2, 3: -7, -1: 1, -2: h'4A82E3391CA1CC45B7963DCE12CA933CFCEED56E4C2EEF54F56F85113D65243C', -3: h'DA3CAE1FDECDA63C3B4156286D5514C58B84E04E770BBB3F1BC20E50A105CCD0'}";
             Assert.AreEqual(expectedStrAcd, strAcd);
             var strExts = km.AuthenticatorData.Extensions.ToString();
-            var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
+            var expectedStrExts = "{\"hmac-secret\": true}";
             Assert.AreEqual(expectedStrExts, strExts);
             Assert.IsNull(key.RSAPublicKey);
             Assert.IsNotNull(key.ECPublicKey);
@@ -222,13 +219,12 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(KeySource.AzureAD, key.Source);
             Assert.AreEqual(KeyFlags.None, key.CustomKeyInfo.Flags);
             Assert.AreEqual("5U0c+8dspqdGF45gHYszsTpOXyENG5f3YPXA5Mr/dhyvfzVsntSgkyG5aV8er5GCA/G1X2idph+8lhhMFX3aaAyBDwEAAA==", key.Identifier);
-            Assert.IsInstanceOfType(key.KeyMaterial, typeof(KeyMaterialFido));
-            var km = (KeyMaterialFido)key.KeyMaterial;
+            var km = key.FidoKeyMaterial;
             Assert.AreEqual("SoloKeys Solo Tap USB", km.DisplayName);
             var expectedRpIdHash = new byte[] { 0x35, 0x6c, 0x9e, 0xd4, 0xa0, 0x93, 0x21, 0xb9, 0x69, 0x5f, 0x1e, 0xaf, 0x91, 0x82, 0x03, 0xf1, 0xb5, 0x5f, 0x68, 0x9d, 0xa6, 0x1f, 0xbc, 0x96, 0x18, 0x4c, 0x15, 0x7d, 0xda, 0x68, 0x0c, 0x81 };
-            Assert.AreEqual(expectedRpIdHash.ToHex(true), km.AuthenticatorData.RpIdHash.ToHex(true));
-            Assert.AreEqual(Data.Fido.AuthenticatorFlags.UP | Data.Fido.AuthenticatorFlags.UV | Data.Fido.AuthenticatorFlags.AT | Data.Fido.AuthenticatorFlags.ED, km.AuthenticatorData.Flags);
-            Assert.AreEqual((uint)0x10f, km.AuthenticatorData.SignCount);
+            Assert.AreEqual(expectedRpIdHash.ToHex(true), km.AuthenticatorData.RelyingPartyIdHash.ToHex(true));
+            Assert.AreEqual(Data.Fido.AuthenticatorFlags.UserPresent | Data.Fido.AuthenticatorFlags.UserVerified | Data.Fido.AuthenticatorFlags.AttestationData | Data.Fido.AuthenticatorFlags.ExtensionData, km.AuthenticatorData.Flags);
+            Assert.AreEqual((uint)0x10f, km.AuthenticatorData.SignatureCount);
             Assert.AreEqual(new Guid("8876631b-d4a0-427f-5773-0ec71c9e0279"), km.AuthenticatorData.AttestedCredentialData.AaGuid);
             var expectedCredentialId = "E54D1CFBC76CA6A746178E601D8B33B13A4E5F210D1B97F760F5C0E4CAFF761CAF7F356C9ED4A09321B9695F1EAF918203F1B55F689DA61FBC96184C157DDA680C810F010000";
             Assert.AreEqual(expectedCredentialId, km.AuthenticatorData.AttestedCredentialData.CredentialID.ToHex(true));
@@ -236,7 +232,7 @@ namespace DSInternals.Common.Test
             var expectedStrAcd = "AAGUID: 8876631b-d4a0-427f-5773-0ec71c9e0279, CredentialID: E54D1CFBC76CA6A746178E601D8B33B13A4E5F210D1B97F760F5C0E4CAFF761CAF7F356C9ED4A09321B9695F1EAF918203F1B55F689DA61FBC96184C157DDA680C810F010000, CredentialPublicKey: {1: 2, 3: -7, -1: 1, -2: h'405DE7DB7E6D48C3AB4CF5363CF973A23D5ED0C21C87322C2223B0313E938F0C', -3: h'106479B76DC2C558AE44D0FB459524D36C76162B320CE96311E559A062597DF3'}";
             Assert.AreEqual(expectedStrAcd, strAcd);
             var strExts = km.AuthenticatorData.Extensions.ToString();
-            var expectedStrExts = "Extensions: {\"hmac-secret\": true}";
+            var expectedStrExts = "{\"hmac-secret\": true}";
             Assert.AreEqual(expectedStrExts, strExts);
             Assert.IsNull(key.RSAPublicKey);
             Assert.IsNotNull(key.ECPublicKey);
@@ -306,7 +302,7 @@ namespace DSInternals.Common.Test
         }
 
         [TestMethod]
-        public void KeyCredential_Generate_FromCertificate()
+        public void KeyCredential_Generate_UserKey_FromCertificate()
         {
             // Input
             byte[] inputBinaryCertificate = "308205473082042fa00302010202104dc51a1f078cd9834fb0523834a5402e300d06092a864886f70d010105050030820149318201453082014106035504031e8201380053002d0031002d0035002d00320031002d0032003800390034003400380039003800340037002d0031003100330036003400320038003400340037002d0032003100340033003000390038003800370034002d0031003100300036002f00380032003200370063006600650061002d0061006600350033002d0034006200370035002d0061003400650033002d006500660035003800320061003500320037003400310065002f006c006f00670069006e002e00770069006e0064006f00770073002e006e00650074002f00330038003300610033003800380039002d0035006200630039002d0034003700610033002d0038003400360063002d003200620037003000660030006200370066006500300065002f00610064006d0069006e00400063006f006e0074006f0073006f002e0063006f006d301e170d3138303631333232323233345a170d3438303631333232333233345a30820149318201453082014106035504031e8201380053002d0031002d0035002d00320031002d0032003800390034003400380039003800340037002d0031003100330036003400320038003400340037002d0032003100340033003000390038003800370034002d0031003100300036002f00380032003200370063006600650061002d0061006600350033002d0034006200370035002d0061003400650033002d006500660035003800320061003500320037003400310065002f006c006f00670069006e002e00770069006e0064006f00770073002e006e00650074002f00330038003300610033003800380039002d0035006200630039002d0034003700610033002d0038003400360063002d003200620037003000660030006200370066006500300065002f00610064006d0069006e00400063006f006e0074006f0073006f002e0063006f006d30820122300d06092a864886f70d01010105000382010f003082010a0282010100c1a78914457758b0b13c70c710c7f8548f3f9ed56ad4640b6e6a112655c98ecac1cbd68a298f5686c08439428a97fe6fdf58d78ea481905182bad684c2d9c5cde1cde34aa19742e8bbf58b953eac4c562fcf598cc176b02dbe9fffef5937a65815c236f92892f7e511a1fedd5483cb33f1ea715d68106180ded2432a293367114a6e325e62f93f73d7ece4b6a2bcdb829d95c8645c3073b94ba7cb7515cd29042f0967201c6e24a77821e92a6c756df79841acbaae11d90ca03b9fcd24ef9e304b5d35248a7bd70557399960277058ae3e99c7c7e2284858b7bf8b08cdd286964186a50a7fcbcc6a24f00fee5b9698bbd3b1aead0ce81fea461c0abd716843a50203010001a3273025300c0603551d130101ff0402300030150603551d25040e300c060a2b060104018237140202300d06092a864886f70d01010505000382010100435e76ffbe9b75052f1b96f67439d3970821f17be454703cb36be91d4c4de349a7d841b266412fa4235254d774f0a224708a4af78e6dce3fd42a2f89365323c951762a38e8b3d2ba0dd0971bf1cb0ecaa17cd82cdb64b969df48419aa4f28cc2d8c91112274ae7ba2f4a0db3c55b7b34ad0a9a5dc56f195208cb7440e9a51bd6996422a31c1632be6335300460538b80e7282f1bb5331cdbda2a182fe33bef9980e6a5257d264e13749036d508da8c29cde953cb747330a99483111abe69a49d11f426f30514505afe25e28a0ec5011e293bf3e13295f7d89a532b35a9e6bb7166ee21247a8dd2000ee987464748b838aa689cc6a499ea2e6614bb100c3beea4".HexToBinary();
@@ -316,7 +312,7 @@ namespace DSInternals.Common.Test
             string expectedModulus = Convert.ToBase64String(expectedRSAParameters.Modulus);
 
             // Convert
-            byte[] publicKeyBlob = certificate.ExportBCryptRSAPublicKey();
+            byte[] publicKeyBlob = certificate.ExportRSAPublicKeyBCrypt();
             var key = new KeyCredential(certificate, Guid.NewGuid(), DummyDN);
 
             // Check
@@ -327,7 +323,7 @@ namespace DSInternals.Common.Test
         }
 
         [TestMethod]
-        public void KeyCredential_Generate_FromPublicKey()
+        public void KeyCredential_Generate_UserKey_FromPublicKey()
         {
             byte[] publicKey = "525341310008000003000000000100000000000000000000010001C1A78914457758B0B13C70C710C7F8548F3F9ED56AD4640B6E6A112655C98ECAC1CBD68A298F5686C08439428A97FE6FDF58D78EA481905182BAD684C2D9C5CDE1CDE34AA19742E8BBF58B953EAC4C562FCF598CC176B02DBE9FFFEF5937A65815C236F92892F7E511A1FEDD5483CB33F1EA715D68106180DED2432A293367114A6E325E62F93F73D7ECE4B6A2BCDB829D95C8645C3073B94BA7CB7515CD29042F0967201C6E24A77821E92A6C756DF79841ACBAAE11D90CA03B9FCD24EF9E304B5D35248A7BD70557399960277058AE3E99C7C7E2284858B7BF8B08CDD286964186A50A7FCBCC6A24F00FEE5B9698BBD3B1AEAD0CE81FEA461C0ABD716843A5".HexToBinary();
             Guid deviceId = Guid.Parse("47f577e3-d2d0-4a0a-8aca-e0501098bde4");
@@ -338,6 +334,24 @@ namespace DSInternals.Common.Test
 
             byte[] keyCredentialBlob = keyCredential.ToByteArray();
             Assert.AreEqual(expectedKeyCredentialBlob, keyCredentialBlob.ToHex(true));
+        }
+
+        [TestMethod]
+        public void KeyCredential_Generate_CompouterKey_FromPublicKey()
+        {
+            byte[] publicKey = "3082010a0282010100b851c9219527f52e8a51582243e2cca390b634fe5de16b2bca2e225257f3ff20bfe478c98b36095c49d897d42a67e2545d77003d38b9df18682af6fbff281895ce61dadd5f72e13b40da34e47833d380e58175f7d509dfa5e9971068756626af1425b7ce0393bdb28aff8e25cc601de4542672e723b5bbb4e7d3963c2acfb445171b43c14683df0ed6524bd11f583d5bbeebba1de6de3384df598e0d8badacfbf1667890dc72ce61af746084364bc288d982f23a6cd123e9bb6b701e00b096be899876fe93bdd8b1c56fc107f36f7b2c8ce1afb715fcdeca192634be961b6104f21bfd84c97305123ff69d05d685cc8760ce54d9788457882d9dd39afda1d77d0203010001".HexToBinary();
+            var key = new KeyCredential(publicKey, null, DummyDN, DateTime.Now, true);
+
+            Assert.IsNotNull(key.RSAPublicKey);
+            Assert.IsNull(key.DeviceId);
+
+            // Check DS-Validated-Write-Computer requirements
+            // See https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/f70afbcc-780e-4d91-850c-cfadce5bb15c
+            Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
+            Assert.AreEqual(KeyUsage.NGC, key.Usage);
+            Assert.AreEqual(KeySource.AD, key.Source);
+            Assert.IsNull(key.CustomKeyInfo);
+            Assert.IsNull(key.LastLogonTime);
         }
     }
 }

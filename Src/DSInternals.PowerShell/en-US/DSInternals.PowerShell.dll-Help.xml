@@ -3164,7 +3164,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>Certificate</maml:name>
           <maml:Description>
-            <maml:para>Specifies a certificate that wraps a NGC key.</maml:para>
+            <maml:para>Specifies a certificate that wraps an NGC key.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">X509Certificate2</command:parameterValue>
           <dev:type>
@@ -3185,6 +3185,18 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="CreatedTime, TimeCreated, TimeGenerated">
+          <maml:name>CreationTime</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the time when the key was created. Default value is the current time.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
+          <dev:type>
+            <maml:name>DateTime</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN">
           <maml:name>HolderDN</maml:name>
           <maml:Description>
@@ -3200,14 +3212,64 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-ADKeyCredential</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+          <maml:name>Certificate</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a certificate that wraps an NGC key.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">X509Certificate2</command:parameterValue>
+          <dev:type>
+            <maml:name>X509Certificate2</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="CreatedTime, TimeCreated, TimeGenerated">
+          <maml:name>CreationTime</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the time when the key was created. Default value is the current time.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
+          <dev:type>
+            <maml:name>DateTime</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN">
+          <maml:name>HolderDN</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the distinguished name (DN) of the object that these credentials are associated with.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>IsComputerKey</maml:name>
+          <maml:Description>
+            <maml:para>Indicates that the resulting key credential must meet the DS-Validated-Write-Computer requirements.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-ADKeyCredential</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="DNWithBinary, DistinguishedNameWithBinary">
           <maml:name>DNWithBinaryData</maml:name>
           <maml:Description>
             <maml:para>Specifies the credentials in the DN-Binary syntax.</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
-            <maml:name>String</maml:name>
+            <maml:name>String[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -3230,11 +3292,23 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>Certificate</maml:name>
         <maml:Description>
-          <maml:para>Specifies a certificate that wraps a NGC key.</maml:para>
+          <maml:para>Specifies a certificate that wraps an NGC key.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">X509Certificate2</command:parameterValue>
         <dev:type>
           <maml:name>X509Certificate2</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="CreatedTime, TimeCreated, TimeGenerated">
+        <maml:name>CreationTime</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the time when the key was created. Default value is the current time.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
+        <dev:type>
+          <maml:name>DateTime</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -3256,9 +3330,9 @@
         <maml:Description>
           <maml:para>Specifies the credentials in the DN-Binary syntax.</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
-          <maml:name>String</maml:name>
+          <maml:name>String[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -3274,6 +3348,18 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>IsComputerKey</maml:name>
+        <maml:Description>
+          <maml:para>Indicates that the resulting key credential must meet the DS-Validated-Write-Computer requirements.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>

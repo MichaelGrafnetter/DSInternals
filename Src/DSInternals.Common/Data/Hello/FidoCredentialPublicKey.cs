@@ -3,6 +3,7 @@
     using System;
     using PeterO.Cbor;
     using System.Security.Cryptography;
+
     public class CredentialPublicKey
     {
         public RSACng RSA
@@ -24,6 +25,7 @@
                 return null;
             }
         }
+
         public ECDsa ECDsa
         {
             get
@@ -37,7 +39,7 @@
                     };
                     ECCurve curve;
                     var crv = (COSE.EllipticCurve)_cpk[CBORObject.FromObject(COSE.KeyTypeParameter.Crv)].AsInt32();
-                    switch (Alg)
+                    switch (Algorithm)
                     {
                         case COSE.Algorithm.ES256:
                             switch (crv)
@@ -71,7 +73,7 @@
                             }
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException(string.Format("Missing or unknown alg {0}", Alg.ToString()));
+                            throw new ArgumentOutOfRangeException(string.Format("Missing or unknown alg {0}", Algorithm.ToString()));
                     }
                     return ECDsa.Create(new ECParameters
                     {
@@ -89,7 +91,7 @@
             {
                 if (Type == COSE.KeyType.RSA)
                 {
-                    switch (Alg) // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
+                    switch (Algorithm) // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
                     {
                         case COSE.Algorithm.PS256:
                         case COSE.Algorithm.PS384:
@@ -102,7 +104,7 @@
                         case COSE.Algorithm.RS512:
                             return RSASignaturePadding.Pkcs1;
                         default:
-                            throw new ArgumentOutOfRangeException(string.Format("Missing or unknown alg {0}", Alg.ToString()));
+                            throw new ArgumentOutOfRangeException(string.Format("Missing or unknown alg {0}", Algorithm.ToString()));
                     }
                 }
                 return null;
@@ -115,7 +117,7 @@
             {
                 if (Type == COSE.KeyType.OKP)
                 {
-                    switch (Alg) // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
+                    switch (Algorithm) // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
                     {
                         case COSE.Algorithm.EdDSA:
                             var crv = (COSE.EllipticCurve)_cpk[CBORObject.FromObject(COSE.KeyTypeParameter.Crv)].AsInt32();
@@ -128,26 +130,28 @@
                                     throw new ArgumentOutOfRangeException(string.Format("Missing or unknown crv {0}", crv.ToString()));
                             }
                         default:
-                            throw new ArgumentOutOfRangeException(string.Format("Missing or unknown alg {0}", Alg.ToString()));
+                            throw new ArgumentOutOfRangeException(string.Format("Missing or unknown alg {0}", Algorithm.ToString()));
                     }
                 }
                 return null;
             }
         }
         public COSE.KeyType Type;
-        public COSE.Algorithm Alg;
+        public COSE.Algorithm Algorithm;
         internal CBORObject _cpk;
 
         public CredentialPublicKey(CBORObject cpk)
         {
             _cpk = cpk;
-            Type = (COSE.KeyType) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.KeyType)].AsInt32();
-            Alg = (COSE.Algorithm) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.Alg)].AsInt32();
+            this.Type = (COSE.KeyType) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.KeyType)].AsInt32();
+            this.Algorithm = (COSE.Algorithm) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.Alg)].AsInt32();
         }
+
         public override string ToString()
         {
             return _cpk.ToString();
         }
+
         public byte[] GetBytes()
         {
             return _cpk.EncodeToBytes();

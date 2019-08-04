@@ -1,14 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
-using Newtonsoft.Json;
-
-namespace DSInternals.Common.Data
+﻿namespace DSInternals.Common.Data
 {
     using System;
     using System.IO;
     using System.Security.Cryptography;
     using System.Security.Cryptography.X509Certificates;
+    using DSInternals.Common.Data.Fido;
+    using Newtonsoft.Json;
 
     /// <summary>
     ///  This class represents a single credential stored as a series of values, corresponding to the KEYCREDENTIALLINK_BLOB structure.
@@ -37,7 +34,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// A SHA256 hash of the Value field of the KeyMaterial entry.
+        /// A SHA256 hash of the Value field of the RawKeyMaterial entry.
         /// </summary>
         public string Identifier
         {
@@ -63,39 +60,42 @@ namespace DSInternals.Common.Data
             private set;
         }
 
+        /// <summary>
+        /// Key material of the credential.
+        /// </summary>
         internal byte[] RawKeyMaterial
         {
             get;
             private set;
         }
-        /// <summary>
-        /// Key material of the credential.
-        /// </summary>
-        public object KeyMaterial
-        {
-            get
-            {
-                if (Usage == KeyUsage.FIDO)
-                {
-                    var fidoCredString = System.Text.Encoding.UTF8.GetString(RawKeyMaterial, 0, RawKeyMaterial.Length);
-                    return JsonConvert.DeserializeObject<KeyMaterialFido>(fidoCredString);
-                }
-                else return RawKeyMaterial;
-            }
-        }
-        public ECParameters? ECPublicKey
+
+        
+        public KeyMaterialFido FidoKeyMaterial
         {
             get
             {
                 if (this.Usage == KeyUsage.FIDO)
                 {
-                    var km = (KeyMaterialFido)this.KeyMaterial;
-                    if (km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type.Equals(Fido.COSE.KeyType.EC2))
-                    {
-                        return km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.ECDsa.ExportParameters(false);
-                    }
+                    var fidoCredString = System.Text.Encoding.UTF8.GetString(this.RawKeyMaterial, 0, this.RawKeyMaterial.Length);
+                    return JsonConvert.DeserializeObject<KeyMaterialFido>(fidoCredString);
                 }
-                return null;
+                else return null;
+            }
+        }
+
+        public ECParameters? ECPublicKey
+        {
+            get
+            {
+                var fidoKey = this.FidoKeyMaterial;
+                if(fidoKey != null && fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type == COSE.KeyType.EC2)
+                {
+                    return fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.ECDsa.ExportParameters(false);
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -103,33 +103,33 @@ namespace DSInternals.Common.Data
         {
             get
             {
-                if (this.Usage == KeyUsage.FIDO)
-                {
-                    var km = (KeyMaterialFido)this.KeyMaterial;
-                    if (km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type.Equals(Fido.COSE.KeyType.RSA))
-                    {
-                        return km.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.RSA.ExportParameters(false);
-                    }
-                }
-
-                // Only NGC and STK directly contain a RSA 2048-bit public key.
-                bool usageHasPublicKey = this.Usage == KeyUsage.NGC || this.Usage == KeyUsage.STK;
-                if (this.KeyMaterial == null || !usageHasPublicKey)
+                if(this.RawKeyMaterial == null)
                 {
                     return null;
                 }
 
-                // The 2048-bit RSA public key may be encoded in several ways.
-                if (this.RawKeyMaterial.IsBCryptRSAPublicKeyBlob())
+                var fidoKey = this.FidoKeyMaterial;
+                if (fidoKey != null && fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type == COSE.KeyType.RSA)
                 {
-                    // This public key is in DER format. This is typically true for device/computer keys.
-                    return this.RawKeyMaterial.ImportBCryptRSAPublicKey();
+                    return fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.RSA.ExportParameters(false);
                 }
-                else
+
+                if(this.Usage == KeyUsage.NGC || this.Usage == KeyUsage.STK)
                 {
-                    // This public key is encoded as BCRYPT_RSAKEY_BLOB. This is typically true for user keys.
-                    return this.RawKeyMaterial.ImportDERPublicKey();
+                    if (this.RawKeyMaterial.IsBCryptRSAPublicKeyBlob())
+                    {
+                        // This public key is in DER format. This is typically true for device/computer keys.
+                        return this.RawKeyMaterial.ImportRSAPublicKeyBCrypt();
+                    }
+                    else
+                    {
+                        // This public key is encoded as BCRYPT_RSAKEY_BLOB. This is typically true for user keys.
+                        return this.RawKeyMaterial.ImportRSAPublicKeyDER();
+                    }
                 }
+
+                // Other key usages probably do not contain any public keys.
+                return null;
             }
         }
 
@@ -181,29 +181,22 @@ namespace DSInternals.Common.Data
             private set;
         }
 
-        public KeyCredential(X509Certificate2 certificate, Guid deviceId, string holderDN) : this(certificate, deviceId, holderDN, DateTime.Now)
-        {
-        }
-
-        public KeyCredential(X509Certificate2 certificate, Guid deviceId, string holderDN, DateTime currentTime)
+        public KeyCredential(X509Certificate2 certificate, Guid? deviceId, string holderDN, DateTime? currentTime = null, bool isComputerKey = false)
         {
             Validator.AssertNotNull(certificate, nameof(certificate));
 
-            byte[] publicKey = certificate.ExportBCryptRSAPublicKey();
-            this.Initialize(publicKey, deviceId, holderDN, currentTime);
+            // Computer NGC keys are DER-encoded, while user NGC keys are encoded as BCRYPT_RSAKEY_BLOB.
+            byte[] publicKey = isComputerKey ? certificate.ExportRSAPublicKeyDER() : certificate.ExportRSAPublicKeyBCrypt();
+            this.Initialize(publicKey, deviceId, holderDN, currentTime, isComputerKey);
         }
 
-        public KeyCredential(byte[] publicKey, Guid deviceId, string holderDN) : this(publicKey, deviceId, holderDN, DateTime.Now)
-        {
-        }
-
-        public KeyCredential(byte[] publicKey, Guid deviceId, string holderDN, DateTime currentTime)
+        public KeyCredential(byte[] publicKey, Guid? deviceId, string holderDN, DateTime? currentTime = null, bool isComputerKey = false)
         {
             Validator.AssertNotNull(publicKey, nameof(publicKey));
-            this.Initialize(publicKey, deviceId, holderDN, currentTime);
+            this.Initialize(publicKey, deviceId, holderDN, currentTime, isComputerKey);
         }
 
-        private void Initialize(byte[] publicKey, Guid deviceId, string holderDN, DateTime currentTime)
+        private void Initialize(byte[] publicKey, Guid? deviceId, string holderDN, DateTime? currentTime, bool isComputerKey)
         {
             // Prodess holder DN
             Validator.AssertNotNullOrEmpty(holderDN, nameof(holderDN));
@@ -212,13 +205,22 @@ namespace DSInternals.Common.Data
             // Initialize the Key Credential based on requirements stated in MS-KPP Processing Details:
             this.Version = KeyCredentialVersion.Version2;
             this.Identifier = ComputeKeyIdentifier(publicKey, this.Version);
-            this.CreationTime = currentTime;
-            this.LastLogonTime = currentTime;
+            this.CreationTime = currentTime.HasValue ? currentTime.Value : DateTime.Now;
+            
+            
             this.RawKeyMaterial = publicKey;
             this.Usage = KeyUsage.NGC;
-            this.CustomKeyInfo = new CustomKeyInformation(KeyFlags.None);
             this.Source = KeySource.AD;
             this.DeviceId = deviceId;
+
+            // Computer NGC keys have to meet some requirements to pass the validated write
+            // The CustomKeyInformation entry is not present.
+            // The KeyApproximateLastLogonTimeStamp entry is not present.
+            if (!isComputerKey)
+            {
+                this.LastLogonTime = this.CreationTime;
+                this.CustomKeyInfo = new CustomKeyInformation(KeyFlags.None);
+            }
         }
 
         public KeyCredential(byte[] blob, string holderDN)

@@ -12,20 +12,26 @@ Creates an object representing Windows Hello for Business or FIDO credentials fr
 
 ## SYNTAX
 
-### FromCertificate (Default)
+### FromUserCertificate (Default)
 ```
 Get-ADKeyCredential [-Certificate] <X509Certificate2> [-DeviceId] <Guid> -HolderDN <String>
- [<CommonParameters>]
+ [-CreationTime <DateTime>] [<CommonParameters>]
 ```
 
 ### FromDNBinary
 ```
-Get-ADKeyCredential -DNWithBinaryData <String> [<CommonParameters>]
+Get-ADKeyCredential -DNWithBinaryData <String[]> [<CommonParameters>]
 ```
 
 ### FromBinary
 ```
 Get-ADKeyCredential -BinaryData <Byte[]> -HolderDN <String> [<CommonParameters>]
+```
+
+### FromComputerCertificate
+```
+Get-ADKeyCredential [-Certificate] <X509Certificate2> -HolderDN <String> [-CreationTime <DateTime>]
+ [-IsComputerKey] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -58,15 +64,30 @@ Accept wildcard characters: False
 ```
 
 ### -Certificate
-Specifies a certificate that wraps a NGC key.
+Specifies a certificate that wraps an NGC key.
 
 ```yaml
 Type: X509Certificate2
-Parameter Sets: FromCertificate
+Parameter Sets: FromUserCertificate, FromComputerCertificate
 Aliases:
 
 Required: True
 Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CreationTime
+Specifies the time when the key was created. Default value is the current time.
+
+```yaml
+Type: DateTime
+Parameter Sets: FromUserCertificate, FromComputerCertificate
+Aliases: CreatedTime, TimeCreated, TimeGenerated
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -77,7 +98,7 @@ Specifies an identifier (typically objectGUID) of the associated computer.
 
 ```yaml
 Type: Guid
-Parameter Sets: FromCertificate
+Parameter Sets: FromUserCertificate
 Aliases: ComputerId, ComputerGuid
 
 Required: True
@@ -91,7 +112,7 @@ Accept wildcard characters: False
 Specifies the credentials in the DN-Binary syntax.
 
 ```yaml
-Type: String
+Type: String[]
 Parameter Sets: FromDNBinary
 Aliases: DNWithBinary, DistinguishedNameWithBinary
 
@@ -107,8 +128,23 @@ Specifies the distinguished name (DN) of the object that these credentials are a
 
 ```yaml
 Type: String
-Parameter Sets: FromCertificate, FromBinary
+Parameter Sets: FromUserCertificate, FromBinary, FromComputerCertificate
 Aliases: DistinguishedName, DN, ObjectDN
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IsComputerKey
+Indicates that the resulting key credential must meet the DS-Validated-Write-Computer requirements.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: FromComputerCertificate
+Aliases:
 
 Required: True
 Position: Named
