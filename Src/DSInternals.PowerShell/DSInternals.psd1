@@ -94,7 +94,6 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
 # List of all files packaged with this module
 FileList = 
            'AutoMapper.dll',
-           'BouncyCastle.Crypto.dll',
            'CBOR.dll',
            'DSInternals.Common.dll',
            'DSInternals.DataStore.dll',

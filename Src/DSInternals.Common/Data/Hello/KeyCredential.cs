@@ -63,7 +63,7 @@
         /// <summary>
         /// Key material of the credential.
         /// </summary>
-        internal byte[] RawKeyMaterial
+        public byte[] RawKeyMaterial
         {
             get;
             private set;

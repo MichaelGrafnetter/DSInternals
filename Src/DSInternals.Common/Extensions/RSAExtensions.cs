@@ -1,17 +1,30 @@
 ﻿using System;
+using System.Linq;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using Org.BouncyCastle.Asn1;
-using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Security;
 
 namespace DSInternals.Common
 {
     public static class RSAExtensions
     {
-        private static readonly CngKeyBlobFormat BCryptRSAPublicKeyFormat = new CngKeyBlobFormat("RSAPUBLICBLOB");
         private const int BCryptKeyBlobHeaderSize = 6 * sizeof(uint);
         private const uint BCryptRSAPublicKeyMagic = 0x31415352; // "RSA1" in ASCII
+
+        /// <summary>
+        /// OID 1.2.840.113549.1.1.1 - Identifier for RSA encryption for use with Public Key Cryptosystem One defined by RSA Inc. 
+        /// </summary>
+        private static readonly Oid RsaOid = Oid.FromFriendlyName("RSA", OidGroup.PublicKeyAlgorithm);
+
+        /// <summary>
+        /// ASN.1 Tag NULL
+        /// </summary>
+        private static readonly AsnEncodedData Asn1Null = new AsnEncodedData(new byte[] { 5, 0 });
+
+        /// <summary>
+        /// BCRYPT_PUBLIC_KEY_BLOB Format
+        /// </summary>
+        private static readonly CngKeyBlobFormat BCryptRSAPublicKeyFormat = new CngKeyBlobFormat("RSAPUBLICBLOB");
 
         /// <summary>
         /// Converts a RSA public key to BCRYPT_RSAKEY_BLOB.
@@ -20,28 +33,9 @@ namespace DSInternals.Common
         {
             Validator.AssertNotNull(certificate, nameof(certificate));
 
-            var publicKey = (RSACryptoServiceProvider)certificate.PublicKey.Key;
-            return publicKey.ExportRSAPublicKeyBCrypt();
-        }
-
-        /// <summary>
-        /// Converts a RSA public key to BCRYPT_RSAKEY_BLOB.
-        /// </summary>
-        public static byte[] ExportRSAPublicKeyBCrypt(this RSACryptoServiceProvider publicKey)
-        {
-            var parameters = publicKey.ExportParameters(false);
-            return parameters.ExportRSAPublicKeyBCrypt();
-        }
-
-        /// <summary>
-        /// Converts a RSA public key to BCRYPT_RSAKEY_BLOB.
-        /// </summary>
-        public static byte[] ExportRSAPublicKeyBCrypt(this RSAParameters publicKey)
-        {
-            using (var rsa = new RSACng())
+            using (var rsa = (RSACng)certificate.GetRSAPublicKey())
             {
-                rsa.ImportParameters(publicKey);
-                using (var key = rsa.Key)
+                using(var key = rsa.Key)
                 {
                     return key.Export(BCryptRSAPublicKeyFormat);
                 }
@@ -65,50 +59,28 @@ namespace DSInternals.Common
         }
 
         /// <summary>
-        /// Decodes a DER RSA public key.
-        /// </summary>
-        public static RSAParameters ImportRSAPublicKeyDER(this byte[] blob)
-        {
-            Validator.AssertNotNull(blob, nameof(blob));
-
-            var asn1 = Asn1Object.FromByteArray(blob);
-            var rsaPublicKey = RsaPublicKeyStructure.GetInstance(asn1);
-
-            return new RSAParameters()
-            {
-                Modulus = rsaPublicKey.Modulus.ToByteArrayUnsigned(),
-                Exponent = rsaPublicKey.PublicExponent.ToByteArrayUnsigned()
-            };
-        }
-
-        /// <summary>
         /// Exports a RSA public key to the DER format.
         /// </summary>
         public static byte[] ExportRSAPublicKeyDER(this X509Certificate2 certificate)
         {
             Validator.AssertNotNull(certificate, nameof(certificate));
 
-            var publicKey = (RSACryptoServiceProvider)certificate.PublicKey.Key;
-            return publicKey.ExportRSAPublicKeyDER();
+            return certificate.PublicKey.EncodedKeyValue.RawData;
         }
 
         /// <summary>
-        /// Exports a RSA public key to the DER format.
+        /// Decodes a DER RSA public key.
         /// </summary>
-        public static byte[] ExportRSAPublicKeyDER(this RSACryptoServiceProvider publicKey)
+        public static RSAParameters ImportRSAPublicKeyDER(this byte[] blob)
         {
-            var rsaParameters = publicKey.ExportParameters(false);
-            return rsaParameters.ExportRSAPublicKeyDER();
-        }
+            Validator.AssertNotNull(blob, nameof(blob));
 
-        /// <summary>
-        /// Exports a RSA public key to the DER format.
-        /// </summary>
-        public static byte[] ExportRSAPublicKeyDER(this RSAParameters publicKey)
-        {
-            var bouncyPublicKey = DotNetUtilities.GetRsaPublicKey(publicKey);
-            var asn1PublicKey = new RsaPublicKeyStructure(bouncyPublicKey.Modulus, bouncyPublicKey.Exponent);
-            return asn1PublicKey.GetDerEncoded();
+            var asn1Key = new AsnEncodedData(blob);
+            var publicKey = new PublicKey(RsaOid, Asn1Null, asn1Key);
+            using (var rsaKey = (RSACryptoServiceProvider)publicKey.Key)
+            {
+                return rsaKey.ExportParameters(false);
+            }
         }
 
         /// <summary>
