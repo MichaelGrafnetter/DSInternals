@@ -332,8 +332,8 @@ namespace DSInternals.DataStore
                             decryptedPekList = DecryptUsingRC4(encryptedPekList, salt, bootKey, BootKeySaltHashRounds);
                             break;
                         case PekListVersion.W2016:
-                            // Remove the trailing zeroes. The structure always fits into exactly 4 AES blocks.
-                            encryptedPekList = encryptedPekList.Cut(0, 4 * AESBlockSize);
+                            // Remove the trailing zeroes. The structure seems to always end with 16B of zeroes.
+                            encryptedPekList = encryptedPekList.Cut(0, encryptedPekList.Length - AESBlockSize);
                             decryptedPekList = DecryptUsingAES(encryptedPekList, salt, bootKey);
                             break;
                         default:

@@ -44,14 +44,17 @@ namespace DSInternals.DataStore.Test
         }
 
         [TestMethod]
-        public void PasswordEncryptionKey_DataStorePEK_W2016_Decrypt()
+        public void PasswordEncryptionKey_DataStorePEK_W2016_IFM_Decrypt()
         {
-            // Win 2016 TP4+
-            byte[] encryptedPEK = "03000000010000008ACED06423573C329BECD77936128FD61FD3892FAC724D4D24B2F4A5DA48A72B5472BDCB7FB6EEFA4884CDC9B2D2A835931A3E67B434DC766051A28B73DE385285B19961E0DC0CF661BA0AC3B3DD185D00000000000000000000000000000000".HexToBinary();
-            byte[] bootKey = "c0f2efe014aeda56da739a22ae9e9893".HexToBinary();
+            // The data come a Windows Server 2019 DC promoted using IFM
+            byte[] encryptedPEK = "03000000010000005B005859BD413C6ED575DDF5C16DEACD22844A2B1D58A03BB64A67C8EF04BDB961049CFB044B23CC541468B0F368F53D954A52C3A62DADB1B191C4E72CDEC5B76FB91846366A60FBD92CB5BD295A4F116651EFDA51FD11381FDBA97949A769B800000000000000000000000000000000".HexToBinary();
+            byte[] bootKey = "00f42e2e7b69ec3dee44da4ffe7e98f5".HexToBinary();
+            byte[] unicodePwd = "1300000000000000313709BF35CF3DEFDFDC37569DABD8F710000000CEFC2BECFB7DD8497773563E121634F8F5F59F803CEE509907E70ED1754351D6".HexToBinary();
+            int rid = 1000;
             var pek = new DataStoreSecretDecryptor(encryptedPEK, bootKey);
-            string expected = "6A35D3FC0E9949135463AB766CAC7DBB";
-            Assert.AreEqual(expected, pek.CurrentKey.ToHex(true));
+            string decryptedHash = pek.DecryptHash(unicodePwd, rid).ToHex(true);
+            string expected = "92937945B518814341DE3F726500D4FF";
+            Assert.AreEqual(expected, decryptedHash);
         }
 
         [TestMethod]
