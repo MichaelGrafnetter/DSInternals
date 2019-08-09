@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.6'
+ModuleVersion = '3.6.1'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -122,9 +122,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed a bug in the Test-PasswordQuality cmdlet.
-- Renamed the -DBPath parameter of database cmdlets to -DatabasePath.
-- Improved Get-Help documentation.
+Resolved an issue with decryption of ntds.dit files originating from Windows Server 2016+ DCs that were promoted using IFM.
 "@
     } # End of PSData hashtable
 

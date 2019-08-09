@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [3.6.1] - 2019-08-10
+
+### Fixed
+- Resolved issue #91 (The boot key provided cannot be used to decrypt the database),
+  which appeared during decryption of ntds.dit files originating from Windows Server 2016+ DCs that were promoted using IFM.
+
 ## [3.6] - 2019-06-28
 
 ### Changed
@@ -312,7 +318,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6.1...HEAD
+[3.6.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6...v3.6.1
 [3.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.5...v3.6
 [3.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.4...v3.5
 [3.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.3...v3.4
