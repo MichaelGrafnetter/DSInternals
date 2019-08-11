@@ -1,12 +1,12 @@
-// Full IDL (ms-drsr.idl) has been taken from MSDN:
-// https://msdn.microsoft.com/en-us/library/cc228531.aspx
+// Full IDL (ms-drsr.idl) has been taken from
+// https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-drsr/3f5d9495-9563-44de-876a-ce6f880e3fb2
 // A few modifications have been made though:
 // - We do not use ms-dtyp.idl, because its definitions conflict with Windows header files. 
 //   Wtypesbase.idl is used instead.
 // - The RPC_UNICODE_STRING has been copied from ms-dtyp.idl.
 // - Custom drsr_imports.idl is used to import the ntdsapi.h file. 
 // - Types that are already defined in ntdsapi.h have been dropped from this IDL in order to prevent redefinitions.
-// This IDL file corresponds to Windows Server 2016 TP4. Newer servers will add more calls, so this IDL will have to be updated.
+// This IDL file corresponds to Windows Server v1803. Newer servers will add more calls, so this IDL will have to be updated.
 
 import "wtypesbase.idl";
 import "drsr_imports.idl";
@@ -440,12 +440,39 @@ interface drsuapi
 		ULONG ulMoreFlags;
 	} DRS_MSG_GETCHGREQ_V10;
 
+	typedef struct {
+		ULONG ulVersion;
+		ULONG cbByteBuffer;
+		ULONGLONG ullPadding;
+		[size_is(cbByteBuffer)] BYTE rgbBuffer[];
+	} VAR_SIZE_BUFFER_WITH_VERSION;
+
+	typedef struct {
+		UUID uuidDsaObjDest;
+		UUID uuidInvocIdSrc;
+		[ref] DSNAME *pNC;
+		USN_VECTOR usnvecFrom;
+		[unique] UPTODATE_VECTOR_V1_EXT *pUpToDateVecDest;
+		ULONG ulFlags;
+		ULONG cMaxObjects;
+		ULONG cMaxBytes;
+		ULONG ulExtendedOp;
+		ULARGE_INTEGER liFsmoInfo;
+		[unique] PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSet;
+		[unique] PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSetEx;
+		SCHEMA_PREFIX_TABLE PrefixTableDest;
+		ULONG ulMoreFlags;
+		GUID correlationID;
+		[unique] VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+	} DRS_MSG_GETCHGREQ_V11;
+
 	typedef[switch_type(DWORD)] union {
 		[case(4)] DRS_MSG_GETCHGREQ_V4 V4;
 		[case(5)] DRS_MSG_GETCHGREQ_V5 V5;
 		[case(7)] DRS_MSG_GETCHGREQ_V7 V7;
 		[case(8)] DRS_MSG_GETCHGREQ_V8 V8;
 		[case(10)] DRS_MSG_GETCHGREQ_V10 V10;
+		[case(11)] DRS_MSG_GETCHGREQ_V11 V11;
 	} DRS_MSG_GETCHGREQ;
 
 	typedef struct {
@@ -480,9 +507,19 @@ interface drsuapi
 		ULONG ulOptions;
 	} DRS_MSG_REPSYNC_V1;
 
+	typedef struct {
+		[ref] DSNAME *pNC;
+		UUID uuidDsaSrc;
+		[unique] [string] char *pszDsaSrc;
+		ULONG ulOptions;
+		GUID correlationID;
+		[unique] VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+	} DRS_MSG_REPSYNC_V2;
+
 	typedef[switch_type(DWORD)] union
 	{
 		[case(1)] DRS_MSG_REPSYNC_V1 V1;
+		[case(2)] DRS_MSG_REPSYNC_V2 V2;
 	} DRS_MSG_REPSYNC;
 
 	typedef struct {
@@ -492,8 +529,18 @@ interface drsuapi
 		ULONG ulOptions;
 	} DRS_MSG_UPDREFS_V1;
 
+	typedef struct {
+		[ref] DSNAME *pNC;
+		[ref] [string] char *pszDsaDest;
+		UUID uuidDsaObjDest;
+		ULONG ulOptions;
+		GUID correlationID;
+		[unique] VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+	} DRS_MSG_UPDREFS_V2;
+
 	typedef[switch_type(DWORD)] union {
 		[case(1)] DRS_MSG_UPDREFS_V1 V1;
+		[case(2)] DRS_MSG_UPDREFS_V2 V2;
 	} DRS_MSG_UPDREFS;
 
 	typedef struct {
@@ -512,9 +559,21 @@ interface drsuapi
 		ULONG ulOptions;
 	} DRS_MSG_REPADD_V2;
 
+	typedef struct {
+		[ref] DSNAME *pNC;
+		[unique] DSNAME *pSourceDsaDN;
+		[unique] DSNAME *pTransportDN;
+		[ref] [string] char *pszSourceDsaAddress;
+		REPLTIMES rtSchedule;
+		ULONG ulOptions;
+		GUID correlationID;
+		[unique] VAR_SIZE_BUFFER_WITH_VERSION *pReservedBuffer;
+	} DRS_MSG_REPADD_V3;
+
 	typedef[switch_type(DWORD)] union {
 		[case(1)] DRS_MSG_REPADD_V1 V1;
 		[case(2)] DRS_MSG_REPADD_V2 V2;
+		[case(3)] DRS_MSG_REPADD_V3 V3;
 	} DRS_MSG_REPADD;
 
 	typedef struct {
