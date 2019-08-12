@@ -10,6 +10,10 @@ namespace DSInternals.Common
     {
         private const int BCryptKeyBlobHeaderSize = 6 * sizeof(uint);
         private const uint BCryptRSAPublicKeyMagic = 0x31415352; // "RSA1" in ASCII
+        private const int TPM20KeyBlobHeaderSize = 4 * sizeof(int) + 9 * sizeof(uint);
+        private const uint TPM20PublicKeyMagic = 0x4d504350; // "MPCP" in ASCII
+        private const byte DERSequenceTag = 0x30;
+        private const int DERPublicKeyMinSize = 260; // At least 2K RSA modulus + 3B public exponent + 1B sequence tag
 
         /// <summary>
         /// OID 1.2.840.113549.1.1.1 - Identifier for RSA encryption for use with Public Key Cryptosystem One defined by RSA Inc. 
@@ -84,7 +88,7 @@ namespace DSInternals.Common
         }
 
         /// <summary>
-        /// CHecks whether the input blob is in the BCRYPT_RSAKEY_BLOB format.
+        /// Checks whether the input blob is in the BCRYPT_RSAKEY_BLOB format.
         /// </summary>
         public static bool IsBCryptRSAPublicKeyBlob(this byte[] blob)
         {
@@ -95,6 +99,34 @@ namespace DSInternals.Common
 
             // Check if the byte sequence starts with the magic
             return BitConverter.ToUInt32(blob, 0) == BCryptRSAPublicKeyMagic;
+        }
+
+        /// <summary>
+        /// Checks whether the input blob is in the PCP_KEY_BLOB_WIN8 format.
+        /// </summary>
+        public static bool IsTPM20PublicKeyBlob(this byte[] blob)
+        {
+            if (blob == null || blob.Length < TPM20KeyBlobHeaderSize)
+            {
+                return false;
+            }
+
+            // Check if the byte sequence starts with the magic
+            return BitConverter.ToUInt32(blob, 0) == TPM20PublicKeyMagic;
+        }
+
+        /// <summary>
+        /// Checks whether the input blob is a DER-encoded public key.
+        /// </summary>
+        public static bool IsDERPublicKeyBlob(this byte[] blob)
+        {
+            if (blob == null || blob.Length < DERPublicKeyMinSize)
+            {
+                return false;
+            }
+
+            // Check if the byte sequence starts with a DER sequence tag. This is a very vague test.
+            return blob[0] == DERSequenceTag;
         }
     }
 }

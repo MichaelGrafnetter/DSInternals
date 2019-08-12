@@ -108,6 +108,7 @@
                     return null;
                 }
 
+                // FIDO keys typically use ECC instead of RSA, but we try to extract the RSA key anyway:
                 var fidoKey = this.FidoKeyMaterial;
                 if (fidoKey != null && fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type == COSE.KeyType.RSA)
                 {
@@ -116,12 +117,20 @@
 
                 if(this.Usage == KeyUsage.NGC || this.Usage == KeyUsage.STK)
                 {
+                    // The RSA public key can be stored in at least 3 different formats.
+
                     if (this.RawKeyMaterial.IsBCryptRSAPublicKeyBlob())
                     {
                         // This public key is in DER format. This is typically true for device/computer keys.
                         return this.RawKeyMaterial.ImportRSAPublicKeyBCrypt();
                     }
-                    else
+                    else if(this.RawKeyMaterial.IsTPM20PublicKeyBlob())
+                    {
+                        // This public key is encoded as PCP_KEY_BLOB_WIN8. This is typically true for device keys protected by TPM.
+                        // The PCP_KEY_BLOB_WIN8 structure is not yet supported by DSInternals.
+                        return null;
+                    }
+                    else if(this.RawKeyMaterial.IsDERPublicKeyBlob())
                     {
                         // This public key is encoded as BCRYPT_RSAKEY_BLOB. This is typically true for user keys.
                         return this.RawKeyMaterial.ImportRSAPublicKeyDER();
