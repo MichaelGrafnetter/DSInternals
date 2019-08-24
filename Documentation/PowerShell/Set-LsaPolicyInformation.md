@@ -14,7 +14,7 @@ Configures AD-related Local Security Authority Policies of the local computer or
 
 ```
 Set-LsaPolicyInformation -DomainName <String> -DnsDomainName <String> -DnsForestName <String>
- -DomainGuid <Guid> -DomainSid <SecurityIdentifier> [-ComputerName <String>] [<CommonParameters>]
+ -DomainGuid <Guid> -DomainSid <SecurityIdentifier> [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,7 +43,7 @@ Parameter Sets: (All)
 Aliases: Server, ServerName, Computer, Machine, MachineName, System, SystemName
 
 Required: False
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -125,14 +125,16 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None
+
 ## OUTPUTS
 
 ### None
+
 ## NOTES
 
 ## RELATED LINKS

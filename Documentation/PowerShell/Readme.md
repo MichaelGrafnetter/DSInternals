@@ -66,6 +66,9 @@ Reads one or more accounts through the MS-DRSR protocol, including secret attrib
 ### [Get-ADReplBackupKey](Get-ADReplBackupKey.md#get-adreplbackupkey)
 Reads the DPAPI backup keys through the MS-DRSR protocol.
 
+### [Set-ADReplNgcKey](Set-ADReplNgcKey.md#Set-adreplngckey)
+Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.
+
 ### [Get-SamPasswordPolicy](Get-SamPasswordPolicy.md#get-sampasswordpolicy)
 Queries Active Directory for the default password policy.
 

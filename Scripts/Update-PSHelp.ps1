@@ -13,11 +13,17 @@ $locale = 'en-US'
 $dsInternalsModulePath = Join-Path $rootDir 'Build\bin\Release\DSInternals'
 $mdHelpPath = Join-Path $rootDir 'Documentation\PowerShell'
 $modulePagePath = Join-Path $mdHelpPath 'Readme.md'
-$xmlHelpPath = Join-Path $rootDir "Src\DSInternals.PowerShell\$locale"
-$aboutPagePath = Join-Path $xmlHelpPath 'about_DSInternals.help.txt'
+$xmlHelpSrcPath = Join-Path $rootDir "Src\DSInternals.PowerShell\$locale"
+$xmlHelpBuildPath = Join-Path $dsInternalsModulePath $locale
+$aboutPagePath = Join-Path $xmlHelpSrcPath 'about_DSInternals.help.txt'
 
 # Import dependencies
 Import-Module -Name platyPS
+
+# Remove any pre-existing XML help
+Remove-Item $xmlHelpBuildPath -Recurse
+
+# Load the freshly compiled module to generate the help for
 Import-Module -Name $dsInternalsModulePath
 
 <#
@@ -30,7 +36,7 @@ New-MarkdownAboutHelp -AboutName DSInternals -OutputFolder $mdHelpPath
 Update-MarkdownHelpModule -Path $mdHelpPath -ModulePagePath $modulePagePath -RefreshModulePage:$false -AlphabeticParamsOrder -UpdateInputOutput
 
 # Generate the MAML file
-New-ExternalHelp -Path $mdHelpPath -OutputPath $xmlHelpPath -Force -ShowProgress
+New-ExternalHelp -Path $mdHelpPath -OutputPath $xmlHelpSrcPath -Force -ShowProgress
 
 # Capitalize the help topic name
 $aboutPage = Get-Content -Path $aboutPagePath

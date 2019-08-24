@@ -1,51 +1,45 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADReplAccount.md
+online version:
 schema: 2.0.0
 ---
 
-# Get-ADReplAccount
+# Set-ADReplNgcKey
 
 ## SYNOPSIS
-Reads one or more accounts through the MS-DRSR protocol, including secret attributes.
+Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.
 
 ## SYNTAX
 
-### All
-```
-Get-ADReplAccount [-All] -NamingContext <String> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
-```
-
 ### ByName
 ```
-Get-ADReplAccount [-SamAccountName] <String> [-Domain] <String> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+Set-ADReplNgcKey -PublicKey <Byte[]> [-SamAccountName] <String> [-Domain] <String> -Server <String>
+ [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### ByUPN
 ```
-Get-ADReplAccount -UserPrincipalName <String> -Server <String> [-Credential <PSCredential>]
+Set-ADReplNgcKey -PublicKey <Byte[]> -UserPrincipalName <String> -Server <String> [-Credential <PSCredential>]
  [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Get-ADReplAccount -ObjectSid <SecurityIdentifier> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+Set-ADReplNgcKey -PublicKey <Byte[]> -ObjectSid <SecurityIdentifier> -Server <String>
+ [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Get-ADReplAccount [-DistinguishedName] <String> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+Set-ADReplNgcKey -PublicKey <Byte[]> [-DistinguishedName] <String> -Server <String>
+ [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Get-ADReplAccount -ObjectGuid <Guid> -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
- [<CommonParameters>]
+Set-ADReplNgcKey -PublicKey <Byte[]> -ObjectGuid <Guid> -Server <String> [-Credential <PSCredential>]
+ [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -55,27 +49,12 @@ Get-ADReplAccount -ObjectGuid <Guid> -Server <String> [-Credential <PSCredential
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-ADReplNgcKey -UserPrincipalName 'john@contoso.com' -Server LON-DC1 -PublicKey 525341310008000003000000000100000000000000000000010001C1A78914457758B0B13C70C710C7F8548F3F9ED56AD4640B6E6A112655C98ECAC1CBD68A298F5686C08439428A97FE6FDF58D78EA481905182BAD684C2D9C5CDE1CDE34AA19742E8BBF58B953EAC4C562FCF598CC176B02DBE9FFFEF5937A65815C236F92892F7E511A1FEDD5483CB33F1EA715D68106180DED2432A293367114A6E325E62F93F73D7ECE4B6A2BCDB829D95C8645C3073B94BA7CB7515CD29042F0967201C6E24A77821E92A6C756DF79841ACBAAE11D90CA03B9FCD24EF9E304B5D35248A7BD70557399960277058AE3E99C7C7E2284858B7BF8B08CDD286964186A50A7FCBCC6A24F00FEE5B9698BBD3B1AEAD0CE81FEA461C0ABD716843A5
 ```
 
-{{ Add example description here }}
+Registers the specified NGC public key for user *john@contoso.com*.
 
 ## PARAMETERS
-
-### -All
-Indidates that all accounts will be replicated from the target domain controller.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: All
-Aliases: AllAccounts, ReturnAllAccounts
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -Credential
 Specifies a user account that has permission to perform this action. The default is the current user.
@@ -93,7 +72,7 @@ Accept wildcard characters: False
 ```
 
 ### -DistinguishedName
-Specifies the identifier of the account that will be replicated.
+Specifies the identifier of the target Active Directory object.
 
 ```yaml
 Type: String
@@ -108,7 +87,7 @@ Accept wildcard characters: False
 ```
 
 ### -Domain
-Specifies the NetBIOS domain name of the account that will be replicated.
+Specifies the NetBIOS domain name of the target Active Directory account.
 
 ```yaml
 Type: String
@@ -122,23 +101,8 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -NamingContext
-Specifies the naming context root of the replica to replicate.
-
-```yaml
-Type: String
-Parameter Sets: All
-Aliases: NC, DomainNC, DomainNamingContext
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -ObjectGuid
-Specifies the identifier of the account that will be replicated.
+Specifies the identifier of the target Active Directory object.
 
 ```yaml
 Type: Guid
@@ -153,7 +117,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectSid
-Specifies the identifier of the account that will be replicated.
+Specifies the identifier of the target Active Directory account.
 
 ```yaml
 Type: SecurityIdentifier
@@ -178,13 +142,28 @@ Accepted values: TCP, SMB, HTTP
 
 Required: False
 Position: Named
-Default value: TCP
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PublicKey
+Specifies the NGC key value.
+
+```yaml
+Type: Byte[]
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -SamAccountName
-Specifies the identifier of the account that will be replicated.
+Specifies the identifier of the target Active Directory account.
 
 ```yaml
 Type: String
@@ -214,7 +193,7 @@ Accept wildcard characters: False
 ```
 
 ### -UserPrincipalName
-Specifies the identifier of the account that will be replicated.
+Specifies the identifier of the target Active Directory account.
 
 ```yaml
 Type: String
@@ -241,13 +220,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### DSInternals.Common.Data.DSAccount
+### None
 
 ## NOTES
 
 ## RELATED LINKS
 
-[Get-ADDBAccount](Get-ADDBAccount.md)
-[Get-ADSIAccount](Get-ADSIAccount.md)
-[Test-PasswordQuality](Test-PasswordQuality.md)
-[Save-DPAPIBlob](Save-DPAPIBlob.md)
+[Get-ADReplAccount](Get-ADReplAccount.md)
+[Get-ADKeyCredential](Get-ADKeyCredential.md)

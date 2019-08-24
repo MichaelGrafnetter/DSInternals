@@ -20,7 +20,7 @@ Get-ADKeyCredential [-Certificate] <X509Certificate2> [-DeviceId] <Guid> -Holder
 
 ### FromDNBinary
 ```
-Get-ADKeyCredential -DNWithBinaryData <String[]> [<CommonParameters>]
+Get-ADKeyCredential [-DNWithBinaryData] <String[]> [<CommonParameters>]
 ```
 
 ### FromBinary
@@ -117,7 +117,7 @@ Parameter Sets: FromDNBinary
 Aliases: DNWithBinary, DistinguishedNameWithBinary
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -154,14 +154,20 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### System.String[]
+
 ## OUTPUTS
 
 ### DSInternals.Common.Data.KeyCredential
+
 ## NOTES
 
 ## RELATED LINKS
+
+[Set-ADReplNgcKey](Set-ADReplNgcKey.md)
+[Get-ADReplAccount](Get-ADReplAccount.md)
+[Get-ADDBAccount](Get-ADDBAccount.md)
