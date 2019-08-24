@@ -1,19 +1,19 @@
-﻿namespace DSInternals.Replication
-{
-    using DSInternals.Common.Data;
-    using DSInternals.Replication.Model;
-    using DSInternals.Replication.Interop;
-    using NDceRpc;
-    using NDceRpc.Microsoft.Interop;
-    using NDceRpc.Native;
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Security.Principal;
-    using DSInternals.Common.Interop;
-    using DSInternals.Common.Cryptography;
-    using DSInternals.Common;
+﻿using DSInternals.Common.Data;
+using DSInternals.Replication.Model;
+using DSInternals.Replication.Interop;
+using NDceRpc;
+using NDceRpc.Microsoft.Interop;
+using NDceRpc.Native;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Security.Principal;
+using DSInternals.Common.Interop;
+using DSInternals.Common.Cryptography;
+using DSInternals.Common;
 
+namespace DSInternals.Replication
+{
     public class DirectoryReplicationClient : IDisposable
     {
         /// <summary>
@@ -21,14 +21,21 @@
         /// </summary>
         private const string ServicePrincipalNameFormat = "ldap/{0}";
         private const string DrsNamedPipeName = @"\pipe\lsass";
+
         /// <summary>
-        /// This magic guid is needed to fetch the whole tree from a Win 2000 Server DC with DsGetNCChanges() as Administrator.
+        /// Identifier of Windows Server 2000 dcpromo.
         /// </summary>
-        static readonly Guid DcPromoGuid2k = new Guid("6abec3d1-3054-41c8-a362-5a0c5b7d5d71");
+        private static readonly Guid DcPromoGuid2k = new Guid("6abec3d1-3054-41c8-a362-5a0c5b7d5d71");
+
         /// <summary>
-        /// This magic guid is needed to fetch the whole tree from a Win 2003+ Server DC with DsGetNCChanges() as Administrator.
+        /// Identifier of Windows Server 2003+ dcpromo.
         /// </summary>
-        static readonly Guid DcPromoGuid2k3 = new Guid("6afab99c-6e26-464a-975f-f58f105218bc");
+        private static readonly Guid DcPromoGuid2k3 = new Guid("6afab99c-6e26-464a-975f-f58f105218bc");
+
+        /// <summary>
+        /// Non-DC client identifier.
+        /// </summary>
+        private static readonly Guid NtdsApiClientGuid = new Guid("e24d201a-4fd6-11d1-a3da-0000f875ae0d");
 
         private NativeClient rpcConnection;
         private DrsConnection drsConnection;
@@ -36,27 +43,27 @@
 
         public DirectoryReplicationClient(string server, RpcProtocol protocol, NetworkCredential credential = null)
         {
-            Validator.AssertNotNullOrWhiteSpace(server, "server");
+            Validator.AssertNotNullOrWhiteSpace(server, nameof(server));
             this.CreateRpcConnection(server, protocol, credential);
-            this.drsConnection = new DrsConnection(this.rpcConnection.Binding, DcPromoGuid2k3);
+            this.drsConnection = new DrsConnection(this.rpcConnection.Binding, NtdsApiClientGuid);
         }
 
         public ReplicationCursor[] GetReplicationCursors(string namingContext)
         {
-            Validator.AssertNotNullOrWhiteSpace(namingContext, "namingContext");
+            Validator.AssertNotNullOrWhiteSpace(namingContext, nameof(namingContext));
             return this.drsConnection.GetReplicationCursors(namingContext);
         }
 
         public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null)
         {
-            Validator.AssertNotNullOrWhiteSpace(domainNamingContext, "domainNamingContext");
+            Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
             ReplicationCookie cookie = new ReplicationCookie(domainNamingContext);
             return GetAccounts(cookie, progressReporter);
         }
 
         public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null)
         {
-            Validator.AssertNotNull(initialCookie, "initialCookie");
+            Validator.AssertNotNull(initialCookie, nameof(initialCookie));
             // Create AD schema
             var schema = BasicSchemaFactory.CreateSchema();
             var currentCookie = initialCookie;
@@ -152,11 +159,27 @@
             return this.GetAccount(objectGuid);
         }
 
-        public DSAccount GetAccountByUPN(string userPrincipalName)
+        public void WriteNgcKey(Guid objectGuid, byte[] publicKey)
         {
-            // TODO: Redesign the GetAccount overloads, for GetAccountByUPN to follow the same convention.
-            Guid objectGuid = this.drsConnection.ResolveGuid(userPrincipalName);
-            return this.GetAccount(objectGuid);
+            string distinguishedName = this.drsConnection.ResolveDistinguishedName(objectGuid);
+            this.WriteNgcKey(distinguishedName, publicKey);
+        }
+
+        public void WriteNgcKey(NTAccount accountName, byte[] publicKey)
+        {
+            string distinguishedName = this.drsConnection.ResolveDistinguishedName(accountName);
+            this.WriteNgcKey(distinguishedName, publicKey);
+        }
+
+        public void WriteNgcKey(SecurityIdentifier sid, byte[] publicKey)
+        {
+            string distinguishedName = this.drsConnection.ResolveDistinguishedName(sid);
+            this.WriteNgcKey(distinguishedName, publicKey);
+        }
+
+        public void WriteNgcKey(string accountDN, byte[] publicKey)
+        {
+            this.drsConnection.WriteNgcKey(accountDN, publicKey);
         }
 
         private DirectorySecretDecryptor SecretDecryptor
@@ -184,9 +207,8 @@
                     }
                     break;
                 default:
-                    // TODO: Custom exception type
                     // TODO: Extract as string
-                    throw new Exception("Unsupported RPC protocol");
+                    throw new NotImplementedException("The requested RPC protocol is not supported.");
             }
             this.rpcConnection = new NativeClient(binding);
 
@@ -207,16 +229,19 @@
             {
                 return;
             }
+
             if (this.drsConnection != null)
             {
                 this.drsConnection.Dispose();
                 this.drsConnection = null;
             }
+
             if (this.rpcConnection != null)
             {
                 this.rpcConnection.Dispose();
                 this.rpcConnection = null;
             }
+
             if(this.npConnection != null)
             {
                 this.npConnection.Dispose();

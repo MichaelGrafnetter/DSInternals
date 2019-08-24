@@ -1,29 +1,18 @@
-﻿namespace DSInternals.PowerShell.Commands
-{
-    using System;
-    using System.Management.Automation;
-    using DSInternals.Replication;
-    using System.Net;
-    using DSInternals.Common.Data;
+﻿using System;
+using System.Management.Automation;
 
+namespace DSInternals.PowerShell.Commands
+{
     public abstract class ADReplObjectCommandBase : ADReplCommandBase
     {
         protected const string ParameterSetByGuid = "ByGuid";
         protected const string ParameterSetByDN = "ByDN";
-        protected const string ParameterSetAll = "All";
 
         #region Parameters
 
-        [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
-        [Alias("AllAccounts", "ReturnAllAccounts")]
-        public SwitchParameter All
-        {
-            get;
-            set;
-        }
-
         [Parameter(
             Mandatory = true,
+            Position = 0,
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = ParameterSetByDN
         )]
@@ -43,15 +32,6 @@
         [ValidateNotNullOrEmpty]
         [Alias("Guid")]
         public Guid ObjectGuid
-        {
-            get;
-            set;
-        }
-
-        [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
-        [ValidateNotNullOrEmpty]
-        [Alias("NC", "DomainNC","DomainNamingContext")]
-        public string NamingContext
         {
             get;
             set;

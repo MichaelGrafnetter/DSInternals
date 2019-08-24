@@ -75,7 +75,8 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
                   'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
-                  'Set-LSAPolicyInformation', 'New-ADDBRestoreFromMediaScript','Get-LsaBackupKey'
+                  'Set-LSAPolicyInformation', 'New-ADDBRestoreFromMediaScript','Get-LsaBackupKey',
+                  'Add-ADReplNgcKey'
 
 # Variables to export from this module
 VariablesToExport = @()

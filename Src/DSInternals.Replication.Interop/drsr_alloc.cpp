@@ -45,7 +45,7 @@ midl_ptr<DRS_MSG_CRACKREQ_V1> make_midl_ptr(ULONG numNames)
 {
 	auto request = midl_ptr<DRS_MSG_CRACKREQ_V1>((DRS_MSG_CRACKREQ_V1*)midl_user_allocate(sizeof(DRS_MSG_CRACKREQ_V1)));
 	request->cNames = numNames;
-	request->rpNames = (WCHAR**)midl_user_allocate(numNames * sizeof(WCHAR*));
+	request->rpNames = (WCHAR * *)midl_user_allocate(numNames * sizeof(WCHAR*));
 	return request;
 }
 
@@ -66,17 +66,24 @@ void midl_delete<DRS_MSG_GETCHGREQ_V5>::operator()(DRS_MSG_GETCHGREQ_V5* request
 template<>
 void midl_delete<DRS_MSG_GETCHGREQ_V8>::operator()(DRS_MSG_GETCHGREQ_V8* request) const
 {
-	if (request != nullptr)
+	if (request == nullptr)
 	{
-		// Perform deep free
-		midl_user_free(request->pPartialAttrSet);
-		midl_user_free(request->pPartialAttrSetEx);
-		// TODO: Free all PrefixTableDest items separately?
-		midl_user_free(request->PrefixTableDest.pPrefixEntry);
-		
-		// The DRS_MSG_GETCHGREQ_V8 message is a superset of DRS_MSG_GETCHGREQ_V5.
-		auto requestV5 = midl_ptr<DRS_MSG_GETCHGREQ_V5>((DRS_MSG_GETCHGREQ_V5*)request);
+		return;
 	}
+
+	// Perform deep free
+	midl_user_free(request->pPartialAttrSet);
+	midl_user_free(request->pPartialAttrSetEx);
+
+	// Free all SCHEMA_PREFIX_TABLE entries
+	for (DWORD i = 0; i < request->PrefixTableDest.PrefixCount; i++)
+	{
+		midl_user_free(request->PrefixTableDest.pPrefixEntry[i].prefix.elements);
+	}
+	midl_user_free(request->PrefixTableDest.pPrefixEntry);
+
+	// The DRS_MSG_GETCHGREQ_V8 message is a superset of DRS_MSG_GETCHGREQ_V5.
+	auto requestV5 = midl_ptr<DRS_MSG_GETCHGREQ_V5>((DRS_MSG_GETCHGREQ_V5*)request);
 }
 
 template<>
@@ -96,6 +103,7 @@ void midl_delete<DRS_MSG_CRACKREQ_V1>::operator()(DRS_MSG_CRACKREQ_V1* request) 
 	{
 		return;
 	}
+
 	midl_user_free(request->rpNames);
 	midl_user_free(request);
 }
@@ -107,6 +115,7 @@ void midl_delete<DRS_MSG_CRACKREPLY_V1>::operator()(DRS_MSG_CRACKREPLY_V1* reply
 	{
 		return;
 	}
+
 	if (reply->pResult != nullptr)
 	{
 		// Perform deep free
@@ -120,6 +129,7 @@ void midl_delete<DRS_MSG_CRACKREPLY_V1>::operator()(DRS_MSG_CRACKREPLY_V1* reply
 		midl_user_free(reply->pResult->rItems);
 		midl_user_free(reply->pResult);
 	}
+
 	// Free the wrapping object itself
 	midl_user_free(reply);
 }
@@ -195,7 +205,7 @@ void midl_delete<DRS_MSG_GETCHGREPLY_V6>::operator()(DRS_MSG_GETCHGREPLY_V6* rep
 
 		// Free the encapsulating array. It does not matter whether it is of type REPLVALINF_V1 or REPLVALINF_V3.
 		midl_user_free(reply->rgValues);
-		
+
 		// The DRS_MSG_GETCHGREPLY_V6 message is a superset of DRS_MSG_GETCHGREPLY_V1.
 		auto replyV1 = midl_ptr<DRS_MSG_GETCHGREPLY_V1>((DRS_MSG_GETCHGREPLY_V1*)reply);
 	}
@@ -213,7 +223,7 @@ void midl_delete<DRS_MSG_GETCHGREPLY_V9>::operator()(DRS_MSG_GETCHGREPLY_V9* rep
 			midl_user_free(currentValue.pObject);
 			midl_user_free(currentValue.Aval.pVal);
 		}
-		
+
 		/* The DRS_MSG_GETCHGREPLY_V6 deleter should not go through these values,
 		   because it would interpret them as REPLVALINF_V1 instead of REPLVALINF_V3.
 		*/
@@ -234,6 +244,24 @@ void midl_delete<DRS_MSG_GETREPLINFO_REQ_V1>::operator()(DRS_MSG_GETREPLINFO_REQ
 
 	// Free the DN string
 	midl_user_free(request->pszObjectDN);
+
+	// Free the encapsulating object:
+	midl_user_free(request);
+}
+
+template<>
+void midl_delete<DRS_MSG_WRITENGCKEYREQ_V1>::operator()(DRS_MSG_WRITENGCKEYREQ_V1* request) const
+{
+	if (request == nullptr)
+	{
+		return;
+	}
+
+	// Free the key
+	midl_user_free(request->pNgcKey);
+
+	// Free the DN string
+	midl_user_free((void*)request->pwszAccount);
 
 	// Free the encapsulating object:
 	midl_user_free(request);

@@ -35,6 +35,7 @@ namespace DSInternals.Common
             switch(code)
             {
                 case Win32ErrorCode.DS_INVALID_DN_SYNTAX:
+                case Win32ErrorCode.INVALID_PARAMETER:
                     exceptionToThrow = new ArgumentException(genericException.Message, genericException);
                     break;
                 case Win32ErrorCode.FILE_NOT_FOUND:

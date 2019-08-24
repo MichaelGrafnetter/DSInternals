@@ -168,6 +168,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[Set-ADReplNgcKey](Set-ADReplNgcKey.md)
+[Add-ADReplNgcKey](Add-ADReplNgcKey.md)
 [Get-ADReplAccount](Get-ADReplAccount.md)
 [Get-ADDBAccount](Get-ADDBAccount.md)

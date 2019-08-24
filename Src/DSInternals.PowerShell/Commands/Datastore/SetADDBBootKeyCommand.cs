@@ -1,12 +1,10 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using System;
     using System.Management.Automation;
-    using DSInternals.Common;
-    using DSInternals.Common.Cryptography;
     using DSInternals.DataStore;
 
     [Cmdlet(VerbsCommon.Set, "ADDBBootKey")]
+    [OutputType("None")]
     public class SetADDBBootKeyCommand : ADDBCommandBase
     {
         [Parameter(Mandatory = true)]

@@ -1,11 +1,10 @@
-﻿namespace DSInternals.PowerShell.Commands
-{
-    using System;
-    using System.Management.Automation;
-    using DSInternals.Replication;
-    using System.Net;
-    using DSInternals.Common.Data;
+﻿using System;
+using System.Management.Automation;
+using System.Net;
+using DSInternals.Replication;
 
+namespace DSInternals.PowerShell.Commands
+{
     public abstract class ADReplCommandBase : PSCmdlet, IDisposable
     {
 
@@ -36,6 +35,7 @@
             set;
         }
         #endregion Parameters
+
         protected DirectoryReplicationClient ReplicationClient
         {
             get;
@@ -46,31 +46,14 @@
 
         protected override void BeginProcessing()
         {
-            // TODO: Debug output
-            // TODO: Exception handling
-            //this.WriteDebug("Opening the Active Directory database.");
             NetworkCredential netCredential = null;
             if(this.Credential != null)
             {
                 // Convert PSCredential to NetworkCredential
                 netCredential = this.Credential.GetNetworkCredential();
             }
+
             this.ReplicationClient = new DirectoryReplicationClient(this.Server, this.Protocol, netCredential);
-            //try
-            //{
-            //}
-            //catch(SessionStateException ex)
-            //{
-            //    // This may be DriveNotFoundException, ItemNotFoundException, ProviderNotFoundException, etc.
-            //    // Terminate on this error:
-            //    this.ThrowTerminatingError(new ErrorRecord(ex.ErrorRecord, ex));
-            //}
-            //catch (Exception ex)
-            //{
-            //    ErrorRecord error = new ErrorRecord(ex, "DBContextError", ErrorCategory.OpenError, null);
-            //    // Terminate on this error:
-            //    this.ThrowTerminatingError(error);
-            //}
         }
 
         #endregion Cmdlet Overrides

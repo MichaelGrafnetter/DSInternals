@@ -1,11 +1,9 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common.Interop;
+    using System;
+    using System.Management.Automation;
     using DSInternals.SAM;
     using DSInternals.SAM.Interop;
-    using System;
-    using System.ComponentModel;
-    using System.Management.Automation;
 
     public abstract class LsaPolicyCommandBase : PSCmdlet, IDisposable
     {

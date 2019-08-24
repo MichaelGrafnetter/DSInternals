@@ -17,13 +17,16 @@ namespace DSInternals
 			class RpcTypeConverter
 			{
 			public:
-				// TODO: Use Guid as reference?
-				static UUID ToUUID(Guid guid);
-				static Guid ToGuid(const UUID &uuid);
-				static array<ReplicationCursor^>^ ToReplicationCursors(midl_ptr<DS_REPL_CURSORS> &&nativeCursors);
-				static midl_ptr<wchar_t> ToNativeString(String^ input);
+				static UUID ToNative(Guid guid);
+				static Guid ToManaged(const UUID& guid);
+				static midl_ptr<wchar_t> ToNative(String^ input);
+				static midl_ptr<byte> ToNative(cli::array<byte>^ managedArray);
+				static cli::array<ReplicationCursor^>^ ToManaged(midl_ptr<DS_REPL_CURSORS>&& nativeCursors);
 				static midl_ptr<DSNAME> ToDsName(String^ distinguishedName);
 				static midl_ptr<DSNAME> ToDsName(Guid objectGuid);
+				static midl_ptr<PARTIAL_ATTR_VECTOR_V1_EXT> CreateNativePas(cli::array<ATTRTYP>^ partialAttributeSet);
+				static String^ ToString(const DSNAME* dsName);
+				static SecurityIdentifier^ ToSid(const DSNAME* dsName);
 			};
 		}
 	}

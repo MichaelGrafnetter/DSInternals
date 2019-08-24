@@ -15,12 +15,12 @@ namespace DSInternals.Common.Data
         None = 0,
 
         /// <summary>
-        /// Reserved for future use.
+        /// Reserved for future use. (CUSTOMKEYINFO_FLAGS_ATTESTATION)
         /// </summary>
         Attestation = 0x01,
 
         /// <summary>
-        /// During creation of this key, the requesting client authenticated using only a single credential.
+        /// During creation of this key, the requesting client authenticated using only a single credential. (CUSTOMKEYINFO_FLAGS_MFA_NOT_USED)
         /// </summary>
         MFANotUsed = 0x02,
     }

@@ -7,10 +7,10 @@
     public enum KeyUsage : byte
     {
         // Admin key (pin-reset key)
-        AdminKey = 0,  
-        
+        AdminKey = 0,
+
         /// <summary>
-        /// NGC key attached to a user object
+        /// NGC key attached to a user object (KEY_USAGE_NGC)
         /// </summary>
         NGC = 0x01,
 
@@ -30,12 +30,12 @@
         Other = 0x04,
 
         /// <summary>
-        /// Fast IDentity Online Key
+        /// Fast IDentity Online Key (KEY_USAGE_FIDO)
         /// </summary>
         FIDO = 0x07,
 
         /// <summary>
-        /// File Encryption Key
+        /// File Encryption Key (KEY_USAGE_FEK)
         /// </summary>
         FEK = 0x08
     }

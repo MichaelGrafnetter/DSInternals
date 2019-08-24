@@ -134,9 +134,10 @@ csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
 
 # C++ Files
-[*.{cpp,h,in}]
+[*.{cpp,h,in,idl}]
 curly_bracket_next_line = true
 indent_brace_style = Allman
+indent_style = tab
 
 # Xml project files
 [*.{csproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]

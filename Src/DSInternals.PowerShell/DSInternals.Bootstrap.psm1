@@ -78,6 +78,9 @@ New-Alias -Name Get-KeyCredentialLink            -Value Get-ADKeyCredential
 New-Alias -Name Get-ADKeyCredentialLink          -Value Get-ADKeyCredential
 New-Alias -Name Get-LsaPolicy                    -Value Get-LsaPolicyInformation
 New-Alias -Name Set-LsaPolicy                    -Value Set-LsaPolicyInformation
+New-Alias -Name Write-ADReplNgcKey               -Value Add-ADReplNgcKey
+New-Alias -Name Write-ADNgcKey                   -Value Add-ADReplNgcKey
+New-Alias -Name Add-ADNgcKey                     -Value Add-ADReplNgcKey
 
 # Export the aliases
 Export-ModuleMember -Alias * -Cmdlet *

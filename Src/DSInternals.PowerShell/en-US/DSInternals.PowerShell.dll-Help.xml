@@ -435,6 +435,555 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Add-ADReplNgcKey</command:name>
+      <command:verb>Add</command:verb>
+      <command:noun>ADReplNgcKey</command:noun>
+      <maml:description>
+        <maml:para>Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>{{Fill in the Description}}</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Add-ADReplNgcKey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="dn">
+          <maml:name>DistinguishedName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the identifier of the target Active Directory object.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
+          <maml:name>Protocol</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
+          <dev:type>
+            <maml:name>RpcProtocol</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PublicKey</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the NGC key value.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+          <maml:name>Server</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Add-ADReplNgcKey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
+          <maml:name>SamAccountName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+          <maml:name>Domain</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the NetBIOS domain name of the target Active Directory account.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
+          <maml:name>Protocol</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
+          <dev:type>
+            <maml:name>RpcProtocol</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PublicKey</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the NGC key value.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+          <maml:name>Server</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Add-ADReplNgcKey</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
+          <maml:name>ObjectGuid</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the identifier of the target Active Directory object.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
+          <maml:name>Protocol</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
+          <dev:type>
+            <maml:name>RpcProtocol</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PublicKey</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the NGC key value.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+          <maml:name>Server</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Add-ADReplNgcKey</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
+          <maml:name>ObjectSid</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
+          <dev:type>
+            <maml:name>SecurityIdentifier</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
+          <maml:name>Protocol</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
+          <dev:type>
+            <maml:name>RpcProtocol</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PublicKey</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the NGC key value.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+          <maml:name>Server</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Add-ADReplNgcKey</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
+          <maml:name>Protocol</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
+          <dev:type>
+            <maml:name>RpcProtocol</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PublicKey</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the NGC key value.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+          <maml:name>Server</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="UPN">
+          <maml:name>UserPrincipalName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:Description>
+          <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="dn">
+        <maml:name>DistinguishedName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the identifier of the target Active Directory object.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+        <maml:name>Domain</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the NetBIOS domain name of the target Active Directory account.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
+        <maml:name>ObjectGuid</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the identifier of the target Active Directory object.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+        <dev:type>
+          <maml:name>Guid</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
+        <maml:name>ObjectSid</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
+        <dev:type>
+          <maml:name>SecurityIdentifier</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
+        <maml:name>Protocol</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
+        <dev:type>
+          <maml:name>RpcProtocol</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>PublicKey</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the NGC key value.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Byte[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
+        <maml:name>SamAccountName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+        <maml:name>Server</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="UPN">
+        <maml:name>UserPrincipalName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Security.Principal.SecurityIdentifier</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Guid</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Add-ADReplNgcKey -UserPrincipalName 'john@contoso.com' -Server LON-DC1 -PublicKey 525341310008000003000000000100000000000000000000010001C1A78914457758B0B13C70C710C7F8548F3F9ED56AD4640B6E6A112655C98ECAC1CBD68A298F5686C08439428A97FE6FDF58D78EA481905182BAD684C2D9C5CDE1CDE34AA19742E8BBF58B953EAC4C562FCF598CC176B02DBE9FFFEF5937A65815C236F92892F7E511A1FEDD5483CB33F1EA715D68106180DED2432A293367114A6E325E62F93F73D7ECE4B6A2BCDB829D95C8645C3073B94BA7CB7515CD29042F0967201C6E24A77821E92A6C756DF79841ACBAAE11D90CA03B9FCD24EF9E304B5D35248A7BD70557399960277058AE3E99C7C7E2284858B7BF8B08CDD286964186A50A7FCBCC6A24F00FEE5B9698BBD3B1AEAD0CE81FEA461C0ABD716843A5</dev:code>
+        <dev:remarks>
+          <maml:para>Registers the specified NGC public key for user john@contoso.com .</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADKeyCredential</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>ConvertFrom-ADManagedPasswordBlob</command:name>
       <command:verb>ConvertFrom</command:verb>
       <command:noun>ADManagedPasswordBlob</command:noun>
@@ -3402,7 +3951,7 @@
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADKeyCredential.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>Set-ADReplNgcKey</maml:linkText>
+        <maml:linkText>Add-ADReplNgcKey</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -7599,555 +8148,6 @@ $initTask.RunAsTask()</dev:code>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADDBAccount</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-    </command:relatedLinks>
-  </command:command>
-  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-    <command:details>
-      <command:name>Set-ADReplNgcKey</command:name>
-      <command:verb>Set</command:verb>
-      <command:noun>ADReplNgcKey</command:noun>
-      <maml:description>
-        <maml:para>Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.</maml:para>
-      </maml:description>
-    </command:details>
-    <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
-    </maml:description>
-    <command:syntax>
-      <command:syntaxItem>
-        <maml:name>Set-ADReplNgcKey</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="dn">
-          <maml:name>DistinguishedName</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the identifier of the target Active Directory object.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Credential</maml:name>
-          <maml:Description>
-            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
-          <dev:type>
-            <maml:name>PSCredential</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:Description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PublicKey</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the NGC key value.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
-          <dev:type>
-            <maml:name>Byte[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
-          <maml:name>Server</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Set-ADReplNgcKey</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
-          <maml:name>SamAccountName</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
-          <maml:name>Domain</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the NetBIOS domain name of the target Active Directory account.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Credential</maml:name>
-          <maml:Description>
-            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
-          <dev:type>
-            <maml:name>PSCredential</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:Description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PublicKey</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the NGC key value.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
-          <dev:type>
-            <maml:name>Byte[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
-          <maml:name>Server</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Set-ADReplNgcKey</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Credential</maml:name>
-          <maml:Description>
-            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
-          <dev:type>
-            <maml:name>PSCredential</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
-          <maml:name>ObjectGuid</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the identifier of the target Active Directory object.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
-          <dev:type>
-            <maml:name>Guid</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:Description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PublicKey</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the NGC key value.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
-          <dev:type>
-            <maml:name>Byte[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
-          <maml:name>Server</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Set-ADReplNgcKey</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Credential</maml:name>
-          <maml:Description>
-            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
-          <dev:type>
-            <maml:name>PSCredential</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
-          <maml:name>ObjectSid</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
-          <dev:type>
-            <maml:name>SecurityIdentifier</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:Description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PublicKey</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the NGC key value.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
-          <dev:type>
-            <maml:name>Byte[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
-          <maml:name>Server</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Set-ADReplNgcKey</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Credential</maml:name>
-          <maml:Description>
-            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
-          <dev:type>
-            <maml:name>PSCredential</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:Description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PublicKey</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the NGC key value.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
-          <dev:type>
-            <maml:name>Byte[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
-          <maml:name>Server</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="UPN">
-          <maml:name>UserPrincipalName</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-    </command:syntax>
-    <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Credential</maml:name>
-        <maml:Description>
-          <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
-        <dev:type>
-          <maml:name>PSCredential</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="dn">
-        <maml:name>DistinguishedName</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the identifier of the target Active Directory object.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
-        <maml:name>Domain</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the NetBIOS domain name of the target Active Directory account.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
-        <maml:name>ObjectGuid</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the identifier of the target Active Directory object.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
-        <dev:type>
-          <maml:name>Guid</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
-        <maml:name>ObjectSid</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
-        <dev:type>
-          <maml:name>SecurityIdentifier</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-        <maml:name>Protocol</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-        <dev:type>
-          <maml:name>RpcProtocol</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>PublicKey</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the NGC key value.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
-        <dev:type>
-          <maml:name>Byte[]</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
-        <maml:name>SamAccountName</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
-        <maml:name>Server</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="UPN">
-        <maml:name>UserPrincipalName</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-    </command:parameters>
-    <command:inputTypes>
-      <command:inputType>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-      <command:inputType>
-        <dev:type>
-          <maml:name>System.Security.Principal.SecurityIdentifier</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-      <command:inputType>
-        <dev:type>
-          <maml:name>System.Guid</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-    </command:inputTypes>
-    <command:returnValues>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>None</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-    </command:returnValues>
-    <maml:alertSet>
-      <maml:alert>
-        <maml:para></maml:para>
-      </maml:alert>
-    </maml:alertSet>
-    <command:examples>
-      <command:example>
-        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Set-ADReplNgcKey -UserPrincipalName 'john@contoso.com' -Server LON-DC1 -PublicKey 525341310008000003000000000100000000000000000000010001C1A78914457758B0B13C70C710C7F8548F3F9ED56AD4640B6E6A112655C98ECAC1CBD68A298F5686C08439428A97FE6FDF58D78EA481905182BAD684C2D9C5CDE1CDE34AA19742E8BBF58B953EAC4C562FCF598CC176B02DBE9FFFEF5937A65815C236F92892F7E511A1FEDD5483CB33F1EA715D68106180DED2432A293367114A6E325E62F93F73D7ECE4B6A2BCDB829D95C8645C3073B94BA7CB7515CD29042F0967201C6E24A77821E92A6C756DF79841ACBAAE11D90CA03B9FCD24EF9E304B5D35248A7BD70557399960277058AE3E99C7C7E2284858B7BF8B08CDD286964186A50A7FCBCC6A24F00FEE5B9698BBD3B1AEAD0CE81FEA461C0ABD716843A5</dev:code>
-        <dev:remarks>
-          <maml:para>Registers the specified NGC public key for user john@contoso.com .</maml:para>
-        </dev:remarks>
-      </command:example>
-    </command:examples>
-    <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Get-ADReplAccount</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Get-ADKeyCredential</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>

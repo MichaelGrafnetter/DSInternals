@@ -13,39 +13,63 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="DSInternals.PowerShell.Commands.ADReplObjectCommandBase">
-    <Position X="0.5" Y="2.75" Width="2" />
+    <Position X="0.5" Y="2.75" Width="2.25" />
     <Members>
-      <Field Name="ParameterSetAll" Hidden="true" />
       <Field Name="ParameterSetByDN" Hidden="true" />
       <Field Name="ParameterSetByGuid" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAgggAAAAAAIACAAAAAIACAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAIACAAAAAAACAAAAAAA=</HashCode>
       <FileName>Commands\Base\ADReplObjectCommandBase.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DSInternals.PowerShell.Commands.GetADReplAccountCommand">
-    <Position X="0.5" Y="5" Width="2.5" />
+  <Class Name="DSInternals.PowerShell.Commands.AddADReplNgcKeyCommand">
+    <Position X="3" Y="6.75" Width="2.25" />
     <Members>
-      <Field Name="parameterSetByName" Hidden="true" />
-      <Field Name="parameterSetBySid" Hidden="true" />
       <Method Name="ProcessRecord" Hidden="true" />
-      <Method Name="ReturnAllAccounts" Hidden="true" />
-      <Method Name="ReturnSingleAccount" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>BAAAAACAAAAAAAAQAQAAAAAAAgAAAAAACAAIAAIAAAA=</HashCode>
-      <FileName>Commands\Replication\GetADReplAccountCommand.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\Replication\AddADReplNgcKeyCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DSInternals.PowerShell.Commands.GetADReplBackupKeyCommand">
-    <Position X="2.75" Y="2.75" Width="2.5" />
+    <Position X="3" Y="2.75" Width="2.5" />
     <Members>
       <Method Name="BeginProcessing" Hidden="true" />
     </Members>
     <TypeIdentifier>
       <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Commands\Replication\GetADReplBackupKeyCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.ADReplPrincipalCommandBase">
+    <Position X="0.5" Y="4.5" Width="2.25" />
+    <Members>
+      <Field Name="ParameterSetByName" Hidden="true" />
+      <Field Name="ParameterSetBySid" Hidden="true" />
+      <Field Name="ParameterSetByUPN" Hidden="true" />
+      <Method Name="ValidateDomainName" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAEAAAAAAAAAAAAAAAgAAAACQCACAAAEAAAA=</HashCode>
+      <FileName>Commands\Base\ADReplPrincipalCommandBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.GetADReplAccountCommand">
+    <Position X="0.5" Y="6.75" Width="2.25" />
+    <Members>
+      <Field Name="ParameterSetAll" Hidden="true" />
+      <Method Name="ProcessRecord" Hidden="true" />
+      <Method Name="ReturnAllAccounts" Hidden="true" />
+      <Method Name="ReturnSingleAccount" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAwgAAAAAAAAAAAAAAIAIAAAAAAA=</HashCode>
+      <FileName>Commands\Replication\GetADReplAccountCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

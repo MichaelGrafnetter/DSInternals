@@ -199,7 +199,7 @@ enum DRS_EXT2 : DWORD
 	/// <summary>
 	/// If present, signifies that the DC has enabled the Recycle Bin optional feature.
 	/// </summary>
-	DRS_EXT_RECYCLE_BIN = 0x00000004,	
+	DRS_EXT_RECYCLE_BIN = 0x00000004,
 	/// <summary>
 	/// If present, signifies that the DC supports DRS_MSG_GETCHGREPLY_V9.
 	/// </summary>
@@ -219,7 +219,7 @@ DEFINE_ENUM_FLAG_OPERATORS(DRS_EXT2)
 struct DRS_EXTENSIONS_INT
 {
 	DRS_EXTENSIONS_INT();
-	DRS_EXTENSIONS_INT(DRS_EXTENSIONS *genericExtensions);
+	DRS_EXTENSIONS_INT(DRS_EXTENSIONS* genericExtensions);
 	/// <summary>
 	/// The count of bytes in the fields dwFlags through dwExtCaps, inclusive.
 	/// </summary>
@@ -434,15 +434,15 @@ enum EXOP_REQ : DWORD
 	/// <summary>
 	/// Request a FSMO role owner transfer.
 	/// </summary>
-	EXOP_FSMO_REQ_ROLE = 0x00000001,	
+	EXOP_FSMO_REQ_ROLE = 0x00000001,
 	/// <summary>
 	/// Request RID allocation from the RID Master FSMO role owner.
 	/// </summary>
-	EXOP_FSMO_REQ_RID_ALLOC = 0x00000002,	
+	EXOP_FSMO_REQ_RID_ALLOC = 0x00000002,
 	/// <summary>
 	/// Request transfer of the RID Master FSMO role.
 	/// </summary>
-	EXOP_FSMO_RID_REQ_ROLE = 0x00000003,	
+	EXOP_FSMO_RID_REQ_ROLE = 0x00000003,
 	/// <summary>
 	/// Request transfer of the PDC FSMO role.
 	/// </summary>
@@ -466,32 +466,39 @@ DEFINE_ENUM_FLAG_OPERATORS(EXOP_REQ)
 // Function wrappers that translate SEH exceptions to Win32 error codes:
 
 ULONG IDL_DRSBind_NoSEH(
-/* [in] */ handle_t rpc_handle,
-/* [unique][in] */ UUID *puuidClientDsa,
-/* [unique][in] */ DRS_EXTENSIONS *pextClient,
-/* [out] */ DRS_EXTENSIONS **ppextServer,
-/* [ref][out] */ DRS_HANDLE *phDrs);
+	/* [in] */ handle_t rpc_handle,
+	/* [unique][in] */ UUID* puuidClientDsa,
+	/* [unique][in] */ DRS_EXTENSIONS* pextClient,
+	/* [out] */ DRS_EXTENSIONS** ppextServer,
+	/* [ref][out] */ DRS_HANDLE* phDrs);
 
 ULONG IDL_DRSGetNCChanges_NoSEH(
 	/* [ref][in] */ DRS_HANDLE hDrs,
 	/* [in] */ DWORD dwInVersion,
-	/* [switch_is][ref][in] */ DRS_MSG_GETCHGREQ *pmsgIn,
-	/* [ref][out] */ DWORD *pdwOutVersion,
-	/* [switch_is][ref][out] */ DRS_MSG_GETCHGREPLY *pmsgOut);
+	/* [switch_is][ref][in] */ DRS_MSG_GETCHGREQ* pmsgIn,
+	/* [ref][out] */ DWORD* pdwOutVersion,
+	/* [switch_is][ref][out] */ DRS_MSG_GETCHGREPLY* pmsgOut);
 
 ULONG IDL_DRSCrackNames_NoSEH(
 	/* [ref][in] */ DRS_HANDLE hDrs,
 	/* [in] */ DWORD dwInVersion,
-	/* [switch_is][ref][in] */ DRS_MSG_CRACKREQ *pmsgIn,
-	/* [ref][out] */ DWORD *pdwOutVersion,
-	/* [switch_is][ref][out] */ DRS_MSG_CRACKREPLY *pmsgOut);
+	/* [switch_is][ref][in] */ DRS_MSG_CRACKREQ* pmsgIn,
+	/* [ref][out] */ DWORD* pdwOutVersion,
+	/* [switch_is][ref][out] */ DRS_MSG_CRACKREPLY* pmsgOut);
 
 ULONG IDL_DRSGetReplInfo_NoSEH(
 	/* [ref][in] */ DRS_HANDLE hDrs,
 	/* [in] */ DWORD dwInVersion,
-	/* [switch_is][ref][in] */ DRS_MSG_GETREPLINFO_REQ *pmsgIn,
-	/* [ref][out] */ DWORD *pdwOutVersion,
-	/* [switch_is][ref][out] */ DRS_MSG_GETREPLINFO_REPLY *pmsgOut);
+	/* [switch_is][ref][in] */ DRS_MSG_GETREPLINFO_REQ* pmsgIn,
+	/* [ref][out] */ DWORD* pdwOutVersion,
+	/* [switch_is][ref][out] */ DRS_MSG_GETREPLINFO_REPLY* pmsgOut);
+
+ULONG IDL_DRSWriteNgcKey_NoSEH(
+	/* [in, ref] */ DRS_HANDLE hDrs,
+	/* [in] */ DWORD dwInVersion,
+	/* [in, ref, switch_is(dwInVersion)]*/ DRS_MSG_WRITENGCKEYREQ* pmsgIn,
+	/* [out, ref] */ DWORD* pdwOutVersion,
+	/* [out, ref, switch_is(*pdwOutVersion)] */ DRS_MSG_WRITENGCKEYREPLY* pmsgOut);
 
 ULONG IDL_DRSUnbind_NoSEH(
-	/* [ref][out][in] */ DRS_HANDLE *phDrs);
+	/* [ref][out][in] */ DRS_HANDLE* phDrs);

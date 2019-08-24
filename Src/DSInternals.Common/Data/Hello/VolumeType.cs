@@ -12,17 +12,17 @@
         None = 0x00,
 
         /// <summary>
-        /// Operating system volume.
+        /// Operating system volume (OSV).
         /// </summary>
         OperatingSystem = 0x01,
 
         /// <summary>
-        /// Fixed data volume.
+        /// Fixed data volume (FDV).
         /// </summary>
         Fixed = 0x02,
 
         /// <summary>
-        /// Removable data volume.
+        /// Removable data volume (RDV).
         /// </summary>
         Removable = 0x03
     }
