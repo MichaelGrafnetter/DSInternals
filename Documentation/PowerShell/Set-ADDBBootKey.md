@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-ADDBBootKey
 
 ## SYNOPSIS
-Re-encrypts a ntds.dit file with a new BootKey/SysKey. Highly experimental!
+Re-encrypts a ntds.dit file with a new BootKey/SysKey.
 
 ## SYNTAX
 
@@ -18,16 +18,19 @@ Set-ADDBBootKey -OldBootKey <Byte[]> [-NewBootKey <Byte[]>] -DatabasePath <Strin
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Decrypts the password encryption key list from the pekList domain attribute using the current/old boot key and re-encrypts it using a new one. This might be useful during some DC restore operations. Note that this procedure is highly unsupported by Microsoft.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-ADDBBootKey -DatabasePath 'C:\Backup\Active Directory\ntds.dit' `
+                        -LogPath 'C:\Backup\Active Directory' `
+                        -OldBootKey 610bc29e6f62ca7004e9872cd51a0116 `
+                        -NewBootKey 6ffec6b70dc863db1906a5507c0576ee
 ```
 
-{{ Add example description here }}
+Re-encrypts the ntds.dit file with a new boot key.
 
 ## PARAMETERS
 
@@ -105,3 +108,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Get-BootKey](Get-BootKey.md)
+[New-ADDBRestoreFromMediaScript](New-ADDBRestoreFromMediaScript.md)

@@ -17,16 +17,25 @@ ConvertTo-Hex [-Input] <Byte[]> [-UpperCase] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Converts a byte array to its hexadecimal representation.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> ConvertTo-Hex -Input 0,255,32
+00ff20
 ```
 
-{{ Add example description here }}
+Converts the byte array to its hexadecimal representation, using lowercase characters.
+
+### Example 2
+```powershell
+PS C:\> ConvertTo-Hex -Input 0,255,32 -UpperCase
+00FF20
+```
+
+Converts the byte array to its hexadecimal representation, using uppercase characters.
 
 ## PARAMETERS
 

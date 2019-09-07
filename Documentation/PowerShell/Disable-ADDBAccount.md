@@ -37,16 +37,16 @@ Disable-ADDBAccount [-SkipMetaUpdate] -ObjectGuid <Guid> -DatabasePath <String> 
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Finds an account in Active Directory database file and modifies the appropriate bit in its *userAccountControl* attribute.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Disable-ADDBAccount -SamAccountName john -DatabasePath .\ntds.dit
 ```
 
-{{ Add example description here }}
+Finds an account with name *john* and disables it.
 
 ## PARAMETERS
 

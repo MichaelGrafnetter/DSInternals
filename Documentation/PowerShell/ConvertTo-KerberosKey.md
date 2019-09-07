@@ -17,16 +17,29 @@ ConvertTo-KerberosKey [-Password] <SecureString> [-Salt] <String> [[-Iterations]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Supports the derivation of AES256, AES128 and DES encryption keys. To calculate the RC4 key, the ConvertTo-NTHash cmdlet should be used instead.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
+PS C:\> ConvertTo-KerberosKey -Password $pwd -Salt 'CONTOSO.COMAdministrator'
+
+AES256_CTS_HMAC_SHA1_96
+  Key: 660e61042b190b5724c62bb473facca12058fb9ad3c03c0d2809f839c0352502
+  Iterations: 4096
+
+AES128_CTS_HMAC_SHA1_96
+  Key: bd75e98362b16649ffbaed630d5341d0
+  Iterations: 4096
+
+DES_CBC_MD5
+  Key: aed02c52204ca2ce
+  Iterations: 4096
 ```
 
-{{ Add example description here }}
+Applies 3 different kerberos key derivation functions to the specified password and salt.
 
 ## PARAMETERS
 

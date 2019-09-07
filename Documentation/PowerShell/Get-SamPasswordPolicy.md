@@ -17,21 +17,42 @@ Get-SamPasswordPolicy -Domain <String> [-Credential <PSCredential>] [-Server <St
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Retrieves the current password policy for a domain through the MS-SAMR protocol. 
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-SamPasswordPolicy -Domain CONTOSO -Server LON-DC1
+
+MinPasswordLength           : 8
+ComplexityEnabled           : True
+ReversibleEncryptionEnabled : False
+MaxPasswordAge              : 90.00:00:00.0
+MinPasswordAge              : 01:00:00
+PasswordHistoryCount        : 10
 ```
 
-{{ Add example description here }}
+Queries the LON-DC1 domain controller for default domain password policy.
+
+### Example 2
+```powershell
+PS C:\> Get-SamPasswordPolicy -Domain Builtin
+
+MinPasswordLength           : 0
+ComplexityEnabled           : False
+ReversibleEncryptionEnabled : False
+MaxPasswordAge              : 42.22:47:31.7437440
+MinPasswordAge              : 00:00:00
+PasswordHistoryCount        : 0
+```
+
+Queries the local computer for its current password policy.
 
 ## PARAMETERS
 
 ### -Credential
-Specify the user account credentials to use to perform this task.
+Specifies the user account credentials to use to perform this task.
 The default credentials are the credentials of the currently logged on user.
 
 ```yaml
@@ -47,7 +68,7 @@ Accept wildcard characters: False
 ```
 
 ### -Domain
-Specify AD domain.
+Specifies the NetBIOS domain name. Local accounts are stored a domain called Builtin.
 
 ```yaml
 Type: String
@@ -93,3 +114,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md)

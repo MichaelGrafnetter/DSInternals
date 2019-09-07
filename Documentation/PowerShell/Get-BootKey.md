@@ -95,3 +95,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Get-ADDBBackupKey](Get-ADDBBackupKey.md)
 [Set-ADDBAccountPassword](Set-ADDBAccountPassword.md)
 [Set-ADDBAccountPasswordHash](Set-ADDBAccountPasswordHash.md)
+[Set-ADDBBootKey](Set-ADDBBootKey.md)

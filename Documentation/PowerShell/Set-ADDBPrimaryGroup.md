@@ -37,16 +37,16 @@ Set-ADDBPrimaryGroup -PrimaryGroupId <Int32> [-SkipMetaUpdate] -ObjectGuid <Guid
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Modifies the primaryGroupId attribute of an account in a ntds.dit file. The most relevant group relative identifiers (RIDs) include 512 for *Domain Admins*, 513 for *Domain Users*, and 519 for *Schema Admins*.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-ADDBPrimaryGroup -SamAccountName John -PrimaryGroupId 512 -DatabasePath 'D:\Windows\NTDS\ntds.dit'
 ```
 
-{{ Add example description here }}
+Moves the account *John* from the default *Domain Users* group to *Domain Admins*.
 
 ## PARAMETERS
 

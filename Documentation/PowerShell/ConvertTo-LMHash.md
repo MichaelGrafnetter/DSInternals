@@ -17,21 +17,36 @@ ConvertTo-LMHash [-Password] <SecureString> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Applies the Lan Manager one-way function (LM OWF) to a given cleartext password and returns the resulting hash.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> ConvertTo-LMHash
+
+cmdlet ConvertTo-LMHash at command pipeline position 1
+Supply values for the following parameters:
+(Type !? for Help.)
+Password: ********
+727e3576618fa1754a3b108f3fa6cb6d
 ```
 
-{{ Add example description here }}
+Reads a password from the command line and calculates its LM hash.
+
+### Example 2
+```powershell
+PS C:\> $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
+PS C:\> ConvertTo-LMHash -Password $pwd
+727e3576618fa1754a3b108f3fa6cb6d
+```
+
+Calculates the LM hash of password *Pa$$w0rd*.
 
 ## PARAMETERS
 
 ### -Password
-Provide a password in the form of a SecureString.
+Specifies a password in the form of a SecureString.
 
 ```yaml
 Type: SecureString

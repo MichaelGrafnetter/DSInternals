@@ -10,7 +10,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>This cmdlet can be used to add any value to the sIDHistory attribute by directly modifying the Active Directory database. Note that the Active Directory Migration Tool (ADMT) is the only supported way of modifying the sIDHistory attribute.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -412,9 +412,18 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Stop-Service -Name ntds -Force
+PS C:\&gt; Add-ADDBSidHistory -SamAccountName John -SidHistory S-1-5-21-3623811102-3361044346-30300840-512,S-1-5-21-3623811102-3361044346-30300840-519 -DBPath C:\Windows\NTDS\ntds.dit
+PS C:\&gt; Start-Service -Name ntds</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Adds the SIDs of the Domain Admins and Enterprise Admins groups into user John 's sIDHistory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Import-Csv user.csv | Add-ADDBSidHistory -DBPath C:\Windows\NTDS\ntds.dit</dev:code>
+        <dev:remarks>
+          <maml:para>Imports a CSV file containing SamAccountName and SidHistory columns into a nds.dit file.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -429,6 +438,10 @@
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDomainController</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -973,6 +986,10 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Add-ADReplNgcKey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Get-ADReplAccount</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -992,7 +1009,8 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Decodes the MSDS-MANAGEDPASSWORD_BLOB structure containing a group-managed service account's password information.</maml:para>
+      <maml:para>The password is actually a cryptographically generated array of 256 bytes that is represented as an 128 characters long UTF-16 string.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1053,9 +1071,15 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; $gmsa = Get-ADServiceAccount -Identity 'SQL_HQ_Primary' -Properties 'msDS-ManagedPassword'
+PS C:\&gt; ConvertFrom-ADManagedPasswordBlob -Blob $gmsa.'msDS-ManagedPassword'
+Version                   : 1
+CurrentPassword           : 湤ୟɰ橣낔饔ᦺ几᧾ʞꈠ⿕ՔὬ랭뷾햾咶郸�렇ͧ퀟᝘럓몚ꬶ佩䎖∘Ǐ㦗ן뱷鼹⽩Ⲃ⫝咽㠅Ｅ䠹鸞왶婰鞪
+PreviousPassword          :
+QueryPasswordInterval     : 29.17:15:36.3736817
+UnchangedPasswordInterval : 29.17:10:36.3736817</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Decodes the managed password information from a group-managed service account (GMSA) called SQL_HQ_Primary . The user retrieving the managed password needs to be listed in the PrincipalsAllowedToRetrieveManagedPassword property of the GMSA.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1063,6 +1087,18 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/ConvertFrom-ADManagedPasswordBlob.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADServiceAccount</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/addsadministration/get-adserviceaccount</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADServiceAccount</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/addsadministration/set-adserviceaccount</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-ADServiceAccount</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/addsadministration/new-adserviceaccount</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1328,7 +1364,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Converts a byte array to its hexadecimal representation.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1412,9 +1448,18 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; ConvertTo-Hex -Input 0,255,32
+00ff20</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Converts the byte array to its hexadecimal representation, using lowercase characters.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; ConvertTo-Hex -Input 0,255,32 -UpperCase
+00FF20</dev:code>
+        <dev:remarks>
+          <maml:para>Converts the byte array to its hexadecimal representation, using uppercase characters.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1435,7 +1480,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Supports the derivation of AES256, AES128 and DES encryption keys. To calculate the RC4 key, the ConvertTo-NTHash cmdlet should be used instead.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1544,9 +1589,22 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
+PS C:\&gt; ConvertTo-KerberosKey -Password $pwd -Salt 'CONTOSO.COMAdministrator'
+
+AES256_CTS_HMAC_SHA1_96
+  Key: 660e61042b190b5724c62bb473facca12058fb9ad3c03c0d2809f839c0352502
+  Iterations: 4096
+
+AES128_CTS_HMAC_SHA1_96
+  Key: bd75e98362b16649ffbaed630d5341d0
+  Iterations: 4096
+
+DES_CBC_MD5
+  Key: aed02c52204ca2ce
+  Iterations: 4096</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Applies 3 different kerberos key derivation functions to the specified password and salt.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1575,7 +1633,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Applies the Lan Manager one-way function (LM OWF) to a given cleartext password and returns the resulting hash.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1583,7 +1641,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="p">
           <maml:name>Password</maml:name>
           <maml:Description>
-            <maml:para>Provide a password in the form of a SecureString.</maml:para>
+            <maml:para>Specifies a password in the form of a SecureString.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
           <dev:type>
@@ -1598,7 +1656,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="p">
         <maml:name>Password</maml:name>
         <maml:Description>
-          <maml:para>Provide a password in the form of a SecureString.</maml:para>
+          <maml:para>Specifies a password in the form of a SecureString.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
         <dev:type>
@@ -1636,9 +1694,24 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; ConvertTo-LMHash
+
+cmdlet ConvertTo-LMHash at command pipeline position 1
+Supply values for the following parameters:
+(Type !? for Help.)
+Password: ********
+727e3576618fa1754a3b108f3fa6cb6d</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Reads a password from the command line and calculates its LM hash.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
+PS C:\&gt; ConvertTo-LMHash -Password $pwd
+727e3576618fa1754a3b108f3fa6cb6d</dev:code>
+        <dev:remarks>
+          <maml:para>Calculates the LM hash of password Pa$$w0rd .</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1667,7 +1740,8 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Applies the NT one-way function (NT OWF) to a given cleartext password and returns the resulting hash, which is just the MD4 hash function applied to the UTF-16 encoded input.</maml:para>
+      <maml:para>This hash is sometimes called NTLM hash, because it is mainly used in the NTLM(v2) network authentication protocol.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1675,7 +1749,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="p">
           <maml:name>Password</maml:name>
           <maml:Description>
-            <maml:para>Provide a password in the form of a SecureString.</maml:para>
+            <maml:para>Specifies a password in the form of a SecureString.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
           <dev:type>
@@ -1690,7 +1764,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="p">
         <maml:name>Password</maml:name>
         <maml:Description>
-          <maml:para>Provide a password in the form of a SecureString.</maml:para>
+          <maml:para>Specifies a password in the form of a SecureString.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
         <dev:type>
@@ -1728,9 +1802,24 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; ConvertTo-NTHash
+
+cmdlet ConvertTo-NTHash at command pipeline position 1
+Supply values for the following parameters:
+(Type !? for Help.)
+Password: ********
+92937945b518814341de3f726500d4ff</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Reads a password from the command line and calculates its NT hash.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
+PS C:\&gt; ConvertTo-NTHash -Password $pwd
+92937945b518814341de3f726500d4ff</dev:code>
+        <dev:remarks>
+          <maml:para>Calculates the NT hash of password Pa$$w0rd .</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1759,7 +1848,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>The OrgId hash is defined as PBKDF2( UTF-16( ToUpper( ToHex( MD4( UTF-16(plaintext))))), RND(10), 1000, HMAC-SHA256, 32).</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1891,9 +1980,27 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
+PS C:\&gt; ConvertTo-OrgIdHash -Password $pwd
+v1;PPH1_MD4,60eaffd2c886b419df7a,1000,ab9c532104713157395a70da85cc8a1b418508753c6997f02341d541328ef16b;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Calculates the OrgId hash from a cleartext password using a random salt.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; ConvertTo-OrgIdHash -NTHash 92937945b518814341de3f726500d4ff
+v1;PPH1_MD4,46c0c5d9095185ce5cf8,1000,6bb7b360d9105ed5157460b343d5d143e465a59195bc9b568718268c334ea4a9;</dev:code>
+        <dev:remarks>
+          <maml:para>Calculates the OrgId hash from a NT hash while using a random salt.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; ConvertTo-OrgIdHash -NTHash 92937945b518814341de3f726500d4ff -Salt a42b92067e4b8123101a
+v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c0965abac5d85de9c143911;</dev:code>
+        <dev:remarks>
+          <maml:para>Calculates the OrgId hash from a NT hash while using the given salt.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1901,6 +2008,10 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/ConvertTo-OrgIdHash.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>ConvertTo-NTHash</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2021,7 +2132,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Finds an account in Active Directory database file and modifies the appropriate bit in its userAccountControl attribute.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2355,9 +2466,9 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Disable-ADDBAccount -SamAccountName john -DatabasePath .\ntds.dit</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Finds an account with name john and disables it.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -2386,7 +2497,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Finds an account in Active Directory database file and modifies the appropriate bit in its userAccountControl attribute.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2720,9 +2831,9 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Enable-ADDBAccount -SamAccountName john -DatabasePath .\ntds.dit</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Finds an account with name john and enables it.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -3151,9 +3262,149 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-ADDBAccount -SamAccountName Administrator -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit'
+
+DistinguishedName: CN=Administrator,CN=Users,DC=contoso,DC=com
+Sid: S-1-5-21-1236425271-2880748467-2592687428-500
+Guid: b3d02974-6b1c-484c-9103-fd2f60d592c4
+SamAccountName: Administrator
+SamAccountType: User
+UserPrincipalName:
+PrimaryGroupId: 513
+SidHistory:
+Enabled: True
+UserAccountControl: NormalAccount, PasswordNeverExpires
+AdminCount: True
+Deleted: False
+LastLogon:
+DisplayName:
+GivenName:
+Surname:
+Description: Built-in account for administering the computer/domain
+ServicePrincipalName:
+SecurityDescriptor: DiscretionaryAclPresent, SystemAclPresent, DiscretionaryAclAutoInherited, SystemAclAutoInherited, DiscretionaryAclProtected, SelfRelative
+Owner: S-1-5-21-1236425271-2880748467-2592687428-512
+Secrets
+  NTHash:
+  LMHash:
+  NTHashHistory:
+  LMHashHistory:
+  SupplementalCredentials:
+Key Credentials:
+Credential Roaming
+  Created:
+  Modified:
+  Credentials:</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Retrieves information about a single account from an Active Directory database. Secret attributes are not decrypted as no boot key is provided.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $key = Get-BootKey -SystemHiveFilePath 'C:\IFM Backup\registry\SYSTEM'
+PS C:\&gt; Get-ADDBAccount -DistinguishedName: 'CN=Joe Smith,OU=Employees,DC=contoso,DC=com' `
+                        -BootKey $key `
+                        -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit'
+
+DistinguishedName: CN=Joe Smith,OU=Employees,DC=contoso,DC=com
+Sid: S-1-5-21-1236425271-2880748467-2592687428-1110
+Guid: 6fb7aca4-fe85-4dc5-9acd-b5b2529fe2bc
+SamAccountName: joe
+SamAccountType: User
+UserPrincipalName: joe@contoso.com
+PrimaryGroupId: 513
+SidHistory:
+Enabled: True
+UserAccountControl: NormalAccount, PasswordNeverExpires
+AdminCount: False
+Deleted: False
+LastLogon:
+DisplayName: Joe Smith
+GivenName: Joe
+Surname: Smith
+Description:
+ServicePrincipalName:
+SecurityDescriptor: DiscretionaryAclPresent, SystemAclPresent, DiscretionaryAclAutoInherited, SystemAclAutoInherited, SelfRelative
+Owner: S-1-5-21-1236425271-2880748467-2592687428-512
+Secrets
+  NTHash: 92937945b518814341de3f726500d4ff
+  LMHash:
+  NTHashHistory:
+    Hash 01: 92937945b518814341de3f726500d4ff
+  LMHashHistory:
+    Hash 01: 30ce97eef1084cf1656cc4be70d68600
+  SupplementalCredentials:
+    ClearText:
+    NTLMStrongHash: 2c6d57beebeafdae65b3f40f2a0d5430
+    Kerberos:
+      Credentials:
+        DES_CBC_MD5
+          Key: 7f16bc4ada0b8a52
+      OldCredentials:
+      Salt: CONTOSO.COMjoe
+      Flags: 0
+    KerberosNew:
+      Credentials:
+        AES256_CTS_HMAC_SHA1_96
+          Key: cd541be0838c787b5c6a34d7b19274aee613545a0e6cc6f5ac5918d8a464d24f
+          Iterations: 4096
+        AES128_CTS_HMAC_SHA1_96
+          Key: 5c88972747bd454704c117ae52c474e4
+          Iterations: 4096
+        DES_CBC_MD5
+          Key: 7f16bc4ada0b8a52
+          Iterations: 4096
+      OldCredentials:
+      OlderCredentials:
+      ServiceCredentials:
+      Salt: CONTOSO.COMjoe
+      DefaultIterationCount: 4096
+      Flags: 0
+    WDigest:
+      Hash 01: 61fed940f0e8d03a49d3727f55800497
+      Hash 02: a1d54499dda6a6b5431f29a8d741a640
+      Hash 03: b6cdf00bc0c4578992f718de81251721
+      Hash 04: 61fed940f0e8d03a49d3727f55800497
+      Hash 05: a1d54499dda6a6b5431f29a8d741a640
+      Hash 06: 9a8991bd99763df2e37f1e1e67d71cc8
+      Hash 07: 61fed940f0e8d03a49d3727f55800497
+      Hash 08: 8a9fe94883c8ccf3bcfc6591ddd2288f
+      Hash 09: 8a9fe94883c8ccf3bcfc6591ddd2288f
+      Hash 10: 1b7b16b49ecd8d9d59c1d0db6fa2cc36
+      Hash 11: d4c24695cfa4dc3810a469d5efb8ecaf
+      Hash 12: 8a9fe94883c8ccf3bcfc6591ddd2288f
+      Hash 13: a5b8aa5088280298c8c27fa99dcaa1e3
+      Hash 14: d4c24695cfa4dc3810a469d5efb8ecaf
+      Hash 15: 1aa8e567622fe53d6fb36f1f34f12aaa
+      Hash 16: 1aa8e567622fe53d6fb36f1f34f12aaa
+      Hash 17: 2af425244079f8f45927c34fa115e45b
+      Hash 18: cf283a35102b820e25003b1ddf270221
+      Hash 19: b98c902c57449253e6f06b5d585866bd
+      Hash 20: 2a690b1eeda9cb8f3157a4a3ba0be9c3
+      Hash 21: af2654776d5f9f27f3283ecb0aa25011
+      Hash 22: af2654776d5f9f27f3283ecb0aa25011
+      Hash 23: ba6fe0513ed2a60ec253a41bbde6a837
+      Hash 24: 8bf5a67b598087be948e040f85c72b4d
+      Hash 25: 8bf5a67b598087be948e040f85c72b4d
+      Hash 26: aa5ff46d23a5c7ebd603e1793225350d
+      Hash 27: 656b6a7f5b52d05b3ce9168a2b7ac8ac
+      Hash 28: ae884c92ecd87e8d54f1844f09c5a519
+      Hash 29: a500a9e26afc9f817df8a07e15771577
+Key Credentials:
+  Usage=NGC, Source=ActiveDirectory, Device=1966d4da-14da-4581-a7a7-5e8e07e93ad9, Created=8/1/2019 10:53:12 PM, LastLogon=8/1/2019 10:53:12 PM
+  Usage=NGC, Source=ActiveDirectory, Device=cfe9a872-13ff-4751-a777-aec88c30a762, Created=8/1/2019 11:09:15 PM, LastLogon=8/1/2019 11:09:15 PM
+Credential Roaming
+  Created: 3/12/2017 9:15:56 AM
+  Modified: 3/13/2017 10:01:18 AM
+  Credentials:
+    DPAPIMasterKey: 47070660-c259-4d90-8bc9-187605323450
+    DPAPIMasterKey: 7fc19508-7b85-4a7c-9e5d-15f9e00e7ce5
+    CryptoApiCertificate: 574E4687133998544C0095C7B348C52CD398182E
+    CNGCertificate: 3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
+    RSAPrivateKey: 701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
+    CNGPrivateKey: E8F13C2BA0209401C4DFE839CD57375E26BBE38F</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves information about a single account from an Active Directory database. Secret attributes are decrypted using the provided boot key.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -3161,6 +3412,10 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBAccount.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-BootKey</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADReplAccount</maml:linkText>
@@ -3330,7 +3585,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Reads domain controller (DC) infromation from a ntds.dit file that is either retrieved from an offline DC or from an (IFM) backup.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3415,9 +3670,44 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-ADDBDomainController -DatabasePath .\ntds.dit
+
+&lt;# Sample Output:
+Name                       : LON-DC1
+DNSHostName                : LON-DC1.contoso.com
+ServerReference            : CN=LON-DC1,OU=Domain Controllers,DC=contoso,DC=com
+DomainName                 : contoso.com
+ForestName                 : contoso.com
+NetBIOSDomainName          : contoso
+DomainSid                  : S-1-5-21-1236425271-2880748467-2592687428
+DomainGuid                 : 262d915a-3c58-4614-86c0-f9fb3f1aa1cd
+Guid                       : 71ccee43-1c03-4ab1-910c-ed4168df5a33
+Sid                        : S-1-5-21-1236425271-2880748467-2592687428-1111
+DomainMode                 : WinThreshold
+ForestMode                 : WinThreshold
+SiteName                   : Default-First-Site-Name
+DsaGuid                    : 0a8574e2-9361-4f3c-8528-ca73d7534f4b
+InvocationId               : 14a1b16d-591c-45bc-a342-153090027bbc
+IsADAM                     : False
+IsGlobalCatalog            : True
+Options                    : GlobalCatalog
+OSName                     : Windows Server 2019 Datacenter
+OSVersion                  : 10.0
+OSVersionMajor             : 10
+OSVersionMinor             : 0
+DomainNamingContext        : DC=contoso,DC=com
+ConfigurationNamingContext : CN=Configuration,DC=contoso,DC=com
+SchemaNamingContext        : CN=Schema,CN=Configuration,DC=contoso,DC=com
+WritablePartitions         : {DC=contoso,DC=com, CN=Configuration,DC=contoso,DC=com, CN=Schema,CN=Configuration,DC=contoso,DC=com, DC=DomainDnsZones,DC=contoso,DC=com...}
+State                      : BackedUp
+HighestCommittedUsn        : 69642
+UsnAtIfm                   :
+BackupUsn                  : 65812
+BackupExpiration           : 2/4/2020 6:32:27 AM
+Epoch                      : 961
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Reads DC information from a ntds.dit file located in the working directory.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -3425,6 +3715,18 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBDomainController.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBDomainController</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBPrimaryGroup</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Add-ADDBSidHistory</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -4974,6 +5276,10 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
         <maml:linkText>Set-ADDBAccountPasswordHash</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBBootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -5228,7 +5534,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Retrieves the current password policy for a domain through the MS-SAMR protocol.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -5236,7 +5542,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>Specify the user account credentials to use to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
+            <maml:para>Specifies the user account credentials to use to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -5248,7 +5554,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Domain</maml:name>
           <maml:Description>
-            <maml:para>Specify AD domain.</maml:para>
+            <maml:para>Specifies the NetBIOS domain name. Local accounts are stored a domain called Builtin.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5276,7 +5582,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:Description>
-          <maml:para>Specify the user account credentials to use to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
+          <maml:para>Specifies the user account credentials to use to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
         <dev:type>
@@ -5288,7 +5594,7 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Domain</maml:name>
         <maml:Description>
-          <maml:para>Specify AD domain.</maml:para>
+          <maml:para>Specifies the NetBIOS domain name. Local accounts are stored a domain called Builtin.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5339,9 +5645,30 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-SamPasswordPolicy -Domain CONTOSO -Server LON-DC1
+
+MinPasswordLength           : 8
+ComplexityEnabled           : True
+ReversibleEncryptionEnabled : False
+MaxPasswordAge              : 90.00:00:00.0
+MinPasswordAge              : 01:00:00
+PasswordHistoryCount        : 10</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Queries the LON-DC1 domain controller for default domain password policy.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-SamPasswordPolicy -Domain Builtin
+
+MinPasswordLength           : 0
+ComplexityEnabled           : False
+ReversibleEncryptionEnabled : False
+MaxPasswordAge              : 42.22:47:31.7437440
+MinPasswordAge              : 00:00:00
+PasswordHistoryCount        : 0</dev:code>
+        <dev:remarks>
+          <maml:para>Queries the local computer for its current password policy.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -5349,6 +5676,10 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-SamPasswordPolicy.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-SamAccountPasswordHash</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -7290,11 +7621,11 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Set</command:verb>
       <command:noun>ADDBBootKey</command:noun>
       <maml:description>
-        <maml:para>Re-encrypts a ntds.dit file with a new BootKey/SysKey. Highly experimental!</maml:para>
+        <maml:para>Re-encrypts a ntds.dit file with a new BootKey/SysKey.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Decrypts the password encryption key list from the pekList domain attribute using the current/old boot key and re-encrypts it using a new one. This might be useful during some DC restore operations. Note that this procedure is highly unsupported by Microsoft.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -7427,9 +7758,12 @@ $initTask.RunAsTask()</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Set-ADDBBootKey -DatabasePath 'C:\Backup\Active Directory\ntds.dit' `
+                        -LogPath 'C:\Backup\Active Directory' `
+                        -OldBootKey 610bc29e6f62ca7004e9872cd51a0116 `
+                        -NewBootKey 6ffec6b70dc863db1906a5507c0576ee</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Re-encrypts the ntds.dit file with a new boot key.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -7437,6 +7771,14 @@ $initTask.RunAsTask()</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBBootKey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-BootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-ADDBRestoreFromMediaScript</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -7450,7 +7792,7 @@ $initTask.RunAsTask()</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>The Set-ADDBDomainController cmdlet can be used to simulate USN rollbacks, USN depletion, and database file restore operations. This cmdlet should only be used in lab environments.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -7706,9 +8048,17 @@ $initTask.RunAsTask()</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; $currentEpoch = Get-ItemPropertyValue -Path 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\NTDS\Parameters' -Name 'DSA Database Epoch'
+PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoch -Force</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Copies the database epoch from registry to the ntds.dit file.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -HighestCommittedUsn 9223372036854775800 -Force</dev:code>
+        <dev:remarks>
+          <maml:para>Modifies the highest committed USN of the AD database. This might be helpful when trying to simulate USN rollbacks and USN depletion.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -7716,6 +8066,14 @@ $initTask.RunAsTask()</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBDomainController.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDomainController</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBBootKey</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -7729,7 +8087,7 @@ $initTask.RunAsTask()</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Modifies the primaryGroupId attribute of an account in a ntds.dit file. The most relevant group relative identifiers (RIDs) include 512 for Domain Admins , 513 for Domain Users , and 519 for Schema Admins .</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -8131,9 +8489,9 @@ $initTask.RunAsTask()</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Set-ADDBPrimaryGroup -SamAccountName John -PrimaryGroupId 512 -DatabasePath 'D:\Windows\NTDS\ntds.dit'</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Moves the account John from the default Domain Users group to Domain Admins .</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

@@ -31,16 +31,24 @@ Set-ADDBDomainController [-Force] -DatabasePath <String> [-LogPath <String>] -Ba
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+The Set-ADDBDomainController cmdlet can be used to simulate USN rollbacks, USN depletion, and database file restore operations. This cmdlet should only be used in lab environments.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $currentEpoch = Get-ItemPropertyValue -Path 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\NTDS\Parameters' -Name 'DSA Database Epoch'
+PS C:\> Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoch -Force
 ```
 
-{{ Add example description here }}
+Copies the database epoch from registry to the ntds.dit file.
+
+### Example 2
+```powershell
+PS C:\> Set-ADDBDomainController -DatabasePath .\ntds.dit -HighestCommittedUsn 9223372036854775800 -Force
+```
+
+Modifies the highest committed USN of the AD database. This might be helpful when trying to simulate USN rollbacks and USN depletion.
 
 ## PARAMETERS
 
@@ -148,3 +156,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Get-ADDBDomainController](Get-ADDBDomainController.md)
+[Set-ADDBBootKey](Set-ADDBBootKey.md)

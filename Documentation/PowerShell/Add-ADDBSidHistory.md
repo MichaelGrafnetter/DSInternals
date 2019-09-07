@@ -37,16 +37,27 @@ Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] -ObjectG
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+
+This cmdlet can be used to add any value to the sIDHistory attribute by directly modifying the Active Directory database.
+Note that the Active Directory Migration Tool (ADMT) is the only supported way of modifying the sIDHistory attribute.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Stop-Service -Name ntds -Force
+PS C:\> Add-ADDBSidHistory -SamAccountName John -SidHistory S-1-5-21-3623811102-3361044346-30300840-512,S-1-5-21-3623811102-3361044346-30300840-519 -DBPath C:\Windows\NTDS\ntds.dit
+PS C:\> Start-Service -Name ntds
 ```
 
-{{ Add example description here }}
+Adds the SIDs of the *Domain Admins* and *Enterprise Admins* groups into user *John*'s sIDHistory.
+
+### Example 2
+```powershell
+PS C:\> Import-Csv user.csv | Add-ADDBSidHistory -DBPath C:\Windows\NTDS\ntds.dit
+```
+
+Imports a CSV file containing *SamAccountName* and *SidHistory* columns into a nds.dit file.
 
 ## PARAMETERS
 
@@ -193,3 +204,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Set-ADDBPrimaryGroup](Set-ADDBPrimaryGroup.md)
 [Get-ADDBAccount](Get-ADDBAccount.md)
+[Get-ADDBDomainController](Get-ADDBDomainController.md)

@@ -17,21 +17,38 @@ ConvertTo-NTHash [-Password] <SecureString> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Applies the NT one-way function (NT OWF) to a given cleartext password and returns the resulting hash, which is just the MD4 hash function applied to the UTF-16 encoded input.
+
+This hash is sometimes called NTLM hash, because it is mainly used in the NTLM(v2) network authentication protocol.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> ConvertTo-NTHash
+
+cmdlet ConvertTo-NTHash at command pipeline position 1
+Supply values for the following parameters:
+(Type !? for Help.)
+Password: ********
+92937945b518814341de3f726500d4ff
 ```
 
-{{ Add example description here }}
+Reads a password from the command line and calculates its NT hash.
+
+### Example 2
+```powershell
+PS C:\> $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
+PS C:\> ConvertTo-NTHash -Password $pwd
+92937945b518814341de3f726500d4ff
+```
+
+Calculates the NT hash of password *Pa$$w0rd*.
 
 ## PARAMETERS
 
 ### -Password
-Provide a password in the form of a SecureString.
+Specifies a password in the form of a SecureString.
 
 ```yaml
 Type: SecureString
