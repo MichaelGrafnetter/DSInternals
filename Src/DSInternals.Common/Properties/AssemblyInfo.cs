@@ -1,13 +1,12 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DSInternals Common Library")]
-[assembly: AssemblyVersion("3.6")]
-[assembly: AssemblyFileVersion("3.6")]
+[assembly: AssemblyVersion("4.0")]
+[assembly: AssemblyFileVersion("4.0")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
