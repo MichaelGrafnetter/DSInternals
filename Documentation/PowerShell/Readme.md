@@ -53,7 +53,7 @@ Reads AD schema from a ntds.dit file, including datatable column names.
 Reads the Boot Key (AKA SysKey or System Key) from an online or offline SYSTEM registry hive.
 
 ### [Set-ADDBBootKey](Set-ADDBBootKey.md#set-addbbootkey)
-Re-encrypts a ntds.dit file with a new BootKey/SysKey. Highly experimental!
+Re-encrypts a ntds.dit file with a new BootKey/SysKey.
 
 ### [Remove-ADDBObject](Remove-ADDBObject.md#remove-addbobject)
 Physically removes specified object from a ntds.dit file, making it semantically inconsistent. Highly experimental!

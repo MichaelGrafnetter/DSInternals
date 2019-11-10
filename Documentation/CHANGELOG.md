@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## 4.0 - Unreleased
+## [Unreleased] DSInternals 4.0
 
 ### Added
 
@@ -337,7 +337,7 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6.1...HEAD
+[4.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6.1...HEAD
 [3.6.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6...v3.6.1
 [3.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.5...v3.6
 [3.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.4...v3.5
