@@ -41,16 +41,22 @@ Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <Suppleme
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Writes the specified NT hash and optionally an entire supplementalCredentials data structure into an offline database.
+Also enables cross-database / cross-forest password migration without the requirement of a domain trust being in place.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $pass = Read-Host -AsSecureString -Prompt 'Provide new password for user hacker'
+PS C:\> $hash = ConvertTo-NTHash $pass
+PS C:\> Set-ADDBAccountPasswordHash -SamAccountName john `
+                                    -NTHash $hash `
+                                    -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                                    -BootKey 0be7a2afe1713642182e9b96f73a75da
 ```
 
-{{ Add example description here }}
+Performs an offline password reset for user *john* by injecting a raw NT hash value.
 
 ## PARAMETERS
 

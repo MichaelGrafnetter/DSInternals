@@ -1,14 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] DSInternals 4.0
+## [4.0] - 2019-12-04
 
 ### Added
 
-- Implemented FIDO2 token information parsing in the `KeyCredential` class. Tested with **YubiKey**, **Feitian**, **eWBM** and **SoloKeys**. Big thanks to @aseigler for major code contribution!
-- Added the `FIDO` custom PowerShell view.
+- Added support for [auditing (Azure) Active Directory NGC keys](PowerShell/Get-ADKeyCredential.md#get-adkeycredential) against the [ROCA]() vulnerability.
 - Added the [Add-ADReplNgcKey](PowerShell/Add-ADReplNgcKey.md#add-adreplngckey) cmdlet for NGC key injection through MS-DRSR.
-- Enabled export of public keys stored in the `msDS-KeyCredentialLink` attribute.
+- Added the `Moduli` custom PowerShell view to enable export of public keys stored in the `msDS-KeyCredentialLink` attribute.
+- Added the `FIDO` custom PowerShell view to provide visibility into FIDO2 keys registered in the `msDS-KeyCredentialLink` attribute.
+- Implemented FIDO2 token information parsing in the `KeyCredential` class. Tested with **YubiKey**, **Feitian**, **eWBM** and **SoloKeys**. Big thanks to @aseigler for major code contribution!
+- Implemented public key retrieval capability in the `KeyCredential` class.
 
 ### Changed
 
@@ -337,7 +339,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[4.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6.1...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.0...HEAD
+[4.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6.1...v4.0
 [3.6.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6...v3.6.1
 [3.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.5...v3.6
 [3.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.4...v3.5

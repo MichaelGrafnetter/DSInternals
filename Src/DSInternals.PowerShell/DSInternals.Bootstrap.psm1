@@ -76,6 +76,9 @@ New-Alias -Name Test-ADReplPasswordQuality       -Value Test-PasswordQuality
 New-Alias -Name Get-KeyCredential                -Value Get-ADKeyCredential
 New-Alias -Name Get-KeyCredentialLink            -Value Get-ADKeyCredential
 New-Alias -Name Get-ADKeyCredentialLink          -Value Get-ADKeyCredential
+New-Alias -Name New-ADKeyCredential              -Value Get-ADKeyCredential
+New-Alias -Name New-ADKeyCredentialLink          -Value Get-ADKeyCredential
+New-Alias -Name New-ADNgcKey                     -Value Get-ADKeyCredential
 New-Alias -Name Get-LsaPolicy                    -Value Get-LsaPolicyInformation
 New-Alias -Name Set-LsaPolicy                    -Value Set-LsaPolicyInformation
 New-Alias -Name Write-ADReplNgcKey               -Value Add-ADReplNgcKey

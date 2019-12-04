@@ -37,16 +37,21 @@ Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMeta
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+
+Generates new password hashes of the given password, including NT hash, WDigest hashes and Kerberos DES, AES128 and AES256 keys and encrypts them into the database using boot key.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $pass = Read-Host -AsSecureString -Prompt 'Provide new password for user john'
+PS C:\> Set-ADDBAccountPassword -SamAccountName john `
+                                -NewPassword $pass `
+                                -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                                -BootKey 0be7a2afe1713642182e9b96f73a75da
 ```
 
-{{ Add example description here }}
+Performs an offline password reset for user *john*.
 
 ## PARAMETERS
 

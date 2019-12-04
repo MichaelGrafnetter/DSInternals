@@ -56,6 +56,16 @@ Describe 'DSInternals PowerShell Module' {
             
             $moduleManifestPath | Should -FileContentMatch $FileName
         }
+
+        $bootstrapPath = Join-Path $ModulePath DSInternals.Bootstrap.psm1
+        $moduleAliases = Select-String -Path $bootstrapPath -Pattern 'New-Alias -Name ([a-zA-Z\-]+) ' |
+                            foreach { @{ AliasName = $PSItem.Matches.Groups[1].Value } }
+
+        It 'exports alias <AliasName>.' -TestCases $moduleAliases -Test {
+            param($AliasName)
+
+            $moduleManifestPath | Should -FileContentMatch "'$AliasName'"
+        }
     }
 
     Context 'File Structure' {

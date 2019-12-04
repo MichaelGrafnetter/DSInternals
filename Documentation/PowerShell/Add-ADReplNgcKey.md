@@ -43,7 +43,7 @@ Add-ADReplNgcKey -PublicKey <Byte[]> -ObjectGuid <Guid> -Server <String> [-Crede
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+This cmdlet wraps the IDL_DRSWriteNgcKey RPC call.
 
 ## EXAMPLES
 

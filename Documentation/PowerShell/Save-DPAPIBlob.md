@@ -23,16 +23,21 @@ Save-DPAPIBlob -Account <DSAccount> [-DirectoryPath] <String> [<CommonParameters
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                          -BootKey 0be7a2afe1713642182e9b96f73a75da |
+             Save-DPAPIBlob -DirectoryPath .\Output
+PS C:\> Get-ADDBAccount -All `
+                -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                -BootKey 0be7a2afe1713642182e9b96f73a75da |
+             Save-DPAPIBlob -DirectoryPath .\Output
 ```
 
-{{ Add example description here }}
+Extracts DPAPI backup keys and roamed credentials (certificates, private keys and DPAPI master keys) to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.
 
 ## PARAMETERS
 

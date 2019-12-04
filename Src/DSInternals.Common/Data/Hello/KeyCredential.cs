@@ -42,6 +42,15 @@
             private set;
         }
 
+        public bool IsWeak
+        {
+            get
+            {
+                var key = this.RSAPublicKey;
+                return key.HasValue && key.Value.IsWeakKey();
+            }
+        }
+
         public KeyUsage Usage
         {
             get;
@@ -69,7 +78,6 @@
             private set;
         }
 
-        
         public KeyMaterialFido FidoKeyMaterial
         {
             get

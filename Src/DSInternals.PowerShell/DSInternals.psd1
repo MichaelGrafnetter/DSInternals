@@ -90,7 +90,9 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'Test-ADDBPasswordQuality', 'Test-ADReplPasswordQuality',
                   'Get-ADPasswordPolicy', 'Get-ADDefaultPasswordPolicy', 'Get-KeyCredential',
                   'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink', 'Get-LsaPolicy',
-                  'Set-LsaPolicy', 'Get-SystemKey'
+                  'Set-LsaPolicy', 'Get-SystemKey', 'Write-ADReplNgcKey', 'Write-ADNgcKey',
+                  'Add-ADNgcKey', 'New-ADKeyCredential', 'New-ADKeyCredentialLink',
+                  'New-ADNgcKey'
 
 # List of all files packaged with this module
 FileList = 

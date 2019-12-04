@@ -456,7 +456,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>This cmdlet wraps the IDL_DRSWriteNgcKey RPC call.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3740,7 +3740,11 @@ Epoch                      : 961
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>KDS Root Keys are used to encrypt the following:</maml:para>
+      <maml:para>- SID-protected private keys in PFX certificate files</maml:para>
+      <maml:para>- BitLocker-enabled drives with SID protector</maml:para>
+      <maml:para>- Passwords of Group Managed Service Accounts (GMSA)</maml:para>
+      <maml:para>- DNSSEC signing keys</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3825,9 +3829,44 @@ Epoch                      : 961
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-ADDBKdsRootKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
+
+&lt;#
+Output:
+
+Id: 6a401799-8dd0-0b2c-3073-beb7ce2e734d
+Version: 1
+Creation Time: 7/27/2019 6:23:26 PM
+Effective Time: 7/27/2019 8:23:26 AM
+Domain Controller: CN=LON-DC1,OU=Domain Controllers,DC=contoso,DC=com
+Key
+  C16A0D16B80307D9CF102C7DB11F69FE015EB0DCD85C2FC0A5005C10E9DB963AC1E18BF161882ABEEAFF1B01CD50076F3C6F7807323253AB9598DBE027A77DD7
+Key Derivation Function
+  Algorithm: SP800_108_CTR_HMAC
+  Parameters: {[0, SHA512]}
+Secret Agreement
+  Algorithm: DH
+  Public Key Length: 2048
+  Private Key Length: 512
+  Parameters
+    0c0200004448504d0001000087a8e61db4b6663cffbbd19c651959998ceef608660dd0f25d2ceed4435e3b00e00df8f1d61957d4faf7df4561b2aa3016c3d91134096fa 
+    a3bf4296d830e9a7c209e0c6497517abd5a8a9d306bcf67ed91f9e6725b4758c022e0b1ef4275bf7b6c5bfc11d45f9088b941f54eb1e59bb8bc39a0bf12307f5c4fdb70
+    c581b23f76b63acae1caa6b7902d52526735488a0ef13c6d9a51bfa4ab3ad8347796524d8ef6a167b5a41825d967e144e5140564251ccacb83e6b486f6b3ca3f7971506 
+    026c0b857f689962856ded4010abd0be621c3a3960a54e710c375f26375d7014103a4b54330c198af126116d2276e11715f693877fad7ef09cadb094ae91e1a15973fb3 
+    2c9b73134d0b2e77506660edbd484ca7b18f21ef205407f4793a1a0ba12510dbc15077be463fff4fed4aac0bb555be3a6c1b0c6b47b1bc3773bf7e8c6f62901228f8c28 
+    cbb18a55ae31341000a650196f931c77a57f2ddf463e5e9ec144b777de62aaab8a8628ac376d282d6ed3864e67982428ebc831d14348f6f2f9193b5045af2767164e1df 
+    c967c1fb3f2e55a4bd1bffe83b9c80d052b985d182ea0adb2a3b7313d3fe14c8484b1e052588b9b7d2bbd2df016199ecd06e1557cd0915b3353bbb64e0ec377fd028370 
+    df92b52c7891428cdc67eb6184b523d1db246c32f63078490f00ef8d647d148d47954515e2327cfef98c582664b4c0f6cc41659
+#&gt;
+
+PS C:\&gt; .\CQDPAPINGPFXDecrypter.exe /pfx Certificate.p12 /master C16A0D16B80307D9CF102C7DB11F69FE015EB0DCD85C2FC0A5005C10E9DB963AC1E18BF161882ABEEAFF1B01CD50076F3C6F7807323253AB9598DBE027A77DD7
+
+&lt;#
+Output:
+Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Retrieves a KDS Root Key from an AD database and then uses the "CQURE DPAPI NG PFX Decrypter" to decrypt the password of the PFX file.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -3980,7 +4019,7 @@ Epoch                      : 961
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>This cmdlet can be used to display existing key credentials from Active Directory (including NGC, STK and FIDO keys) and to generate new NGC credentials from self-sigled certificates. See the examples for more info.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -4241,9 +4280,123 @@ Epoch                      : 961
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
+             Select-Object -ExpandProperty msDS-KeyCredentialLink |
+             Get-KeyCredential
+&lt;# Output:
+
+Usage Source  Flags       DeviceId                             Created    HolderDN
+----- ------  -----       --------                             -------    --------
+NGC   AD      None        cfe9a872-13ff-4751-a777-aec88c30a762 2019-08-01 CN=John Doe,CN=Users,DC=contoso,DC=com
+STK   AD      None                                             2017-08-23 CN=PC01,CN=Computers,DC=contoso,DC=com
+NGC   AD      MFANotUsed                                       2017-08-23 CN=PC02,CN=Computers,DC=contoso,DC=com
+NGC   AzureAD None        fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
+FIDO  AzureAD Attestation 00000000-0000-0000-0000-000000000000 2019-08-26 CN=John Doe,CN=Users,DC=contoso,DC=com
+
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Lists all key credentials that are registered in Active Directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
+            Select-Object -ExpandProperty msDS-KeyCredentialLink |
+            Get-KeyCredential |
+            Where-Object Usage -eq NGC |
+            Format-Table -View ROCA
+
+&lt;# Output:
+
+Usage IsWeak Source  DeviceId                             Created    HolderDN
+----- ------ ------  --------                             -------    --------
+NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
+NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe,CN=Users,DC=contoso,DC=com
+
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Lists weak public keys registered in Active Directory that were generated on ROCA-vulnerable TPMs.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
+            Select-Object -ExpandProperty msDS-KeyCredentialLink |
+            Get-KeyCredential |
+            Where-Object Usage -eq NGC |
+            Format-Custom -View Moduli |
+            Out-File -FilePath .\moduli.txt -Encoding ascii -Force</dev:code>
+        <dev:remarks>
+          <maml:para>Exports all RSA public key moduli from NGC keys to a file in BASE64 encoding. This format is supported by the original Python ROCA Detection Tool.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
+            Select-Object -ExpandProperty msDS-KeyCredentialLink |
+            Get-KeyCredential |
+            Where-Object Usage -eq FIDO |
+            Format-Table -View FIDO
+
+&lt;# Output:
+
+DisplayName           Flags       FidoFlags                                                 Created    HolderDN
+-----------           -----       ---------                                                 -------    --------
+eWMB Goldengate G320  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
+eWBM Goldengate G310  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
+YubiKey FIDO2         Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-07-11 CN=John Doe,CN=Users,DC=contoso,DC=com
+Yubikey 5             Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-06-21 CN=John Doe,CN=Users,DC=contoso,DC=com
+Feitian BioPass FIDO2 Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-26 CN=John Doe,CN=Users,DC=contoso,DC=com
+
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Lists FIDO tokens registered in Active Directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 5 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADUser -Identity john -Properties msDS-KeyCredentialLink |
+    Select-Object -ExpandProperty msDS-KeyCredentialLink |
+    Get-KeyCredential |
+    Out-GridView -OutputMode Multiple -Title 'Select a credentials for removal...' |
+    ForEach-Object { Set-ADObject -Identity $PSItem.HolderDN -Remove @{ 'msDS-KeyCredentialLink' = $PSItem.ToDNWithBinary() } }</dev:code>
+        <dev:remarks>
+          <maml:para>Selectively deletes key credentials from Active Directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 6 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $certificateSubject = 'S-1-5-21-1236425271-2880748467-2592687428-1109/13f787d5-4078-47ee-a6e7-b3af92f76c1e/login.windows.net/383a3889-5bc9-47a3-846c-2b70f0b7fe0e/john@contoso.com'
+PS C:\&gt; $certificate = New-SelfSignedCertificate -Subject $certificateSubject `
+                                                 -KeyLength 2048 `
+                                                 -Provider 'Microsoft Strong Cryptographic Provider' `
+                                                 -CertStoreLocation Cert:\CurrentUser\My `
+                                                 -NotAfter (Get-Date).AddYears(30) `
+                                                 -TextExtension '2.5.29.19={text}false', '2.5.29.37={text}1.3.6.1.4.1.311.20.2.2' `
+                                                 -SuppressOid '2.5.29.14' `
+                                                 -KeyUsage None `
+                                                 -KeyExportPolicy Exportable
+PS C:\&gt; $ngcKey = Get-KeyCredential -Certificate $certificate -DeviceId (New-Guid) -HolderDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
+PS C:\&gt; Set-ADObject -Identity $ngcKey.HolderDN -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }</dev:code>
+        <dev:remarks>
+          <maml:para>Generates a new NGC key for a user account and registers it in Active Directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 7 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $certificate = New-SelfSignedCertificate -Subject 'S-1-5-21-1236425271-2880748467-2592687428-1001' `
+                                                 -KeyLength 2048 `
+                                                 -Provider 'Microsoft Strong Cryptographic Provider' `
+                                                 -CertStoreLocation Cert:\LocalMachine\My `
+                                                 -NotAfter (Get-Date).AddYears(30) `
+                                                 -TextExtension '2.5.29.19={text}false', '2.5.29.37={text}1.3.6.1.4.1.311.20.2.2' `
+                                                 -SuppressOid '2.5.29.14' `
+                                                 -KeyUsage None `
+                                                 -KeyExportPolicy Exportable
+PS C:\&gt; $ngcKey = Get-KeyCredential -IsComputerKey -Certificate $certificate -HolderDN 'CN=PC01,CN=Computers,DC=contoso,DC=com'
+PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }</dev:code>
+        <dev:remarks>
+          <maml:para>Performs a validated write of computer NGC key. Must be executed under the computer account's identity.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -6380,7 +6533,7 @@ $initTask.RunAsTask()</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para></maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -6512,9 +6665,15 @@ $initTask.RunAsTask()</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                          -BootKey 0be7a2afe1713642182e9b96f73a75da |
+             Save-DPAPIBlob -DirectoryPath .\Output
+PS C:\&gt; Get-ADDBAccount -All `
+                -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                -BootKey 0be7a2afe1713642182e9b96f73a75da |
+             Save-DPAPIBlob -DirectoryPath .\Output</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Extracts DPAPI backup keys and roamed credentials (certificates, private keys and DPAPI master keys) to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -6555,7 +6714,7 @@ $initTask.RunAsTask()</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Generates new password hashes of the given password, including NT hash, WDigest hashes and Kerberos DES, AES128 and AES256 keys and encrypts them into the database using boot key.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -7017,9 +7176,13 @@ $initTask.RunAsTask()</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; $pass = Read-Host -AsSecureString -Prompt 'Provide new password for user john'
+PS C:\&gt; Set-ADDBAccountPassword -SamAccountName john `
+                                -NewPassword $pass `
+                                -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                                -BootKey 0be7a2afe1713642182e9b96f73a75da</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Performs an offline password reset for user john .</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -7056,7 +7219,7 @@ $initTask.RunAsTask()</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Writes the specified NT hash and optionally an entire supplementalCredentials data structure into an offline database. Also enables cross-database / cross-forest password migration without the requirement of a domain trust being in place.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -7586,9 +7749,14 @@ $initTask.RunAsTask()</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; $pass = Read-Host -AsSecureString -Prompt 'Provide new password for user hacker'
+PS C:\&gt; $hash = ConvertTo-NTHash $pass
+PS C:\&gt; Set-ADDBAccountPasswordHash -SamAccountName john `
+                                    -NTHash $hash `
+                                    -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                                    -BootKey 0be7a2afe1713642182e9b96f73a75da</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Performs an offline password reset for user john by injecting a raw NT hash value.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
