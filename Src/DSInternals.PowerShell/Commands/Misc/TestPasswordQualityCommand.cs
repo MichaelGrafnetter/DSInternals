@@ -185,10 +185,23 @@
                     this.result.ClearTextPassword.Add(this.Account.SamAccountName);
                 }
 
-                if (this.Account.SupplementalCredentials.KerberosNew == null && !this.Account.UserAccountControl.HasFlag(UserAccountControl.SmartCardRequired))
+                if(this.Account.UserAccountControl.HasFlag(UserAccountControl.SmartCardRequired))
                 {
-                    // Account is missing the AES kerberos keys. This is only OK if smart card auth is enforced for this account.
-                    this.result.AESKeysMissing.Add(this.Account.SamAccountName);
+                    // Smart card user
+                    if (this.Account.SupplementalCredentials.Kerberos != null)
+                    {
+                        // Accounts that require smart card authentication should have an empty supplemental credentials data structure.
+                        this.result.SmartCardUsersWithPassword.Add(this.Account.SamAccountName);
+                    }
+                }
+                else
+                {
+                    // Not a smart card user
+                    if (this.Account.SupplementalCredentials.KerberosNew == null)
+                    {
+                        // Account is missing the AES kerberos keys. This is only OK if smart card auth is enforced for this account.
+                        this.result.AESKeysMissing.Add(this.Account.SamAccountName);
+                    }
                 }
             }
 

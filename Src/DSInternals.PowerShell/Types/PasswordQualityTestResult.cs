@@ -63,6 +63,11 @@
         public ISet<string> DelegatableAdmins = new SortedSet<string>();
 
         /// <summary>
+        /// List of smart-card enabled accounts that have a password set.
+        /// </summary>
+        public ISet<string> SmartCardUsersWithPassword = new SortedSet<string>();
+
+        /// <summary>
         /// List of collections of accounts with the same password hashes.
         /// </summary>
         public IEnumerable<ISet<string>> DuplicatePasswordGroups = new List<SortedSet<string>>();

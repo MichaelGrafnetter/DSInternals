@@ -9445,6 +9445,10 @@ Passwords of these accounts will never expire:
 
 These accounts are not required to have a password:
   gonzales
+
+These accounts that require smart card authentication have a password:
+  smithj
+  jonesp
 #&gt;</dev:code>
         <dev:remarks>
           <maml:para>Performs an offline credential hygiene audit of AD database against HIBP.</maml:para>

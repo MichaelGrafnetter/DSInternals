@@ -81,6 +81,10 @@ Passwords of these accounts will never expire:
 
 These accounts are not required to have a password:
   gonzales
+
+These accounts that require smart card authentication have a password:
+  smithj
+  jonesp
 #>
 ```
 

@@ -1,12 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet now contains a check for accounts that require smart card authentication have a password at the same time. 
+
 ## [4.0] - 2019-12-04
 
 ### Added
 
-- Added support for [auditing (Azure) Active Directory NGC keys](PowerShell/Get-ADKeyCredential.md#get-adkeycredential) against the [ROCA]() vulnerability.
-- Added the [Add-ADReplNgcKey](PowerShell/Add-ADReplNgcKey.md#add-adreplngckey) cmdlet for NGC key injection through MS-DRSR.
+- Added support for [auditing (Azure) Active Directory NGC keys](PowerShell/Get-ADKeyCredential.md#get-adkeycredential) against the [ROCA](https://crocs.fi.muni.cz/public/papers/rsa_ccs17) vulnerability.
+- Added the [Add-ADReplNgcKey](PowerShell/Add-ADReplNgcKey.md#add-adreplngckey) cmdlet for NGC key injection through the MS-DRSR protocol.
 - Added the `Moduli` custom PowerShell view to enable export of public keys stored in the `msDS-KeyCredentialLink` attribute.
 - Added the `FIDO` custom PowerShell view to provide visibility into FIDO2 keys registered in the `msDS-KeyCredentialLink` attribute.
 - Implemented FIDO2 token information parsing in the `KeyCredential` class. Tested with **YubiKey**, **Feitian**, **eWBM** and **SoloKeys**. Big thanks to @aseigler for major code contribution!
