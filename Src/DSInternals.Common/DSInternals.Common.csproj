@@ -61,6 +61,7 @@
     <Compile Include="Data\DPAPI\RoamedCredential.cs" />
     <Compile Include="Data\DPAPI\RoamedCredentialFlags.cs" />
     <Compile Include="Data\DPAPI\RoamedCredentialType.cs" />
+    <Compile Include="Cryptography\CngSoftwareProviderTransportBlob.cs" />
     <Compile Include="Data\Hello\CustomKeyInformation.cs" />
     <Compile Include="Data\Hello\FidoAttestedCredentialData.cs" />
     <Compile Include="Data\Hello\FidoAuthenticatorData.cs" />

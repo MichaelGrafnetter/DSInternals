@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file. The format 
 
 - The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet now contains a check for accounts that require smart card authentication have a password at the same time. 
 
+### Fixed
+
+- The [Save-DPAPIBlob](PowerShell/Save-DPAPIBlob.md#save-dpapiblob) cmdlet now saves roamed CNG keys in proper format.
+
 ## [4.0] - 2019-12-04
 
 ### Added

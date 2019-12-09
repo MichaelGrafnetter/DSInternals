@@ -4,6 +4,7 @@
     using System.IO;
     using System.Security.Principal;
     using System.Text;
+    using DSInternals.Common.Cryptography;
 
     public class RoamedCredential : DPAPIObject
     {
@@ -12,6 +13,11 @@
         private const string CNGKeyCommandFormat = "dpapi::cng /in:\"{0}\"";
         private const string CertificateCommandFormat = "crypto::system /file:\"{0}\" /export";
         private const string CurrentMasterKeyPointerId = "Preferred";
+        private const string CapiRSAKeyDirectoryFormat = @"Crypto\RSA\{0}\";
+        private const string CapiDSAKeyDirectoryFormat = @"Crypto\DSS\{0}\";
+        private const string CngKeyDirectory = @"Crypto\Keys\";
+        private const string CertificateDirectory = @"SystemCertificates\My\Certificates\";
+        private const string CertificateRequestDirectory = @"SystemCertificates\Request\Certificates\";
         private const int MinLength = 132;
         private const int IdentifierMaxSize = 93;
         private const int HashSize = 20;
@@ -19,10 +25,10 @@
         public RoamedCredential(byte[] blob, string accountName, SecurityIdentifier accountSid)
         {
             // Validate the input
-            Validator.AssertNotNull(blob, "blob");
-            Validator.AssertMinLength(blob, MinLength, "blob");
-            Validator.AssertNotNull(accountName, "accountName");
-            Validator.AssertNotNull(accountSid, "accountSid");
+            Validator.AssertNotNull(blob, nameof(blob));
+            Validator.AssertMinLength(blob, MinLength, nameof(blob));
+            Validator.AssertNotNull(accountName, nameof(accountName));
+            Validator.AssertNotNull(accountSid, nameof(accountSid));
 
             this.AccountName = accountName;
             this.AccountSid = accountSid;
@@ -48,7 +54,7 @@
                     for(int i = 0; i < IdentifierMaxSize; i++)
                     {
                         char currentChar = reader.ReadChar();
-                        if(currentChar != '\0')
+                        if(currentChar != Char.MinValue)
                         {
                             sb.Append(currentChar);
                         }
@@ -79,6 +85,12 @@
 
                     // The actual roamed data
                     this.Data = reader.ReadBytes(dataSize);
+
+                    if(this.Type == RoamedCredentialType.CNGPrivateKey)
+                    {
+                        // Remove Software KSP NCRYPT_OPAQUETRANSPORT_BLOB header
+                        this.Data = new CngSoftwareProviderTransportBlob(this.Data).KeyData;
+                    }
 
                     if(providerDataSize > 0)
                     {
@@ -158,20 +170,20 @@
                         break;
                     case RoamedCredentialType.CryptoApiCertificate:
                     case RoamedCredentialType.CNGCertificate:
-                        sb.Append(@"SystemCertificates\My\Certificates\");
+                        sb.Append(CertificateDirectory);
                         break;
                     case RoamedCredentialType.CryptoApiRequest:
                     case RoamedCredentialType.CNGRequest:
-                        sb.Append(@"SystemCertificates\Request\Certificates\");
+                        sb.Append(CertificateRequestDirectory);
                         break;
                     case RoamedCredentialType.RSAPrivateKey:
-                        sb.AppendFormat(@"Crypto\RSA\{0}\", this.AccountSid);
+                        sb.AppendFormat(CapiRSAKeyDirectoryFormat, this.AccountSid);
                         break;
                     case RoamedCredentialType.DSAPrivateKey:
-                        sb.AppendFormat(@"Crypto\DSS\{0}\", this.AccountSid);
+                        sb.AppendFormat(CapiDSAKeyDirectoryFormat, this.AccountSid);
                         break;
                     case RoamedCredentialType.CNGPrivateKey:
-                        sb.Append(@"Crypto\Keys\");
+                        sb.Append(CngKeyDirectory);
                         break;
                     default:
                         // Unknown type
