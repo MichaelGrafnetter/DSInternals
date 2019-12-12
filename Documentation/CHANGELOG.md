@@ -1,15 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [4.1] - 2019-12-12
 
 ### Added
 
-- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet now contains a check for accounts that require smart card authentication have a password at the same time. 
+- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet now contains a check for accounts that require smart card authentication and have a password at the same time. 
 
 ### Fixed
 
 - The [Save-DPAPIBlob](PowerShell/Save-DPAPIBlob.md#save-dpapiblob) cmdlet now saves roamed CNG keys in proper format.
+- Fixed an issue with the [Set-ADDBAccountPassword](PowerShell/Set-ADDBAccountPassword.md#set-addbaccountpassword) and [Set-ADDBAccountPasswordHash](PowerShell/Set-ADDBAccountPasswordHash.md#set-addbaccountpasswordhash) cmdlets, which, under rare circumstances, could incorrectly modify replication metadata. Unfortunately, the documentation does not say that [PROPERTY_META_DATA_EXT_VECTOR](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-drsr/22bccd51-1e7d-4502-aef8-b84da983f94f) must be sorted.
 
 ## [4.0] - 2019-12-04
 
@@ -349,7 +350,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.0...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.1...HEAD
+[4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.0...v4.1
 [4.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6.1...v4.0
 [3.6.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6...v3.6.1
 [3.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.5...v3.6
