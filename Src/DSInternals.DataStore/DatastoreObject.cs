@@ -249,7 +249,7 @@
 
         public void UpdateAttributeMeta(string[] attributeNames, long usn, DateTime time)
         {
-            Validator.AssertNotNull(attributeNames, "attributeNames");
+            Validator.AssertNotNull(attributeNames, nameof(attributeNames));
 
             ColumnAccessor record = this.cursor.EditRecord;
             
@@ -260,8 +260,7 @@
             this.SetAttribute<long>(CommonDirectoryAttributes.WhenChanged, time.ToGeneralizedTime());
 
             // Update the replPropertyMetaData attribute (read-modify-write)
-            AttributeMetadataCollection meta;
-            this.ReadAttribute(CommonDirectoryAttributes.PropertyMetaData, out meta);
+            this.ReadAttribute(CommonDirectoryAttributes.PropertyMetaData, out AttributeMetadataCollection meta);
 
             foreach(var attributeName in attributeNames)
             {

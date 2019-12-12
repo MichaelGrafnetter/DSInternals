@@ -68,12 +68,6 @@ namespace DSInternals.DataStore
             return result.Count > 0 ? result.ToArray() : null;
         }
 
-        public static AttributeMetadataCollection RetrieveColumnAsAttrMeta(this Cursor cursor, Columnid columnId)
-        {
-            byte[] buffer = cursor.RetrieveColumnAsByteArray(columnId);
-            return new AttributeMetadataCollection(buffer);
-        }
-
         public static SecurityIdentifier RetrieveColumnAsSid(this Cursor cursor, Columnid columnId)
         {
             byte[] binarySid = cursor.RetrieveColumnAsByteArray(columnId);

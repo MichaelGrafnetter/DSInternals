@@ -1,58 +1,76 @@
 ﻿using DSInternals.Common;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace DSInternals.DataStore
 {
-    public class AttributeMetadataCollection // : IReadOnlyCollection<AttributeMetadata>
+    public class AttributeMetadataCollection
     {
         private const int guidSize = 16;
         private const int entrySize = 3 * sizeof(long) + 2 * sizeof(int) + guidSize;
+        private const int HeaderSize = 2 * sizeof(long); // Structure: | Unknown | Number of Entries | Entries |
+        private const long DefaultUnknownValue = 1;
+
         public long Unknown
         {
             get;
             private set;
         }
+
         public int Count
         {
             get
             {
-                return (InnerList != null) ? InnerList.Count : 0;
+                return this.InnerList?.Count ?? 0;
             }
         }
-        protected IList<AttributeMetadata> InnerList
+
+        public IList<int> Attributes
+        {
+            get
+            {
+                return this.InnerList?.Keys;
+            }
+        }
+
+        /// <summary>
+        /// Holds a list of attribute metadata sorted by attribute ID.
+        /// </summary>
+        protected SortedList<int,AttributeMetadata> InnerList
         {
             get;
             private set;
         }
+
         public AttributeMetadataCollection() : this(null) { }
+
         public AttributeMetadataCollection(byte[] buffer)
         {
-            if(buffer == null)
+            if (buffer == null)
             {
-                this.Unknown = 1;
-                this.InnerList = new List<AttributeMetadata>();
+                // Initialize an empty collection
+                this.Unknown = DefaultUnknownValue;
+                this.InnerList = new SortedList<int, AttributeMetadata>();
                 return;
             }
-            if(buffer.Length < 2 * sizeof(long))
-            {
-                throw new ArgumentOutOfRangeException("buffer");
-            }
 
-            using(Stream stream = new MemoryStream(buffer))
+            Validator.AssertMinLength(buffer, HeaderSize, nameof(buffer));
+
+            using (Stream stream = new MemoryStream(buffer))
             {
-                using(BinaryReader reader = new BinaryReader(stream))
+                using (BinaryReader reader = new BinaryReader(stream))
                 {
+                    // Read structure and validate header
                     this.Unknown = reader.ReadInt64();
                     long numEntries = reader.ReadInt64();
                     long expectedBufferSize = CalculateBinarySize(numEntries);
-                    Validator.AssertLength(buffer, expectedBufferSize, "buffer");
-                    this.InnerList = new List<AttributeMetadata>((int) numEntries);
-                    for(int i = 1; i <= numEntries; i++)
+                    Validator.AssertLength(buffer, expectedBufferSize, nameof(buffer));
+
+                    // Read all entries
+                    this.InnerList = new SortedList<int, AttributeMetadata>((int)numEntries);
+                    for (int i = 1; i <= numEntries; i++)
                     {
                         int attributeId = reader.ReadInt32();
                         int version = reader.ReadInt32();
@@ -60,8 +78,16 @@ namespace DSInternals.DataStore
                         Guid originatingDSA = new Guid(reader.ReadBytes(16));
                         long originatingUSN = reader.ReadInt64();
                         long localUSN = reader.ReadInt64();
-                        var entry = new AttributeMetadata(attributeId, version, timestamp, originatingDSA, originatingUSN, localUSN);
-                        this.InnerList.Add(entry);
+                        var entry = new AttributeMetadata(version, timestamp, originatingDSA, originatingUSN, localUSN);
+                        try
+                        {
+                            this.InnerList.Add(attributeId, entry);
+                        }
+                        catch(ArgumentException)
+                        {
+                            // An element with the same key already exists.
+                            // We will simply ignore duplicate values and thus remove them on save.
+                        }
                     }
                 }
             }
@@ -69,42 +95,41 @@ namespace DSInternals.DataStore
 
         public void Update(int attributeId, Guid invocationId, DateTime time, long usn)
         {
-            var existingEntry = this.InnerList.FirstOrDefault(item => item.AttributeId == attributeId);
-            if(existingEntry != null)
+            this.InnerList.TryGetValue(attributeId, out AttributeMetadata entry);
+
+            if (entry != null)
             {
                 // This attribute is already contained in the list, so we just update it
-                existingEntry.Update(invocationId, time, usn);
+                entry.Update(invocationId, time, usn);
             }
             else
             {
                 // This is a newly added attribute
-                var newEntry = new AttributeMetadata(attributeId, invocationId, time, usn);
-                this.InnerList.Add(newEntry);
+                entry = new AttributeMetadata(invocationId, time, usn);
+                this.InnerList.Add(attributeId, entry);
             }
         }
 
         public byte[] ToByteArray()
         {
-            if(this.InnerList.Count == 0)
-            {
-                return null;
-            }
             byte[] buffer = new byte[CalculateBinarySize(this.Count)];
             using (MemoryStream stream = new MemoryStream(buffer))
             {
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     writer.Write(this.Unknown);
+
                     // Important: Write Count as 64-bit and not 32-bit:
-                    writer.Write((long) this.Count);
-                    foreach(var entry in this.InnerList)
+                    writer.Write((long)this.Count);
+
+                    foreach (var entry in this.InnerList)
                     {
-                        writer.Write(entry.AttributeId);
-                        writer.Write(entry.Version);
-                        writer.Write(entry.LastOriginatingChangeTimestamp);
-                        writer.Write(entry.LastOriginatingInvocationId.ToByteArray());
-                        writer.Write(entry.OriginatingChangeUsn);
-                        writer.Write(entry.LocalChangeUsn);
+                        writer.Write(entry.Key);
+                        writer.Write(entry.Value.Version);
+                        writer.Write(entry.Value.LastOriginatingChangeTimestamp);
+                        writer.Write(entry.Value.LastOriginatingInvocationId.ToByteArray());
+                        writer.Write(entry.Value.OriginatingChangeUsn);
+                        writer.Write(entry.Value.LocalChangeUsn);
                     }
                 }
             }
@@ -116,14 +141,10 @@ namespace DSInternals.DataStore
             var text = new StringBuilder();
             foreach (var entry in InnerList)
             {
-                text.AppendLine(entry.ToString());
+                text.AppendFormat("AttId: {0}, ", entry.Key);
+                text.AppendLine(entry.Value.ToString());
             }
             return text.ToString();
-        }
-
-        public IEnumerator<AttributeMetadata> GetEnumerator()
-        {
-            return InnerList.GetEnumerator();
         }
 
         private static long CalculateBinarySize(long numEntries)
@@ -131,6 +152,5 @@ namespace DSInternals.DataStore
             // Unknown Value + Entry Count + Entries
             return 2 * sizeof(long) + numEntries * entrySize;
         }
-
     }
 }
