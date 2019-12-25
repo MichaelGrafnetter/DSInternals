@@ -133,7 +133,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The Test-PasswordQuality cmdlet now contains a check for accounts that require smart card authentication and have a password at the same time. 
+- The Test-PasswordQuality cmdlet now contains a check for accounts that require smart card authentication and have a password at the same time.
 - Minor bug fixes.
 "@
     } # End of PSData hashtable
