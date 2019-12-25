@@ -165,6 +165,9 @@
   <data name="UnexpectedSupplementalCredsSignatureMessage" xml:space="preserve">
     <value>Supplemental credentials do not have a valid signature.</value>
   </data>
+  <data name="UnexpectedValueMessage" xml:space="preserve">
+    <value>The input contains an unexpected value '{0}', while the expected value is '{1}'.</value>
+  </data>
   <data name="UnsupportedSecretEncryptionType" xml:space="preserve">
     <value>Unsupported secret encryption algorithm.</value>
   </data>

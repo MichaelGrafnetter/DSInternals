@@ -205,6 +205,15 @@ namespace DSInternals.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The input contains an unexpected value &apos;{0}&apos;, while the expected value is &apos;{1}&apos;..
+        /// </summary>
+        public static string UnexpectedValueMessage {
+            get {
+                return ResourceManager.GetString("UnexpectedValueMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unsupported secret encryption algorithm..
         /// </summary>
         public static string UnsupportedSecretEncryptionType {

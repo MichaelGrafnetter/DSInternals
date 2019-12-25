@@ -40,14 +40,14 @@
                 {
                     // The 1st byte is always '%'
                     char c1 = reader.ReadChar();
-                    // TODO: Validate %
+                    Validator.AssertEquals('%', c1, nameof(blob));
 
                     // The 2nd char encodes the type of the roamed credential
                     this.Type = (RoamedCredentialType)(reader.ReadChar() - '0');
 
                     // The 3rd char is always '\\'
                     char c3 = reader.ReadChar();
-                    // TODO: Validate \
+                    Validator.AssertEquals('\\', c3, nameof(blob));
 
                     // Now comes the identifier padded with zeros
                     var sb = new StringBuilder(IdentifierMaxSize);

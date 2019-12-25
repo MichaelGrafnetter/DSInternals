@@ -1,13 +1,12 @@
-﻿using DSInternals.Common.Cryptography;
-using DSInternals.Common.Exceptions;
-using DSInternals.Common.Interop;
-using DSInternals.Common.Properties;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Security;
-using System.Text.RegularExpressions;
+using DSInternals.Common.Cryptography;
+using DSInternals.Common.Exceptions;
+using DSInternals.Common.Interop;
+using DSInternals.Common.Properties;
 
 namespace DSInternals.Common
 {
@@ -71,6 +70,24 @@ namespace DSInternals.Common
                     break;
             }
             throw exceptionToThrow;
+        }
+
+        public static void AssertEquals(string expectedValue, string actualValue, string paramName)
+        {
+            if(!String.Equals(expectedValue, actualValue, StringComparison.InvariantCulture))
+            {
+                string message = String.Format(Resources.UnexpectedValueMessage, actualValue, expectedValue);
+                throw new ArgumentException(message, paramName);
+            }
+        }
+
+        public static void AssertEquals(char expectedValue, char actualValue, string paramName)
+        {
+            if (expectedValue.CompareTo(actualValue) != 0)
+            {
+                string message = String.Format(Resources.UnexpectedValueMessage, actualValue, expectedValue);
+                throw new ArgumentException(message, paramName);
+            }
         }
 
         public static void AssertNotNull(object value, string paramName)
@@ -167,7 +184,7 @@ namespace DSInternals.Common
             uint actualCrc = Crc32.Calculate(buffer);
             if(actualCrc != expectedCrc)
             {
-                throw new Exception(Resources.InvalidCRCMessage);
+                throw new FormatException(Resources.InvalidCRCMessage);
             }
         }
     }
