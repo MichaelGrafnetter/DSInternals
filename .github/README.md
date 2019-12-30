@@ -100,6 +100,7 @@ The online version of [PowerShell Get-Help documentation](../Documentation/Power
 
 I have also published a series of articles about the DSInternals module on [my blog](https://www.dsinternals.com/en/list-of-cmdlets-in-the-dsinternals-module/). Here are a few of them:
 
+- [CQLabs – Offline Attacks on Active Directory](https://cqureacademy.com/cqure-labs/cqlabs-dsinternals-powershell-module)
 - [Auditing Active Directory Password Quality](https://www.dsinternals.com/en/auditing-active-directory-password-quality/)
 - [Dumping ntds.dit files](https://www.dsinternals.com/en/dumping-ntds-dit-files-using-powershell/)
 - [Retrieving Active Directory Passwords Remotely](https://www.dsinternals.com/en/retrieving-active-directory-passwords-remotely/)
@@ -110,8 +111,9 @@ I have also published a series of articles about the DSInternals module on [my b
 - [Impersonating Office 365 Users With Mimikatz](https://www.dsinternals.com/en/impersonating-office-365-users-mimikatz/)
 
 ### Slide Decks
-
-- [HipConf 2018: Offline Attacks on Active Directory](https://www.dsinternals.com/wp-content/uploads/HIP_AD_Offline_Attacks.pdf)
+- [Black Hat Europe 2019: DSInternals PowerShell Module](https://www.dsinternals.com/wp-content/uploads/eu-19-Grafnetter-DSInternals-PowerShell-Module.pdf)
+- [Black Hat Europe 2019: Exploiting Windows Hello for Business](https://www.dsinternals.com/wp-content/uploads/eu-19-Grafnetter-Exploiting-Windows-Hello-for-Business.pdf)
+- [HipConf New York 2018: Offline Attacks on Active Directory](https://www.dsinternals.com/wp-content/uploads/HIP_AD_Offline_Attacks.pdf)
 
 ## Acknowledgements
 
