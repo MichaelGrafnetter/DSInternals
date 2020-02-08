@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Fixed
+
+- Resolved a bug in the [Get-ADDBBackupKey](PowerShell/Get-ADDBBackupKey.md#get-addbbackupkey) cmdlet that prevented it from working on global catalogs in multi-domain forests.
+
+
 ## [4.1] - 2019-12-12
 
 ### Added

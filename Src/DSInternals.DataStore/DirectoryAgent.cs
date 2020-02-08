@@ -120,7 +120,11 @@
             // TODO: Refactor using Linq
             foreach (var secret in this.FindObjectsByCategory(CommonDirectoryClasses.Secret))
             {
-                yield return new DPAPIBackupKey(secret, pek);
+                // RODCs and partial replicas on GCs do not contain secrets
+                if (secret.IsWritable)
+                {
+                    yield return new DPAPIBackupKey(secret, pek);
+                }
             }
         }
 
