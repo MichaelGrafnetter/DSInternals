@@ -8,23 +8,10 @@
 
     public class DSAccount
     {
-        private string displayName;
-        private string description;
-        private string surname;
-        private string givenName;
-        private string samAccountName;
-        private string upn;
-        private string[] spn;
-        private bool isDeleted;
-        private bool adminCount;
-        private SecurityIdentifier[] sidHistory;
-        private RawSecurityDescriptor securityDescriptor;
-        private DateTime? lastLogon;
-
         public DSAccount(DirectoryObject dsObject, DirectorySecretDecryptor pek)
         {
             // Parameter validation
-            Validator.AssertNotNull(dsObject, "dsObject");
+            Validator.AssertNotNull(dsObject, nameof(dsObject));
             if (!dsObject.IsAccount)
             {
                 // TODO: Exteption type
@@ -64,10 +51,8 @@
 
         public SecurityIdentifier[] SidHistory
         {
-            get
-            {
-                return this.sidHistory;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -75,10 +60,8 @@
         /// </summary>
         public RawSecurityDescriptor SecurityDescriptor
         {
-            get
-            {
-                return this.securityDescriptor;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -101,10 +84,8 @@
         /// </value>
         public string DisplayName
         {
-            get
-            {
-                return this.displayName;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -115,10 +96,8 @@
         /// </value>
         public string Description
         {
-            get
-            {
-                return this.description;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -126,10 +105,8 @@
         /// </summary>
         public string GivenName
         {
-            get
-            {
-                return this.givenName;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -137,10 +114,8 @@
         /// </summary>
         public string Surname
         {
-            get
-            {
-                return this.surname;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -177,10 +152,8 @@
         /// </value>
         public bool Deleted
         {
-            get
-            {
-                return this.isDeleted;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -188,10 +161,8 @@
         /// </summary>
         public DateTime? LastLogon
         {
-            get
-            {
-                return this.lastLogon;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -199,10 +170,8 @@
         /// </summary>
         public string UserPrincipalName
         {
-            get
-            {
-                return this.upn;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -210,10 +179,8 @@
         /// </summary>
         public string SamAccountName
         {
-            get
-            {
-                return this.samAccountName;
-            }
+            get;
+            private set;
         }
 
         public int PrimaryGroupId
@@ -237,18 +204,14 @@
         /// </summary>
         public bool AdminCount
         {
-            get
-            {
-                return this.adminCount;
-            }
+            get;
+            private set;
         }
 
         public string[] ServicePrincipalName
         {
-            get
-            {
-                return this.spn;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -259,6 +222,7 @@
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the account's password in LAN Manager (LM) one-way format (OWF).
         /// </summary>
@@ -268,6 +232,7 @@
             get;
             private set;
         }
+
         /// <summary>
         /// Gets password history of the user in Windows NT operating system one-way format (OWF). 
         /// </summary>
@@ -276,6 +241,7 @@
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the password history of the user in LAN Manager (LM) one-way format (OWF).
         /// </summary>
@@ -287,6 +253,7 @@
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the stored credentials for use in authenticating.
         /// </summary>
@@ -325,7 +292,6 @@
 
         protected void LoadAccountInfo(DirectoryObject dsObject)
         {
-
             // Guid:
             this.Guid = dsObject.Guid;
 
@@ -336,54 +302,63 @@
             this.Sid = dsObject.Sid;
 
             // SidHistory:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SIDHistory, out this.sidHistory);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SIDHistory, out SecurityIdentifier[] sidHistory);
+            this.SidHistory = sidHistory;
 
             // DisplayName:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.DisplayName, out this.displayName);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.DisplayName, out string displayName);
+            this.DisplayName = displayName;
 
             // Description
-            dsObject.ReadAttribute(CommonDirectoryAttributes.Description, out this.description);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Description, out string description);
+            this.Description = description;
 
             // GivenName:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.GivenName, out this.givenName);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.GivenName, out string givenName);
+            this.GivenName = givenName;
 
             // Surname:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.Surname, out this.surname);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Surname, out string surname);
+            this.Surname = surname;
 
             // Security Descriptor:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out this.securityDescriptor);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out RawSecurityDescriptor securityDescriptor);
+            this.SecurityDescriptor = securityDescriptor;
 
             // AdminCount (Although the schema defines it as Int32, it can only have values 0 and 1, so we directly convert it to bool)
-            dsObject.ReadAttribute(CommonDirectoryAttributes.AdminCount, out this.adminCount);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.AdminCount, out bool adminCount);
+            this.AdminCount = adminCount;
 
             // Service Principal Name(s)
-            dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out this.spn);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out string[] spn);
+            this.ServicePrincipalName = spn;
 
             // UAC:
-            int? numericUac;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out numericUac);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out int? numericUac);
             this.UserAccountControl = (UserAccountControl)numericUac.Value;
 
             // Deleted:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out this.isDeleted);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out bool isDeleted);
+            this.Deleted = isDeleted;
 
             // LastLogon:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out this.lastLogon);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out DateTime? lastLogon);
+            this.LastLogon = lastLogon;
 
             // UPN:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out this.upn);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out string upn);
+            this.UserPrincipalName = upn;
 
             // SamAccountName:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out this.samAccountName);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out string samAccountName);
+            this.SamAccountName = samAccountName;
 
             // SamAccountType:
-            int? numericAccountType;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out numericAccountType);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out int? numericAccountType);
             this.SamAccountType = (SamAccountType)numericAccountType.Value;
 
             // PrimaryGroupId
-            int? groupId;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out groupId);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out int? groupId);
             this.PrimaryGroupId = groupId.Value;
         }
 

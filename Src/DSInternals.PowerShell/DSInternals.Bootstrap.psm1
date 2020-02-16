@@ -55,6 +55,14 @@ catch [System.IO.IOException]
 }
 
 #
+# Type Data
+# Note: *.types.ps1xml cannot be used for the following configuration, because it is processed before *.psm1 and would thus fail loading platform-specific assemblies. 
+
+Update-TypeData -TypeName 'DSInternals.Common.Data.SupplementalCredentials' `
+                -TypeConverter ([DSInternals.PowerShell.SupplementalCredentialsDeserializer]) `
+                -Force
+
+#
 # Cmdlet aliases
 #
 

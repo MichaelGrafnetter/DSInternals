@@ -101,6 +101,7 @@
     <Compile Include="Types\LsaPolicyInformation.cs" />
     <Compile Include="Types\PasswordQualityTestResult.cs" />
     <Compile Include="Types\SchemaAttribute.cs" />
+    <Compile Include="Types\SupplementalCredentialsDeserializer.cs" />
     <Compile Include="Utils\AcceptHexStringAttribute.cs" />
     <Compile Include="Utils\ValidatePasswordLengthAttribute.cs" />
     <Compile Include="Commands\Encryption\ConvertFromGPPrefPasswordCommand.cs" />
@@ -207,6 +208,9 @@
     </Content>
     <None Include="Commands\ADReplCommandHierarchy.cd" />
     <None Include="Commands\ADSICommandHierarchy.cd" />
+    <Content Include="DSInternals.types.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Run-Cmdlets.ps1" />
     <Content Include="Views\DSInternals.DSAccount.format.ps1xml">

@@ -41,6 +41,9 @@ CLRVersion = '4.0.30319.42000' # Corresponds to .NET Framework 4.6 and later
 # Processor architecture (None, X86, Amd64) required by this module
 ProcessorArchitecture = 'None'
 
+# Type files (.ps1xml) to be loaded when importing this module
+TypesToProcess = @('DSInternals.types.ps1xml')
+
 # Format files (.ps1xml) to be loaded when importing this module
 FormatsToProcess = 'Views\DSInternals.Hash.format.ps1xml',
                    'Views\DSInternals.RoamedCredential.format.ps1xml',
@@ -94,11 +97,12 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'Add-ADNgcKey', 'New-ADKeyCredential', 'New-ADKeyCredentialLink',
                   'New-ADNgcKey'
 
+# List of assemblies that must be loaded prior to importing this module
+RequiredAssemblies = @('DSInternals.Common.dll')
+
 # List of all files packaged with this module
-FileList = 
-           'AutoMapper.dll',
+FileList = 'AutoMapper.dll',
            'CBOR.dll',
-           'DSInternals.Common.dll',
            'DSInternals.DataStore.dll',
            'DSInternals.Replication.dll',
            'DSInternals.Replication.Model.dll',
