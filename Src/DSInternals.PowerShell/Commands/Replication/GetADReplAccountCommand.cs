@@ -22,7 +22,7 @@ namespace DSInternals.PowerShell.Commands
             set;
         }
 
-        [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
+        [Parameter(Mandatory = false, ParameterSetName = ParameterSetAll)]
         [ValidateNotNullOrEmpty]
         [Alias("NC", "DomainNC", "DomainNamingContext")]
         public string NamingContext
@@ -59,9 +59,12 @@ namespace DSInternals.PowerShell.Commands
                 progress.PercentComplete = Math.Min(percentComplete, 100);
                 this.WriteProgress(progress);
             };
-            
+
+            // Automatically infer domain name if no value is provided
+            string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
+
             // Replicate all accounts
-            foreach (var account in this.ReplicationClient.GetAccounts(this.NamingContext, progressReporter))
+            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter))
             {
                 this.WriteObject(account);
             }
@@ -81,7 +84,6 @@ namespace DSInternals.PowerShell.Commands
                     break;
 
                 case ParameterSetByName:
-                    this.ValidateDomainName();
                     var accountName = new NTAccount(this.Domain, this.SamAccountName);
                     account = this.ReplicationClient.GetAccount(accountName);
                     break;

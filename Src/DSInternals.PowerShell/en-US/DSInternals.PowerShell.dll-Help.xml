@@ -541,7 +541,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
           <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Specifies the NetBIOS domain name of the target Active Directory account.</maml:para>
@@ -837,7 +837,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
         <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Specifies the NetBIOS domain name of the target Active Directory account.</maml:para>
@@ -4457,7 +4457,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NC, DomainNC, DomainNamingContext">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NC, DomainNC, DomainNamingContext">
           <maml:name>NamingContext</maml:name>
           <maml:Description>
             <maml:para>Specifies the naming context root of the replica to replicate.</maml:para>
@@ -4569,7 +4569,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
           <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Specifies the NetBIOS domain name of the account that will be replicated.</maml:para>
@@ -4829,7 +4829,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
         <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Specifies the NetBIOS domain name of the account that will be replicated.</maml:para>
@@ -4841,7 +4841,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NC, DomainNC, DomainNamingContext">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="NC, DomainNC, DomainNamingContext">
         <maml:name>NamingContext</maml:name>
         <maml:Description>
           <maml:para>Specifies the naming context root of the replica to replicate.</maml:para>
@@ -5026,7 +5026,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="FQDN, DomainName, DNSDomainName">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="FQDN, DomainName, DNSDomainName">
           <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>TODO</maml:para>
@@ -5082,7 +5082,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="FQDN, DomainName, DNSDomainName">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="FQDN, DomainName, DNSDomainName">
         <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>TODO</maml:para>

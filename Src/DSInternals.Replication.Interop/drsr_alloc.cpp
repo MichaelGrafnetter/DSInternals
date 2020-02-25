@@ -104,6 +104,11 @@ void midl_delete<DRS_MSG_CRACKREQ_V1>::operator()(DRS_MSG_CRACKREQ_V1* request) 
 		return;
 	}
 
+	for (DWORD i = 0; i < request->cNames; i++)
+	{
+		midl_user_free(request->rpNames[i]);
+	}
+
 	midl_user_free(request->rpNames);
 	midl_user_free(request);
 }

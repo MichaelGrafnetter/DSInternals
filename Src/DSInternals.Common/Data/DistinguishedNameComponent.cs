@@ -6,8 +6,17 @@
 
     public class DistinguishedNameComponent
     {
-        public string Name;
-        public string Value;
+        public string Name
+        {
+            get;
+            private set;
+        }
+
+        public string Value
+        {
+            get;
+            private set;
+        }
 
         public DistinguishedNameComponent(string name, string value)
         {

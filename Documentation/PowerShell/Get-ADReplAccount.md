@@ -14,13 +14,13 @@ Reads one or more accounts through the MS-DRSR protocol, including secret attrib
 
 ### All
 ```
-Get-ADReplAccount [-All] -NamingContext <String> -Server <String> [-Credential <PSCredential>]
+Get-ADReplAccount [-All] [-NamingContext <String>] -Server <String> [-Credential <PSCredential>]
  [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### ByName
 ```
-Get-ADReplAccount [-SamAccountName] <String> [-Domain] <String> -Server <String> [-Credential <PSCredential>]
+Get-ADReplAccount [-SamAccountName] <String> [[-Domain] <String>] -Server <String> [-Credential <PSCredential>]
  [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
@@ -115,7 +115,7 @@ Type: String
 Parameter Sets: ByName
 Aliases: AccountDomain, UserDomain
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -130,7 +130,7 @@ Type: String
 Parameter Sets: All
 Aliases: NC, DomainNC, DomainNamingContext
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

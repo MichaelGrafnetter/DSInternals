@@ -26,7 +26,7 @@ namespace DSInternals.PowerShell.Commands
         }
 
         [Parameter(
-            Mandatory = true,
+            Mandatory = false,
             Position = 1,
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = ParameterSetByName
@@ -66,6 +66,25 @@ namespace DSInternals.PowerShell.Commands
         }
 
         #endregion Parameters
+
+        protected override void BeginProcessing()
+        {
+            base.BeginProcessing();
+
+            if (ParameterSetName == ParameterSetByName)
+            {
+                if(string.IsNullOrEmpty(this.Domain))
+                {
+                    // Automatically infer DC's domain name.
+                    this.Domain = this.ReplicationClient.NetBIOSDomainName;
+                }
+                else
+                {
+                    // User-provided domain name, so a sanity check is necessary.
+                    this.ValidateDomainName();
+                }
+            }
+        }
 
         protected void ValidateDomainName()
         {

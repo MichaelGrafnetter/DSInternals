@@ -29,7 +29,6 @@ namespace DSInternals.PowerShell.Commands
                     break;
 
                 case ParameterSetByName:
-                    this.ValidateDomainName();
                     this.ReplicationClient.WriteNgcKey(new NTAccount(this.Domain, this.SamAccountName), this.PublicKey);
                     break;
 

@@ -72,6 +72,7 @@ namespace DSInternals
 				// Parse the server info
 				DRS_EXTENSIONS_INT serverInfo = DRS_EXTENSIONS_INT(genericServerInfo);
 				this->_serverSiteObjectGuid = RpcTypeConverter::ToManaged(serverInfo.siteObjGuid);
+				this->_configurationObjectGuid = RpcTypeConverter::ToManaged(serverInfo.configObjGUID);
 				this->_serverReplEpoch = serverInfo.dwReplEpoch;
 				this->_serverCapabilities = serverInfo.dwFlags;
 			}
@@ -86,6 +87,11 @@ namespace DSInternals
 			Guid DrsConnection::ServerSiteGuid::get()
 			{
 				return this->_serverSiteObjectGuid;
+			}
+
+			Guid DrsConnection::ConfigurationPartitionGuid::get()
+			{
+				return this->_configurationObjectGuid;
 			}
 
 			midl_ptr<DRS_EXTENSIONS_INT> DrsConnection::CreateClientInfo()
@@ -105,7 +111,7 @@ namespace DSInternals
 			array<ReplicationCursor^>^ DrsConnection::GetReplicationCursors(String^ namingContext)
 			{
 				this->ValidateConnection();
-				Validator::AssertNotNullOrWhiteSpace(namingContext, "namingContext");
+				Validator::AssertNotNullOrEmpty(namingContext, nameof(namingContext));
 
 				// Prepare the parameters
 				DRS_HANDLE handle = this->handle.ToPointer();
@@ -213,7 +219,7 @@ namespace DSInternals
 			ReplicationResult^ DrsConnection::ReplicateAllObjects(ReplicationCookie^ cookie, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects)
 			{
 				// Validate parameters
-				Validator::AssertNotNull(cookie, "cookie");
+				Validator::AssertNotNull(cookie, nameof(cookie));
 
 				auto request = CreateReplicateAllRequest(cookie, partialAttributeSet, maxBytes, maxObjects);
 				auto reply = GetNCChanges(move(request));
@@ -232,6 +238,8 @@ namespace DSInternals
 
 			ReplicaObject^ DrsConnection::ReplicateSingleObject(String^ distinguishedName, array<ATTRTYP>^ partialAttributeSet)
 			{
+				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
+
 				try
 				{
 					auto request = CreateReplicateSingleRequest(distinguishedName, partialAttributeSet);
@@ -334,81 +342,191 @@ namespace DSInternals
 
 			String^ DrsConnection::ResolveDistinguishedName(NTAccount^ accountName)
 			{
+				Validator::AssertNotNull(accountName, nameof(accountName));
 				auto stringAccountName = accountName->Value;
 				bool isUPN = stringAccountName->Contains(UpnSeparator);
 				auto nameFormat = isUPN ? DS_NAME_FORMAT::DS_USER_PRINCIPAL_NAME : DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME;
-				return this->ResolveName(stringAccountName, nameFormat, DS_NAME_FORMAT::DS_FQDN_1779_NAME);
+				return this->ResolveName(stringAccountName, nameFormat, DS_NAME_FORMAT::DS_FQDN_1779_NAME, true);
 			}
 
 			String^ DrsConnection::ResolveDistinguishedName(SecurityIdentifier^ objectSid)
 			{
+				Validator::AssertNotNull(objectSid, nameof(objectSid));
 				auto stringSid = objectSid->ToString();
-				return this->ResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME);
+				return this->ResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME, true);
 			}
 
 			String^ DrsConnection::ResolveDistinguishedName(Guid objectGuid)
 			{
 				auto stringGuid = objectGuid.ToString();
-				return this->ResolveName(stringGuid, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME);
+				return this->ResolveName(stringGuid, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME, true);
 			}
 
 			Guid DrsConnection::ResolveGuid(NTAccount^ accountName)
 			{
+				Validator::AssertNotNull(accountName, nameof(accountName));
 				auto stringAccountName = accountName->Value;
 				bool isUPN = stringAccountName->Contains(DrsConnection::UpnSeparator);
 				auto nameFormat = isUPN ? DS_NAME_FORMAT::DS_USER_PRINCIPAL_NAME : DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME;
-				auto stringGuid = this->ResolveName(stringAccountName, nameFormat, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				auto stringGuid = this->ResolveName(stringAccountName, nameFormat, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, true);
 				return Guid::Parse(stringGuid);
 			}
 
 			Guid DrsConnection::ResolveGuid(SecurityIdentifier^ objectSid)
 			{
+				Validator::AssertNotNull(objectSid, nameof(objectSid));
 				auto stringSid = objectSid->ToString();
-				auto stringGuid = this->ResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				auto stringGuid = this->ResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, true);
 				return Guid::Parse(stringGuid);
 			}
 
-			String^ DrsConnection::TryResolveName(String^ name, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired)
+			NTAccount^ DrsConnection::ResolveAccountName(String^ distinguishedName)
 			{
-				// We only want to resolve 1 name at a time:
-				const size_t numItems = 1;
+				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
+				String^ result = this->ResolveName(distinguishedName, DS_NAME_FORMAT::DS_FQDN_1779_NAME, DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME, true);
+				return gcnew NTAccount(result);
+			}
 
+			String^ DrsConnection::ResolveName(String^ name, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired, bool mustExist)
+			{
+				return this->ResolveNames(gcnew array<String^> { name }, formatOffered, formatDesired, mustExist)[0];
+			}
+
+			array<String^>^ DrsConnection::ResolveNames(array<String^>^ names, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired, bool mustExist)
+			{
 				// Prepare the request
-				auto request = make_midl_ptr<DRS_MSG_CRACKREQ_V1>(numItems);
+				auto request = make_midl_ptr<DRS_MSG_CRACKREQ_V1>(names->Length);
 				request->formatOffered = formatOffered;
 				request->formatDesired = formatDesired;
-				request->rpNames[0] = RpcTypeConverter::ToNative(name).release();
+
+				for (int i = 0; i < names->Length; i++)
+				{
+					request->rpNames[i] = RpcTypeConverter::ToNative(names[i]).release();
+				}
 
 				// Perform RPC call
 				auto reply = this->CrackNames(move(request));
 
 				// Process the response
-				auto item = reply->pResult->rItems[0];
-				if (item.status == DS_NAME_ERROR::DS_NAME_NO_ERROR)
+				auto result = reply->pResult;
+				if (mustExist == true && result->cItems == 0)
 				{
-					auto name = marshal_as<String^>(item.pName);
-					return name;
+					throw gcnew DirectoryObjectNotFoundException(names[0], nullptr);
 				}
-				else
+
+				array<String^>^ resolvedNames = gcnew array<String^>(result->cItems);
+				for (DWORD i = 0; i < result->cItems; i++)
 				{
-					// No name translation has been found for some reason.
-					return nullptr;
+					auto item = result->rItems[i];
+					if (item.status == DS_NAME_ERROR::DS_NAME_NO_ERROR)
+					{
+						resolvedNames[i] = marshal_as<String^>(item.pName);
+					}
+					else
+					{
+						// Object was not resolved
+						if (mustExist == true)
+						{
+							throw gcnew DirectoryObjectNotFoundException(names[i], nullptr);
+						}
+					}
 				}
+
+				return resolvedNames;
 			}
 
-			String^ DrsConnection::ResolveName(String^ name, DS_NAME_FORMAT formatOffered, DS_NAME_FORMAT formatDesired)
+			array<String^>^ DrsConnection::ListInfo(DS_NAME_FORMAT_EXT infoType)
 			{
-				auto dn = this->TryResolveName(name, formatOffered, formatDesired);
-				if (dn == nullptr)
+				// Note that the server ignores the name string value for some call types, but it still cannot be empty.
+				return this->ListInfo(infoType, nullptr);
+			}
+
+			array<String^>^ DrsConnection::ListInfo(DS_NAME_FORMAT_EXT infoType, String^ targetName)
+			{
+				bool targetMustExist = true;
+
+				if (targetName == nullptr)
 				{
-					throw gcnew DirectoryObjectNotFoundException(name, nullptr);
+					targetName = DummyName;
+					targetMustExist = false;
 				}
-				return dn;
+
+				return this->ResolveNames(
+					gcnew array<String^> { targetName },
+					(DS_NAME_FORMAT)infoType,
+					DS_NAME_FORMAT::DS_UNKNOWN_NAME,
+					targetMustExist
+				);
+			}
+
+			ActiveDirectoryRoleInformation^ DrsConnection::ListRoles()
+			{
+				// Retrieve role information from DC
+				array<String^>^ roles = this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_ROLES);
+
+				// Convert the array of strings into an encapsulating object
+				auto result = gcnew ActiveDirectoryRoleInformation();
+				result->SchemaMaster = roles[DS_ROLE_SCHEMA_OWNER];
+				result->DomainNamingMaster = roles[DS_ROLE_DOMAIN_OWNER];
+
+				if (roles->Length > DS_ROLE_PDC_OWNER)
+				{
+					// Note: The following roles are not available on AD LDS instances:
+					result->PdcEmulator = roles[DS_ROLE_PDC_OWNER];
+					result->RidMaster = roles[DS_ROLE_RID_OWNER];
+					result->InfrastructureMaster = roles[DS_ROLE_INFRASTRUCTURE_OWNER];
+				}
+
+				return result;
+			}
+
+			array<String^>^ DrsConnection::ListSites()
+			{
+				return this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_SITES);
+			}
+
+			array<String^>^ DrsConnection::ListNamingContexts()
+			{
+				return this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_NCS);
+			}
+
+			array<String^>^ DrsConnection::ListDomains()
+			{
+				return this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_DOMAINS);
+			}
+
+			array<String^>^ DrsConnection::ListServersInSite(String^ name)
+			{
+				Validator::AssertNotNullOrEmpty(name, nameof(name));
+				return this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_SERVERS_IN_SITE, name);
+			}
+
+			array<String^>^ DrsConnection::ListDomainsInSite(String^ name)
+			{
+				Validator::AssertNotNullOrEmpty(name, nameof(name));
+				return this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_DOMAINS_IN_SITE, name);
+			}
+
+			DomainControllerInformation^ DrsConnection::ListInfoForServer(String^ distinguishedName)
+			{
+				// Input validation
+				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
+
+				// Retrieve info
+				auto result = this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_INFO_FOR_SERVER, distinguishedName);
+
+				// Parse the results
+				auto dcInfo = gcnew DomainControllerInformation();
+				dcInfo->ServerReference = result[DS_LIST_ACCOUNT_OBJECT_FOR_SERVER];
+				dcInfo->DNSHostName = result[DS_LIST_DNS_HOST_NAME_FOR_SERVER];
+				dcInfo->DsaObject = result[DS_LIST_DSA_OBJECT_FOR_SERVER];
+				return dcInfo;
 			}
 
 			bool DrsConnection::TestObjectExistence(String^ distinguishedName)
 			{
-				auto resolvedName = this->TryResolveName(distinguishedName, DS_NAME_FORMAT::DS_FQDN_1779_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME);
+				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
+				auto resolvedName = this->ResolveName(distinguishedName, DS_NAME_FORMAT::DS_FQDN_1779_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, false);
 				// Return true if and only if the object exists
 				return resolvedName != nullptr;
 			}
@@ -416,7 +534,7 @@ namespace DSInternals
 			bool DrsConnection::TestObjectExistence(Guid objectGuid)
 			{
 				auto stringGuid = objectGuid.ToString("B");
-				auto resolvedName = this->TryResolveName(stringGuid, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME);
+				auto resolvedName = this->ResolveName(stringGuid, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME, false);
 				// Return true if and only if the object exists
 				return resolvedName != nullptr;
 			}
@@ -425,8 +543,8 @@ namespace DSInternals
 			{
 				this->ValidateConnection();
 				// Input validation
-				Validator::AssertNotNullOrWhiteSpace(distinguishedName, "distinguishedName");
-				Validator::AssertNotNull(key, "key");
+				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
+				Validator::AssertNotNull(key, nameof(key));
 
 				DRS_HANDLE handle = this->handle.ToPointer();
 

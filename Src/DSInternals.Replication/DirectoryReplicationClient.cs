@@ -40,6 +40,34 @@ namespace DSInternals.Replication
         private NativeClient rpcConnection;
         private DrsConnection drsConnection;
         private NamedPipeConnection npConnection;
+        private string domainNamingContext;
+        private string netBIOSDomainName;
+
+        public string DomainNamingContext
+        {
+            get
+            {
+                if(this.domainNamingContext == null)
+                {
+                    // Lazy loading
+                    this.LoadDomainInfo();
+                }
+                return this.domainNamingContext;
+            }
+        }
+
+        public string NetBIOSDomainName
+        {
+            get
+            {
+                if (this.netBIOSDomainName == null)
+                {
+                    // Lazy loading
+                    this.LoadDomainInfo();
+                }
+                return this.netBIOSDomainName;
+            }
+        }
 
         public DirectoryReplicationClient(string server, RpcProtocol protocol, NetworkCredential credential = null)
         {
@@ -247,6 +275,28 @@ namespace DSInternals.Replication
                 this.npConnection.Dispose();
                 this.npConnection = null;
             }
+        }
+
+        private void LoadDomainInfo()
+        {
+            // These is no direct way of retrieving current DC's domain info, so we are using a combination of 3 calls.
+
+            // We first retrieve FSMO roles. The PDC emulator lies in the same domain as the current server.
+            var fsmoRoles = this.drsConnection.ListRoles();
+
+            // We need the DC object of the PDC Emulator. It is the parent of the NTDS Settings object.
+            string pdcEmulator = new DistinguishedName(fsmoRoles.PdcEmulator).Parent.ToString();
+
+            // Get the PDC account object from the domain partition.
+            var pdcInfo = this.drsConnection.ListInfoForServer(pdcEmulator);
+            string pdcAccountDN = pdcInfo.ServerReference;
+
+            // Get the PDC Emulator's domain naming context.
+            this.domainNamingContext = new DistinguishedName(pdcAccountDN).RootNamingContext.ToString();
+
+            // Get the PDC Emulator's NetBIOS account name and extract the domain part.
+            NTAccount pdcAccount = this.drsConnection.ResolveAccountName(pdcAccountDN);
+            this.netBIOSDomainName = pdcAccount.NetBIOSDomainName();
         }
     }
 }

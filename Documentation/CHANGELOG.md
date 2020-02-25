@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Added
+
+- The [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount), [Get-ADReplBackupKey](PowerShell/Get-ADReplBackupKey.md#get-adreplbackupkey) and [Add-ADReplNgcKey](PowerShell/Add-ADReplNgcKey.md#add-adreplngckey) cmdlets now do not require the `Domain` and `NamingContext` parameters to be specified, as their proper values are retrieved from the target DC.
+
 ### Fixed
 
 - Resolved a bug in the [Get-ADDBBackupKey](PowerShell/Get-ADDBBackupKey.md#get-addbbackupkey) cmdlet that prevented it from working on global catalogs in multi-domain forests.

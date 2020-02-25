@@ -463,6 +463,97 @@ enum EXOP_REQ : DWORD
 
 DEFINE_ENUM_FLAG_OPERATORS(EXOP_REQ)
 
+/// <summary>
+/// Additional name format values supported by IDL_DRSCrackNames.
+/// </summary>
+enum DS_NAME_FORMAT_EXT : DWORD
+{
+	/// <summary>
+	/// Get all sites in the forest.
+	/// </summary>
+	DS_LIST_SITES = 0xFFFFFFFF,
+
+	/// <summary>
+	/// Get all servers in a given site.
+	/// </summary>
+	DS_LIST_SERVERS_IN_SITE = 0xFFFFFFFE,
+
+	/// <summary>
+	/// Get all domains in a given site.
+	/// </summary>
+	DS_LIST_DOMAINS_IN_SITE = 0xFFFFFFFD,
+
+	/// <summary>
+	/// Get all DCs of a specified domain in a given site.
+	/// </summary>
+	DS_LIST_SERVERS_FOR_DOMAIN_IN_SITE = 0xFFFFFFFC,
+
+	/// <summary>
+	/// Get DNS host name and server reference for a given DC.
+	/// </summary>
+	DS_LIST_INFO_FOR_SERVER = 0xFFFFFFFB,
+
+	/// <summary>
+	/// Get FSMO role owners.
+	/// </summary>
+	DS_LIST_ROLES = 0xFFFFFFFA,
+
+	/// <summary>
+	/// Get value of sAMAccountName attribute.
+	/// </summary>
+	DS_NT4_ACCOUNT_NAME_SANS_DOMAIN = 0xFFFFFFF9,
+
+	/// <summary>
+	/// Get LDAP display name from schema GUID.The given schema GUID must be in the curly braced GUID string format as specified in[MS - DTYP] section 2.3.4.3.
+	/// </summary>
+	DS_MAP_SCHEMA_GUID = 0xFFFFFFF8,
+
+	/// <summary>
+	/// Get all domains in the forest.
+	/// </summary>
+	DS_LIST_DOMAINS = 0xFFFFFFF7,
+
+	/// <summary>
+	/// Get all NCs in the forest.
+	/// </summary>
+	DS_LIST_NCS = 0xFFFFFFF6,
+
+	/// <summary>
+	/// Compares input names against the values of the altSecurityIdentities attribute.
+	/// </summary>
+	DS_ALT_SECURITY_IDENTITIES_NAME = 0xFFFFFFF5,
+
+	/// <summary>
+	/// String form of SID.
+	/// </summary>
+	DS_STRING_SID_NAME = 0xFFFFFFF4,
+
+	/// <summary>
+	/// Get all DCs in a given site.
+	/// </summary>
+	DS_LIST_SERVERS_WITH_DCS_IN_SITE = 0xFFFFFFF3,
+
+	/// <summary>
+	/// Get all GCs in the forest.
+	/// </summary>
+	DS_LIST_GLOBAL_CATALOG_SERVERS = 0xFFFFFFF1,
+
+	/// <summary>
+	/// Get value of sAMAccountName attribute; return status DS_NAME_ERROR_NOT_FOUND if account is invalid. 
+	/// </summary>
+	DS_NT4_ACCOUNT_NAME_SANS_DOMAIN_EX = 0xFFFFFFF0,
+
+	/// <summary>
+	/// Compares input names against the user principal name and the values of the altSecurityIdentities attribute.
+	/// </summary>
+	DS_USER_PRINCIPAL_NAME_AND_ALTSECID = 0xFFFFFFEF,
+
+	/// <summary>
+	/// User principal name.
+	/// </summary>
+	DS_USER_PRINCIPAL_NAME_FOR_LOGON = 0xFFFFFFF2
+};
+
 // Function wrappers that translate SEH exceptions to Win32 error codes:
 
 ULONG IDL_DRSBind_NoSEH(

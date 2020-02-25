@@ -115,6 +115,7 @@
     <Compile Include="Exceptions\DirectoryObjectOperationException.cs" />
     <Compile Include="Exceptions\SchemaAttributeNotFoundException.cs" />
     <Compile Include="Extensions\NetworkCredentialExtensions.cs" />
+    <Compile Include="Extensions\NTAccountExtensions.cs" />
     <Compile Include="Extensions\RSAExtensions.cs" />
     <Compile Include="Interop\CryptoBuffer.cs" />
     <Compile Include="Interop\Enums\NetCancelOptions.cs" />

@@ -39,6 +39,8 @@
     <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActiveDirectoryRoleInformation.cs" />
+    <Compile Include="DomainControllerInformation.cs" />
     <Compile Include="PartialAttributeSet.cs" />
     <Compile Include="ReplicatedLinkedValueCollection.cs" />
     <Compile Include="ReplicaAttributeCollection.cs" />

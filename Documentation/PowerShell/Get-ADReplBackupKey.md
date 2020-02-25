@@ -13,7 +13,7 @@ Reads the DPAPI backup keys through the MS-DRSR protocol.
 ## SYNTAX
 
 ```
-Get-ADReplBackupKey -Domain <String> -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
+Get-ADReplBackupKey [-Domain <String>] -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
  [<CommonParameters>]
 ```
 
@@ -54,7 +54,7 @@ Type: String
 Parameter Sets: (All)
 Aliases: FQDN, DomainName, DNSDomainName
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

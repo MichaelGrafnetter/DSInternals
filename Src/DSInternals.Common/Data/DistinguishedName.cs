@@ -14,23 +14,26 @@
         private const char rdnSeparator = '=';
         private const char dnsNameSeparator = '.';
 
-        public IList<DistinguishedNameComponent> Components
+        private List<DistinguishedNameComponent> components = new List<DistinguishedNameComponent>();
+        
+        public IReadOnlyList<DistinguishedNameComponent> Components
         {
-            get;
-            private set;
+            get
+            {
+                return this.components;
+            }
         }
 
         public DistinguishedName()
         {
-            this.Components = new List<DistinguishedNameComponent>();
         }
 
-        public DistinguishedName(DistinguishedNameComponent rdn) : this()
+        public DistinguishedName(DistinguishedNameComponent rdn)
         {
             this.AddParent(rdn);
         }
 
-        public DistinguishedName(string dn) : this()
+        public DistinguishedName(string dn)
         {
             if (String.IsNullOrEmpty(dn))
             {
@@ -49,7 +52,7 @@
                 try
                 {
                     var component = new DistinguishedNameComponent(rdnSegments[0].Trim(), rdnSegments[1].Trim());
-                    this.Components.Add(component);
+                    this.components.Add(component);
                 }
                 catch (ArgumentNullException)
                 {
@@ -67,16 +70,37 @@
             }
 
             var hostName = new StringBuilder();
-            hostName.Append(this.Components[0].Value);
+            hostName.Append(this.components[0].Value);
 
-            for (int i = 1; i < this.Components.Count; i++)
+            for (int i = 1; i < this.components.Count; i++)
             {
                 // TODO: Check name if it really is DC=
                 hostName.Append(dnsNameSeparator);
-                hostName.Append(this.Components[i].Value);
+                hostName.Append(this.components[i].Value);
             }
 
             return hostName.ToString();
+        }
+
+        public DistinguishedName Parent
+        {
+            get
+            {
+                var result = new DistinguishedName();
+                result.components.AddRange(this.components.Skip(1));
+                return result;
+            }
+        }
+
+        public DistinguishedName RootNamingContext
+        {
+            get
+            {
+                var dcComponents = this.components.Where(component => component.Name.Equals(CommonDirectoryAttributes.DomainComponent, StringComparison.InvariantCultureIgnoreCase));
+                var result = new DistinguishedName();
+                result.components.AddRange(dcComponents);
+                return result;
+            }
         }
 
         public void AddParent(DistinguishedName dn)
@@ -104,7 +128,7 @@
         {
             if (component != null)
             {
-                this.Components.Add(component);
+                this.components.Add(component);
             }
         }
 
@@ -133,7 +157,7 @@
         {
             if (component != null)
             {
-                this.Components.Insert(0, component);
+                this.components.Insert(0, component);
             }
         }
 
@@ -145,7 +169,7 @@
             }
 
             StringBuilder dn = new StringBuilder();
-            foreach (var component in this.Components)
+            foreach (var component in this.components)
             {
                 dn.Append(component);
                 dn.Append(dnSeparator);

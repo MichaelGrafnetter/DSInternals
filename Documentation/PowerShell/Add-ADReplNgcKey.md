@@ -14,7 +14,7 @@ Composes and updates the msDS-KeyCredentialLink value on an object through the M
 
 ### ByName
 ```
-Add-ADReplNgcKey -PublicKey <Byte[]> [-SamAccountName] <String> [-Domain] <String> -Server <String>
+Add-ADReplNgcKey -PublicKey <Byte[]> [-SamAccountName] <String> [[-Domain] <String>] -Server <String>
  [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
@@ -94,7 +94,7 @@ Type: String
 Parameter Sets: ByName
 Aliases: AccountDomain, UserDomain
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName)

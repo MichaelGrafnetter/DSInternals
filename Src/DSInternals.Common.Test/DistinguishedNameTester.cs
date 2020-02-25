@@ -226,5 +226,68 @@
             dn.AddChild((DistinguishedNameComponent)null);
             Assert.AreEqual("DC=adatum,DC=com", dn.ToString());
         }
+
+        [TestMethod]
+        public void DistinguishedName_Parent_Null()
+        {
+            var dn = new DistinguishedName();
+            Assert.AreEqual(String.Empty, dn.Parent.ToString());
+        }
+
+        [TestMethod]
+        public void DistinguishedName_Parent_RDN()
+        {
+            var dn = new DistinguishedName("CN=Users");
+            Assert.AreEqual(String.Empty, dn.Parent.ToString());
+        }
+
+        [TestMethod]
+        public void DistinguishedName_Parent_Vector1()
+        {
+            var dn = new DistinguishedName("DC=adatum,DC=com");
+            Assert.AreEqual("DC=com", dn.Parent.ToString());
+        }
+
+        [TestMethod]
+        public void DistinguishedName_Parent_Vector2()
+        {
+            var dn = new DistinguishedName("CN=Users,DC=adatum,DC=com");
+            Assert.AreEqual("DC=adatum,DC=com", dn.Parent.ToString());
+        }
+
+        [TestMethod]
+        public void DistinguishedName_RootNamingContext_Null()
+        {
+            var dn = new DistinguishedName();
+            Assert.AreEqual(String.Empty, dn.RootNamingContext.ToString());
+        }
+
+        [TestMethod]
+        public void DistinguishedName_RootNamingContext_RDN()
+        {
+            var dn = new DistinguishedName("CN=Users");
+            Assert.AreEqual(String.Empty, dn.RootNamingContext.ToString());
+        }
+
+        [TestMethod]
+        public void DistinguishedName_RootNamingContext_Self()
+        {
+            var dn = new DistinguishedName("DC=adatum,DC=com");
+            Assert.AreEqual("DC=adatum,DC=com", dn.RootNamingContext.ToString());
+        }
+
+        [TestMethod]
+        public void DistinguishedName_RootNamingContext_Vector1()
+        {
+            var dn = new DistinguishedName("CN=Users,DC=adatum,DC=com");
+            Assert.AreEqual("DC=adatum,DC=com", dn.RootNamingContext.ToString());
+        }
+
+        [TestMethod]
+        public void DistinguishedName_RootNamingContext_Vector2()
+        {
+            var dn = new DistinguishedName("OU=Employees,OU=Marketing,DC=adatum,DC=com");
+            Assert.AreEqual("DC=adatum,DC=com", dn.RootNamingContext.ToString());
+        }
     }
 }
