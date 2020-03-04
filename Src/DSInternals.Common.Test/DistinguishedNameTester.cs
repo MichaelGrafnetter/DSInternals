@@ -289,5 +289,12 @@
             var dn = new DistinguishedName("OU=Employees,OU=Marketing,DC=adatum,DC=com");
             Assert.AreEqual("DC=adatum,DC=com", dn.RootNamingContext.ToString());
         }
+
+        [TestMethod]
+        public void DistinguishedName_RootNamingContext_Vector3()
+        {
+            var dn = new DistinguishedName("DC=LON-CL1,cn=MicrosoftDNS,DC=DomainDnsZones,DC=adatum,DC=com");
+            Assert.AreEqual("DC=DomainDnsZones,DC=adatum,DC=com", dn.RootNamingContext.ToString());
+        }
     }
 }

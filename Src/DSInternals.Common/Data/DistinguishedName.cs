@@ -96,7 +96,10 @@
         {
             get
             {
-                var dcComponents = this.components.Where(component => component.Name.Equals(CommonDirectoryAttributes.DomainComponent, StringComparison.InvariantCultureIgnoreCase));
+                var dcComponents = this.components
+                    .Reverse<DistinguishedNameComponent>()
+                    .TakeWhile(component => component.Name.Equals(CommonDirectoryAttributes.DomainComponent, StringComparison.InvariantCultureIgnoreCase))
+                    .Reverse();
                 var result = new DistinguishedName();
                 result.components.AddRange(dcComponents);
                 return result;
