@@ -94,6 +94,17 @@ namespace DSInternals
 				return this->_configurationObjectGuid;
 			}
 
+			String^ DrsConnection::NetBIOSDomainName::get()
+			{
+				return this->_netBIOSDomainName;
+			}
+
+			void DrsConnection::NetBIOSDomainName::set(String^ netBIOSDomainName)
+			{
+				Validator::AssertNotNullOrEmpty(netBIOSDomainName, nameof(netBIOSDomainName));
+				this->_netBIOSDomainName = netBIOSDomainName;
+			}
+
 			midl_ptr<DRS_EXTENSIONS_INT> DrsConnection::CreateClientInfo()
 			{
 				auto clientInfo = make_midl_ptr<DRS_EXTENSIONS_INT>();

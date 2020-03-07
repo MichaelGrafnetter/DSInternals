@@ -183,6 +183,15 @@
             private set;
         }
 
+        /// <summary>
+        /// Gets or sets the NetBIOSDomainName\SAM account name for this <see cref="DSAccount"/>.
+        /// </summary>
+        public string LogonName
+        {
+            get;
+            set;
+        }
+
         public int PrimaryGroupId
         {
             get;

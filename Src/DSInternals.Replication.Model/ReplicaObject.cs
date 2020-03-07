@@ -228,6 +228,8 @@
             }
         }
 
+        public override string NetBIOSDomainName => throw new NotImplementedException();
+
         /// <summary>
         /// Parses the binary data as SYNTAX_DISTNAME_BINARY.
         /// </summary>

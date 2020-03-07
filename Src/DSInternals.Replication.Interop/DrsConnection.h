@@ -38,6 +38,7 @@ namespace DSInternals
 				DRS_EXT _serverCapabilities;
 				DWORD _serverReplEpoch;
 				SecurityCallback^ _securityCallback;
+				String^ _netBIOSDomainName;
 			public:
 				DrsConnection(IntPtr rpcHandle, Guid clientDsa);
 				DrsConnection(IntPtr preexistingDrssHandle, bool ownsHandle);
@@ -52,6 +53,11 @@ namespace DSInternals
 				property Guid ConfigurationPartitionGuid
 				{
 					Guid get();
+				}
+				property String^ NetBIOSDomainName
+				{
+					String^ get();
+					void set(String^ netBIOSDomainName);
 				}
 				cli::array<ReplicationCursor^>^ GetReplicationCursors(String^ namingContext);
 				ReplicaObject^ ReplicateSingleObject(Guid objectGuid);

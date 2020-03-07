@@ -138,43 +138,43 @@
             if (this.Account.Enabled == false && !this.IncludeDisabledAccounts.IsPresent)
             {
                 // The account is disabled and should be skipped.
-                string message = String.Format("Skipping account {0}, because it is disabled.", this.Account.SamAccountName);
+                string message = String.Format("Skipping account {0}, because it is disabled.", this.Account.LogonName);
                 this.WriteVerbose(message);
                 return;
             }
 
             // Verbose message
-            string message2 = String.Format("Processing account {0}...", this.Account.SamAccountName);
+            string message2 = String.Format("Processing account {0}...", this.Account.LogonName);
             this.WriteVerbose(message2);
 
             if (this.Account.UserAccountControl.HasFlag(UserAccountControl.PasswordNeverExpires))
             {
                 // The account has a non-expiring password.
-                this.result.PasswordNeverExpires.Add(this.Account.SamAccountName);
+                this.result.PasswordNeverExpires.Add(this.Account.LogonName);
             }
 
             if (this.Account.UserAccountControl.HasFlag(UserAccountControl.UseDesKeyOnly))
             {
                 // Only DES kerberos encryption type is used with this account.
-                this.result.DESEncryptionOnly.Add(this.Account.SamAccountName);
+                this.result.DESEncryptionOnly.Add(this.Account.LogonName);
             }
 
             if (this.Account.AdminCount && !this.Account.UserAccountControl.HasFlag(UserAccountControl.NotDelegated))
             {
                 // This administrative account can be delegated.
-                this.result.DelegatableAdmins.Add(this.Account.SamAccountName);
+                this.result.DelegatableAdmins.Add(this.Account.LogonName);
             }
 
             if (this.Account.UserAccountControl.HasFlag(UserAccountControl.PasswordNotRequired))
             {
                 // The account's password is not required.
-                this.result.PasswordNotRequired.Add(this.Account.SamAccountName);
+                this.result.PasswordNotRequired.Add(this.Account.LogonName);
             }
 
             if (this.Account.UserAccountControl.HasFlag(UserAccountControl.PreAuthNotRequired))
             {
                 // Pre-authentication is not required for this account account.
-                this.result.PreAuthNotRequired.Add(this.Account.SamAccountName);
+                this.result.PreAuthNotRequired.Add(this.Account.LogonName);
             }
 
             if (this.Account.SupplementalCredentials != null)
@@ -182,7 +182,7 @@
                 if (this.Account.SupplementalCredentials.ClearText != null)
                 {
                     // Account has ClearText password (stored using reversible encryption)
-                    this.result.ClearTextPassword.Add(this.Account.SamAccountName);
+                    this.result.ClearTextPassword.Add(this.Account.LogonName);
                 }
 
                 if(this.Account.UserAccountControl.HasFlag(UserAccountControl.SmartCardRequired))
@@ -191,7 +191,7 @@
                     if (this.Account.SupplementalCredentials.Kerberos != null)
                     {
                         // Accounts that require smart card authentication should have an empty supplemental credentials data structure.
-                        this.result.SmartCardUsersWithPassword.Add(this.Account.SamAccountName);
+                        this.result.SmartCardUsersWithPassword.Add(this.Account.LogonName);
                     }
                 }
                 else
@@ -200,7 +200,7 @@
                     if (this.Account.SupplementalCredentials.KerberosNew == null)
                     {
                         // Account is missing the AES kerberos keys. This is only OK if smart card auth is enforced for this account.
-                        this.result.AESKeysMissing.Add(this.Account.SamAccountName);
+                        this.result.AESKeysMissing.Add(this.Account.LogonName);
                     }
                 }
             }
@@ -208,13 +208,13 @@
             if (this.Account.LMHash != null)
             {
                 // Account has the LM hash present.
-                this.result.LMHash.Add(this.Account.SamAccountName);
+                this.result.LMHash.Add(this.Account.LogonName);
             }
 
             if (this.Account.NTHash == null)
             {
                 // The account has no password.
-                this.result.EmptyPassword.Add(this.Account.SamAccountName);
+                this.result.EmptyPassword.Add(this.Account.LogonName);
 
                 // All the remaining tests are based on NT hash, so we can skip them.
                 return;
@@ -223,7 +223,7 @@
             if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, NTHash.Empty))
             {
                 // The account has an empty password.
-                this.result.EmptyPassword.Add(this.Account.SamAccountName);
+                this.result.EmptyPassword.Add(this.Account.LogonName);
 
                 // Skip the remaining tests, because they only make sense for non-empty passwords.
                 return;
@@ -289,7 +289,7 @@
                 bool found = this.sortedHashFileSearcher.FindString(this.Account.NTHash.ToHex());
                 if (found)
                 {
-                    this.result.WeakPassword.UnionWith(new string[] { this.Account.SamAccountName });
+                    this.result.WeakPassword.UnionWith(new string[] { this.Account.LogonName });
                 }
             }
         }
@@ -456,7 +456,7 @@
                 this.hashToAccountMap.Add(currentHash, accountList);
             }
 
-            accountList.Add(this.Account.SamAccountName);
+            accountList.Add(this.Account.LogonName);
         }
 
         private void TestComputerDefaultPassword()
@@ -466,7 +466,7 @@
             if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, defaultHash))
             {
                 // The computer has the default password.
-                this.result.DefaultComputerPassword.Add(this.Account.SamAccountName);
+                this.result.DefaultComputerPassword.Add(this.Account.LogonName);
             }
         }
         #endregion Helper Methods

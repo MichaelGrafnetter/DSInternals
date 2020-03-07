@@ -44,6 +44,8 @@
             }
         }
 
+        public override string NetBIOSDomainName => throw new NotImplementedException();
+
         protected override bool HasBigEndianRid
         {
             get

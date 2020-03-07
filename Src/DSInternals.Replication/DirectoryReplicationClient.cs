@@ -74,6 +74,7 @@ namespace DSInternals.Replication
             Validator.AssertNotNullOrWhiteSpace(server, nameof(server));
             this.CreateRpcConnection(server, protocol, credential);
             this.drsConnection = new DrsConnection(this.rpcConnection.Binding, NtdsApiClientGuid);
+            this.drsConnection.NetBIOSDomainName = this.NetBIOSDomainName;
         }
 
         public ReplicationCursor[] GetReplicationCursors(string namingContext)

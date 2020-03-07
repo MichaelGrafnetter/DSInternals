@@ -58,6 +58,11 @@
             get;
         }
 
+        public abstract string NetBIOSDomainName
+        {
+            get;
+        }
+
         public void ReadAttribute(string name, out SecurityIdentifier value)
         {
             byte[] binarySid;

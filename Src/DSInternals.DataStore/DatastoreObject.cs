@@ -56,6 +56,14 @@
             }
         }
 
+        public override string NetBIOSDomainName
+        {
+            get
+            {
+                return this.context.DomainController.NetBIOSDomainName;
+            }
+        }
+
         protected override bool HasBigEndianRid
         {
             get
