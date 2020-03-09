@@ -363,7 +363,7 @@
             this.SamAccountName = samAccountName;
 
             // LogonName:
-            this.LogonName = dsObject.NetBIOSDomainName + "\\" + samAccountName;
+            this.LogonName = new NTAccount(dsObject.NetBIOSDomainName, samAccountName).ToString();
 
             // SamAccountType:
             dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out int? numericAccountType);
