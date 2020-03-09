@@ -1,6 +1,7 @@
 ﻿namespace DSInternals.Common.Data
 {
     using DSInternals.Common.Cryptography;
+    using DSInternals.Common.Properties;
     using System;
     using System.Collections.Generic;
     using System.Security.AccessControl;
@@ -8,18 +9,19 @@
 
     public class DSAccount
     {
-        public DSAccount(DirectoryObject dsObject, DirectorySecretDecryptor pek)
+        public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek)
         {
             // Parameter validation
             Validator.AssertNotNull(dsObject, nameof(dsObject));
+            Validator.AssertNotNull(netBIOSDomainName, nameof(netBIOSDomainName));
+
             if (!dsObject.IsAccount)
             {
-                // TODO: Exteption type
-                throw new Exception("Not an account.");
+                throw new ArgumentException(Resources.ObjectNotAccountMessage);
             }
 
             // Common properties
-            this.LoadAccountInfo(dsObject);
+            this.LoadAccountInfo(dsObject, netBIOSDomainName);
 
             // Credential Roaming
             this.LoadRoamedCredentials(dsObject);
@@ -183,6 +185,15 @@
             private set;
         }
 
+        /// <summary>
+        /// Gets or sets the pre-Windows 2000 logon name of this this <see cref="DSAccount"/>.
+        /// </summary>
+        public string LogonName
+        {
+            get;
+            private set;
+        }
+
         public int PrimaryGroupId
         {
             get;
@@ -290,7 +301,7 @@
             private set;
         }
 
-        protected void LoadAccountInfo(DirectoryObject dsObject)
+        protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName)
         {
             // Guid:
             this.Guid = dsObject.Guid;
@@ -349,9 +360,10 @@
             dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out string upn);
             this.UserPrincipalName = upn;
 
-            // SamAccountName:
+            // SamAccountName + LogonName:
             dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out string samAccountName);
             this.SamAccountName = samAccountName;
+            this.LogonName = new NTAccount(netBIOSDomainName, samAccountName).Value;
 
             // SamAccountType:
             dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out int? numericAccountType);

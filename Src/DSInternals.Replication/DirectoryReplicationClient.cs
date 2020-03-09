@@ -118,7 +118,7 @@ namespace DSInternals.Replication
                     {
                         continue;
                     }
-                    var account = new DSAccount(obj, this.SecretDecryptor);
+                    var account = new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor);
                     yield return account;
                 }
 
@@ -132,7 +132,7 @@ namespace DSInternals.Replication
             var obj = this.drsConnection.ReplicateSingleObject(objectGuid);
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
-            return new DSAccount(obj, this.SecretDecryptor);
+            return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor);
         }
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(string domainNamingContext)
@@ -172,7 +172,7 @@ namespace DSInternals.Replication
             // TODO: Extract?
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
-            return new DSAccount(obj, this.SecretDecryptor);
+            return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor);
         }
 
         public DSAccount GetAccount(NTAccount accountName)

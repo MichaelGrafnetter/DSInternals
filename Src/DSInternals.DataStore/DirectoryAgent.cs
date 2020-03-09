@@ -1,16 +1,14 @@
 ﻿namespace DSInternals.DataStore
 {
     using DSInternals.Common;
-    using DSInternals.Common.Cryptography;
     using DSInternals.Common.Data;
     using DSInternals.Common.Exceptions;
     using DSInternals.Common.Properties;
     using Microsoft.Database.Isam;
     using System;
     using System.Collections.Generic;
-    using System.Security;
     using System.Security.Principal;
-    
+
     public partial class DirectoryAgent : IDisposable
     {
         // 2^30
@@ -74,7 +72,7 @@
                 {
                     continue;
                 }
-                yield return new DSAccount(obj, pek);
+                yield return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek);
             }
         }
 
@@ -110,7 +108,7 @@
             }
 
             var pek = GetSecretDecryptor(bootKey);
-            return new DSAccount(foundObject, pek);
+            return new DSAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek);
         }
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)
