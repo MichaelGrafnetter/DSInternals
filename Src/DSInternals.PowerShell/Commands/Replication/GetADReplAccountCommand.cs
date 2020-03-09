@@ -66,7 +66,6 @@ namespace DSInternals.PowerShell.Commands
             // Replicate all accounts
             foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter))
             {
-                account.LogonName = this.ReplicationClient.NetBIOSDomainName + '\\' + account.SamAccountName;
                 this.WriteObject(account);
             }
 

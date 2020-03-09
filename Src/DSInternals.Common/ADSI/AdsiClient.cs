@@ -10,6 +10,12 @@
 
     public class AdsiClient : IDisposable
     {
+        private const string ConfigurationContainerRDN = "CN=Configuration";
+        private const string CrossRefContainerRDN = "LDAP://{0}/CN=Partitions,{1}";
+        private const string NetBIOSNameFilter = "(&(objectCategory=crossRef)(nETBIOSName=*)(dnsroot={0}))";
+        private static readonly string[] NetBIOSNamePropertiesToLoad = new string[] {
+            CommonDirectoryAttributes.NetBIOSName
+        };
         private const string AccountsFilter = "(objectClass=user)";
         private static readonly string[] AccountPropertiesToLoad = new string[] {
             CommonDirectoryAttributes.CommonName,
@@ -38,6 +44,27 @@
         };
 
         private DirectoryEntry searchRoot;
+        private String netBIOSDomainName;
+
+        private String GetNetBIOSDomainName(Domain domain, string server)
+        {
+            // Find the configuration naming context in the list of partitions
+            var configDN = domain.PdcRoleOwner.Partitions.Cast<string>()
+                .Where(partition => partition.ToString().StartsWith(ConfigurationContainerRDN))
+                .FirstOrDefault();
+
+            // Format the cross reference container DN using the user provided server, or if omitted, the domain name, and the configuration naming context DN
+            var crossRefContainerDN = String.Format(CrossRefContainerRDN, (String.IsNullOrEmpty(server) ? server : domain.Name), configDN);
+
+            // Search the cross reference container for a crossRef with a nETBIOSName and a matching dnsRoot 
+            using (var searcher = new DirectorySearcher(new DirectoryEntry(crossRefContainerDN), string.Format(NetBIOSNameFilter, domain.Name), NetBIOSNamePropertiesToLoad, SearchScope.OneLevel))
+            {
+                searcher.CacheResults = false;
+                // There can only be one matching object
+                var searchResult = searcher.FindOne();
+                return searchResult.Properties[CommonDirectoryAttributes.NetBIOSName][0].ToString();
+            }
+        }
 
         public AdsiClient(string server = null, NetworkCredential credential = null)
         {
@@ -57,6 +84,7 @@
                     using (var domain = dc.Domain)
                     {
                         this.searchRoot = domain.GetDirectoryEntry();
+                        this.netBIOSDomainName = GetNetBIOSDomainName(domain, server);
                     }
                 }
             }
@@ -74,6 +102,7 @@
                 using (var domain = Domain.GetDomain(context))
                 {
                     this.searchRoot = domain.GetDirectoryEntry();
+                    this.netBIOSDomainName = GetNetBIOSDomainName(domain, server);
                 }
             }
         }
@@ -86,7 +115,7 @@
                 {
                     foreach(var searchResult in searchResults.Cast<SearchResult>())
                     {
-                        var obj = new AdsiObjectAdapter(searchResult);
+                        var obj = new AdsiObjectAdapter(searchResult, netBIOSDomainName);
                         var account = new DSAccount(obj, null);
                         yield return account;
                     }

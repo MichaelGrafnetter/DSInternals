@@ -189,7 +189,7 @@
         public string LogonName
         {
             get;
-            set;
+            private set;
         }
 
         public int PrimaryGroupId
@@ -361,6 +361,9 @@
             // SamAccountName:
             dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out string samAccountName);
             this.SamAccountName = samAccountName;
+
+            // LogonName:
+            this.LogonName = dsObject.NetBIOSDomainName + "\\" + samAccountName;
 
             // SamAccountType:
             dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out int? numericAccountType);

@@ -112,8 +112,8 @@ namespace DSInternals
 				static ReplicaAttribute^ ReadAttribute(const ATTR& attribute);
 				static ReplicaAttribute^ ReadAttribute(const REPLVALINF_V3& attribute);
 				static ReplicaAttributeCollection^ ReadAttributes(const ATTRBLOCK& attributes);
-				static ReplicaObject^ ReadObject(const ENTINF& object);
-				static ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount);
+				ReplicaObject^ ReadObject(const ENTINF& object);
+				ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount);
 				static DS_NAME_FORMAT GetAccountNameFormat(NTAccount^ accountName);
 			};
 		}

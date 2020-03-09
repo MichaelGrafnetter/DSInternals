@@ -665,7 +665,7 @@ namespace DSInternals
 				auto guid = RpcTypeConverter::ToManaged(object.pName->Guid);
 				auto sid = RpcTypeConverter::ToSid(object.pName);
 				auto dn = RpcTypeConverter::ToString(object.pName);
-				return gcnew ReplicaObject(dn, guid, sid, attributes);
+				return gcnew ReplicaObject(dn, guid, sid, attributes, this->NetBIOSDomainName);
 			}
 
 			ReplicaObjectCollection^ DrsConnection::ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount)
@@ -689,7 +689,7 @@ namespace DSInternals
 				auto currentObject = objects;
 				while (currentObject != nullptr)
 				{
-					auto managedObject = ReadObject(currentObject->Entinf);
+					auto managedObject = this->ReadObject(currentObject->Entinf);
 					managedObject->LoadLinkedValues(linkedValueCollection);
 					managedObjects->Add(managedObject);
 					currentObject = currentObject->pNextEntInf;

@@ -13,13 +13,15 @@
         private string distinguishedName;
         private Guid guid;
         private SecurityIdentifier sid;
+        private string netBIOSDomainName;
 
-        public ReplicaObject(String distinguishedName, Guid objectGuid, SecurityIdentifier objectSid, ReplicaAttributeCollection attributes)
+        public ReplicaObject(String distinguishedName, Guid objectGuid, SecurityIdentifier objectSid, ReplicaAttributeCollection attributes, String netBIOSDomainName)
         {
             this.guid = objectGuid;
             this.distinguishedName = distinguishedName;
             this.sid = objectSid;
             this.Attributes = attributes;
+            this.netBIOSDomainName = netBIOSDomainName;
         }
         // TODO: ISchema
         public BasicSchema Schema
@@ -228,8 +230,13 @@
             }
         }
 
-        public override string NetBIOSDomainName => throw new NotImplementedException();
-
+        public override string NetBIOSDomainName
+        {
+            get
+            {
+                return this.netBIOSDomainName;
+            }
+        }
         /// <summary>
         /// Parses the binary data as SYNTAX_DISTNAME_BINARY.
         /// </summary>

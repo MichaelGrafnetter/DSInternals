@@ -9,11 +9,14 @@
     public class AdsiObjectAdapter : DirectoryObject
     {
         protected SearchResult directoryEntry;
+        private String netBIOSDomainName;
 
-        public AdsiObjectAdapter(SearchResult directoryEntry)
+        public AdsiObjectAdapter(SearchResult directoryEntry, String netBIOSDomainName)
         {
             Validator.AssertNotNull(directoryEntry, "directoryEntry");
             this.directoryEntry = directoryEntry;
+            Validator.AssertNotNull(netBIOSDomainName, "netBIOSDomainName");
+            this.netBIOSDomainName = netBIOSDomainName;
         }
 
         public override string DistinguishedName
@@ -44,7 +47,13 @@
             }
         }
 
-        public override string NetBIOSDomainName => throw new NotImplementedException();
+        public override string NetBIOSDomainName
+        {
+            get
+            {
+                return this.netBIOSDomainName;
+            }
+        }
 
         protected override bool HasBigEndianRid
         {
@@ -99,7 +108,7 @@
         {
             // Parse the DN with binary value
             string[] textValues = this.ReadAttributeMulti<string>(attributeName);
-            values = textValues.Select(textValue => DNWithBinary.Parse(textValue).Binary).ToArray();
+            values = textValues?.Select(textValue => DNWithBinary.Parse(textValue).Binary).ToArray();
         }
 
         protected TResult ReadAttributeSingle<TResult>(string name)
