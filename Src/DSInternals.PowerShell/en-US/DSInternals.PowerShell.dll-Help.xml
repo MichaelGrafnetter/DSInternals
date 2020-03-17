@@ -3397,12 +3397,12 @@ Credential Roaming
   Created: 3/12/2017 9:15:56 AM
   Modified: 3/13/2017 10:01:18 AM
   Credentials:
-    DPAPIMasterKey: 47070660-c259-4d90-8bc9-187605323450
-    DPAPIMasterKey: 7fc19508-7b85-4a7c-9e5d-15f9e00e7ce5
-    CryptoApiCertificate: 574E4687133998544C0095C7B348C52CD398182E
-    CNGCertificate: 3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
-    RSAPrivateKey: 701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
-    CNGPrivateKey: E8F13C2BA0209401C4DFE839CD57375E26BBE38F</dev:code>
+    DPAPIMasterKey: joe\Protect\S-1-5-21-1236425271-2880748467-2592687428-1110\47070660-c259-4d90-8bc9-187605323450
+    DPAPIMasterKey: joe\Protect\S-1-5-21-1236425271-2880748467-2592687428-1110\7fc19508-7b85-4a7c-9e5d-15f9e00e7ce5
+    CryptoApiCertificate: joe\SystemCertificates\My\Certificates\574E4687133998544C0095C7B348C52CD398182E
+    CNGCertificate: joe\SystemCertificates\My\Certificates\3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
+    RSAPrivateKey: joe\Crypto\RSA\S-1-5-21-1236425271-2880748467-2592687428-1110\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
+    CNGPrivateKey: joe\Crypto\Keys\E8F13C2BA0209401C4DFE839CD57375E26BBE38F</dev:code>
         <dev:remarks>
           <maml:para>Retrieves information about a single account from an Active Directory database. Secret attributes are decrypted using the provided boot key.</maml:para>
         </dev:remarks>
@@ -9402,53 +9402,53 @@ Active Directory Password Quality Report
 ----------------------------------------
 
 Passwords of these accounts are stored using reversible encryption:
-  smith
-  doe
+  CONTOSO\smith
+  CONTOSO\doe
 
 LM hashes of passwords of these accounts are present:
-  hodge
+  CONTOSO\hodge
 
 These accounts have no password set:
-  test01
-  test02
+  CONTOSO\test01
+  CONTOSO\test02
 
 Passwords of these accounts have been found in the dictionary:
-  Administrator
+  CONTOSO\Administrator
 
 These groups of accounts have the same passwords:
   Group 1:
-    graham
-    graham_admin
+    CONTOSO\graham
+    CONTOSO\graham_admin
   Group 1:
-    admin
-    sql_svc01
+    CONTOSO\admin
+    CONTOSO\sql_svc01
 
 These computer accounts have default passwords:
-  DESKTOP27$
+  CONTOSO\DESKTOP27$
 
 Kerberos AES keys are missing from these accounts:
-  sql_svc01
+  CONTOSO\sql_svc01
 
 Kerberos pre-authentication is not required for these accounts:
-  jboss
+  CONTOSO\jboss
 
 Only DES encryption is allowed to be used with these accounts:
-  sql_svc01
+  CONTOSO\sql_svc01
 
 These administrative accounts are allowed to be delegated to a service:
-  AdatumAdmin
-  Administrator
+  CONTOSO\AdatumAdmin
+  CONTOSO\Administrator
 
 Passwords of these accounts will never expire:
-  admin
-  sql_svc01
+  CONTOSO\admin
+  CONTOSO\sql_svc01
 
 These accounts are not required to have a password:
-  gonzales
+  CONTOSO\gonzales
 
 These accounts that require smart card authentication have a password:
-  smithj
-  jonesp
+  CONTOSO\smithj
+  CONTOSO\jonesp
 #&gt;</dev:code>
         <dev:remarks>
           <maml:para>Performs an offline credential hygiene audit of AD database against HIBP.</maml:para>

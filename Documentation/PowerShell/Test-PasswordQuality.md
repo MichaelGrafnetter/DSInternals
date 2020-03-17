@@ -38,53 +38,53 @@ Active Directory Password Quality Report
 ----------------------------------------
 
 Passwords of these accounts are stored using reversible encryption:
-  smith
-  doe
+  CONTOSO\smith
+  CONTOSO\doe
 
 LM hashes of passwords of these accounts are present:
-  hodge
+  CONTOSO\hodge
 
 These accounts have no password set:
-  test01
-  test02
+  CONTOSO\test01
+  CONTOSO\test02
 
 Passwords of these accounts have been found in the dictionary:
-  Administrator
+  CONTOSO\Administrator
 
 These groups of accounts have the same passwords:
   Group 1:
-    graham
-    graham_admin
+    CONTOSO\graham
+    CONTOSO\graham_admin
   Group 1:
-    admin
-    sql_svc01
+    CONTOSO\admin
+    CONTOSO\sql_svc01
 
 These computer accounts have default passwords:
-  DESKTOP27$
+  CONTOSO\DESKTOP27$
 
 Kerberos AES keys are missing from these accounts:
-  sql_svc01
+  CONTOSO\sql_svc01
 
 Kerberos pre-authentication is not required for these accounts:
-  jboss
+  CONTOSO\jboss
 
 Only DES encryption is allowed to be used with these accounts:
-  sql_svc01
+  CONTOSO\sql_svc01
 
 These administrative accounts are allowed to be delegated to a service:
-  AdatumAdmin
-  Administrator
+  CONTOSO\AdatumAdmin
+  CONTOSO\Administrator
 
 Passwords of these accounts will never expire:
-  admin
-  sql_svc01
+  CONTOSO\admin
+  CONTOSO\sql_svc01
 
 These accounts are not required to have a password:
-  gonzales
+  CONTOSO\gonzales
 
 These accounts that require smart card authentication have a password:
-  smithj
-  jonesp
+  CONTOSO\smithj
+  CONTOSO\jonesp
 #>
 ```
 

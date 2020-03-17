@@ -183,12 +183,12 @@ Credential Roaming
   Created: 3/12/2017 9:15:56 AM
   Modified: 3/13/2017 10:01:18 AM
   Credentials:
-    DPAPIMasterKey: 47070660-c259-4d90-8bc9-187605323450
-    DPAPIMasterKey: 7fc19508-7b85-4a7c-9e5d-15f9e00e7ce5
-    CryptoApiCertificate: 574E4687133998544C0095C7B348C52CD398182E
-    CNGCertificate: 3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
-    RSAPrivateKey: 701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
-    CNGPrivateKey: E8F13C2BA0209401C4DFE839CD57375E26BBE38F
+    DPAPIMasterKey: joe\Protect\S-1-5-21-1236425271-2880748467-2592687428-1110\47070660-c259-4d90-8bc9-187605323450
+    DPAPIMasterKey: joe\Protect\S-1-5-21-1236425271-2880748467-2592687428-1110\7fc19508-7b85-4a7c-9e5d-15f9e00e7ce5
+    CryptoApiCertificate: joe\SystemCertificates\My\Certificates\574E4687133998544C0095C7B348C52CD398182E
+    CNGCertificate: joe\SystemCertificates\My\Certificates\3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
+    RSAPrivateKey: joe\Crypto\RSA\S-1-5-21-1236425271-2880748467-2592687428-1110\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
+    CNGPrivateKey: joe\Crypto\Keys\E8F13C2BA0209401C4DFE839CD57375E26BBE38F
 ```
 
 Retrieves information about a single account from an Active Directory database. Secret attributes are decrypted using the provided boot key.
