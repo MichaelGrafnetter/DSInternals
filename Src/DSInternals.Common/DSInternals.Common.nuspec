@@ -6,14 +6,18 @@
     <title>DSInternals Common</title>
     <authors>Michael Grafnetter</authors>
     <owners>Michael Grafnetter</owners>
-    <licenseUrl>https://github.com/MichaelGrafnetter/DSInternals/blob/master/LICENSE.md</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/MichaelGrafnetter/DSInternals/</projectUrl>
+    <repository type="git" url="https://github.com/MichaelGrafnetter/DSInternals.git" branch="master" />
     <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This package is shared between all other DSInternals packages. It contains implementations of common hash functions used by Windows, including NT hash, LM hash and OrgId hash. It also contains methods for SysKey/BootKey retrieval.</description>
     <summary>This package is shared between all other DSInternals packages.</summary>
-    <releaseNotes>Roamed CNG keys are now exported in proper format.</releaseNotes>
-    <copyright>Copyright (c) 2015-2019 Michael Grafnetter. All rights reserved.</copyright>
+    <releaseNotes>
+- A property called LogonName has been added to the DsAccount class, to support multi-domain scenarios.
+- Several bugs in the ADSI client have been fixed.
+    </releaseNotes>
+    <copyright>Copyright (c) 2015-2020 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security</tags>
   </metadata>
 </package>

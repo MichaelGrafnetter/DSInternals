@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.1'
+ModuleVersion = '4.2'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -20,7 +20,7 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) 2015-2019 Michael Grafnetter. All rights reserved.'
+Copyright = '(c) 2015-2020 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
@@ -137,8 +137,9 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The Test-PasswordQuality cmdlet now contains a check for accounts that require smart card authentication and have a password at the same time.
-- Minor bug fixes.
+- The Test-PasswordQuality cmdlet now supports cross-domain and cross-forest duplicate password detection.
+- The Get-ADReplAccount, Get-ADReplBackupKey and Add-ADReplNgcKey cmdlets no longer require the Domain and NamingContext parameters to be specified, as their proper values are automatically retrieved from the target DC.
+- Fixed multiple bugs related to Credential Roaming.
 "@
     } # End of PSData hashtable
 

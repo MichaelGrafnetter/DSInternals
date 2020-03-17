@@ -84,8 +84,10 @@ Describe 'DSInternals PowerShell Module' {
             Select-String -Path $aboutPagePath -Pattern 'about_DSInternals' -CaseSensitive -SimpleMatch -Quiet | Should Be $true
         }
 
-        It 'contains the License.txt file' {
-            Join-Path $ModulePath 'License.txt' | Should -Exist
+        It 'contains the License.txt file with up-to-date copyright' {
+            $licenseFile = Join-Path $ModulePath 'License.txt'
+            $licenseFile | Should -Exist
+            $licenseFile |  Should -FileContentMatch ('Copyright \(c\) 2015-{0}' -f (Get-Date).Year)
         }
 
         It 'contains Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' } -Test {

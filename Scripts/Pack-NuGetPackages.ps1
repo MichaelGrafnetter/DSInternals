@@ -18,13 +18,14 @@ $nugetExeUrl = 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe'
 
 if(-not (Test-Path $nuget))
 {
-    mkdir $toolsDir
+    New-Item -Path $toolsDir -ItemType Directory -Force
     Invoke-WebRequest -Uri $nugetExeUrl -OutFile $nuget
 }
 
 # Pack all *.csproj files that have a corresponding *.nuspec file
-Get-ChildItem -Path $repoRoot -Filter *.nuspec -Exclude DSInternals.nuspec -Recurse -File |
+Get-ChildItem -Path $repoRoot -Filter *.nuspec -Recurse -File |
     ForEach-Object { $PSItem.FullName.Replace('.nuspec', '.csproj') } |
+    Where-Object { Test-Path -Path $PSItem -PathType Leaf } |
     ForEach-Object {
         $solutionFile = $PSItem
         & $nuget pack $solutionFile -OutputDirectory $outputDir -IncludeReferencedProjects -Verbosity detailed -NonInteractive

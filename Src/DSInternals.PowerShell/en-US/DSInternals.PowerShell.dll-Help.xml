@@ -9419,7 +9419,7 @@ These groups of accounts have the same passwords:
   Group 1:
     CONTOSO\graham
     CONTOSO\graham_admin
-  Group 1:
+  Group 2:
     CONTOSO\admin
     CONTOSO\sql_svc01
 
@@ -9456,7 +9456,7 @@ These accounts that require smart card authentication have a password:
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; $results = Get-ADReplAccount -All -NamingContext 'DC=contoso,DC=com' -Server LON-DC1 |
+        <dev:code>PS C:\&gt; $results = Get-ADReplAccount -All -Server LON-DC1 |
                    Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt</dev:code>
         <dev:remarks>
           <maml:para>Performs an online credential hygiene audit of AD against HIBP + a custom wordlist.</maml:para>
@@ -9478,6 +9478,27 @@ These accounts that require smart card authentication have a password:
             Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt</dev:code>
         <dev:remarks>
           <maml:para>Performs an offline credential hygiene audit of a selected OU from AD database against HIBP.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 5 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $contosoAccounts = Get-ADReplAccount -All -Server LON-DC1.contoso.com
+PS C:\&gt; $adatumAccounts = Get-ADReplAccount -All -Server NYC-DC1.adatum.com -Credential (Get-Credential)
+PS C:\&gt; $contosoAccounts + $adatumAccounts | Test-PasswordQuality
+&lt;# Sample Output (Partial)
+
+These groups of accounts have the same passwords:
+  Group 1:
+    ADATUM\smith
+    ADATUM\doe
+  Group 2:
+    ADATUM\Administrator
+    ADATUM\joe_admin
+    CONTOSO\Administrator
+    CONTOSO\joe_admin
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Performs a cross-forest duplicate password discovery. Any number of Get-ADReplAccount and Get-ADDBAccount cmdlet outputs can be combined together, as long as the computer has enough memory.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

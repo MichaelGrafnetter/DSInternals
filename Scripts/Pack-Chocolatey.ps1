@@ -19,7 +19,7 @@ if(-not $catalogIsValid)
 } 
 
 # Create target folder
-mkdir $outputDir -Force
+New-Item -Path $outputDir -ItemType Directory -Force
 
 # Pack using Chocolatey
 choco pack $nuspecPath --outputdirectory $outputDir --timeout 60 --confirm --verbose

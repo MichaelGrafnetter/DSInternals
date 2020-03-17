@@ -4,11 +4,11 @@ The binary distribution of the DSInternals PowerShell Module contains the follow
 DSInternals PowerShell Module and Framework
 -------------------------------------------
 
-(License updated on 7/7/2019 from https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/LICENSE.md.)
+(License updated on 3/17/2020 from https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/LICENSE.md.)
 
 The MIT License (MIT)
 
-Copyright (c) 2015-2019 Michael Grafnetter
+Copyright (c) 2015-2020 Michael Grafnetter
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

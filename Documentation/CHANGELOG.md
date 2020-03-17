@@ -1,16 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [4.2] - 2020-03-18
 
 ### Added
 
-- The [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount), [Get-ADReplBackupKey](PowerShell/Get-ADReplBackupKey.md#get-adreplbackupkey) and [Add-ADReplNgcKey](PowerShell/Add-ADReplNgcKey.md#add-adreplngckey) cmdlets now do not require the `Domain` and `NamingContext` parameters to be specified, as their proper values are retrieved from the target DC.
+- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet now supports **cross-domain and cross-forest duplicate password discovery**.
+- The [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount), [Get-ADReplBackupKey](PowerShell/Get-ADReplBackupKey.md#get-adreplbackupkey) and [Add-ADReplNgcKey](PowerShell/Add-ADReplNgcKey.md#add-adreplngckey) cmdlets no longer require the `Domain` and `NamingContext` parameters to be specified, as their proper values are automatically retrieved from the target DC.
+
+### Changed
+
+- Updated license information in Nuget packages to resolve [Warning NU5125](https://docs.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5125).
 
 ### Fixed
 
 - Resolved a bug in the [Get-ADDBBackupKey](PowerShell/Get-ADDBBackupKey.md#get-addbbackupkey) cmdlet that prevented it from working on global catalogs in multi-domain forests.
-
+- Resolved a bug in DPAPI credential display.
 
 ## [4.1] - 2019-12-12
 
@@ -361,7 +366,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.1...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.2...HEAD
+[4.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.1...v4.2
 [4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.0...v4.1
 [4.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6.1...v4.0
 [3.6.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6...v3.6.1

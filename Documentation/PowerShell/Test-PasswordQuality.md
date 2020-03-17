@@ -55,7 +55,7 @@ These groups of accounts have the same passwords:
   Group 1:
     CONTOSO\graham
     CONTOSO\graham_admin
-  Group 1:
+  Group 2:
     CONTOSO\admin
     CONTOSO\sql_svc01
 
@@ -92,7 +92,7 @@ Performs an offline credential hygiene audit of AD database against HIBP.
 
 ### Example 2
 ```powershell
-PS C:\> $results = Get-ADReplAccount -All -NamingContext 'DC=contoso,DC=com' -Server LON-DC1 |
+PS C:\> $results = Get-ADReplAccount -All -Server LON-DC1 |
                    Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
 ```
 
@@ -115,6 +115,27 @@ PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
 ```
 
 Performs an offline credential hygiene audit of a selected OU from AD database against HIBP.
+
+### Example 5
+```powershell
+PS C:\> $contosoAccounts = Get-ADReplAccount -All -Server LON-DC1.contoso.com
+PS C:\> $adatumAccounts = Get-ADReplAccount -All -Server NYC-DC1.adatum.com -Credential (Get-Credential)
+PS C:\> $contosoAccounts + $adatumAccounts | Test-PasswordQuality
+<# Sample Output (Partial)
+
+These groups of accounts have the same passwords:
+  Group 1:
+    ADATUM\smith
+    ADATUM\doe
+  Group 2:
+    ADATUM\Administrator
+    ADATUM\joe_admin
+    CONTOSO\Administrator
+    CONTOSO\joe_admin
+#>
+```
+
+Performs a cross-forest duplicate password discovery. Any number of Get-ADReplAccount and Get-ADDBAccount cmdlet outputs can be combined together, as long as the computer has enough memory.
 
 ## PARAMETERS
 

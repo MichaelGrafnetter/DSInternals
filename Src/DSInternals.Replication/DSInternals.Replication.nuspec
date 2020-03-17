@@ -6,14 +6,15 @@
     <title>DSInternals Replication</title>
     <authors>Michael Grafnetter</authors>
     <owners>Michael Grafnetter</owners>
-    <licenseUrl>https://github.com/MichaelGrafnetter/DSInternals/blob/master/LICENSE.md</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/MichaelGrafnetter/DSInternals/</projectUrl>
+    <repository type="git" url="https://github.com/MichaelGrafnetter/DSInternals.git" branch="master" />
     <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</description>
     <summary>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R).</summary>
-    <releaseNotes>Added support for the IDL_DRSWriteNgcKey operation.</releaseNotes>
-    <copyright>Copyright (c) 2015-2019 Michael Grafnetter. All rights reserved.</copyright>
+    <releaseNotes>Directory accounts now contain domain information in the LogonName property.</releaseNotes>
+    <copyright>Copyright (c) 2015-2020 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security RPC DRSR</tags>
     <references>
       <reference file="DSInternals.Replication.dll" />
@@ -22,7 +23,7 @@
   </metadata>
   <files>
     <!-- NuGet does not add the DSInternals.Replication.Interop.dll assembly to the package for some reason, so we need to force it. -->
-    <file src="..\..\Build\bin\Release\DSInternals\amd64\DSInternals.Replication.Interop.dll" target="lib\net451" />
+    <file src="..\..\Build\bin\Release\DSInternals\amd64\DSInternals.Replication.Interop.dll" target="lib\net47" />
     <file src="package\install.ps1" target="tools" />
   </files>
 </package>
