@@ -356,6 +356,13 @@
             dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out DateTime? lastLogon);
             this.LastLogon = lastLogon;
 
+            // lastLogon is not replicated, lastLogonTimestamp is but it's not as accurate, so if we can't find lastLogon, try using lastLogonTimestamp instead
+            if (null == lastLogon)
+            {
+                dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogonTimestamp, out DateTime? lastLogonTimestamp);
+                this.LastLogon = lastLogonTimestamp;
+            }
+
             // UPN:
             dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out string upn);
             this.UserPrincipalName = upn;
