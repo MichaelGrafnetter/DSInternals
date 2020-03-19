@@ -1,4 +1,6 @@
-# DSInternals PowerShell Module and Framework
+![DSInternals Logo](DSInternals.png)
+
+# Directory Services Internals<br/>PowerShell Module and Framework
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
 [![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg?logo=PowerShell)](#)
@@ -33,14 +35,6 @@ The DSInternals project consists of these two parts:
 I have created these tools in my spare time and I am using them while performing AD security audits and also in my lectures to demonstrate how Active Directory works internally.
 
 I would like to thank all people who have contributed to the project by [sending their feedback](https://github.com/MichaelGrafnetter/DSInternals/issues) or by [submitting their code](https://github.com/MichaelGrafnetter/DSInternals/graphs/contributors). In case you would also like to help with this project, please see the [CONTRIBUTING](CONTRIBUTING.md#contributing-to-dsinternals) document.
-
-Several people who use DSInternals during AD security audits have asked to donate. I have therefore set up a PayPal account:
-
-<p align="center">
-<a href="https://paypal.me/dsinternals">
-<img src="https://img.shields.io/badge/Donate-2A6496.svg?logo=paypal" height="40px" alt="Donate" align="center" />
-</a>
-</p>
 
 ## Downloads
 
@@ -78,9 +72,14 @@ This package is self-contained and it will also install all dependencies. Note t
 
 The DSInternals PowerShell module is part of FireEye's [Commando VM](https://github.com/fireeye/commando-vm), the Windows-based alternative to Kali Linux.
 
-### NuGet Packages
+###  NuGet Packages
 
-The easiest way of integrating the DSInternals functionality into .NET applications is by using the [DSInternals Framework NuGet packages](https://www.nuget.org/profiles/MichaelGrafnetter).
+The easiest way of integrating the DSInternals functionality into .NET applications is by using the [DSInternals Framework NuGet packages](https://www.nuget.org/profiles/MichaelGrafnetter):
+
+- [DSInternals.Common](https://www.nuget.org/packages/DSInternals.Common/)
+- [DSInternals.DataStore](https://www.nuget.org/packages/DSInternals.DataStore/)
+- [DSInternals.Replication](https://www.nuget.org/packages/DSInternals.Replication/)
+- [DSInternals.SAM](https://www.nuget.org/packages/DSInternals.SAM/)
 
 ### Building from Source Code
 

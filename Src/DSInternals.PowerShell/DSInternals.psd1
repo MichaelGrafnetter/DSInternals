@@ -10,6 +10,9 @@ RootModule = 'DSInternals.Bootstrap.psm1'
 # Version number of this module.
 ModuleVersion = '4.2'
 
+# Supported PSEditions
+CompatiblePSEditions = 'Desktop'
+
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
 
@@ -127,13 +130,13 @@ PrivateData = @{
         Tags = 'ActiveDirectory', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/LICENSE.md'
+        LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/License.txt'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/MichaelGrafnetter/DSInternals'
 
         # A URL to an icon representing this module.
-        IconUri = 'https://www.dsinternals.com/wp-content/uploads/ad.png'
+        IconUri = 'https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/Src/Icons/module_black.png'
 
         # ReleaseNotes of this module
         ReleaseNotes = @"

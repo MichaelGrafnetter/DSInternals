@@ -9,7 +9,7 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/MichaelGrafnetter/DSInternals/</projectUrl>
     <repository type="git" url="https://github.com/MichaelGrafnetter/DSInternals.git" branch="master" />
-    <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
+    <icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>DSInternals SAM implements a client for the Security Accounts Manager Remote Protocol (SAM-R) and Local Security Authority Remote Protocol(MS-LSAD or LSARPC). It can be used to import password hashes into Active Directory or to query and modify LSA Policy.</description>
     <summary>DSInternals SAM implements a client for SAM-R and MS-LSAD/LSARPC protocols.</summary>
@@ -20,4 +20,7 @@
       <reference file="DSInternals.SAM.dll" />
     </references>
   </metadata>
+  <files>
+    <file src="..\Icons\package_black.png" target="icon.png" />
+  </files>
 </package>

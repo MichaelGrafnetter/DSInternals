@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>DSInternals.Common</id>
     <version>$version$</version>
@@ -9,7 +9,7 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/MichaelGrafnetter/DSInternals/</projectUrl>
     <repository type="git" url="https://github.com/MichaelGrafnetter/DSInternals.git" branch="master" />
-    <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
+    <icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This package is shared between all other DSInternals packages. It contains implementations of common hash functions used by Windows, including NT hash, LM hash and OrgId hash. It also contains methods for SysKey/BootKey retrieval.</description>
     <summary>This package is shared between all other DSInternals packages.</summary>
@@ -20,4 +20,7 @@
     <copyright>Copyright (c) 2015-2020 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security</tags>
   </metadata>
+  <files>
+    <file src="..\Icons\package_black.png" target="icon.png" />
+  </files>
 </package>

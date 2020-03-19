@@ -9,7 +9,7 @@
     <title>DSInternals PowerShell Module</title>
     <authors>Michael Grafnetter</authors>
     <projectUrl>https://github.com/MichaelGrafnetter/DSInternals</projectUrl>
-    <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/Src/Icons/module_black.png</iconUrl>
     <copyright>(c) 2015-2020 Michael Grafnetter. All rights reserved.</copyright>
     <licenseUrl>https://github.com/MichaelGrafnetter/DSInternals/blob/master/LICENSE.md</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

@@ -9,7 +9,7 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/MichaelGrafnetter/DSInternals/</projectUrl>
     <repository type="git" url="https://github.com/MichaelGrafnetter/DSInternals.git" branch="master" />
-    <iconUrl>https://www.dsinternals.com/wp-content/uploads/ad.png</iconUrl>
+    <icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</description>
     <summary>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R).</summary>
@@ -25,5 +25,6 @@
     <!-- NuGet does not add the DSInternals.Replication.Interop.dll assembly to the package for some reason, so we need to force it. -->
     <file src="..\..\Build\bin\Release\DSInternals\amd64\DSInternals.Replication.Interop.dll" target="lib\net47" />
     <file src="package\install.ps1" target="tools" />
+    <file src="..\Icons\package_black.png" target="icon.png" />
   </files>
 </package>

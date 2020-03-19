@@ -1,4 +1,6 @@
-# Contributing to DSInternals
+![DSInternals Logo](DSInternals.png)
+
+# Contributing to the Project
 
 ## How can I contribute?
 

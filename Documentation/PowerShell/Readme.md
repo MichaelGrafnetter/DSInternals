@@ -6,7 +6,9 @@ Help Version: 1.0
 Locale: en-US
 ---
 
-# DSInternals PowerShell Module
+![DSInternals Logo](../../.github/DSInternals.png)
+
+# Directory Services Internals PowerShell Module
 
 ## Description
 The DSInternals PowerShell Module exposes several internal features of Active Directory. These include offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.
