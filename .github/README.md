@@ -99,6 +99,7 @@ The online version of [PowerShell Get-Help documentation](../Documentation/Power
 
 I have also published a series of articles about the DSInternals module on [my blog](https://www.dsinternals.com/en/list-of-cmdlets-in-the-dsinternals-module/). Here are a few of them:
 
+- [CQLabs – Extracting Roamed Private Keys from Active Directory](https://cqureacademy.com/blog/extracting-roamed-private-keys)
 - [CQLabs – Offline Attacks on Active Directory](https://cqureacademy.com/cqure-labs/cqlabs-dsinternals-powershell-module)
 - [Auditing Active Directory Password Quality](https://www.dsinternals.com/en/auditing-active-directory-password-quality/)
 - [Dumping ntds.dit files](https://www.dsinternals.com/en/dumping-ntds-dit-files-using-powershell/)
