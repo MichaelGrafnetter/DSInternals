@@ -66,7 +66,7 @@ Physically removes specified object from a ntds.dit file, making it semantically
 Reads one or more accounts through the MS-DRSR protocol, including secret attributes.
 
 ### [Get-ADReplBackupKey](Get-ADReplBackupKey.md#get-adreplbackupkey)
-Reads the DPAPI backup keys through the MS-DRSR protocol.
+Reads the DPAPI backup keys from a domain controller through the MS-DRSR protocol.
 
 ### [Add-ADReplNgcKey](Add-ADReplNgcKey.md#add-adreplngckey)
 Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.
@@ -123,14 +123,22 @@ The output of the [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount) and [Get
 ### Example 1
 
 ```powershell
-Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key | Format-Custom -View PwDump | Out-File -FilePath users.pwdump -Encoding ascii
+PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
+            Format-Custom -View PwDump |
+            Out-File -FilePath users.pwdump -Encoding ascii
 ```
+
+Exports NT and LM password hashes from an Active Directory database to a pwdump file.
 
 ### Example 2
 
 ```powershell
-Get-ADReplAccount -All -NamingContext 'DC=adatum,DC=com' -Server LON-DC1 | Format-Custom -View JohnNT | Out-File -FilePath users.txt -Encoding ascii
+PS C:\> Get-ADReplAccount -All -Server LON-DC1 |
+            Format-Custom -View JohnNT |
+            Out-File -FilePath users.txt -Encoding ascii
 ```
+
+Replicates all Active Directory accounts from the target domain controller and exports their NT password hashes to a file format that is supported by John the Ripper.
 
 ## Cmdlets for Password Hash Calculation
 
@@ -149,7 +157,7 @@ Calculates OrgId hash of a given password. Used by Azure Active Directory Connec
 ## Cmdlets for Credential Decryption
 
 ### [Save-DPAPIBlob](Save-DPAPIBlob.md#save-dpapiblob)
-Saves DPAPI and Credential Roaming data returned by the [Get-ADReplBackupKey](Get-ADReplBackupKey.md#get-adreplbackupkey), [Get-ADDBBackupKey](Get-ADDBBackupKey.md#get-addbbackupkey), [Get-ADReplAccount](Get-ADReplAccount.md#get-adreplaccount), [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount) and [Get-ADSIAccount](Get-ADSIAccount.md#get-adsiaccount) cmdlets to files for further processing.
+Saves DPAPI and Credential Roaming data retrieved from Active Directory to the filesystem for further processing.
 
 ### [ConvertFrom-ADManagedPasswordBlob](ConvertFrom-ADManagedPasswordBlob.md#convertfrom-admanagedpasswordblob)
 Decodes the value of the msDS-ManagedPassword attribute of a Group Managed Service Account.

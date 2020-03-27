@@ -413,7 +413,10 @@
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Stop-Service -Name ntds -Force
-PS C:\&gt; Add-ADDBSidHistory -SamAccountName John -SidHistory S-1-5-21-3623811102-3361044346-30300840-512,S-1-5-21-3623811102-3361044346-30300840-519 -DBPath C:\Windows\NTDS\ntds.dit
+PS C:\&gt; Add-ADDBSidHistory -SamAccountName John `
+                           -SidHistory 'S-1-5-21-3623811102-3361044346-30300840-512',
+                                       'S-1-5-21-3623811102-3361044346-30300840-519' `
+                           -DatabasePath C:\Windows\NTDS\ntds.dit
 PS C:\&gt; Start-Service -Name ntds</dev:code>
         <dev:remarks>
           <maml:para>Adds the SIDs of the Domain Admins and Enterprise Admins groups into user John 's sIDHistory.</maml:para>
@@ -421,7 +424,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Import-Csv user.csv | Add-ADDBSidHistory -DBPath C:\Windows\NTDS\ntds.dit</dev:code>
+        <dev:code>PS C:\&gt; Import-Csv user.csv | Add-ADDBSidHistory -DatabasePath C:\Windows\NTDS\ntds.dit</dev:code>
         <dev:remarks>
           <maml:para>Imports a CSV file containing SamAccountName and SidHistory columns into a nds.dit file.</maml:para>
         </dev:remarks>
@@ -1073,11 +1076,13 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $gmsa = Get-ADServiceAccount -Identity 'SQL_HQ_Primary' -Properties 'msDS-ManagedPassword'
 PS C:\&gt; ConvertFrom-ADManagedPasswordBlob -Blob $gmsa.'msDS-ManagedPassword'
+&lt;# Sample Output:
 Version                   : 1
 CurrentPassword           : 湤ୟɰ橣낔饔ᦺ几᧾ʞꈠ⿕ՔὬ랭뷾햾咶郸�렇ͧ퀟᝘럓몚ꬶ佩䎖∘Ǐ㦗ן뱷鼹⽩Ⲃ⫝咽㠅Ｅ䠹鸞왶婰鞪
 PreviousPassword          :
 QueryPasswordInterval     : 29.17:15:36.3736817
-UnchangedPasswordInterval : 29.17:10:36.3736817</dev:code>
+UnchangedPasswordInterval : 29.17:10:36.3736817
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Decodes the managed password information from a group-managed service account (GMSA) called SQL_HQ_Primary . The user retrieving the managed password needs to be listed in the PrincipalsAllowedToRetrieveManagedPassword property of the GMSA.</maml:para>
         </dev:remarks>
@@ -1591,6 +1596,7 @@ UnchangedPasswordInterval : 29.17:10:36.3736817</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
 PS C:\&gt; ConvertTo-KerberosKey -Password $pwd -Salt 'CONTOSO.COMAdministrator'
+&lt;# Sample Output:
 
 AES256_CTS_HMAC_SHA1_96
   Key: 660e61042b190b5724c62bb473facca12058fb9ad3c03c0d2809f839c0352502
@@ -1602,7 +1608,8 @@ AES128_CTS_HMAC_SHA1_96
 
 DES_CBC_MD5
   Key: aed02c52204ca2ce
-  Iterations: 4096</dev:code>
+  Iterations: 4096
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Applies 3 different kerberos key derivation functions to the specified password and salt.</maml:para>
         </dev:remarks>
@@ -1982,7 +1989,9 @@ PS C:\&gt; ConvertTo-NTHash -Password $pwd
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
 PS C:\&gt; ConvertTo-OrgIdHash -Password $pwd
-v1;PPH1_MD4,60eaffd2c886b419df7a,1000,ab9c532104713157395a70da85cc8a1b418508753c6997f02341d541328ef16b;</dev:code>
+&lt;# Sample Output:
+v1;PPH1_MD4,60eaffd2c886b419df7a,1000,ab9c532104713157395a70da85cc8a1b418508753c6997f02341d541328ef16b;
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Calculates the OrgId hash from a cleartext password using a random salt.</maml:para>
         </dev:remarks>
@@ -1990,7 +1999,9 @@ v1;PPH1_MD4,60eaffd2c886b419df7a,1000,ab9c532104713157395a70da85cc8a1b418508753c
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; ConvertTo-OrgIdHash -NTHash 92937945b518814341de3f726500d4ff
-v1;PPH1_MD4,46c0c5d9095185ce5cf8,1000,6bb7b360d9105ed5157460b343d5d143e465a59195bc9b568718268c334ea4a9;</dev:code>
+&lt;# Sample Output:
+v1;PPH1_MD4,46c0c5d9095185ce5cf8,1000,6bb7b360d9105ed5157460b343d5d143e465a59195bc9b568718268c334ea4a9;
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Calculates the OrgId hash from a NT hash while using a random salt.</maml:para>
         </dev:remarks>
@@ -1998,7 +2009,9 @@ v1;PPH1_MD4,46c0c5d9095185ce5cf8,1000,6bb7b360d9105ed5157460b343d5d143e465a59195
       <command:example>
         <maml:title>-------------------------- Example 3 --------------------------</maml:title>
         <dev:code>PS C:\&gt; ConvertTo-OrgIdHash -NTHash 92937945b518814341de3f726500d4ff -Salt a42b92067e4b8123101a
-v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c0965abac5d85de9c143911;</dev:code>
+&lt;# Sample Output:
+v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c0965abac5d85de9c143911;
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Calculates the OrgId hash from a NT hash while using the given salt.</maml:para>
         </dev:remarks>
@@ -2862,7 +2875,7 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Reads one or more accounts from an Active Directory database file. When provided with a boot key (AKA SysKey or system key), it also decrypts secret attributes.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3262,8 +3275,9 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-ADDBAccount -SamAccountName Administrator -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit'
-
+        <dev:code>PS C:\&gt; Get-ADDBAccount -SamAccountName Administrator `
+                        -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit'
+&lt;# Sample Output:
 DistinguishedName: CN=Administrator,CN=Users,DC=contoso,DC=com
 Sid: S-1-5-21-1236425271-2880748467-2592687428-500
 Guid: b3d02974-6b1c-484c-9103-fd2f60d592c4
@@ -3294,7 +3308,8 @@ Key Credentials:
 Credential Roaming
   Created:
   Modified:
-  Credentials:</dev:code>
+  Credentials:
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Retrieves information about a single account from an Active Directory database. Secret attributes are not decrypted as no boot key is provided.</maml:para>
         </dev:remarks>
@@ -3305,7 +3320,7 @@ Credential Roaming
 PS C:\&gt; Get-ADDBAccount -DistinguishedName: 'CN=Joe Smith,OU=Employees,DC=contoso,DC=com' `
                         -BootKey $key `
                         -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit'
-
+&lt;# Sample Output:
 DistinguishedName: CN=Joe Smith,OU=Employees,DC=contoso,DC=com
 Sid: S-1-5-21-1236425271-2880748467-2592687428-1110
 Guid: 6fb7aca4-fe85-4dc5-9acd-b5b2529fe2bc
@@ -3402,9 +3417,68 @@ Credential Roaming
     CryptoApiCertificate: joe\SystemCertificates\My\Certificates\574E4687133998544C0095C7B348C52CD398182E
     CNGCertificate: joe\SystemCertificates\My\Certificates\3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
     RSAPrivateKey: joe\Crypto\RSA\S-1-5-21-1236425271-2880748467-2592687428-1110\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
-    CNGPrivateKey: joe\Crypto\Keys\E8F13C2BA0209401C4DFE839CD57375E26BBE38F</dev:code>
+    CNGPrivateKey: joe\Crypto\Keys\E8F13C2BA0209401C4DFE839CD57375E26BBE38F
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Retrieves information about a single account from an Active Directory database. Secret attributes are decrypted using the provided boot key.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $results = Get-ADDBAccount -DatabasePath '.\Active Directory\ntds.dit' `
+                                   -BootKey acdba64a3929261b04e5270c3ef973cf `
+                                   -All  |
+                   Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt</dev:code>
+        <dev:remarks>
+          <maml:para>Performs an offline credential hygiene audit of AD database against HIBP.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
+            Format-Custom -View PwDump |
+            Out-File -FilePath users.pwdump -Encoding ascii</dev:code>
+        <dev:remarks>
+          <maml:para>Exports NT and LM password hashes from an Active Directory database to a pwdump file.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 5 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                          -BootKey 0be7a2afe1713642182e9b96f73a75da |
+            Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ADDBAccount -All -DatabasePath '.\ADBackup\Active Directory\ntds.dit' |
+            Save-DPAPIBlob -DirectoryPath '.\Output'</dev:code>
+        <dev:remarks>
+          <maml:para>Extracts DPAPI backup keys and roamed credentials (certificates, private keys, and DPAPI master keys) from an Active Directory database file and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 6 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBAccount -All -DatabasePath '.\ADBackup\Active Directory\ntds.dit' |
+            Select-Object -ExpandProperty KeyCredentials |
+            Where-Object Usage -eq NGC |
+            Format-Table -View ROCA
+&lt;# Sample Output:
+
+Usage IsWeak Source  DeviceId                             Created    HolderDN
+----- ------ ------  --------                             -------    --------
+NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
+NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe,CN=Users,DC=contoso,DC=com
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Lists weak public keys registered in Active Directory that were generated on ROCA-vulnerable TPMs.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 7 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $dc = Get-ADDBDomainController -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
+PS C:\&gt; $adminSid = '{0}-500' -f $dc.DomainSid           
+PS C:\&gt; $account = Get-ADDBAccount -Sid $adminSid `
+                                   -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                                   -BootKey 0be7a2afe1713642182e9b96f73a75da</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves information about a the the built-in Administrator account, even if it was renamed.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -3433,6 +3507,10 @@ Credential Roaming
         <maml:linkText>Save-DPAPIBlob</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADKeyCredential</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -3445,7 +3523,8 @@ Credential Roaming
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Reads and decrypts Data Protection API (DPAPI) backup keys from an Active Directory database file. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.</maml:para>
+      <maml:para>DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3554,9 +3633,61 @@ Credential Roaming
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; $key = Get-BootKey -SystemHiveFilePath '.\ADBackup\registry\SYSTEM'
+PS C:\&gt; Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                          -BootKey $key | Format-List
+&lt;# Sample Output:
+
+FilePath          : ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
+KiwiCommand       : 
+Type              : LegacyKey
+DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22 
+                    Secret,CN=System,DC=contoso,DC=com
+KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
+Data              : {1, 0, 0, 0...}
+
+FilePath          : 
+KiwiCommand       : 
+Type              : PreferredLegacyKeyPointer
+DistinguishedName : CN=BCKUPKEY_P Secret,CN=System,DC=contoso,DC=com
+KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
+Data              : {250, 203, 22, 177...}
+
+FilePath          : ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
+KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey 
+                    command: /pvk:"ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk"
+Type              : RSAKey
+DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3 
+                    Secret,CN=System,DC=contoso,DC=com
+KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
+Data              : {2, 0, 0, 0...}
+
+FilePath          : 
+KiwiCommand       : 
+Type              : PreferredRSAKeyPointer
+DistinguishedName : CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=contoso,DC=com
+KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
+Data              : {237, 20, 9, 41...}
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Extracts the boot key (AKA SysKey or system key) from a backup of the SYSTEM registry hive and decrypts all DPAPI backup keys stored in the an Active Directory database file.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                          -BootKey 0be7a2afe1713642182e9b96f73a75da |
+             Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ChildItem -Path '.\Output' | Select-Object -ExpandProperty Name
+&lt;# Sample Output:
+kiwiscript.txt
+ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
+ntds_capi_4cee80c0-b6c6-406c-a68b-c0e5818bc436.cer
+ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pfx
+ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Exports DPAPI backup keys to the Output directory.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -3571,6 +3702,10 @@ Credential Roaming
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADReplBackupKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-LsaBackupKey</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -3671,7 +3806,6 @@ Credential Roaming
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADDBDomainController -DatabasePath .\ntds.dit
-
 &lt;# Sample Output:
 Name                       : LON-DC1
 DNSHostName                : LON-DC1.contoso.com
@@ -3830,10 +3964,7 @@ Epoch                      : 961
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADDBKdsRootKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
-
-&lt;#
-Output:
-
+&lt;# Sample Output:
 Id: 6a401799-8dd0-0b2c-3073-beb7ce2e734d
 Version: 1
 Creation Time: 7/27/2019 6:23:26 PM
@@ -3860,9 +3991,7 @@ Secret Agreement
 #&gt;
 
 PS C:\&gt; .\CQDPAPINGPFXDecrypter.exe /pfx Certificate.p12 /master C16A0D16B80307D9CF102C7DB11F69FE015EB0DCD85C2FC0A5005C10E9DB963AC1E18BF161882ABEEAFF1B01CD50076F3C6F7807323253AB9598DBE027A77DD7
-
-&lt;#
-Output:
+&lt;# Sample Output:
 Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
 #&gt;</dev:code>
         <dev:remarks>
@@ -4281,9 +4410,9 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
-             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-             Get-KeyCredential
-&lt;# Output:
+            Select-Object -ExpandProperty msDS-KeyCredentialLink |
+            Get-KeyCredential
+&lt;# Sample Output:
 
 Usage Source  Flags       DeviceId                             Created    HolderDN
 ----- ------  -----       --------                             -------    --------
@@ -4305,8 +4434,7 @@ FIDO  AzureAD Attestation 00000000-0000-0000-0000-000000000000 2019-08-26 CN=Joh
             Get-KeyCredential |
             Where-Object Usage -eq NGC |
             Format-Table -View ROCA
-
-&lt;# Output:
+&lt;# Sample Output:
 
 Usage IsWeak Source  DeviceId                             Created    HolderDN
 ----- ------ ------  --------                             -------    --------
@@ -4337,8 +4465,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
             Get-KeyCredential |
             Where-Object Usage -eq FIDO |
             Format-Table -View FIDO
-
-&lt;# Output:
+&lt;# Sample Output:
 
 DisplayName           Flags       FidoFlags                                                 Created    HolderDN
 -----------           -----       ---------                                                 -------    --------
@@ -4366,7 +4493,9 @@ Feitian BioPass FIDO2 Attestation UserPresent, UserVerified, AttestationData, Ex
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 6 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; $certificateSubject = 'S-1-5-21-1236425271-2880748467-2592687428-1109/13f787d5-4078-47ee-a6e7-b3af92f76c1e/login.windows.net/383a3889-5bc9-47a3-846c-2b70f0b7fe0e/john@contoso.com'
+        <dev:code>PS C:\&gt; $upn = 'john@contoso.com'
+PS C:\&gt; $userSid = 'S-1-5-21-1236425271-2880748467-2592687428-1109'
+PS C:\&gt; $certificateSubject = '{0}/{1}/login.windows.net/383a3889-5bc9-47a3-846c-2b70f0b7fe0e/{2}' -f $userSid, (New-Guid), $upn
 PS C:\&gt; $certificate = New-SelfSignedCertificate -Subject $certificateSubject `
                                                  -KeyLength 2048 `
                                                  -Provider 'Microsoft Strong Cryptographic Provider' `
@@ -4379,7 +4508,7 @@ PS C:\&gt; $certificate = New-SelfSignedCertificate -Subject $certificateSubject
 PS C:\&gt; $ngcKey = Get-KeyCredential -Certificate $certificate -DeviceId (New-Guid) -HolderDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
 PS C:\&gt; Set-ADObject -Identity $ngcKey.HolderDN -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }</dev:code>
         <dev:remarks>
-          <maml:para>Generates a new NGC key for a user account and registers it in Active Directory.</maml:para>
+          <maml:para>Generates a new NGC key for a user account and registers it in Active Directory. Note that the value of the certificate Subject has no effect on the functionality, but as it appears in DC logs, this example uses the same format as Windows does.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -4429,7 +4558,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Reads one or more accounts from a target Active Directory domain controller through the MS-DRSR protocol, including secret attributes.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -4970,9 +5099,140 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-ADReplAccount -SamAccountName joe -Server 'lon-dc1.contoso.com'
+&lt;# Sample Output:
+DistinguishedName: CN=Joe Smith,OU=Employees,DC=contoso,DC=com
+Sid: S-1-5-21-1236425271-2880748467-2592687428-1110
+Guid: 6fb7aca4-fe85-4dc5-9acd-b5b2529fe2bc
+SamAccountName: joe
+SamAccountType: User
+UserPrincipalName: joe@contoso.com
+PrimaryGroupId: 513
+SidHistory:
+Enabled: True
+UserAccountControl: NormalAccount, PasswordNeverExpires
+AdminCount: False
+Deleted: False
+LastLogon:
+DisplayName: Joe Smith
+GivenName: Joe
+Surname: Smith
+Description:
+ServicePrincipalName:
+SecurityDescriptor: DiscretionaryAclPresent, SystemAclPresent, DiscretionaryAclAutoInherited, SystemAclAutoInherited, SelfRelative
+Owner: S-1-5-21-1236425271-2880748467-2592687428-512
+Secrets
+  NTHash: 92937945b518814341de3f726500d4ff
+  LMHash:
+  NTHashHistory:
+    Hash 01: 92937945b518814341de3f726500d4ff
+  LMHashHistory:
+    Hash 01: 30ce97eef1084cf1656cc4be70d68600
+  SupplementalCredentials:
+    ClearText:
+    NTLMStrongHash: 2c6d57beebeafdae65b3f40f2a0d5430
+    Kerberos:
+      Credentials:
+        DES_CBC_MD5
+          Key: 7f16bc4ada0b8a52
+      OldCredentials:
+      Salt: CONTOSO.COMjoe
+      Flags: 0
+    KerberosNew:
+      Credentials:
+        AES256_CTS_HMAC_SHA1_96
+          Key: cd541be0838c787b5c6a34d7b19274aee613545a0e6cc6f5ac5918d8a464d24f
+          Iterations: 4096
+        AES128_CTS_HMAC_SHA1_96
+          Key: 5c88972747bd454704c117ae52c474e4
+          Iterations: 4096
+        DES_CBC_MD5
+          Key: 7f16bc4ada0b8a52
+          Iterations: 4096
+      OldCredentials:
+      OlderCredentials:
+      ServiceCredentials:
+      Salt: CONTOSO.COMjoe
+      DefaultIterationCount: 4096
+      Flags: 0
+    WDigest:
+      Hash 01: 61fed940f0e8d03a49d3727f55800497
+      Hash 02: a1d54499dda6a6b5431f29a8d741a640
+      Hash 03: b6cdf00bc0c4578992f718de81251721
+      Hash 04: 61fed940f0e8d03a49d3727f55800497
+      Hash 05: a1d54499dda6a6b5431f29a8d741a640
+      Hash 06: 9a8991bd99763df2e37f1e1e67d71cc8
+      Hash 07: 61fed940f0e8d03a49d3727f55800497
+      Hash 08: 8a9fe94883c8ccf3bcfc6591ddd2288f
+      Hash 09: 8a9fe94883c8ccf3bcfc6591ddd2288f
+      Hash 10: 1b7b16b49ecd8d9d59c1d0db6fa2cc36
+      Hash 11: d4c24695cfa4dc3810a469d5efb8ecaf
+      Hash 12: 8a9fe94883c8ccf3bcfc6591ddd2288f
+      Hash 13: a5b8aa5088280298c8c27fa99dcaa1e3
+      Hash 14: d4c24695cfa4dc3810a469d5efb8ecaf
+      Hash 15: 1aa8e567622fe53d6fb36f1f34f12aaa
+      Hash 16: 1aa8e567622fe53d6fb36f1f34f12aaa
+      Hash 17: 2af425244079f8f45927c34fa115e45b
+      Hash 18: cf283a35102b820e25003b1ddf270221
+      Hash 19: b98c902c57449253e6f06b5d585866bd
+      Hash 20: 2a690b1eeda9cb8f3157a4a3ba0be9c3
+      Hash 21: af2654776d5f9f27f3283ecb0aa25011
+      Hash 22: af2654776d5f9f27f3283ecb0aa25011
+      Hash 23: ba6fe0513ed2a60ec253a41bbde6a837
+      Hash 24: 8bf5a67b598087be948e040f85c72b4d
+      Hash 25: 8bf5a67b598087be948e040f85c72b4d
+      Hash 26: aa5ff46d23a5c7ebd603e1793225350d
+      Hash 27: 656b6a7f5b52d05b3ce9168a2b7ac8ac
+      Hash 28: ae884c92ecd87e8d54f1844f09c5a519
+      Hash 29: a500a9e26afc9f817df8a07e15771577
+Key Credentials:
+  Usage=NGC, Source=ActiveDirectory, Device=1966d4da-14da-4581-a7a7-5e8e07e93ad9, Created=8/1/2019 10:53:12 PM, LastLogon=8/1/2019 10:53:12 PM
+  Usage=NGC, Source=ActiveDirectory, Device=cfe9a872-13ff-4751-a777-aec88c30a762, Created=8/1/2019 11:09:15 PM, LastLogon=8/1/2019 11:09:15 PM
+Credential Roaming
+  Created: 3/12/2017 9:15:56 AM
+  Modified: 3/13/2017 10:01:18 AM
+  Credentials:
+    DPAPIMasterKey: joe\Protect\S-1-5-21-1236425271-2880748467-2592687428-1110\47070660-c259-4d90-8bc9-187605323450
+    DPAPIMasterKey: joe\Protect\S-1-5-21-1236425271-2880748467-2592687428-1110\7fc19508-7b85-4a7c-9e5d-15f9e00e7ce5
+    CryptoApiCertificate: joe\SystemCertificates\My\Certificates\574E4687133998544C0095C7B348C52CD398182E
+    CNGCertificate: joe\SystemCertificates\My\Certificates\3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
+    RSAPrivateKey: joe\Crypto\RSA\S-1-5-21-1236425271-2880748467-2592687428-1110\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
+    CNGPrivateKey: joe\Crypto\Keys\E8F13C2BA0209401C4DFE839CD57375E26BBE38F
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Replicates a single Active Directory account from the target domain controller.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $accounts = Get-ADReplAccount -All -Server 'lon-dc1.contoso.com'</dev:code>
+        <dev:remarks>
+          <maml:para>Replicates all Active Directory accounts from the target domain controller.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $results = Get-ADReplAccount -All -Server 'lon-dc1.contoso.com' |
+                   Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt</dev:code>
+        <dev:remarks>
+          <maml:para>Performs an online credential hygiene audit of AD against HIBP.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADReplAccount -All -Server LON-DC1 |
+            Format-Custom -View PwDump |
+            Out-File -FilePath users.pwdump -Encoding ascii</dev:code>
+        <dev:remarks>
+          <maml:para>Replicates all Active Directory accounts from the target domain controller and exports their NT and LM password hashes to a pwdump file.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 5 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'</dev:code>
+        <dev:remarks>
+          <maml:para>Replicates all DPAPI backup keys and roamed credentials (certificates, private keys, and DPAPI master keys) from the target Active Directory domain controller and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -5005,11 +5265,12 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
       <command:verb>Get</command:verb>
       <command:noun>ADReplBackupKey</command:noun>
       <maml:description>
-        <maml:para>Reads the DPAPI backup keys through the MS-DRSR protocol.</maml:para>
+        <maml:para>Reads the DPAPI backup keys from a domain controller through the MS-DRSR protocol.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Replicates the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-DRSR protocol. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.</maml:para>
+      <maml:para>DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -5029,7 +5290,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="FQDN, DomainName, DNSDomainName">
           <maml:name>Domain</maml:name>
           <maml:Description>
-            <maml:para>TODO</maml:para>
+            <maml:para>Specifies the DNS name of the target Active Directory domain.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -5085,7 +5346,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="FQDN, DomainName, DNSDomainName">
         <maml:name>Domain</maml:name>
         <maml:Description>
-          <maml:para>TODO</maml:para>
+          <maml:para>Specifies the DNS name of the target Active Directory domain.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -5146,10 +5407,58 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
     </maml:alertSet>
     <command:examples>
       <command:example>
-        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADReplBackupKey -Server 'lon-dc1.contoso.com'
+&lt;# Sample Output:
+
+FilePath          : ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
+KiwiCommand       : 
+Type              : LegacyKey
+DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22 
+                    Secret,CN=System,DC=contoso,DC=com
+KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
+Data              : {1, 0, 0, 0...}
+
+FilePath          : 
+KiwiCommand       : 
+Type              : PreferredLegacyKeyPointer
+DistinguishedName : CN=BCKUPKEY_P Secret,CN=System,DC=contoso,DC=com
+KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
+Data              : {250, 203, 22, 177...}
+
+FilePath          : ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
+KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey 
+                    command: /pvk:"ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk"
+Type              : RSAKey
+DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3 
+                    Secret,CN=System,DC=contoso,DC=com
+KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
+Data              : {2, 0, 0, 0...}
+
+FilePath          : 
+KiwiCommand       : 
+Type              : PreferredRSAKeyPointer
+DistinguishedName : CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=contoso,DC=com
+KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
+Data              : {237, 20, 9, 41...}
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Replicates all DPAPI backup keys from the target Active Directory domain controller.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ChildItem -Path '.\Output' | Select-Object -ExpandProperty Name
+&lt;# Sample Output:
+kiwiscript.txt
+ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
+ntds_capi_4cee80c0-b6c6-406c-a68b-c0e5818bc436.cer
+ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pfx
+ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Replicates all DPAPI backup keys from the target Active Directory domain controller and saves them to the Output directory.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -5182,7 +5491,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Gets all Active Directory user accounts from a given domain controller using ADSI/LDAP. Typically used for Credential Roaming data retrieval and NGC key auditing.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -5190,7 +5499,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>{{Fill Credential Description}}</maml:para>
+            <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -5199,7 +5508,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
           <maml:name>Server</maml:name>
           <maml:Description>
             <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
@@ -5217,7 +5526,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Credential Description}}</maml:para>
+          <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
         <dev:type>
@@ -5226,7 +5535,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
         <maml:name>Server</maml:name>
         <maml:Description>
           <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
@@ -5267,9 +5576,27 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-LsaBackupKey -ComputerName 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Retrieves DPAPI backup keys from the target domain controller through the MS-LSAD protocol. Also retrieves roamed credentials (certificates, private keys, and DPAPI master keys) from this domain controller through LDAP and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' |
+            Select-Object -ExpandProperty KeyCredentials |
+            Where-Object Usage -eq NGC |
+            Format-Table -View ROCA
+&lt;# Sample Output:
+
+Usage IsWeak Source  DeviceId                             Created    HolderDN
+----- ------ ------  --------                             -------    --------
+NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
+NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe,CN=Users,DC=contoso,DC=com
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Lists weak public keys registered in Active Directory that were generated on ROCA-vulnerable TPMs.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -5287,11 +5614,11 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>Test-PasswordQuality</maml:linkText>
+        <maml:linkText>Save-DPAPIBlob</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>Save-DPAPIBlob</maml:linkText>
+        <maml:linkText>Get-ADKeyCredential</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -5394,7 +5721,8 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-BootKey -Online</dev:code>
+        <dev:code>PS C:\&gt; Get-BootKey -Online
+0be7a2afe1713642182e9b96f73a75da</dev:code>
         <dev:remarks>
           <maml:para>Retrieves the BootKey from the currently running OS.</maml:para>
         </dev:remarks>
@@ -5402,7 +5730,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; reg.exe SAVE HKLM\SYSTEM C:\RegBackup\SYSTEM.hiv
-PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
+PS C:\&gt; $key = Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
         <dev:remarks>
           <maml:para>Creates a backup of the SYSTEM registry hive and then retrieves the BootKey from this backup.</maml:para>
         </dev:remarks>
@@ -5445,7 +5773,8 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>The Data Protection API (DPAPI) is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
+      <maml:para>Reads the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-LSAD (AKA LSARPC) protocol. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.</maml:para>
+      <maml:para>DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -5509,6 +5838,7 @@ PS C:\&gt; Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:code>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-LsaBackupKey -ComputerName LON-DC1
+&lt;# Sample Output:
 
 FilePath          : ntds_capi_b1c56a3e-ddf7-41dd-a5f3-44a2ed27a96d.pvk
 KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey command:
@@ -5523,16 +5853,25 @@ KiwiCommand       :
 Type              : LegacyKey
 DistinguishedName :
 KeyId             : 7882b20e-96ef-4ce5-a2b9-3efdccbbce28
-Data              : {1, 0, 0, 0...}</dev:code>
+Data              : {1, 0, 0, 0...}
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Displays the DPAPI domain backup keys.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-LsaBackupKey -ComputerName LON-DC1 | Save-DPAPIBlob -DirectoryPath .\</dev:code>
+        <dev:code>PS C:\&gt; Get-LsaBackupKey -ComputerName LON-DC1 | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ChildItem -Path '.\Output' | Select-Object -ExpandProperty Name
+&lt;# Sample Output:
+kiwiscript.txt
+ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
+ntds_capi_4cee80c0-b6c6-406c-a68b-c0e5818bc436.cer
+ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pfx
+ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>Saves the DPAPI domain backup keys to the working directory.</maml:para>
+          <maml:para>Saves the DPAPI domain backup keys to the Output directory.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -5630,12 +5969,13 @@ Data              : {1, 0, 0, 0...}</dev:code>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-LSAPolicyInformation
-
+&lt;# Sample Output:
 Domain/Workgroup Name : WORKGROUP
 Account Domain Name   : MYPC
 Account Domain SID    : S-1-5-21-2814909047-1086830290-2660982408
 Local Domain Name     : MYPC
-Local Domain SID      : S-1-5-21-2814909047-1086830290-2660982408</dev:code>
+Local Domain SID      : S-1-5-21-2814909047-1086830290-2660982408
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Retrieves LSA Policy from the local computer.</maml:para>
         </dev:remarks>
@@ -5643,7 +5983,7 @@ Local Domain SID      : S-1-5-21-2814909047-1086830290-2660982408</dev:code>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-LSAPolicyInformation -ComputerName LON-DC1
-
+&lt;# Sample Output:
 Domain/Workgroup Name : ADATUM
 Forest DNS Name       : Adatum.com
 Domain DNS Name       : Adatum.com
@@ -5652,7 +5992,8 @@ Domain SID            : S-1-5-21-3180365339-800773672-3767752645
 Account Domain Name   : ADATUM
 Account Domain SID    : S-1-5-21-3180365339-800773672-3767752645
 Local Domain Name     : LON-DC1
-Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
+Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Retrieves LSA Policy from a remote computer called LON-DC1.</maml:para>
         </dev:remarks>
@@ -5799,13 +6140,14 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202</dev:code>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-SamPasswordPolicy -Domain CONTOSO -Server LON-DC1
-
+&lt;# Sample Output:
 MinPasswordLength           : 8
 ComplexityEnabled           : True
 ReversibleEncryptionEnabled : False
 MaxPasswordAge              : 90.00:00:00.0
 MinPasswordAge              : 01:00:00
-PasswordHistoryCount        : 10</dev:code>
+PasswordHistoryCount        : 10
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Queries the LON-DC1 domain controller for default domain password policy.</maml:para>
         </dev:remarks>
@@ -5813,13 +6155,14 @@ PasswordHistoryCount        : 10</dev:code>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-SamPasswordPolicy -Domain Builtin
-
+&lt;# Sample Output:
 MinPasswordLength           : 0
 ComplexityEnabled           : False
 ReversibleEncryptionEnabled : False
 MaxPasswordAge              : 42.22:47:31.7437440
 MinPasswordAge              : 00:00:00
-PasswordHistoryCount        : 0</dev:code>
+PasswordHistoryCount        : 0
+#&gt;</dev:code>
         <dev:remarks>
           <maml:para>Queries the local computer for its current password policy.</maml:para>
         </dev:remarks>
@@ -6529,11 +6872,11 @@ $initTask.RunAsTask()</dev:code>
       <command:verb>Save</command:verb>
       <command:noun>DPAPIBlob</command:noun>
       <maml:description>
-        <maml:para>Saves DPAPI and Credential Roaming data returned by the Get-ADReplBackupKey, Get-ADDBBackupKey, Get-ADReplAccount, Get-ADDBAccount and Get-ADSIAccount cmdlets to files for further processing.</maml:para>
+        <maml:para>Saves DPAPI and Credential Roaming data retrieved from Active Directory to the filesystem for further processing.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para></maml:para>
+      <maml:para>This cmdlet saves DPAPI-related data retrieved from Active Directory to a selected directory. It also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys and to decode the certificates. Supports DPAPI backup keys returned by the Get-ADReplBackupKey, Get-ADDBBackupKey, and Get-LsaBackupKey cmdlets and roamed credentials (certificates, private keys, and DPAPI master keys) returned by the Get-ADReplAccount, Get-ADDBAccount, and Get-ADSIAccount cmdlets.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -6667,13 +7010,87 @@ $initTask.RunAsTask()</dev:code>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
                           -BootKey 0be7a2afe1713642182e9b96f73a75da |
-             Save-DPAPIBlob -DirectoryPath .\Output
-PS C:\&gt; Get-ADDBAccount -All `
-                -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
-                -BootKey 0be7a2afe1713642182e9b96f73a75da |
-             Save-DPAPIBlob -DirectoryPath .\Output</dev:code>
+             Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ADDBAccount -All -DatabasePath '.\ADBackup\Active Directory\ntds.dit' |
+             Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ChildItem -Path '.\Output' -Recurse -File |
+            Foreach-Object { $PSItem.FullName.Replace((Resolve-Path -Path '.\Output'), '') }
+&lt;# Sample Output:
+\kiwiscript.txt
+\ntds_capi_4cee80c0-b6c6-406c-a68b-c0e5818bc436.cer
+\ntds_capi_4cee80c0-b6c6-406c-a68b-c0e5818bc436.pfx
+\ntds_capi_4cee80c0-b6c6-406c-a68b-c0e5818bc436.pvk
+\ntds_legacy_d78736ad-5206-4eda-bfd4-cd10cc49d163.key
+\Abbi\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-1304\99c6f954ca07d75267f9a369a0bf5cd3_9e75a609-18c7-4c98-8cd0-c34c3aeae423
+\Abbi\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-1304\ba7577742c7900c29f8e7f8193ca5f6d_9e75a609-18c7-4c98-8cd0-c34c3aeae423
+\Abbi\Protect\S-1-5-21-4534338-1127018997-2609994386-1304\eadae2b5-3933-434a-9bcf-804175877104
+\Abbi\SystemCertificates\My\Certificates\366004B5FA21294B80B22DA1385F414C70DF611B
+\Abbi\SystemCertificates\My\Certificates\6441367E7BF2D4C7DAA1CF27C72D6552F4A48B48
+\Administrator\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-500\0b0c01d1f2bb6db4cd9496cd5e1214d6_f8b7bbef-d227-4ac7-badd-3a238a7f741e
+\Administrator\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-500\2907acacb201238bd89fe63b20c6d23b_f8b7bbef-d227-4ac7-badd-3a238a7f741e
+\Administrator\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-500\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
+\Administrator\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-500\d881dc8bbed7c3a08f03b01de4b9f45f_f8b7bbef-d227-4ac7-badd-3a238a7f741e
+\Administrator\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-500\e1b4cc613d831f27c664af17b8f98021_f8b7bbef-d227-4ac7-badd-3a238a7f741e
+\Administrator\Protect\S-1-5-21-4534338-1127018997-2609994386-500\47070660-c259-4d90-8bc9-187605323450
+\Administrator\Protect\S-1-5-21-4534338-1127018997-2609994386-500\e13655bb-9519-45aa-abf8-a50a7b01317a
+\Administrator\SystemCertificates\My\Certificates\01ADA5237C2D2D1F1571247A239CA66B31885389
+\Administrator\SystemCertificates\My\Certificates\5479CDDE0747E2CB5DF64F28A9E4AD3266AB27AF
+\Administrator\SystemCertificates\My\Certificates\574E4687133998544C0095C7B348C52CD398182E
+\Administrator\SystemCertificates\My\Certificates\B422F98237039C9836D24E22E5A92FCEC507EF89
+\Administrator\SystemCertificates\My\Certificates\DBE2B5417D56BC061B05B7265A47D3595EEC6A32
+\Administrator\SystemCertificates\Request\Certificates\AE1EBACC333E48E80C5DED7D0C644D80417CB6EC
+\Lara\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-1359\1eceade740dd71b94c3a7333522b9859_9e75a609-18c7-4c98-8cd0-c34c3aeae423
+\Lara\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-1359\2995fb4c62c9211bc265c89fe1c85061_9e75a609-18c7-4c98-8cd0-c34c3aeae423
+\Lara\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-1359\3183cd1aef41afc9af73e231607b5266_9e75a609-18c7-4c98-8cd0-c34c3aeae423
+\Lara\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-1359\4f8bd0d10c208c8d57d2a1babd288a83_9e75a609-18c7-4c98-8cd0-c34c3aeae423
+\Lara\Protect\S-1-5-21-4534338-1127018997-2609994386-1359\5f6d65d9-c363-4c78-af8d-034fb80efc5a
+\Lara\SystemCertificates\My\Certificates\1307CE05C8247AA08508302431B6A99647FF600E
+\Lara\SystemCertificates\My\Certificates\7B0928AF99A3244E73F7F17957ABD5A80818B210
+\Lara\SystemCertificates\My\Certificates\90E1D7F90AD73F66F2C8F60120C256D038FD1F2C
+\Lara\SystemCertificates\My\Certificates\DB690E9D99D094D3E9746DE484D3050951516E29
+\Logan\Crypto\RSA\S-1-5-21-4534338-1127018997-2609994386-1272\fd56f510920bd55b31ff5207eafda8c8_9e75a609-18c7-4c98-8cd0-c34c3aeae423
+\Logan\Protect\S-1-5-21-4534338-1127018997-2609994386-1272\9c6cc9e0-b5f8-48f4-a478-305ad77fceab
+\Logan\SystemCertificates\My\Certificates\5D7A3A4FE8ADF5A61C5079EB7FDD1507B2753682
+#&gt;
+
+PS C:\&gt; Get-Content -Path '.\Output\kiwiscript.txt'
+&lt;# Sample Output:
+REM Add this parameter to at least the first dpapi::masterkey command: /pvk:"ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk"
+dpapi::masterkey /in:"Install\Protect\S-1-5-21-1236425271-2880748467-2592687428-1000\0f2ca69c-c144-4d80-905f-a6bcdfb0d659" /sid:S-1-5-21-1236425271-2880748467-2592687428-1000
+dpapi::masterkey /in:"Install\Protect\S-1-5-21-1236425271-2880748467-2592687428-1000\acdad60e-bcc0-48fb-9ceb-7514ca5aa558" /sid:S-1-5-21-1236425271-2880748467-2592687428-1000
+dpapi::cng /in:"Install\Crypto\Keys\002F8F86566CEFBC8694EE7F5BB24A5FF2BA2C18"
+dpapi::cng /in:"Install\Crypto\Keys\476D927F1B009662D46D785BA58BD8E9DB42F687"
+crypto::system /file:"Install\SystemCertificates\My\Certificates\EA4AD6192A82AB059BFA5E774515FDE0DA604160" /export
+crypto::system /file:"Install\SystemCertificates\My\Certificates\D6F23BB7BD8C0099DF5F1324507EA0CA3DE7DEAB" /export
+dpapi::masterkey /in:"john\Protect\S-1-5-21-1236425271-2880748467-2592687428-1109\bfefb3a6-5cdc-44f9-8521-a31feb3acdb1" /sid:S-1-5-21-1236425271-2880748467-2592687428-1109
+dpapi::masterkey /in:"john\Protect\S-1-5-21-1236425271-2880748467-2592687428-1109\c14e7f69-3bf5-4c49-92d8-78d759d74ece" /sid:S-1-5-21-1236425271-2880748467-2592687428-1109
+crypto::system /file:"john\SystemCertificates\My\Certificates\AF839B040D1257997A8D83EE71F96918F4C3EA01" /export
+dpapi::cng /in:"john\Crypto\Keys\9F95F8E4F381BFFFD22B5EFAA013E53268451310"
+dpapi::cng /in:"john\Crypto\Keys\C9ABDF8DC38EA2BA2E20AEC770D91210FF919F87"
+crypto::system /file:"john\SystemCertificates\My\Certificates\DEFFADB62EE547CB88973DF664C4DC958E8E64D8" /export
+crypto::system /file:"john\SystemCertificates\My\Certificates\49FD324E5CC4A6020AC9D12D4311C7B33393A1C4" /export
+crypto::system /file:"john\SystemCertificates\My\Certificates\4E951C29567A261B2E90C94BCCEFAE1FA878A2CB" /export
+dpapi::capi /in:"john\Crypto\RSA\S-1-5-21-1236425271-2880748467-2592687428-1109\0581f4e6088649266038726d9f8786a9_edc46440-65c9-41ce-aaeb-73754e0e38c8"
+dpapi::capi /in:"john\Crypto\RSA\S-1-5-21-1236425271-2880748467-2592687428-1109\4771dfabcc8ad1ec2c84c489df041fad_edc46440-65c9-41ce-aaeb-73754e0e38c8"
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>Extracts DPAPI backup keys and roamed credentials (certificates, private keys and DPAPI master keys) to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.</maml:para>
+          <maml:para>Extracts DPAPI backup keys and roamed credentials (certificates, private keys, and DPAPI master keys) from an Active Directory database file and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'</dev:code>
+        <dev:remarks>
+          <maml:para>Replicates all DPAPI backup keys and roamed credentials (certificates, private keys, and DPAPI master keys) from the target Active Directory domain controller and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-LsaBackupKey -ComputerName 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves DPAPI backup keys from the target domain controller through the MS-LSAD protocol. Also retrieves roamed credentials (certificates, private keys, and DPAPI master keys) from this domain controller through LDAP and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -6700,6 +7117,10 @@ PS C:\&gt; Get-ADDBAccount -All `
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIAccount</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -8657,7 +9078,9 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Set-ADDBPrimaryGroup -SamAccountName John -PrimaryGroupId 512 -DatabasePath 'D:\Windows\NTDS\ntds.dit'</dev:code>
+        <dev:code>PS C:\&gt; Set-ADDBPrimaryGroup -SamAccountName John `
+                             -PrimaryGroupId 512 `
+                             -DatabasePath 'D:\Windows\NTDS\ntds.dit'</dev:code>
         <dev:remarks>
           <maml:para>Moves the account John from the default Domain Users group to Domain Admins .</maml:para>
         </dev:remarks>
@@ -8688,7 +9111,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Configures AD-related Local Security Authority (LSA) Policies of the local or a remote computer. This functionality is helpful when restoring Active Directory domain controllers (DC) from IFM backups. Note that running this command against a DC with parameters that do not match the information stored in its local AD database might prevent the target DC from booting ever again.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -8871,7 +9294,11 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Set-LsaPolicyInformation -DomainName 'ADATUM' -DnsDomainName 'Adatum.com' -DnsForestName 'Adatum.com' -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 -DomainSid S-1-5-21-1817670852-3242289776-1304069626</dev:code>
+        <dev:code>PS C:\&gt; Set-LsaPolicyInformation -DomainName 'ADATUM' `
+                                 -DnsDomainName 'Adatum.com' `
+                                 -DnsForestName 'Adatum.com' `
+                                 -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 `
+                                 -DomainSid S-1-5-21-1817670852-3242289776-1304069626</dev:code>
         <dev:remarks>
           <maml:para>Configures AD-related LSA Policy Information of the local computer.</maml:para>
         </dev:remarks>
@@ -8881,6 +9308,10 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-LsaPolicyInformation.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-ADDBRestoreFromMediaScript</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -8894,7 +9325,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Sets NT and LM password hashes of a user account in a local or remote Security Account Manager (SAM) or Active Directory (AD) database through the SAM Remote Protocol (MS-SAMR). Note that kerberos AES and DES ekeys of the target account are cleared by this command.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -8902,7 +9333,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>Specify the user account credentials to use to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
+            <maml:para>Specifies the user account credentials to be used to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -8914,7 +9345,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>Domain</maml:name>
           <maml:Description>
-            <maml:para>Specify the user's domain.</maml:para>
+            <maml:para>Specifies the target NetBIOS domain name the target account belongs to.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -8926,7 +9357,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>LMHash</maml:name>
           <maml:Description>
-            <maml:para>Specify a new LM password hash value in hexadecimal format.</maml:para>
+            <maml:para>Specifies a new LM password hash value in hexadecimal format.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -8938,7 +9369,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>NTHash</maml:name>
           <maml:Description>
-            <maml:para>Specify a new NT password hash value in hexadecimal format.</maml:para>
+            <maml:para>Specifies a new NT password hash value in hexadecimal format.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -8950,7 +9381,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
-            <maml:para>Specify user's login.</maml:para>
+            <maml:para>Specifies user's login.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -8977,7 +9408,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:Description>
-            <maml:para>Specify the user account credentials to use to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
+            <maml:para>Specifies the user account credentials to be used to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
@@ -8989,7 +9420,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>LMHash</maml:name>
           <maml:Description>
-            <maml:para>Specify a new LM password hash value in hexadecimal format.</maml:para>
+            <maml:para>Specifies a new LM password hash value in hexadecimal format.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -9001,7 +9432,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>NTHash</maml:name>
           <maml:Description>
-            <maml:para>Specify a new NT password hash value in hexadecimal format.</maml:para>
+            <maml:para>Specifies a new NT password hash value in hexadecimal format.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
           <dev:type>
@@ -9025,7 +9456,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>Sid</maml:name>
           <maml:Description>
-            <maml:para>Specify user SID.</maml:para>
+            <maml:para>Specifies user SID.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
           <dev:type>
@@ -9040,7 +9471,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:Description>
-          <maml:para>Specify the user account credentials to use to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
+          <maml:para>Specifies the user account credentials to be used to perform this task. The default credentials are the credentials of the currently logged on user.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
         <dev:type>
@@ -9052,7 +9483,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
         <maml:name>Domain</maml:name>
         <maml:Description>
-          <maml:para>Specify the user's domain.</maml:para>
+          <maml:para>Specifies the target NetBIOS domain name the target account belongs to.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -9064,7 +9495,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
         <maml:name>LMHash</maml:name>
         <maml:Description>
-          <maml:para>Specify a new LM password hash value in hexadecimal format.</maml:para>
+          <maml:para>Specifies a new LM password hash value in hexadecimal format.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -9076,7 +9507,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
         <maml:name>NTHash</maml:name>
         <maml:Description>
-          <maml:para>Specify a new NT password hash value in hexadecimal format.</maml:para>
+          <maml:para>Specifies a new NT password hash value in hexadecimal format.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
         <dev:type>
@@ -9088,7 +9519,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
-          <maml:para>Specify user's login.</maml:para>
+          <maml:para>Specifies user's login.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -9112,7 +9543,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
         <maml:name>Sid</maml:name>
         <maml:Description>
-          <maml:para>Specify user SID.</maml:para>
+          <maml:para>Specifies user SID.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
@@ -9166,9 +9597,12 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Set-SamAccountPasswordHash -SamAccountName 'john' `
+                                   -Domain CONTOSO `
+                                   -NTHash ac5d3227c79791b451eb28fcd9efbfb2 `
+                                   -Server 'lon-dc1.contoso.com'</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Resets the NT password hash of the target Active Directory account through the MS-SAMR protocol.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -9176,6 +9610,18 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-SamAccountPasswordHash.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBAccountPasswordHash</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -9395,8 +9841,8 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
-            Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
-&lt;# Sample Output
+            Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
+&lt;# Sample Output:
 
 Active Directory Password Quality Report
 ----------------------------------------
@@ -9457,7 +9903,8 @@ These accounts that require smart card authentication have a password:
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $results = Get-ADReplAccount -All -Server LON-DC1 |
-                   Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt</dev:code>
+                   Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' `
+                                        -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt</dev:code>
         <dev:remarks>
           <maml:para>Performs an online credential hygiene audit of AD against HIBP + a custom wordlist.</maml:para>
         </dev:remarks>
@@ -9475,7 +9922,7 @@ These accounts that require smart card authentication have a password:
         <maml:title>-------------------------- Example 4 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
             where DistinguishedName -like '*OU=Employees,DC=contoso,DC=com' |
-            Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt</dev:code>
+            Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt</dev:code>
         <dev:remarks>
           <maml:para>Performs an offline credential hygiene audit of a selected OU from AD database against HIBP.</maml:para>
         </dev:remarks>
@@ -9485,7 +9932,7 @@ These accounts that require smart card authentication have a password:
         <dev:code>PS C:\&gt; $contosoAccounts = Get-ADReplAccount -All -Server LON-DC1.contoso.com
 PS C:\&gt; $adatumAccounts = Get-ADReplAccount -All -Server NYC-DC1.adatum.com -Credential (Get-Credential)
 PS C:\&gt; $contosoAccounts + $adatumAccounts | Test-PasswordQuality
-&lt;# Sample Output (Partial)
+&lt;# Sample Output (Partial):
 
 These groups of accounts have the same passwords:
   Group 1:

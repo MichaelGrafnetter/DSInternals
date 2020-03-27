@@ -21,7 +21,7 @@ $aboutPagePath = Join-Path $xmlHelpSrcPath 'about_DSInternals.help.txt'
 Import-Module -Name platyPS
 
 # Remove any pre-existing XML help
-Remove-Item $xmlHelpBuildPath -Recurse
+Remove-Item $xmlHelpBuildPath -Recurse -ErrorAction SilentlyContinue
 
 # Load the freshly compiled module to generate the help for
 Import-Module -Name $dsInternalsModulePath

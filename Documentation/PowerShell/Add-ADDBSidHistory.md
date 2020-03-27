@@ -46,7 +46,10 @@ Note that the Active Directory Migration Tool (ADMT) is the only supported way o
 ### Example 1
 ```powershell
 PS C:\> Stop-Service -Name ntds -Force
-PS C:\> Add-ADDBSidHistory -SamAccountName John -SidHistory S-1-5-21-3623811102-3361044346-30300840-512,S-1-5-21-3623811102-3361044346-30300840-519 -DBPath C:\Windows\NTDS\ntds.dit
+PS C:\> Add-ADDBSidHistory -SamAccountName John `
+                           -SidHistory 'S-1-5-21-3623811102-3361044346-30300840-512',
+                                       'S-1-5-21-3623811102-3361044346-30300840-519' `
+                           -DatabasePath C:\Windows\NTDS\ntds.dit
 PS C:\> Start-Service -Name ntds
 ```
 
@@ -54,7 +57,7 @@ Adds the SIDs of the *Domain Admins* and *Enterprise Admins* groups into user *J
 
 ### Example 2
 ```powershell
-PS C:\> Import-Csv user.csv | Add-ADDBSidHistory -DBPath C:\Windows\NTDS\ntds.dit
+PS C:\> Import-Csv user.csv | Add-ADDBSidHistory -DatabasePath C:\Windows\NTDS\ntds.dit
 ```
 
 Imports a CSV file containing *SamAccountName* and *SidHistory* columns into a nds.dit file.

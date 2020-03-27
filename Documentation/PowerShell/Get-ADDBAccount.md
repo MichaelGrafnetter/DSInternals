@@ -42,14 +42,16 @@ Get-ADDBAccount [-BootKey <Byte[]>] -ObjectGuid <Guid> -DatabasePath <String> [-
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+
+Reads one or more accounts from an Active Directory database file. When provided with a boot key (AKA SysKey or system key), it also decrypts secret attributes.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBAccount -SamAccountName Administrator -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit'
-
+PS C:\> Get-ADDBAccount -SamAccountName Administrator `
+                        -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit'
+<# Sample Output:
 DistinguishedName: CN=Administrator,CN=Users,DC=contoso,DC=com
 Sid: S-1-5-21-1236425271-2880748467-2592687428-500
 Guid: b3d02974-6b1c-484c-9103-fd2f60d592c4
@@ -81,6 +83,7 @@ Credential Roaming
   Created:
   Modified:
   Credentials:
+#>
 ```
 
 Retrieves information about a single account from an Active Directory database. Secret attributes are not decrypted as no boot key is provided.
@@ -91,7 +94,7 @@ PS C:\> $key = Get-BootKey -SystemHiveFilePath 'C:\IFM Backup\registry\SYSTEM'
 PS C:\> Get-ADDBAccount -DistinguishedName: 'CN=Joe Smith,OU=Employees,DC=contoso,DC=com' `
                         -BootKey $key `
                         -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit'
-
+<# Sample Output:
 DistinguishedName: CN=Joe Smith,OU=Employees,DC=contoso,DC=com
 Sid: S-1-5-21-1236425271-2880748467-2592687428-1110
 Guid: 6fb7aca4-fe85-4dc5-9acd-b5b2529fe2bc
@@ -189,9 +192,68 @@ Credential Roaming
     CNGCertificate: joe\SystemCertificates\My\Certificates\3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
     RSAPrivateKey: joe\Crypto\RSA\S-1-5-21-1236425271-2880748467-2592687428-1110\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
     CNGPrivateKey: joe\Crypto\Keys\E8F13C2BA0209401C4DFE839CD57375E26BBE38F
+#>
 ```
 
 Retrieves information about a single account from an Active Directory database. Secret attributes are decrypted using the provided boot key.
+
+### Example 3
+```powershell
+PS C:\> $results = Get-ADDBAccount -DatabasePath '.\Active Directory\ntds.dit' `
+                                   -BootKey acdba64a3929261b04e5270c3ef973cf `
+                                   -All  |
+                   Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
+```
+
+Performs an offline credential hygiene audit of AD database against HIBP.
+
+### Example 4
+```powershell
+PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
+            Format-Custom -View PwDump |
+            Out-File -FilePath users.pwdump -Encoding ascii
+```
+
+Exports NT and LM password hashes from an Active Directory database to a pwdump file.
+
+### Example 5
+```powershell
+PS C:\> Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                          -BootKey 0be7a2afe1713642182e9b96f73a75da |
+            Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADDBAccount -All -DatabasePath '.\ADBackup\Active Directory\ntds.dit' |
+            Save-DPAPIBlob -DirectoryPath '.\Output'
+```
+
+Extracts DPAPI backup keys and roamed credentials (certificates, private keys, and DPAPI master keys) from an Active Directory database file and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.
+
+### Example 6
+```powershell
+PS C:\> Get-ADDBAccount -All -DatabasePath '.\ADBackup\Active Directory\ntds.dit' |
+            Select-Object -ExpandProperty KeyCredentials |
+            Where-Object Usage -eq NGC |
+            Format-Table -View ROCA
+<# Sample Output:
+
+Usage IsWeak Source  DeviceId                             Created    HolderDN
+----- ------ ------  --------                             -------    --------
+NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
+NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe,CN=Users,DC=contoso,DC=com
+#>
+```
+
+Lists weak public keys registered in Active Directory that were generated on ROCA-vulnerable TPMs.
+
+### Example 7
+```powershell
+PS C:\> $dc = Get-ADDBDomainController -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
+PS C:\> $adminSid = '{0}-500' -f $dc.DomainSid           
+PS C:\> $account = Get-ADDBAccount -Sid $adminSid `
+                                   -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
+                                   -BootKey 0be7a2afe1713642182e9b96f73a75da
+```
+
+Retrieves information about a the the built-in Administrator account, even if it was renamed.
 
 ## PARAMETERS
 
@@ -339,3 +401,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Get-ADSIAccount](Get-ADSIAccount.md)
 [Test-PasswordQuality](Test-PasswordQuality.md)
 [Save-DPAPIBlob](Save-DPAPIBlob.md)
+[Get-ADKeyCredential](Get-ADKeyCredential.md)

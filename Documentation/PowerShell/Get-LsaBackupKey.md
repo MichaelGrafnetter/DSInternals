@@ -18,13 +18,16 @@ Get-LsaBackupKey [[-ComputerName] <String>] [<CommonParameters>]
 
 ## DESCRIPTION
 
-The Data Protection API (DPAPI) is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.
+Reads the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-LSAD (AKA LSARPC) protocol. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.
+
+DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
 PS C:\> Get-LsaBackupKey -ComputerName LON-DC1
+<# Sample Output:
 
 FilePath          : ntds_capi_b1c56a3e-ddf7-41dd-a5f3-44a2ed27a96d.pvk
 KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey command:
@@ -40,16 +43,25 @@ Type              : LegacyKey
 DistinguishedName :
 KeyId             : 7882b20e-96ef-4ce5-a2b9-3efdccbbce28
 Data              : {1, 0, 0, 0...}
+#>
 ```
 
 Displays the DPAPI domain backup keys.
 
 ### Example 2
 ```powershell
-PS C:\> Get-LsaBackupKey -ComputerName LON-DC1 | Save-DPAPIBlob -DirectoryPath .\
+PS C:\> Get-LsaBackupKey -ComputerName LON-DC1 | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-ChildItem -Path '.\Output' | Select-Object -ExpandProperty Name
+<# Sample Output:
+kiwiscript.txt
+ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
+ntds_capi_4cee80c0-b6c6-406c-a68b-c0e5818bc436.cer
+ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pfx
+ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
+#>
 ```
 
-Saves the DPAPI domain backup keys to the working directory.
+Saves the DPAPI domain backup keys to the Output directory.
 
 ## PARAMETERS
 

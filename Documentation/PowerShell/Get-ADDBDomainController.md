@@ -25,7 +25,6 @@ Reads domain controller (DC) infromation from a ntds.dit file that is either ret
 ### Example 1
 ```powershell
 PS C:\> Get-ADDBDomainController -DatabasePath .\ntds.dit
-
 <# Sample Output:
 Name                       : LON-DC1
 DNSHostName                : LON-DC1.contoso.com

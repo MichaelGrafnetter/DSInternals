@@ -29,10 +29,7 @@ KDS Root Keys are used to encrypt the following:
 ### Example 1
 ```powershell
 PS C:\> Get-ADDBKdsRootKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
-
-<#
-Output:
-
+<# Sample Output:
 Id: 6a401799-8dd0-0b2c-3073-beb7ce2e734d
 Version: 1
 Creation Time: 7/27/2019 6:23:26 PM
@@ -59,9 +56,7 @@ Secret Agreement
 #>
 
 PS C:\> .\CQDPAPINGPFXDecrypter.exe /pfx Certificate.p12 /master C16A0D16B80307D9CF102C7DB11F69FE015EB0DCD85C2FC0A5005C10E9DB963AC1E18BF161882ABEEAFF1B01CD50076F3C6F7807323253AB9598DBE027A77DD7
-
-<#
-Output:
+<# Sample Output:
 Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
 #>
 ```

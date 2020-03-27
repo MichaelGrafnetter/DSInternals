@@ -32,6 +32,7 @@ The Boot Key is returned in hexadecimal format.
 ### Example 1
 ```powershell
 PS C:\> Get-BootKey -Online
+0be7a2afe1713642182e9b96f73a75da
 ```
 
 Retrieves the BootKey from the currently running OS.
@@ -39,7 +40,7 @@ Retrieves the BootKey from the currently running OS.
 ### Example 2
 ```powershell
 PS C:\> reg.exe SAVE HKLM\SYSTEM C:\RegBackup\SYSTEM.hiv
-PS C:\> Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv
+PS C:\> $key = Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv
 ```
 
 Creates a backup of the SYSTEM registry hive and then retrieves the BootKey from this backup. 

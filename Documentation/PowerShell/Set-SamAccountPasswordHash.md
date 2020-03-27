@@ -25,21 +25,26 @@ Set-SamAccountPasswordHash -Sid <SecurityIdentifier> -NTHash <Byte[]> [-LMHash <
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+
+Sets NT and LM password hashes of a user account in a local or remote Security Account Manager (SAM) or Active Directory (AD) database through the SAM Remote Protocol (MS-SAMR).
+Note that kerberos AES and DES ekeys of the target account are cleared by this command.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-SamAccountPasswordHash -SamAccountName 'john' `
+                                   -Domain CONTOSO `
+                                   -NTHash ac5d3227c79791b451eb28fcd9efbfb2 `
+                                   -Server 'lon-dc1.contoso.com'
 ```
 
-{{ Add example description here }}
+Resets the NT password hash of the target Active Directory account through the MS-SAMR protocol.
 
 ## PARAMETERS
 
 ### -Credential
-Specify the user account credentials to use to perform this task.
+Specifies the user account credentials to be used to perform this task.
 The default credentials are the credentials of the currently logged on user.
 
 ```yaml
@@ -55,7 +60,7 @@ Accept wildcard characters: False
 ```
 
 ### -Domain
-Specify the user's domain.
+Specifies the target NetBIOS domain name the target account belongs to.
 
 ```yaml
 Type: String
@@ -70,7 +75,7 @@ Accept wildcard characters: False
 ```
 
 ### -LMHash
-Specify a new LM password hash value in hexadecimal format.
+Specifies a new LM password hash value in hexadecimal format.
 
 ```yaml
 Type: Byte[]
@@ -85,7 +90,7 @@ Accept wildcard characters: False
 ```
 
 ### -NTHash
-Specify a new NT password hash value in hexadecimal format.
+Specifies a new NT password hash value in hexadecimal format.
 
 ```yaml
 Type: Byte[]
@@ -100,7 +105,7 @@ Accept wildcard characters: False
 ```
 
 ### -SamAccountName
-Specify user's login.
+Specifies user's login.
 
 ```yaml
 Type: String
@@ -130,7 +135,7 @@ Accept wildcard characters: False
 ```
 
 ### -Sid
-Specify user SID.
+Specifies user SID.
 
 ```yaml
 Type: SecurityIdentifier
@@ -162,3 +167,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[Get-ADDBAccount](Get-ADDBAccount.md)
+[Get-ADReplAccount](Get-ADReplAccount.md)
+[Set-ADDBAccountPasswordHash](Set-ADDBAccountPasswordHash.md)

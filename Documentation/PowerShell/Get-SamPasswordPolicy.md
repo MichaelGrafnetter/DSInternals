@@ -24,13 +24,14 @@ Retrieves the current password policy for a domain through the MS-SAMR protocol.
 ### Example 1
 ```powershell
 PS C:\> Get-SamPasswordPolicy -Domain CONTOSO -Server LON-DC1
-
+<# Sample Output:
 MinPasswordLength           : 8
 ComplexityEnabled           : True
 ReversibleEncryptionEnabled : False
 MaxPasswordAge              : 90.00:00:00.0
 MinPasswordAge              : 01:00:00
 PasswordHistoryCount        : 10
+#>
 ```
 
 Queries the LON-DC1 domain controller for default domain password policy.
@@ -38,13 +39,14 @@ Queries the LON-DC1 domain controller for default domain password policy.
 ### Example 2
 ```powershell
 PS C:\> Get-SamPasswordPolicy -Domain Builtin
-
+<# Sample Output:
 MinPasswordLength           : 0
 ComplexityEnabled           : False
 ReversibleEncryptionEnabled : False
 MaxPasswordAge              : 42.22:47:31.7437440
 MinPasswordAge              : 00:00:00
 PasswordHistoryCount        : 0
+#>
 ```
 
 Queries the local computer for its current password policy.

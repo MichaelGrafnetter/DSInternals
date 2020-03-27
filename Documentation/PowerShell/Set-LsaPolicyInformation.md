@@ -18,13 +18,20 @@ Set-LsaPolicyInformation -DomainName <String> -DnsDomainName <String> -DnsForest
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+
+Configures AD-related Local Security Authority (LSA) Policies of the local or a remote computer.
+This functionality is helpful when restoring Active Directory domain controllers (DC) from IFM backups.
+Note that running this command against a DC with parameters that do not match the information stored in its local AD database might prevent the target DC from booting ever again.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Set-LsaPolicyInformation -DomainName 'ADATUM' -DnsDomainName 'Adatum.com' -DnsForestName 'Adatum.com' -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 -DomainSid S-1-5-21-1817670852-3242289776-1304069626
+PS C:\> Set-LsaPolicyInformation -DomainName 'ADATUM' `
+                                 -DnsDomainName 'Adatum.com' `
+                                 -DnsForestName 'Adatum.com' `
+                                 -DomainGuid 279b615e-ae79-4c86-a61a-50f687b9f7b8 `
+                                 -DomainSid S-1-5-21-1817670852-3242289776-1304069626
 ```
 
 Configures AD-related LSA Policy Information of the local computer.
@@ -138,3 +145,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[New-ADDBRestoreFromMediaScript](New-ADDBRestoreFromMediaScript.md)

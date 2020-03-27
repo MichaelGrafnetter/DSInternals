@@ -27,11 +27,13 @@ The password is actually a cryptographically generated array of 256 bytes that i
 ```powershell
 PS C:\> $gmsa = Get-ADServiceAccount -Identity 'SQL_HQ_Primary' -Properties 'msDS-ManagedPassword'
 PS C:\> ConvertFrom-ADManagedPasswordBlob -Blob $gmsa.'msDS-ManagedPassword'
+<# Sample Output:
 Version                   : 1
 CurrentPassword           : 湤ୟɰ橣낔饔ᦺ几᧾ʞꈠ⿕ՔὬ랭뷾햾咶郸�렇ͧ퀟᝘럓몚ꬶ佩䎖∘Ǐ㦗ן뱷鼹⽩Ⲃ⫝咽㠅Ｅ䠹鸞왶婰鞪
 PreviousPassword          :
 QueryPasswordInterval     : 29.17:15:36.3736817
 UnchangedPasswordInterval : 29.17:10:36.3736817
+#>
 ```
 
 Decodes the managed password information from a group-managed service account (GMSA) called *SQL_HQ_Primary*. The user retrieving the managed password needs to be listed in the *PrincipalsAllowedToRetrieveManagedPassword* property of the GMSA.

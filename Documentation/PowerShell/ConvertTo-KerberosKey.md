@@ -25,6 +25,7 @@ Supports the derivation of AES256, AES128 and DES encryption keys. To calculate 
 ```powershell
 PS C:\> $pwd = ConvertTo-SecureString -String 'Pa$$w0rd' -AsPlainText -Force
 PS C:\> ConvertTo-KerberosKey -Password $pwd -Salt 'CONTOSO.COMAdministrator'
+<# Sample Output:
 
 AES256_CTS_HMAC_SHA1_96
   Key: 660e61042b190b5724c62bb473facca12058fb9ad3c03c0d2809f839c0352502
@@ -37,6 +38,7 @@ AES128_CTS_HMAC_SHA1_96
 DES_CBC_MD5
   Key: aed02c52204ca2ce
   Iterations: 4096
+#>
 ```
 
 Applies 3 different kerberos key derivation functions to the specified password and salt.

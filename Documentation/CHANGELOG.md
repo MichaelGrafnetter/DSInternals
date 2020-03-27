@@ -9,10 +9,12 @@ All notable changes to this project will be documented in this file. The format 
 
 - New logo and package icons!
 - Both [lastLogon](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada1/93258066-276d-4357-8458-981c19caad95) and [lastLogonTimestamp](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada1/530d7194-20f6-4aaa-8d80-9ca6b6350ad6) user account attributes are now exposed.
+- The `-Server` parameter of the [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlet now has the standard `-ComputerName` alias.
 
 ### Changed
 
 - The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+- Major [PowerShell module documentation](PowerShell/Readme.md#directory-services-internals-powershell-module) improvements.
 
 ## [4.2] - 2020-03-18
 

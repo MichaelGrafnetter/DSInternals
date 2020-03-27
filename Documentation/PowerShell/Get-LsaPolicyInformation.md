@@ -27,12 +27,13 @@ The local security policy of a system is a set of information about the security
 ### Example 1
 ```powershell
 PS C:\> Get-LSAPolicyInformation
-
+<# Sample Output:
 Domain/Workgroup Name : WORKGROUP
 Account Domain Name   : MYPC
 Account Domain SID    : S-1-5-21-2814909047-1086830290-2660982408
 Local Domain Name     : MYPC
 Local Domain SID      : S-1-5-21-2814909047-1086830290-2660982408
+#>
 ```
 
 Retrieves LSA Policy from the local computer.
@@ -40,7 +41,7 @@ Retrieves LSA Policy from the local computer.
 ### Example 2
 ```powershell
 PS C:\> Get-LSAPolicyInformation -ComputerName LON-DC1
-
+<# Sample Output:
 Domain/Workgroup Name : ADATUM
 Forest DNS Name       : Adatum.com
 Domain DNS Name       : Adatum.com
@@ -50,6 +51,7 @@ Account Domain Name   : ADATUM
 Account Domain SID    : S-1-5-21-3180365339-800773672-3767752645
 Local Domain Name     : LON-DC1
 Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202
+#>
 ```
 
 Retrieves LSA Policy from a remote computer called LON-DC1.

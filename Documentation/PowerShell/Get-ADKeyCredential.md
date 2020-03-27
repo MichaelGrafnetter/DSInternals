@@ -43,9 +43,9 @@ This cmdlet can be used to display existing key credentials from Active Director
 ### Example 1
 ```powershell
 PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
-             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-             Get-KeyCredential
-<# Output:
+            Select-Object -ExpandProperty msDS-KeyCredentialLink |
+            Get-KeyCredential
+<# Sample Output:
 
 Usage Source  Flags       DeviceId                             Created    HolderDN
 ----- ------  -----       --------                             -------    --------
@@ -67,8 +67,7 @@ PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-K
             Get-KeyCredential |
             Where-Object Usage -eq NGC |
             Format-Table -View ROCA
-
-<# Output:
+<# Sample Output:
 
 Usage IsWeak Source  DeviceId                             Created    HolderDN
 ----- ------ ------  --------                             -------    --------
@@ -99,8 +98,7 @@ PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-K
             Get-KeyCredential |
             Where-Object Usage -eq FIDO |
             Format-Table -View FIDO
-
-<# Output:
+<# Sample Output:
 
 DisplayName           Flags       FidoFlags                                                 Created    HolderDN
 -----------           -----       ---------                                                 -------    --------
@@ -128,7 +126,9 @@ Selectively deletes key credentials from Active Directory.
 
 ### Example 6
 ```powershell
-PS C:\> $certificateSubject = 'S-1-5-21-1236425271-2880748467-2592687428-1109/13f787d5-4078-47ee-a6e7-b3af92f76c1e/login.windows.net/383a3889-5bc9-47a3-846c-2b70f0b7fe0e/john@contoso.com'
+PS C:\> $upn = 'john@contoso.com'
+PS C:\> $userSid = 'S-1-5-21-1236425271-2880748467-2592687428-1109'
+PS C:\> $certificateSubject = '{0}/{1}/login.windows.net/383a3889-5bc9-47a3-846c-2b70f0b7fe0e/{2}' -f $userSid, (New-Guid), $upn
 PS C:\> $certificate = New-SelfSignedCertificate -Subject $certificateSubject `
                                                  -KeyLength 2048 `
                                                  -Provider 'Microsoft Strong Cryptographic Provider' `
@@ -143,6 +143,7 @@ PS C:\> Set-ADObject -Identity $ngcKey.HolderDN -Add @{ 'msDS-KeyCredentialLink'
 ```
 
 Generates a new NGC key for a user account and registers it in Active Directory.
+Note that the value of the certificate Subject has no effect on the functionality, but as it appears in DC logs, this example uses the same format as Windows does.
 
 ### Example 7
 ```powershell

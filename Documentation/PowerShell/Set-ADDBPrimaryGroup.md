@@ -43,7 +43,9 @@ Modifies the primaryGroupId attribute of an account in a ntds.dit file. The most
 
 ### Example 1
 ```powershell
-PS C:\> Set-ADDBPrimaryGroup -SamAccountName John -PrimaryGroupId 512 -DatabasePath 'D:\Windows\NTDS\ntds.dit'
+PS C:\> Set-ADDBPrimaryGroup -SamAccountName John `
+                             -PrimaryGroupId 512 `
+                             -DatabasePath 'D:\Windows\NTDS\ntds.dit'
 ```
 
 Moves the account *John* from the default *Domain Users* group to *Domain Admins*.

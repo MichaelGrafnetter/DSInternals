@@ -10,7 +10,7 @@
         #region Parameters
         [Parameter(Mandatory = false)]
         [ValidateNotNullOrEmpty]
-        [Alias("Host", "DomainController", "DC")]
+        [Alias("Host", "DomainController", "DC", "ComputerName")]
         public string Server
         {
             get;

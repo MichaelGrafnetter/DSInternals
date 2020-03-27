@@ -31,8 +31,8 @@ Although the cmdlet output is formatted in a human readable fashion, it is still
 ### Example 1
 ```powershell
 PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
-            Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
-<# Sample Output
+            Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
+<# Sample Output:
 
 Active Directory Password Quality Report
 ----------------------------------------
@@ -93,7 +93,8 @@ Performs an offline credential hygiene audit of AD database against HIBP.
 ### Example 2
 ```powershell
 PS C:\> $results = Get-ADReplAccount -All -Server LON-DC1 |
-                   Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
+                   Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' `
+                                        -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
 ```
 
 Performs an online credential hygiene audit of AD against HIBP + a custom wordlist.
@@ -111,7 +112,7 @@ Performs a dictionary attack against a set of accounts. The Test-PasswordQuality
 ```powershell
 PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
             where DistinguishedName -like '*OU=Employees,DC=contoso,DC=com' |
-            Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v4.txt
+            Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
 ```
 
 Performs an offline credential hygiene audit of a selected OU from AD database against HIBP.
@@ -121,7 +122,7 @@ Performs an offline credential hygiene audit of a selected OU from AD database a
 PS C:\> $contosoAccounts = Get-ADReplAccount -All -Server LON-DC1.contoso.com
 PS C:\> $adatumAccounts = Get-ADReplAccount -All -Server NYC-DC1.adatum.com -Credential (Get-Credential)
 PS C:\> $contosoAccounts + $adatumAccounts | Test-PasswordQuality
-<# Sample Output (Partial)
+<# Sample Output (Partial):
 
 These groups of accounts have the same passwords:
   Group 1:
