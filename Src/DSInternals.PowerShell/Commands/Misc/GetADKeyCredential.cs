@@ -125,7 +125,7 @@
                 case ParamSetFromDNBinary:
                     foreach (string singleValue in this.DNWithBinaryData)
                     {
-                        keyCredential = KeyCredential.Parse(singleValue);
+                        keyCredential = KeyCredential.ParseDNBinary(singleValue);
                         this.WriteObject(keyCredential);
                     }
                     break;

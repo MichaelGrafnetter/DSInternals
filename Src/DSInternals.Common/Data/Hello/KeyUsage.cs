@@ -37,6 +37,11 @@
         /// <summary>
         /// File Encryption Key (KEY_USAGE_FEK)
         /// </summary>
-        FEK = 0x08
+        FEK = 0x08,
+
+        /// <summary>
+        /// DPAPI Key
+        /// </summary>
+        DPAPI // TODO: The DPAPI enum needs to be mapped to a proper integer value.
     }
 }

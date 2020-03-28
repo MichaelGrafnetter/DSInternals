@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 namespace DSInternals.Common.Data
 {
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class KeyMaterialFido
     {
         /// <summary>

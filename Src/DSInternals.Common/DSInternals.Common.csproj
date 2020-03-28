@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADSI\AdsiClient.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Data\DPAPI\RoamedCredentialType.cs" />
     <Compile Include="Cryptography\CngSoftwareProviderTransportBlob.cs" />
     <Compile Include="Data\Hello\CustomKeyInformation.cs" />
+    <Compile Include="Data\Hello\CustomKeyInformationConverter.cs" />
     <Compile Include="Data\Hello\FidoAttestedCredentialData.cs" />
     <Compile Include="Data\Hello\FidoAuthenticatorData.cs" />
     <Compile Include="Data\Hello\FidoAuthenticatorFlags.cs" />
@@ -167,6 +169,8 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Data\FIDO2\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
