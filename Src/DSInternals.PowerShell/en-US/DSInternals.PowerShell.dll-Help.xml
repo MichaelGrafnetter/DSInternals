@@ -4546,6 +4546,10 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         <maml:linkText>Get-ADDBAccount</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-AzureADUserEx</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -5617,6 +5621,288 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
         <maml:linkText>Save-DPAPIBlob</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADKeyCredential</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-AzureADUserEx</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>AzureADUserEx</command:noun>
+      <maml:description>
+        <maml:para>Gets a user from Azure AD, including the associated FIDO and NGC keys.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Get-AzureADUserEx cmdlet uses an undocumented Azure AD Graph API endpoint to retrieve the normally hidden searchableDeviceKeys attribute of user accounts. This attribute holds different types of key credentials, including the FIDO2 and NGC keys that are used by Windows Hello for Business.</maml:para>
+      <maml:para>This cmdlet is not intended to replace the standard Get-AzureADUser cmdlet. Only a handful of attributes are retrieved from Azure Active Directory and  No administrative role is required to perform this operation.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-AzureADUserEx</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Token">
+          <maml:name>AccessToken</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the access token retrieved by the Connect-AzureAD cmdlet.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="AllUsers">
+          <maml:name>All</maml:name>
+          <maml:Description>
+            <maml:para>If true, return all users. If false, return the first 999 objects.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
+          <maml:name>TenantId</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the Azure AD tenant to perform the search in. If empty, the tenant of the authenticated user will be used.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-AzureADUserEx</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Token">
+          <maml:name>AccessToken</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the access token retrieved by the Connect-AzureAD cmdlet.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Identity, Id, UserId, ObjectGuid">
+          <maml:name>ObjectId</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the identity of a user in Azure AD.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
+          <maml:name>TenantId</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the Azure AD tenant to perform the search in. If empty, the tenant of the authenticated user will be used.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-AzureADUserEx</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Token">
+          <maml:name>AccessToken</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the access token retrieved by the Connect-AzureAD cmdlet.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
+          <maml:name>TenantId</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the Azure AD tenant to perform the search in. If empty, the tenant of the authenticated user will be used.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UPN, UserName">
+          <maml:name>UserPrincipalName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the UPN of a user in Azure AD.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Token">
+        <maml:name>AccessToken</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the access token retrieved by the Connect-AzureAD cmdlet.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="AllUsers">
+        <maml:name>All</maml:name>
+        <maml:Description>
+          <maml:para>If true, return all users. If false, return the first 999 objects.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Identity, Id, UserId, ObjectGuid">
+        <maml:name>ObjectId</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the identity of a user in Azure AD.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+        <dev:type>
+          <maml:name>Guid</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
+        <maml:name>TenantId</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the Azure AD tenant to perform the search in. If empty, the tenant of the authenticated user will be used.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+        <dev:type>
+          <maml:name>Guid</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UPN, UserName">
+        <maml:name>UserPrincipalName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the UPN of a user in Azure AD.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.AzureAD.AzureADUser</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Connect-AzureAD
+PS C:\&gt; $token = [Microsoft.Open.Azure.AD.CommonLibrary.AzureSession]::AccessTokens['AccessToken'].AccessToken
+PS C:\&gt; Get-AzureADUserEx -All -Token $token |
+            Where-Object Enabled -eq $true |
+            Select-Object -ExpandProperty KeyCredentials |
+            Where-Object Usage -eq FIDO |
+            Format-Table -View FIDO
+&lt;# Sample Output:
+
+DisplayName           Flags       FidoFlags                                                 Created    HolderDN
+-----------           -----       ---------                                                 -------    --------
+YubiKey FIDO2         Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-07-11
+Yubikey 5             Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-06-21
+Feitian BioPass FIDO2 Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-26
+eWMB Goldengate G320  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29
+eWBM Goldengate G310  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29
+
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Lists FIDO2 token registered in an Azure AD tenant.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-AzureADUserEx -All -Token $token |
+            Where-Object Enabled -eq $true |
+            Select-Object -ExpandProperty KeyCredentials |
+            Where-Object Usage -eq NGC |
+            Format-Table -View ROCA
+&lt;# Sample Output:
+
+Usage IsWeak Source  DeviceId                             Created    HolderDN
+----- ------ ------  --------                             -------    --------
+NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 
+NGC   False  AzureAD 1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 
+
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Lists weak public keys registered in Azure Active Directory that were generated on ROCA-vulnerable TPMs.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-AzureADTenantDetail | Out-Null
+PS C:\&gt; $token = [Microsoft.Open.Azure.AD.CommonLibrary.AzureSession]::AccessTokens['AccessToken'].AccessToken
+PS C:\&gt; Get-AzureADUserEx -UserPrincipalName 'michael@dsinternals.com' -Token $token
+&lt;# Sample Output:
+
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Gets information about a single Azure Active Directory user. If necessary, the access token is automatically refreshed by the standard Get-AzureADTenantDetail cmdlet.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Get-ADKeyCredential</maml:linkText>
         <maml:uri></maml:uri>

@@ -1,4 +1,5 @@
 ﻿using System;
+#pragma warning disable CA1028 // Enum Storage should be Int32
 
 namespace DSInternals.Common.Data.Fido
 {

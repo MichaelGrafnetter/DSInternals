@@ -14,7 +14,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <NuGetPackageImportStamp>a6f7f4f7</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -45,12 +46,20 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADSI\AdsiClient.cs" />
     <Compile Include="ADSI\AdsiObjectAdapter.cs" />
+    <Compile Include="AzureAD\AzureADUser.cs" />
+    <Compile Include="AzureAD\AzureADClient.cs" />
+    <Compile Include="AzureAD\GraphApiException.cs" />
+    <Compile Include="AzureAD\ODataError.cs" />
+    <Compile Include="AzureAD\ODataErrorMessage.cs" />
+    <Compile Include="AzureAD\OdataErrorResponse.cs" />
+    <Compile Include="AzureAD\OdataPagedResponse.cs" />
     <Compile Include="Cryptography\HashEqualityComparer.cs" />
     <Compile Include="Cryptography\KerberosKeyDerivation.cs" />
     <Compile Include="Cryptography\SortedFileSearcher.cs" />

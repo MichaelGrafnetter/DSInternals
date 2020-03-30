@@ -287,3 +287,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Add-ADReplNgcKey](Add-ADReplNgcKey.md)
 [Get-ADReplAccount](Get-ADReplAccount.md)
 [Get-ADDBAccount](Get-ADDBAccount.md)
+[Get-AzureADUserEx](Get-AzureADUserEx.md)

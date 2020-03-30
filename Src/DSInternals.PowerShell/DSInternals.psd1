@@ -82,7 +82,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
                   'Set-LSAPolicyInformation', 'New-ADDBRestoreFromMediaScript','Get-LsaBackupKey',
-                  'Add-ADReplNgcKey'
+                  'Add-ADReplNgcKey', 'Get-AzureADUserEx'
 
 # Variables to export from this module
 VariablesToExport = @()
@@ -127,7 +127,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'ActiveDirectory', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows'
+        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/License.txt'
