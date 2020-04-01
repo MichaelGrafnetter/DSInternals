@@ -4,8 +4,15 @@ namespace DSInternals.Common.AzureAD
 {
     public class GraphApiException : Exception
     {
-        public GraphApiException(string message) : base(message)
+        public string ErrorCode
         {
+            get;
+            protected set;
+        }
+
+        public GraphApiException(string message, string errorCode = null) : base(message)
+        {
+            this.ErrorCode = errorCode;
         }
 
         public GraphApiException(string message, Exception innerException) : base(message, innerException)
@@ -14,7 +21,7 @@ namespace DSInternals.Common.AzureAD
 
         public GraphApiException(ODataError error) : base(error.Message.Value)
         {
-            this.Data.Add("ErrorCode", error.Code);
+            this.ErrorCode = error.Code;
         }
     }
 }

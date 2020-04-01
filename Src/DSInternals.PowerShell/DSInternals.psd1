@@ -48,7 +48,8 @@ ProcessorArchitecture = 'None'
 TypesToProcess = @('DSInternals.types.ps1xml')
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = 'Views\DSInternals.Hash.format.ps1xml',
+FormatsToProcess = 'Views\DSInternals.AzureADUser.format.ps1xml',
+                   'Views\DSInternals.Hash.format.ps1xml',
                    'Views\DSInternals.RoamedCredential.format.ps1xml',
                    'Views\DSInternals.Kerberos.format.ps1xml',
                    'Views\DSInternals.KeyCredential.format.ps1xml',

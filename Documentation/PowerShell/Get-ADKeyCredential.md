@@ -14,7 +14,7 @@ Creates an object representing Windows Hello for Business or FIDO credentials fr
 
 ### FromUserCertificate (Default)
 ```
-Get-ADKeyCredential [-Certificate] <X509Certificate2> [-DeviceId] <Guid> -HolderDN <String>
+Get-ADKeyCredential [-Certificate] <X509Certificate2> [-DeviceId] <Guid> -OwnerDN <String>
  [-CreationTime <DateTime>] [<CommonParameters>]
 ```
 
@@ -25,12 +25,12 @@ Get-ADKeyCredential [-DNWithBinaryData] <String[]> [<CommonParameters>]
 
 ### FromBinary
 ```
-Get-ADKeyCredential -BinaryData <Byte[]> -HolderDN <String> [<CommonParameters>]
+Get-ADKeyCredential -BinaryData <Byte[]> -OwnerDN <String> [<CommonParameters>]
 ```
 
 ### FromComputerCertificate
 ```
-Get-ADKeyCredential [-Certificate] <X509Certificate2> -HolderDN <String> [-CreationTime <DateTime>]
+Get-ADKeyCredential [-Certificate] <X509Certificate2> -OwnerDN <String> [-CreationTime <DateTime>]
  [-IsComputerKey] [<CommonParameters>]
 ```
 
@@ -47,8 +47,8 @@ PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-K
             Get-KeyCredential
 <# Sample Output:
 
-Usage Source  Flags       DeviceId                             Created    HolderDN
------ ------  -----       --------                             -------    --------
+Usage Source  Flags       DeviceId                             Created    Owner
+----- ------  -----       --------                             -------    -----
 NGC   AD      None        cfe9a872-13ff-4751-a777-aec88c30a762 2019-08-01 CN=John Doe,CN=Users,DC=contoso,DC=com
 STK   AD      None                                             2017-08-23 CN=PC01,CN=Computers,DC=contoso,DC=com
 NGC   AD      MFANotUsed                                       2017-08-23 CN=PC02,CN=Computers,DC=contoso,DC=com
@@ -69,8 +69,8 @@ PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-K
             Format-Table -View ROCA
 <# Sample Output:
 
-Usage IsWeak Source  DeviceId                             Created    HolderDN
------ ------ ------  --------                             -------    --------
+Usage IsWeak Source  DeviceId                             Created    Owner
+----- ------ ------  --------                             -------    -----
 NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
 NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe,CN=Users,DC=contoso,DC=com
 
@@ -100,13 +100,12 @@ PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-K
             Format-Table -View FIDO
 <# Sample Output:
 
-DisplayName           Flags       FidoFlags                                                 Created    HolderDN
------------           -----       ---------                                                 -------    --------
-eWMB Goldengate G320  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
-eWBM Goldengate G310  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
-YubiKey FIDO2         Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-07-11 CN=John Doe,CN=Users,DC=contoso,DC=com
-Yubikey 5             Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-06-21 CN=John Doe,CN=Users,DC=contoso,DC=com
-Feitian BioPass FIDO2 Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-26 CN=John Doe,CN=Users,DC=contoso,DC=com
+DisplayName           AAGUID                               Alg   Counter Created    Owner
+-----------           ------                               ---   ------- -------    -----
+eWMB Goldengate G320  87dbc5a1-4c94-4dc8-8a47-97d800fd1f3c ES256      37 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
+eWBM Goldengate G310  95442b2e-f15e-4def-b270-efb106facb4e ES256      48 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
+Yubikey 5             cb69481e-8ff7-4039-93ec-0a2729a154a8 ES256      25 2019-06-21 CN=John Doe,CN=Users,DC=contoso,DC=com
+Feitian All-In-Pass   12ded745-4bed-47d4-abaa-e713f51d6393 ES256    1398 2020-03-31 CN=John Doe,CN=Users,DC=contoso,DC=com
 
 #>
 ```
@@ -119,7 +118,7 @@ PS C:\> Get-ADUser -Identity john -Properties msDS-KeyCredentialLink |
     Select-Object -ExpandProperty msDS-KeyCredentialLink |
     Get-KeyCredential |
     Out-GridView -OutputMode Multiple -Title 'Select a credentials for removal...' |
-    ForEach-Object { Set-ADObject -Identity $PSItem.HolderDN -Remove @{ 'msDS-KeyCredentialLink' = $PSItem.ToDNWithBinary() } }
+    ForEach-Object { Set-ADObject -Identity $PSItem.Owner -Remove @{ 'msDS-KeyCredentialLink' = $PSItem.ToDNWithBinary() } }
 ```
 
 Selectively deletes key credentials from Active Directory.
@@ -138,8 +137,8 @@ PS C:\> $certificate = New-SelfSignedCertificate -Subject $certificateSubject `
                                                  -SuppressOid '2.5.29.14' `
                                                  -KeyUsage None `
                                                  -KeyExportPolicy Exportable
-PS C:\> $ngcKey = Get-KeyCredential -Certificate $certificate -DeviceId (New-Guid) -HolderDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
-PS C:\> Set-ADObject -Identity $ngcKey.HolderDN -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }
+PS C:\> $ngcKey = Get-KeyCredential -Certificate $certificate -DeviceId (New-Guid) -OwnerDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
+PS C:\> Set-ADObject -Identity $ngcKey.Owner -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }
 ```
 
 Generates a new NGC key for a user account and registers it in Active Directory.
@@ -156,7 +155,7 @@ PS C:\> $certificate = New-SelfSignedCertificate -Subject 'S-1-5-21-1236425271-2
                                                  -SuppressOid '2.5.29.14' `
                                                  -KeyUsage None `
                                                  -KeyExportPolicy Exportable
-PS C:\> $ngcKey = Get-KeyCredential -IsComputerKey -Certificate $certificate -HolderDN 'CN=PC01,CN=Computers,DC=contoso,DC=com'
+PS C:\> $ngcKey = Get-KeyCredential -IsComputerKey -Certificate $certificate -OwnerDN 'CN=PC01,CN=Computers,DC=contoso,DC=com'
 PS C:\> Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }
 ```
 
@@ -239,13 +238,13 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -HolderDN
-Specifies the distinguished name (DN) of the object that these credentials are associated with.
+### -IsComputerKey
+Indicates that the resulting key credential must meet the DS-Validated-Write-Computer requirements.
 
 ```yaml
-Type: String
-Parameter Sets: FromUserCertificate, FromBinary, FromComputerCertificate
-Aliases: DistinguishedName, DN, ObjectDN
+Type: SwitchParameter
+Parameter Sets: FromComputerCertificate
+Aliases:
 
 Required: True
 Position: Named
@@ -254,13 +253,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IsComputerKey
-Indicates that the resulting key credential must meet the DS-Validated-Write-Computer requirements.
+### -OwnerDN
+Specifies the distinguished name (DN) of the object that these credentials are associated with.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: FromComputerCertificate
-Aliases:
+Type: String
+Parameter Sets: FromUserCertificate, FromBinary, FromComputerCertificate
+Aliases: DistinguishedName, DN, ObjectDN, HolderDN, Holder, Owner, UserPrincipalName, UPN
 
 Required: True
 Position: Named

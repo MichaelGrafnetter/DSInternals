@@ -38,8 +38,8 @@ PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' |
             Format-Table -View ROCA
 <# Sample Output:
 
-Usage IsWeak Source  DeviceId                             Created    HolderDN
------ ------ ------  --------                             -------    --------
+Usage IsWeak Source  DeviceId                             Created    Owner
+----- ------ ------  --------                             -------    -----
 NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
 NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe,CN=Users,DC=contoso,DC=com
 #>

@@ -32,6 +32,11 @@
         private const ushort PackSize = 4;
 
         /// <summary>
+        /// Cached value of the parsed FIDO key material
+        /// </summary>
+        private KeyMaterialFido _cachedFidoKeyMaterial;
+
+        /// <summary>
         /// Defines the version of the structure.
         /// </summary>
         public KeyCredentialVersion Version
@@ -96,12 +101,15 @@
         {
             get
             {
-                if (this.Usage == KeyUsage.FIDO)
+                if (this.Usage == KeyUsage.FIDO && this._cachedFidoKeyMaterial == null && this.RawKeyMaterial != null)
                 {
+                    // The raw value has not yet been parsed
                     var fidoCredString = System.Text.Encoding.UTF8.GetString(this.RawKeyMaterial, 0, this.RawKeyMaterial.Length);
-                    return JsonConvert.DeserializeObject<KeyMaterialFido>(fidoCredString);
+                    this._cachedFidoKeyMaterial = JsonConvert.DeserializeObject<KeyMaterialFido>(fidoCredString);
                 }
-                else return null;
+
+                // Returned the parsed object from cache or NULL if no FIDO key is present.
+                return this._cachedFidoKeyMaterial;
             }
         }
 
@@ -208,18 +216,19 @@
         }
 
         /// <summary>
-        /// Distinguished name of the AD object that holds this key credential.
+        /// Distinguished name of the AD object (UPN in case of AAD objects) that holds this key credential.
         /// </summary>
-        public string HolderDN
+        public string Owner
         {
             get;
-            private set;
+            // We need to update this property after JSON deserialization, so it is internal instead of private.
+            internal set;
         }
 
         /// <summary>
         /// Gets the FIDO AAGUID. For JSON deserialization only.
         /// </summary>
-        [JsonProperty("fidoAaGuid", Order = 7)]
+        [JsonProperty("fidoAaGuid", Order = 7, ObjectCreationHandling = ObjectCreationHandling.Replace)]
         private Guid? FidoAaGuid
         {
             get
@@ -239,7 +248,7 @@
         /// <summary>
         /// Gets the FIDO authenticator version. For JSON deserialization only.
         /// </summary>
-        [JsonProperty("fidoAuthenticatorVersion", Order = 8)]
+        [JsonProperty("fidoAuthenticatorVersion", Order = 8, ObjectCreationHandling = ObjectCreationHandling.Replace)]
         private string FidoAuthenticatorVersion
         {
             get
@@ -251,7 +260,7 @@
         /// <summary>
         /// Gets a list of thumbprints of FIDO Attestation Certificates. For JSON deserialization only.
         /// </summary>
-        [JsonProperty("fidoAttestationCertificates", Order = 9)]
+        [JsonProperty("fidoAttestationCertificates", Order = 9, ObjectCreationHandling = ObjectCreationHandling.Replace)]
         private string[] FidoAttestationCertificates
         {
             get
@@ -268,26 +277,26 @@
             }
         }
 
-        public KeyCredential(X509Certificate2 certificate, Guid? deviceId, string holderDN, DateTime? currentTime = null, bool isComputerKey = false)
+        public KeyCredential(X509Certificate2 certificate, Guid? deviceId, string owner, DateTime? currentTime = null, bool isComputerKey = false)
         {
             Validator.AssertNotNull(certificate, nameof(certificate));
 
             // Computer NGC keys are DER-encoded, while user NGC keys are encoded as BCRYPT_RSAKEY_BLOB.
             byte[] publicKey = isComputerKey ? certificate.ExportRSAPublicKeyDER() : certificate.ExportRSAPublicKeyBCrypt();
-            this.Initialize(publicKey, deviceId, holderDN, currentTime, isComputerKey);
+            this.Initialize(publicKey, deviceId, owner, currentTime, isComputerKey);
         }
 
-        public KeyCredential(byte[] publicKey, Guid? deviceId, string holderDN, DateTime? currentTime = null, bool isComputerKey = false)
+        public KeyCredential(byte[] publicKey, Guid? deviceId, string owner, DateTime? currentTime = null, bool isComputerKey = false)
         {
             Validator.AssertNotNull(publicKey, nameof(publicKey));
-            this.Initialize(publicKey, deviceId, holderDN, currentTime, isComputerKey);
+            this.Initialize(publicKey, deviceId, owner, currentTime, isComputerKey);
         }
 
-        private void Initialize(byte[] publicKey, Guid? deviceId, string holderDN, DateTime? currentTime, bool isComputerKey)
+        private void Initialize(byte[] publicKey, Guid? deviceId, string owner, DateTime? currentTime, bool isComputerKey)
         {
-            // Prodess holder DN
-            Validator.AssertNotNullOrEmpty(holderDN, nameof(holderDN));
-            this.HolderDN = holderDN;
+            // Prodess owner DN/UPN
+            Validator.AssertNotNullOrEmpty(owner, nameof(owner));
+            this.Owner = owner;
 
             // Initialize the Key Credential based on requirements stated in MS-KPP Processing Details:
             this.Version = KeyCredentialVersion.Version2;
@@ -308,15 +317,15 @@
             }
         }
 
-        public KeyCredential(byte[] blob, string holderDN)
+        public KeyCredential(byte[] blob, string owner)
         {
             // Input validation
             Validator.AssertNotNull(blob, nameof(blob));
             Validator.AssertMinLength(blob, MinLength, nameof(blob));
-            Validator.AssertNotNullOrEmpty(holderDN, nameof(holderDN));
+            Validator.AssertNotNullOrEmpty(owner, nameof(owner));
             
             // Init
-            this.HolderDN = holderDN;
+            this.Owner = owner;
 
             // Parse binary input
             using (var stream = new MemoryStream(blob, false))
@@ -502,7 +511,8 @@
 
         public string ToDNWithBinary()
         {
-            return new DNWithBinary(this.HolderDN, this.ToByteArray()).ToString();
+            // This method should only be used when the owner is in the form of a Distinguished Name.
+            return new DNWithBinary(this.Owner, this.ToByteArray()).ToString();
         }
 
         public string ToJson()

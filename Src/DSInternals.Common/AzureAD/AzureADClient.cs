@@ -47,35 +47,29 @@ namespace DSInternals.Common.AzureAD
             // Vaidate the input
             Validator.AssertNotNullOrEmpty(userPrincipalName, nameof(userPrincipalName));
 
-            // Build uri with filter
-            var url = new StringBuilder();
-            url.AppendFormat(CultureInfo.InvariantCulture, UsersUrlFormat, this._tenantId);
-            url.Append(SelectParameter);
-            url.AppendFormat(CultureInfo.InvariantCulture, UPNFilterParameterFormat, userPrincipalName);
-
-            // Send the request
-            var result = await this.GetUsersAsync(url.ToString()).ConfigureAwait(false);
-            if(result.Items== null || result.Items.Count == 0)
-            {
-                throw new DirectoryObjectNotFoundException(userPrincipalName);
-            }
-
-            return result.Items[0];
+            string filter = String.Format(CultureInfo.InvariantCulture, UPNFilterParameterFormat, userPrincipalName);
+            return await this.GetUserAsync(filter, userPrincipalName);
         }
 
         public async Task<AzureADUser> GetUserAsync(Guid objectId)
+        {
+            string filter = String.Format(CultureInfo.InvariantCulture, IdFilterParameterFormat, objectId);
+            return await this.GetUserAsync(filter, objectId);
+        }
+
+        private async Task<AzureADUser> GetUserAsync(string filterParameter, object userIdentifier)
         {
             // Build uri with filter
             var url = new StringBuilder();
             url.AppendFormat(CultureInfo.InvariantCulture, UsersUrlFormat, this._tenantId);
             url.Append(SelectParameter);
-            url.AppendFormat(CultureInfo.InvariantCulture, IdFilterParameterFormat, objectId);
+            url.Append(filterParameter);
 
             // Send the request
             var result = await this.GetUsersAsync(url.ToString()).ConfigureAwait(false);
             if (result.Items == null || result.Items.Count == 0)
             {
-                throw new DirectoryObjectNotFoundException(objectId);
+                throw new DirectoryObjectNotFoundException(userIdentifier);
             }
 
             return result.Items[0];
@@ -111,7 +105,13 @@ namespace DSInternals.Common.AzureAD
                         {
                             if (response.StatusCode == HttpStatusCode.OK)
                             {
-                                return this._jsonSerializer.Deserialize<OdataPagedResponse<AzureADUser>>(jsonTextReader);
+                                var result = this._jsonSerializer.Deserialize<OdataPagedResponse<AzureADUser>>(jsonTextReader);
+                                // Update key credential owner references
+                                if(result.Items != null)
+                                {
+                                    result.Items.ForEach(user => user.UpdateKeyCredentialReferences());
+                                }
+                                return result;
                             }
                             else
                             {
@@ -124,9 +124,8 @@ namespace DSInternals.Common.AzureAD
                     else
                     {
                         // The response is not a JSON document, so we parse its first line as message text
-                        // TODO: Add status code to the exception
                         string message = await streamReader.ReadLineAsync().ConfigureAwait(false);
-                        throw new GraphApiException(message);
+                        throw new GraphApiException(message, response.StatusCode.ToString());
                     }
                 }
             }

@@ -42,5 +42,13 @@ namespace DSInternals.Common.AzureAD
             get;
             private set;
         }
+
+        internal void UpdateKeyCredentialReferences()
+        {
+            if(this.KeyCredentials != null)
+            {
+                this.KeyCredentials.ForEach(credential => credential.Owner = this.UserPrincipalName);
+            }
+        }
     }
 }

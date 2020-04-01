@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+  <ViewDefinitions>
+    <View>
+      <Name>AzureADUser</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.AzureAD.AzureADUser</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>ObjectId: </Text>
+              <ExpressionBinding>
+                <PropertyName>ObjectId</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>UserPrincipalName: </Text>
+              <ExpressionBinding>
+                <PropertyName>UserPrincipalName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Enabled: </Text>
+              <ExpressionBinding>
+                <PropertyName>Enabled</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>DisplayName: </Text>
+              <ExpressionBinding>
+                <PropertyName>DisplayName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Key Credentials:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>KeyCredentials</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>KeyCredential</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

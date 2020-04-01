@@ -7,6 +7,9 @@ namespace DSInternals.Common.Data
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class KeyMaterialFido
     {
+        // All PEM certificates that are less than 16,383B long start with MII.
+        private const string X509CertificateHeader = "MII";
+
         /// <summary>
         /// Version is an integer that specifies the version of the structure.
         /// </summary>
@@ -58,7 +61,11 @@ namespace DSInternals.Common.Data
                 X509Certificate2Collection certs = new X509Certificate2Collection();
                 foreach (string s in this.AttestationCertificatesRaw)
                 {
-                    certs.Add(new X509Certificate2(Convert.FromBase64String(s)));
+                    // In AAD, some x5c values are not really certificates, so we need to filter them out.
+                    if(s.StartsWith(X509CertificateHeader))
+                    {
+                        certs.Add(new X509Certificate2(Convert.FromBase64String(s)));
+                    }
                 }
                 return certs;
             }

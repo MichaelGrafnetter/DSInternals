@@ -3461,8 +3461,8 @@ PS C:\&gt; Get-ADDBAccount -All -DatabasePath '.\ADBackup\Active Directory\ntds.
             Format-Table -View ROCA
 &lt;# Sample Output:
 
-Usage IsWeak Source  DeviceId                             Created    HolderDN
------ ------ ------  --------                             -------    --------
+Usage IsWeak Source  DeviceId                             Created    Owner
+----- ------ ------  --------                             -------    -----
 NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
 NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe,CN=Users,DC=contoso,DC=com
 #&gt;</dev:code>
@@ -4165,8 +4165,8 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN">
-          <maml:name>HolderDN</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN, HolderDN, Holder, Owner, UserPrincipalName, UPN">
+          <maml:name>OwnerDN</maml:name>
           <maml:Description>
             <maml:para>Specifies the distinguished name (DN) of the object that these credentials are associated with.</maml:para>
           </maml:Description>
@@ -4216,8 +4216,8 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN">
-          <maml:name>HolderDN</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN, HolderDN, Holder, Owner, UserPrincipalName, UPN">
+          <maml:name>OwnerDN</maml:name>
           <maml:Description>
             <maml:para>Specifies the distinguished name (DN) of the object that these credentials are associated with.</maml:para>
           </maml:Description>
@@ -4255,18 +4255,6 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN">
-          <maml:name>HolderDN</maml:name>
-          <maml:Description>
-            <maml:para>Specifies the distinguished name (DN) of the object that these credentials are associated with.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>IsComputerKey</maml:name>
           <maml:Description>
@@ -4277,6 +4265,18 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
             <maml:uri />
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN, HolderDN, Holder, Owner, UserPrincipalName, UPN">
+          <maml:name>OwnerDN</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the distinguished name (DN) of the object that these credentials are associated with.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
       <command:syntaxItem>
@@ -4356,18 +4356,6 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN">
-        <maml:name>HolderDN</maml:name>
-        <maml:Description>
-          <maml:para>Specifies the distinguished name (DN) of the object that these credentials are associated with.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>IsComputerKey</maml:name>
         <maml:Description>
@@ -4379,6 +4367,18 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
           <maml:uri />
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DistinguishedName, DN, ObjectDN, HolderDN, Holder, Owner, UserPrincipalName, UPN">
+        <maml:name>OwnerDN</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the distinguished name (DN) of the object that these credentials are associated with.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -4414,8 +4414,8 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
             Get-KeyCredential
 &lt;# Sample Output:
 
-Usage Source  Flags       DeviceId                             Created    HolderDN
------ ------  -----       --------                             -------    --------
+Usage Source  Flags       DeviceId                             Created    Owner
+----- ------  -----       --------                             -------    -----
 NGC   AD      None        cfe9a872-13ff-4751-a777-aec88c30a762 2019-08-01 CN=John Doe,CN=Users,DC=contoso,DC=com
 STK   AD      None                                             2017-08-23 CN=PC01,CN=Computers,DC=contoso,DC=com
 NGC   AD      MFANotUsed                                       2017-08-23 CN=PC02,CN=Computers,DC=contoso,DC=com
@@ -4436,8 +4436,8 @@ FIDO  AzureAD Attestation 00000000-0000-0000-0000-000000000000 2019-08-26 CN=Joh
             Format-Table -View ROCA
 &lt;# Sample Output:
 
-Usage IsWeak Source  DeviceId                             Created    HolderDN
------ ------ ------  --------                             -------    --------
+Usage IsWeak Source  DeviceId                             Created    Owner
+----- ------ ------  --------                             -------    -----
 NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
 NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe,CN=Users,DC=contoso,DC=com
 
@@ -4467,13 +4467,12 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
             Format-Table -View FIDO
 &lt;# Sample Output:
 
-DisplayName           Flags       FidoFlags                                                 Created    HolderDN
------------           -----       ---------                                                 -------    --------
-eWMB Goldengate G320  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
-eWBM Goldengate G310  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
-YubiKey FIDO2         Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-07-11 CN=John Doe,CN=Users,DC=contoso,DC=com
-Yubikey 5             Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-06-21 CN=John Doe,CN=Users,DC=contoso,DC=com
-Feitian BioPass FIDO2 Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-26 CN=John Doe,CN=Users,DC=contoso,DC=com
+DisplayName           AAGUID                               Alg   Counter Created    Owner
+-----------           ------                               ---   ------- -------    -----
+eWMB Goldengate G320  87dbc5a1-4c94-4dc8-8a47-97d800fd1f3c ES256      37 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
+eWBM Goldengate G310  95442b2e-f15e-4def-b270-efb106facb4e ES256      48 2019-08-29 CN=John Doe,CN=Users,DC=contoso,DC=com
+Yubikey 5             cb69481e-8ff7-4039-93ec-0a2729a154a8 ES256      25 2019-06-21 CN=John Doe,CN=Users,DC=contoso,DC=com
+Feitian All-In-Pass   12ded745-4bed-47d4-abaa-e713f51d6393 ES256    1398 2020-03-31 CN=John Doe,CN=Users,DC=contoso,DC=com
 
 #&gt;</dev:code>
         <dev:remarks>
@@ -4486,7 +4485,7 @@ Feitian BioPass FIDO2 Attestation UserPresent, UserVerified, AttestationData, Ex
     Select-Object -ExpandProperty msDS-KeyCredentialLink |
     Get-KeyCredential |
     Out-GridView -OutputMode Multiple -Title 'Select a credentials for removal...' |
-    ForEach-Object { Set-ADObject -Identity $PSItem.HolderDN -Remove @{ 'msDS-KeyCredentialLink' = $PSItem.ToDNWithBinary() } }</dev:code>
+    ForEach-Object { Set-ADObject -Identity $PSItem.Owner -Remove @{ 'msDS-KeyCredentialLink' = $PSItem.ToDNWithBinary() } }</dev:code>
         <dev:remarks>
           <maml:para>Selectively deletes key credentials from Active Directory.</maml:para>
         </dev:remarks>
@@ -4505,8 +4504,8 @@ PS C:\&gt; $certificate = New-SelfSignedCertificate -Subject $certificateSubject
                                                  -SuppressOid '2.5.29.14' `
                                                  -KeyUsage None `
                                                  -KeyExportPolicy Exportable
-PS C:\&gt; $ngcKey = Get-KeyCredential -Certificate $certificate -DeviceId (New-Guid) -HolderDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
-PS C:\&gt; Set-ADObject -Identity $ngcKey.HolderDN -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }</dev:code>
+PS C:\&gt; $ngcKey = Get-KeyCredential -Certificate $certificate -DeviceId (New-Guid) -OwnerDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
+PS C:\&gt; Set-ADObject -Identity $ngcKey.Owner -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }</dev:code>
         <dev:remarks>
           <maml:para>Generates a new NGC key for a user account and registers it in Active Directory. Note that the value of the certificate Subject has no effect on the functionality, but as it appears in DC logs, this example uses the same format as Windows does.</maml:para>
         </dev:remarks>
@@ -4522,7 +4521,7 @@ PS C:\&gt; Set-ADObject -Identity $ngcKey.HolderDN -Add @{ 'msDS-KeyCredentialLi
                                                  -SuppressOid '2.5.29.14' `
                                                  -KeyUsage None `
                                                  -KeyExportPolicy Exportable
-PS C:\&gt; $ngcKey = Get-KeyCredential -IsComputerKey -Certificate $certificate -HolderDN 'CN=PC01,CN=Computers,DC=contoso,DC=com'
+PS C:\&gt; $ngcKey = Get-KeyCredential -IsComputerKey -Certificate $certificate -OwnerDN 'CN=PC01,CN=Computers,DC=contoso,DC=com'
 PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }</dev:code>
         <dev:remarks>
           <maml:para>Performs a validated write of computer NGC key. Must be executed under the computer account's identity.</maml:para>
@@ -5594,8 +5593,8 @@ PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -Direc
             Format-Table -View ROCA
 &lt;# Sample Output:
 
-Usage IsWeak Source  DeviceId                             Created    HolderDN
------ ------ ------  --------                             -------    --------
+Usage IsWeak Source  DeviceId                             Created    Owner
+----- ------ ------  --------                             -------    -----
 NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 CN=John Doe,CN=Users,DC=contoso,DC=com
 NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe,CN=Users,DC=contoso,DC=com
 #&gt;</dev:code>
@@ -5638,7 +5637,8 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
     </command:details>
     <maml:description>
       <maml:para>The Get-AzureADUserEx cmdlet uses an undocumented Azure AD Graph API endpoint to retrieve the normally hidden searchableDeviceKeys attribute of user accounts. This attribute holds different types of key credentials, including the FIDO2 and NGC keys that are used by Windows Hello for Business.</maml:para>
-      <maml:para>This cmdlet is not intended to replace the standard Get-AzureADUser cmdlet. Only a handful of attributes are retrieved from Azure Active Directory and  No administrative role is required to perform this operation.</maml:para>
+      <maml:para>This cmdlet is not intended to replace the standard Get-AzureADUser cmdlet. Only a handful of attributes are retrieved from Azure Active Directory and </maml:para>
+      <maml:para>No administrative role is required to perform this operation. The cmdlet was tested on a tenant with 150,000 user accounts and ran under 5 minutes.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -5669,7 +5669,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
           <maml:name>TenantId</maml:name>
           <maml:Description>
-            <maml:para>Specifies the Azure AD tenant to perform the search in. If empty, the tenant of the authenticated user will be used.</maml:para>
+            <maml:para>Specifies the Azure AD tenant to perform the search in. If not specified, the tenant of the authenticated user will be used.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -5708,7 +5708,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
           <maml:name>TenantId</maml:name>
           <maml:Description>
-            <maml:para>Specifies the Azure AD tenant to perform the search in. If empty, the tenant of the authenticated user will be used.</maml:para>
+            <maml:para>Specifies the Azure AD tenant to perform the search in. If not specified, the tenant of the authenticated user will be used.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -5735,7 +5735,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
           <maml:name>TenantId</maml:name>
           <maml:Description>
-            <maml:para>Specifies the Azure AD tenant to perform the search in. If empty, the tenant of the authenticated user will be used.</maml:para>
+            <maml:para>Specifies the Azure AD tenant to perform the search in. If not specified, the tenant of the authenticated user will be used.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
@@ -5798,7 +5798,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
         <maml:name>TenantId</maml:name>
         <maml:Description>
-          <maml:para>Specifies the Azure AD tenant to perform the search in. If empty, the tenant of the authenticated user will be used.</maml:para>
+          <maml:para>Specifies the Azure AD tenant to perform the search in. If not specified, the tenant of the authenticated user will be used.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
         <dev:type>
@@ -5848,7 +5848,37 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Connect-AzureAD
+        <dev:code>PS C:\&gt; Install-Module -Name AzureAD,DSInternals -Force
+PS C:\&gt; Connect-AzureAD
+PS C:\&gt; $token = [Microsoft.Open.Azure.AD.CommonLibrary.AzureSession]::AccessTokens['AccessToken'].AccessToken
+PS C:\&gt; Get-AzureADUserEx -All -Token $token | Where-Object KeyCredentials -ne $null
+&lt;# Sample Output:
+
+ObjectId: af4cf208-16e0-429d-b574-2a09c5f30dea
+UserPrincipalName: john@contoso.com
+Enabled: True
+DisplayName: John Doe
+Key Credentials:
+  Usage=FIDO, Source=AzureAD, Device=00000000-0000-0000-0000-000000000000, Created=12/12/2019 9:42:21 AM
+  Usage=NGC, Source=AzureAD, Device=cbad3c94-b480-4fa6-9187-ff1ed42c4479, Created=11/17/2015 8:17:13 AM
+
+ObjectId: 5dd9c7f0-9441-4c5a-b2df-ca7b889d8c4c
+UserPrincipalName: peter@contoso.com
+Enabled: True
+DisplayName: Peter Smith
+Key Credentials:
+  Usage=NGC, Source=AzureAD, Device=21c915a8-0326-47c4-8985-2aceda00eaee, Created=12/26/2019 1:22:17 PM
+  Usage=NGC, Source=AzureAD, Device=ec45d71b-b5dd-45dc-beaf-e248cbcb2bd3, Created=12/24/2019 9:44:56 AM
+
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Displays info about Azure AD users with key credentials.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Install-Module -Name AzureAD,DSInternals -Force
+PS C:\&gt; Connect-AzureAD
 PS C:\&gt; $token = [Microsoft.Open.Azure.AD.CommonLibrary.AzureSession]::AccessTokens['AccessToken'].AccessToken
 PS C:\&gt; Get-AzureADUserEx -All -Token $token |
             Where-Object Enabled -eq $true |
@@ -5857,21 +5887,18 @@ PS C:\&gt; Get-AzureADUserEx -All -Token $token |
             Format-Table -View FIDO
 &lt;# Sample Output:
 
-DisplayName           Flags       FidoFlags                                                 Created    HolderDN
------------           -----       ---------                                                 -------    --------
-YubiKey FIDO2         Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-07-11
-Yubikey 5             Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-06-21
-Feitian BioPass FIDO2 Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-26
-eWMB Goldengate G320  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29
-eWBM Goldengate G310  Attestation UserPresent, UserVerified, AttestationData, ExtensionData 2019-08-29
+DisplayName         AAGUID                               Alg   Counter Created    Owner
+-----------         ------                               ---   ------- -------    -----
+YubiKey 5           cb69481e-8ff7-4039-93ec-0a2729a154a8 ES256      25 2019-12-12 john@contoso.com
+Feitian All-In-Pass 12ded745-4bed-47d4-abaa-e713f51d6393 ES256    1398 2020-03-31 peter@contoso.com
 
 #&gt;</dev:code>
         <dev:remarks>
-          <maml:para>Lists FIDO2 token registered in an Azure AD tenant.</maml:para>
+          <maml:para>Lists all FIDO2 tokens registered in an Azure AD tenant, but only on accounts that are enabled.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-AzureADUserEx -All -Token $token |
             Where-Object Enabled -eq $true |
             Select-Object -ExpandProperty KeyCredentials |
@@ -5879,10 +5906,10 @@ eWBM Goldengate G310  Attestation UserPresent, UserVerified, AttestationData, Ex
             Format-Table -View ROCA
 &lt;# Sample Output:
 
-Usage IsWeak Source  DeviceId                             Created    HolderDN
------ ------ ------  --------                             -------    --------
-NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 
-NGC   False  AzureAD 1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 
+Usage IsWeak Source  DeviceId                             Created    Owner
+----- ------ ------  --------                             -------    -----
+NGC   True   AzureAD fd591087-245c-4ff5-a5ea-c14de5e2b32d 2017-07-19 joe@contoso.com
+NGC   False  AzureAD 1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 peter@contoso.com
 
 #&gt;</dev:code>
         <dev:remarks>
@@ -5890,19 +5917,58 @@ NGC   False  AzureAD 1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-AzureADTenantDetail | Out-Null
 PS C:\&gt; $token = [Microsoft.Open.Azure.AD.CommonLibrary.AzureSession]::AccessTokens['AccessToken'].AccessToken
-PS C:\&gt; Get-AzureADUserEx -UserPrincipalName 'michael@dsinternals.com' -Token $token
+PS C:\&gt; Get-AzureADUserEx -UserPrincipalName 'john@contoso.com' -Token $token
+
 &lt;# Sample Output:
+
+ObjectId: af4cf208-16e0-429d-b574-2a09c5f30dea
+UserPrincipalName: john@contoso.com
+Enabled: True
+DisplayName: Michael Grafnetter
+Key Credentials:
+  Usage=FIDO, Source=AzureAD, Device=00000000-0000-0000-0000-000000000000, Created=12/12/2019 9:42:21 AM
+  Usage=NGC, Source=AzureAD, Device=cbad3c94-b480-4fa6-9187-ff1ed42c4479, Created=11/17/2015 8:17:13 AM
 
 #&gt;</dev:code>
         <dev:remarks>
           <maml:para>Gets information about a single Azure Active Directory user. If necessary, the access token is automatically refreshed by the standard Get-AzureADTenantDetail cmdlet.</maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 5 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-AzureADUserEx -UserPrincipalName 'john@contoso.com' -AccessToken $token |
+            ForEach-Object { $PSItem.KeyCredentials.FidoKeyMaterial }
+
+&lt;# Sample Output:
+
+Version: 1
+DisplayName: YubiKey 5
+AttestationCertificates
+  CN=Yubico U2F EE Serial 413943488, OU=Authenticator Attestation, O=Yubico AB, C=SE
+AuthenticatorData
+  RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
+  Flags: UserPresent, UserVerified, AttestationData, ExtensionData
+  SignatureCount: 25
+  AttestedCredentialData
+    AAGUID: cb69481e-8ff7-4039-93ec-0a2729a154a8
+    CredentialID: 1ac87220d2cc68e3b0aadd4b3548b481
+    PublicKeyAlgorithm: ES256
+  Extensions: {"hmac-secret": true}
+
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Displays details about FIDO2 keys registered in Azure Active Directory by a specific user.</maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-AzureADUserEx.md</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADKeyCredential</maml:linkText>
         <maml:uri></maml:uri>

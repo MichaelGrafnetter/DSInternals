@@ -13,7 +13,7 @@ namespace DSInternals.Common.Test
     public class SearchableDeviceKeyTester
     {
         [TestMethod]
-        public void SearchableDeviceKey_Parse_FIDO()
+        public void SearchableDeviceKey_Parse_FIDO_Input1()
         {
             string jsonData = @"{
                 'usage':'FIDO',
@@ -36,6 +36,57 @@ namespace DSInternals.Common.Test
             Assert.IsTrue(keyCredential.CustomKeyInfo.Flags.HasFlag(KeyFlags.Attestation));
             Assert.AreEqual("e7d092ba192fdbbb2f36552832d616126971a269", keyCredential.FidoKeyMaterial.AttestationCertificates[0].Thumbprint.ToLowerInvariant());
             Assert.AreEqual("cb69481e-8ff7-4039-93ec-0a2729a154a8", keyCredential.FidoKeyMaterial.AuthenticatorData.AttestedCredentialData.AaGuid.ToString());
+
+            // Serialize the object again and compare with the original
+            Assert.AreEqual(JToken.Parse(jsonData).ToString(Formatting.None), keyCredential.ToJson());
+        }
+
+        [TestMethod]
+        public void SearchableDeviceKey_Parse_FIDO_Input2()
+        {
+            string jsonData = @"{
+                'usage':'FIDO',
+                'keyIdentifier':'lSjOUI3XUtloTxC0ddVJtPLKZMQyKWKrTgXWadGmH9c=',
+                'keyMaterial':'eyJ2ZXJzaW9uIjoxLCJhdXRoRGF0YSI6Ik5XeWUxS0NUSWJscFh4NnZrWUlEOGJWZmFKMm1IN3lXR0V3VmZkcG9ESUhGQUFBRmRoTGUxMFZMN1VmVXE2cm5FL1VkWTVNQUlKVW96bENOMTFMWmFFOFF0SFhWU2JUeXltVEVNaWxpcTA0RjFtblJwaC9YcFFFQ0F5WWdBU0ZZSVAzWms5Vm5URUpONlQ4VWgxMHRPcUpmdDRicW1leVJUUzhvNkJQK2prYkNJbGdnYjFnR0dNMnM3T2dDMTNQdkZBVTJ1UDZJcVVGWWdiaGxQc3diUzRDK1FoV2hhMmh0WVdNdGMyVmpjbVYwOVE9PSIsIng1YyI6WyJNSUlDUXpDQ0FlbWdBd0lCQWdJUUhmSzFXbEhjUzJpRm85bWVhWC90RmpBS0JnZ3Foa2pPUFFRREFqQkpNUXN3Q1FZRFZRUUdFd0pWVXpFZE1Cc0dBMVVFQ2d3VVJtVnBkR2xoYmlCVVpXTm9ibTlzYjJkcFpYTXhHekFaQmdOVkJBTU1Fa1psYVhScFlXNGdSa2xFVHlCRFFTQXdNekFnRncweE9ERXlNalV3TURBd01EQmFHQTh5TURNek1USXlOREl6TlRrMU9Wb3djREVMTUFrR0ExVUVCaE1DVlZNeEhUQWJCZ05WQkFvTUZFWmxhWFJwWVc0Z1ZHVmphRzV2Ykc5bmFXVnpNU0l3SUFZRFZRUUxEQmxCZFhSb1pXNTBhV05oZEc5eUlFRjBkR1Z6ZEdGMGFXOXVNUjR3SEFZRFZRUUREQlZHVkNCQ2FXOVFZWE56SUVaSlJFOHlJREEwTnpBd1dUQVRCZ2NxaGtqT1BRSUJCZ2dxaGtqT1BRTUJCd05DQUFTNjJoSWJ5ZW5IOVdQbnpZSGVoYUJSM0M3cXN3b21aa2FQekd5VWxGUmlKSU1vM3VJVGVJbUZPRmZOY0R1T3pvcTF3Y1hYR1RtRXRFdHhGMndvOW5va280R0pNSUdHTUIwR0ExVWREZ1FXQkJTQkkxWG9MRFkxL0hKYWJhK1czMm54aHhwM1dqQWZCZ05WSFNNRUdEQVdnQlJCdC94TmRjcU8wcDhzMHhlYnpZTlJpbm5ZcVRBTUJnTlZIUk1CQWY4RUFqQUFNQk1HQ3lzR0FRUUJndVVjQWdFQkJBUURBZ1J3TUNFR0N5c0dBUVFCZ3VVY0FRRUVCQklFRUJMZTEwVkw3VWZVcTZybkUvVWRZNU13Q2dZSUtvWkl6ajBFQXdJRFNBQXdSUUloQUk2R1NWaTEwcjY3M3VxdHNvKzJvQjZmNVM1Z0UwZmY0NHQzTmNRK1ROOU5BaUFDL1NDUCtlS3cxQm5tY1NnYnhjUXBZdVdqQlBNVkRmcWVnOHBibU9kSEt3PT0iLCJvQWpxMkNlTkEyL2d5NW14YzV0Vll4NVJ4RWFMektEMWxhMDdhZ3RmR28wPSJdLCJkaXNwbGF5TmFtZSI6IkZlaXRpYW4gQWxsLUluLVBhc3MifQ==',
+                'creationTime':'2020-03-31T21:41:44.8757516Z',
+                'deviceId':'00000000-0000-0000-0000-000000000000',
+                'customKeyInformation':'AQEAAAAAAAAAAAAAAAAA',
+                'fidoAaGuid':'12ded745-4bed-47d4-abaa-e713f51d6393',
+                'fidoAuthenticatorVersion':null,
+                'fidoAttestationCertificates':['4f94e8b002c79416507e9d9d390eca3153e1a5e8', '9e3808651ecfa53162772e9d2bc62bfe568350a9']
+             }";
+
+            // Parse the FIDO key and check all fields
+            var keyCredential = KeyCredential.ParseJson(jsonData);
+            Assert.AreEqual(KeyUsage.FIDO, keyCredential.Usage);
+            Assert.AreEqual("Feitian All-In-Pass", keyCredential.FidoKeyMaterial.DisplayName);
+            Assert.AreEqual("lSjOUI3XUtloTxC0ddVJtPLKZMQyKWKrTgXWadGmH9c=", keyCredential.Identifier);
+            Assert.AreEqual(2020, keyCredential.CreationTime.Year);
+            Assert.IsTrue(keyCredential.CustomKeyInfo.Flags.HasFlag(KeyFlags.Attestation));
+            Assert.AreEqual("9e3808651ecfa53162772e9d2bc62bfe568350a9", keyCredential.FidoKeyMaterial.AttestationCertificates[0].Thumbprint.ToLowerInvariant());
+            Assert.AreEqual("12ded745-4bed-47d4-abaa-e713f51d6393", keyCredential.FidoKeyMaterial.AuthenticatorData.AttestedCredentialData.AaGuid.ToString());
+        }
+
+        [TestMethod]
+        public void SearchableDeviceKey_Serialize_FIDO_Input2()
+        {
+            string jsonData = @"{
+                'usage':'FIDO',
+                'keyIdentifier':'lSjOUI3XUtloTxC0ddVJtPLKZMQyKWKrTgXWadGmH9c=',
+                'keyMaterial':'eyJ2ZXJzaW9uIjoxLCJhdXRoRGF0YSI6Ik5XeWUxS0NUSWJscFh4NnZrWUlEOGJWZmFKMm1IN3lXR0V3VmZkcG9ESUhGQUFBRmRoTGUxMFZMN1VmVXE2cm5FL1VkWTVNQUlKVW96bENOMTFMWmFFOFF0SFhWU2JUeXltVEVNaWxpcTA0RjFtblJwaC9YcFFFQ0F5WWdBU0ZZSVAzWms5Vm5URUpONlQ4VWgxMHRPcUpmdDRicW1leVJUUzhvNkJQK2prYkNJbGdnYjFnR0dNMnM3T2dDMTNQdkZBVTJ1UDZJcVVGWWdiaGxQc3diUzRDK1FoV2hhMmh0WVdNdGMyVmpjbVYwOVE9PSIsIng1YyI6WyJNSUlDUXpDQ0FlbWdBd0lCQWdJUUhmSzFXbEhjUzJpRm85bWVhWC90RmpBS0JnZ3Foa2pPUFFRREFqQkpNUXN3Q1FZRFZRUUdFd0pWVXpFZE1Cc0dBMVVFQ2d3VVJtVnBkR2xoYmlCVVpXTm9ibTlzYjJkcFpYTXhHekFaQmdOVkJBTU1Fa1psYVhScFlXNGdSa2xFVHlCRFFTQXdNekFnRncweE9ERXlNalV3TURBd01EQmFHQTh5TURNek1USXlOREl6TlRrMU9Wb3djREVMTUFrR0ExVUVCaE1DVlZNeEhUQWJCZ05WQkFvTUZFWmxhWFJwWVc0Z1ZHVmphRzV2Ykc5bmFXVnpNU0l3SUFZRFZRUUxEQmxCZFhSb1pXNTBhV05oZEc5eUlFRjBkR1Z6ZEdGMGFXOXVNUjR3SEFZRFZRUUREQlZHVkNCQ2FXOVFZWE56SUVaSlJFOHlJREEwTnpBd1dUQVRCZ2NxaGtqT1BRSUJCZ2dxaGtqT1BRTUJCd05DQUFTNjJoSWJ5ZW5IOVdQbnpZSGVoYUJSM0M3cXN3b21aa2FQekd5VWxGUmlKSU1vM3VJVGVJbUZPRmZOY0R1T3pvcTF3Y1hYR1RtRXRFdHhGMndvOW5va280R0pNSUdHTUIwR0ExVWREZ1FXQkJTQkkxWG9MRFkxL0hKYWJhK1czMm54aHhwM1dqQWZCZ05WSFNNRUdEQVdnQlJCdC94TmRjcU8wcDhzMHhlYnpZTlJpbm5ZcVRBTUJnTlZIUk1CQWY4RUFqQUFNQk1HQ3lzR0FRUUJndVVjQWdFQkJBUURBZ1J3TUNFR0N5c0dBUVFCZ3VVY0FRRUVCQklFRUJMZTEwVkw3VWZVcTZybkUvVWRZNU13Q2dZSUtvWkl6ajBFQXdJRFNBQXdSUUloQUk2R1NWaTEwcjY3M3VxdHNvKzJvQjZmNVM1Z0UwZmY0NHQzTmNRK1ROOU5BaUFDL1NDUCtlS3cxQm5tY1NnYnhjUXBZdVdqQlBNVkRmcWVnOHBibU9kSEt3PT0iLCJvQWpxMkNlTkEyL2d5NW14YzV0Vll4NVJ4RWFMektEMWxhMDdhZ3RmR28wPSJdLCJkaXNwbGF5TmFtZSI6IkZlaXRpYW4gQWxsLUluLVBhc3MifQ==',
+                'creationTime':'2020-03-31T21:41:44.8757516Z',
+                'deviceId':'00000000-0000-0000-0000-000000000000',
+                'customKeyInformation':'AQEAAAAAAAAAAAAAAAAA',
+                'fidoAaGuid':'12ded745-4bed-47d4-abaa-e713f51d6393',
+                'fidoAuthenticatorVersion':null,
+                'fidoAttestationCertificates':['4f94e8b002c79416507e9d9d390eca3153e1a5e8', '9e3808651ecfa53162772e9d2bc62bfe568350a9']
+             }";
+
+            // Parse the FIDO key from the SearchableDeviceKey_Parse_FIDO_Input2 test
+            var keyCredential = KeyCredential.ParseJson(jsonData);
+
+            // This test fill fail for now:
+            Assert.AreEqual(2, keyCredential.FidoKeyMaterial.AttestationCertificates.Count);
 
             // Serialize the object again and compare with the original
             Assert.AreEqual(JToken.Parse(jsonData).ToString(Formatting.None), keyCredential.ToJson());

@@ -82,8 +82,8 @@
             Position = 1,
             ParameterSetName = ParamSetFromComputerCertificate
         )]
-        [Alias("DistinguishedName", "DN", "ObjectDN")]
-        public string HolderDN
+        [Alias("DistinguishedName", "DN", "ObjectDN", "HolderDN", "Holder", "Owner", "UserPrincipalName", "UPN")]
+        public string OwnerDN
         {
             get;
             set;
@@ -130,12 +130,12 @@
                     }
                     break;
                 case ParamSetFromBinary:
-                    keyCredential = new KeyCredential(this.BinaryData, this.HolderDN);
+                    keyCredential = new KeyCredential(this.BinaryData, this.OwnerDN);
                     this.WriteObject(keyCredential);
                     break;
                 case ParamSetFromUserCertificate:
                 case ParamSetFromComputerCertificate:
-                    keyCredential = new KeyCredential(this.Certificate, this.DeviceId, this.HolderDN, this.CreationTime, this.IsComputerKey.IsPresent);
+                    keyCredential = new KeyCredential(this.Certificate, this.DeviceId, this.OwnerDN, this.CreationTime, this.IsComputerKey.IsPresent);
                     this.WriteObject(keyCredential);
                     break;
             }
