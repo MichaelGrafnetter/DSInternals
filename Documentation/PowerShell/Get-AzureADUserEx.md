@@ -31,7 +31,7 @@ Get-AzureADUserEx -AccessToken <String> -UserPrincipalName <String> [-TenantId <
 The Get-AzureADUserEx cmdlet uses an undocumented Azure AD Graph API endpoint to retrieve the normally hidden searchableDeviceKeys attribute of user accounts.
 This attribute holds different types of key credentials, including the FIDO2 and NGC keys that are used by Windows Hello for Business.
 
-This cmdlet is not intended to replace the standard Get-AzureADUser cmdlet. Only a handful of attributes are retrieved from Azure Active Directory and 
+This cmdlet is not intended to replace the Get-AzureADUser cmdlet from Microsoft's AzureAD module. Only a handful of attributes are retrieved from Azure Active Directory and authentication fully relies on the Connect-AzureAD cmdlet.
 
 No administrative role is required to perform this operation. The cmdlet was tested on a tenant with 150,000 user accounts and ran under 5 minutes.
 
@@ -64,7 +64,7 @@ Key Credentials:
 #>
 ```
 
-Displays info about Azure AD users with key credentials.
+Displays info about Azure AD users with key credentials. Authentication is handled by the AzureAD module.
 
 ### Example 2
 ```powershell
@@ -78,10 +78,12 @@ PS C:\> Get-AzureADUserEx -All -Token $token |
             Format-Table -View FIDO
 <# Sample Output:
 
-DisplayName         AAGUID                               Alg   Counter Created    Owner
------------         ------                               ---   ------- -------    -----
-YubiKey 5           cb69481e-8ff7-4039-93ec-0a2729a154a8 ES256      25 2019-12-12 john@contoso.com
-Feitian All-In-Pass 12ded745-4bed-47d4-abaa-e713f51d6393 ES256    1398 2020-03-31 peter@contoso.com
+DisplayName           AAGUID                               Alg   Counter Created    Owner
+-----------           ------                               ---   ------- -------    -----
+YubiKey 5             cb69481e-8ff7-4039-93ec-0a2729a154a8 ES256      25 2019-12-12 john@contoso.com
+Feitian All-In-Pass   12ded745-4bed-47d4-abaa-e713f51d6393 ES256    1398 2020-03-31 peter@contoso.com
+eWMB Goldengate G320  87dbc5a1-4c94-4dc8-8a47-97d800fd1f3c ES256      37 2019-08-29 joe@contoso.com
+eWBM Goldengate G310  95442b2e-f15e-4def-b270-efb106facb4e ES256      48 2019-08-29 joe@contoso.com
 
 #>
 ```
@@ -146,6 +148,20 @@ AuthenticatorData
   AttestedCredentialData
     AAGUID: cb69481e-8ff7-4039-93ec-0a2729a154a8
     CredentialID: 1ac87220d2cc68e3b0aadd4b3548b481
+    PublicKeyAlgorithm: ES256
+  Extensions: {"hmac-secret": true}
+
+Version: 1
+DisplayName: Feitian All-In-Pass
+AttestationCertificates
+  CN=FT BioPass FIDO2 0470, OU=Authenticator Attestation, O=Feitian Technologies, C=US
+AuthenticatorData
+  RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
+  Flags: UserPresent, UserVerified, AttestationData, ExtensionData
+  SignatureCount: 1398
+  AttestedCredentialData
+    AAGUID: 12ded745-4bed-47d4-abaa-e713f51d6393
+    CredentialID: 9528ce508dd752d9684f10b475d549b4f2ca64c4322962ab4e05d669d1a61fd7
     PublicKeyAlgorithm: ES256
   Extensions: {"hmac-secret": true}
 
