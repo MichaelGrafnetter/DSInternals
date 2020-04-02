@@ -78,12 +78,20 @@ PS C:\> Get-AzureADUserEx -All -Token $token |
             Format-Table -View FIDO
 <# Sample Output:
 
-DisplayName           AAGUID                               Alg   Counter Created    Owner
------------           ------                               ---   ------- -------    -----
-YubiKey 5             cb69481e-8ff7-4039-93ec-0a2729a154a8 ES256      25 2019-12-12 john@contoso.com
-Feitian All-In-Pass   12ded745-4bed-47d4-abaa-e713f51d6393 ES256    1398 2020-03-31 peter@contoso.com
-eWMB Goldengate G320  87dbc5a1-4c94-4dc8-8a47-97d800fd1f3c ES256      37 2019-08-29 joe@contoso.com
-eWBM Goldengate G310  95442b2e-f15e-4def-b270-efb106facb4e ES256      48 2019-08-29 joe@contoso.com
+DisplayName               AAGUID                               Alg   Counter Created    Owner
+-----------               ------                               ---   ------- -------    -----
+SoloKeys Tap              8876631b-d4a0-427f-5773-0ec71c9e0279 ES256     274 2019-08-29 james@contoso.com
+SoloKeys Solo             8876631b-d4a0-427f-5773-0ec71c9e0279 ES256     281 2019-08-29 thomas@contoso.com
+eWBM Goldengate G320      87dbc5a1-4c94-4dc8-8a47-97d800fd1f3c ES256      83 2019-08-29 jane@contoso.com
+eWBM Goldengate G310      95442b2e-f15e-4def-b270-efb106facb4e ES256       4 2019-08-29 mary@contoso.com
+Feitian BioPass FIDO2     77010bd7-212a-4fc9-b236-d2ca5e9d4084 ES256     261 2019-08-26 george@contoso.com
+Yubico Security Key FIDO2 f8a011f3-8c0a-4d15-8006-17111f9edc7d ES256     257 2019-08-26 matt@contoso.com
+Feitian AllinPass FIDO2   12ded745-4bed-47d4-abaa-e713f51d6393 ES256     231 2019-08-26 jenny@contoso.com
+YubiKey 5                 fa2b99dc-9e39-4257-8f92-4a30d23c4118 ES256     229 2019-08-26 jill@contoso.com
+YubiKey 5                 cb69481e-8ff7-4039-93ec-0a2729a154a8 ES256      25 2019-12-12 john@contoso.com
+Feitian All-In-Pass       12ded745-4bed-47d4-abaa-e713f51d6393 ES256    1398 2020-03-31 peter@contoso.com
+eWBM Goldengate G320      87dbc5a1-4c94-4dc8-8a47-97d800fd1f3c ES256      37 2019-08-29 joe@contoso.com
+eWBM Goldengate G310      95442b2e-f15e-4def-b270-efb106facb4e ES256      48 2019-08-29 joe@contoso.com
 
 #>
 ```
@@ -138,30 +146,114 @@ PS C:\> Get-AzureADUserEx -UserPrincipalName 'john@contoso.com' -AccessToken $to
 <# Sample Output:
 
 Version: 1
-DisplayName: YubiKey 5
+DisplayName: SoloKeys Tap
 AttestationCertificates
-  CN=Yubico U2F EE Serial 413943488, OU=Authenticator Attestation, O=Yubico AB, C=SE
+  E=hello@solokeys.com, CN=solokeys.com, OU=Authenticator Attestation, O=Solo Keys, S=Maryland, C=US
 AuthenticatorData
   RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
   Flags: UserPresent, UserVerified, AttestationData, ExtensionData
-  SignatureCount: 25
+  SignatureCount: 274
   AttestedCredentialData
-    AAGUID: cb69481e-8ff7-4039-93ec-0a2729a154a8
-    CredentialID: 1ac87220d2cc68e3b0aadd4b3548b481
+    AAGUID: 8876631b-d4a0-427f-5773-0ec71c9e0279
+    CredentialID: 9d0c595c03cd6c9dd22b0b8f852585302c2d5a13f77669251406c390de6ba42a63f3ea6632a39cd8bc505184352541367725a5283689d825f4355fe2016af2f0008112010000
     PublicKeyAlgorithm: ES256
   Extensions: {"hmac-secret": true}
 
 Version: 1
-DisplayName: Feitian All-In-Pass
+DisplayName: SoloKeys Solo
+AttestationCertificates
+  E=hello@solokeys.com, CN=solokeys.com, OU=Authenticator Attestation, O=Solo Keys, S=Maryland, C=US
+AuthenticatorData
+  RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
+  Flags: UserPresent, UserVerified, AttestationData, ExtensionData
+  SignatureCount: 281
+  AttestedCredentialData
+    AAGUID: 8876631b-d4a0-427f-5773-0ec71c9e0279
+    CredentialID: ac5373c1eaa6722c351db6554715fd534906f5c98f4548b8390fe11b97325a943f0905d0a9de19765385f9bce512673128a95e3fea15f53ee46dbe307d0f94c84d8119010000
+    PublicKeyAlgorithm: ES256
+  Extensions: {"hmac-secret": true}
+
+Version: 1
+DisplayName: eWBM Goldengate G320
+AttestationCertificates
+  E=info@ewbm.com, CN=eWBM FIDO2 Certificate, OU=Authenticator Attestation, O="eWBM Co., Ltd.", L=Gangnam-Gu, S=Seoul-Si, C=KR
+AuthenticatorData
+  RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
+  Flags: UserPresent, UserVerified, AttestationData, ExtensionData
+  SignatureCount: 83
+  AttestedCredentialData
+    AAGUID: 87dbc5a1-4c94-4dc8-8a47-97d800fd1f3c
+    CredentialID: fb64eb483921507239317b6f5f1d7a0b9499afd4dd0698eaa55ad8871fe1c25a
+    PublicKeyAlgorithm: ES256
+  Extensions: {"hmac-secret": true}
+
+Version: 1
+DisplayName: eWBM Goldengate G310
+AttestationCertificates
+  E=info@ewbm.com, CN=eWBM FIDO2 Certificate, OU=Authenticator Attestation, O="eWBM Co., Ltd.", L=Gangnam-Gu, S=Seoul-Si, C=KR
+AuthenticatorData
+  RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
+  Flags: UserPresent, UserVerified, AttestationData, ExtensionData
+  SignatureCount: 4
+  AttestedCredentialData
+    AAGUID: 95442b2e-f15e-4def-b270-efb106facb4e
+    CredentialID: 4dd34d8760bc0e92fcb53b64cc1c354ac7112931bd6f53c0a6aabba7c813c36d
+    PublicKeyAlgorithm: ES256
+  Extensions: {"hmac-secret": true}
+
+Version: 1
+DisplayName: Feitian BioPass FIDO2
+AttestationCertificates
+  CN=FT BioPass FIDO2 USB, OU=Authenticator Attestation, O=Feitian Technologies, C=US
+AuthenticatorData
+  RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
+  Flags: UserPresent, UserVerified, AttestationData, ExtensionData
+  SignatureCount: 261
+  AttestedCredentialData
+    AAGUID: 77010bd7-212a-4fc9-b236-d2ca5e9d4084
+    CredentialID: db2baabf8450f6af3b931b35acc7d5f77ebe4ed98cf0b55c0513cff31e18520d
+    PublicKeyAlgorithm: ES256
+  Extensions: {"hmac-secret": true}
+
+Version: 1
+DisplayName: Yubico Security Key FIDO2
+AttestationCertificates
+  CN=Yubico U2F EE Serial 8513128192, OU=Authenticator Attestation, O=Yubico AB, C=SE
+AuthenticatorData
+  RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
+  Flags: UserPresent, UserVerified, AttestationData, ExtensionData
+  SignatureCount: 257
+  AttestedCredentialData
+    AAGUID: f8a011f3-8c0a-4d15-8006-17111f9edc7d
+    CredentialID: 09956acca523d532e04c647a4a158664
+    PublicKeyAlgorithm: ES256
+  Extensions: {"hmac-secret": true}
+
+Version: 1
+DisplayName: Feitian AllinPass FIDO2
 AttestationCertificates
   CN=FT BioPass FIDO2 0470, OU=Authenticator Attestation, O=Feitian Technologies, C=US
 AuthenticatorData
   RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
   Flags: UserPresent, UserVerified, AttestationData, ExtensionData
-  SignatureCount: 1398
+  SignatureCount: 231
   AttestedCredentialData
     AAGUID: 12ded745-4bed-47d4-abaa-e713f51d6393
-    CredentialID: 9528ce508dd752d9684f10b475d549b4f2ca64c4322962ab4e05d669d1a61fd7
+    CredentialID: 59dc5439faef677d7e81688a27604a205dab922978372062c5c10206639c3c00
+    PublicKeyAlgorithm: ES256
+  Extensions: {"hmac-secret": true}
+
+Version: 1
+DisplayName: YubiKey 5
+AttestationCertificates
+  CN=Yubico U2F EE Serial 14818162, OU=Authenticator Attestation, O=Yubico AB, C=SE
+AuthenticatorData
+  RelyingPartyIdHash: 356c9ed4a09321b9695f1eaf918203f1b55f689da61fbc96184c157dda680c81
+  Flags: UserPresent, UserVerified, AttestationData, ExtensionData
+  SignatureCount: 229
+  AttestedCredentialData
+    AAGUID: fa2b99dc-9e39-4257-8f92-4a30d23c4118
+    CredentialID: bc879d1e8da27d5f29a66d9a457ac1d8
     PublicKeyAlgorithm: ES256
   Extensions: {"hmac-secret": true}
 
