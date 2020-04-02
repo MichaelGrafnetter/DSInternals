@@ -13,7 +13,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</description>
     <summary>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R).</summary>
-    <releaseNotes>Directory accounts now contain domain information in the LogonName property.</releaseNotes>
+    <releaseNotes>
+- The LastLogonTimestamp property is now exposed on user accounts.
+- Updated the package logo.
+    </releaseNotes>
     <copyright>Copyright (c) 2015-2020 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security RPC DRSR</tags>
     <references>

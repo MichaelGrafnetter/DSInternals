@@ -5,16 +5,20 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Changed
+- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+
+## [4.3] - 2020-04-02
+
 ### Added
 
 - New logo and package icons!
-- The new [Get-AzureADUserEx](PowerShell/Get-AzureADUserEx.md#get-azureaduserex) cmdlet can be used to retrieve FIDO and NGC keys from Azure Active Directory.
-- Both [lastLogon](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada1/93258066-276d-4357-8458-981c19caad95) and [lastLogonTimestamp](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada1/530d7194-20f6-4aaa-8d80-9ca6b6350ad6) user account attributes are now exposed.
+- The new [Get-AzureADUserEx](PowerShell/Get-AzureADUserEx.md#get-azureaduserex) cmdlet can be used to retrieve FIDO and NGC keys from Azure Active Directory, as the first tool on the market.
+- Both [lastLogon](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada1/93258066-276d-4357-8458-981c19caad95) and [lastLogonTimestamp](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada1/530d7194-20f6-4aaa-8d80-9ca6b6350ad6) user account attributes are now exposed. The LastLogonDate PowerShell property returns whichever of these 2 values is available.
 - The `-Server` parameter of the [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlet now has the standard `-ComputerName` alias.
 
 ### Changed
 
-- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
 - Major [PowerShell module documentation](PowerShell/Readme.md#directory-services-internals-powershell-module) improvements.
 
 ## [4.2] - 2020-03-18
@@ -382,7 +386,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.2...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.3...HEAD
+[4.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.2...v4.3
 [4.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.1...v4.2
 [4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.0...v4.1
 [4.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v3.6.1...v4.0

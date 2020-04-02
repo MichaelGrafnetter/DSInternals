@@ -11,14 +11,15 @@
     <repository type="git" url="https://github.com/MichaelGrafnetter/DSInternals.git" branch="master" />
     <icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>This package is shared between all other DSInternals packages. It contains implementations of common hash functions used by Windows, including NT hash, LM hash and OrgId hash. It also contains methods for SysKey/BootKey retrieval.</description>
+    <description>This package is shared between all other DSInternals packages. Its main features are Azure AD Graph API and ADSI clients for for retrieval of cryptographic material. It contains implementations of common hash functions used by Windows, including NT hash, LM hash and OrgId hash. It also contains methods for SysKey/BootKey retrieval.</description>
     <summary>This package is shared between all other DSInternals packages.</summary>
     <releaseNotes>
-- A property called LogonName has been added to the DsAccount class, to support multi-domain scenarios.
-- Several bugs in the ADSI client have been fixed.
+- Added the the AzureADClient class for FIDO2 and NGC key retrieval from Azure Active Directory.
+- Both LastLogon and LastLogonTimestamp properties are now exposed on AD user accounts.
+- Updated the package logo.
     </releaseNotes>
     <copyright>Copyright (c) 2015-2020 Michael Grafnetter. All rights reserved.</copyright>
-    <tags>ActiveDirectory Security</tags>
+    <tags>ActiveDirectory Security AD AAD Identity Active Directory</tags>
   </metadata>
   <files>
     <file src="..\Icons\package_black.png" target="icon.png" />

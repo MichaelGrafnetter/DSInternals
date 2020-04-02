@@ -8,10 +8,10 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.2'
+ModuleVersion = '4.3'
 
 # Supported PSEditions
-CompatiblePSEditions = 'Desktop'
+# CompatiblePSEditions = 'Desktop'
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -27,7 +27,7 @@ Copyright = '(c) 2015-2020 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
-The DSInternals PowerShell Module exposes several internal features of Active Directory. These include offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.
+The DSInternals PowerShell Module exposes several internal features of Active Directory and Azure Active Directory. These include FIDO2 and NGC key auditing, offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.
 
 DISCLAIMER: Features exposed through this module are not supported by Microsoft and it is therefore not intended to be used in production environments. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
 "@
@@ -128,7 +128,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows'
+        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows', 'FIDO'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/License.txt'
@@ -141,9 +141,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The Test-PasswordQuality cmdlet now supports cross-domain and cross-forest duplicate password detection.
-- The Get-ADReplAccount, Get-ADReplBackupKey and Add-ADReplNgcKey cmdlets no longer require the Domain and NamingContext parameters to be specified, as their proper values are automatically retrieved from the target DC.
-- Fixed multiple bugs related to Credential Roaming.
+- Added the Get-AzureADUserEx cmdlet for FIDO2 and NGC key auditing in Azure Active Directory.
+- Both LastLogon and LastLogonTimestamp properties are now exposed on user accounts.
+- Improved display format of FIDO2 keys.
+- Updated the package logo.
 "@
     } # End of PSData hashtable
 

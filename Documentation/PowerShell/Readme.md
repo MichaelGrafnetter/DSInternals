@@ -11,12 +11,12 @@ Locale: en-US
 # Directory Services Internals PowerShell Module
 
 ## Description
-The DSInternals PowerShell Module exposes several internal features of Active Directory. These include offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.
+The DSInternals PowerShell Module exposes several internal features of Active Directory and Azure Active Directory. These include FIDO2 and NGC key auditing, offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.
 
 ## Azure Active Directory Cmdlets
 These cmdlets utilize an undocumented API endpoint that exposes information not available through the Microsoft Graph API nor Azure AD Graph API.
 
-### [Get-AzureADUserEx](Get-AzureADUserEx.md)
+### [Get-AzureADUserEx](Get-AzureADUserEx.md#get-azureaduserex)
 Gets a user from Azure AD, including the associated FIDO and NGC keys.
 
 ## Cmdlets for Offline Active Directory Operations

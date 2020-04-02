@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>4.2</version>
+    <version>4.3</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -20,6 +20,7 @@
     <summary>The DSInternals PowerShell Module exposes several internal features of Active Directory. These include offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.</summary>
     <description>The DSInternals PowerShell Module has these main features:
 
+* [Azure Active Directory FIDO2 key auditing](../Documentation/PowerShell/Get-AzureADUserEx.md#get-azureaduserex) and retrieval of system information about all user-registered key credentials.
 * [Active Directory password auditing](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Test-PasswordQuality.md) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
 * [Bare-metal recovery of domain controllers](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md) from just IFM backups (ntds.dit + SYSVOL).
 * Offline ntds.dit file manipulation, including [hash dumping](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBAccount.md), [password resets](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBAccountPassword.md), [group membership changes](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBPrimaryGroup.md), [SID History injection](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Add-ADDBSidHistory.md) and [enabling](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Enable-ADDBAccount.md)/[disabling](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Disable-ADDBAccount.md) accounts.
@@ -36,9 +37,10 @@
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* The Test-PasswordQuality cmdlet now supports cross-domain and cross-forest duplicate password detection.
-* The Get-ADReplAccount, Get-ADReplBackupKey and Add-ADReplNgcKey cmdlets no longer require the Domain and NamingContext parameters to be specified, as their proper values are automatically retrieved from the target DC.
-* Fixed multiple bugs related to Credential Roaming.
+* Added the Get-AzureADUserEx cmdlet for FIDO2 and NGC key auditing in Azure Active Directory.
+* Both LastLogon and LastLogonTimestamp properties are now exposed on user accounts.
+* Improved display format of FIDO2 keys.
+* Updated the package logo.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->
