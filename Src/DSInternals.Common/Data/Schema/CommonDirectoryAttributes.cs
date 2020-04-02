@@ -54,6 +54,7 @@
         public const string LastLogon = "lastLogon";
         public const int LastLogonId = 589876;
         public const string LastLogonTimestamp = "lastLogonTimestamp";
+        public const int LastLogonTimestampId = 591520;
         public const string LDAPDisplayName = "lDAPDisplayName";
         public const int LdapDisplayNameId = 131532;
         public const string LinkId = "linkID";

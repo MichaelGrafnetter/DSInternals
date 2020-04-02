@@ -69,7 +69,7 @@ Enabled: True
 UserAccountControl: NormalAccount, PasswordNeverExpires
 AdminCount: False
 Deleted: False
-LastLogon:
+LastLogonDate: 2/23/2015 10:27:18 AM
 DisplayName: Joe Smith
 GivenName: Joe
 Surname: Smith

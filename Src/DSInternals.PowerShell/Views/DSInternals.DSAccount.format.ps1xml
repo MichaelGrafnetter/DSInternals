@@ -70,9 +70,9 @@
                 <PropertyName>Deleted</PropertyName>
               </ExpressionBinding>
               <NewLine />
-              <Text>LastLogon: </Text>
+              <Text>LastLogonDate: </Text>
               <ExpressionBinding>
-                <PropertyName>LastLogon</PropertyName>
+                <PropertyName>LastLogonDate</PropertyName>
               </ExpressionBinding>
               <NewLine />
               <Text>DisplayName: </Text>

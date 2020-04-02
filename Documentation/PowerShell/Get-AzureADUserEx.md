@@ -120,7 +120,7 @@ PS C:\> Get-AzureADUserEx -UserPrincipalName 'john@contoso.com' -Token $token
 ObjectId: af4cf208-16e0-429d-b574-2a09c5f30dea
 UserPrincipalName: john@contoso.com
 Enabled: True
-DisplayName: Michael Grafnetter
+DisplayName: John Doe
 Key Credentials:
   Usage=FIDO, Source=AzureAD, Device=00000000-0000-0000-0000-000000000000, Created=12/12/2019 9:42:21 AM
   Usage=NGC, Source=AzureAD, Device=cbad3c94-b480-4fa6-9187-ff1ed42c4479, Created=11/17/2015 8:17:13 AM

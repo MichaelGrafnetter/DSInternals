@@ -161,10 +161,34 @@
         /// <summary>
         /// Gets the Nullable DateTime that specifies the date and time of the last logon for this <see cref="DSAccount"/>.
         /// </summary>
+        /// <remarks>
+        /// Local, nonreplicated value.
+        /// </remarks>
         public DateTime? LastLogon
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// Gets the Nullable DateTime that specifies the date and time of the last logon for this <see cref="DSAccount"/>.
+        /// </summary>
+        /// <remarks>
+        /// Replicated value
+        /// </remarks>
+        public DateTime? LastLogonTimestamp
+        {
+            get;
+            private set;
+        }
+
+        public DateTime? LastLogonDate
+        {
+            get
+            {
+                // lastLogon is not replicated, lastLogonTimestamp is but it's not as accurate, so if we can't find lastLogon, try using lastLogonTimestamp instead
+                return this.LastLogon ?? this.LastLogonTimestamp;
+            }
         }
 
         /// <summary>
@@ -356,12 +380,8 @@
             dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out DateTime? lastLogon);
             this.LastLogon = lastLogon;
 
-            // lastLogon is not replicated, lastLogonTimestamp is but it's not as accurate, so if we can't find lastLogon, try using lastLogonTimestamp instead
-            if (null == lastLogon)
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogonTimestamp, out DateTime? lastLogonTimestamp);
-                this.LastLogon = lastLogonTimestamp;
-            }
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogonTimestamp, out DateTime? lastLogonTimestamp);
+            this.LastLogonTimestamp = lastLogonTimestamp;
 
             // UPN:
             dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out string upn);
