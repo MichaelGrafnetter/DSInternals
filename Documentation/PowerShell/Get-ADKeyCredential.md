@@ -36,7 +36,7 @@ Get-ADKeyCredential [-Certificate] <X509Certificate2> -OwnerDN <String> [-Creati
 
 ## DESCRIPTION
 
-This cmdlet can be used to display existing key credentials from Active Directory (including NGC, STK and FIDO keys) and to generate new NGC credentials from self-sigled certificates. See the examples for more info.
+This cmdlet can be used to display existing key credentials from Active Directory (including NGC, STK and FIDO keys) and to generate new NGC credentials from self-signed certificates. See the examples for more info.
 
 ## EXAMPLES
 
@@ -44,7 +44,7 @@ This cmdlet can be used to display existing key credentials from Active Director
 ```powershell
 PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-            Get-KeyCredential
+            Get-ADKeyCredential
 <# Sample Output:
 
 Usage Source  Flags       DeviceId                             Created    Owner
@@ -64,7 +64,7 @@ Lists all key credentials that are registered in Active Directory.
 ```powershell
 PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-            Get-KeyCredential |
+            Get-ADKeyCredential |
             Where-Object Usage -eq NGC |
             Format-Table -View ROCA
 <# Sample Output:
@@ -83,7 +83,7 @@ Lists weak public keys registered in Active Directory that were generated on ROC
 ```powershell
 PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-            Get-KeyCredential |
+            Get-ADKeyCredential |
             Where-Object Usage -eq NGC |
             Format-Custom -View Moduli |
             Out-File -FilePath .\moduli.txt -Encoding ascii -Force
@@ -95,7 +95,7 @@ Exports all RSA public key moduli from NGC keys to a file in BASE64 encoding. Th
 ```powershell
 PS C:\> Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-            Get-KeyCredential |
+            Get-ADKeyCredential |
             Where-Object Usage -eq FIDO |
             Format-Table -View FIDO
 <# Sample Output:
@@ -116,7 +116,7 @@ Lists FIDO tokens registered in Active Directory.
 ```powershell
 PS C:\> Get-ADUser -Identity john -Properties msDS-KeyCredentialLink |
     Select-Object -ExpandProperty msDS-KeyCredentialLink |
-    Get-KeyCredential |
+    Get-ADKeyCredential |
     Out-GridView -OutputMode Multiple -Title 'Select a credentials for removal...' |
     ForEach-Object { Set-ADObject -Identity $PSItem.Owner -Remove @{ 'msDS-KeyCredentialLink' = $PSItem.ToDNWithBinary() } }
 ```
@@ -137,7 +137,7 @@ PS C:\> $certificate = New-SelfSignedCertificate -Subject $certificateSubject `
                                                  -SuppressOid '2.5.29.14' `
                                                  -KeyUsage None `
                                                  -KeyExportPolicy Exportable
-PS C:\> $ngcKey = Get-KeyCredential -Certificate $certificate -DeviceId (New-Guid) -OwnerDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
+PS C:\> $ngcKey = Get-ADKeyCredential -Certificate $certificate -DeviceId (New-Guid) -OwnerDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
 PS C:\> Set-ADObject -Identity $ngcKey.Owner -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }
 ```
 
@@ -155,7 +155,7 @@ PS C:\> $certificate = New-SelfSignedCertificate -Subject 'S-1-5-21-1236425271-2
                                                  -SuppressOid '2.5.29.14' `
                                                  -KeyUsage None `
                                                  -KeyExportPolicy Exportable
-PS C:\> $ngcKey = Get-KeyCredential -IsComputerKey -Certificate $certificate -OwnerDN 'CN=PC01,CN=Computers,DC=contoso,DC=com'
+PS C:\> $ngcKey = Get-ADKeyCredential -IsComputerKey -Certificate $certificate -OwnerDN 'CN=PC01,CN=Computers,DC=contoso,DC=com'
 PS C:\> Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }
 ```
 
