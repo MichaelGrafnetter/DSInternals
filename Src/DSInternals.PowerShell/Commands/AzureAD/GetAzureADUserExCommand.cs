@@ -1,11 +1,11 @@
-﻿namespace DSInternals.PowerShell.Commands
-{
-    using System;
-    using System.Globalization;
-    using System.Management.Automation;
-    using System.Threading.Tasks;
-    using DSInternals.Common.AzureAD;
+﻿using System;
+using System.Globalization;
+using System.Management.Automation;
+using System.Threading.Tasks;
+using DSInternals.Common.AzureAD;
 
+namespace DSInternals.PowerShell.Commands
+{
     [Cmdlet(VerbsCommon.Get, "AzureADUserEx", DefaultParameterSetName = ParamSetAllUsers)]
     [OutputType(typeof(AzureADUser))]
     public class GetAzureADUserExCommand : PSCmdlet, IDisposable
@@ -62,30 +62,22 @@
 
         protected override void BeginProcessing()
         {
-            this.Client = new AzureADClient(this.AccessToken, this.TenantId);
+            Client = new AzureADClient(AccessToken, TenantId);
         }
 
         protected override void ProcessRecord()
         {
-            try
+            switch (ParameterSetName)
             {
-                switch (this.ParameterSetName)
-                {
-                    case ParamSetAllUsers:
-                        this.FetchMultipleUsers();
-                        break;
-                    case ParamSetSingleUserId:
-                        this.WriteObject(this.Client.GetUserAsync(this.ObjectId.Value).Result);
-                        break;
-                    case ParamSetSingleUserUPN:
-                        this.WriteObject(this.Client.GetUserAsync(this.UserPrincipalName).Result);
-                        break;
-                }
-            }
-            catch (AggregateException e)
-            {
-                // Unpack the actual exception from the GetUsersAsync call
-                throw e.InnerException;
+                case ParamSetAllUsers:
+                    FetchMultipleUsers();
+                    break;
+                case ParamSetSingleUserId:
+                    WriteObject(Client.GetUserAsync(ObjectId.Value).GetAwaiter().GetResult());
+                    break;
+                case ParamSetSingleUserUPN:
+                    WriteObject(Client.GetUserAsync(UserPrincipalName).GetAwaiter().GetResult());
+                    break;
             }
         }
 
@@ -95,58 +87,42 @@
             ProgressRecord progress = new ProgressRecord(0, "Reading users from Azure AD", "Starting...");
             // Disable the progress bar as we do not know the total number of accounts.
             progress.PercentComplete = -1;
-            this.WriteProgress(progress);
+            WriteProgress(progress);
 
             // Start fetching the first batch of users
             OdataPagedResponse<AzureADUser> response;
-            Task<OdataPagedResponse<AzureADUser>> userRetriever = this.Client.GetUsersAsync();
+            Task<OdataPagedResponse<AzureADUser>> userRetriever = Client.GetUsersAsync();
             int userCount = 0;
 
             do
             {
                 // Wait for the users to be fetched from AAD
-                response = userRetriever.Result;
+                response = userRetriever.GetAwaiter().GetResult();
 
-                if (response.HasMoreData && this.All.IsPresent)
+                if (response.HasMoreData && All.IsPresent)
                 {
                     // Start fetching the next page
-                    userRetriever = this.Client.GetUsersAsync(response.NextLink);
+                    userRetriever = Client.GetUsersAsync(response.NextLink);
                 }
 
                 // Write progress
                 userCount += response.Items.Count;
-                progress.StatusDescription = String.Format(CultureInfo.InvariantCulture, "{0} user(s)", userCount);
-                this.WriteProgress(progress);
+                progress.StatusDescription = string.Format(CultureInfo.InvariantCulture, "{0} user(s)", userCount);
+                WriteProgress(progress);
 
                 // Write the previously fetched users to the pipeline
-                this.WriteObject(response.Items, true);
-            } while (response.HasMoreData && this.All.IsPresent);
+                WriteObject(response.Items, true);
+            } while (response.HasMoreData && All.IsPresent);
 
             // Final progress record
             progress.RecordType = ProgressRecordType.Completed;
-            this.WriteProgress(progress);
+            WriteProgress(progress);
         }
 
         #region IDisposable Support
-        protected virtual void Dispose(bool disposing)
+        public virtual void Dispose()
         {
-            if (this.Client != null)
-            {
-                if (disposing)
-                {
-                    this.Client.Dispose();
-                }
-
-                this.Client = null;
-            }
-        }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            Client.Dispose();
         }
         #endregion
     }

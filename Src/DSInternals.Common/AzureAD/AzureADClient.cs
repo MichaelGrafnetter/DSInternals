@@ -34,12 +34,12 @@ namespace DSInternals.Common.AzureAD
             // Validate inputs
             Validator.AssertNotNullOrWhiteSpace(accessToken, nameof(accessToken));
 
-            this._tenantId = tenantId.HasValue ? tenantId.Value.ToString() : DefaultTenantId;
-            this._batchSizeParameter = String.Format(CultureInfo.InvariantCulture, BatchSizeParameterFormat, batchSize);
+            _tenantId = tenantId?.ToString() ?? DefaultTenantId;
+            _batchSizeParameter = string.Format(CultureInfo.InvariantCulture, BatchSizeParameterFormat, batchSize);
 
-            this._httpClient = new HttpClient();
-            this._httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, accessToken);
-            this._httpClient.DefaultRequestHeaders.Accept.Add(s_contentType);
+            _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthenticationScheme, accessToken);
+            _httpClient.DefaultRequestHeaders.Accept.Add(s_contentType);
         }
 
         public async Task<AzureADUser> GetUserAsync(string userPrincipalName)
@@ -47,27 +47,27 @@ namespace DSInternals.Common.AzureAD
             // Vaidate the input
             Validator.AssertNotNullOrEmpty(userPrincipalName, nameof(userPrincipalName));
 
-            string filter = String.Format(CultureInfo.InvariantCulture, UPNFilterParameterFormat, userPrincipalName);
-            return await this.GetUserAsync(filter, userPrincipalName);
+            var filter = string.Format(CultureInfo.InvariantCulture, UPNFilterParameterFormat, userPrincipalName);
+            return await GetUserAsync(filter, userPrincipalName);
         }
 
         public async Task<AzureADUser> GetUserAsync(Guid objectId)
         {
-            string filter = String.Format(CultureInfo.InvariantCulture, IdFilterParameterFormat, objectId);
-            return await this.GetUserAsync(filter, objectId);
+            var filter = string.Format(CultureInfo.InvariantCulture, IdFilterParameterFormat, objectId);
+            return await GetUserAsync(filter, objectId);
         }
 
         private async Task<AzureADUser> GetUserAsync(string filterParameter, object userIdentifier)
         {
             // Build uri with filter
             var url = new StringBuilder();
-            url.AppendFormat(CultureInfo.InvariantCulture, UsersUrlFormat, this._tenantId);
+            url.AppendFormat(CultureInfo.InvariantCulture, UsersUrlFormat, _tenantId);
             url.Append(SelectParameter);
             url.Append(filterParameter);
 
             // Send the request
-            var result = await this.GetUsersAsync(url.ToString()).ConfigureAwait(false);
-            if (result.Items == null || result.Items.Count == 0)
+            var result = await GetUsersAsync(url.ToString()).ConfigureAwait(false);
+            if ((result.Items?.Count ?? 0) == 0)
             {
                 throw new DirectoryObjectNotFoundException(userIdentifier);
             }
@@ -79,35 +79,35 @@ namespace DSInternals.Common.AzureAD
         {
             var url = new StringBuilder(nextLink);
 
-            if (String.IsNullOrEmpty(nextLink))
+            if (string.IsNullOrEmpty(nextLink))
             {
                 // Build the intial URL
-                url.AppendFormat(CultureInfo.InvariantCulture, UsersUrlFormat, this._tenantId);
+                url.AppendFormat(CultureInfo.InvariantCulture, UsersUrlFormat, _tenantId);
                 url.Append(SelectParameter);
             }
 
             // Add query string parameters
-            url.Append(ApiVersionParameter)
-               .Append(this._batchSizeParameter);
+            url.Append(ApiVersionParameter);
+            url.Append(_batchSizeParameter);
 
             // Perform API call
             try
             {
                 using (var request = new HttpRequestMessage(HttpMethod.Get, url.ToString()))
-                using (var response = await this._httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+                using (var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                 using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
                 using (var streamReader = new StreamReader(responseStream))
                 {
-                    if(s_contentType.MediaType.Equals(response.Content.Headers.ContentType.MediaType, StringComparison.InvariantCultureIgnoreCase))
+                    if (s_contentType.MediaType.Equals(response.Content.Headers.ContentType.MediaType, StringComparison.InvariantCultureIgnoreCase))
                     {
                         // The response is a JSON document
                         using (var jsonTextReader = new JsonTextReader(streamReader))
                         {
                             if (response.StatusCode == HttpStatusCode.OK)
                             {
-                                var result = this._jsonSerializer.Deserialize<OdataPagedResponse<AzureADUser>>(jsonTextReader);
+                                var result = _jsonSerializer.Deserialize<OdataPagedResponse<AzureADUser>>(jsonTextReader);
                                 // Update key credential owner references
-                                if(result.Items != null)
+                                if (result.Items != null)
                                 {
                                     result.Items.ForEach(user => user.UpdateKeyCredentialReferences());
                                 }
@@ -116,7 +116,7 @@ namespace DSInternals.Common.AzureAD
                             else
                             {
                                 // Translate OData response to an exception
-                                var error = this._jsonSerializer.Deserialize<OdataErrorResponse>(jsonTextReader);
+                                var error = _jsonSerializer.Deserialize<OdataErrorResponse>(jsonTextReader);
                                 throw error.GetException();
                             }
                         }
@@ -129,11 +129,11 @@ namespace DSInternals.Common.AzureAD
                     }
                 }
             }
-            catch(JsonException e)
+            catch (JsonException e)
             {
                 throw new GraphApiException("The data returned by the REST API call has an unexpected format.", e);
             }
-            catch(HttpRequestException e)
+            catch (HttpRequestException e)
             {
                 // Unpack a more meaningful message, e. g. DNS error
                 throw new GraphApiException(e?.InnerException.Message ?? "An error occured while trying to call the REST API.", e);
@@ -141,25 +141,9 @@ namespace DSInternals.Common.AzureAD
         }
 
         #region IDisposable Support
-        protected virtual void Dispose(bool disposing)
+        public virtual void Dispose()
         {
-            if (this._httpClient != null)
-            {
-                if (disposing)
-                {
-                    this._httpClient.Dispose();
-                }
-
-                this._httpClient = null;
-            }
-        }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            _httpClient.Dispose();
         }
         #endregion
     }
