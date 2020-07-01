@@ -12,17 +12,17 @@ Gets a user from Azure AD, including the associated FIDO and NGC keys.
 
 ## SYNTAX
 
-### GetMultiple (Default)
+### Multiple (Default)
 ```
-Get-AzureADUserEx -AccessToken <String> [-All] [-TenantId <Guid>] [<CommonParameters>]
+Get-AzureADUserEx [-All] -AccessToken <String> [-TenantId <Guid>] [<CommonParameters>]
 ```
 
-### GetById
+### ById
 ```
 Get-AzureADUserEx -AccessToken <String> -ObjectId <Guid> [-TenantId <Guid>] [<CommonParameters>]
 ```
 
-### GetByUPN
+### ByUPN
 ```
 Get-AzureADUserEx -AccessToken <String> -UserPrincipalName <String> [-TenantId <Guid>] [<CommonParameters>]
 ```
@@ -284,7 +284,7 @@ If true, return all users. If false, return the first 999 objects.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: GetMultiple
+Parameter Sets: Multiple
 Aliases: AllUsers
 
 Required: False
@@ -299,7 +299,7 @@ Specifies the identity of a user in Azure AD.
 
 ```yaml
 Type: Guid
-Parameter Sets: GetById
+Parameter Sets: ById
 Aliases: Identity, Id, UserId, ObjectGuid
 
 Required: True
@@ -329,7 +329,7 @@ Specifies the UPN of a user in Azure AD.
 
 ```yaml
 Type: String
-Parameter Sets: GetByUPN
+Parameter Sets: ByUPN
 Aliases: UPN, UserName
 
 Required: True

@@ -4148,7 +4148,7 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This cmdlet can be used to display existing key credentials from Active Directory (including NGC, STK and FIDO keys) and to generate new NGC credentials from self-sigled certificates. See the examples for more info.</maml:para>
+      <maml:para>This cmdlet can be used to display existing key credentials from Active Directory (including NGC, STK and FIDO keys) and to generate new NGC credentials from self-signed certificates. See the examples for more info.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -4411,7 +4411,7 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-            Get-KeyCredential
+            Get-ADKeyCredential
 &lt;# Sample Output:
 
 Usage Source  Flags       DeviceId                             Created    Owner
@@ -4431,7 +4431,7 @@ FIDO  AzureAD Attestation 00000000-0000-0000-0000-000000000000 2019-08-26 CN=Joh
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-            Get-KeyCredential |
+            Get-ADKeyCredential |
             Where-Object Usage -eq NGC |
             Format-Table -View ROCA
 &lt;# Sample Output:
@@ -4450,7 +4450,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
         <maml:title>-------------------------- Example 3 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-            Get-KeyCredential |
+            Get-ADKeyCredential |
             Where-Object Usage -eq NGC |
             Format-Custom -View Moduli |
             Out-File -FilePath .\moduli.txt -Encoding ascii -Force</dev:code>
@@ -4462,7 +4462,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
         <maml:title>-------------------------- Example 4 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADObject -LDAPFilter '(msDS-KeyCredentialLink=*)' -Properties msDS-KeyCredentialLink |
             Select-Object -ExpandProperty msDS-KeyCredentialLink |
-            Get-KeyCredential |
+            Get-ADKeyCredential |
             Where-Object Usage -eq FIDO |
             Format-Table -View FIDO
 &lt;# Sample Output:
@@ -4483,7 +4483,7 @@ Feitian All-In-Pass   12ded745-4bed-47d4-abaa-e713f51d6393 ES256    1398 2020-03
         <maml:title>-------------------------- Example 5 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADUser -Identity john -Properties msDS-KeyCredentialLink |
     Select-Object -ExpandProperty msDS-KeyCredentialLink |
-    Get-KeyCredential |
+    Get-ADKeyCredential |
     Out-GridView -OutputMode Multiple -Title 'Select a credentials for removal...' |
     ForEach-Object { Set-ADObject -Identity $PSItem.Owner -Remove @{ 'msDS-KeyCredentialLink' = $PSItem.ToDNWithBinary() } }</dev:code>
         <dev:remarks>
@@ -4504,7 +4504,7 @@ PS C:\&gt; $certificate = New-SelfSignedCertificate -Subject $certificateSubject
                                                  -SuppressOid '2.5.29.14' `
                                                  -KeyUsage None `
                                                  -KeyExportPolicy Exportable
-PS C:\&gt; $ngcKey = Get-KeyCredential -Certificate $certificate -DeviceId (New-Guid) -OwnerDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
+PS C:\&gt; $ngcKey = Get-ADKeyCredential -Certificate $certificate -DeviceId (New-Guid) -OwnerDN 'CN=John Doe,CN=Users,DC=contoso,DC=com'
 PS C:\&gt; Set-ADObject -Identity $ngcKey.Owner -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }</dev:code>
         <dev:remarks>
           <maml:para>Generates a new NGC key for a user account and registers it in Active Directory. Note that the value of the certificate Subject has no effect on the functionality, but as it appears in DC logs, this example uses the same format as Windows does.</maml:para>
@@ -4521,7 +4521,7 @@ PS C:\&gt; Set-ADObject -Identity $ngcKey.Owner -Add @{ 'msDS-KeyCredentialLink'
                                                  -SuppressOid '2.5.29.14' `
                                                  -KeyUsage None `
                                                  -KeyExportPolicy Exportable
-PS C:\&gt; $ngcKey = Get-KeyCredential -IsComputerKey -Certificate $certificate -OwnerDN 'CN=PC01,CN=Computers,DC=contoso,DC=com'
+PS C:\&gt; $ngcKey = Get-ADKeyCredential -IsComputerKey -Certificate $certificate -OwnerDN 'CN=PC01,CN=Computers,DC=contoso,DC=com'
 PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @{ 'msDS-KeyCredentialLink' = $ngcKey.ToDNWithBinary() }</dev:code>
         <dev:remarks>
           <maml:para>Performs a validated write of computer NGC key. Must be executed under the computer account's identity.</maml:para>
@@ -9560,6 +9560,220 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Set-AzureADUserEx</command:name>
+      <command:verb>Set</command:verb>
+      <command:noun>AzureADUserEx</command:noun>
+      <maml:description>
+        <maml:para>Registers new or revokes existing FIDO and NGC keys in Azure Active Directory.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>{{ Fill in the Description }}</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Set-AzureADUserEx</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Token">
+          <maml:name>AccessToken</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the access token retrieved by the Connect-AzureAD cmdlet.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SearchableDeviceKey, KeyCredentialLink">
+          <maml:name>KeyCredential</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill KeyCredential Description }}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">KeyCredential[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KeyCredential[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Identity, Id, UserId, ObjectGuid">
+          <maml:name>ObjectId</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the identity of a user in Azure AD.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
+          <maml:name>TenantId</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the Azure AD tenant to perform the search in. If not specified, the tenant of the authenticated user will be used.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Set-AzureADUserEx</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Token">
+          <maml:name>AccessToken</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the access token retrieved by the Connect-AzureAD cmdlet.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SearchableDeviceKey, KeyCredentialLink">
+          <maml:name>KeyCredential</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill KeyCredential Description }}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">KeyCredential[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KeyCredential[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
+          <maml:name>TenantId</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the Azure AD tenant to perform the search in. If not specified, the tenant of the authenticated user will be used.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UPN, UserName">
+          <maml:name>UserPrincipalName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the UPN of a user in Azure AD.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Token">
+        <maml:name>AccessToken</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the access token retrieved by the Connect-AzureAD cmdlet.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SearchableDeviceKey, KeyCredentialLink">
+        <maml:name>KeyCredential</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill KeyCredential Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">KeyCredential[]</command:parameterValue>
+        <dev:type>
+          <maml:name>KeyCredential[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Identity, Id, UserId, ObjectGuid">
+        <maml:name>ObjectId</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the identity of a user in Azure AD.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+        <dev:type>
+          <maml:name>Guid</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tenant">
+        <maml:name>TenantId</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the Azure AD tenant to perform the search in. If not specified, the tenant of the authenticated user will be used.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+        <dev:type>
+          <maml:name>Guid</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UPN, UserName">
+        <maml:name>UserPrincipalName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the UPN of a user in Azure AD.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:remarks>
+          <maml:para>{{ Add example description here }}</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>

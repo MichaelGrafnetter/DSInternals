@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Management.Automation;
 using System.Threading.Tasks;
 using DSInternals.Common.AzureAD;
@@ -8,19 +7,9 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, "AzureADUserEx", DefaultParameterSetName = ParamSetAllUsers)]
     [OutputType(typeof(AzureADUser))]
-    public class GetAzureADUserExCommand : PSCmdlet, IDisposable
+    public class GetAzureADUserExCommand : AzureADCommandBase
     {
-        private const string ParamSetAllUsers = "GetMultiple";
-        private const string ParamSetSingleUserId = "GetById";
-        private const string ParamSetSingleUserUPN = "GetByUPN";
-
-        [Parameter(Mandatory = true)]
-        [Alias("Token")]
-        public string AccessToken
-        {
-            get;
-            set;
-        }
+        private const string ParamSetAllUsers = "Multiple";
 
         [Parameter(Mandatory = false, ParameterSetName = ParamSetAllUsers)]
         [Alias("AllUsers")]
@@ -28,41 +17,6 @@ namespace DSInternals.PowerShell.Commands
         {
             get;
             set;
-        }
-
-        [Parameter(Mandatory = true, ParameterSetName = ParamSetSingleUserId)]
-        [Alias("Identity","Id", "UserId","ObjectGuid")]
-        public Guid? ObjectId
-        {
-            get;
-            set;
-        }
-
-        [Parameter(Mandatory = true, ParameterSetName = ParamSetSingleUserUPN)]
-        [Alias("UPN","UserName")]
-        public string UserPrincipalName
-        {
-            get;
-            set;
-        }
-
-        [Parameter(Mandatory = false)]
-        [Alias("Tenant")]
-        public Guid? TenantId
-        {
-            get;
-            set;
-        }
-
-        protected AzureADClient Client
-        {
-            get;
-            set;
-        }
-
-        protected override void BeginProcessing()
-        {
-            Client = new AzureADClient(AccessToken, TenantId);
         }
 
         protected override void ProcessRecord()
@@ -118,12 +72,5 @@ namespace DSInternals.PowerShell.Commands
             progress.RecordType = ProgressRecordType.Completed;
             WriteProgress(progress);
         }
-
-        #region IDisposable Support
-        public virtual void Dispose()
-        {
-            Client.Dispose();
-        }
-        #endregion
     }
 }

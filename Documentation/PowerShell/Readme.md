@@ -19,6 +19,9 @@ These cmdlets utilize an undocumented API endpoint that exposes information not 
 ### [Get-AzureADUserEx](Get-AzureADUserEx.md#get-azureaduserex)
 Gets a user from Azure AD, including the associated FIDO and NGC keys.
 
+### [Set-AzureADUserEx](Set-AzureADUserEx.md#set-azureaduserex)
+Registers new or revokes existing FIDO and NGC keys in Azure Active Directory.
+
 ## Cmdlets for Offline Active Directory Operations
 
 ### [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount)
