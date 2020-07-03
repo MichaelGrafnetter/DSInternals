@@ -5,12 +5,15 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Changed
+
+- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+
+## [4.4] - 2020-07-03
+
 ### Added
 
 - The new [Set-AzureADUserEx](PowerShell/Set-AzureADUserEx.md#set-azureaduserex) cmdlet can be used to revoke FIDO2 and NGC keys in Azure Active Directory.
-
-### Changed
-- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
 
 ## [4.3] - 2020-04-02
 
@@ -390,7 +393,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.3...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4...HEAD
+[4.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.3...v4.4
 [4.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.2...v4.3
 [4.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.1...v4.2
 [4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.0...v4.1

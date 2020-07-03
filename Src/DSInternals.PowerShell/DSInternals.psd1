@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.3'
+ModuleVersion = '4.4'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -141,10 +141,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Get-AzureADUserEx cmdlet for FIDO2 and NGC key auditing in Azure Active Directory.
-- Both LastLogon and LastLogonTimestamp properties are now exposed on user accounts.
-- Improved display format of FIDO2 keys.
-- Updated the package logo.
+- Added the Set-AzureADUserEx cmdlet for administrative FIDO2 security key revocation in Azure Active Directory.
 "@
     } # End of PSData hashtable
 

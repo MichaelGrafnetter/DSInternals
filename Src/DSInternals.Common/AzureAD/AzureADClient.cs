@@ -52,13 +52,13 @@ namespace DSInternals.Common.AzureAD
             Validator.AssertNotNullOrEmpty(userPrincipalName, nameof(userPrincipalName));
 
             var filter = string.Format(CultureInfo.InvariantCulture, UPNFilterParameterFormat, userPrincipalName);
-            return await GetUserAsync(filter, userPrincipalName);
+            return await GetUserAsync(filter, userPrincipalName).ConfigureAwait(false);
         }
 
         public async Task<AzureADUser> GetUserAsync(Guid objectId)
         {
             var filter = string.Format(CultureInfo.InvariantCulture, IdFilterParameterFormat, objectId);
-            return await GetUserAsync(filter, objectId);
+            return await GetUserAsync(filter, objectId).ConfigureAwait(false);
         }
 
         private async Task<AzureADUser> GetUserAsync(string filterParameter, object userIdentifier)
@@ -97,53 +97,18 @@ namespace DSInternals.Common.AzureAD
             url.Append(UriParameterSeparator);
             url.Append(_batchSizeParameter);
 
-            // Perform API call
-            try
+            using (var request = new HttpRequestMessage(HttpMethod.Get, url.ToString()))
             {
-                using (var request = new HttpRequestMessage(HttpMethod.Get, url.ToString()))
-                using (var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
-                using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                using (var streamReader = new StreamReader(responseStream))
+                // Perform API call
+                var result = await SendODataRequest<OdataPagedResponse<AzureADUser>>(request).ConfigureAwait(false);
+
+                // Update key credential owner references
+                if (result.Items != null)
                 {
-                    if (s_odataContentType.MediaType.Equals(response.Content.Headers.ContentType.MediaType, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        // The response is a JSON document
-                        using (var jsonTextReader = new JsonTextReader(streamReader))
-                        {
-                            if (response.StatusCode == HttpStatusCode.OK)
-                            {
-                                var result = _jsonSerializer.Deserialize<OdataPagedResponse<AzureADUser>>(jsonTextReader);
-                                // Update key credential owner references
-                                if (result.Items != null)
-                                {
-                                    result.Items.ForEach(user => user.UpdateKeyCredentialReferences());
-                                }
-                                return result;
-                            }
-                            else
-                            {
-                                // Translate OData response to an exception
-                                var error = _jsonSerializer.Deserialize<OdataErrorResponse>(jsonTextReader);
-                                throw error.GetException();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // The response is not a JSON document, so we parse its first line as message text
-                        string message = await streamReader.ReadLineAsync().ConfigureAwait(false);
-                        throw new GraphApiException(message, response.StatusCode.ToString());
-                    }
+                    result.Items.ForEach(user => user.UpdateKeyCredentialReferences());
                 }
-            }
-            catch (JsonException e)
-            {
-                throw new GraphApiException("The data returned by the REST API call has an unexpected format.", e);
-            }
-            catch (HttpRequestException e)
-            {
-                // Unpack a more meaningful message, e. g. DNS error
-                throw new GraphApiException(e?.InnerException.Message ?? "An error occured while trying to call the REST API.", e);
+
+                return result;
             }
         }
 
@@ -153,13 +118,13 @@ namespace DSInternals.Common.AzureAD
             Validator.AssertNotNullOrEmpty(userPrincipalName, nameof(userPrincipalName));
 
             var properties = new Hashtable() { { KeyCredentialAttributeName, keyCredentials } };
-            await SetUserAsync(userPrincipalName, properties);
+            await SetUserAsync(userPrincipalName, properties).ConfigureAwait(false);
         }
 
         public async Task SetUserAsync(Guid objectId, KeyCredential[] keyCredentials)
         {
             var properties = new Hashtable() { { KeyCredentialAttributeName, keyCredentials } };
-            await SetUserAsync(objectId.ToString(), properties);
+            await SetUserAsync(objectId.ToString(), properties).ConfigureAwait(false);
         }
 
         private async Task SetUserAsync(string userIdentifier, Hashtable properties)
@@ -169,20 +134,52 @@ namespace DSInternals.Common.AzureAD
             url.AppendFormat(CultureInfo.InvariantCulture, UsersUrlFormat, _tenantId, userIdentifier);
             url.Append(ApiVersionParameter);
 
-            // Perform API call
+            // TODO: Switch to HttpMethod.Patch after migrating to .NET Standard 2.1 / .NET 5
+            using (var request = new HttpRequestMessage(new HttpMethod("PATCH"), url.ToString()))
+            {
+                request.Content = new StringContent(JsonConvert.SerializeObject(properties), Encoding.UTF8, JsonContentType);
+                await SendODataRequest<object>(request).ConfigureAwait(false);
+            }
+        }
+
+        private async Task<T> SendODataRequest<T>(HttpRequestMessage request)
+        {
             try
             {
-                // TODO: Switch to HttpMethod.Patch after migrating to .NET Standard 2.1 / .NET 5
-                using (var request = new HttpRequestMessage(new HttpMethod("PATCH"), url.ToString()))
+                using (var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                 {
-                    // Build the request body
-                    request.Content = new StringContent(JsonConvert.SerializeObject(properties), Encoding.UTF8, JsonContentType);
-
-                    // Send the request
-                    using (var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+                    if(response.StatusCode == HttpStatusCode.NoContent)
                     {
-                        // TODO: Error handling
-                        // response.StatusCode;
+                        // No objects have been returned, but the call was successful.
+                        return default(T);
+                    }
+
+                    using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                    using (var streamReader = new StreamReader(responseStream))
+                    {
+                        if (s_odataContentType.MediaType.Equals(response.Content.Headers.ContentType.MediaType, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            // The response is a JSON document
+                            using (var jsonTextReader = new JsonTextReader(streamReader))
+                            {
+                                if (response.StatusCode == HttpStatusCode.OK)
+                                {
+                                    return _jsonSerializer.Deserialize<T>(jsonTextReader);
+                                }
+                                else
+                                {
+                                    // Translate OData response to an exception
+                                    var error = _jsonSerializer.Deserialize<OdataErrorResponse>(jsonTextReader);
+                                    throw error.GetException();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // The response is not a JSON document, so we parse its first line as message text
+                            string message = await streamReader.ReadLineAsync().ConfigureAwait(false);
+                            throw new GraphApiException(message, response.StatusCode.ToString());
+                        }
                     }
                 }
             }

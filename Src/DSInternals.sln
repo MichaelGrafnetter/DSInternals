@@ -113,6 +113,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\Set-ADDBBootKey.md = ..\Documentation\PowerShell\Set-ADDBBootKey.md
 		..\Documentation\PowerShell\Set-ADDBDomainController.md = ..\Documentation\PowerShell\Set-ADDBDomainController.md
 		..\Documentation\PowerShell\Set-ADDBPrimaryGroup.md = ..\Documentation\PowerShell\Set-ADDBPrimaryGroup.md
+		..\Documentation\PowerShell\Set-AzureADUserEx.md = ..\Documentation\PowerShell\Set-AzureADUserEx.md
 		..\Documentation\PowerShell\Set-LsaPolicyInformation.md = ..\Documentation\PowerShell\Set-LsaPolicyInformation.md
 		..\Documentation\PowerShell\Set-SamAccountPasswordHash.md = ..\Documentation\PowerShell\Set-SamAccountPasswordHash.md
 		..\Documentation\PowerShell\Test-PasswordQuality.md = ..\Documentation\PowerShell\Test-PasswordQuality.md

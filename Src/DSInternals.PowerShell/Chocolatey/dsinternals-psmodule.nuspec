@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>4.3</version>
+    <version>4.4</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -37,10 +37,7 @@
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* Added the Get-AzureADUserEx cmdlet for FIDO2 and NGC key auditing in Azure Active Directory.
-* Both LastLogon and LastLogonTimestamp properties are now exposed on user accounts.
-* Improved display format of FIDO2 keys.
-* Updated the package logo.
+* Added the Set-AzureADUserEx cmdlet for administrative FIDO2 security key revocation in Azure Active Directory.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->

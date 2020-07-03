@@ -354,4 +354,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
+[Set-AzureADUserEx](Set-AzureADUserEx.md)
 [Get-ADKeyCredential](Get-ADKeyCredential.md)

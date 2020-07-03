@@ -4,6 +4,7 @@ using DSInternals.Common.Data;
 namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Set, "AzureADUserEx", DefaultParameterSetName = ParamSetSingleUserUPN)]
+    [OutputType("None")]
     public class SetAzureADUserExCommand : AzureADCommandBase
     {
         [Parameter(Mandatory = true)]
