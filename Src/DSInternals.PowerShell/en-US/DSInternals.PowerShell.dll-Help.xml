@@ -9571,7 +9571,7 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
       <command:verb>Set</command:verb>
       <command:noun>AzureADUserEx</command:noun>
       <maml:description>
-        <maml:para>Registers new or revokes existing FIDO2 and NGC keys in Azure Active Directory.</maml:para>
+        <maml:para>Registers new or revokes existing FIDO and NGC keys in Azure Active Directory.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>

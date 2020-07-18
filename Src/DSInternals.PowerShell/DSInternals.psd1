@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.4'
+ModuleVersion = '4.4.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -141,7 +141,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Set-AzureADUserEx cmdlet for administrative FIDO2 security key revocation in Azure Active Directory.
+- Fixed an issue that prevented the DSInternals.Replication.Interop.dll file from being loaded.
 "@
     } # End of PSData hashtable
 

@@ -93,10 +93,12 @@ Describe 'DSInternals PowerShell Module' {
         It 'contains Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' } -Test {
             param([string] $Platform)
 
-            # Regardless of the runtime version, we expect 2 additional DLLs to be present in the x86/amd64 directory
+            # Regardless of the runtime version, we expect 2-3 additional DLLs to be present in the x86/amd64 directory
             $platformSpecificPath = Join-Path $ModulePath $Platform
             Get-ChildItem -Path $platformSpecificPath -Recurse -Include msvc*,vcruntime* |
-                Should -HaveCount 2
+                Measure-Object |
+                Select-Object -ExpandProperty Count |
+                Should -BeIn @(2,3)
         }
 
         It 'does not contain debug symbols' {

@@ -280,9 +280,10 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)' == 'Release'">
     <CustomBuildStep>
-      <!-- Note: The msvcr140.dll file has been replaced by vcruntime140.dll since Visual Studio 2017. Moreover, $(PlatformToolsetVersion) equals to 150 instead of 140 and thus does not match the names of the runtime files.-->
+      <!-- Note: The msvcr140.dll file has been replaced by vcruntime140.dll since Visual Studio 2017. The vcruntime140_1.dll file is also required.
+                 Moreover, $(PlatformToolsetVersion) equals to 150 instead of 140 and thus does not match the names of the runtime files.-->
       <Command>
-        robocopy.exe "$(VCRuntimePath)" "$(OutDir)\." "msvcp*.dll" "msvcr*.dll" "vcruntime*.dll" /xf "msvcp*_*.dll" /xf "vcruntime*_*.dll" /FP /NP /NDL /NS /NJH /NJS
+        robocopy.exe "$(VCRuntimePath)" "$(OutDir)\." "msvcp*.dll" "msvcr*.dll" "vcruntime*.dll" /xf "msvcp*_*.dll" /FP /NP /NDL /NS /NJH /NJS
         IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0
       </Command>
       <Outputs>$(OutDir)\msvcr$(PlatformToolsetVersion).dll;$(OutDir)\msvcp$(PlatformToolsetVersion).dll;$(OutDir)\vcruntime$(PlatformToolsetVersion).dll;$(OutDir)\msvcp140.dll;$(OutDir)\vcruntime140.dll</Outputs>

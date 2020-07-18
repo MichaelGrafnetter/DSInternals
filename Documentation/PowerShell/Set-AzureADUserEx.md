@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-AzureADUserEx
 
 ## SYNOPSIS
-Registers new or revokes existing FIDO2 and NGC keys in Azure Active Directory.
+Registers new or revokes existing FIDO and NGC keys in Azure Active Directory.
 
 ## SYNTAX
 
