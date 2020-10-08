@@ -10,7 +10,7 @@
 ## Introduction
 
 The DSInternals project consists of these two parts:
-- The [DSInternals Framework](https://www.nuget.org/profiles/MichaelGrafnetter) exposes several internal features of *Active Directory* and can be used from any .NET application. The codebase has already been integrated into several 3<sup>rd</sup> party commercial products that use it in scenarios like Active Directory disaster recovery, identity management, cross-forest migrations and password strength auditing.
+- The [DSInternals Framework](https://www.nuget.org/profiles/DSInternals) exposes several internal features of *Active Directory* and can be used from any .NET application. The codebase has already been integrated into several 3<sup>rd</sup> party commercial products that use it in scenarios like Active Directory disaster recovery, identity management, cross-forest migrations and password strength auditing.
 - The [DSInternals PowerShell Module](https://www.powershellgallery.com/packages/DSInternals/) provides easy-to-use cmdlets that are built on top of the Framework. These are the main features:
   - [Azure Active Directory FIDO2 key auditing](../Documentation/PowerShell/Get-AzureADUserEx.md#get-azureaduserex) and retrieval of system information about all user-registered key credentials.
   - [Active Directory password auditing](../Documentation/PowerShell/Test-PasswordQuality.md#test-passwordquality) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
@@ -42,7 +42,7 @@ I would like to thank all people who have contributed to the project by [sending
 [![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/DSInternals.svg?label=PowerShell%20Gallery%20Downloads&logo=PowerShell)](https://www.powershellgallery.com/packages/DSInternals/)
 [![Chocolatey Downloads](https://img.shields.io/chocolatey/dt/dsinternals-psmodule.svg?label=Chocolatey%20Downloads&logo=NuGet)](https://chocolatey.org/packages/dsinternals-psmodule)
 [![GitHub Downloads](https://img.shields.io/github/downloads/MichaelGrafnetter/DSInternals/total.svg?label=GitHub%20Downloads&logo=GitHub)](https://github.com/MichaelGrafnetter/DSInternals/releases)
-[![NuGet Gallery Downloads](https://img.shields.io/nuget/dt/DSInternals.Common.svg?label=NuGet%20Gallery%20Downloads&logo=NuGet)](https://www.nuget.org/profiles/MichaelGrafnetter)
+[![NuGet Gallery Downloads](https://img.shields.io/nuget/dt/DSInternals.Common.svg?label=NuGet%20Gallery%20Downloads&logo=NuGet)](https://www.nuget.org/profiles/DSInternals)
 
 ### PowerShell Gallery (PowerShell 5+)
 
@@ -75,7 +75,7 @@ The DSInternals PowerShell module is part of FireEye's [Commando VM](https://git
 
 ###  NuGet Packages
 
-The easiest way of integrating the DSInternals functionality into .NET applications is by using the [DSInternals Framework NuGet packages](https://www.nuget.org/profiles/MichaelGrafnetter):
+The easiest way of integrating the DSInternals functionality into .NET applications is by using the [DSInternals Framework NuGet packages](https://www.nuget.org/profiles/DSInternals):
 
 - [DSInternals.Common](https://www.nuget.org/packages/DSInternals.Common/)
 - [DSInternals.DataStore](https://www.nuget.org/packages/DSInternals.DataStore/)
