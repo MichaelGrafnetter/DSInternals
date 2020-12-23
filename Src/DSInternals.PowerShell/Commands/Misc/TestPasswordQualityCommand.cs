@@ -461,7 +461,7 @@
 
         private void TestComputerDefaultPassword()
         {
-            string defaultPassword = this.Account.LogonName.TrimEnd('$').ToLower();
+            string defaultPassword = this.Account.SamAccountName.TrimEnd('$').ToLower();
             byte[] defaultHash = NTHash.ComputeHash(defaultPassword);
             if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, defaultHash))
             {
