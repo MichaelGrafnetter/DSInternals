@@ -25,7 +25,7 @@ DPAPI is used by several components of Windows to securely store passwords, encr
 
 ## EXAMPLES
 
-### Example 2
+### Example 1
 ```powershell
 PS C:\> Get-ADReplBackupKey -Server 'lon-dc1.contoso.com'
 <# Sample Output:
