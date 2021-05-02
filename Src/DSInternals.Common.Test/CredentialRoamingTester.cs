@@ -132,5 +132,16 @@ DCD2F6E392B6867C0836B85F64D95BC5F506D213070CD973417A049A775C5907E903CE595603AFDE
             Assert.AreEqual(@"Administrator\Protect\S-1-5-21-4534338-1127018997-2609994386-500\7fc19508-7b85-4a7c-9e5d-15f9e00e7ce5", roamedObject.FilePath);
             Assert.AreEqual(RoamedCredentialType.DPAPIMasterKey, roamedObject.Type);
         }
+
+        [TestMethod]
+        public void RoamedCredential_ParseUnreadablePrivateKeyX()
+        {
+            byte[] blob = @"25395C463630364239413737323434464344393544423545353431413531443339374235424231463037390000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000".HexToBinary();
+
+            var roamedObject = new RoamedCredential(blob, TestUser, TestSID);
+            Assert.IsTrue(roamedObject.Flags.HasFlag(RoamedCredentialFlags.Unreadable));
+            Assert.AreEqual(RoamedCredentialType.CNGPrivateKey, roamedObject.Type);
+            Assert.AreEqual(0, roamedObject.Data.Length);
+        }
     }
 }
