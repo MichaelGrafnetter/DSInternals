@@ -30,20 +30,66 @@ namespace DSInternals.PowerShell.Commands
             get;
             set;
         }
-        
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter Extra
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter UserAccountsOnly
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter CredsOnly
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter CredsNTOnly
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter CredsLMOnly
+        {
+            get;
+            set;
+        }
+
         protected override void ProcessRecord()
         {
+            int checkCredsParams = (CredsOnly.IsPresent ? 1 : 0) + (CredsNTOnly.IsPresent ? 1 : 0) + (CredsLMOnly.IsPresent ? 1 : 0);
+            if (checkCredsParams > 1)
+            {
+                throw new Exception("Only one Creds* filter is allowed");
+            }
+
+            if (this.ParameterSetName != ParameterSetAll && UserAccountsOnly.IsPresent)
+            {
+                throw new Exception("Using -UserAccountsOnly is not allowed without -All option set.");
+            }
+
             if (this.ParameterSetName == ParameterSetAll)
             {
-                this.ReturnAllAccounts();
+                this.ReturnAllAccounts(Extra.IsPresent, UserAccountsOnly.IsPresent, CredsOnly.IsPresent, CredsNTOnly.IsPresent, CredsLMOnly.IsPresent);
             }
             else
             {
-                this.ReturnSingleAccount();
+                this.ReturnSingleAccount(Extra.IsPresent, CredsOnly.IsPresent, CredsNTOnly.IsPresent, CredsLMOnly.IsPresent);
             }
         }
 
-        protected void ReturnAllAccounts()
+        protected void ReturnAllAccounts(bool extra, bool onlyUser, bool onlyCreds, bool onlyNTCreds, bool onlyLMCreds)
         {
             // Write the initial progress
             // TODO: Extract strings as resources
@@ -64,7 +110,7 @@ namespace DSInternals.PowerShell.Commands
             string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
 
             // Replicate all accounts
-            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter))
+            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter, extra, onlyUser, onlyCreds, onlyNTCreds, onlyLMCreds))
             {
                 this.WriteObject(account);
             }
@@ -74,31 +120,31 @@ namespace DSInternals.PowerShell.Commands
             this.WriteProgress(progress);
         }
 
-        protected void ReturnSingleAccount()
+        protected void ReturnSingleAccount(bool extra, bool onlyCreds, bool onlyNTCreds, bool onlyLMCreds)
         {
             DSAccount account;
             switch (this.ParameterSetName)
             {
                 case ParameterSetByDN:
-                    account = this.ReplicationClient.GetAccount(this.DistinguishedName);
+                    account = this.ReplicationClient.GetAccount(this.DistinguishedName, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
                     break;
 
                 case ParameterSetByName:
                     var accountName = new NTAccount(this.Domain, this.SamAccountName);
-                    account = this.ReplicationClient.GetAccount(accountName);
+                    account = this.ReplicationClient.GetAccount(accountName, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
                     break;
 
                 case ParameterSetByGuid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectGuid);
+                    account = this.ReplicationClient.GetAccount(this.ObjectGuid, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
                     break;
 
                 case ParameterSetBySid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectSid);
+                    account = this.ReplicationClient.GetAccount(this.ObjectSid, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
                     break;
 
                 case ParameterSetByUPN:
                     var upn = new NTAccount(this.UserPrincipalName);
-                    account = this.ReplicationClient.GetAccount(upn);
+                    account = this.ReplicationClient.GetAccount(upn, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
                     break;
 
                 default:

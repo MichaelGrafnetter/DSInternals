@@ -56,7 +56,7 @@
             }
         }
 
-        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey)
+        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, bool extra = false, bool onlyUser = false, bool onlyCreds = false, bool onlyNTCreds = false, bool onlyLMCreds = false)
         {
             var pek = this.GetSecretDecryptor(bootKey);
             // TODO: Use a more suitable index?
@@ -68,47 +68,81 @@
             {
                 var obj = new DatastoreObject(this.dataTableCursor, this.context);
                 // TODO: This probably does not work on RODCs:
+                if (onlyUser && !obj.IsUserAccount)
+                {
+                    continue;
+                }
+
+                if (onlyCreds && !obj.HasNTHash && !obj.HasLMHash)
+                {
+                    continue;
+                }
+
+                if (onlyNTCreds && !obj.HasNTHash)
+                {
+                    continue;
+                }
+
+                if (onlyLMCreds && !obj.HasLMHash)
+                {
+                    continue;
+                }
+
                 if (obj.IsDeleted || !obj.IsWritable || !obj.IsAccount)
                 {
                     continue;
                 }
-                yield return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek);
+
+                yield return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
             }
         }
 
-        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey)
+        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTCreds = false, bool onlyLMCreds = false)
         {
             var obj = this.FindObject(dn);
-            return this.GetAccount(obj, dn, bootKey);
+            return this.GetAccount(obj, dn, bootKey, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
         }
 
-        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey)
+        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTCreds = false, bool onlyLMCreds = false)
         {
             var obj = this.FindObject(objectSid);
-            return this.GetAccount(obj, objectSid, bootKey);
+            return this.GetAccount(obj, objectSid, bootKey, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
         }
 
-        public DSAccount GetAccount(string samAccountName, byte[] bootKey)
+        public DSAccount GetAccount(string samAccountName, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTCreds = false, bool onlyLMCreds = false)
         {
             var obj = this.FindObject(samAccountName);
-            return this.GetAccount(obj, samAccountName, bootKey);
+            return this.GetAccount(obj, samAccountName, bootKey, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
         }
 
-        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey)
+        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTCreds = false, bool onlyLMCreds = false)
         {
             var obj = this.FindObject(objectGuid);
-            return this.GetAccount(obj, objectGuid, bootKey);
+            return this.GetAccount(obj, objectGuid, bootKey, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
         }
 
-        protected DSAccount GetAccount(DatastoreObject foundObject, object objectIdentifier, byte[] bootKey)
+        protected DSAccount GetAccount(DatastoreObject foundObject, object objectIdentifier, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTCreds = false, bool onlyLMCreds = false)
         {
             if (!foundObject.IsAccount)
             {
                 throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, objectIdentifier);
             }
 
+            if (onlyCreds && !foundObject.HasNTHash && !foundObject.HasLMHash)
+            {
+                return null;
+            }
+            else if (onlyNTCreds && !foundObject.HasNTHash)
+            {
+                return null;
+            }
+            else if (onlyLMCreds && !foundObject.HasLMHash)
+            {
+                return null;
+            }
+
             var pek = GetSecretDecryptor(bootKey);
-            return new DSAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek);
+            return new DSAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
         }
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)

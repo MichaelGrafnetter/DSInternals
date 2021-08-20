@@ -75,6 +75,11 @@
                 <PropertyName>LastLogonDate</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>Description: </Text>
+              <ExpressionBinding>
+                <PropertyName>Description</PropertyName>
+               </ExpressionBinding>
+              <NewLine />
               <Text>DisplayName: </Text>
               <ExpressionBinding>
                 <PropertyName>DisplayName</PropertyName>
@@ -90,10 +95,16 @@
                 <PropertyName>Surname</PropertyName>
               </ExpressionBinding>
               <NewLine />
-              <Text>Description: </Text>
-              <ExpressionBinding>
-                <PropertyName>Description</PropertyName>
-              </ExpressionBinding>
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <Text>Generic User Account Info:</Text>
+                  <ExpressionBinding>
+                    <PropertyName>GenericUserAccountInfo</PropertyName>
+                    <CustomControlName>GenericUserAccountInfo</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
               <NewLine />
               <Text>ServicePrincipalName: </Text>
               <ExpressionBinding>

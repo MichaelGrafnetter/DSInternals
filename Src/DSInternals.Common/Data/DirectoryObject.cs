@@ -113,6 +113,28 @@
             }
         }
 
+        public bool HasNTHash
+        {
+            get
+            {
+                byte[] nt, ntHistory;
+                this.ReadAttribute(CommonDirectoryAttributes.NTHash, out nt);
+                this.ReadAttribute(CommonDirectoryAttributes.NTHashHistory, out ntHistory);
+                return (nt != null || ntHistory != null);
+            }
+        }
+
+        public bool HasLMHash
+        {
+            get
+            {
+                byte[] lm, lmHistory;
+                this.ReadAttribute(CommonDirectoryAttributes.LMHash, out lm);
+                this.ReadAttribute(CommonDirectoryAttributes.LMHashHistory, out lmHistory);
+                return (lm != null || lmHistory != null);
+            }
+        }
+
         public bool IsAccount
         {
             get
@@ -144,6 +166,23 @@
                     case SamAccountType.Trust:
                     case SamAccountType.SecurityGroup:
                     case SamAccountType.Alias:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public bool IsUserAccount
+        {
+            get
+            {
+                SamAccountType? accountType;
+                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
+                switch (accountType)
+                {
+                    case SamAccountType.User:
+                    case SamAccountType.Trust:
                         return true;
                     default:
                         return false;

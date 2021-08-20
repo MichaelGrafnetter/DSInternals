@@ -54,15 +54,18 @@
             <CustomItem>
               <ExpressionBinding>
                 <ScriptBlock>
-				  $records = [System.Collections.ArrayList]@()
-				  $record = '{0}:$NT${1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.NTHash)
-				  $position = $records.Add($record)
-				  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
-				  {
-					$record = '{0}_history{1}:$NT${2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.NTHashHistory[$i])
-					$position = $records.Add($record)
-				  }
-				  $records -join [Environment]::NewLine
+                  $records = [System.Collections.ArrayList]@()
+                  if ($PSItem.NTHash -ne $null)
+                  {
+                  $record = '{0}:$NT${1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.NTHash)
+                  $position = $records.Add($record)
+                  }
+                  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
+                  {
+                  $record = '{0}_history{1}:$NT${2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.NTHashHistory[$i])
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
                 </ScriptBlock>
                 <EnumerateCollection/>
               </ExpressionBinding>
@@ -106,15 +109,18 @@
             <CustomItem>
               <ExpressionBinding>
                 <ScriptBlock>
-				  $records = [System.Collections.ArrayList]@()
-				  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.LMHash)
-				  $position = $records.Add($record)
-				  for($i=1; $i -lt $PSItem.LMHashHistory.Count; $i++)
-				  {
-					$record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.LMHashHistory[$i])
-					$position = $records.Add($record)
-				  }
-				  $records -join [Environment]::NewLine
+                  $records = [System.Collections.ArrayList]@()
+                  if ($PSItem.LMHash -ne $null)
+                  {
+                  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.LMHash)
+                  $position = $records.Add($record)
+                  }
+                  for($i=1; $i -lt $PSItem.LMHashHistory.Count; $i++)
+                  {
+                  $record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.LMHashHistory[$i])
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
                 </ScriptBlock>
                 <EnumerateCollection/>
               </ExpressionBinding>
@@ -192,14 +198,17 @@
               <ExpressionBinding>
                 <ScriptBlock>
                   $records = [System.Collections.ArrayList]@()
-				  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.NTHash)
-				  $position = $records.Add($record)
-				  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
-				  {
-					$record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.NTHashHistory[$i])
-					$position = $records.Add($record)
-				  }
-				  $records -join [Environment]::NewLine
+                  if ($PSItem.NTHash -ne $null)
+                  {
+                  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.NTHash)
+                  $position = $records.Add($record)
+                  }
+                  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
+                  {
+                  $record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.NTHashHistory[$i])
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
                 </ScriptBlock>
                 <EnumerateCollection/>
               </ExpressionBinding>
@@ -244,14 +253,17 @@
               <ExpressionBinding>
                 <ScriptBlock>
                   $records = [System.Collections.ArrayList]@()
-				  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.LMHash)
-				  $position = $records.Add($record)
-				  for($i=1; $i -lt $PSItem.LMHashHistory.Count; $i++)
-				  {
-					$record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.LMHashHistory[$i])
-					$position = $records.Add($record)
-				  }
-				  $records -join [Environment]::NewLine
+                  if ($PSItem.LMHash -ne $null)
+                  {
+                  $record = '{0}:{1}' -f $PSItem.SamAccountName, (ConvertTo-Hex $PSItem.LMHash)
+                  $position = $records.Add($record)
+                  }
+                  for($i=1; $i -lt $PSItem.LMHashHistory.Count; $i++)
+                  {
+                  $record = '{0}_history{1}:{2}' -f $PSItem.SamAccountName, ($i-1), (ConvertTo-Hex $PSItem.LMHashHistory[$i])
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
                 </ScriptBlock>
                 <EnumerateCollection/>
               </ExpressionBinding>
@@ -405,28 +417,27 @@
               <ExpressionBinding>
                 <ScriptBlock>
                   $records = [System.Collections.ArrayList]@()
-				  
-				  $samAccountName = $PSItem.SamAccountName
-				  $rid = [DSInternals.Common.SecurityIdentifierExtensions]::GetRid($PSItem.Sid)
-				  if($PSItem.LMHash -eq $null -Or (ConvertTo-Hex $PSItem.LMHash) -eq 'aad3b435b51404eeaad3b435b51404ee') { $lmHash = 'NO LM-HASH**********************' }
-				  else { $lmHash = ConvertTo-Hex $PSItem.LMHash }
-				  if($PSItem.NTHash -eq $null) { $ntHash = 'NO NT-HASH**********************' }
-				  else { $ntHash = ConvertTo-Hex $PSItem.NTHash }
-				  
-				  $record = '{0}:{1}:{2}:{3}:::' -f $SamAccountName, $rid, $lmHash, $ntHash
-				  $position = $records.Add($record)
-				  
-				  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
-				  {
-					if($PSItem.LMHashHistory[$i] -eq $null -Or (ConvertTo-Hex $PSItem.LMHashHistory[$i]) -eq 'aad3b435b51404eeaad3b435b51404ee') { $lmHash = 'NO LM-HASH**********************' }
-					else { $lmHash = ConvertTo-Hex $PSItem.LMHashHistory[$i] }
-					if($PSItem.NTHashHistory[$i] -eq $null) { $ntHash = 'NO NT-HASH**********************' }
-					else { $ntHash = ConvertTo-Hex $PSItem.NTHashHistory[$i] }
-					
-					$record = '{0}_history{1}:{2}:{3}:{4}:::' -f $SamAccountName, ($i-1), $rid, $lmHash, $ntHash
-					$position = $records.Add($record)
-				  }
-				  $records -join [Environment]::NewLine
+                  $samAccountName = $PSItem.SamAccountName
+                  $rid = [DSInternals.Common.SecurityIdentifierExtensions]::GetRid($PSItem.Sid)
+                  if($PSItem.LMHash -eq $null -Or (ConvertTo-Hex $PSItem.LMHash) -eq 'aad3b435b51404eeaad3b435b51404ee') { $lmHash = 'NO LM-HASH**********************' }
+                  else { $lmHash = ConvertTo-Hex $PSItem.LMHash }
+                  if($PSItem.NTHash -eq $null) { $ntHash = 'NO NT-HASH**********************' }
+                  else { $ntHash = ConvertTo-Hex $PSItem.NTHash }
+
+                  $record = '{0}:{1}:{2}:{3}:::' -f $SamAccountName, $rid, $lmHash, $ntHash
+                  $position = $records.Add($record)
+
+                  for($i=1; $i -lt $PSItem.NTHashHistory.Count; $i++)
+                  {
+                  if($PSItem.LMHashHistory[$i] -eq $null -Or (ConvertTo-Hex $PSItem.LMHashHistory[$i]) -eq 'aad3b435b51404eeaad3b435b51404ee') { $lmHash = 'NO LM-HASH**********************' }
+                  else { $lmHash = ConvertTo-Hex $PSItem.LMHashHistory[$i] }
+                  if($PSItem.NTHashHistory[$i] -eq $null) { $ntHash = 'NO NT-HASH**********************' }
+                  else { $ntHash = ConvertTo-Hex $PSItem.NTHashHistory[$i] }
+
+                  $record = '{0}_history{1}:{2}:{3}:{4}:::' -f $SamAccountName, ($i-1), $rid, $lmHash, $ntHash
+                  $position = $records.Add($record)
+                  }
+                  $records -join [Environment]::NewLine
                 </ScriptBlock>
                 <EnumerateCollection/>
               </ExpressionBinding>

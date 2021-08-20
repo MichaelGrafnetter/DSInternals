@@ -1,13 +1,12 @@
-﻿namespace DSInternals.Replication.Model
-{
-    using DSInternals.Common;
-    using DSInternals.Common.Data;
-    using System;
-    using System.Linq;
-    using System.Security.AccessControl;
-    using System.Security.Principal;
-    using System.Text;
+﻿using DSInternals.Common;
+using DSInternals.Common.Data;
+using System;
+using System.Linq;
+using System.Security.Principal;
+using System.Text;
 
+namespace DSInternals.Replication.Model
+{
     public class ReplicaObject : DirectoryObject
     {
         private string distinguishedName;
