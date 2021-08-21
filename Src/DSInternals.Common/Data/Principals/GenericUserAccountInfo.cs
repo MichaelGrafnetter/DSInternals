@@ -2,9 +2,6 @@
 {
     using DSInternals.Common.Properties;
     using System;
-    using System.Linq;
-    using System.Security.Principal;
-    using System.Text;
 
     public class GenericUserAccountInfo
     {
@@ -179,31 +176,6 @@
             private set;
         }
 
-        // from: https://github.com/MichaelGrafnetter/DSInternals/issues/49
-
-        public string ParseDSDN(byte[] binaryVal)
-        {
-            int currPos = 0;
-            uint StructLength = BitConverter.ToUInt32(binaryVal, currPos);
-            currPos = 4;
-            uint _sidLength = BitConverter.ToUInt32(binaryVal.Skip(currPos).Take(4).ToArray(), 0);
-            currPos += 4;
-
-            byte[] guidBytes = binaryVal.Skip(currPos).Take(16).ToArray();
-            Guid ObjectGuid = new Guid(guidBytes);
-            currPos += 16;
-
-            // The size of this field is exactly 28 bytes, regardless of the value of SidLen,
-            // which specifies how many bytes in this field are used.
-            byte[] sidBytes = binaryVal.Skip(currPos).Take(28).ToArray();
-            SecurityIdentifier Sid = (_sidLength > 0) ? new SecurityIdentifier(sidBytes, 0) : null;
-            currPos += 28;
-            uint _nameLength = BitConverter.ToUInt32(binaryVal.Skip(currPos).Take(4).ToArray(), 0);
-            currPos += 4;
-
-            return Encoding.Unicode.GetString(binaryVal.Skip(currPos).Take((int)(_nameLength * 2)).ToArray());
-        }
-
         protected ulong LoadGenericUserAccountInfo(DirectoryObject dsObject)
         {
             ulong ret = 0;
@@ -323,7 +295,7 @@
 
             // Manager:
             dsObject.ReadAttribute(CommonDirectoryAttributes.Manager, out byte[] binaryManager);
-            string manager = this.ParseDSDN(binaryManager);
+            string manager = dsObject.ParseDSDN(binaryManager);
             if (!String.IsNullOrEmpty(manager))
                 ret += (ulong)manager.Length;
             this.Manager = manager;

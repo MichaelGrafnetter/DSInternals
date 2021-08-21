@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Security.AccessControl;
     using System.Security.Principal;
+    using System.Text;
 
     public abstract class DirectoryObject
     {
@@ -101,6 +102,20 @@
             {
                 value = null;
             }
+        }
+
+        // based on https://github.com/MichaelGrafnetter/DSInternals/issues/49
+        public string ParseDSDN(byte[] binaryVal)
+        {
+            if (binaryVal != null && binaryVal.Length > 0)
+            {
+                int curOff = 4 + 16 + 28;
+                uint curNameLen = BitConverter.ToUInt32(binaryVal.Skip(curOff).Take(4).ToArray(), 0);
+                curOff += 4;
+                return Encoding.Unicode.GetString(binaryVal.Skip(curOff).Take((int)(curNameLen * 2)).ToArray());
+            }
+
+            return null;
         }
 
         public bool IsDeleted

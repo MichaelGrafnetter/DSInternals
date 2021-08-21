@@ -438,7 +438,7 @@
         {
             this.GenericUserAccountInfo = null;
             GenericUserAccountInfo tmp = new GenericUserAccountInfo(dsObject);
-            if (tmp.data_len > 0)
+            if (tmp != null && tmp.data_len > 0)
             {
                 this.GenericUserAccountInfo = tmp;
             }
@@ -448,7 +448,7 @@
         {
             this.GenericComputerAccountInfo = null;
             GenericComputerAccountInfo tmp = new GenericComputerAccountInfo(dsObject);
-            if (tmp.data_len > 0)
+            if (tmp != null && tmp.data_len > 0)
             {
                 this.GenericComputerAccountInfo = tmp;
             }
