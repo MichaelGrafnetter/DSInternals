@@ -9,7 +9,7 @@
 
     public class DSAccount
     {
-        public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, bool extra = false, bool onlyCreds = false, bool onlyNTCreds = false, bool onlyLMCreds = false)
+        public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, bool extra = false, bool onlyCreds = false, bool onlyNTLMCreds = false)
         {
             // Parameter validation
             Validator.AssertNotNull(dsObject, nameof(dsObject));
@@ -21,18 +21,23 @@
             }
 
             // Common properties
-            this.LoadAccountInfo(dsObject, netBIOSDomainName, onlyCreds || onlyNTCreds || onlyLMCreds);
+            this.LoadAccountInfo(dsObject, netBIOSDomainName, onlyCreds || onlyNTLMCreds);
 
-            if (!onlyCreds && !onlyNTCreds && !onlyLMCreds)
+            if (!onlyCreds && !onlyNTLMCreds)
             {
                 if (dsObject.IsUserAccount && extra)
                 {
                     // Generic User properties
                     this.LoadGenericUserAccountInfo(dsObject);
                 }
+
+                if (dsObject.IsComputerAccount && extra)
+                {
+                    this.LoadGenericComputerAccountInfo(dsObject);
+                }
             }
 
-            if (!onlyNTCreds && !onlyLMCreds)
+            if (!onlyNTLMCreds)
             {
                 // Credential Roaming
                 this.LoadRoamedCredentials(dsObject);
@@ -42,7 +47,7 @@
             }
 
             // Hashes and Supplemental Credentials
-            this.LoadHashes(dsObject, pek, onlyNTCreds, onlyLMCreds);
+            this.LoadHashes(dsObject, pek, onlyNTLMCreds);
         }
 
         /// <summary>
@@ -343,6 +348,13 @@
             private set;
         }
 
+        public GenericComputerAccountInfo GenericComputerAccountInfo
+        {
+            get;
+            private set;
+        }
+
+
         protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName, bool onlyCreds = false)
         {
             // Guid:
@@ -432,7 +444,17 @@
             }
         }
 
-        protected void LoadHashes(DirectoryObject dsObject, DirectorySecretDecryptor pek, bool onlyNTCreds = false, bool onlyLMCreds = false)
+        protected void LoadGenericComputerAccountInfo(DirectoryObject dsObject)
+        {
+            this.GenericComputerAccountInfo = null;
+            GenericComputerAccountInfo tmp = new GenericComputerAccountInfo(dsObject);
+            if (tmp.data_len > 0)
+            {
+                this.GenericComputerAccountInfo = tmp;
+            }
+        }
+
+        protected void LoadHashes(DirectoryObject dsObject, DirectorySecretDecryptor pek, bool onlyNTLMCreds = false)
         {
             if (pek == null)
             {
@@ -440,45 +462,39 @@
                 return;
             }
 
-            if (!onlyLMCreds)
+            // NTHash:
+            byte[] encryptedNtHash;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.NTHash, out encryptedNtHash);
+            if (encryptedNtHash != null)
             {
-                // NTHash:
-                byte[] encryptedNtHash;
-                dsObject.ReadAttribute(CommonDirectoryAttributes.NTHash, out encryptedNtHash);
-                if (encryptedNtHash != null)
-                {
-                    this.NTHash = pek.DecryptHash(encryptedNtHash, this.Sid.GetRid());
-                }
-
-                // NTHashHistory:
-                byte[] encryptedNtHashHistory;
-                dsObject.ReadAttribute(CommonDirectoryAttributes.NTHashHistory, out encryptedNtHashHistory);
-                if (encryptedNtHashHistory != null)
-                {
-                    this.NTHashHistory = pek.DecryptHashHistory(encryptedNtHashHistory, this.Sid.GetRid());
-                }
+                this.NTHash = pek.DecryptHash(encryptedNtHash, this.Sid.GetRid());
             }
 
-            if (!onlyNTCreds)
+            // NTHashHistory:
+            byte[] encryptedNtHashHistory;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.NTHashHistory, out encryptedNtHashHistory);
+            if (encryptedNtHashHistory != null)
             {
-                // LMHash
-                byte[] encryptedLmHash;
-                dsObject.ReadAttribute(CommonDirectoryAttributes.LMHash, out encryptedLmHash);
-                if (encryptedLmHash != null)
-                {
-                    this.LMHash = pek.DecryptHash(encryptedLmHash, this.Sid.GetRid());
-                }
-
-                // LMHashHistory:
-                byte[] encryptedLmHashHistory;
-                dsObject.ReadAttribute(CommonDirectoryAttributes.LMHashHistory, out encryptedLmHashHistory);
-                if (encryptedLmHashHistory != null)
-                {
-                    this.LMHashHistory = pek.DecryptHashHistory(encryptedLmHashHistory, this.Sid.GetRid());
-                }
+                this.NTHashHistory = pek.DecryptHashHistory(encryptedNtHashHistory, this.Sid.GetRid());
             }
 
-            if (!onlyNTCreds && !onlyLMCreds)
+            // LMHash
+            byte[] encryptedLmHash;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LMHash, out encryptedLmHash);
+            if (encryptedLmHash != null)
+            {
+                this.LMHash = pek.DecryptHash(encryptedLmHash, this.Sid.GetRid());
+            }
+
+            // LMHashHistory:
+            byte[] encryptedLmHashHistory;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LMHashHistory, out encryptedLmHashHistory);
+            if (encryptedLmHashHistory != null)
+            {
+                this.LMHashHistory = pek.DecryptHashHistory(encryptedLmHashHistory, this.Sid.GetRid());
+            }
+
+            if (!onlyNTLMCreds)
             {
                 // SupplementalCredentials:
                 byte[] encryptedSupplementalCredentials;

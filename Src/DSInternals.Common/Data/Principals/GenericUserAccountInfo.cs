@@ -2,6 +2,9 @@
 {
     using DSInternals.Common.Properties;
     using System;
+    using System.Linq;
+    using System.Security.Principal;
+    using System.Text;
 
     public class GenericUserAccountInfo
     {
@@ -21,6 +24,42 @@
         public ulong data_len = 0;
 
         public string Initials
+        {
+            get;
+            private set;
+        }
+
+        public string State
+        {
+            get;
+            private set;
+        }
+
+        public string StreetAddress
+        {
+            get;
+            private set;
+        }
+
+        public string City
+        {
+            get;
+            private set;
+        }
+
+        public string PostalCode
+        {
+            get;
+            private set;
+        }
+
+        public string Country
+        {
+            get;
+            private set;
+        }
+
+        public string PostOfficeBox
         {
             get;
             private set;
@@ -98,6 +137,12 @@
             private set;
         }
 
+        public string Manager
+        {
+            get;
+            private set;
+        }
+
         public string HomeDirectory
         {
             get;
@@ -128,6 +173,37 @@
             private set;
         }
 
+        public string Notes
+        {
+            get;
+            private set;
+        }
+
+        // from: https://github.com/MichaelGrafnetter/DSInternals/issues/49
+
+        public string ParseDSDN(byte[] binaryVal)
+        {
+            int currPos = 0;
+            uint StructLength = BitConverter.ToUInt32(binaryVal, currPos);
+            currPos = 4;
+            uint _sidLength = BitConverter.ToUInt32(binaryVal.Skip(currPos).Take(4).ToArray(), 0);
+            currPos += 4;
+
+            byte[] guidBytes = binaryVal.Skip(currPos).Take(16).ToArray();
+            Guid ObjectGuid = new Guid(guidBytes);
+            currPos += 16;
+
+            // The size of this field is exactly 28 bytes, regardless of the value of SidLen,
+            // which specifies how many bytes in this field are used.
+            byte[] sidBytes = binaryVal.Skip(currPos).Take(28).ToArray();
+            SecurityIdentifier Sid = (_sidLength > 0) ? new SecurityIdentifier(sidBytes, 0) : null;
+            currPos += 28;
+            uint _nameLength = BitConverter.ToUInt32(binaryVal.Skip(currPos).Take(4).ToArray(), 0);
+            currPos += 4;
+
+            return Encoding.Unicode.GetString(binaryVal.Skip(currPos).Take((int)(_nameLength * 2)).ToArray());
+        }
+
         protected ulong LoadGenericUserAccountInfo(DirectoryObject dsObject)
         {
             ulong ret = 0;
@@ -136,6 +212,42 @@
             dsObject.ReadAttribute(CommonDirectoryAttributes.Initials, out string initials);
             if (!String.IsNullOrEmpty(initials)) ret += (ulong)initials.Length;
             this.Initials = initials;
+
+            // StreetAddress:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.StreetAddress, out string streetAddress);
+            if (!String.IsNullOrEmpty(streetAddress))
+                ret += (ulong)streetAddress.Length;
+            this.StreetAddress = streetAddress;
+
+            // City:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.City, out string city);
+            if (!String.IsNullOrEmpty(city))
+                ret += (ulong)city.Length;
+            this.City = city;
+
+            // Postal Code:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PostalCode, out string postalCode);
+            if (!String.IsNullOrEmpty(postalCode))
+                ret += (ulong)postalCode.Length;
+            this.PostalCode = postalCode;
+
+            // State:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.State, out string state);
+            if (!String.IsNullOrEmpty(state))
+                ret += (ulong)state.Length;
+            this.State = state;
+
+            // Country:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Country, out string country);
+            if (!String.IsNullOrEmpty(country))
+                ret += (ulong)country.Length;
+            this.Country = country;
+
+            // PostOfficeBox:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PostOfficeBox, out string postOfficeBox);
+            if (!String.IsNullOrEmpty(postOfficeBox))
+                ret += (ulong)postOfficeBox.Length;
+            this.PostOfficeBox = postOfficeBox;
 
             // EmployeeID:
             dsObject.ReadAttribute(CommonDirectoryAttributes.EmployeeID, out string employeeID);
@@ -209,6 +321,13 @@
                 ret += (ulong)company.Length;
             this.Company = company;
 
+            // Manager:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Manager, out byte[] binaryManager);
+            string manager = this.ParseDSDN(binaryManager);
+            if (!String.IsNullOrEmpty(manager))
+                ret += (ulong)manager.Length;
+            this.Manager = manager;
+
             // HomeDirectory:
             dsObject.ReadAttribute(CommonDirectoryAttributes.HomeDirectory, out string homeDirectory);
             if (!String.IsNullOrEmpty(homeDirectory))
@@ -238,6 +357,12 @@
             if (!String.IsNullOrEmpty(scriptPath))
                 ret += (ulong)scriptPath.Length;
             this.ScriptPath = scriptPath;
+
+            // Notes:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Notes, out string notes);
+            if (!String.IsNullOrEmpty(notes))
+                ret += (ulong)notes.Length;
+            this.Notes = notes;
 
             return ret;
         }

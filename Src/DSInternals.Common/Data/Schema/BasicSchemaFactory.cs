@@ -34,7 +34,7 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.PKIDPAPIMasterKeysId, CommonDirectoryAttributes.PKIDPAPIMasterKeys, AttributeSyntax.DNWithBinary));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.PKIAccountCredentialsId, CommonDirectoryAttributes.PKIAccountCredentials, AttributeSyntax.DNWithBinary));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.KeyCredentialLinkId, CommonDirectoryAttributes.KeyCredentialLink, AttributeSyntax.DNWithBinary));
-
+            // user (extra)
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.InitialsId, CommonDirectoryAttributes.Initials, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.EmployeeIDId, CommonDirectoryAttributes.EmployeeID, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OfficeId, CommonDirectoryAttributes.Office, AttributeSyntax.UnicodeString));
@@ -53,6 +53,23 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.UnixHomeDirectoryId, CommonDirectoryAttributes.UnixHomeDirectory, AttributeSyntax.String));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ProfilePathId, CommonDirectoryAttributes.ProfilePath, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ScriptPathId, CommonDirectoryAttributes.ScriptPath, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.StateId, CommonDirectoryAttributes.State, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.StreetAddressId, CommonDirectoryAttributes.StreetAddress, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.PostOfficeBoxId, CommonDirectoryAttributes.PostOfficeBox, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CityId, CommonDirectoryAttributes.City, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.PostalCodeId, CommonDirectoryAttributes.PostalCode, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CountryId, CommonDirectoryAttributes.Country, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.NotesId, CommonDirectoryAttributes.Notes, AttributeSyntax.UnicodeString));
+            // computer (extra)
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ManagerId, CommonDirectoryAttributes.Manager, AttributeSyntax.DNWithBinary));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ManagedById, CommonDirectoryAttributes.ManagedBy, AttributeSyntax.DNWithBinary));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CanonicalNameId, CommonDirectoryAttributes.CanonicalName, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.LocationId, CommonDirectoryAttributes.Location, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemId, CommonDirectoryAttributes.OperatingSystem, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemVersionId, CommonDirectoryAttributes.OperatingSystemVersion, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemHotfixId, CommonDirectoryAttributes.OperatingSystemHotfix, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemServicePackId, CommonDirectoryAttributes.OperatingSystemServicePack, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.DNSHostNameId, CommonDirectoryAttributes.DNSHostName, AttributeSyntax.UnicodeString));
 
             return new BasicSchema(attributes);
         }

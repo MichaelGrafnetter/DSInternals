@@ -95,17 +95,28 @@
                 <PropertyName>Surname</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>Generic User Account Info:</Text>
+              <NewLine />
               <Frame>
                 <LeftIndent>2</LeftIndent>
                 <CustomItem>
-                  <Text>Generic User Account Info:</Text>
                   <ExpressionBinding>
                     <PropertyName>GenericUserAccountInfo</PropertyName>
                     <CustomControlName>GenericUserAccountInfo</CustomControlName>
                   </ExpressionBinding>
                 </CustomItem>
               </Frame>
+              <Text>Generic Computer Account Info:</Text>
               <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>GenericComputerAccountInfo</PropertyName>
+                    <CustomControlName>GenericComputerAccountInfo</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
               <Text>ServicePrincipalName: </Text>
               <ExpressionBinding>
                 <PropertyName>ServicePrincipalName</PropertyName>

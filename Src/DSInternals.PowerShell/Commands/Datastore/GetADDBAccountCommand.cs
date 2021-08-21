@@ -35,6 +35,12 @@ namespace DSInternals.PowerShell.Commands
             set;
         }
 
+        public SwitchParameter ComputerAccountsOnly
+        {
+            get;
+            set;
+        }
+
         [Parameter(Mandatory = false)]
         public SwitchParameter CredsOnly
         {
@@ -43,14 +49,7 @@ namespace DSInternals.PowerShell.Commands
         }
 
         [Parameter(Mandatory = false)]
-        public SwitchParameter CredsNTOnly
-        {
-            get;
-            set;
-        }
-
-        [Parameter(Mandatory = false)]
-        public SwitchParameter CredsLMOnly
+        public SwitchParameter CredsNTLMOnly
         {
             get;
             set;
@@ -72,28 +71,32 @@ namespace DSInternals.PowerShell.Commands
             // TODO: Exception handling: Object not found, malformed DN, ...
             // TODO: Map DSAccount to transfer object
 
-            int checkCredsParams = (CredsOnly.IsPresent ? 1 : 0) + (CredsNTOnly.IsPresent ? 1 : 0) + (CredsLMOnly.IsPresent ? 1 : 0);
-            if (checkCredsParams > 1)
+            if (CredsOnly.IsPresent && CredsNTLMOnly.IsPresent)
             {
-                throw new Exception("Only one Creds* filter is allowed.");
+                throw new Exception("Using -CredsOnly with -CredsNTLMOnly is not allowed.");
             }
 
-            if (this.ParameterSetName != ParameterSetAll && UserAccountsOnly.IsPresent)
+            if (UserAccountsOnly.IsPresent && ComputerAccountsOnly.IsPresent)
             {
-                throw new Exception("Using -UserAccountsOnly is not allowed without -All option set.");
+                throw new Exception("Using -UserAccountsOnly with -ComputerAccountsOnly is not allowed.");
+            }
+
+            if (this.ParameterSetName != ParameterSetAll && (UserAccountsOnly.IsPresent || ComputerAccountsOnly.IsPresent))
+            {
+                throw new Exception("Using -UserAccountsOnly or -ComputerAccountsOnly is not allowed without -All option set.");
             }
 
             if (this.ParameterSetName == ParameterSetAll)
             {
-                this.ReturnAllAccounts(this.BootKey, Extra.IsPresent, UserAccountsOnly.IsPresent, CredsOnly.IsPresent, CredsNTOnly.IsPresent, CredsLMOnly.IsPresent);
+                this.ReturnAllAccounts(this.BootKey, Extra.IsPresent, UserAccountsOnly.IsPresent, ComputerAccountsOnly.IsPresent, CredsOnly.IsPresent, CredsNTLMOnly.IsPresent);
             }
             else
             {
-                this.ReturnSingleAccount(this.BootKey, Extra.IsPresent, CredsOnly.IsPresent, CredsNTOnly.IsPresent, CredsLMOnly.IsPresent);
+                this.ReturnSingleAccount(this.BootKey, Extra.IsPresent, CredsOnly.IsPresent, CredsNTLMOnly.IsPresent);
             }
         }
 
-        private void ReturnAllAccounts(byte[] bootKey, bool extra, bool onlyUser, bool onlyCreds, bool onlyNTCreds, bool onlyLMCreds)
+        private void ReturnAllAccounts(byte[] bootKey, bool extra, bool onlyUser, bool onlyComputer, bool onlyCreds, bool onlyNTLMCreds)
         {
             // This operation might take some time so we report its status.
             var progress = new ProgressRecord(4, "Reading accounts from AD database", "Starting...");
@@ -103,7 +106,7 @@ namespace DSInternals.PowerShell.Commands
             progress.PercentComplete = -1;
             this.WriteProgress(progress);
 
-            foreach (var account in this.DirectoryAgent.GetAccounts(bootKey, extra, onlyUser, onlyCreds, onlyNTCreds, onlyLMCreds))
+            foreach (var account in this.DirectoryAgent.GetAccounts(bootKey, extra, onlyUser, onlyComputer, onlyCreds, onlyNTLMCreds))
             {
                 this.WriteObject(account);
                 accountCount++;
@@ -122,26 +125,26 @@ namespace DSInternals.PowerShell.Commands
             this.WriteProgress(progress);
         }
 
-        private void ReturnSingleAccount(byte[] bootKey, bool extra, bool onlyCreds, bool onlyNTCreds, bool onlyLMCreds)
+        private void ReturnSingleAccount(byte[] bootKey, bool extra, bool onlyCreds, bool onlyNTLMCreds)
         {
             DSAccount account;
             switch (this.ParameterSetName)
             {
                 case parameterSetByDN:
                     var dn = new DistinguishedName(this.DistinguishedName);
-                    account = this.DirectoryAgent.GetAccount(dn, bootKey, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
+                    account = this.DirectoryAgent.GetAccount(dn, bootKey, extra, onlyCreds, onlyNTLMCreds);
                     break;
 
                 case parameterSetByName:
-                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, bootKey, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
+                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, bootKey, extra, onlyCreds, onlyNTLMCreds);
                     break;
 
                 case parameterSetByGuid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, bootKey, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
+                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, bootKey, extra, onlyCreds, onlyNTLMCreds);
                     break;
 
                 case parameterSetBySid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, bootKey, extra, onlyCreds, onlyNTCreds, onlyLMCreds);
+                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, bootKey, extra, onlyCreds, onlyNTLMCreds);
                     break;
 
                 default:

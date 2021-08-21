@@ -190,6 +190,38 @@
             }
         }
 
+        public bool IsComputerAccount
+        {
+            get
+            {
+                SamAccountType? accountType;
+                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
+                switch (accountType)
+                {
+                    case SamAccountType.Computer:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public bool IsDomainAccount
+        {
+            get
+            {
+                SamAccountType? accountType;
+                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
+                switch (accountType)
+                {
+                    case SamAccountType.Domain:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+
         public InstanceType? InstanceType
         {
             get

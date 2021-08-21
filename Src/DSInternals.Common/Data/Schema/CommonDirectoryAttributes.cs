@@ -17,6 +17,7 @@
         public const int DisplayNameId = 131085;
         public const string DN = "distinguishedName";
         public const string DNSHostName = "dNSHostName";
+        public const int DNSHostNameId = 590443;
         public const string DNSRoot = "dnsRoot";
         public const string DNTag = "DNT";
         public const string FunctionalLevel = "msDS-Behavior-Version";
@@ -156,6 +157,8 @@
         public const int DepartmentId = 131213;
         public const string Company = "company";
         public const int CompanyId = 131218;
+        public const string Manager = "manager";
+        public const int ManagerId = 1376266;
         public const string HomeDirectory = "homeDirectory";
         public const int HomeDirectoryId = 589868;
         public const string HomeDrive = "homeDrive";
@@ -166,5 +169,35 @@
         public const int ProfilePathId = 589963;
         public const string ScriptPath = "scriptPath";
         public const int ScriptPathId = 589886;
+        public const string ManagedBy = "managedBy";
+        public const int ManagedById = 590477;
+        public const string CanonicalName = "canonicalName";
+        public const int CanonicalNameId = 590740;
+        public const string Location = "location";
+        public const int LocationId = 590046;
+        public const string OperatingSystem = "operatingSystem";
+        public const int OperatingSystemId = 590187;
+        public const string OperatingSystemVersion = "operatingSystemVersion";
+        public const int OperatingSystemVersionId = 590188;
+        public const string OperatingSystemHotfix = "operatingSystemHotfix";
+        public const int OperatingSystemHotfixId = 590239;
+        public const string OperatingSystemServicePack = "operatingSystemServicePack";
+        public const int OperatingSystemServicePackId = 590189;
+        public const string State = "st";
+        public const int StateId = 8;
+        public const string Street = "street";
+        public const int StreetId = 131328;
+        public const string StreetAddress = "streetAddress";
+        public const int StreetAddressId = 131328;
+        public const string PostOfficeBox = "postOfficeBox";
+        public const int PostOfficeBoxId = 18;
+        public const string City = "l";
+        public const int CityId = 7;
+        public const string Country = "co";
+        public const int CountryId = 131203;
+        public const string Notes = "notes";
+        public const int NotesId = 590089;
+        public const string PostalCode = "postalCode";
+        public const int PostalCodeId = 17;
     }
 }

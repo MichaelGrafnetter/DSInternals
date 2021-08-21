@@ -7,15 +7,39 @@
         <CustomEntries>
           <CustomEntry>
             <CustomItem>
-              <NewLine />
               <Text>Initials: </Text>
               <ExpressionBinding>
                 <PropertyName>Initials</PropertyName>
               </ExpressionBinding>
               <NewLine />
-              <Text>Employee ID: </Text>
+              <Text>Street Address: </Text>
               <ExpressionBinding>
-                <PropertyName>EmployeeID</PropertyName>
+                <PropertyName>StreetAddress</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Post Office Box: </Text>
+              <ExpressionBinding>
+                <PropertyName>PostOfficeBox</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>City: </Text>
+              <ExpressionBinding>
+                <PropertyName>City</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>State: </Text>
+              <ExpressionBinding>
+                <PropertyName>State</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Postal Code: </Text>
+              <ExpressionBinding>
+                <PropertyName>PostalCode</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Country: </Text>
+              <ExpressionBinding>
+                <PropertyName>Country</PropertyName>
               </ExpressionBinding>
               <NewLine />
               <Text>Office: </Text>
@@ -73,6 +97,16 @@
                 <PropertyName>Company</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>Employee ID: </Text>
+              <ExpressionBinding>
+                <PropertyName>EmployeeID</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Manager: </Text>
+              <ExpressionBinding>
+                <PropertyName>Manager</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
               <Text>Home Directory: </Text>
               <ExpressionBinding>
                 <PropertyName>HomeDirectory</PropertyName>
@@ -97,6 +131,12 @@
               <ExpressionBinding>
                 <PropertyName>ScriptPath</PropertyName>
               </ExpressionBinding>
+              <NewLine />
+              <Text>Notes: </Text>
+              <ExpressionBinding>
+                <PropertyName>Notes</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
             </CustomItem>
           </CustomEntry>
         </CustomEntries>
