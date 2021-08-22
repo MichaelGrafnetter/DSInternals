@@ -12,8 +12,14 @@ namespace DSInternals.PowerShell.Commands
     [OutputType(typeof(DSAccount))]
     public class GetADReplAccountCommand : ADReplPrincipalCommandBase
     {
+        #region Constants
         protected const string ParameterSetAll = "All";
+        protected DSAccount.AccountType accountTypes = DSAccount.AccountType.All;
+        protected DSAccount.CredType credTypes = DSAccount.CredType.All;
+        protected ulong counter = 0;
+        #endregion Constants
 
+        #region Parameters
         [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
         [Alias("AllAccounts", "ReturnAllAccounts")]
         public SwitchParameter All
@@ -39,65 +45,65 @@ namespace DSInternals.PowerShell.Commands
         }
 
         [Parameter(Mandatory = false)]
-        public SwitchParameter UserAccountsOnly
+        public string[] AccountTypes
         {
             get;
             set;
         }
 
         [Parameter(Mandatory = false)]
-        public SwitchParameter ComputerAccountsOnly
+        public string[] CredTypes
         {
             get;
             set;
         }
 
         [Parameter(Mandatory = false)]
-        public SwitchParameter CredsOnly
+        public ulong Count
         {
             get;
             set;
         }
+        #endregion Parameters
 
-        [Parameter(Mandatory = false)]
-        public SwitchParameter CredsNTLMOnly
-        {
-            get;
-            set;
-        }
-
+        #region Cmdlet Overrides
         protected override void ProcessRecord()
         {
-            if (CredsOnly.IsPresent && CredsNTLMOnly.IsPresent)
+            if (AccountTypes != null && AccountTypes.Length > 0)
             {
-                throw new Exception("Using -CredsOnly with -CredsNTLMOnly is not allowed.");
+                accountTypes = DSAccount.GetAccountType(AccountTypes);
             }
 
-            if (UserAccountsOnly.IsPresent && ComputerAccountsOnly.IsPresent)
+            if (CredTypes != null && CredTypes.Length > 0)
             {
-                throw new Exception("Using -UserAccountsOnly with -ComputerAccountsOnly is not allowed.");
+                credTypes = DSAccount.GetCredType(CredTypes);
             }
 
-            if (this.ParameterSetName != ParameterSetAll && (UserAccountsOnly.IsPresent || ComputerAccountsOnly.IsPresent))
+            if (Count > 0)
             {
-                throw new Exception("Using -UserAccountsOnly or -ComputerAccountsOnly is not allowed without -All option set.");
+                counter = Count;
             }
 
             if (this.ParameterSetName == ParameterSetAll)
             {
-                this.ReturnAllAccounts(Extra.IsPresent, UserAccountsOnly.IsPresent, ComputerAccountsOnly.IsPresent, CredsOnly.IsPresent, CredsNTLMOnly.IsPresent);
+                this.ReturnAllAccounts();
             }
             else
             {
-                this.ReturnSingleAccount(Extra.IsPresent, CredsOnly.IsPresent, CredsNTLMOnly.IsPresent);
+                this.ReturnSingleAccount();
             }
         }
+        #endregion Cmdlet Overrides
 
-        protected void ReturnAllAccounts(bool extra, bool onlyUser, bool onlyComputer, bool onlyCreds, bool onlyNTLMCreds)
+        #region Helper Methods
+
+        protected void ReturnAllAccounts()
         {
             // Write the initial progress
             // TODO: Extract strings as resources
             var progress = new ProgressRecord(1, "Replication", "Replicating Active Directory objects.");
+            ulong accountCount = 0;
+
             progress.PercentComplete = 0;
             this.WriteProgress(progress);
 
@@ -114,9 +120,15 @@ namespace DSInternals.PowerShell.Commands
             string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
 
             // Replicate all accounts
-            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter, extra, onlyUser, onlyComputer, onlyCreds, onlyNTLMCreds))
+            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter, Extra.IsPresent, accountTypes, credTypes))
             {
+                if (account == null)
+                    continue;
+
                 this.WriteObject(account);
+
+                if (counter > 0 && ++accountCount >= counter)
+                    break;
             }
 
             // Write progress completed
@@ -124,31 +136,31 @@ namespace DSInternals.PowerShell.Commands
             this.WriteProgress(progress);
         }
 
-        protected void ReturnSingleAccount(bool extra, bool onlyCreds, bool onlyNTLMCreds)
+        protected void ReturnSingleAccount()
         {
             DSAccount account;
             switch (this.ParameterSetName)
             {
                 case ParameterSetByDN:
-                    account = this.ReplicationClient.GetAccount(this.DistinguishedName, extra, onlyCreds, onlyNTLMCreds);
+                    account = this.ReplicationClient.GetAccount(this.DistinguishedName, Extra.IsPresent, credTypes);
                     break;
 
                 case ParameterSetByName:
                     var accountName = new NTAccount(this.Domain, this.SamAccountName);
-                    account = this.ReplicationClient.GetAccount(accountName, extra, onlyCreds, onlyNTLMCreds);
+                    account = this.ReplicationClient.GetAccount(accountName, Extra.IsPresent, credTypes);
                     break;
 
                 case ParameterSetByGuid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectGuid, extra, onlyCreds, onlyNTLMCreds);
+                    account = this.ReplicationClient.GetAccount(this.ObjectGuid, Extra.IsPresent, credTypes);
                     break;
 
                 case ParameterSetBySid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectSid, extra, onlyCreds, onlyNTLMCreds);
+                    account = this.ReplicationClient.GetAccount(this.ObjectSid, Extra.IsPresent, credTypes);
                     break;
 
                 case ParameterSetByUPN:
                     var upn = new NTAccount(this.UserPrincipalName);
-                    account = this.ReplicationClient.GetAccount(upn, extra, onlyCreds, onlyNTLMCreds);
+                    account = this.ReplicationClient.GetAccount(upn, Extra.IsPresent, credTypes);
                     break;
 
                 default:
@@ -158,5 +170,6 @@ namespace DSInternals.PowerShell.Commands
 
             this.WriteObject(account);
         }
+        #endregion Helper Methods
     }
 }

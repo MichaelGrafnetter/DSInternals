@@ -56,7 +56,7 @@
             }
         }
 
-        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, bool extra = false, bool onlyUser = false, bool onlyComputer = false, bool onlyCreds = false, bool onlyNTLMCreds = false)
+        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.All, DSAccount.CredType credTypes = DSAccount.CredType.All)
         {
             var pek = this.GetSecretDecryptor(bootKey);
             // TODO: Use a more suitable index?
@@ -67,69 +67,143 @@
             while (this.dataTableCursor.MoveNext())
             {
                 var obj = new DatastoreObject(this.dataTableCursor, this.context);
+
+                if (obj == null)
+                    continue;
+
+                if (!accountTypes.HasFlag(DSAccount.AccountType.All))
+                {
+                    long max = 0;
+                    long err = 0;
+
+                    if (accountTypes.HasFlag(DSAccount.AccountType.User))
+                    {
+                        max++;
+                        if (!obj.IsUserAccount)
+                            err++;
+                    }
+
+                    if (accountTypes.HasFlag(DSAccount.AccountType.Computer))
+                    {
+                        max++;
+                        if (!obj.IsComputerAccount)
+                            err++;
+                    }
+
+                    if (accountTypes.HasFlag(DSAccount.AccountType.Domain))
+                    {
+                        max++;
+                        if (!obj.IsDomainAccount)
+                            err++;
+                    }
+
+                    if (max > 0 && max == err)
+                        continue;
+                }
+
+                if (!credTypes.HasFlag(DSAccount.CredType.All) && !credTypes.HasFlag(DSAccount.CredType.None))
+                {
+                    long max = 0;
+                    long err = 0;
+
+                    if (credTypes.HasFlag(DSAccount.CredType.LM) || credTypes.HasFlag(DSAccount.CredType.LM_History))
+                    {
+                        max++;
+                        if (!obj.HasLMHash)
+                            err++;
+                    }
+
+                    if (credTypes.HasFlag(DSAccount.CredType.NT) || credTypes.HasFlag(DSAccount.CredType.NT_History))
+                    {
+                        max++;
+                        if (!obj.HasNTHash)
+                            err++;
+                    }
+
+                    if (credTypes.HasFlag(DSAccount.CredType.Other))
+                    {
+                        max++;
+                        if (!obj.HasOtherCreds)
+                            err++;
+                    }
+
+                    if (max > 0 && max == err)
+                        continue;
+                }
+
                 // TODO: This probably does not work on RODCs:
-                if (onlyUser && !obj.IsUserAccount)
-                {
-                    continue;
-                }
-
-                if (onlyComputer && !obj.IsComputerAccount)
-                {
-                    continue;
-                }
-
-                if (onlyNTLMCreds && !obj.HasNTHash && !obj.HasLMHash)
-                {
-                    continue;
-                }
-
                 if (obj.IsDeleted || !obj.IsWritable || !obj.IsAccount)
                 {
                     continue;
                 }
 
-                yield return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, onlyCreds, onlyNTLMCreds);
+                yield return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, credTypes);
             }
         }
 
-        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTLMCreds = false)
+        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
         {
             var obj = this.FindObject(dn);
-            return this.GetAccount(obj, dn, bootKey, extra, onlyCreds, onlyNTLMCreds);
+            return this.GetAccount(obj, dn, bootKey, extra, credTypes);
         }
 
-        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTLMCreds = false)
+        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
         {
             var obj = this.FindObject(objectSid);
-            return this.GetAccount(obj, objectSid, bootKey, extra, onlyCreds, onlyNTLMCreds);
+            return this.GetAccount(obj, objectSid, bootKey, extra, credTypes);
         }
 
-        public DSAccount GetAccount(string samAccountName, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTLMCreds = false)
+        public DSAccount GetAccount(string samAccountName, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
         {
             var obj = this.FindObject(samAccountName);
-            return this.GetAccount(obj, samAccountName, bootKey, extra, onlyCreds, onlyNTLMCreds);
+            return this.GetAccount(obj, samAccountName, bootKey, extra, credTypes);
         }
 
-        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTLMCreds = false)
+        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
         {
             var obj = this.FindObject(objectGuid);
-            return this.GetAccount(obj, objectGuid, bootKey, extra, onlyCreds, onlyNTLMCreds);
+            return this.GetAccount(obj, objectGuid, bootKey, extra, credTypes);
         }
 
-        protected DSAccount GetAccount(DatastoreObject foundObject, object objectIdentifier, byte[] bootKey, bool extra = false, bool onlyCreds = false, bool onlyNTLMCreds = false)
+        protected DSAccount GetAccount(DatastoreObject obj, object objectIdentifier, byte[] bootKey, bool extra, DSAccount.CredType credTypes)
         {
-            if (!foundObject.IsAccount)
+            if (!obj.IsAccount)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, objectIdentifier);
+                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, obj);
             }
 
-            if (onlyNTLMCreds && !foundObject.HasNTHash && !foundObject.HasLMHash)
+            if (!credTypes.HasFlag(DSAccount.CredType.All) && !credTypes.HasFlag(DSAccount.CredType.None))
             {
-                return null;
+                long max = 0;
+                long err = 0;
+
+                if (credTypes.HasFlag(DSAccount.CredType.LM) || credTypes.HasFlag(DSAccount.CredType.LM_History))
+                {
+                    max++;
+                    if (!obj.HasLMHash)
+                        err++;
+                }
+
+                if (credTypes.HasFlag(DSAccount.CredType.NT) || credTypes.HasFlag(DSAccount.CredType.NT_History))
+                {
+                    max++;
+                    if (!obj.HasNTHash)
+                        err++;
+                }
+
+                if (credTypes.HasFlag(DSAccount.CredType.Other))
+                {
+                    max++;
+                    if (!obj.HasOtherCreds)
+                        err++;
+                }
+
+                if (max > 0 && max == err)
+                    return null;
             }
 
             var pek = GetSecretDecryptor(bootKey);
-            return new DSAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek, extra, onlyCreds, onlyNTLMCreds);
+            return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, credTypes);
         }
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)

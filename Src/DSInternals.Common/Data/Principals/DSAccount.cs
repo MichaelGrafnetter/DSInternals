@@ -9,7 +9,7 @@
 
     public class DSAccount
     {
-        public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, bool extra = false, bool onlyCreds = false, bool onlyNTLMCreds = false)
+        public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, bool extra = false, CredType credTypes = CredType.All)
         {
             // Parameter validation
             Validator.AssertNotNull(dsObject, nameof(dsObject));
@@ -21,35 +21,149 @@
             }
 
             // Common properties
-            this.LoadAccountInfo(dsObject, netBIOSDomainName, onlyCreds || onlyNTLMCreds);
+            this.LoadAccountInfo(dsObject, netBIOSDomainName);
 
-            if (!onlyCreds && !onlyNTLMCreds)
+            if (extra)
             {
-                if (dsObject.IsUserAccount && extra)
+                if (dsObject.IsUserAccount)
                 {
                     // Generic User properties
                     this.LoadGenericUserAccountInfo(dsObject);
                 }
-
-                if (dsObject.IsComputerAccount && extra)
+                else if (dsObject.IsComputerAccount)
                 {
+                    // Generic Computer properties
                     this.LoadGenericComputerAccountInfo(dsObject);
                 }
             }
 
-            if (!onlyNTLMCreds)
+            if (!credTypes.HasFlag(CredType.None))
             {
-                // Credential Roaming
-                this.LoadRoamedCredentials(dsObject);
+                if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.Other))
+                {
+                    // Credential Roaming
+                    this.LoadRoamedCredentials(dsObject);
 
-                // Windows Hello for Business
-                this.LoadKeyCredentials(dsObject);
+                    // Windows Hello for Business
+                    this.LoadKeyCredentials(dsObject);
+                }
+
+                // Hashes and Supplemental Credentials
+                this.LoadHashes(dsObject, pek, credTypes);
             }
-
-            // Hashes and Supplemental Credentials
-            this.LoadHashes(dsObject, pek, onlyNTLMCreds);
         }
 
+        [Flags]
+        public enum CredType : byte
+        {
+            Default = 0,
+            All = 1 << 0,
+            LM = 1 << 1,
+            LM_History = 1 << 2,
+            NT = 1 << 3,
+            NT_History = 1 << 4,
+            Other = 1 << 5,
+            None = 1 << 6,
+        }
+
+        [Flags]
+        public enum AccountType : byte
+        {
+            Default = 0,
+            All = 1 << 0,
+            User = 1 << 2,
+            Computer = 1 << 3,
+            Domain = 1 << 4,
+            Other = 1 << 5
+        }
+
+        public static AccountType GetAccountType(string[] typeDesc)
+        {
+            AccountType ret = 0;
+
+            for (int i = 0; i < typeDesc.Length; i++)
+            {
+                if (typeDesc[i].ToLower().Equals("user"))
+                    ret |= AccountType.User;
+                else if (typeDesc[i].ToLower().Equals("computer"))
+                    ret |= AccountType.Computer;
+                else if (typeDesc[i].ToLower().Equals("domain"))
+                    ret |= AccountType.Domain;
+                else if (typeDesc[i].ToLower().Equals("other"))
+                    ret |= AccountType.Other;
+                else if (typeDesc[i].ToLower().Equals("all"))
+                {
+                    ret = AccountType.All;
+                    break;
+                }
+            }
+
+            return ret & ~AccountType.Default;
+        }
+
+        public static CredType GetCredType(string[] typeDesc)
+        {
+            CredType ret = 0;
+
+            for (int i = 0; i < typeDesc.Length; i++)
+            {
+                if (typeDesc[i].ToLower().Equals("lm"))
+                {
+                    ret |= CredType.LM;
+                }
+                else if (typeDesc[i].ToLower().Equals("lmhistory"))
+                {
+                    ret |= CredType.LM_History;
+                }
+                else if (typeDesc[i].ToLower().Equals("nt"))
+                {
+                    ret |= CredType.NT;
+                }
+                else if (typeDesc[i].ToLower().Equals("nthistory"))
+                {
+                    ret |= CredType.NT_History;
+                }
+                else if (typeDesc[i].ToLower().Equals("other"))
+                {
+                    ret |= CredType.Other;
+                }
+                else if (typeDesc[i].ToLower().Equals("all"))
+                {
+                    ret = CredType.All;
+                    break;
+                }
+                else if (typeDesc[i].ToLower().Equals("none"))
+                {
+                    ret = CredType.None;
+                    break;
+                }
+            }
+
+            return ret & ~CredType.Default;
+        }
+        /*
+        public static void PrintCredType(CredType credTypes)
+        {
+            string buf = "";
+
+            if (credTypes.HasFlag(CredType.All))
+                buf += "All ";
+            if (credTypes.HasFlag(CredType.None))
+                buf += "None ";
+            if (credTypes.HasFlag(CredType.LM))
+                buf += "LM ";
+            if (credTypes.HasFlag(CredType.LM_History))
+                buf += "LMHistory ";
+            if (credTypes.HasFlag(CredType.NT))
+                buf += "NT ";
+            if (credTypes.HasFlag(CredType.NT_History))
+                buf += "NTHistory ";
+            if (credTypes.HasFlag(CredType.Other))
+                buf += "Other";
+
+            System.Console.WriteLine("CredTypes: " + buf);
+        }
+        */
         /// <summary>
         /// Gets the distinguished name (DN) for this <see cref="DSAccount"/>.
         /// </summary>
@@ -354,8 +468,7 @@
             private set;
         }
 
-
-        protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName, bool onlyCreds = false)
+        protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName)
         {
             // Guid:
             this.Guid = dsObject.Guid;
@@ -371,67 +484,65 @@
             this.SamAccountName = samAccountName;
             this.LogonName = new NTAccount(netBIOSDomainName, samAccountName).Value;
 
-            if (!onlyCreds)
-            {
-                // SidHistory:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.SIDHistory, out SecurityIdentifier[] sidHistory);
-                this.SidHistory = sidHistory;
+            // SidHistory:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SIDHistory, out SecurityIdentifier[] sidHistory);
+            this.SidHistory = sidHistory;
 
-                // DisplayName:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.DisplayName, out string displayName);
-                this.DisplayName = displayName;
+            // DisplayName:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.DisplayName, out string displayName);
+            this.DisplayName = displayName;
 
-                // Description
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Description, out string description);
-                this.Description = description;
+            // Description
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Description, out string description);
+            this.Description = description;
 
-                // GivenName:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.GivenName, out string givenName);
-                this.GivenName = givenName;
+            // GivenName:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.GivenName, out string givenName);
+            this.GivenName = givenName;
 
-                // Surname:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Surname, out string surname);
-                this.Surname = surname;
+            // Surname:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Surname, out string surname);
+            this.Surname = surname;
 
-                // Security Descriptor:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out RawSecurityDescriptor securityDescriptor);
-                this.SecurityDescriptor = securityDescriptor;
+            // Security Descriptor:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out RawSecurityDescriptor securityDescriptor);
+            this.SecurityDescriptor = securityDescriptor;
 
-                // AdminCount (Although the schema defines it as Int32, it can only have values 0 and 1, so we directly convert it to bool)
-                dsObject.ReadAttribute(CommonDirectoryAttributes.AdminCount, out bool adminCount);
-                this.AdminCount = adminCount;
+            // AdminCount (Although the schema defines it as Int32, it can only have values 0 and 1, so we directly convert it to bool)
+            dsObject.ReadAttribute(CommonDirectoryAttributes.AdminCount, out bool adminCount);
+            this.AdminCount = adminCount;
 
-                // Service Principal Name(s)
-                dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out string[] spn);
-                this.ServicePrincipalName = spn;
+            // Service Principal Name(s)
+            dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out string[] spn);
+            this.ServicePrincipalName = spn;
 
-                // UAC:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out int? numericUac);
-                this.UserAccountControl = (UserAccountControl)numericUac.Value;
+            // UAC:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out int? numericUac);
+            this.UserAccountControl = (UserAccountControl)numericUac.Value;
 
-                // Deleted:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out bool isDeleted);
-                this.Deleted = isDeleted;
+            // Deleted:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out bool isDeleted);
+            this.Deleted = isDeleted;
 
-                // LastLogon:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out DateTime? lastLogon);
-                this.LastLogon = lastLogon;
+            // LastLogon:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out DateTime? lastLogon);
+            this.LastLogon = lastLogon;
 
-                dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogonTimestamp, out DateTime? lastLogonTimestamp);
-                this.LastLogonTimestamp = lastLogonTimestamp;
+            // LastLogonTimestamp:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogonTimestamp, out DateTime? lastLogonTimestamp);
+            this.LastLogonTimestamp = lastLogonTimestamp;
 
-                // UPN:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out string upn);
-                this.UserPrincipalName = upn;
+            // UPN:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out string upn);
+            this.UserPrincipalName = upn;
 
-                // SamAccountType:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out int? numericAccountType);
-                this.SamAccountType = (SamAccountType)numericAccountType.Value;
+            // SamAccountType:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out int? numericAccountType);
+            this.SamAccountType = (SamAccountType)numericAccountType.Value;
 
-                // PrimaryGroupId
-                dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out int? groupId);
-                this.PrimaryGroupId = groupId.Value;
-            }
+            // PrimaryGroupId
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out int? groupId);
+            this.PrimaryGroupId = groupId.Value;
         }
 
         protected void LoadGenericUserAccountInfo(DirectoryObject dsObject)
@@ -454,7 +565,7 @@
             }
         }
 
-        protected void LoadHashes(DirectoryObject dsObject, DirectorySecretDecryptor pek, bool onlyNTLMCreds = false)
+        protected void LoadHashes(DirectoryObject dsObject, DirectorySecretDecryptor pek, CredType credTypes = CredType.All)
         {
             if (pek == null)
             {
@@ -462,39 +573,51 @@
                 return;
             }
 
-            // NTHash:
-            byte[] encryptedNtHash;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.NTHash, out encryptedNtHash);
-            if (encryptedNtHash != null)
+            if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.LM))
             {
-                this.NTHash = pek.DecryptHash(encryptedNtHash, this.Sid.GetRid());
+                // LMHash
+                byte[] encryptedLmHash;
+                dsObject.ReadAttribute(CommonDirectoryAttributes.LMHash, out encryptedLmHash);
+                if (encryptedLmHash != null)
+                {
+                    this.LMHash = pek.DecryptHash(encryptedLmHash, this.Sid.GetRid());
+                }
             }
 
-            // NTHashHistory:
-            byte[] encryptedNtHashHistory;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.NTHashHistory, out encryptedNtHashHistory);
-            if (encryptedNtHashHistory != null)
+            if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.LM_History))
             {
-                this.NTHashHistory = pek.DecryptHashHistory(encryptedNtHashHistory, this.Sid.GetRid());
+                // LMHashHistory:
+                byte[] encryptedLmHashHistory;
+                dsObject.ReadAttribute(CommonDirectoryAttributes.LMHashHistory, out encryptedLmHashHistory);
+                if (encryptedLmHashHistory != null)
+                {
+                    this.LMHashHistory = pek.DecryptHashHistory(encryptedLmHashHistory, this.Sid.GetRid());
+                }
             }
 
-            // LMHash
-            byte[] encryptedLmHash;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.LMHash, out encryptedLmHash);
-            if (encryptedLmHash != null)
+            if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.NT))
             {
-                this.LMHash = pek.DecryptHash(encryptedLmHash, this.Sid.GetRid());
+                // NTHash
+                byte[] encryptedNtHash;
+                dsObject.ReadAttribute(CommonDirectoryAttributes.NTHash, out encryptedNtHash);
+                if (encryptedNtHash != null)
+                {
+                    this.NTHash = pek.DecryptHash(encryptedNtHash, this.Sid.GetRid());
+                }
             }
 
-            // LMHashHistory:
-            byte[] encryptedLmHashHistory;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.LMHashHistory, out encryptedLmHashHistory);
-            if (encryptedLmHashHistory != null)
+            if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.NT_History))
             {
-                this.LMHashHistory = pek.DecryptHashHistory(encryptedLmHashHistory, this.Sid.GetRid());
+                // NTHashHistory:
+                byte[] encryptedNtHashHistory;
+                dsObject.ReadAttribute(CommonDirectoryAttributes.NTHashHistory, out encryptedNtHashHistory);
+                if (encryptedNtHashHistory != null)
+                {
+                    this.NTHashHistory = pek.DecryptHashHistory(encryptedNtHashHistory, this.Sid.GetRid());
+                }
             }
 
-            if (!onlyNTLMCreds)
+            if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.Other))
             {
                 // SupplementalCredentials:
                 byte[] encryptedSupplementalCredentials;

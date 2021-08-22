@@ -70,16 +70,13 @@
 
         public void ReadAttribute(string name, out SecurityIdentifier[] value)
         {
+            value = null;
             byte[][] binarySids;
             // TODO: Always big endian?
             this.ReadAttribute(name, out binarySids);
             if(binarySids != null)
             {
                 value = binarySids.Select(binarySid => binarySid.ToSecurityIdentifier(this.HasBigEndianRid)).ToArray();
-            }
-            else
-            {
-                value = null;
             }
         }
 
@@ -92,15 +89,12 @@
 
         public void ReadAttribute(string name, out DateTime? value)
         {
+            value = null;
             long? timestamp;
             this.ReadAttribute(name, out timestamp);
             if(timestamp.HasValue && timestamp.Value > 0)
             {
                 value = DateTime.FromFileTime(timestamp.Value); 
-            }
-            else
-            {
-                value = null;
             }
         }
 
@@ -125,6 +119,19 @@
                 bool result;
                 this.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out result);
                 return result;
+            }
+        }
+
+        public bool HasOtherCreds
+        {
+            get
+            {
+                byte[] encryptedSupplementalCredentials, roamingTimeStamp;
+                byte[][] keyCredentialBlobs;
+                this.ReadAttribute(CommonDirectoryAttributes.SupplementalCredentials, out encryptedSupplementalCredentials);
+                this.ReadAttribute(CommonDirectoryAttributes.PKIRoamingTimeStamp, out roamingTimeStamp);
+                this.ReadLinkedValues(CommonDirectoryAttributes.KeyCredentialLink, out keyCredentialBlobs);
+                return (encryptedSupplementalCredentials != null || roamingTimeStamp != null || keyCredentialBlobs != null);
             }
         }
 
