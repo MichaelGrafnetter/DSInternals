@@ -56,7 +56,7 @@
             }
         }
 
-        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.All, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.Default, DSAccount.CredType credTypes = DSAccount.CredType.All)
         {
             var pek = this.GetSecretDecryptor(bootKey);
             // TODO: Use a more suitable index?
@@ -67,8 +67,11 @@
             while (this.dataTableCursor.MoveNext())
             {
                 var obj = new DatastoreObject(this.dataTableCursor, this.context);
-
                 if (obj == null)
+                    continue;
+
+                // TODO: This probably does not work on RODCs:
+                if (obj.IsDeleted || !obj.IsWritable)
                     continue;
 
                 if (!accountTypes.HasFlag(DSAccount.AccountType.All))
@@ -90,14 +93,17 @@
                             err++;
                     }
 
-                    if (accountTypes.HasFlag(DSAccount.AccountType.Domain))
+                    if (accountTypes.HasFlag(DSAccount.AccountType.Other))
                     {
                         max++;
-                        if (!obj.IsDomainAccount)
+                        if (!obj.IsOtherAccount)
                             err++;
                     }
 
                     if (max > 0 && max == err)
+                        continue;
+
+                    if (max == 0 && !obj.IsAccount)
                         continue;
                 }
 
@@ -131,13 +137,11 @@
                         continue;
                 }
 
-                // TODO: This probably does not work on RODCs:
-                if (obj.IsDeleted || !obj.IsWritable || !obj.IsAccount)
-                {
+                var newAccount = new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, credTypes);
+                if (newAccount == null)
                     continue;
-                }
 
-                yield return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, credTypes);
+                yield return newAccount;
             }
         }
 
@@ -167,11 +171,6 @@
 
         protected DSAccount GetAccount(DatastoreObject obj, object objectIdentifier, byte[] bootKey, bool extra, DSAccount.CredType credTypes)
         {
-            if (!obj.IsAccount)
-            {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, obj);
-            }
-
             if (!credTypes.HasFlag(DSAccount.CredType.All) && !credTypes.HasFlag(DSAccount.CredType.None))
             {
                 long max = 0;

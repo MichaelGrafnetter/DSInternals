@@ -13,7 +13,7 @@ namespace DSInternals.PowerShell.Commands
         #region Constants
         private int ProgressReportingInterval = 25;
         protected const string ParameterSetAll = "All";
-        protected DSAccount.AccountType accountTypes = DSAccount.AccountType.All;
+        protected DSAccount.AccountType accountTypes = DSAccount.AccountType.Default;
         protected DSAccount.CredType credTypes = DSAccount.CredType.All;
         protected ulong counter = 0;
         protected byte[] bootKey = null;

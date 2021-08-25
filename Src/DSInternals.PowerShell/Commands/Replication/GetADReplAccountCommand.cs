@@ -14,7 +14,7 @@ namespace DSInternals.PowerShell.Commands
     {
         #region Constants
         protected const string ParameterSetAll = "All";
-        protected DSAccount.AccountType accountTypes = DSAccount.AccountType.All;
+        protected DSAccount.AccountType accountTypes = DSAccount.AccountType.Default;
         protected DSAccount.CredType credTypes = DSAccount.CredType.All;
         protected ulong counter = 0;
         #endregion Constants

@@ -195,6 +195,28 @@
             }
         }
 
+        public bool IsOtherAccount
+        {
+            get
+            {
+                SamAccountType? accountType;
+                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
+                switch (accountType)
+                {
+                    case SamAccountType.Domain:
+                    case SamAccountType.SecurityGroup:
+                    case SamAccountType.DistributuionGroup:
+                    case SamAccountType.Alias:
+                    case SamAccountType.NonSecurityAlias:
+                    case SamAccountType.ApplicationBasicGroup:
+                    case SamAccountType.ApplicationQueryGroup:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+
         public bool IsUserAccount
         {
             get
@@ -221,22 +243,6 @@
                 switch (accountType)
                 {
                     case SamAccountType.Computer:
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        }
-
-        public bool IsDomainAccount
-        {
-            get
-            {
-                SamAccountType? accountType;
-                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
-                switch (accountType)
-                {
-                    case SamAccountType.Domain:
                         return true;
                     default:
                         return false;

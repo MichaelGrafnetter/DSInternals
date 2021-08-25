@@ -82,14 +82,14 @@ namespace DSInternals.Replication
             return this.drsConnection.GetReplicationCursors(namingContext);
         }
 
-        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.All, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.Default, DSAccount.CredType credTypes = DSAccount.CredType.All)
         {
             Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
             ReplicationCookie cookie = new ReplicationCookie(domainNamingContext);
             return GetAccounts(cookie, progressReporter, extra, accountTypes, credTypes);
         }
 
-        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.All, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.Default, DSAccount.CredType credTypes = DSAccount.CredType.All)
         {
             Validator.AssertNotNull(initialCookie, nameof(initialCookie));
             // Create AD schema
@@ -115,11 +115,6 @@ namespace DSInternals.Replication
                 {
                     obj.Schema = schema;
 
-                    if (!obj.IsAccount)
-                    {
-                        continue;
-                    }
-
                     if (!accountTypes.HasFlag(DSAccount.AccountType.All))
                     {
                         long max = 0;
@@ -139,18 +134,25 @@ namespace DSInternals.Replication
                                 err++;
                         }
 
-                        if (accountTypes.HasFlag(DSAccount.AccountType.Domain))
+                        if (accountTypes.HasFlag(DSAccount.AccountType.Other))
                         {
                             max++;
-                            if (!obj.IsDomainAccount)
+                            if (!obj.IsOtherAccount)
                                 err++;
                         }
 
                         if (max > 0 && max == err)
                             continue;
+
+                        if (max == 0 && !obj.IsAccount)
+                            continue;
                     }
 
-                    yield return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, extra, credTypes);
+                    var newAccount = new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, extra, credTypes);
+                    if (newAccount == null)
+                        continue;
+
+                    yield return newAccount;
                 }
 
                 // Update the position of the replication cursor

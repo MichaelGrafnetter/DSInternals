@@ -15,10 +15,12 @@
             Validator.AssertNotNull(dsObject, nameof(dsObject));
             Validator.AssertNotNull(netBIOSDomainName, nameof(netBIOSDomainName));
 
+            /*
             if (!dsObject.IsAccount)
             {
                 throw new ArgumentException(Resources.ObjectNotAccountMessage);
             }
+            */
 
             // Common properties
             this.LoadAccountInfo(dsObject, netBIOSDomainName);
@@ -73,33 +75,66 @@
             All = 1 << 0,
             User = 1 << 2,
             Computer = 1 << 3,
-            Domain = 1 << 4,
-            Other = 1 << 5
+            Other = 1 << 4,
+            None = 1 << 5
         }
 
         public static AccountType GetAccountType(string[] typeDesc)
         {
-            AccountType ret = 0;
+            int cnt = 0;
+            AccountType ret = AccountType.None;
 
             for (int i = 0; i < typeDesc.Length; i++)
             {
                 if (typeDesc[i].ToLower().Equals("user"))
+                {
                     ret |= AccountType.User;
+                    cnt++;
+                }
                 else if (typeDesc[i].ToLower().Equals("computer"))
+                {
                     ret |= AccountType.Computer;
-                else if (typeDesc[i].ToLower().Equals("domain"))
-                    ret |= AccountType.Domain;
+                    cnt++;
+                }
                 else if (typeDesc[i].ToLower().Equals("other"))
+                {
                     ret |= AccountType.Other;
+                    cnt++;
+                }
                 else if (typeDesc[i].ToLower().Equals("all"))
                 {
                     ret = AccountType.All;
+                    cnt++;
                     break;
+                }
+                else
+                {
+                    throw new Exception("Invalid AccountType argument(s)");
                 }
             }
 
-            return ret & ~AccountType.Default;
+            return (cnt > 0) ? ret & ~AccountType.None : AccountType.Default;
         }
+
+        /*
+        public static void PrintAccountType(AccountType accountTypes)
+        {
+            string buf = "";
+
+            if (accountTypes.HasFlag(AccountType.All))
+                buf += "All ";
+            if (accountTypes.HasFlag(AccountType.User))
+                buf += "User ";
+            if (accountTypes.HasFlag(AccountType.Computer))
+                buf += "Computer ";
+            if (accountTypes.HasFlag(AccountType.Other))
+                buf += "Other ";
+            if (accountTypes.HasFlag(AccountType.None))
+                buf += "None";
+
+            System.Console.WriteLine("AccountTypes: " + buf);
+        }
+        */
 
         public static CredType GetCredType(string[] typeDesc)
         {
@@ -137,10 +172,15 @@
                     ret = CredType.None;
                     break;
                 }
+                else
+                {
+                    throw new Exception("Invalid CredType argument(s)");
+                }
             }
 
-            return ret & ~CredType.Default;
+            return ret;
         }
+
         /*
         public static void PrintCredType(CredType credTypes)
         {
@@ -164,6 +204,7 @@
             System.Console.WriteLine("CredTypes: " + buf);
         }
         */
+
         /// <summary>
         /// Gets the distinguished name (DN) for this <see cref="DSAccount"/>.
         /// </summary>
@@ -479,10 +520,19 @@
             // Sid:
             this.Sid = dsObject.Sid;
 
-            // SamAccountName + LogonName:
+            // SamAccountName
             dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out string samAccountName);
             this.SamAccountName = samAccountName;
-            this.LogonName = new NTAccount(netBIOSDomainName, samAccountName).Value;
+
+            // LogonName
+            if (samAccountName != null && samAccountName.Length > 0 && netBIOSDomainName != null && netBIOSDomainName.Length > 0)
+            {
+                var ntAccount = new NTAccount(netBIOSDomainName, samAccountName);
+                if (ntAccount != null && ntAccount.Value.Length > 0)
+                {
+                    this.LogonName = ntAccount.Value;
+                }
+            }
 
             // SidHistory:
             dsObject.ReadAttribute(CommonDirectoryAttributes.SIDHistory, out SecurityIdentifier[] sidHistory);
@@ -516,9 +566,15 @@
             dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out string[] spn);
             this.ServicePrincipalName = spn;
 
-            // UAC:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out int? numericUac);
-            this.UserAccountControl = (UserAccountControl)numericUac.Value;
+            if (!dsObject.IsOtherAccount)
+            {
+                // UAC:
+                dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out int? numericUac);
+                if (numericUac != null)
+                {
+                    this.UserAccountControl = (UserAccountControl)numericUac.Value;
+                }
+            }
 
             // Deleted:
             dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out bool isDeleted);
@@ -540,9 +596,15 @@
             dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out int? numericAccountType);
             this.SamAccountType = (SamAccountType)numericAccountType.Value;
 
-            // PrimaryGroupId
-            dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out int? groupId);
-            this.PrimaryGroupId = groupId.Value;
+            if (!dsObject.IsOtherAccount)
+            {
+                // PrimaryGroupId
+                dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out int? groupId);
+                if (groupId != null)
+                {
+                    this.PrimaryGroupId = groupId.Value;
+                }
+            }
         }
 
         protected void LoadGenericUserAccountInfo(DirectoryObject dsObject)
