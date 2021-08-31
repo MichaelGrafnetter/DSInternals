@@ -80,7 +80,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Get-ADReplAccount', 'ConvertTo-Hex', 'ConvertTo-KerberosKey',
                   'ConvertFrom-ADManagedPasswordBlob',
                   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
-                  'Set-ADDBBootKey', 'Test-PasswordQuality',
+                  'Set-ADDBBootKey', 'Test-PasswordQuality', 'Get-ADDBBitlockerRecoveryInfo',
                   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
                   'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',

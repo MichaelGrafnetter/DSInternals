@@ -230,6 +230,27 @@
             }
         }
 
+        public IEnumerable<BitlockerRecoveryInfo> GetBitlockerRecoveryInfoAll(string exportKeysPath)
+        {
+            foreach (var bitlockerInfo in this.FindObjectsByCategory(CommonDirectoryClasses.FVERecoveryInformation))
+            {
+                yield return new BitlockerRecoveryInfo(bitlockerInfo, exportKeysPath);
+            }
+        }
+
+        public IEnumerable<BitlockerRecoveryInfo> GetBitlockerRecoveryInfoSingle(Guid recoveryGuid, string exportKeysPath)
+        {
+            foreach (var bitlockerInfo in this.FindObjectsByCategory(CommonDirectoryClasses.FVERecoveryInformation))
+            {
+                var obj = new BitlockerRecoveryInfo(bitlockerInfo, exportKeysPath);
+                if (obj.RecoveryGuid.Equals(recoveryGuid))
+                {
+                    yield return obj;
+                    break;
+                }
+            }
+        }
+
         public IEnumerable<DirectoryObject> FindObjectsByCategory(string className, bool includeDeleted = false)
         {
             // Find all objects with the right objectCategory

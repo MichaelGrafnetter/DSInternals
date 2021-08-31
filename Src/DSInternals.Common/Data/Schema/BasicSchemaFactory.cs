@@ -60,8 +60,8 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.PostalCodeId, CommonDirectoryAttributes.PostalCode, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CountryId, CommonDirectoryAttributes.Country, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.NotesId, CommonDirectoryAttributes.Notes, AttributeSyntax.UnicodeString));
-            // computer (extra)
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ManagerId, CommonDirectoryAttributes.Manager, AttributeSyntax.DNWithBinary));
+            // computer (extra)
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ManagedById, CommonDirectoryAttributes.ManagedBy, AttributeSyntax.DNWithBinary));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CanonicalNameId, CommonDirectoryAttributes.CanonicalName, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.LocationId, CommonDirectoryAttributes.Location, AttributeSyntax.UnicodeString));
@@ -70,7 +70,14 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemHotfixId, CommonDirectoryAttributes.OperatingSystemHotfix, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemServicePackId, CommonDirectoryAttributes.OperatingSystemServicePack, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.DNSHostNameId, CommonDirectoryAttributes.DNSHostName, AttributeSyntax.UnicodeString));
-
+            /*
+            // TPM + bitlocker
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.TPMOwnerInfoId, CommonDirectoryAttributes.TPMOwnerInfo, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVEKeyPackageId, CommonDirectoryAttributes.FVEKeyPackage, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVEVolumeGuidId, CommonDirectoryAttributes.FVEVolumeGuid, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryGuidId, CommonDirectoryAttributes.FVERecoveryGuid, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryPasswordId, CommonDirectoryAttributes.FVERecoveryPassword, AttributeSyntax.UnicodeString));
+            */
             return new BasicSchema(attributes);
         }
     }
