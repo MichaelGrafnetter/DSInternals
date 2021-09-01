@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+  <Controls>
+    <Control>
+      <Name>BitlockerInfo</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>TPMOwnerInfo: </Text>
+              <ExpressionBinding>
+                <PropertyName>TPMOwnerInfo</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>FVEKeyPackage: </Text>
+              <ExpressionBinding>
+                <PropertyName>KeyPackage</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>FVEVolumeGuid: </Text>
+              <ExpressionBinding>
+                <PropertyName>VolumeGuid</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>FVERecoveryGuid: </Text>
+              <ExpressionBinding>
+                <PropertyName>RecoveryGuid</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>FVERecoveryPassword: </Text>
+              <ExpressionBinding>
+                <PropertyName>RecoveryPassword</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+  </Controls>
+  <ViewDefinitions>
+    <View>
+      <Name>BitlockerInfo</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.BitlockerRecoveryInfo</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>BitlockerInfo</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

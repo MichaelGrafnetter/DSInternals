@@ -56,7 +56,7 @@
             }
         }
 
-        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.Default, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.Default, DSAccount.CredType credTypes = DSAccount.CredType.All, List<BitlockerRecoveryInfo> bitlockerData = null)
         {
             var pek = this.GetSecretDecryptor(bootKey);
             // TODO: Use a more suitable index?
@@ -126,6 +126,13 @@
                             err++;
                     }
 
+                    if (credTypes.HasFlag(DSAccount.CredType.Bitlocker))
+                    {
+                        max++;
+                        if (bitlockerData == null)
+                            err++;
+                    }
+
                     if (credTypes.HasFlag(DSAccount.CredType.Other))
                     {
                         max++;
@@ -137,7 +144,7 @@
                         continue;
                 }
 
-                var newAccount = new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, credTypes);
+                var newAccount = new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, credTypes, bitlockerData);
                 if (newAccount == null)
                     continue;
 
@@ -145,31 +152,31 @@
             }
         }
 
-        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All, List<BitlockerRecoveryInfo> bitlockerData = null)
         {
             var obj = this.FindObject(dn);
-            return this.GetAccount(obj, dn, bootKey, extra, credTypes);
+            return this.GetAccount(obj, dn, bootKey, extra, credTypes, bitlockerData);
         }
 
-        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All, List<BitlockerRecoveryInfo> bitlockerData = null)
         {
             var obj = this.FindObject(objectSid);
-            return this.GetAccount(obj, objectSid, bootKey, extra, credTypes);
+            return this.GetAccount(obj, objectSid, bootKey, extra, credTypes, bitlockerData);
         }
 
-        public DSAccount GetAccount(string samAccountName, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public DSAccount GetAccount(string samAccountName, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All, List<BitlockerRecoveryInfo> bitlockerData = null)
         {
             var obj = this.FindObject(samAccountName);
-            return this.GetAccount(obj, samAccountName, bootKey, extra, credTypes);
+            return this.GetAccount(obj, samAccountName, bootKey, extra, credTypes, bitlockerData);
         }
 
-        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All, List<BitlockerRecoveryInfo> bitlockerData = null)
         {
             var obj = this.FindObject(objectGuid);
-            return this.GetAccount(obj, objectGuid, bootKey, extra, credTypes);
+            return this.GetAccount(obj, objectGuid, bootKey, extra, credTypes, bitlockerData);
         }
 
-        protected DSAccount GetAccount(DatastoreObject obj, object objectIdentifier, byte[] bootKey, bool extra, DSAccount.CredType credTypes)
+        protected DSAccount GetAccount(DatastoreObject obj, object objectIdentifier, byte[] bootKey, bool extra, DSAccount.CredType credTypes, List<BitlockerRecoveryInfo> bitlockerData)
         {
             if (!credTypes.HasFlag(DSAccount.CredType.All) && !credTypes.HasFlag(DSAccount.CredType.None))
             {
@@ -190,6 +197,13 @@
                         err++;
                 }
 
+                if (credTypes.HasFlag(DSAccount.CredType.Bitlocker))
+                {
+                    max++;
+                    if (bitlockerData == null)
+                        err++;
+                }
+
                 if (credTypes.HasFlag(DSAccount.CredType.Other))
                 {
                     max++;
@@ -202,7 +216,7 @@
             }
 
             var pek = GetSecretDecryptor(bootKey);
-            return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, credTypes);
+            return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, extra, credTypes, bitlockerData);
         }
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)
@@ -238,7 +252,7 @@
             }
         }
 
-        public IEnumerable<BitlockerRecoveryInfo> GetBitlockerRecoveryInfoSingle(Guid recoveryGuid, string exportKeysPath)
+        public IEnumerable<BitlockerRecoveryInfo> GetBitlockerRecoveryInfoByRecoveryGuid(Guid recoveryGuid, string exportKeysPath)
         {
             foreach (var bitlockerInfo in this.FindObjectsByCategory(CommonDirectoryClasses.FVERecoveryInformation))
             {

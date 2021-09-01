@@ -215,6 +215,18 @@
                   </Frame>
                 </CustomItem>
               </Frame>
+              <Text>Bitlocker Recovery Data:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>BitlockerInfo</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>BitlockerInfo</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
             </CustomItem>
           </CustomEntry>
         </CustomEntries>

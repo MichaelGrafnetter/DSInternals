@@ -16,7 +16,6 @@
             }
 
             data_len = this.LoadGenericComputerAccountInfo(dsObject);
-            //data_len += this.LoadBitlockerRecoveryInfo(dsObject);
         }
 
         public ulong data_len = 0;
@@ -80,38 +79,6 @@
             get;
             private set;
         }
-
-        /*
-        public string TPMOwnerInfo
-        {
-            get;
-            private set;
-        }
-
-        public byte[] FVEKeyPackage
-        {
-            get;
-            private set;
-        }
-
-        public byte[] FVEVolumeGuid
-        {
-            get;
-            private set;
-        }
-
-        public byte[] FVERecoveryGuid
-        {
-            get;
-            private set;
-        }
-
-        public string FVERecoveryPassword
-        {
-            get;
-            private set;
-        }
-        */
 
         protected ulong LoadGenericComputerAccountInfo(DirectoryObject dsObject)
         {
@@ -210,60 +177,5 @@
 
             return ret;
         }
-
-        /*
-        protected ulong LoadBitlockerRecoveryInfo(DirectoryObject dsObject)
-        {
-            ulong ret = 0;
-
-            // TPMOwnerInfo:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.TPMOwnerInfo))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.TPMOwnerInfo, out string tpmOwnerInfo);
-                if (!String.IsNullOrEmpty(tpmOwnerInfo))
-                    ret += (ulong)tpmOwnerInfo.Length;
-                this.TPMOwnerInfo = tpmOwnerInfo;
-            }
-
-            // FVEKeyPackage:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.FVEKeyPackage))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.FVEKeyPackage, out byte[] fveKeyPackage);
-                if (fveKeyPackage != null)
-                    ret += (ulong)fveKeyPackage.Length;
-                this.FVEKeyPackage = fveKeyPackage;
-            }
-
-            // FVEVolumeGuid:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.FVEVolumeGuid))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.FVEVolumeGuid, out byte[] fveVolumeGuid);
-                if (fveVolumeGuid != null)
-                    ret += (ulong)fveVolumeGuid.Length;
-                this.FVEVolumeGuid = fveVolumeGuid;
-            }
-
-            // FVERecoveryGuid:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.FVERecoveryGuid))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.FVERecoveryGuid, out byte[] fveRecoveryGuid);
-                if (fveRecoveryGuid != null)
-                    ret += (ulong)fveRecoveryGuid.Length;
-                this.FVERecoveryGuid = fveRecoveryGuid;
-            }
-
-            // FVERecoveryPassword:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.FVERecoveryPassword))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.FVERecoveryPassword, out string fveRecoveryPassword);
-                Console.WriteLine("FVE: {0}", fveRecoveryPassword);
-                if (!String.IsNullOrEmpty(fveRecoveryPassword))
-                    ret += (ulong)fveRecoveryPassword.Length;
-                this.FVERecoveryPassword = fveRecoveryPassword;
-            }
-
-            return ret;
-        }
-        */
     }
 }

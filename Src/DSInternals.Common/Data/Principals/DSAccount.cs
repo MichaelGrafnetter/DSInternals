@@ -9,7 +9,7 @@
 
     public class DSAccount
     {
-        public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, bool extra = false, CredType credTypes = CredType.All)
+        public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, bool extra = false, CredType credTypes = CredType.All, List<BitlockerRecoveryInfo> bitlockerData = null)
         {
             // Parameter validation
             Validator.AssertNotNull(dsObject, nameof(dsObject));
@@ -41,6 +41,14 @@
 
             if (!credTypes.HasFlag(CredType.None))
             {
+                if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.Bitlocker))
+                {
+                    if (bitlockerData != null && dsObject.IsComputerAccount)
+                    {
+                        this.LoadBitlockerInfo(dsObject, bitlockerData);
+                    }
+                }
+
                 if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.Other))
                 {
                     // Credential Roaming
@@ -64,8 +72,9 @@
             LM_History = 1 << 2,
             NT = 1 << 3,
             NT_History = 1 << 4,
-            Other = 1 << 5,
-            None = 1 << 6,
+            Bitlocker = 1 << 5,
+            Other = 1 << 6,
+            None = 1 << 7,
         }
 
         [Flags]
@@ -157,6 +166,10 @@
                 else if (typeDesc[i].ToLower().Equals("nthistory"))
                 {
                     ret |= CredType.NT_History;
+                }
+                else if (typeDesc[i].ToLower().Equals("bitlocker"))
+                {
+                    ret |= CredType.Bitlocker;
                 }
                 else if (typeDesc[i].ToLower().Equals("other"))
                 {
@@ -509,6 +522,12 @@
             private set;
         }
 
+        public BitlockerRecoveryInfo[] BitlockerInfo
+        {
+            get;
+            private set;
+        }
+
         protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName)
         {
             // Guid:
@@ -624,6 +643,34 @@
             if (tmp != null && tmp.data_len > 0)
             {
                 this.GenericComputerAccountInfo = tmp;
+            }
+        }
+
+        protected void LoadBitlockerInfo(DirectoryObject dsObject, List<BitlockerRecoveryInfo> bitlockerData)
+        {
+            this.BitlockerInfo = null;
+            string DN = this.DistinguishedName.ToString();
+            int i = 0;
+            foreach (var obj in bitlockerData)
+            {
+                if (obj.OwerDN.Equals(DN))
+                {
+                    i++;
+                }
+            }
+
+            if (i > 0)
+            {
+                this.BitlockerInfo = new BitlockerRecoveryInfo[i];
+
+                i = 0;
+                foreach (var obj in bitlockerData)
+                {
+                    if (obj.OwerDN.Equals(DN))
+                    {
+                        this.BitlockerInfo[i++] = obj;
+                    }
+                }
             }
         }
 

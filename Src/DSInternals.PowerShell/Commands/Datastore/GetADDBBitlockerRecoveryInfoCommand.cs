@@ -53,7 +53,7 @@
             {
                 if (recoveryGuid != Guid.Empty)
                 {
-                    var obj = directoryAgent.GetBitlockerRecoveryInfoSingle(recoveryGuid, this.exportKeysPath);
+                    var obj = directoryAgent.GetBitlockerRecoveryInfoByRecoveryGuid(recoveryGuid, this.exportKeysPath);
                     if (obj != null)
                     {
                         this.WriteObject(obj);

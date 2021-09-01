@@ -2,6 +2,7 @@
 using DSInternals.DataStore;
 using DSInternals.PowerShell.Properties;
 using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 
 namespace DSInternals.PowerShell.Commands
@@ -17,6 +18,7 @@ namespace DSInternals.PowerShell.Commands
         protected DSAccount.CredType credTypes = DSAccount.CredType.All;
         protected ulong counter = 0;
         protected byte[] bootKey = null;
+        private List<BitlockerRecoveryInfo> bitlockerData = null;
         #endregion Constants
 
         #region Parameters
@@ -83,6 +85,25 @@ namespace DSInternals.PowerShell.Commands
                 credTypes = DSAccount.GetCredType(CredTypes);
             }
 
+            if (credTypes.HasFlag(DSAccount.CredType.All) || credTypes.HasFlag(DSAccount.CredType.Bitlocker))
+            {
+                this.bitlockerData = null;
+                var tmpbitlockerData = new List<BitlockerRecoveryInfo>();
+
+                using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+                {
+                    foreach (var obj in directoryAgent.GetBitlockerRecoveryInfoAll(null))
+                    {
+                        tmpbitlockerData.Add(obj);
+                    }
+                }
+
+                if (tmpbitlockerData.Count > 0)
+                {
+                    this.bitlockerData = tmpbitlockerData;
+                }
+            }
+
             if (Count > 0)
             {
                 counter = Count;
@@ -120,7 +141,7 @@ namespace DSInternals.PowerShell.Commands
             progress.PercentComplete = -1;
             this.WriteProgress(progress);
 
-            foreach (var account in this.DirectoryAgent.GetAccounts(bootKey, Extra.IsPresent, accountTypes, credTypes))
+            foreach (var account in this.DirectoryAgent.GetAccounts(bootKey, Extra.IsPresent, accountTypes, credTypes, bitlockerData))
             {
                 if (account == null)
                     continue;
@@ -152,19 +173,19 @@ namespace DSInternals.PowerShell.Commands
             {
                 case parameterSetByDN:
                     var dn = new DistinguishedName(this.DistinguishedName);
-                    account = this.DirectoryAgent.GetAccount(dn, bootKey, Extra.IsPresent, credTypes);
+                    account = this.DirectoryAgent.GetAccount(dn, bootKey, Extra.IsPresent, credTypes, bitlockerData);
                     break;
 
                 case parameterSetByName:
-                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, bootKey, Extra.IsPresent, credTypes);
+                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, bootKey, Extra.IsPresent, credTypes, bitlockerData);
                     break;
 
                 case parameterSetByGuid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, bootKey, Extra.IsPresent, credTypes);
+                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, bootKey, Extra.IsPresent, credTypes, bitlockerData);
                     break;
 
                 case parameterSetBySid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, bootKey, Extra.IsPresent, credTypes);
+                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, bootKey, Extra.IsPresent, credTypes, bitlockerData);
                     break;
 
                 default:

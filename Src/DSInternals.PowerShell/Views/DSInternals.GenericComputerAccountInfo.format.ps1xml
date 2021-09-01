@@ -47,33 +47,6 @@
                 <PropertyName>OperatingSystemHotfix</PropertyName>
               </ExpressionBinding>
               <NewLine />
-              <!--
-              <Text>TPMOwnerInfo: </Text>
-              <ExpressionBinding>
-                <PropertyName>TPMOwnerInfo</PropertyName>
-              </ExpressionBinding>
-              <NewLine />
-              <Text>FVEKeyPackage: </Text>
-              <ExpressionBinding>
-                <PropertyName>FVEKeyPackage</PropertyName>
-              </ExpressionBinding>
-              <NewLine />
-              <Text>FVEVolumeGuid: </Text>
-              <ExpressionBinding>
-                <PropertyName>FVEVolumeGuid</PropertyName>
-              </ExpressionBinding>
-              <NewLine />
-              <Text>FVERecoveryGuid: </Text>
-              <ExpressionBinding>
-                <PropertyName>FVERecoveryGuid</PropertyName>
-              </ExpressionBinding>
-              <NewLine />
-              <Text>FVERecoveryPassword: </Text>
-              <ExpressionBinding>
-                <PropertyName>FVERecoveryPassword</PropertyName>
-              </ExpressionBinding>
-              <NewLine />
-              -->
             </CustomItem>
           </CustomEntry>
         </CustomEntries>
