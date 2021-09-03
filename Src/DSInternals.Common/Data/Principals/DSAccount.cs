@@ -525,7 +525,7 @@
         public BitlockerRecoveryInfo[] BitlockerInfo
         {
             get;
-            private set;
+            set;
         }
 
         protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName)
@@ -650,27 +650,27 @@
         {
             this.BitlockerInfo = null;
             string DN = this.DistinguishedName.ToString();
-            int i = 0;
-            foreach (var obj in bitlockerData)
-            {
-                if (obj.OwerDN.Equals(DN))
-                {
-                    i++;
-                }
-            }
 
+            List < BitlockerRecoveryInfo > bl_curUser = bitlockerData.FindAll(
+                delegate (BitlockerRecoveryInfo br)
+                {
+                    return br.OwnerDN.Equals(DN);
+                }
+            );
+
+            int i = (bl_curUser != null) ? bl_curUser.Count : 0;
             if (i > 0)
             {
-                this.BitlockerInfo = new BitlockerRecoveryInfo[i];
+                BitlockerRecoveryInfo[] bitlockerRecoveryData = new BitlockerRecoveryInfo[i];
 
-                i = 0;
-                foreach (var obj in bitlockerData)
-                {
-                    if (obj.OwerDN.Equals(DN))
+                bl_curUser.ForEach(
+                    delegate (BitlockerRecoveryInfo br)
                     {
-                        this.BitlockerInfo[i++] = obj;
+                        bitlockerRecoveryData[--i] = br;
                     }
-                }
+                );
+
+                this.BitlockerInfo = bitlockerRecoveryData;
             }
         }
 

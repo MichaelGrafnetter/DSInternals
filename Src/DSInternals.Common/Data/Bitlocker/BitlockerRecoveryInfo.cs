@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.DirectoryServices;
 using System.IO;
-using System.Security.AccessControl;
 using System.Text;
 
 namespace DSInternals.Common.Data
@@ -32,7 +29,12 @@ namespace DSInternals.Common.Data
             dsObject.ReadAttribute(CommonDirectoryAttributes.ObjectGUID, out this.FVE_ObjectGUID);
             dsObject.ReadAttribute(CommonDirectoryAttributes.Name, out this.FVE_Name);
             dsObject.ReadAttribute(CommonDirectoryAttributes.CommonName, out this.FVE_CommonName);
-            dsObject.ReadAttribute(CommonDirectoryAttributes.DN, out this.FVE_DistinguishedName);
+
+            if (dsObject.DistinguishedName == null)
+                dsObject.ReadAttribute(CommonDirectoryAttributes.DN, out this.FVE_DistinguishedName);
+            else
+                this.FVE_DistinguishedName = new DistinguishedName(dsObject.DistinguishedName);
+
             //dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out this.FVE_securityDescriptor);
             dsObject.ReadAttribute(CommonDirectoryAttributes.FVEVolumeGuid, out this.FVE_VolumeGuid);
             dsObject.ReadAttribute(CommonDirectoryAttributes.FVERecoveryGuid, out this.FVE_RecoveryGuid);
@@ -41,20 +43,31 @@ namespace DSInternals.Common.Data
             dsObject.ReadAttribute(CommonDirectoryAttributes.WhenChanged, out this.FVE_WhenChanged);
             dsObject.ReadAttribute(CommonDirectoryAttributes.WhenCreated, out this.FVE_WhenCreated);
 
-            DateTime dt1 = new DateTime(1601, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dt1 = dt1.AddSeconds(this.FVE_WhenChanged.Value).ToLocalTime();
-            this.FVE_WhenChanged_str = dt1.ToString();
-
-            DateTime dt2 = new DateTime(1601, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dt2 = dt2.AddSeconds(this.FVE_WhenCreated.Value).ToLocalTime();
-            this.FVE_WhenCreated_str = dt2.ToString();
-
-            string CN = this.FVE_CommonName;
-            string DN = this.FVE_DistinguishedName.ToString();
-            string oDN = DN.Replace("CN=" + CN + ",", "");
-            if (oDN != null && oDN.Length > 0)
+            if (this.FVE_WhenChanged != null)
             {
-                this.FVE_OwnerDN = new DistinguishedName(oDN);
+                DateTime dt1 = new DateTime(1601, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                dt1 = dt1.AddSeconds(this.FVE_WhenChanged.Value).ToLocalTime();
+                this.FVE_WhenChanged_str = dt1.ToString();
+            }
+
+            if (this.FVE_WhenCreated != null)
+            {
+                DateTime dt2 = new DateTime(1601, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                dt2 = dt2.AddSeconds(this.FVE_WhenCreated.Value).ToLocalTime();
+                this.FVE_WhenCreated_str = dt2.ToString();
+            }
+
+            string CN = (this.FVE_CommonName != null) ? this.FVE_CommonName : this.FVE_Name;
+            string oDN = null;
+
+            if (this.FVE_DistinguishedName != null)
+            {
+                string DN = this.FVE_DistinguishedName.ToString();
+                oDN = DN.Replace("CN=" + CN + ",", "");
+                if (oDN != null && oDN.Length > 0)
+                {
+                    this.FVE_OwnerDN = new DistinguishedName(oDN);
+                }
             }
 
             if (exportKeysPath != null && exportKeysPath.Length > 0)
@@ -116,7 +129,7 @@ namespace DSInternals.Common.Data
             }
         }
 
-        public string OwerDN
+        public string OwnerDN
         {
             get
             {

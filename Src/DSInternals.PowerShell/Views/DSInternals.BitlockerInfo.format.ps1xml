@@ -7,9 +7,26 @@
         <CustomEntries>
           <CustomEntry>
             <CustomItem>
+              <!--
               <Text>TPMOwnerInfo: </Text>
               <ExpressionBinding>
                 <PropertyName>TPMOwnerInfo</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>ObjectGUID: </Text>
+              <ExpressionBinding>
+                <PropertyName>ObjectGUID</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              -->
+              <Text>DistinguishedName: </Text>
+              <ExpressionBinding>
+                <PropertyName>DistinguishedName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>OwnerDN: </Text>
+              <ExpressionBinding>
+                <PropertyName>OwnerDN</PropertyName>
               </ExpressionBinding>
               <NewLine />
               <Text>FVEKeyPackage: </Text>
@@ -31,6 +48,17 @@
               <ExpressionBinding>
                 <PropertyName>RecoveryPassword</PropertyName>
               </ExpressionBinding>
+              <NewLine />
+              <Text>WhenChanged: </Text>
+              <ExpressionBinding>
+                <PropertyName>WhenChanged</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>WhenCreated: </Text>
+              <ExpressionBinding>
+                <PropertyName>WhenCreated</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
               <NewLine />
             </CustomItem>
           </CustomEntry>

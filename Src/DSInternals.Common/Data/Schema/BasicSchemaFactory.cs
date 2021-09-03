@@ -4,6 +4,26 @@
 
     public static class BasicSchemaFactory
     {
+        public static BasicSchema CreateBitlockerSchema()
+        {
+            var attributes = new List<ISchemaAttribute>();
+            // tpm + bitlocker
+            attributes.Add(new BasicSchemaAttribute(CommonDirectoryAttributes.NameId, CommonDirectoryAttributes.Name, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ObjectClassId, CommonDirectoryAttributes.ObjectClass, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ObjectCategoryId, CommonDirectoryAttributes.ObjectCategory, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.DNId, CommonDirectoryAttributes.DN, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CommonNameId, CommonDirectoryAttributes.CommonName, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ObjectGUIDId, CommonDirectoryAttributes.ObjectGUID, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.TPMOwnerInfoId, CommonDirectoryAttributes.TPMOwnerInfo, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVEKeyPackageId, CommonDirectoryAttributes.FVEKeyPackage, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVEVolumeGuidId, CommonDirectoryAttributes.FVEVolumeGuid, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryGuidId, CommonDirectoryAttributes.FVERecoveryGuid, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryPasswordId, CommonDirectoryAttributes.FVERecoveryPassword, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.WhenChangedId, CommonDirectoryAttributes.WhenChanged, AttributeSyntax.Int64));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.WhenCreatedId, CommonDirectoryAttributes.WhenCreated, AttributeSyntax.Int64));
+            return new BasicSchema(attributes);
+        }
+
         public static BasicSchema CreateSchema()
         {
             var attributes = new List<ISchemaAttribute>();
@@ -70,14 +90,7 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemHotfixId, CommonDirectoryAttributes.OperatingSystemHotfix, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemServicePackId, CommonDirectoryAttributes.OperatingSystemServicePack, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.DNSHostNameId, CommonDirectoryAttributes.DNSHostName, AttributeSyntax.UnicodeString));
-            /*
-            // TPM + bitlocker
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.TPMOwnerInfoId, CommonDirectoryAttributes.TPMOwnerInfo, AttributeSyntax.UnicodeString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVEKeyPackageId, CommonDirectoryAttributes.FVEKeyPackage, AttributeSyntax.OctetString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVEVolumeGuidId, CommonDirectoryAttributes.FVEVolumeGuid, AttributeSyntax.OctetString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryGuidId, CommonDirectoryAttributes.FVERecoveryGuid, AttributeSyntax.OctetString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryPasswordId, CommonDirectoryAttributes.FVERecoveryPassword, AttributeSyntax.UnicodeString));
-            */
             return new BasicSchema(attributes);
         }
     }

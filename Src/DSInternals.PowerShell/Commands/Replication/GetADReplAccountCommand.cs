@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 using System.Security.Principal;
 using DSInternals.Common.Data;
@@ -99,6 +100,7 @@ namespace DSInternals.PowerShell.Commands
 
         protected void ReturnAllAccounts()
         {
+            List<BitlockerRecoveryInfo> bitlockerRecoveryInfoList = null;
             // Write the initial progress
             // TODO: Extract strings as resources
             var progress = new ProgressRecord(1, "Replication", "Replicating Active Directory objects.");
@@ -119,11 +121,54 @@ namespace DSInternals.PowerShell.Commands
             // Automatically infer domain name if no value is provided
             string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
 
+            if (accountTypes.HasFlag(DSAccount.AccountType.Default) || accountTypes.HasFlag(DSAccount.AccountType.All) || accountTypes.HasFlag(DSAccount.AccountType.Computer))
+            {
+                if (credTypes.HasFlag(DSAccount.CredType.All) || credTypes.HasFlag(DSAccount.CredType.Bitlocker))
+                {
+                    // dump msFVE-RecoveryInformation
+                    bitlockerRecoveryInfoList = new List<BitlockerRecoveryInfo>();
+
+                    foreach (var bl in this.ReplicationClient.GetBitlockerRecoveryData(domainNamingContext, null))
+                    {
+                        if (bl == null)
+                            continue;
+
+                        bitlockerRecoveryInfoList.Add(bl);
+                    }
+                }
+            }
+
             // Replicate all accounts
             foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter, Extra.IsPresent, accountTypes, credTypes))
             {
                 if (account == null)
                     continue;
+
+                if (bitlockerRecoveryInfoList != null)
+                {
+                    List<BitlockerRecoveryInfo> bl_curUser = bitlockerRecoveryInfoList.FindAll(
+                        delegate(BitlockerRecoveryInfo br)
+                        {
+                            return br.OwnerDN.Equals(account.DistinguishedName);
+                        }
+                    );
+
+                    int i = (bl_curUser != null) ? bl_curUser.Count : 0;
+
+                    if (i > 0)
+                    {
+                        BitlockerRecoveryInfo[] bitlockerRecoveryData = new BitlockerRecoveryInfo[i];
+
+                        bl_curUser.ForEach(
+                            delegate(BitlockerRecoveryInfo br)
+                            {
+                                bitlockerRecoveryData[--i] = br;
+                            }
+                        );
+
+                        account.BitlockerInfo = bitlockerRecoveryData;
+                    }
+                }
 
                 this.WriteObject(account);
 
@@ -138,7 +183,8 @@ namespace DSInternals.PowerShell.Commands
 
         protected void ReturnSingleAccount()
         {
-            DSAccount account;
+            DSAccount account = null;
+
             switch (this.ParameterSetName)
             {
                 case ParameterSetByDN:
@@ -166,6 +212,55 @@ namespace DSInternals.PowerShell.Commands
                 default:
                     // This should never happen:
                     throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+            }
+
+            if (account != null)
+            {
+                if (account.SamAccountType.HasFlag(SamAccountType.Computer))
+                {
+                    if (credTypes.HasFlag(DSAccount.CredType.All) || credTypes.HasFlag(DSAccount.CredType.Bitlocker))
+                    {
+                        // Automatically infer domain name if no value is provided
+                        string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
+
+                        // dump msFVE-RecoveryInformation
+                        List<BitlockerRecoveryInfo> bitlockerRecoveryInfoList = new List<BitlockerRecoveryInfo>();
+
+                        foreach (var bl in this.ReplicationClient.GetBitlockerRecoveryData(domainNamingContext, null))
+                        {
+                            if (bl == null)
+                                continue;
+
+                            bitlockerRecoveryInfoList.Add(bl);
+                        }
+
+                        if (bitlockerRecoveryInfoList != null)
+                        {
+                            List<BitlockerRecoveryInfo> bl_curUser = bitlockerRecoveryInfoList.FindAll(
+                                delegate (BitlockerRecoveryInfo br)
+                                {
+                                    return br.OwnerDN.Equals(account.DistinguishedName);
+                                }
+                            );
+
+                            int i = (bl_curUser != null) ? bl_curUser.Count : 0;
+
+                            if (i > 0)
+                            {
+                                BitlockerRecoveryInfo[] bitlockerRecoveryData = new BitlockerRecoveryInfo[i];
+
+                                bl_curUser.ForEach(
+                                    delegate (BitlockerRecoveryInfo br)
+                                    {
+                                        bitlockerRecoveryData[--i] = br;
+                                    }
+                                );
+
+                                account.BitlockerInfo = bitlockerRecoveryData;
+                            }
+                        }
+                    }
+                }
             }
 
             this.WriteObject(account);

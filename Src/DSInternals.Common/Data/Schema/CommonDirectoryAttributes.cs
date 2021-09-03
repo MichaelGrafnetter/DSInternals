@@ -9,6 +9,7 @@
         public const string AttributeOmSyntax = "oMSyntax";
         public const string AttributeSyntax = "attributeSyntax";
         public const string CommonName = "cn";
+        public const int CommonNameId = 3;
         public const string CurrentValue = "currentValue";
         public const int CurrentValueId = 589851;
         public const string Description = "description";
@@ -16,6 +17,7 @@
         public const string DisplayName = "displayName";
         public const int DisplayNameId = 131085;
         public const string DN = "distinguishedName";
+        public const int DNId = 49;
         public const string DNSHostName = "dNSHostName";
         public const int DNSHostNameId = 590443;
         public const string DNSRoot = "dnsRoot";
@@ -77,6 +79,7 @@
         public const string ObjectClass = "objectClass";
         public const int ObjectClassId = 0;
         public const string ObjectGUID = "objectGUID";
+        public const int ObjectGUIDId = 589826;
         public const string ObjectSid = "objectSid";
         public const int ObjectSidId = 589970;
         public const string ObjectTypeId = "ObjectTypeId";
@@ -130,7 +133,9 @@
         public const string USNCreated = "uSNCreated";
         public const string USNChanged = "uSNChanged";
         public const string WhenCreated = "whenCreated";
+        public const int WhenCreatedId = 131074;
         public const string WhenChanged = "whenChanged";
+        public const int WhenChangedId = 131075;
         public const string Initials = "initials";
         public const int InitialsId = 43;
         public const string EmployeeID = "employeeID";

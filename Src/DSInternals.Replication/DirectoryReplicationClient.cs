@@ -82,6 +82,62 @@ namespace DSInternals.Replication
             return this.drsConnection.GetReplicationCursors(namingContext);
         }
 
+        public IEnumerable<BitlockerRecoveryInfo> GetBitlockerRecoveryData(string domainNamingContext, ReplicationProgressHandler progressReporter = null, string exportKeysPath = null)
+        {
+            Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
+            ReplicationCookie cookie = new ReplicationCookie(domainNamingContext);
+            return GetBitlockerRecoveryData(cookie, progressReporter, exportKeysPath);
+        }
+
+        public IEnumerable<BitlockerRecoveryInfo> GetBitlockerRecoveryData(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, string exportKeysPath = null)
+        {
+            Validator.AssertNotNull(initialCookie, nameof(initialCookie));
+            // Create AD Bitlocker schema
+            var schema = BasicSchemaFactory.CreateBitlockerSchema();
+            var currentCookie = initialCookie;
+            ReplicationResult result;
+            int processedObjectCount = 0;
+
+            do
+            {
+                // Perform one replication cycle
+                result = this.drsConnection.ReplicateAllObjects(currentCookie);
+
+                // Report replication progress
+                if (progressReporter != null)
+                {
+                    processedObjectCount += result.Objects.Count;
+                    progressReporter(result.Cookie, processedObjectCount, result.TotalObjectCount);
+                }
+
+                // Process the returned objects
+                foreach (var obj in result.Objects)
+                {
+                    obj.Schema = schema;
+                    /*
+                    if (obj.IsTPM)
+                    {
+                        obj.ReadAttribute(CommonDirectoryAttributes.TPMOwnerInfo, out string tpmownerinfo);
+                        Console.WriteLine("TMPOwnerInfo: {0}", tpmownerinfo);
+                    }
+                    else
+                    */
+                    if (!obj.IsBitlocker)
+                        continue;
+
+                    var objBL = new BitlockerRecoveryInfo(obj, exportKeysPath);
+                    if (objBL == null)
+                        continue;
+
+                    yield return objBL;
+                }
+
+                // Update the position of the replication cursor
+                currentCookie = result.Cookie;
+            } while (result.HasMoreData);
+        }
+
+
         public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.Default, DSAccount.CredType credTypes = DSAccount.CredType.All)
         {
             Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));

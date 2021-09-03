@@ -157,6 +157,24 @@
             }
         }
 
+        public bool IsBitlocker
+        {
+            get
+            {
+                // make better
+                return this.HasAttribute(CommonDirectoryAttributes.FVERecoveryGuid);
+            }
+        }
+        /*
+        public bool IsTPM
+        {
+            get
+            {
+                // make better
+                return this.HasAttribute(CommonDirectoryAttributes.TPMOwnerInfo);
+            }
+        }
+        */
         public bool IsAccount
         {
             get
