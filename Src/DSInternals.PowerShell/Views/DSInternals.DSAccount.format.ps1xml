@@ -215,6 +215,18 @@
                   </Frame>
                 </CustomItem>
               </Frame>
+              <Text>LAPS Credential:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>LAPS</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>LAPS</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
               <Text>Bitlocker Recovery Data:</Text>
               <NewLine />
               <Frame>

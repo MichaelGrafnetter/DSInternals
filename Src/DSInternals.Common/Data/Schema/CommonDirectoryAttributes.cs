@@ -215,5 +215,9 @@
         public const int FVERecoveryGuidId = 591789;
         public const string FVERecoveryPassword = "msFVE-RecoveryPassword";
         public const int FVERecoveryPasswordId = 591788;
+        public const string McsAdmPwd = "ms-Mcs-AdmPwd";
+        public const int McsAdmPwdId = -1859393137;
+        public const string McsAdmPwdExpirationTime = "ms-Mcs-AdmPwdExpirationTime";
+        public const int McsAdmPwdExpirationTimeId = -1741909977;
     }
 }

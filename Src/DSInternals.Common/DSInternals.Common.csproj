@@ -90,6 +90,7 @@
     <Compile Include="Data\Hello\KeyMaterialFido.cs" />
     <Compile Include="Data\Hello\VolumeType.cs" />
     <Compile Include="Data\Hello\KeyUsage.cs" />
+    <Compile Include="Data\LAPS\LAPSCredential.cs" />
     <Compile Include="Data\Principals\GenericUserAccountInfo.cs" />
     <Compile Include="Data\Principals\GenericComputerAccountInfo.cs" />
     <Compile Include="Extensions\ByteArrayExtensions.cs" />

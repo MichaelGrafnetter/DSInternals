@@ -49,6 +49,14 @@
                     }
                 }
 
+                if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.LAPS))
+                {
+                    if (dsObject.IsComputerAccount && dsObject.HasLAPS)
+                    {
+                        this.LoadLapsComputerAccountInfo(dsObject);
+                    }
+                }
+
                 if (credTypes.HasFlag(CredType.All) || credTypes.HasFlag(CredType.Other))
                 {
                     // Credential Roaming
@@ -64,7 +72,7 @@
         }
 
         [Flags]
-        public enum CredType : byte
+        public enum CredType : Int16
         {
             Default = 0,
             All = 1 << 0,
@@ -73,8 +81,9 @@
             NT = 1 << 3,
             NT_History = 1 << 4,
             Bitlocker = 1 << 5,
-            Other = 1 << 6,
-            None = 1 << 7,
+            LAPS = 1 << 6,
+            Other = 1 << 7,
+            None = 1 << 8
         }
 
         [Flags]
@@ -125,26 +134,6 @@
             return (cnt > 0) ? ret & ~AccountType.None : AccountType.Default;
         }
 
-        /*
-        public static void PrintAccountType(AccountType accountTypes)
-        {
-            string buf = "";
-
-            if (accountTypes.HasFlag(AccountType.All))
-                buf += "All ";
-            if (accountTypes.HasFlag(AccountType.User))
-                buf += "User ";
-            if (accountTypes.HasFlag(AccountType.Computer))
-                buf += "Computer ";
-            if (accountTypes.HasFlag(AccountType.Other))
-                buf += "Other ";
-            if (accountTypes.HasFlag(AccountType.None))
-                buf += "None";
-
-            System.Console.WriteLine("AccountTypes: " + buf);
-        }
-        */
-
         public static CredType GetCredType(string[] typeDesc)
         {
             CredType ret = 0;
@@ -193,30 +182,6 @@
 
             return ret;
         }
-
-        /*
-        public static void PrintCredType(CredType credTypes)
-        {
-            string buf = "";
-
-            if (credTypes.HasFlag(CredType.All))
-                buf += "All ";
-            if (credTypes.HasFlag(CredType.None))
-                buf += "None ";
-            if (credTypes.HasFlag(CredType.LM))
-                buf += "LM ";
-            if (credTypes.HasFlag(CredType.LM_History))
-                buf += "LMHistory ";
-            if (credTypes.HasFlag(CredType.NT))
-                buf += "NT ";
-            if (credTypes.HasFlag(CredType.NT_History))
-                buf += "NTHistory ";
-            if (credTypes.HasFlag(CredType.Other))
-                buf += "Other";
-
-            System.Console.WriteLine("CredTypes: " + buf);
-        }
-        */
 
         /// <summary>
         /// Gets the distinguished name (DN) for this <see cref="DSAccount"/>.
@@ -522,10 +487,23 @@
             private set;
         }
 
+        /// <summary>
+        /// Gets the stored Bitlocker Recovery Information
+        /// </summary>
         public BitlockerRecoveryInfo[] BitlockerInfo
         {
             get;
             set;
+
+        }
+
+        /// <summary>
+        /// Gets the stored Local Admin Password and Expiration Time from LAPS
+        /// </summary>
+        public LAPSCredential LAPS
+        {
+            get;
+            private set;
         }
 
         protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName)
@@ -643,6 +621,16 @@
             if (tmp != null && tmp.data_len > 0)
             {
                 this.GenericComputerAccountInfo = tmp;
+            }
+        }
+
+        protected void LoadLapsComputerAccountInfo(DirectoryObject dsObject)
+        {
+            this.LAPS = null;
+            LAPSCredential laps = new LAPSCredential(dsObject);
+            if (laps != null)
+            {
+                this.LAPS = laps;
             }
         }
 

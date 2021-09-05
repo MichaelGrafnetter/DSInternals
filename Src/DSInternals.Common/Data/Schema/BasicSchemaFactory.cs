@@ -91,6 +91,9 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemServicePackId, CommonDirectoryAttributes.OperatingSystemServicePack, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.DNSHostNameId, CommonDirectoryAttributes.DNSHostName, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryPasswordId, CommonDirectoryAttributes.FVERecoveryPassword, AttributeSyntax.UnicodeString));
+            // laps
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.McsAdmPwdId, CommonDirectoryAttributes.McsAdmPwd, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.McsAdmPwdExpirationTimeId, CommonDirectoryAttributes.McsAdmPwdExpirationTime, AttributeSyntax.Int64));
             return new BasicSchema(attributes);
         }
     }

@@ -157,6 +157,16 @@
             }
         }
 
+        public bool HasLAPS
+        {
+            get
+            {
+                byte[] admPwd;
+                this.ReadAttribute(CommonDirectoryAttributes.McsAdmPwd, out admPwd);
+                return (admPwd != null);
+            }
+        }
+
         public bool IsBitlocker
         {
             get

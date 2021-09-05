@@ -133,6 +133,13 @@
                             err++;
                     }
 
+                    if (credTypes.HasFlag(DSAccount.CredType.LAPS))
+                    {
+                        max++;
+                        if (!obj.HasLAPS)
+                            err++;
+                    }
+
                     if (credTypes.HasFlag(DSAccount.CredType.Other))
                     {
                         max++;
@@ -201,6 +208,13 @@
                 {
                     max++;
                     if (bitlockerData == null)
+                        err++;
+                }
+
+                if (credTypes.HasFlag(DSAccount.CredType.LAPS))
+                {
+                    max++;
+                    if (!obj.HasLAPS)
                         err++;
                 }
 
