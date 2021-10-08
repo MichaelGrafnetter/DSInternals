@@ -7,6 +7,7 @@
     using Microsoft.Isam.Esent.Interop;
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     /// <summary>
@@ -25,7 +26,6 @@
         private IDictionary<string, SchemaAttribute> attributesByName;
         private IDictionary<string, int> classesByName;
 
-        // TODO: Internal?
         // TODO: ISchema
         public DirectorySchema(IsamDatabase database)
         {
@@ -39,17 +39,6 @@
                 this.LoadPrefixMap(cursor);
             }
             // TODO: Load Ext-Int Map from hiddentable
-        }
-
-        /// <summary>
-        /// Gets the partition name.
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
         }
 
         /// <summary>
@@ -110,15 +99,6 @@
         public string FindIndexName(string attributeName)
         {
             return this.FindAttribute(attributeName).Index;
-        }
-
-
-        /// <summary>
-        /// Refreshes the schema cache.
-        /// </summary>
-        public void RefreshSchema()
-        {
-            throw new NotImplementedException();
         }
 
         // TODO: Rename to CategoryDNT
@@ -229,6 +209,7 @@
                 // Some built-in attributes do not have internal id set, which means it is equal to the public id
                 int id = internalId ?? attributeId;
                 SchemaAttribute attribute;
+
                 bool found = this.attributesByInternalId.TryGetValue(id, out attribute);
                 if (! found)
                 {
@@ -236,6 +217,7 @@
                     attribute = new SchemaAttribute();
                     attribute.InternalId = internalId;
                 }
+
                 attribute.Id = dataTableCursor.RetrieveColumnAsInt(attributeIdCol).Value;
                 attribute.Name = dataTableCursor.RetrieveColumnAsString(ldapDisplayNameCol);
                 attribute.CommonName = dataTableCursor.RetrieveColumnAsString(cnCol);
@@ -251,8 +233,13 @@
                 attribute.IsSystemOnly = dataTableCursor.RetrieveColumnAsBoolean(systemOnlyCol);
                 attribute.Syntax = dataTableCursor.RetrieveColumnAsAttributeSyntax(syntaxCol);
                 attribute.OmSyntax = dataTableCursor.RetrieveColumnAsAttributeOmSyntax(omSyntaxCol);
-                // Make it case-insensitive by always lowering the name:
-                this.attributesByName.Add(attribute.Name.ToLower(), attribute);
+
+                // Only index non-defunct attributes by name. A name conflict could arise otherwise.
+                if(!attribute.IsDefunct)
+                {
+                    // Make the attribute name lookup case-insensitive by always lowercasing the name:
+                    this.attributesByName.Add(attribute.Name.ToLower(CultureInfo.InvariantCulture), attribute);
+                }
             }
         }
 
