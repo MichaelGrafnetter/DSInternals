@@ -15,8 +15,10 @@
     <summary>This package is shared between all other DSInternals packages.</summary>
     <releaseNotes>
 - Added the ability to modify FIDO2 and NGC keys registered in Azure Active Directory.
+- Improved parsing of roaming CNG private keys.
+- Updated the target .NET Framework to 4.7.2.
     </releaseNotes>
-    <copyright>Copyright (c) 2015-2020 Michael Grafnetter. All rights reserved.</copyright>
+    <copyright>Copyright (c) 2015-2021 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security AD AAD Identity Active Directory</tags>
   </metadata>
   <files>

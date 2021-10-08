@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.4.1'
+ModuleVersion = '4.5'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -23,7 +23,7 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) 2015-2020 Michael Grafnetter. All rights reserved.'
+Copyright = '(c) 2015-2021 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
@@ -141,7 +141,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed an issue that prevented the DSInternals.Replication.Interop.dll file from being loaded.
+- Added support for ntds.dit files with conflicting defunct attributes.
+- Fixed the detection of default computer passwords.
+- Improved parsing of roaming CNG private keys.
+- Updated the target .NET Framework to 4.7.2.
 "@
     } # End of PSData hashtable
 

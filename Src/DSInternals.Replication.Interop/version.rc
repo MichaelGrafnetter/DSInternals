@@ -57,12 +57,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Michael Grafnetter"
             VALUE "FileDescription", "DSInternals Replication Interop Library"
-            VALUE "FileVersion", "4.3.0.0"
+            VALUE "FileVersion", "4.5.0.0"
             VALUE "InternalName", "DSInternals.Replication.Interop"
-            VALUE "LegalCopyright", "Copyright © 2015-2020 Michael Grafnetter"
+            VALUE "LegalCopyright", "Copyright © 2015-2021 Michael Grafnetter"
             VALUE "OriginalFilename", "DSInternals.Replication.Interop.dll"
             VALUE "ProductName", "DSInternals PowerShell Module"
-            VALUE "ProductVersion", "4.3.0.0"
+            VALUE "ProductVersion", "4.5.0.0"
         END
     END
     BLOCK "VarFileInfo"
