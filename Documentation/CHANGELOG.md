@@ -9,6 +9,17 @@ All notable changes to this project will be documented in this file. The format 
 
 - The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
 
+## [4.5] - 2021-10-14
+
+### Fixed
+- Added support for ntds.dit files with conflicting defunct attributes.
+- Fixed the detection of default computer passwords.
+- Improved parsing of roaming CNG private keys.
+
+### Changed
+
+- Updated the target .NET Framework to 4.7.2.
+
 ## [4.4.1] - 2020-07-18
 
 ### Fixed
@@ -399,7 +410,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4.1...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.5...HEAD
+[4.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4.1...v4.5
 [4.4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4...v4.4.1
 [4.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.3...v4.4
 [4.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.2...v4.3
