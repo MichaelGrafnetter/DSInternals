@@ -14,6 +14,8 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Runtime.Serialization.Formatters.Binary;
 #endif
     using System.Text;
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows10;
 
     /// <summary>
     /// Helper methods for the ESENT API. These do data conversion for
@@ -311,7 +313,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Perform atomic addition on one column. The column must be of type
+        /// Perform atomic addition on an Int32 column. The column must be of type
         /// <see cref="JET_coltyp.Long"/>. This function allows multiple sessions to update the
         /// same record concurrently without conflicts.
         /// </summary>
@@ -341,6 +343,39 @@ namespace Microsoft.Isam.Esent.Interop
                 previousValue.Length == actualPreviousValueLength,
                 "Unexpected previous value length. Expected an Int32");
             return BitConverter.ToInt32(previousValue, 0);
+        }
+
+        /// <summary>
+        /// Perform atomic addition on an Int64 column. The column must be of type
+        /// <see cref="VistaColtyp.LongLong"/>. This function allows multiple sessions to update the
+        /// same record concurrently without conflicts.
+        /// </summary>
+        /// <remarks>
+        /// This method wraps <see cref="JetEscrowUpdate"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to update.</param>
+        /// <param name="columnid">The column to update. This must be an escrow-updatable column.</param>
+        /// <param name="delta">The delta to apply to the column.</param>
+        /// <returns>The current value of the column as stored in the database (versioning is ignored).</returns>
+        public static long EscrowUpdate(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, long delta)
+        {
+            var previousValue = new byte[sizeof(long)];
+            int actualPreviousValueLength;
+            JetEscrowUpdate(
+                sesid,
+                tableid,
+                columnid,
+                BitConverter.GetBytes(delta),
+                sizeof(long),
+                previousValue,
+                previousValue.Length,
+                out actualPreviousValueLength,
+                EscrowUpdateGrbit.None);
+            Debug.Assert(
+                previousValue.Length == actualPreviousValueLength,
+                "Unexpected previous value length. Expected an Int64");
+            return BitConverter.ToInt64(previousValue, 0);
         }
 
         /// <summary>

@@ -338,7 +338,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">
         /// The native columncreate to set the values from.
         /// </param>
-        internal void SetFromNativeColumnCreate(NATIVE_COLUMNCREATE value)
+        internal void SetFromNativeColumnCreate(ref NATIVE_COLUMNCREATE value)
         {
             this.columnid = new JET_COLUMNID { Value = value.columnid };
             this.err = (JET_err)value.err;

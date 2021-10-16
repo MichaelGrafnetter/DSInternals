@@ -72,7 +72,7 @@ namespace Microsoft.Isam.Esent.Interop
                     Debug.Assert(!this.hasResource, "Resource was not freed");
                 }
 
-                this.isDisposed = true;                
+                this.isDisposed = true;
             }
             else
             {
@@ -84,7 +84,7 @@ namespace Microsoft.Isam.Esent.Interop
                     // called before JetCloseTable). Freeing esent resources
                     // in the wrong order will generate EsentExceptions.
                     Trace.TraceWarning("Non-finalized ESENT resource {0}", this);
-                }                
+                }
             }
         }
 

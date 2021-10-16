@@ -22,12 +22,12 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// system parameter JET_param.CommitDefault when used with an instance and a sesid.
         /// Note: JET_param.CommitDefault is not currently exposed in the ESE interop layer.
         /// </summary>
-        CommitDefault = Base + 1,
+        CommitDefault = 4097,
 
         /// <summary>
         /// This parameter sets a user specific commit context that will be placed in the
         /// transaction log on commit to level 0.
         /// </summary>
-        CommitGenericContext = Base + 2,
+        CommitGenericContext = 4098,
     }
 }

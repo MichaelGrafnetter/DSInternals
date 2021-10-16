@@ -308,9 +308,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="nativeRetrievecolumns">
         /// The native retrieve columns that match the column values.
         /// </param>
-        private static unsafe void RetrieveTruncatedBuffers(JET_SESID sesid, JET_TABLEID tableid, IList<ColumnValue> columnValues, NATIVE_RETRIEVECOLUMN* nativeRetrievecolumns)
+        private static unsafe void RetrieveTruncatedBuffers(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_RETRIEVECOLUMN* nativeRetrievecolumns)
         {
-            for (int i = 0; i < columnValues.Count; ++i)
+            for (int i = 0; i < columnValues.Length; ++i)
             {
                 if (nativeRetrievecolumns[i].err == (int)JET_wrn.BufferTruncated)
                 {

@@ -1,6 +1,25 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <BooleanProperty Name="WriteCache">False</BooleanProperty>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>api</Value>
+      <Value>coltyp</Value>
+      <Value>columndef</Value>
+      <Value>columnid</Value>
+      <Value>dbid</Value>
+      <Value>dll</Value>
+      <Value>ese</Value>
+      <Value>esent</Value>
+      <Value>grbit</Value>
+      <Value>grbits</Value>
+      <Value>interop</Value>
+      <Value>itag</Value>
+      <Value>lgpos</Value>
+      <Value>param</Value>
+      <Value>preread</Value>
+      <Value>sesid</Value>
+      <Value>tableid</Value>
+    </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
     <Analyzer AnalyzerId="StyleCop.CSharp.NamingRules">

@@ -12,6 +12,10 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics.CodeAnalysis;
 
+#if !MANAGEDESENT_ON_WSA
+This file should only be compiled with MANAGEDESENT_ON_WSA
+#endif
+
     /// <summary>
     /// A fake enumeration to allow compilation on platforms that lack this enumeration.
     /// </summary>

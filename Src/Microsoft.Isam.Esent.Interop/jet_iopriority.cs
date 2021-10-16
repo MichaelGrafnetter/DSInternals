@@ -39,13 +39,5 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// Available on Windows 8.1 and later.
         /// </remarks>
         LowForScavenge = 0x4,
-
-        /// <summary>
-        /// Subsequent I/Os issued for shrinking the database cache will be issued at Low priority.
-        /// </summary>
-        /// <remarks>
-        /// Available on Windows 8.1 and later.
-        /// </remarks>
-        LowForCacheShrink = 0x8,
     }
 }

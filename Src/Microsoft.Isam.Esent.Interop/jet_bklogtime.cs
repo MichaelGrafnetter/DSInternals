@@ -12,7 +12,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Runtime.InteropServices;
 
     /// <summary>
-    /// Describes a date/time when a backup occured.
+    /// Describes a date/time when a backup occurred.
     /// </summary>
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
@@ -68,7 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the <see cref="JET_BKLOGTIME"/> struct.
         /// </summary>
         /// <param name="time">
-        /// The DateTime to intialize the structure with.
+        /// The DateTime to initialize the structure with.
         /// </param>
         /// <param name="isSnapshot">
         /// True if this time is for a snapshot backup.
@@ -81,11 +81,11 @@ namespace Microsoft.Isam.Esent.Interop
             this.bDays = checked((byte)time.Day);
             this.bMonth = checked((byte)time.Month);
             this.bYear = checked((byte)(time.Year - 1900));
-            
+
             // bFiller1: fTimeIsUTC at the first bit, bMillisecondsLow at left 7 bits
             this.bFiller1 = (time.Kind == DateTimeKind.Utc) ? (byte)0x1 : (byte)0;
             this.bFiller1 |= checked((byte)((time.Millisecond & 0x7F) << 1));
-            
+
             // bFiller2: fOSSnapshot at the first bit, bMillisecondsHigh at following 3 bits
             this.bFiller2 = isSnapshot ? (byte)0x1 : (byte)0;
             this.bFiller2 |= checked((byte)((time.Millisecond & 0x380) >> 6));

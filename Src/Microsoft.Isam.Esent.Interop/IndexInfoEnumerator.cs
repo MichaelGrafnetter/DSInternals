@@ -24,7 +24,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// The session to use.
         /// </param>
         protected IndexInfoEnumerator(JET_SESID sesid) : base(sesid)
-        {            
+        {
         }
 
         /// <summary>

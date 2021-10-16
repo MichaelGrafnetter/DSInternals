@@ -212,12 +212,12 @@ namespace Microsoft.Isam.Esent.Interop
 
             checked
             {
-                this.ibLongValue += count;                
+                this.ibLongValue += count;
             }
         }
 
         /// <summary>
-        /// Reads a sequence of bytes from the current stream and advances the 
+        /// Reads a sequence of bytes from the current stream and advances the
         /// position within the stream by the number of bytes read.
         /// </summary>
         /// <param name="buffer">The buffer to read into.</param>
@@ -240,7 +240,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             checked
             {
-                this.ibLongValue += bytesRead;                
+                this.ibLongValue += bytesRead;
             }
 
             return bytesRead;
@@ -282,7 +282,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 var setinfo = new JET_SETINFO { itagSequence = this.Itag };
                 SetColumnGrbit grbit = (0 == value) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.SizeLV;
-                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, checked((int)value), grbit, setinfo);                
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, checked((int)value), grbit, setinfo);
             }
 
             // Setting the length moves the offset back to the end of the data

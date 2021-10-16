@@ -88,6 +88,23 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="JET_CONDITIONALCOLUMN"/> class.
+        /// </summary>
+        public JET_CONDITIONALCOLUMN()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JET_CONDITIONALCOLUMN"/> class.
+        /// </summary>
+        /// <param name="native">The native object from which to read values.</param>
+        internal JET_CONDITIONALCOLUMN(ref NATIVE_CONDITIONALCOLUMN native)
+        {
+            this.szColumnName = Marshal.PtrToStringUni(native.szColumnName);
+            this.grbit = (ConditionalColumnGrbit)native.grbit;
+        }
+
+        /// <summary>
         /// Returns a deep copy of the object.
         /// </summary>
         /// <returns>A deep copy of the object.</returns>

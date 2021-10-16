@@ -7,9 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
-    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Vista;
 
@@ -131,17 +129,63 @@ namespace Microsoft.Isam.Esent.Interop
 
             return native;
         }
-        
+
         /// <summary>
-        /// Sets only the output fields of the object from a NATIVE_INDEXCREATE3 struct,
+        /// Sets only the output fields of the object from a <see cref="NATIVE_INDEXCREATE3"/> struct,
         /// specifically <see cref="err"/>.
         /// </summary>
         /// <param name="value">
         /// The native indexcreate to set the values from.
         /// </param>
-        internal void SetFromNativeIndexCreate(NATIVE_INDEXCREATE3 value)
+        internal void SetFromNativeIndexCreate(ref NATIVE_INDEXCREATE3 value)
         {
             this.err = (JET_err)value.err;
-        }        
+        }
+
+        /// <summary>
+        /// Sets all of the fields (not just output fields) of the object from a <see cref="NATIVE_INDEXCREATE3"/> struct,
+        /// specifically <see cref="err"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The native indexcreate to set the values from.
+        /// </param>
+        internal void SetAllFromNativeIndexCreate(ref NATIVE_INDEXCREATE3 value)
+        {
+            this.szIndexName = Marshal.PtrToStringUni(value.szIndexName);
+            this.cbKey = unchecked((int)value.cbKey / sizeof(char));
+            this.szKey = Marshal.PtrToStringUni(value.szKey, this.cbKey);
+            if (this.cbKey != this.szKey.Length)
+            {
+                throw new ArgumentException(string.Format("cbKey {0} != szKey.Length {1}", this.cbKey, this.szKey.Length));
+            }
+
+            this.grbit = unchecked((CreateIndexGrbit)value.grbit);
+            this.ulDensity = unchecked((int)value.ulDensity);
+
+            unsafe
+            {
+                this.pidxUnicode = new JET_UNICODEINDEX(ref *value.pidxUnicode);
+            }
+
+            this.cbVarSegMac = (int)value.cbVarSegMac;
+            this.cConditionalColumn = unchecked((int)value.cConditionalColumn);
+            this.rgconditionalcolumn = new JET_CONDITIONALCOLUMN[this.cConditionalColumn];
+
+            int sizeofConditionalColumn = Marshal.SizeOf(typeof(NATIVE_CONDITIONALCOLUMN));
+            for (int i = 0; i < this.cConditionalColumn; ++i)
+            {
+                IntPtr addressOfElement = value.rgconditionalcolumn + i * sizeofConditionalColumn;
+                NATIVE_CONDITIONALCOLUMN nativeConditionalColumn =
+                    (NATIVE_CONDITIONALCOLUMN)Marshal.PtrToStructure(addressOfElement, typeof(NATIVE_CONDITIONALCOLUMN));
+                this.rgconditionalcolumn[i] = new JET_CONDITIONALCOLUMN(ref nativeConditionalColumn);
+            }
+
+            this.err = (JET_err)value.err;
+            this.cbKeyMost = unchecked((int)value.cbKeyMost);
+
+            var nativeSpaceHints = (NATIVE_SPACEHINTS)Marshal.PtrToStructure(value.pSpaceHints, typeof(NATIVE_SPACEHINTS));
+            this.pSpaceHints = new JET_SPACEHINTS();
+            this.pSpaceHints.SetFromNativeSpaceHints(nativeSpaceHints);
+        }
     }
 }

@@ -50,7 +50,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Default options.
         /// </summary>
         None = 0,
-        
+
         /// <summary>
         /// Requests that the instance be shut down cleanly. Any optional
         /// cleanup work that would ordinarily be done in the background at
@@ -61,9 +61,14 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Requests that the instance be shut down as quickly as possible.
         /// Any optional work that would ordinarily be done in the
-        /// background at run time is abandoned. 
+        /// background at run time is abandoned.
         /// </summary>
         Abrupt = 2,
+        
+        /// <summary>
+        /// Interrupts and fails any on-going backup.
+        /// </summary>
+        StopBackup = 4,
     }
 
     /// <summary>
@@ -126,6 +131,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetAttachDatabase"/>.
     /// </summary>
+    /// <seealso cref="Server2003.Server2003Grbits.DeleteUnicodeIndexes"/>
     /// <seealso cref="Windows7.Windows7Grbits.EnableAttachDbBackgroundMaintenance"/>
     /// <seealso cref="Windows8.Windows8Grbits.PurgeCacheOnAttach"/>
     [Flags]
@@ -145,7 +151,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// If JET_paramEnableIndexChecking has been set, all indexes over Unicode
         /// data will be deleted.
         /// </summary>
-        DeleteCorruptIndexes = 0x10, 
+        DeleteCorruptIndexes = 0x10,
     }
 
     /// <summary>
@@ -218,7 +224,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// the source database will be skipped.
         /// </summary>
         [Obsolete("Use esentutl repair functionality instead.")]
-        Repair = 0x40,        
+        Repair = 0x40,
     }
 
     /// <summary>
@@ -245,7 +251,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Default options.
         /// </summary>
         None = 0,
-    
+
         /// <summary>
         /// Only logfiles will be taken.
         /// </summary>
@@ -279,7 +285,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Default options.
         /// </summary>
         None = 0,
-        
+
         /// <summary>
         /// Creates an incremental backup as opposed to a full backup. This
         /// means that only the log files created since the last full or
@@ -360,7 +366,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetCommitTransaction.
     /// </summary>
-    /// <seealso cref="Windows7.Windows7Grbits.ForceNewLog"/>
+    /// <seealso cref = "Server2003.Server2003Grbits.WaitAllLevel0Commit"/>
+    /// <seealso cref = "Windows7.Windows7Grbits.ForceNewLog"/>
     [Flags]
     public enum CommitTransactionGrbit
     {
@@ -375,7 +382,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// to the caller. This drastically reduces the duration of a commit operation
         /// at the cost of durability. Any transaction that is not flushed to the log
         /// before a crash will be automatically aborted during crash recovery during
-        /// the next call to JetInit. If WaitLastLevel0Commit or WaitAllLevel0Commit
+        /// the next call to JetInit. If <see cref="WaitLastLevel0Commit"/> or <see cref="Server2003.Server2003Grbits.WaitAllLevel0Commit"/>
         /// are specified, this option is ignored.
         /// </summary>
         LazyFlush = 0x1,
@@ -612,8 +619,8 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
 
         /// <summary>
-        /// This option is used to append data to a column of type JET_coltypLongText
-        /// or JET_coltypLongBinary. The same behavior can be achieved by determining
+        /// This option is used to append data to a column of type <see cref="JET_coltyp.LongText"/>
+        /// or <see cref="JET_coltyp.LongBinary"/>. The same behavior can be achieved by determining
         /// the size of the existing long value and specifying ibLongValue in psetinfo.
         /// However, its simpler to use this grbit since knowing the size of the existing
         /// column value is not necessary.
@@ -635,9 +642,9 @@ namespace Microsoft.Isam.Esent.Interop
         RevertToDefaultValue = 0x200,
 
         /// <summary>
-        /// This option is used to force a long value, columns of type JET_coltyp.LongText
-        /// or JET_coltyp.LongBinary, to be stored separately from the remainder of record
-        /// data. This occurs normally when the size of the long value prevents it from being 
+        /// This option is used to force a long value, columns of type <see cref="JET_coltyp.LongText"/>
+        /// or <see cref="JET_coltyp.LongBinary"/>, to be stored separately from the remainder of record
+        /// data. This occurs normally when the size of the long value prevents it from being
         /// stored with remaining record data. However, this option can be used to force the
         /// long value to be stored separately. Note that long values four bytes in size
         /// of smaller cannot be forced to be separate. In such cases, the option is ignored.
@@ -667,7 +674,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// This option is used to enforce that all values in a multi-valued column are
         /// distinct. This option compares the key normalized transformation of column
         /// data, to other similarly transformed existing column values and an error is
-        /// returned if a duplicate is found. If this option is given, then AppendLV, 
+        /// returned if a duplicate is found. If this option is given, then AppendLV,
         /// OverwriteLV and SizeLV cannot also be given.
         /// </summary>
         UniqueNormalizedMultiValues = 0x100,
@@ -712,34 +719,34 @@ namespace Microsoft.Isam.Esent.Interop
         /// can be avoided when needed data is available from index entries themselves.
         /// </summary>
         RetrieveFromIndex = 0x2,
-        
+
         /// <summary>
         /// This option is used to retrieve column values from the index bookmark,
         /// and may differ from the index value when a column appears both in the
         /// primary index and the current index. This option should not be specified
         /// if the current index is the clustered, or primary, index. This bit cannot
-        /// be set if RetrieveFromIndex is also set. 
+        /// be set if RetrieveFromIndex is also set.
         /// </summary>
         RetrieveFromPrimaryBookmark = 0x4,
 
         /// <summary>
         /// This option is used to retrieve the sequence number of a multi-valued
         /// column value in JET_RETINFO.itagSequence. Retrieving the sequence number
-        /// can be a costly operation and should only be done if necessary. 
+        /// can be a costly operation and should only be done if necessary.
         /// </summary>
         RetrieveTag = 0x8,
 
         /// <summary>
         /// This option is used to retrieve multi-valued column NULL values. If
         /// this option is not specified, multi-valued column NULL values will
-        /// automatically be skipped. 
+        /// automatically be skipped.
         /// </summary>
         RetrieveNull = 0x10,
 
         /// <summary>
         /// This option affects only multi-valued columns and causes a NULL
         /// value to be returned when the requested sequence number is 1 and
-        /// there are no set values for the column in the record. 
+        /// there are no set values for the column in the record.
         /// </summary>
         RetrieveIgnoreDefault = 0x20,
     }
@@ -795,7 +802,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// match their default values.
         /// It is important to remember that this option affects the output of
         /// <see cref="Api.JetEnumerateColumns(JET_SESID, JET_TABLEID, EnumerateColumnsGrbit, out IEnumerable&lt;EnumeratedColumn&gt;)"/>
-        /// and its associated overloads when used with 
+        /// and its associated overloads when used with
         /// <see cref="EnumerateColumnsGrbit.EnumeratePresenceOnly"/> or
         /// <see cref="EnumerateColumnsGrbit.EnumerateTaggedOnly"/>.
         /// </summary>
@@ -815,7 +822,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// when numColumnids is zero), only tagged column values will be returned.
         /// This option is not allowed when enumerating a specific array of column IDs.
         /// </summary>
-        EnumerateTaggedOnly = 0x00040000, 
+        EnumerateTaggedOnly = 0x00040000,
     }
 
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
@@ -970,7 +977,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// The search key should be constructed such that the current key
         /// column is considered to be a prefix wildcard and that any key
         /// columns that come after the current key column should be considered
-        /// to be wildcards. 
+        /// to be wildcards.
         /// </summary>
         PartialColumnStartLimit = 0x400,
 
@@ -1042,7 +1049,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// An index range will automatically be setup for all keys that
-        /// exactly match the search key. 
+        /// exactly match the search key.
         /// </summary>
         SetIndexRange = 0x20,
     }
@@ -1066,7 +1073,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The search key in the cursor represents the search criteria for the
         /// index entry closest to the end of the index that will match the index
-        /// range. 
+        /// range.
         /// </summary>
         RangeUpperLimit = 0x2,
 
@@ -1108,7 +1115,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for <see cref="Api.JetSetCurrentIndex2"/> and 
+    /// Options for <see cref="Api.JetSetCurrentIndex2"/> and
     /// <see cref="Api.JetSetCurrentIndex3"/>.
     /// </summary>
     [Flags]
@@ -1202,6 +1209,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for the <see cref="JET_COLUMNDEF"/> structure.
     /// </summary>
+    /// <seealso cref="Server2003.Server2003Grbits.ColumnDeleteOnZero"/>
     /// <seealso cref="Windows7.Windows7Grbits.ColumnCompressed"/>
     [Flags]
     public enum ColumndefGrbit
@@ -1270,11 +1278,11 @@ namespace Microsoft.Isam.Esent.Interop
         ///  Specifies that a column is an escrow update column. An escrow update column can be
         ///  updated concurrently by different sessions with JetEscrowUpdate and will maintain
         ///  transactional consistency. An escrow update column must also meet the following conditions:
-        ///  An escrow update column can be created only when the table is empty. 
-        ///  An escrow update column must be of type JET_coltypLong. 
+        ///  An escrow update column can be created only when the table is empty.
+        ///  An escrow update column must be of type JET_coltypLong.
         ///  An escrow update column must have a default value.
         ///  ColumnEscrowUpdate cannot be used in conjunction with <see cref="ColumnTagged"/>,
-        ///  <see cref="ColumnVersion"/>, or <see cref="ColumnAutoincrement"/>. 
+        ///  <see cref="ColumnVersion"/>, or <see cref="ColumnAutoincrement"/>.
         /// </summary>
         ColumnEscrowUpdate = 0x800,
 
@@ -1292,7 +1300,7 @@ namespace Microsoft.Isam.Esent.Interop
         ColumnMaybeNull = 0x2000,
 
         /// <summary>
-        /// When the escrow-update column reaches a value of zero, the callback function will be invoked.
+        /// DEPRECATED / Not Fully Implemented: use ColumnDeleteOnZero <see cref="Server2003.Server2003Grbits.ColumnDeleteOnZero"/> instead.
         /// </summary>
         ColumnFinalize = 0x4000,
 
@@ -1365,7 +1373,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <seealso cref="Windows10.Windows10Grbits.IndexCreateImmutableStructure"/>
     [Flags]
     public enum CreateIndexGrbit
-    {        
+    {
         /// <summary>
         /// Default options.
         /// </summary>
@@ -1490,50 +1498,50 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
 
         /// <summary>
-        /// This option requests that the temporary table be flexible enough to 
-        /// permit the use of JetSeek to lookup records by index key. If this 
-        /// functionality it not required then it is best to not request it. If this 
-        /// functionality is not requested then the temporary table manager may be 
-        /// able to choose a strategy for managing the temporary table that will 
-        /// result in improved performance. 
+        /// This option requests that the temporary table be flexible enough to
+        /// permit the use of JetSeek to lookup records by index key. If this
+        /// functionality it not required then it is best to not request it. If this
+        /// functionality is not requested then the temporary table manager may be
+        /// able to choose a strategy for managing the temporary table that will
+        /// result in improved performance.
         /// </summary>
         Indexed = 0x1,
 
         /// <summary>
-        /// This option requests that records with duplicate index keys be removed 
-        /// from the final set of records in the temporary table. 
-        /// Prior to Windows Server 2003, the database engine always assumed this 
-        /// option to be in effect due to the fact that all clustered indexes must 
-        /// also be a primary key and thus must be unique. As of Windows Server 
-        /// 2003, it is now possible to create a temporary table that does NOT 
+        /// This option requests that records with duplicate index keys be removed
+        /// from the final set of records in the temporary table.
+        /// Prior to Windows Server 2003, the database engine always assumed this
+        /// option to be in effect due to the fact that all clustered indexes must
+        /// also be a primary key and thus must be unique. As of Windows Server
+        /// 2003, it is now possible to create a temporary table that does NOT
         /// remove duplicates when the <see cref="Server2003.Server2003Grbits.ForwardOnly"/>
-        /// option is also specified. 
-        /// It is not possible to know which duplicate will win and which duplicates 
-        /// will be discarded in general. However, when the 
-        /// <see cref="ErrorOnDuplicateInsertion"/> option is requested then the first 
-        /// record with a given index key to be inserted into the temporary table 
-        /// will always win. 
+        /// option is also specified.
+        /// It is not possible to know which duplicate will win and which duplicates
+        /// will be discarded in general. However, when the
+        /// <see cref="ErrorOnDuplicateInsertion"/> option is requested then the first
+        /// record with a given index key to be inserted into the temporary table
+        /// will always win.
         /// </summary>
         Unique = 0x2,
 
         /// <summary>
-        /// This option requests that the temporary table be flexible enough to 
-        /// allow records that have previously been inserted to be subsequently 
-        /// changed. If this functionality it not required then it is best to not 
-        /// request it. If this functionality is not requested then the temporary 
-        /// table manager may be able to choose a strategy for managing the 
-        /// temporary table that will result in improved performance. 
+        /// This option requests that the temporary table be flexible enough to
+        /// allow records that have previously been inserted to be subsequently
+        /// changed. If this functionality it not required then it is best to not
+        /// request it. If this functionality is not requested then the temporary
+        /// table manager may be able to choose a strategy for managing the
+        /// temporary table that will result in improved performance.
         /// </summary>
         Updatable = 0x4,
 
         /// <summary>
-        /// This option requests that the temporary table be flexible enough to 
-        /// allow records to be scanned in arbitrary order and direction using 
+        /// This option requests that the temporary table be flexible enough to
+        /// allow records to be scanned in arbitrary order and direction using
         /// <see cref="Api.JetMove(JET_SESID,JET_TABLEID,int,MoveGrbit)"/>.
-        /// If this functionality it not required then it is best to not 
-        /// request it. If this functionality is not requested then the temporary 
-        /// table manager may be able to choose a strategy for managing the 
-        /// temporary table that will result in improved performance. 
+        /// If this functionality it not required then it is best to not
+        /// request it. If this functionality is not requested then the temporary
+        /// table manager may be able to choose a strategy for managing the
+        /// temporary table that will result in improved performance.
          /// </summary>
         Scrollable = 0x8,
 
@@ -1551,16 +1559,16 @@ namespace Microsoft.Isam.Esent.Interop
         ForceMaterialization = 0x20,
 
         /// <summary>
-        /// This option requests that any attempt to insert a record with the same 
-        /// index key as a previously inserted record will immediately fail with 
-        /// <see cref="JET_err.KeyDuplicate"/>. If this option is not requested then a duplicate 
-        /// may be detected immediately and fail or may be silently removed later 
-        /// depending on the strategy chosen by the database engine to implement the 
-        /// temporary table based on the requested functionality. If this 
-        /// functionality it not required then it is best to not request it. If this 
-        /// functionality is not requested then the temporary table manager may be 
-        /// able to choose a strategy for managing the temporary table that will 
-        /// result in improved performance. 
+        /// This option requests that any attempt to insert a record with the same
+        /// index key as a previously inserted record will immediately fail with
+        /// <see cref="JET_err.KeyDuplicate"/>. If this option is not requested then a duplicate
+        /// may be detected immediately and fail or may be silently removed later
+        /// depending on the strategy chosen by the database engine to implement the
+        /// temporary table based on the requested functionality. If this
+        /// functionality it not required then it is best to not request it. If this
+        /// functionality is not requested then the temporary table manager may be
+        /// able to choose a strategy for managing the temporary table that will
+        /// result in improved performance.
         /// </summary>
         ErrorOnDuplicateInsertion = 0x20,
     }
@@ -1661,7 +1669,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Stops a defragmentation task.
         /// </summary>
-        BatchStop = 0x2, 
+        BatchStop = 0x2,
     }
 
     /// <summary>
@@ -1713,7 +1721,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Default options.
         /// </summary>
         None = 0x0,
-        
+
         // Generic bits.
 
         /// <summary>
@@ -1745,14 +1753,14 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// By setting this the client indicates that forward sequential scan is
-        /// the predominant usage pattern of this table (causing B+ Tree defrag to 
+        /// the predominant usage pattern of this table (causing B+ Tree defrag to
         /// be auto-triggered to clean it up if fragmented).
         /// </summary>
         RetrieveHintTableScanForward = 0x00000010,
 
         /// <summary>
         /// By setting this the client indicates that backwards sequential scan
-        /// is the predominant usage pattern of this table(causing B+ Tree defrag to 
+        /// is the predominant usage pattern of this table(causing B+ Tree defrag to
         /// be auto-triggered to clean it up if fragmented).
         /// </summary>
         RetrieveHintTableScanBackward = 0x00000020,

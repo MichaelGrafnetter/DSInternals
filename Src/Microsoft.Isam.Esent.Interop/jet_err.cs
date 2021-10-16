@@ -74,6 +74,26 @@ namespace Microsoft.Isam.Esent.Interop
         UnloadableOSFunctionality = -113,
 
         /// <summary>
+        /// A required hardware device or functionality was missing.
+        /// </summary>
+        DeviceMissing = -114,
+
+        /// <summary>
+        /// A required hardware device was misconfigured externally.
+        /// </summary>
+        DeviceMisconfigured = -115,
+
+        /// <summary>
+        /// Timeout occurred while waiting for a hardware device to respond.
+        /// </summary>
+        DeviceTimeout = -116,
+
+        /// <summary>
+        /// A required hardware device didn't function as expected.
+        /// </summary>
+        DeviceFailure = -118,
+
+        /// <summary>
         /// Buffer dependencies improperly set. Recovery failure
         /// </summary>
         DatabaseBufferDependenciesCorrupted = -255,
@@ -214,7 +234,7 @@ namespace Microsoft.Isam.Esent.Interop
         NoBackupDirectory = -503,
 
         /// <summary>
-        /// The backup directory is not emtpy
+        /// The backup directory is not empty
         /// </summary>
         BackupDirectoryNotEmpty = -504,
 
@@ -239,7 +259,7 @@ namespace Microsoft.Isam.Esent.Interop
         LogWriteFail = -510,
 
         /// <summary>
-        /// Try to log something after recovery faild
+        /// Try to log something after recovery failed
         /// </summary>
         LogDisabledDueToRecoveryFailure = -511,
 
@@ -269,7 +289,7 @@ namespace Microsoft.Isam.Esent.Interop
         LoggingDisabled = -516,
 
         /// <summary>
-        /// Log buffer is too small for recovery
+        /// An operation generated a log record which was too large to fit in the log buffer or in a single log file
         /// </summary>
         LogBufferTooSmall = -517,
 
@@ -1029,6 +1049,16 @@ namespace Microsoft.Isam.Esent.Interop
         InvalidSesparamId = -1093,
 
         /// <summary>
+        /// There are too many records to enumerate, switch to an API that handles 64-bit numbers
+        /// </summary>
+        TooManyRecords = -1094,
+
+        /// <summary>
+        /// This JET_dbparam* identifier is not known to the ESE engine.
+        /// </summary>
+        InvalidDbparamId = -1095,
+
+        /// <summary>
         /// Out of sessions
         /// </summary>
         OutOfSessions = -1101,
@@ -1069,7 +1099,7 @@ namespace Microsoft.Isam.Esent.Interop
         TransReadOnly = -1110,
 
         /// <summary>
-        /// Attempt to replace the same record by two diffrerent cursors in the same session
+        /// Attempt to replace the same record by two different cursors in the same session
         /// </summary>
         SessionWriteConflict = -1111,
 
@@ -1694,7 +1724,7 @@ namespace Microsoft.Isam.Esent.Interop
         RecordNoCopy = -1602,
 
         /// <summary>
-        /// Currently not on a record
+        /// Currency not on a record
         /// </summary>
         NoCurrentRecord = -1603,
 
@@ -1839,7 +1869,7 @@ namespace Microsoft.Isam.Esent.Interop
         SessionContextAlreadySet = -1912,
 
         /// <summary>
-        /// Tried to reset session context, but current thread did not orignally set the session context
+        /// Tried to reset session context, but current thread did not originally set the session context
         /// </summary>
         SessionContextNotSetByThisThread = -1913,
 

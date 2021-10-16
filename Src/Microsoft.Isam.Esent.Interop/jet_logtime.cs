@@ -68,7 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the <see cref="JET_LOGTIME"/> struct.
         /// </summary>
         /// <param name="time">
-        /// The DateTime to intialize the structure with.
+        /// The DateTime to initialize the structure with.
         /// </param>
         internal JET_LOGTIME(DateTime time)
         {

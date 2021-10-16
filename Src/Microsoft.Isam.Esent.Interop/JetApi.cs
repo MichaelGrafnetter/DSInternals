@@ -113,7 +113,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetCreateInstance2(out instance, name, null, CreateInstanceGrbit.None);
 #else
-            TraceFunctionCall("JetCreateInstance");
+            TraceFunctionCall();
             instance.Value = IntPtr.Zero;
             if (this.Capabilities.SupportsUnicodePaths)
             {
@@ -144,7 +144,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetCreateInstance2(out JET_INSTANCE instance, string name, string displayName, CreateInstanceGrbit grbit)
         {
-            TraceFunctionCall("JetCreateInstance2");
+            TraceFunctionCall();
             instance.Value = IntPtr.Zero;
 
 #if MANAGEDESENT_ON_WSA
@@ -175,7 +175,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetInit3(ref instance, null, InitGrbit.None);
 #else
-            TraceFunctionCall("JetInit");
+            TraceFunctionCall();
             return Err(NativeMethods.JetInit(ref instance.Value));
 #endif // MANAGEDESENT_ON_WSA
         }
@@ -197,7 +197,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetInit3(ref instance, null, grbit);
 #else
-            TraceFunctionCall("JetInit2");
+            TraceFunctionCall();
             return Err(NativeMethods.JetInit2(ref instance.Value, (uint)grbit));
 #endif // MANAGEDESENT_ON_WSA
         }
@@ -220,7 +220,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code or warning.</returns>
         public int JetInit3(ref JET_INSTANCE instance, JET_RSTINFO recoveryOptions, InitGrbit grbit)
         {
-            TraceFunctionCall("JetInit3");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetInit3");
 
             if (null != recoveryOptions)
@@ -281,7 +281,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetGetInstanceInfo(out int numInstances, out JET_INSTANCE_INFO[] instances)
         {
-            TraceFunctionCall("JetGetInstanceInfo");
+            TraceFunctionCall();
 
             unsafe
             {
@@ -316,7 +316,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetGetInstanceMiscInfo(JET_INSTANCE instance, out JET_SIGNATURE signature, JET_InstanceMiscInfo infoLevel)
         {
-            TraceFunctionCall("JetGetInstanceMiscInfo");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetGetInstanceMiscInfo");
 
             var nativeSignature = new NATIVE_SIGNATURE();
@@ -339,7 +339,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetStopBackupInstance(JET_INSTANCE instance)
         {
-            TraceFunctionCall("JetStopBackupInstance");
+            TraceFunctionCall();
             return Err(NativeMethods.JetStopBackupInstance(instance.Value));
         }
 
@@ -350,7 +350,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetStopServiceInstance(JET_INSTANCE instance)
         {
-            TraceFunctionCall("JetStopServiceInstance");
+            TraceFunctionCall();
             return Err(NativeMethods.JetStopServiceInstance(instance.Value));
         }
 #endif // !MANAGEDESENT_ON_WSA
@@ -365,7 +365,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_INSTANCE instance,
             StopServiceGrbit grbit)
         {
-            TraceFunctionCall("JetStopServiceInstance2");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetStopServiceInstance2");
             return Err(NativeMethods.JetStopServiceInstance2(instance.Value, unchecked((uint)grbit)));
         }
@@ -381,7 +381,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetTerm2(instance, TermGrbit.None);
 #else
-            TraceFunctionCall("JetTerm");
+            TraceFunctionCall();
             this.callbackWrappers.Collect();
             if (!instance.IsInvalid)
             {
@@ -401,7 +401,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetTerm2(JET_INSTANCE instance, TermGrbit grbit)
         {
-            TraceFunctionCall("JetTerm2");
+            TraceFunctionCall();
             this.callbackWrappers.Collect();
             if (!instance.IsInvalid)
             {
@@ -425,7 +425,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, IntPtr paramValue, string paramString)
         {
-            TraceFunctionCall("JetSetSystemParameter");
+            TraceFunctionCall();
             unsafe
             {
                 IntPtr* pinstance = (IntPtr.Zero == instance.Value) ? null : &instance.Value;
@@ -457,7 +457,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, JET_CALLBACK paramValue, string paramString)
         {
-            TraceFunctionCall("JetSetSystemParameter");
+            TraceFunctionCall();
 
             unsafe
             {
@@ -528,7 +528,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref IntPtr paramValue, out string paramString, int maxParam)
         {
-            TraceFunctionCall("JetGetSystemParameter");
+            TraceFunctionCall();
             CheckNotNegative(maxParam, "maxParam");
 
             uint bytesMax = checked((uint)(this.Capabilities.SupportsUnicodePaths ? maxParam * sizeof(char) : maxParam));
@@ -562,7 +562,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetGetVersion(JET_SESID sesid, out uint version)
         {
-            TraceFunctionCall("JetGetVersion");
+            TraceFunctionCall();
             uint nativeVersion;
             int err;
 
@@ -602,7 +602,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetCreateDatabase2(sesid, database, 0, out dbid, grbit);
 #else
-            TraceFunctionCall("JetCreateDatabase");
+            TraceFunctionCall();
             CheckNotNull(database, "database");
 
             dbid = JET_DBID.Nil;
@@ -630,7 +630,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetCreateDatabase2(JET_SESID sesid, string database, int maxPages, out JET_DBID dbid, CreateDatabaseGrbit grbit)
         {
-            TraceFunctionCall("JetCreateDatabase2");
+            TraceFunctionCall();
             CheckNotNull(database, "database");
             CheckNotNegative(maxPages, "maxPages");
 
@@ -661,7 +661,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetAttachDatabase2(sesid, database, 0, grbit);
 #else
-            TraceFunctionCall("JetAttachDatabase");
+            TraceFunctionCall();
             CheckNotNull(database, "database");
 
             if (this.Capabilities.SupportsUnicodePaths)
@@ -688,7 +688,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetAttachDatabase2(JET_SESID sesid, string database, int maxPages, AttachDatabaseGrbit grbit)
         {
-            TraceFunctionCall("JetAttachDatabase2");
+            TraceFunctionCall();
             CheckNotNull(database, "database");
             CheckNotNegative(maxPages, "maxPages");
 
@@ -717,7 +717,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetOpenDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, OpenDatabaseGrbit grbit)
         {
-            TraceFunctionCall("JetOpenDatabase");
+            TraceFunctionCall();
             CheckNotNull(database, "database");
             dbid = JET_DBID.Nil;
 
@@ -743,7 +743,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetCloseDatabase(JET_SESID sesid, JET_DBID dbid, CloseDatabaseGrbit grbit)
         {
-            TraceFunctionCall("JetCloseDatabase");
+            TraceFunctionCall();
             return Err(NativeMethods.JetCloseDatabase(sesid.Value, dbid.Value, (uint)grbit));
         }
 
@@ -755,7 +755,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetDetachDatabase(JET_SESID sesid, string database)
         {
-            TraceFunctionCall("JetDetachDatabase");
+            TraceFunctionCall();
 
 #if MANAGEDESENT_ON_WSA
             return this.JetDetachDatabase2(sesid, database, DetachDatabaseGrbit.None);
@@ -778,7 +778,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetDetachDatabase2(JET_SESID sesid, string database, DetachDatabaseGrbit grbit)
         {
-            TraceFunctionCall("JetDetachDatabase2");
+            TraceFunctionCall();
 
             if (this.Capabilities.SupportsUnicodePaths)
             {
@@ -821,7 +821,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             object ignored,
             CompactGrbit grbit)
         {
-            TraceFunctionCall("JetCompact");
+            TraceFunctionCall();
             CheckNotNull(sourceDatabase, "sourceDatabase");
             CheckNotNull(destinationDatabase, "destinationDatabase");
             if (null != ignored)
@@ -863,7 +863,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGrowDatabase(JET_SESID sesid, JET_DBID dbid, int desiredPages, out int actualPages)
         {
-            TraceFunctionCall("JetGrowDatabase");
+            TraceFunctionCall();
             CheckNotNegative(desiredPages, "desiredPages");
 
             uint actualPagesNative = 0;
@@ -885,7 +885,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetDatabaseSize(JET_SESID sesid, string database, int desiredPages, out int actualPages)
         {
-            TraceFunctionCall("JetSetDatabaseSize");
+            TraceFunctionCall();
             CheckNotNegative(desiredPages, "desiredPages");
             CheckNotNull(database, "database");
 
@@ -921,7 +921,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out int value,
             JET_DbInfo infoLevel)
         {
-            TraceFunctionCall("JetGetDatabaseInfo");
+            TraceFunctionCall();
 #if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetGetDatabaseInfoW(sesid.Value, dbid.Value, out value, sizeof(int), (uint)infoLevel));
 #else
@@ -943,7 +943,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_DBINFOMISC dbinfomisc,
             JET_DbInfo infoLevel)
         {
-            TraceFunctionCall("JetGetDatabaseInfo");
+            TraceFunctionCall();
             int err = (int)JET_err.Success;
             dbinfomisc = null;
 
@@ -1021,7 +1021,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out string value,
             JET_DbInfo infoLevel)
         {
-            TraceFunctionCall("JetGetDatabaseInfo");
+            TraceFunctionCall();
             int err;
 
             const int MaxCharacters = 1024;
@@ -1055,7 +1055,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out int value,
             JET_DbInfo infoLevel)
         {
-            TraceFunctionCall("JetGetDatabaseFileInfo");
+            TraceFunctionCall();
             int err;
 
             if (this.Capabilities.SupportsUnicodePaths)
@@ -1087,7 +1087,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out long value,
             JET_DbInfo infoLevel)
         {
-            TraceFunctionCall("JetGetDatabaseFileInfo");
+            TraceFunctionCall();
             int err;
 
             if (this.Capabilities.SupportsUnicodePaths)
@@ -1119,7 +1119,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_DBINFOMISC dbinfomisc,
             JET_DbInfo infoLevel)
         {
-            TraceFunctionCall("JetGetDatabaseFileInfo");
+            TraceFunctionCall();
             int err = (int)JET_err.Success;
             dbinfomisc = null;
 
@@ -1191,7 +1191,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetBackupInstance(
             JET_INSTANCE instance, string destination, BackupGrbit grbit, JET_PFNSTATUS statusCallback)
         {
-            TraceFunctionCall("JetBackupInstance");
+            TraceFunctionCall();
 
             var callbackWrapper = new StatusCallbackWrapper(statusCallback);
             IntPtr functionPointer = (null == statusCallback) ? IntPtr.Zero : Marshal.GetFunctionPointerForDelegate(callbackWrapper.NativeCallback);
@@ -1234,7 +1234,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetRestoreInstance(JET_INSTANCE instance, string source, string destination, JET_PFNSTATUS statusCallback)
         {
-            TraceFunctionCall("JetRestoreInstance");
+            TraceFunctionCall();
             CheckNotNull(source, "source");
 
             var callbackWrapper = new StatusCallbackWrapper(statusCallback);
@@ -1274,7 +1274,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetOSSnapshotPrepare(out JET_OSSNAPID snapid, SnapshotPrepareGrbit grbit)
         {
-            TraceFunctionCall("JetOSSnapshotPrepare");
+            TraceFunctionCall();
             snapid = JET_OSSNAPID.Nil;
             return Err(NativeMethods.JetOSSnapshotPrepare(out snapid.Value, (uint)grbit));
         }
@@ -1288,7 +1288,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetOSSnapshotPrepareInstance(JET_OSSNAPID snapshot, JET_INSTANCE instance, SnapshotPrepareInstanceGrbit grbit)
         {
-            TraceFunctionCall("JetOSSnapshotPrepareInstance");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetOSSnapshotPrepareInstance");
             return Err(NativeMethods.JetOSSnapshotPrepareInstance(snapshot.Value, instance.Value, (uint)grbit));
         }
@@ -1310,7 +1310,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetOSSnapshotFreeze(JET_OSSNAPID snapshot, out int numInstances, out JET_INSTANCE_INFO[] instances, SnapshotFreezeGrbit grbit)
         {
-            TraceFunctionCall("JetOSSnapshotFreeze");
+            TraceFunctionCall();
 
             unsafe
             {
@@ -1349,7 +1349,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_INSTANCE_INFO[] instances,
             SnapshotGetFreezeInfoGrbit grbit)
         {
-            TraceFunctionCall("JetOSSnapshotGetFreezeInfo");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetOSSnapshotGetFreezeInfo");
             Debug.Assert(this.Capabilities.SupportsUnicodePaths, "JetOSSnapshotGetFreezeInfo is always Unicode");
 
@@ -1374,7 +1374,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetOSSnapshotThaw(JET_OSSNAPID snapid, SnapshotThawGrbit grbit)
         {
-            TraceFunctionCall("JetOSSnapshotThaw");
+            TraceFunctionCall();
             return Err(NativeMethods.JetOSSnapshotThaw(snapid.Value, (uint)grbit));
         }
 
@@ -1391,7 +1391,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetOSSnapshotTruncateLog(JET_OSSNAPID snapshot, SnapshotTruncateLogGrbit grbit)
         {
-            TraceFunctionCall("JetOSSnapshotTruncateLog");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetOSSnapshotTruncateLog");
             return Err(NativeMethods.JetOSSnapshotTruncateLog(snapshot.Value, (uint)grbit));
         }
@@ -1410,7 +1410,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetOSSnapshotTruncateLogInstance(JET_OSSNAPID snapshot, JET_INSTANCE instance, SnapshotTruncateLogGrbit grbit)
         {
-            TraceFunctionCall("JetOSSnapshotTruncateLogInstance");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetOSSnapshotTruncateLogInstance");
             return Err(NativeMethods.JetOSSnapshotTruncateLogInstance(snapshot.Value, instance.Value, (uint)grbit));
         }
@@ -1423,7 +1423,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetOSSnapshotEnd(JET_OSSNAPID snapid, SnapshotEndGrbit grbit)
         {
-            TraceFunctionCall("JetOSSnapshotEnd");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetOSSnapshotEnd");
             return Err(NativeMethods.JetOSSnapshotEnd(snapid.Value, (uint)grbit));
         }
@@ -1437,7 +1437,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetOSSnapshotAbort(JET_OSSNAPID snapid, SnapshotAbortGrbit grbit)
         {
-            TraceFunctionCall("JetOSSnapshotAbort");
+            TraceFunctionCall();
             this.CheckSupportsServer2003Features("JetOSSnapshotAbort");
             return Err(NativeMethods.JetOSSnapshotAbort(snapid.Value, (uint)grbit));
         }
@@ -1455,7 +1455,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetBeginExternalBackupInstance(JET_INSTANCE instance, BeginExternalBackupGrbit grbit)
         {
-            TraceFunctionCall("JetBeginExternalBackupInstance");
+            TraceFunctionCall();
             return Err(NativeMethods.JetBeginExternalBackupInstance(instance.Value, (uint)grbit));
         }
 
@@ -1468,7 +1468,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetCloseFileInstance(JET_INSTANCE instance, JET_HANDLE handle)
         {
-            TraceFunctionCall("JetCloseFileInstance");
+            TraceFunctionCall();
             return Err(NativeMethods.JetCloseFileInstance(instance.Value, handle.Value));
         }
 
@@ -1481,7 +1481,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetEndExternalBackupInstance(JET_INSTANCE instance)
         {
-            TraceFunctionCall("JetEndExternalBackupInstance");
+            TraceFunctionCall();
             return Err(NativeMethods.JetEndExternalBackupInstance(instance.Value));
         }
 
@@ -1495,7 +1495,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetEndExternalBackupInstance2(JET_INSTANCE instance, EndExternalBackupGrbit grbit)
         {
-            TraceFunctionCall("JetEndExternalBackupInstance2");
+            TraceFunctionCall();
             return Err(NativeMethods.JetEndExternalBackupInstance2(instance.Value, (uint)grbit));
         }
 
@@ -1529,7 +1529,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetGetAttachInfoInstance(JET_INSTANCE instance, out string files, int maxChars, out int actualChars)
         {
-            TraceFunctionCall("JetGetAttachInfoInstance");
+            TraceFunctionCall();
             CheckNotNegative(maxChars, "maxChars");
 
             // These strings have embedded nulls so we can't use a StringBuilder.
@@ -1584,7 +1584,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetGetLogInfoInstance(JET_INSTANCE instance, out string files, int maxChars, out int actualChars)
         {
-            TraceFunctionCall("JetGetLogInfoInstance");
+            TraceFunctionCall();
             CheckNotNegative(maxChars, "maxChars");
 
             // These strings have embedded nulls so we can't use a StringBuilder.
@@ -1638,7 +1638,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetGetTruncateLogInfoInstance(JET_INSTANCE instance, out string files, int maxChars, out int actualChars)
         {
-            TraceFunctionCall("JetGetTruncateLogInfoInstance");
+            TraceFunctionCall();
             CheckNotNegative(maxChars, "maxChars");
 
             // These strings have embedded nulls so we can't use a StringBuilder.
@@ -1682,7 +1682,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetOpenFileInstance(JET_INSTANCE instance, string file, out JET_HANDLE handle, out long fileSizeLow, out long fileSizeHigh)
         {
-            TraceFunctionCall("JetOpenFileInstance");
+            TraceFunctionCall();
             CheckNotNull(file, "file");
             handle = JET_HANDLE.Nil;
             int err;
@@ -1715,7 +1715,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetReadFileInstance(JET_INSTANCE instance, JET_HANDLE file, byte[] buffer, int bufferSize, out int bytesRead)
         {
-            TraceFunctionCall("JetReadFileInstance");
+            TraceFunctionCall();
             CheckNotNull(buffer, "buffer");
             CheckDataSize(buffer, bufferSize, "bufferSize");
 
@@ -1757,7 +1757,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         public int JetTruncateLogInstance(JET_INSTANCE instance)
         {
-            TraceFunctionCall("JetTruncateLogInstance");
+            TraceFunctionCall();
             return Err(NativeMethods.JetTruncateLogInstance(instance.Value));
         }
 #endif // !MANAGEDESENT_ON_WSA
@@ -1775,7 +1775,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetBeginSession(JET_INSTANCE instance, out JET_SESID sesid, string username, string password)
         {
-            TraceFunctionCall("JetBeginSession");
+            TraceFunctionCall();
             sesid = JET_SESID.Nil;
 #if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetBeginSessionW(instance.Value, out sesid.Value, username, password));
@@ -1795,7 +1795,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetSessionContext(JET_SESID sesid, IntPtr context)
         {
-            TraceFunctionCall("JetSetSessionContext");
+            TraceFunctionCall();
             return Err(NativeMethods.JetSetSessionContext(sesid.Value, context));
         }
 
@@ -1807,7 +1807,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetResetSessionContext(JET_SESID sesid)
         {
-            TraceFunctionCall("JetResetSessionContext");
+            TraceFunctionCall();
             return Err(NativeMethods.JetResetSessionContext(sesid.Value));
         }
 
@@ -1819,7 +1819,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetEndSession(JET_SESID sesid, EndSessionGrbit grbit)
         {
-            TraceFunctionCall("JetEndSession");
+            TraceFunctionCall();
             return Err(NativeMethods.JetEndSession(sesid.Value, (uint)grbit));
         }
 
@@ -1832,7 +1832,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetDupSession(JET_SESID sesid, out JET_SESID newSesid)
         {
-            TraceFunctionCall("JetDupSession");
+            TraceFunctionCall();
             newSesid = JET_SESID.Nil;
             return Err(NativeMethods.JetDupSession(sesid.Value, out newSesid.Value));
         }
@@ -1850,7 +1850,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the operation fails.</returns>
         public int JetGetThreadStats(out JET_THREADSTATS threadstats)
         {
-            TraceFunctionCall("JetGetThreadStats");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetGetThreadStats");
 
             // To speed up the interop we use unsafe code to avoid initializing
@@ -1881,7 +1881,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetOpenTable(JET_SESID sesid, JET_DBID dbid, string tablename, byte[] parameters, int parametersLength, OpenTableGrbit grbit, out JET_TABLEID tableid)
         {
-            TraceFunctionCall("JetOpenTable");
+            TraceFunctionCall();
             tableid = JET_TABLEID.Nil;
             CheckNotNull(tablename, "tablename");
             CheckDataSize(parameters, parametersLength, "parametersLength");
@@ -1901,7 +1901,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetCloseTable(JET_SESID sesid, JET_TABLEID tableid)
         {
-            TraceFunctionCall("JetCloseTable");
+            TraceFunctionCall();
             return Err(NativeMethods.JetCloseTable(sesid.Value, tableid.Value));
         }
 
@@ -1923,7 +1923,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetDupCursor(JET_SESID sesid, JET_TABLEID tableid, out JET_TABLEID newTableid, DupCursorGrbit grbit)
         {
-            TraceFunctionCall("JetDupCursor");
+            TraceFunctionCall();
             newTableid = JET_TABLEID.Nil;
             return Err(NativeMethods.JetDupCursor(sesid.Value, tableid.Value, out newTableid.Value, (uint)grbit));
         }
@@ -1941,7 +1941,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetComputeStats(JET_SESID sesid, JET_TABLEID tableid)
         {
-            TraceFunctionCall("JetComputeStats");
+            TraceFunctionCall();
             return Err(NativeMethods.JetComputeStats(sesid.Value, tableid.Value));
         }
 
@@ -1961,7 +1961,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetLS(JET_SESID sesid, JET_TABLEID tableid, JET_LS ls, LsGrbit grbit)
         {
-            TraceFunctionCall("JetSetLS");
+            TraceFunctionCall();
             return Err(NativeMethods.JetSetLS(sesid.Value, tableid.Value, ls.Value, (uint)grbit));
         }
 
@@ -1980,7 +1980,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetLS(JET_SESID sesid, JET_TABLEID tableid, out JET_LS ls, LsGrbit grbit)
         {
-            TraceFunctionCall("JetGetLS");
+            TraceFunctionCall();
             IntPtr native;
             int err = NativeMethods.JetGetLS(sesid.Value, tableid.Value, out native, (uint)grbit);
             ls = new JET_LS { Value = native };
@@ -2000,7 +2000,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetCursorInfo(JET_SESID sesid, JET_TABLEID tableid)
         {
-            TraceFunctionCall("JetGetCursorInfo");
+            TraceFunctionCall();
             return Err(NativeMethods.JetGetCursorInfo(sesid.Value, tableid.Value, IntPtr.Zero, 0, 0));
         }
 #endif // !MANAGEDESENT_ON_WSA
@@ -2017,7 +2017,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetBeginTransaction(JET_SESID sesid)
         {
-            TraceFunctionCall("JetBeginTransaction");
+            TraceFunctionCall();
 #if MANAGEDESENT_ON_WSA
             // 19513 is an arbitrary number.
             return this.JetBeginTransaction3(sesid, 19513, BeginTransactionGrbit.None);
@@ -2035,7 +2035,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetBeginTransaction2(JET_SESID sesid, BeginTransactionGrbit grbit)
         {
-            TraceFunctionCall("JetBeginTransaction2");
+            TraceFunctionCall();
 #if MANAGEDESENT_ON_WSA
             // 33193 is an arbitrary number.
             return this.JetBeginTransaction3(sesid, 33193, BeginTransactionGrbit.None);
@@ -2055,7 +2055,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetCommitTransaction(JET_SESID sesid, CommitTransactionGrbit grbit)
         {
-            TraceFunctionCall("JetCommitTransaction");
+            TraceFunctionCall();
 #if MANAGEDESENT_ON_WSA
             JET_COMMIT_ID commitId;
             return this.JetCommitTransaction2(sesid, grbit, TimeSpan.Zero, out commitId);
@@ -2075,7 +2075,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetRollback(JET_SESID sesid, RollbackTransactionGrbit grbit)
         {
-            TraceFunctionCall("JetRollback");
+            TraceFunctionCall();
             return Err(NativeMethods.JetRollback(sesid.Value, unchecked((uint)grbit)));
         }
 
@@ -2097,7 +2097,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetCreateTable(JET_SESID sesid, JET_DBID dbid, string table, int pages, int density, out JET_TABLEID tableid)
         {
-            TraceFunctionCall("JetCreateTable");
+            TraceFunctionCall();
             tableid = JET_TABLEID.Nil;
             CheckNotNull(table, "table");
 
@@ -2125,7 +2125,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetDeleteTable(JET_SESID sesid, JET_DBID dbid, string table)
         {
-            TraceFunctionCall("JetDeleteTable");
+            TraceFunctionCall();
             CheckNotNull(table, "table");
 
 #if MANAGEDESENT_ON_WSA
@@ -2148,7 +2148,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetAddColumn(JET_SESID sesid, JET_TABLEID tableid, string column, JET_COLUMNDEF columndef, byte[] defaultValue, int defaultValueSize, out JET_COLUMNID columnid)
         {
-            TraceFunctionCall("JetAddColumn");
+            TraceFunctionCall();
             columnid = JET_COLUMNID.Nil;
             CheckNotNull(column, "column");
             CheckNotNull(columndef, "columndef");
@@ -2192,7 +2192,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetDeleteColumn2(sesid, tableid, column, DeleteColumnGrbit.None);
 #else
-            TraceFunctionCall("JetDeleteColumn");
+            TraceFunctionCall();
             CheckNotNull(column, "column");
             return Err(NativeMethods.JetDeleteColumn(sesid.Value, tableid.Value, column));
 #endif
@@ -2208,7 +2208,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetDeleteColumn2(JET_SESID sesid, JET_TABLEID tableid, string column, DeleteColumnGrbit grbit)
         {
-            TraceFunctionCall("JetDeleteColumn2");
+            TraceFunctionCall();
             CheckNotNull(column, "column");
 #if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetDeleteColumn2W(sesid.Value, tableid.Value, column, (uint)grbit));
@@ -2244,7 +2244,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int keyDescriptionLength,
             int density)
         {
-            TraceFunctionCall("JetCreateIndex");
+            TraceFunctionCall();
 #if MANAGEDESENT_ON_WSA
             // Up-convert to JetCreateIndex2().
             JET_INDEXCREATE indexcreate = new JET_INDEXCREATE();
@@ -2292,7 +2292,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_INDEXCREATE[] indexcreates,
             int numIndexCreates)
         {
-            TraceFunctionCall("JetCreateIndex2");
+            TraceFunctionCall();
             CheckNotNull(indexcreates, "indexcreates");
             CheckNotNegative(numIndexCreates, "numIndexCreates");
             if (numIndexCreates > indexcreates.Length)
@@ -2337,7 +2337,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetDeleteIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
         {
-            TraceFunctionCall("JetDeleteIndex");
+            TraceFunctionCall();
             CheckNotNull(index, "index");
 
 #if MANAGEDESENT_ON_WSA
@@ -2380,7 +2380,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_TABLEID tableid,
             JET_COLUMNID[] columnids)
         {
-            TraceFunctionCall("JetOpenTempTable");
+            TraceFunctionCall();
             CheckNotNull(columns, "columnns");
             CheckDataSize(columns, numColumns, "numColumns");
             CheckNotNull(columnids, "columnids");
@@ -2443,7 +2443,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_TABLEID tableid,
             JET_COLUMNID[] columnids)
         {
-            TraceFunctionCall("JetOpenTempTable2");
+            TraceFunctionCall();
             CheckNotNull(columns, "columnns");
             CheckDataSize(columns, numColumns, "numColumns");
             CheckNotNull(columnids, "columnids");
@@ -2502,7 +2502,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_TABLEID tableid,
             JET_COLUMNID[] columnids)
         {
-            TraceFunctionCall("JetOpenTempTable3");
+            TraceFunctionCall();
             CheckNotNull(columns, "columnns");
             CheckDataSize(columns, numColumns, "numColumns");
             CheckNotNull(columnids, "columnids");
@@ -2551,7 +2551,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetOpenTemporaryTable(JET_SESID sesid, JET_OPENTEMPORARYTABLE temporarytable)
         {
-            TraceFunctionCall("JetOpenTemporaryTable");
+            TraceFunctionCall();
 #if MANAGEDESENT_ON_WSA
             return this.JetOpenTemporaryTable2(sesid, temporarytable);
 #else
@@ -2599,7 +2599,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_DBID dbid,
             JET_TABLECREATE tablecreate)
         {
-            TraceFunctionCall("JetCreateTableColumnIndex3");
+            TraceFunctionCall();
             CheckNotNull(tablecreate, "tablecreate");
 
 #if MANAGEDESENT_ON_WSA
@@ -2630,7 +2630,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 string columnName,
                 out JET_COLUMNDEF columndef)
         {
-            TraceFunctionCall("JetGetTableColumnInfo");
+            TraceFunctionCall();
             columndef = new JET_COLUMNDEF();
             CheckNotNull(columnName, "columnName");
 
@@ -2682,7 +2682,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 JET_COLUMNID columnid,
                 out JET_COLUMNDEF columndef)
         {
-            TraceFunctionCall("JetGetTableColumnInfo");
+            TraceFunctionCall();
             columndef = new JET_COLUMNDEF();
             int err;
 
@@ -2733,7 +2733,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 string columnName,
                 out JET_COLUMNBASE columnbase)
         {
-            TraceFunctionCall("JetGetTableColumnInfo");
+            TraceFunctionCall();
             CheckNotNull(columnName, "columnName");
 
             int err;
@@ -2791,7 +2791,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_COLUMNID columnid,
             out JET_COLUMNBASE columnbase)
         {
-            TraceFunctionCall("JetGetTableColumnInfo");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetGetTableColumnInfo");
             int err;
 
@@ -2827,7 +2827,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 ColInfoGrbit grbit,
                 out JET_COLUMNLIST columnlist)
         {
-            TraceFunctionCall("JetGetTableColumnInfo");
+            TraceFunctionCall();
             columnlist = new JET_COLUMNLIST();
             int err;
 
@@ -2886,7 +2886,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 string columnName,
                 out JET_COLUMNDEF columndef)
         {
-            TraceFunctionCall("JetGetColumnInfo");
+            TraceFunctionCall();
             columndef = new JET_COLUMNDEF();
             CheckNotNull(tablename, "tablename");
             CheckNotNull(columnName, "columnName");
@@ -2945,7 +2945,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 string ignored,
                 out JET_COLUMNLIST columnlist)
         {
-            TraceFunctionCall("JetGetColumnInfo");
+            TraceFunctionCall();
             columnlist = new JET_COLUMNLIST();
             CheckNotNull(tablename, "tablename");
             int err;
@@ -3003,7 +3003,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 string columnName,
                 out JET_COLUMNBASE columnbase)
         {
-            TraceFunctionCall("JetGetColumnInfo");
+            TraceFunctionCall();
             CheckNotNull(tablename, "tablename");
             CheckNotNull(columnName, "columnName");
             int err;
@@ -3066,7 +3066,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 JET_COLUMNID columnid,
                 out JET_COLUMNBASE columnbase)
         {
-            TraceFunctionCall("JetGetColumnInfo");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetGetColumnInfo");
             CheckNotNull(tablename, "tablename");
             int err;
@@ -3126,7 +3126,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetObjectInfo(JET_SESID sesid, JET_DBID dbid, out JET_OBJECTLIST objectlist)
         {
-            TraceFunctionCall("JetGetObjectInfo");
+            TraceFunctionCall();
             objectlist = new JET_OBJECTLIST();
 
             var nativeObjectlist = new NATIVE_OBJECTLIST();
@@ -3182,7 +3182,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             string objectName,
             out JET_OBJECTINFO objectinfo)
         {
-            TraceFunctionCall("JetGetObjectInfo");
+            TraceFunctionCall();
             objectinfo = new JET_OBJECTINFO();
 
             var nativeObjectinfo = new NATIVE_OBJECTINFO();
@@ -3241,7 +3241,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, out string indexName, int maxNameLength)
         {
-            TraceFunctionCall("JetGetCurrentIndex");
+            TraceFunctionCall();
             CheckNotNegative(maxNameLength, "maxNameLength");
 
             var name = new StringBuilder(maxNameLength);
@@ -3270,7 +3270,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out JET_OBJECTINFO result, JET_TblInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableInfo");
+            TraceFunctionCall();
             var nativeResult = new NATIVE_OBJECTINFO();
             int err;
 
@@ -3318,7 +3318,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out string result, JET_TblInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableInfo");
+            TraceFunctionCall();
             var resultBuffer = new StringBuilder(SystemParameters.NameMost + 1);
             int err;
 
@@ -3355,7 +3355,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out JET_DBID result, JET_TblInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableInfo");
+            TraceFunctionCall();
             result = JET_DBID.Nil;
 
             if (this.Capabilities.SupportsVistaFeatures)
@@ -3386,7 +3386,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, int[] result, JET_TblInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableInfo");
+            TraceFunctionCall();
             CheckNotNull(result, "result");
 
             uint bytesResult = checked((uint)(result.Length * sizeof(int)));
@@ -3418,7 +3418,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out int result, JET_TblInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableInfo");
+            TraceFunctionCall();
             uint nativeResult;
             int err;
             if (this.Capabilities.SupportsVistaFeatures)
@@ -3461,7 +3461,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out ushort result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetIndexInfo");
+            TraceFunctionCall();
             CheckNotNull(tablename, "tablename");
             int err;
 
@@ -3514,7 +3514,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out int result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetIndexInfo");
+            TraceFunctionCall();
             CheckNotNull(tablename, "tablename");
 
             uint nativeResult;
@@ -3570,7 +3570,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_INDEXID result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetIndexInfo");
+            TraceFunctionCall();
             CheckNotNull(tablename, "tablename");
 
             int err;
@@ -3624,7 +3624,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_INDEXLIST result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetIndexInfo");
+            TraceFunctionCall();
             CheckNotNull(tablename, "tablename");
             int err;
 
@@ -3681,7 +3681,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out string result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetIndexInfo");
+            TraceFunctionCall();
             CheckNotNull(tablename, "tablename");
             int err;
 
@@ -3725,7 +3725,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out ushort result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableIndexInfo");
+            TraceFunctionCall();
             int err;
 
             if (this.Capabilities.SupportsVistaFeatures)
@@ -3773,7 +3773,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out int result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableIndexInfo");
+            TraceFunctionCall();
 
             uint nativeResult;
             int err;
@@ -3824,7 +3824,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_INDEXID result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableIndexInfo");
+            TraceFunctionCall();
             int err;
 
             if (this.Capabilities.SupportsVistaFeatures)
@@ -3872,7 +3872,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_INDEXLIST result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableIndexInfo");
+            TraceFunctionCall();
 
             var nativeIndexlist = new NATIVE_INDEXLIST();
             nativeIndexlist.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_INDEXLIST)));
@@ -3925,7 +3925,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out string result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableIndexInfo");
+            TraceFunctionCall();
 
             // Will need to check for Windows 8 Features.
             //
@@ -3959,7 +3959,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetRenameTable(JET_SESID sesid, JET_DBID dbid, string tableName, string newTableName)
         {
-            TraceFunctionCall("JetRenameTable");
+            TraceFunctionCall();
             CheckNotNull(tableName, "tableName");
             CheckNotNull(newTableName, "newTableName");
 #if MANAGEDESENT_ON_WSA
@@ -3980,7 +3980,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetRenameColumn(JET_SESID sesid, JET_TABLEID tableid, string name, string newName, RenameColumnGrbit grbit)
         {
-            TraceFunctionCall("JetRenameColumn");
+            TraceFunctionCall();
             CheckNotNull(name, "name");
             CheckNotNull(newName, "newName");
 #if MANAGEDESENT_ON_WSA
@@ -4007,7 +4007,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetSetColumnDefaultValue(
             JET_SESID sesid, JET_DBID dbid, string tableName, string columnName, byte[] data, int dataSize, SetColumnDefaultValueGrbit grbit)
         {
-            TraceFunctionCall("JetSetColumnDefaultValue");
+            TraceFunctionCall();
             CheckNotNull(tableName, "tableName");
             CheckNotNull(columnName, "columnName");
             CheckDataSize(data, dataSize, "dataSize");
@@ -4032,7 +4032,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="bookmarkSize">The size of the bookmark.</param>        /// <returns>An error if the call fails.</returns>
         public int JetGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize)
         {
-            TraceFunctionCall("JetGotoBookmark");
+            TraceFunctionCall();
             CheckNotNull(bookmark, "bookmark");
             CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
@@ -4066,7 +4066,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int primaryKeySize,
             GotoSecondaryIndexBookmarkGrbit grbit)
         {
-            TraceFunctionCall("JetGotoSecondaryIndexBookmark");
+            TraceFunctionCall();
             CheckNotNull(secondaryKey, "secondaryKey");
             CheckDataSize(secondaryKey, secondaryKeySize, "secondaryKeySize");
             CheckDataSize(primaryKey, primaryKeySize, "primaryKeySize");
@@ -4097,7 +4097,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, IntPtr data, int dataSize, MakeKeyGrbit grbit)
         {
-            TraceFunctionCall("JetMakeKey");
+            TraceFunctionCall();
             CheckNotNegative(dataSize, "dataSize");
             return Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, data, checked((uint)dataSize), unchecked((uint)grbit)));
         }
@@ -4114,7 +4114,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning..</returns>
         public int JetSeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
         {
-            TraceFunctionCall("JetSeek");
+            TraceFunctionCall();
             return Err(NativeMethods.JetSeek(sesid.Value, tableid.Value, unchecked((uint)grbit)));
         }
 
@@ -4130,7 +4130,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetMove(JET_SESID sesid, JET_TABLEID tableid, int numRows, MoveGrbit grbit)
         {
-            TraceFunctionCall("JetMove");
+            TraceFunctionCall();
             return Err(NativeMethods.JetMove(sesid.Value, tableid.Value, numRows, unchecked((uint)grbit)));
         }
 
@@ -4148,7 +4148,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetIndexRange(JET_SESID sesid, JET_TABLEID tableid, SetIndexRangeGrbit grbit)
         {
-            TraceFunctionCall("JetSetIndexRange");
+            TraceFunctionCall();
             return Err(NativeMethods.JetSetIndexRange(sesid.Value, tableid.Value, unchecked((uint)grbit)));
         }
 
@@ -4177,7 +4177,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_RECORDLIST recordlist,
             IntersectIndexesGrbit grbit)
         {
-            TraceFunctionCall("JetIntersectIndexes");
+            TraceFunctionCall();
             CheckNotNull(ranges, "ranges");
             CheckDataSize(ranges, numRanges, "numRanges");
             if (numRanges < 2)
@@ -4222,7 +4222,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetSetCurrentIndex4(sesid, tableid, index, IntPtr.Zero, SetCurrentIndexGrbit.MoveFirst, 1);
 #else
-            TraceFunctionCall("JetSetCurrentIndex");
+            TraceFunctionCall();
 
             // A null index name is valid here -- it will set the table to the primary index
             return Err(NativeMethods.JetSetCurrentIndex(sesid.Value, tableid.Value, index));
@@ -4247,7 +4247,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetSetCurrentIndex4(sesid, tableid, index, IntPtr.Zero, grbit, 1);
 #else
-            TraceFunctionCall("JetSetCurrentIndex2");
+            TraceFunctionCall();
 
             // A null index name is valid here -- it will set the table to the primary index
             return Err(NativeMethods.JetSetCurrentIndex2(sesid.Value, tableid.Value, index, (uint)grbit));
@@ -4279,7 +4279,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetSetCurrentIndex4(sesid, tableid, index, IntPtr.Zero, grbit, itagSequence);
 #else
-            TraceFunctionCall("JetSetCurrentIndex3");
+            TraceFunctionCall();
 
             // A null index name is valid here -- it will set the table to the primary index
             return Err(NativeMethods.JetSetCurrentIndex3(sesid.Value, tableid.Value, index, (uint)grbit, checked((uint)itagSequence)));
@@ -4318,7 +4318,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             SetCurrentIndexGrbit grbit,
             int itagSequence)
         {
-            TraceFunctionCall("JetSetCurrentIndex4");
+            TraceFunctionCall();
 
             // A null index name is valid here -- it will set the table to the primary index
 #if MANAGEDESENT_ON_WSA
@@ -4344,11 +4344,35 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetIndexRecordCount(JET_SESID sesid, JET_TABLEID tableid, out int numRecords, int maxRecordsToCount)
         {
-            TraceFunctionCall("JetIndexRecordCount");
+            TraceFunctionCall();
             CheckNotNegative(maxRecordsToCount, "maxRecordsToCount");
             uint crec = 0;
             int err = Err(NativeMethods.JetIndexRecordCount(sesid.Value, tableid.Value, out crec, unchecked((uint)maxRecordsToCount))); // -1 is allowed
             numRecords = checked((int)crec);
+            return err;
+        }
+
+        /// <summary>
+        /// Counts the number of entries in the current index from the current position forward.
+        /// The current position is included in the count. The count can be greater than the
+        /// total number of records in the table if the current index is over a multi-valued
+        /// column and instances of the column have multiple-values. If the table is empty,
+        /// then 0 will be returned for the count.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to count the records in.</param>
+        /// <param name="numRecords">Returns the number of records.</param>
+        /// <param name="maxRecordsToCount">
+        /// The maximum number of records to count.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetIndexRecordCount2(JET_SESID sesid, JET_TABLEID tableid, out long numRecords, long maxRecordsToCount)
+        {
+            TraceFunctionCall();
+            CheckNotNegative(maxRecordsToCount, "maxRecordsToCount");
+            ulong crec = 0;
+            int err = Err(NativeMethods.JetIndexRecordCount2(sesid.Value, tableid.Value, out crec, unchecked((ulong)maxRecordsToCount)));
+            numRecords = checked((long)crec);
             return err;
         }
 
@@ -4364,7 +4388,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetTableSequential(JET_SESID sesid, JET_TABLEID tableid, SetTableSequentialGrbit grbit)
         {
-            TraceFunctionCall("JetSetTableSequential");
+            TraceFunctionCall();
             return Err(NativeMethods.JetSetTableSequential(sesid.Value, tableid.Value, (uint)grbit));
         }
 
@@ -4379,7 +4403,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetResetTableSequential(JET_SESID sesid, JET_TABLEID tableid, ResetTableSequentialGrbit grbit)
         {
-            TraceFunctionCall("JetResetTableSequential");
+            TraceFunctionCall();
             return Err(NativeMethods.JetResetTableSequential(sesid.Value, tableid.Value, (uint)grbit));
         }
 
@@ -4393,7 +4417,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetRecordPosition(JET_SESID sesid, JET_TABLEID tableid, out JET_RECPOS recpos)
         {
-            TraceFunctionCall("JetGetRecordPosition");
+            TraceFunctionCall();
             recpos = new JET_RECPOS();
             NATIVE_RECPOS native = recpos.GetNativeRecpos();
             int err = Err(NativeMethods.JetGetRecordPosition(sesid.Value, tableid.Value, out native, native.cbStruct));
@@ -4411,7 +4435,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS recpos)
         {
-            TraceFunctionCall("JetGotoPosition");
+            TraceFunctionCall();
             NATIVE_RECPOS native = recpos.GetNativeRecpos();
             return Err(NativeMethods.JetGotoPosition(sesid.Value, tableid.Value, ref native));
         }
@@ -4450,7 +4474,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out int keysPreread,
             PrereadKeysGrbit grbit)
         {
-            TraceFunctionCall("JetPrereadKeys");
+            TraceFunctionCall();
             this.CheckSupportsWindows7Features("JetPrereadKeys");
             CheckDataSize(keys, keyIndex, "keyIndex", keyCount, "keyCount");
             CheckDataSize(keyLengths, keyIndex, "keyIndex", keyCount, "keyCount");
@@ -4499,7 +4523,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
-            TraceFunctionCall("JetGetBookmark");
+            TraceFunctionCall();
             CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
             uint bytesActual = 0;
@@ -4544,7 +4568,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out int actualPrimaryKeySize,
             GetSecondaryIndexBookmarkGrbit grbit)
         {
-            TraceFunctionCall("JetGetSecondaryIndexBookmark");
+            TraceFunctionCall();
             CheckDataSize(secondaryKey, secondaryKeySize, "secondaryKeySize");
             CheckDataSize(primaryKey, primaryKeySize, "primaryKeySize");
 
@@ -4580,7 +4604,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
         {
-            TraceFunctionCall("JetRetrieveKey");
+            TraceFunctionCall();
             CheckDataSize(data, dataSize, "dataSize");
 
             uint bytesActual = 0;
@@ -4619,7 +4643,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
-            TraceFunctionCall("JetRetrieveColumn");
+            TraceFunctionCall();
             CheckNotNegative(dataSize, "dataSize");
 
             int err;
@@ -4677,7 +4701,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </returns>
         public unsafe int JetRetrieveColumns(JET_SESID sesid, JET_TABLEID tableid, NATIVE_RETRIEVECOLUMN* retrievecolumns, int numColumns)
         {
-            TraceFunctionCall("JetRetrieveColumns");
+            TraceFunctionCall();
             return Err(NativeMethods.JetRetrieveColumns(sesid.Value, tableid.Value, retrievecolumns, checked((uint)numColumns)));
         }
 
@@ -4735,7 +4759,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int maxDataSize,
             EnumerateColumnsGrbit grbit)
         {
-            TraceFunctionCall("JetEnumerateColumns");
+            TraceFunctionCall();
             CheckNotNull(allocator, "allocator");
             CheckNotNegative(maxDataSize, "maxDataSize");
             CheckDataSize(columnids, numColumnids, "numColumnids");
@@ -4917,7 +4941,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>A warning, error or success.</returns>
         public int JetGetRecordSize(JET_SESID sesid, JET_TABLEID tableid, ref JET_RECSIZE recsize, GetRecordSizeGrbit grbit)
         {
-            TraceFunctionCall("JetGetRecordSize");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetGetRecordSize");
             int err;
 
@@ -4951,7 +4975,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetDelete(JET_SESID sesid, JET_TABLEID tableid)
         {
-            TraceFunctionCall("JetDelete");
+            TraceFunctionCall();
             return Err(NativeMethods.JetDelete(sesid.Value, tableid.Value));
         }
 
@@ -4964,7 +4988,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetPrepareUpdate(JET_SESID sesid, JET_TABLEID tableid, JET_prep prep)
         {
-            TraceFunctionCall("JetPrepareUpdate");
+            TraceFunctionCall();
             return Err(NativeMethods.JetPrepareUpdate(sesid.Value, tableid.Value, unchecked((uint)prep)));
         }
 
@@ -4988,7 +5012,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetUpdate(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
-            TraceFunctionCall("JetUpdate");
+            TraceFunctionCall();
 #if MANAGEDESENT_ON_WSA
             return this.JetUpdate2(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize, UpdateGrbit.None);
 #else
@@ -5022,7 +5046,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetUpdate2(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize, UpdateGrbit grbit)
         {
-            TraceFunctionCall("JetUpdate2");
+            TraceFunctionCall();
             CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
             this.CheckSupportsServer2003Features("JetUpdate2");
 
@@ -5053,7 +5077,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
-            TraceFunctionCall("JetSetColumn");
+            TraceFunctionCall();
             CheckNotNegative(dataSize, "dataSize");
             if (IntPtr.Zero == data)
             {
@@ -5093,7 +5117,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code or warning.</returns>
         public unsafe int JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, NATIVE_SETCOLUMN* setcolumns, int numColumns)
         {
-            TraceFunctionCall("JetSetColumns");
+            TraceFunctionCall();
             return Err(NativeMethods.JetSetColumns(sesid.Value, tableid.Value, setcolumns, checked((uint)numColumns)));
         }
 
@@ -5111,7 +5135,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetLock(JET_SESID sesid, JET_TABLEID tableid, GetLockGrbit grbit)
         {
-            TraceFunctionCall("JetGetLock");
+            TraceFunctionCall();
             return Err(NativeMethods.JetGetLock(sesid.Value, tableid.Value, unchecked((uint)grbit)));
         }
 #endif // !MANAGEDESENT_ON_WSA
@@ -5146,7 +5170,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out int actualPreviousValueLength,
             EscrowUpdateGrbit grbit)
         {
-            TraceFunctionCall("JetEscrowUpdate");
+            TraceFunctionCall();
             CheckNotNull(delta, "delta");
             CheckDataSize(delta, deltaSize, "deltaSize");
             CheckDataSize(previousValue, previousValueLength, "previousValueLength");
@@ -5200,7 +5224,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr context,
             out JET_HANDLE callbackId)
         {
-            TraceFunctionCall("JetRegisterCallback");
+            TraceFunctionCall();
             CheckNotNull(callback, "callback");
 
             callbackId = JET_HANDLE.Nil;
@@ -5232,7 +5256,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetUnregisterCallback(JET_SESID sesid, JET_TABLEID tableid, JET_cbtyp cbtyp, JET_HANDLE callbackId)
         {
-            TraceFunctionCall("JetUnregisterCallback");
+            TraceFunctionCall();
             this.callbackWrappers.Collect();
             return Err(NativeMethods.JetUnregisterCallback(
                 sesid.Value,
@@ -5276,7 +5300,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.JetDefragment2(sesid, dbid, tableName, ref passes, ref seconds, null, grbit);
 #else
-            TraceFunctionCall("JetDefragment");
+            TraceFunctionCall();
             uint nativePasses = unchecked((uint)passes);
             uint nativeSeconds = unchecked((uint)seconds);
             int err = Err(NativeMethods.JetDefragment(
@@ -5310,7 +5334,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if MANAGEDESENT_ON_WSA
             return this.Defragment2(sesid, dbid, tableName, null, grbit);
 #else
-            TraceFunctionCall("Defragment");
+            TraceFunctionCall();
             int err = Err(NativeMethods.JetDefragment(
                 sesid.Value, dbid.Value, tableName, IntPtr.Zero, IntPtr.Zero, (uint)grbit));
             return err;
@@ -5352,7 +5376,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_CALLBACK callback,
             DefragGrbit grbit)
         {
-            TraceFunctionCall("JetDefragment2");
+            TraceFunctionCall();
             uint nativePasses = unchecked((uint)passes);
             uint nativeSeconds = unchecked((uint)seconds);
 
@@ -5407,7 +5431,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_CALLBACK callback,
             DefragGrbit grbit)
         {
-            TraceFunctionCall("Defragment2");
+            TraceFunctionCall();
 
             IntPtr functionPointer;
             if (null == callback)
@@ -5444,7 +5468,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the operation fails.</returns>
         public int JetIdle(JET_SESID sesid, IdleGrbit grbit)
         {
-            TraceFunctionCall("JetIdle");
+            TraceFunctionCall();
             return Err(NativeMethods.JetIdle(sesid.Value, (uint)grbit));
         }
 #endif // !MANAGEDESENT_ON_WSA
@@ -5461,7 +5485,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetConfigureProcessForCrashDump(CrashDumpGrbit grbit)
         {
-            TraceFunctionCall("JetConfigureProcessForCrashDump");
+            TraceFunctionCall();
             this.CheckSupportsWindows7Features("JetConfigureProcessForCrashDump");
             return Err(NativeMethods.JetConfigureProcessForCrashDump((uint)grbit));
         }
@@ -5476,7 +5500,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetFreeBuffer(IntPtr buffer)
         {
-            TraceFunctionCall("JetFreeBuffer");
+            TraceFunctionCall();
             return Err(NativeMethods.JetFreeBuffer(buffer));
         }
 #endif // !MANAGEDESENT_ON_WSA
@@ -5578,7 +5602,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="i">The integer to check.</param>
         /// <param name="paramName">The name of the parameter.</param>
-        private static void CheckNotNegative(int i, string paramName)
+        private static void CheckNotNegative(long i, string paramName)
         {
             if (i < 0)
             {
@@ -5609,17 +5633,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         // Disallow inlining so we can always get the name of the calling function.
         [MethodImpl(MethodImplOptions.NoInlining)]
 #endif
-        private static void TraceFunctionCall(string function)
+        private static void TraceFunctionCall([System.Runtime.CompilerServices.CallerMemberName] string function = null)
         {
-#if DEBUG && !MANAGEDESENT_ON_WSA
-            // Make sure the name of the calling function is correct.
-            var stackTrace = new StackTrace();
-            Debug.Assert(
-                stackTrace.GetFrame(1).GetMethod().Name == function,
-                "Incorrect function name",
-                function);
-#endif // DEBUG && !MANAGEDESENT_ON_WSA
-
             Trace.WriteLineIf(TraceSwitch.TraceInfo, function);
         }
 
@@ -6108,7 +6123,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     {
                         for (int i = 0; i < tablecreate.rgcolumncreate.Length; ++i)
                         {
-                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(nativeTableCreate.rgcolumncreate[i]);
+                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(ref nativeTableCreate.rgcolumncreate[i]);
                         }
                     }
 
@@ -6291,7 +6306,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             SetCurrentIndexGrbit grbit,
             int itagSequence)
         {
-            TraceFunctionCall("JetSetCurrentIndex4");
+            TraceFunctionCall();
 
             if (indexid != IntPtr.Zero)
             {
@@ -6361,7 +6376,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     {
                         for (int i = 0; i < tablecreate.rgcolumncreate.Length; ++i)
                         {
-                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(nativeTableCreate.rgcolumncreate[i]);
+                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(ref nativeTableCreate.rgcolumncreate[i]);
                         }
                     }
 

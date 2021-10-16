@@ -53,12 +53,12 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         GreaterThan,
 
         /// <summary>
-        /// Accept only rows which have column value ANDed with a given bitmask yielding zero.
+        /// Accept only rows which have column value AND'ed with a given bitmask yielding zero.
         /// </summary>
         BitmaskEqualsZero,
 
         /// <summary>
-        /// Accept only rows which have column value ANDed with a given bitmask yielding non-zero.
+        /// Accept only rows which have column value AND'ed with a given bitmask yielding non-zero.
         /// </summary>
         BitmaskNotEqualsZero,
     }
@@ -122,7 +122,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         public JetRelop relop { get; set; }
 
         /// <summary>
-        /// Gets or sets the value to comparte the column with.
+        /// Gets or sets the value to compare the column with.
         /// </summary>
         public byte[] pvData { get; set; }
 

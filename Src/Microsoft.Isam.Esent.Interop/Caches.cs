@@ -22,6 +22,11 @@ namespace Microsoft.Isam.Esent.Interop
         private const int KeyMostMost = 2000;
 
         /// <summary>
+        /// Reserve 1 extra space for keys made with prefix or wildcard.
+        /// </summary>
+        private const int LimitKeyMostMost = KeyMostMost + 1;
+
+        /// <summary>
         /// The maximum number of buffers we want in a cache.
         /// </summary>
         private const int MaxBuffers = 16;
@@ -34,12 +39,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Cached buffers for keys and bookmarks.
         /// </summary>
-        private static readonly MemoryCache TheBookmarkCache = new MemoryCache(KeyMostMost, MaxBuffers);
+        private static readonly MemoryCache TheBookmarkCache = new MemoryCache(LimitKeyMostMost, MaxBuffers);
 
         /// <summary>
         /// Cached buffers for keys and bookmarks.
         /// </summary>
-        private static readonly MemoryCache TheSecondaryBookmarkCache = new MemoryCache(KeyMostMost, MaxBuffers);
+        private static readonly MemoryCache TheSecondaryBookmarkCache = new MemoryCache(LimitKeyMostMost, MaxBuffers);
 
         /// <summary>
         /// Gets the cached buffers for columns.

@@ -119,7 +119,7 @@ namespace Microsoft.Isam.Esent.Interop
         NoErrorInfo = 1055,
 
         /// <summary>
-        /// No idle activity occured
+        /// No idle activity occurred
         /// </summary>
         NoIdleActivity = 1058,
 
@@ -274,7 +274,7 @@ namespace Microsoft.Isam.Esent.Interop
         DatabaseScanNotRunning = 2003,
 
         /// <summary>
-        /// Unregistered a non-existant callback function
+        /// Unregistered a non-existent callback function
         /// </summary>
         CallbackNotRegistered = 2100,
 

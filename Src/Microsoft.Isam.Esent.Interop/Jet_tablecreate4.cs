@@ -106,7 +106,7 @@ namespace Microsoft.Isam.Esent.Interop
         public uint cbSeparateLV;
 
         /// <summary>
-        /// Returned tabledid.
+        /// Returned tableid.
         /// </summary>
         public IntPtr tableid;
 
@@ -130,29 +130,29 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_TABLECREATE4 GetNativeTableCreate4()
         {
             this.CheckMembersAreValid();
-        
+
             var native = new NATIVE_TABLECREATE4();
             native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_TABLECREATE4)));
             native.szTableName = this.szTableName;
             native.szTemplateTableName = this.szTemplateTableName;
             native.ulPages = checked((uint)this.ulPages);
             native.ulDensity = checked((uint)this.ulDensity);
-        
+
             // native.rgcolumncreate is done at pinvoke time.
             native.cColumns = checked((uint)this.cColumns);
-        
+
             // native.rgindexcreate is done at pinvoke time.
             native.cIndexes = checked((uint)this.cIndexes);
             native.szCallback = this.szCallback;
             native.cbtyp = this.cbtyp;
             native.grbit = checked((uint)this.grbit);
-        
+
             // native.pSeqSpacehints is done at pinvoke time.
             // native.pLVSpacehints is done at pinvoke time.
             native.cbSeparateLV = checked((uint)this.cbSeparateLV);
             native.tableid = this.tableid.Value;
             native.cCreated = checked((uint)this.cCreated);
-        
+
             return native;
         }
     }

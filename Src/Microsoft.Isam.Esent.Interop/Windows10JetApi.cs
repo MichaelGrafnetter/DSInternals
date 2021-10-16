@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_sesparam sesparamid,
             out JET_OPERATIONCONTEXT operationContext)
         {
-            TraceFunctionCall("JetGetSessionParameter");
+            TraceFunctionCall();
             this.CheckSupportsWindows10Features("JetGetSessionParameter");
             int err;
             int actualDataSize;
@@ -77,7 +77,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_sesparam sesparamid,
             JET_OPERATIONCONTEXT operationContext)
         {
-            TraceFunctionCall("JetSetSessionParameter");
+            TraceFunctionCall();
             this.CheckSupportsWindows10Features("JetSetSessionParameter");
             int err;
 
@@ -108,7 +108,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the operation fails.</returns>
         public int JetGetThreadStats(out JET_THREADSTATS2 threadstats)
         {
-            TraceFunctionCall("JetGetThreadStats");
+            TraceFunctionCall();
             this.CheckSupportsVistaFeatures("JetGetThreadStats");
 
             // To speed up the interop we use unsafe code to avoid initializing

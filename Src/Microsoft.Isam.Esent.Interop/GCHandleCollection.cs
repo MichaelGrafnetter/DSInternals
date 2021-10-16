@@ -24,7 +24,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         private GCHandle[] handles;
 
         /// <summary>
-        /// Handle count
+        /// Handle count.
         /// </summary>
         private int count;
 
@@ -36,7 +36,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             if (null != this.handles)
             {
                 for (int i = 0; i < this.count; i++)
-                { 
+                {
                     this.handles[i].Free();
                 }
 

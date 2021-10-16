@@ -22,13 +22,11 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// index definition, not an LCID.
         /// The returned object is suitable for use by <see cref="Windows8Api.JetCreateIndex4"/>.
         /// </summary>
-        /// <remarks>Not currently implemented in this layer, but provided for completeness to
-        /// match the underlying API layer.</remarks>
-        internal const JET_IdxInfo InfoCreateIndex3 = (JET_IdxInfo)13;
+        public const JET_IdxInfo InfoCreateIndex3 = (JET_IdxInfo)13;
 
         /// <summary>
         /// Introduced in Windows 8. Returns the locale name of the given index.
         /// </summary>
-        internal const JET_IdxInfo LocaleName = (JET_IdxInfo)14;
+        public const JET_IdxInfo LocaleName = (JET_IdxInfo)14;
     }
 }

@@ -655,6 +655,24 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether <see cref="Api.JetAttachDatabase"/> will
+        /// delete indexes that were build using an older version of the NLS library in the
+        /// operating system.
+        /// </summary>
+        public bool EnableIndexCleanup
+        {
+            get
+            {
+                return this.GetBoolParameter(JET_param.EnableIndexCleanup);
+            }
+        
+            set
+            {
+                this.SetBoolParameter(JET_param.EnableIndexCleanup, value);
+            }
+        }
+
+        /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="InstanceParameters"/>.
         /// </summary>
         /// <returns>

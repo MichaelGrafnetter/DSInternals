@@ -831,6 +831,134 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.DeviceMissing exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDeviceMissingException : EsentFatalException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceMissingException class.
+        /// </summary>
+        public EsentDeviceMissingException() :
+            base("A required hardware device or functionality was missing.", JET_err.DeviceMissing)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceMissingException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDeviceMissingException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.DeviceMisconfigured exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDeviceMisconfiguredException : EsentFatalException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceMisconfiguredException class.
+        /// </summary>
+        public EsentDeviceMisconfiguredException() :
+            base("A required hardware device was misconfigured externally.", JET_err.DeviceMisconfigured)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceMisconfiguredException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDeviceMisconfiguredException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.DeviceTimeout exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDeviceTimeoutException : EsentOperationException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceTimeoutException class.
+        /// </summary>
+        public EsentDeviceTimeoutException() :
+            base("Timeout occurred while waiting for a hardware device to respond.", JET_err.DeviceTimeout)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceTimeoutException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDeviceTimeoutException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.DeviceFailure exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDeviceFailureException : EsentOperationException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceFailureException class.
+        /// </summary>
+        public EsentDeviceFailureException() :
+            base("A required hardware device didn't function as expected.", JET_err.DeviceFailure)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceFailureException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDeviceFailureException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
     /// Base class for JET_err.DatabaseBufferDependenciesCorrupted exceptions.
     /// </summary>
     [SuppressMessage(
@@ -1740,7 +1868,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBackupDirectoryNotEmptyException class.
         /// </summary>
         public EsentBackupDirectoryNotEmptyException() :
-            base("The backup directory is not emtpy", JET_err.BackupDirectoryNotEmpty)
+            base("The backup directory is not empty", JET_err.BackupDirectoryNotEmpty)
         {
         }
 
@@ -1900,7 +2028,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogDisabledDueToRecoveryFailureException class.
         /// </summary>
         public EsentLogDisabledDueToRecoveryFailureException() :
-            base("Try to log something after recovery faild", JET_err.LogDisabledDueToRecoveryFailure)
+            base("Try to log something after recovery failed", JET_err.LogDisabledDueToRecoveryFailure)
         {
         }
 
@@ -2092,7 +2220,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogBufferTooSmallException class.
         /// </summary>
         public EsentLogBufferTooSmallException() :
-            base("Log buffer is too small for recovery", JET_err.LogBufferTooSmall)
+            base("An operation generated a log record which was too large to fit in the log buffer or in a single log file", JET_err.LogBufferTooSmall)
         {
         }
 
@@ -6943,6 +7071,70 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.TooManyRecords exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentTooManyRecordsException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyRecordsException class.
+        /// </summary>
+        public EsentTooManyRecordsException() :
+            base("There are too many records to enumerate, switch to an API that handles 64-bit numbers", JET_err.TooManyRecords)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyRecordsException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentTooManyRecordsException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.InvalidDbparamId exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentInvalidDbparamIdException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidDbparamIdException class.
+        /// </summary>
+        public EsentInvalidDbparamIdException() :
+            base("This JET_dbparam* identifier is not known to the ESE engine.", JET_err.InvalidDbparamId)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidDbparamIdException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentInvalidDbparamIdException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
     /// Base class for JET_err.OutOfSessions exceptions.
     /// </summary>
     [SuppressMessage(
@@ -7212,7 +7404,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSessionWriteConflictException class.
         /// </summary>
         public EsentSessionWriteConflictException() :
-            base("Attempt to replace the same record by two diffrerent cursors in the same session", JET_err.SessionWriteConflict)
+            base("Attempt to replace the same record by two different cursors in the same session", JET_err.SessionWriteConflict)
         {
         }
 
@@ -12140,7 +12332,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSessionContextNotSetByThisThreadException class.
         /// </summary>
         public EsentSessionContextNotSetByThisThreadException() :
-            base("Tried to reset session context, but current thread did not orignally set the session context", JET_err.SessionContextNotSetByThisThread)
+            base("Tried to reset session context, but current thread did not originally set the session context", JET_err.SessionContextNotSetByThisThread)
         {
         }
 
@@ -13054,6 +13246,14 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentDisabledFunctionalityException();
             case JET_err.UnloadableOSFunctionality:
                 return new EsentUnloadableOSFunctionalityException();
+            case JET_err.DeviceMissing:
+                return new EsentDeviceMissingException();
+            case JET_err.DeviceMisconfigured:
+                return new EsentDeviceMisconfiguredException();
+            case JET_err.DeviceTimeout:
+                return new EsentDeviceTimeoutException();
+            case JET_err.DeviceFailure:
+                return new EsentDeviceFailureException();
             case JET_err.DatabaseBufferDependenciesCorrupted:
                 return new EsentDatabaseBufferDependenciesCorruptedException();
             case JET_err.PreviousVersion:
@@ -13436,6 +13636,10 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentInstanceUnavailableDueToFatalLogDiskFullException();
             case JET_err.InvalidSesparamId:
                 return new EsentInvalidSesparamIdException();
+            case JET_err.TooManyRecords:
+                return new EsentTooManyRecordsException();
+            case JET_err.InvalidDbparamId:
+                return new EsentInvalidDbparamIdException();
             case JET_err.OutOfSessions:
                 return new EsentOutOfSessionsException();
             case JET_err.WriteConflict:

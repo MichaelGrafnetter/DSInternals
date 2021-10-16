@@ -197,12 +197,13 @@ namespace Microsoft.Isam.Esent.Interop
                     "cannot be greater than the length of the pvData");
             }
 
-            if ((null == this.pvData && 0 != this.cbData) || (null != this.pvData && this.cbData > (this.pvData.Length - this.ibData)))
+            if ((null == this.pvData && 0 != this.cbData && SetColumnGrbit.SizeLV != (this.grbit & SetColumnGrbit.SizeLV))
+                || (null != this.pvData && this.cbData > (this.pvData.Length - this.ibData)))
             {
                 throw new ArgumentOutOfRangeException(
                     "cbData",
                     this.cbData,
-                    "cannot be greater than the length of the pvData");
+                    "cannot be greater than the length of the pvData (unless the SizeLV option is used)");
             }
             
             if (this.itagSequence < 0)

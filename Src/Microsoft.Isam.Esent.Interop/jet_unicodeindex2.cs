@@ -34,7 +34,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public uint dwMapFlags;
     }
-    
+
     /// <summary>
     /// Customizes how Unicode data gets normalized when an index is created over a Unicode column.
     /// </summary>
@@ -55,6 +55,23 @@ namespace Microsoft.Isam.Esent.Interop
             LcidToLocales.Add(1033, "en-us");
             LcidToLocales.Add(1046, "pt-br");
             LcidToLocales.Add(3084, "fr-ca");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JET_UNICODEINDEX"/> class.
+        /// </summary>
+        public JET_UNICODEINDEX()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JET_UNICODEINDEX"/> class.
+        /// </summary>
+        /// <param name="native">The native object from which to read values.</param>
+        internal JET_UNICODEINDEX(ref NATIVE_UNICODEINDEX2 native)
+        {
+            this.szLocaleName = Marshal.PtrToStringUni(native.szLocaleName);
+            this.dwMapFlags = native.dwMapFlags;
         }
 
         /// <summary>

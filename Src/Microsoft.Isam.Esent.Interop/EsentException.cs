@@ -8,7 +8,7 @@ namespace Microsoft.Isam.Esent
 {
     using System;
     using System.Runtime.Serialization;
-#if !MANAGEDESENT_SUPPORTS_SERIALIZATION
+#if !MANAGEDESENT_SUPPORTS_SERIALIZATION && MANAGEDESENT_ON_WSA
     using Microsoft.Isam.Esent.Interop;
     using SerializableAttribute = Microsoft.Isam.Esent.Interop.SerializableAttribute;
 #endif
@@ -42,7 +42,7 @@ namespace Microsoft.Isam.Esent
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         protected EsentException(SerializationInfo info, StreamingContext context)
-#if MANAGEDESENT_SUPPORTS_SERIALIZATION
+#if MANAGEDESENT_SUPPORTS_SERIALIZATION || !MANAGEDESENT_ON_WSA
                 : base(info, context)
 #endif
         {

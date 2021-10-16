@@ -60,7 +60,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// transaction.
         /// </summary>
         public bool IsInTransaction
-        { 
+        {
             get
             {
                 this.CheckObjectIsNotDisposed();

@@ -139,7 +139,7 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_COLUMNID columnidcRecord { get; internal set; }
 
         /// <summary>
-        /// Gets the columnid of the column in the temporary table whic
+        /// Gets the columnid of the column in the temporary table which
         /// stores the name of the container.
         /// </summary>
         public JET_COLUMNID columnidcontainername { get; internal set; }

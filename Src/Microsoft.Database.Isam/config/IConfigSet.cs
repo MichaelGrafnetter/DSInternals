@@ -49,7 +49,7 @@ namespace Microsoft.Database.Isam.Config
         /// <param name="value">The requested parameter's value.</param>
         /// <returns>true if the value was found, false otherwise.</returns>
         bool TryGetValue(int key, out object value);
-        
+
         /// <summary>
         /// Merges two config sets into one and throws an exception if there are any conflicts.
         /// </summary>

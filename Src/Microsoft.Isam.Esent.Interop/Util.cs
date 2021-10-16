@@ -203,7 +203,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Add a trailing directory separator character to the string.
         /// </summary>
         /// <param name="dir">The directory.</param>
-        /// <returns>The directory with a separator character added (if necesary).</returns>
+        /// <returns>The directory with a separator character added (if necessary).</returns>
         public static string AddTrailingDirectorySeparator(string dir)
         {
             if (!string.IsNullOrEmpty(dir))
@@ -255,6 +255,24 @@ namespace Microsoft.Isam.Esent.Interop
             output[output.Length - 2] = (byte)0;
             output[output.Length - 1] = (byte)0;
 
+            return output;
+        }
+
+        /// <summary>
+        /// Converts a unicode string to an Ascii byte array.
+        /// CAUTION: The array doesn't have a null-terminator at the end.
+        /// </summary>
+        /// <param name="value">The unicode string to be converted.</param>
+        /// <returns>The byte array with an Ascii representation of the given string.</returns>
+        public static byte[] ConvertToAsciiByteArray(string value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            byte[] output = new byte[value.Length];
+            LibraryHelpers.EncodingASCII.GetBytes(value, 0, value.Length, output, 0);
             return output;
         }
     }

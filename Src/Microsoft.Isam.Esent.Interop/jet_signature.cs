@@ -201,7 +201,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Convrts the structure to the native representation.
+        /// Converts the structure to the native representation.
         /// </summary>
         /// <returns>The native representation of the signature.</returns>
         internal NATIVE_SIGNATURE GetNativeSignature()

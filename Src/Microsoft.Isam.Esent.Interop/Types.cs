@@ -78,12 +78,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
         /// </returns>
         /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
-        /// -or- 
-        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// -or-
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation.
         /// </param>
         /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
-        /// -or- 
-        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// -or-
+        /// null to obtain the numeric format information from the current locale setting of the operating system.
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -194,12 +194,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
         /// </returns>
         /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
-        /// -or- 
-        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// -or-
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation.
         /// </param>
         /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
-        /// -or- 
-        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// -or-
+        /// null to obtain the numeric format information from the current locale setting of the operating system.
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -270,7 +270,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get { return this.Value == IntPtr.Zero || this.Value == new IntPtr(~0); }
         }
-   
+
         /// <summary>
         /// Determines whether two specified instances of JET_TABLEID
         /// are equal.
@@ -311,12 +311,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
         /// </returns>
         /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
-        /// -or- 
-        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// -or-
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation.
         /// </param>
         /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
-        /// -or- 
-        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// -or-
+        /// null to obtain the numeric format information from the current locale setting of the operating system.
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -422,12 +422,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
         /// </returns>
         /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
-        /// -or- 
-        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// -or-
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation.
         /// </param>
         /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
-        /// -or- 
-        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// -or-
+        /// null to obtain the numeric format information from the current locale setting of the operating system.
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -584,12 +584,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
         /// </returns>
         /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
-        /// -or- 
-        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// -or-
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation.
         /// </param>
         /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
-        /// -or- 
-        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// -or-
+        /// null to obtain the numeric format information from the current locale setting of the operating system.
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -730,12 +730,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
         /// </returns>
         /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
-        /// -or- 
-        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// -or-
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation.
         /// </param>
         /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
-        /// -or- 
-        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// -or-
+        /// null to obtain the numeric format information from the current locale setting of the operating system.
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -847,12 +847,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
         /// </returns>
         /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
-        /// -or- 
-        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// -or-
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation.
         /// </param>
         /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
-        /// -or- 
-        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// -or-
+        /// null to obtain the numeric format information from the current locale setting of the operating system.
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -961,12 +961,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
         /// </returns>
         /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
-        /// -or- 
-        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// -or-
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation.
         /// </param>
         /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
-        /// -or- 
-        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// -or-
+        /// null to obtain the numeric format information from the current locale setting of the operating system.
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -1137,6 +1137,6 @@ namespace Microsoft.Isam.Esent.Interop
                    && this.IndexId1 == other.IndexId1
                    && this.IndexId2 == other.IndexId2
                    && this.IndexId3 == other.IndexId3;
-        }        
+        }
     }
 }

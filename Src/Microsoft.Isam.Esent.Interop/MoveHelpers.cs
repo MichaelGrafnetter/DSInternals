@@ -17,7 +17,7 @@ namespace Microsoft.Isam.Esent.Interop
     public static partial class Api
     {
         /// <summary>
-        /// Position the cursor before the first record in the table. A 
+        /// Position the cursor before the first record in the table. A
         /// subsequent move next will position the cursor on the first
         /// record.
         /// </summary>
@@ -30,7 +30,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Position the cursor after the last record in the table. A 
+        /// Position the cursor after the last record in the table. A
         /// subsequent move previous will position the cursor on the
         /// last record.
         /// </summary>
@@ -181,7 +181,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Intersect a group of index ranges and return the bookmarks of the records which are found
-        /// in all the index ranges. 
+        /// in all the index ranges.
         /// Also see <see cref="JetIntersectIndexes"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -191,14 +191,14 @@ namespace Microsoft.Isam.Esent.Interop
         /// to create an index range.
         /// </param>
         /// <returns>
-        /// The bookmarks of the records which are found in all the index ranges. The bookmarks 
+        /// The bookmarks of the records which are found in all the index ranges. The bookmarks
         /// are returned in primary key order.
         /// </returns>
         public static IEnumerable<byte[]> IntersectIndexes(JET_SESID sesid, params JET_TABLEID[] tableids)
         {
             if (null == tableids)
             {
-                throw new ArgumentNullException("tableids");    
+                throw new ArgumentNullException("tableids");
             }
 
             var ranges = new JET_INDEXRANGE[tableids.Length];
@@ -213,12 +213,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Positions a cursor to an index entry for the record that is associated with
         /// the specified bookmark. The bookmark can be used with any index defined over
-        /// a table. The bookmark for a record can be retrieved using <see cref="JetGetBookmark"/>. 
+        /// a table. The bookmark for a record can be retrieved using <see cref="JetGetBookmark"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to position.</param>
         /// <param name="bookmark">The bookmark used to position the cursor.</param>
-        /// <param name="bookmarkSize">The size of the bookmark.</param>        
+        /// <param name="bookmarkSize">The size of the bookmark.</param>
         /// <returns>True if a record matching the bookmark was found.</returns>
         public static bool TryGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize)
         {

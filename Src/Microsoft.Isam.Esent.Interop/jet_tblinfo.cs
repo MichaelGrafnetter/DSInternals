@@ -33,7 +33,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// The behavior of the method depends on how large the array that is passed
-        /// to the method is. The array must have at least two entries. 
+        /// to the method is. The array must have at least two entries.
         /// The first entry will contain the number of Owned Extents in the table.
         /// The second entry will contain the number of Available Extents in the table.
         /// If the array has more than two entries then the remaining bytes of
@@ -45,7 +45,7 @@ namespace Microsoft.Isam.Esent.Interop
         SpaceUsage = 7,
 
         /// <summary>
-        /// The array passed to JetGetTableInfo must have two entries. 
+        /// The array passed to JetGetTableInfo must have two entries.
         /// The first entry will be set to the number of pages in the table.
         /// The second entry will be set to the target density of pages for the table.
         /// Use this option with

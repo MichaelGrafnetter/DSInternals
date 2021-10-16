@@ -105,7 +105,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetTerm2(IntPtr instance, uint grbit);
-        
+
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static unsafe extern int JetSetSystemParameter(IntPtr* pinstance, IntPtr sesid, uint paramid, IntPtr lParam, string szParam);
@@ -869,6 +869,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint cbResult,
             uint InfoLevel);
 
+        // Meant for NATIVE_INDEXCREATE3. I had some trouble doing [In] [Out] ref NATIVE_INDEXCREATE3.
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetGetIndexInfoW(
+            IntPtr sesid,
+            uint dbid,
+            string szTableName,
+            string szIndexName,
+            [In] IntPtr result,
+            uint cbResult,
+            uint InfoLevel);
+
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetGetIndexInfoW(
             IntPtr sesid,
@@ -954,6 +965,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr tableid,
             string szIndexName,
             [In] [Out] ref NATIVE_INDEXLIST result,
+            uint cbResult,
+            uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetGetTableIndexInfoW(
+            IntPtr sesid,
+            IntPtr tableid,
+            string szIndexName,
+            [In] IntPtr result,
             uint cbResult,
             uint InfoLevel);
 
@@ -1051,6 +1071,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetIndexRecordCount(IntPtr sesid, IntPtr tableid, out uint crec, uint crecMax);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetIndexRecordCount2(IntPtr sesid, IntPtr tableid, out ulong crec, ulong crecMax);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetSetTableSequential(IntPtr sesid, IntPtr tableid, uint grbit);

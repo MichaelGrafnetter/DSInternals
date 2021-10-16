@@ -469,7 +469,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Restores and recovers a streaming backup of an instance including all
         /// the attached databases. It is designed to work with a backup created
         /// with the <see cref="Api.JetBackupInstance"/> function. This is the
-        /// simplest and most encapsulated restore function. 
+        /// simplest and most encapsulated restore function.
         /// </summary>
         /// <param name="instance">The instance to use.</param>
         /// <param name="source">
@@ -603,7 +603,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
 #if !MANAGEDESENT_ON_WSA
         /// <summary>
-        /// Initiates an external backup while the engine and database are online and active. 
+        /// Initiates an external backup while the engine and database are online and active.
         /// </summary>
         /// <param name="instance">The instance prepare for backup.</param>
         /// <param name="grbit">Backup options.</param>
@@ -649,7 +649,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
         /// the output buffer is too small to accept the full list of files that should be
-        /// part of the backup file set. 
+        /// part of the backup file set.
         /// </remarks>
         /// <param name="instance">The instance to get the information for.</param>
         /// <param name="files">
@@ -670,14 +670,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         /// <summary>
         /// Used during a backup initiated by <see cref="JetBeginExternalBackupInstance"/>
-        /// to query an instance for the names of database patch files and logfiles that 
-        /// should become part of the backup file set. These files may subsequently be 
+        /// to query an instance for the names of database patch files and logfiles that
+        /// should become part of the backup file set. These files may subsequently be
         /// opened using <see cref="JetOpenFileInstance"/> and read using <see cref="JetReadFileInstance"/>.
         /// </summary>
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
         /// the output buffer is too small to accept the full list of files that should be
-        /// part of the backup file set. 
+        /// part of the backup file set.
         /// </remarks>
         /// <param name="instance">The instance to get the information for.</param>
         /// <param name="files">
@@ -704,7 +704,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
         /// the output buffer is too small to accept the full list of files that should be
-        /// part of the backup file set. 
+        /// part of the backup file set.
         /// </remarks>
         /// <param name="instance">The instance to get the information for.</param>
         /// <param name="files">
@@ -778,7 +778,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Associates a session with the current thread using the given context
         /// handle. This association overrides the default engine requirement
         /// that a transaction for a given session must occur entirely on the
-        /// same thread. 
+        /// same thread.
         /// </summary>
         /// <param name="sesid">The session to set the context on.</param>
         /// <param name="context">The context to set.</param>
@@ -815,7 +815,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Retrieves performance information from the database engine for the
         /// current thread. Multiple calls can be used to collect statistics
         /// that reflect the activity of the database engine on this thread
-        /// between those calls. 
+        /// between those calls.
         /// </summary>
         /// <param name="threadstats">
         /// Returns the thread statistics.
@@ -901,7 +901,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// associated with that cursor. This context handle must have been
         /// previously set using <see cref="JetSetLS"/>. JetGetLS can also
         /// be used to simultaneously fetch the current context handle for
-        /// a cursor or table and reset that context handle.  
+        /// a cursor or table and reset that context handle.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to use.</param>
@@ -1042,7 +1042,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to create the index on.</param>
         /// <param name="indexName">
-        /// Pointer to a null-terminated string that specifies the name of the index to create. 
+        /// Pointer to a null-terminated string that specifies the name of the index to create.
         /// </param>
         /// <param name="grbit">Index creation options.</param>
         /// <param name="keyDescription">
@@ -1057,7 +1057,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_SESID sesid,
             JET_TABLEID tableid,
             string indexName,
-            CreateIndexGrbit grbit, 
+            CreateIndexGrbit grbit,
             string keyDescription,
             int keyDescriptionLength,
             int density);
@@ -1126,7 +1126,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="lcid">
         /// The locale ID to use to compare any Unicode key column data in the temporary table.
         /// Any locale may be used as long as the appropriate language pack has been installed
-        /// on the machine. 
+        /// on the machine.
         /// </param>
         /// <param name="grbit">Table creation options.</param>
         /// <param name="tableid">
@@ -1165,8 +1165,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="numColumns">Number of column definitions.</param>
         /// <param name="unicodeindex">
         /// The Locale ID and normalization flags that will be used to compare
-        /// any Unicode key column data in the temporary table. When this 
-        /// is not present then the default options are used. 
+        /// any Unicode key column data in the temporary table. When this
+        /// is not present then the default options are used.
         /// </param>
         /// <param name="grbit">Table creation options.</param>
         /// <param name="tableid">
@@ -1405,7 +1405,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="tableid">The cursor to get the index name for.</param>
         /// <param name="indexName">Returns the name of the index.</param>
         /// <param name="maxNameLength">
-        /// The maximum length of the index name. Index names are no more than 
+        /// The maximum length of the index name. Index names are no more than
         /// Api.MaxNameLength characters.
         /// </param>
         /// <returns>An error if the call fails.</returns>
@@ -1575,6 +1575,23 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out string result,
             JET_IdxInfo infoLevel);
 
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="tablename">The name of the table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetIndexInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tablename,
+            string indexname,
+            out JET_INDEXCREATE result,
+            JET_IdxInfo infoLevel);
         #endregion
 
         #region JetGetTableIndexInfo overloads
@@ -1659,6 +1676,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out string result,
             JET_IdxInfo infoLevel);
 
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetTableIndexInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string indexname,
+            out JET_INDEXCREATE result,
+            JET_IdxInfo infoLevel);
+
         #endregion
 
         /// <summary>
@@ -1705,12 +1738,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Positions a cursor to an index entry for the record that is associated with
         /// the specified bookmark. The bookmark can be used with any index defined over
-        /// a table. The bookmark for a record can be retrieved using <see cref="JetGetBookmark"/>. 
+        /// a table. The bookmark for a record can be retrieved using <see cref="JetGetBookmark"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to position.</param>
         /// <param name="bookmark">The bookmark used to position the cursor.</param>
-        /// <param name="bookmarkSize">The size of the bookmark.</param>        
+        /// <param name="bookmarkSize">The size of the bookmark.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize);
 
@@ -1767,7 +1800,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Efficiently positions a cursor to an index entry that matches the search
         /// criteria specified by the search key in that cursor and the specified
-        /// inequality. A search key must have been previously constructed using 
+        /// inequality. A search key must have been previously constructed using
         /// JetMakeKey.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -1793,7 +1826,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Computes the intersection between multiple sets of index entries from different secondary
         /// indices over the same table. This operation is useful for finding the set of records in a
-        /// table that match two or more criteria that can be expressed using index ranges. 
+        /// table that match two or more criteria that can be expressed using index ranges.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="ranges">
@@ -1901,7 +1934,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// The current position is included in the count. The count can be greater than the
         /// total number of records in the table if the current index is over a multi-valued
         /// column and instances of the column have multiple-values. If the table is empty,
-        /// then 0 will be returned for the count. 
+        /// then 0 will be returned for the count.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to count the records in.</param>
@@ -1913,10 +1946,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetIndexRecordCount(JET_SESID sesid, JET_TABLEID tableid, out int numRecords, int maxRecordsToCount);
 
         /// <summary>
+        /// Counts the number of entries in the current index from the current position forward.
+        /// The current position is included in the count. The count can be greater than the
+        /// total number of records in the table if the current index is over a multi-valued
+        /// column and instances of the column have multiple-values. If the table is empty,
+        /// then 0 will be returned for the count. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to count the records in.</param>
+        /// <param name="numRecords">Returns the number of records.</param>
+        /// <param name="maxRecordsToCount">
+        /// The maximum number of records to count.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        int JetIndexRecordCount2(JET_SESID sesid, JET_TABLEID tableid, out long numRecords, long maxRecordsToCount);
+
+        /// <summary>
         /// Notifies the database engine that the application is scanning the entire
         /// index that the cursor is positioned on. Consequently, the methods that
         /// are used to access the index data will be tuned to make this scenario as
-        /// fast as possible. 
+        /// fast as possible.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor that will be accessing the data.</param>
@@ -1947,7 +1996,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         /// <summary>
         /// Moves a cursor to a new location that is a fraction of the way through
-        /// the current index. 
+        /// the current index.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to position.</param>
@@ -1996,7 +2045,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Retrieves the bookmark for the record that is associated with the index entry
         /// at the current position of a cursor. This bookmark can then be used to
-        /// reposition that cursor back to the same record using <see cref="JetGotoBookmark"/>. 
+        /// reposition that cursor back to the same record using <see cref="JetGotoBookmark"/>.
         /// The bookmark will be no longer than <see cref="SystemParameters.BookmarkMost"/>
         /// bytes.
         /// </summary>
@@ -2057,7 +2106,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// index entry that references the current record. In addition to retrieving the
         /// actual column value, JetRetrieveColumn can also be used to retrieve the size
         /// of a column, before retrieving the column data itself so that application
-        /// buffers can be sized appropriately.  
+        /// buffers can be sized appropriately.
         /// </summary>
         /// <remarks>
         /// The RetrieveColumnAs functions provide datatype-specific retrieval functions.
@@ -2249,7 +2298,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// update the current record. It can overwrite an existing value, add a new value to a sequence of
         /// values in a multi-valued column, remove a value from a sequence of values in a multi-valued column,
         /// or update all or part of a long value (a column of type <see cref="JET_coltyp.LongText"/>
-        /// or <see cref="JET_coltyp.LongBinary"/>). 
+        /// or <see cref="JET_coltyp.LongBinary"/>).
         /// </summary>
         /// <remarks>
         /// The SetColumn methods provide datatype-specific overrides which may be more efficient.
@@ -2288,7 +2337,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// being updated by any other session, read lock. Normally, row write locks are acquired implicitly as a
         /// result of updating rows. Read locks are usually not required because of record versioning. However,
         /// in some cases a transaction may desire to explicitly lock a row to enforce serialization, or to ensure
-        /// that a subsequent operation will succeed. 
+        /// that a subsequent operation will succeed.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to use. A lock will be acquired on the current record.</param>
@@ -2391,7 +2440,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use for the call.</param>
         /// <param name="dbid">The database to be defragmented.</param>
         /// <param name="tableName">
-        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// Under some options defragmentation is performed for the entire database described by the given
         /// database ID, and other options (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>) require
         /// the name of the table to defragment.
         /// </param>
@@ -2424,7 +2473,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use for the call.</param>
         /// <param name="dbid">The database to be defragmented.</param>
         /// <param name="tableName">
-        /// Under some options defragmentation is performed for the entire database described by the given 
+        /// Under some options defragmentation is performed for the entire database described by the given
         /// database ID, and other options (such as <see cref="Windows7.Windows7Grbits.DefragmentBTree"/>) require
         /// the name of the table to defragment.
         /// </param>

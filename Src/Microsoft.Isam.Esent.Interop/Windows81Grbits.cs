@@ -47,8 +47,8 @@ namespace Microsoft.Isam.Esent.Interop.Windows81
     public static class Windows81Grbits
     {
         /// <summary>
-        /// Only shrink the database to the desired size, but keeping an 
-        /// empty extent at the end. If the resize call would grow the database, do nothing.
+        /// Only shrink the database to the desired size.
+        /// If the resize call would grow the database, do nothing.
         /// In order to use this functionality, <see cref="InstanceParameters.EnableShrinkDatabase"/>
         /// must be set to <see cref="ShrinkDatabaseGrbit.On"/>. Otherwise, an exception may
         /// be thrown.

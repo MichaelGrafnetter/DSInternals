@@ -9,10 +9,10 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Interface for objects that can have their contents compared against
     /// each other. This should be used for equality comparisons on mutable
-    /// reference objects where overriding Equals() and GetHashCode() isn't a 
+    /// reference objects where overriding Equals() and GetHashCode() isn't a
     /// good idea.
     /// </summary>
-    /// <typeparam name="T">The type of objects to comapre.</typeparam>
+    /// <typeparam name="T">The type of objects to compare.</typeparam>
     public interface IContentEquatable<T>
     {
         /// <summary>
