@@ -23,8 +23,7 @@
         {
             if (!File.Exists(dbFilePath))
             {
-                // TODO: Extract as resource
-                throw new FileNotFoundException("The specified database file does not exist.", dbFilePath);
+                 throw new FileNotFoundException("The specified database file does not exist.", dbFilePath);
             }
 
             this.DSADatabaseFile = dbFilePath;
@@ -32,28 +31,43 @@
 
             this.DSAWorkingDirectory = Path.GetDirectoryName(this.DSADatabaseFile);
             string checkpointDirectoryPath = this.DSAWorkingDirectory;
-            string tempDirectoryPath = this.DSAWorkingDirectory;
+            string tempDatabasePath = Path.Combine(this.DSAWorkingDirectory, ADConstants.EseTempDatabaseName);
 
             this.DatabaseLogFilesPath = logDirectoryPath;
             if (this.DatabaseLogFilesPath != null)
             {
                 if (!Directory.Exists(this.DatabaseLogFilesPath))
                 {
-                    // TODO: Extract as resource
                     throw new FileNotFoundException("The specified log directory does not exist.", this.DatabaseLogFilesPath);
                 }
             }
             else
             {
+                // Use the default location if an alternate log directory is not provided.
                 this.DatabaseLogFilesPath = this.DSAWorkingDirectory;
             }
 
             // TODO: Exception handling?
-            // HACK: IsamInstance constructor throws AccessDenied Exception when the path does not end with a backslash.
-            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(this.DatabaseLogFilesPath), AddPathSeparator(tempDirectoryPath), ADConstants.EseBaseName, JetInstanceName, readOnly, ADConstants.PageSize);
+            // Note: IsamInstance constructor throws AccessDenied Exception when the path does not end with a backslash.
+            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(this.DatabaseLogFilesPath), tempDatabasePath, ADConstants.EseBaseName, JetInstanceName, readOnly, ADConstants.PageSize);
             try
             {
                 var isamParameters = this.instance.IsamSystemParameters;
+
+                if(EsentVersion.SupportsWindows10Features)
+                {
+                    try
+                    {
+                        // Required for Windows Server 2022 compatibility, as it limits the transaction log file format to 8920.
+                        // Note: Usage of JET_efvUsePersistedFormat still causes minor DB format upgrade.
+                        isamParameters.EngineFormatVersion = 0x40000002; // JET_efvUsePersistedFormat: Instructs the engine to use the minimal Engine Format Version of all loaded log and DB files.
+                    }
+                    catch (EsentInvalidParameterException)
+                    {
+                        // JET_efvUsePersistedFormat should be supported since Windows Server 2016.
+                        // Just continue even if it is not supported on the current Windows build.
+                    }
+                }
 
                 // Set the size of the transaction log files to AD defaults.
                 isamParameters.LogFileSize = ADConstants.EseLogFileSize;
@@ -62,7 +76,7 @@
                 isamParameters.DeleteOutOfRangeLogs = true;
 
                 // Check the database for indexes over Unicode key columns that were built using an older version of the NLS library.
-                isamParameters.EnableIndexChecking = true;
+                isamParameters.EnableIndexChecking2 = true;
 
                 // Automatically clean up indexes over Unicode key columns as necessary to avoid database format changes caused by changes to the NLS library.
                 isamParameters.EnableIndexCleanup = true;
@@ -73,8 +87,27 @@
                 // Disable all database engine callbacks to application provided functions. This enables us to open Win2016 DBs on non-DC systems.
                 isamParameters.DisableCallbacks = true;
 
-                // TODO: Configure additional ISAM parameters
-                // this.instance.IsamSystemParameters.EnableOnlineDefrag = false;
+                // Increase the limit of maximum open tables.
+                isamParameters.MaxOpenTables = ADConstants.EseMaxOpenTables;
+
+                // Enable backwards compatibility with the file naming conventions of earlier releases of the database engine.
+                isamParameters.LegacyFileNames = ADConstants.EseLegacyFileNames;
+
+                // Set EN-US to be used by any index over a Unicode key column.
+                isamParameters.UnicodeIndexDefault = new JET_UNICODEINDEX()
+                {
+                    lcid = ADConstants.EseIndexDefaultLocale,
+                    dwMapFlags = ADConstants.EseIndexDefaultCompareOptions
+                };
+
+                // Force crash recovery to look for the database referenced in the transaction log in the specified folder.
+                isamParameters.AlternateDatabaseRecoveryPath = this.DSAWorkingDirectory;
+
+                if (!readOnly)
+                {
+                    // Delete obsolete log files.
+                    isamParameters.DeleteOldLogs = true;
+                }
 
                 this.session = this.instance.CreateSession();
                 this.session.AttachDatabase(this.DSADatabaseFile);
@@ -234,7 +267,6 @@
 
         private static string AddPathSeparator(string path)
         {
-            // TODO: Newer version of ISAM should implemet this
             if (string.IsNullOrEmpty(path) || path.EndsWith(Path.DirectorySeparatorChar.ToString()))
             {
                 // No need to add path separator
@@ -246,7 +278,7 @@
             }
         }
 
-        private static void ValidateDatabaseState(string dbFilePath)
+        public static void ValidateDatabaseState(string dbFilePath)
         {
             // Retrieve info about the DB (Win Version, Page Size, State,...)
             JET_DBINFOMISC dbInfo;
@@ -255,7 +287,6 @@
             if (dbInfo.dbstate != JET_dbstate.CleanShutdown)
             {
                 // Database might be inconsistent
-                // TODO: Extract message as a recource
                 throw new InvalidDatabaseStateException("The database is not in a clean state. Try to recover it first by running the 'esentutl /r edb /d' command.", dbFilePath);
             }
         }

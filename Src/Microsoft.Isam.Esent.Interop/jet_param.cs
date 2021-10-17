@@ -352,12 +352,6 @@ namespace Microsoft.Isam.Esent.Interop
         DatabasePageSize = 64,
 
         /// <summary>
-        /// This parameter disables all database engine callbacks to application provided functions.
-        /// It is primarily intended to support the database engine utilities and is not intended to be used in your application.
-        /// </summary>
-        DisableCallbacks = 65,
-
-        /// <summary>
         /// This parameter can be used to convert a JET_ERR into a string.
         /// This should only be used with JetGetSystemParameter.
         /// </summary>

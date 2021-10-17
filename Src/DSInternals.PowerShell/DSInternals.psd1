@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.5'
+ModuleVersion = '4.6'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -36,7 +36,7 @@ DISCLAIMER: Features exposed through this module are not supported by Microsoft 
 PowerShellVersion = '3.0'
 
 # Minimum version of Microsoft .NET Framework required by this module
-DotNetFrameworkVersion = '4.7' # This requirement is not enforced by older versions of PS.
+DotNetFrameworkVersion = '4.7.2' # This requirement is not enforced by older versions of PS.
 
 # Minimum version of the common language runtime (CLR) required by this module
 CLRVersion = '4.0.30319.42000' # Corresponds to .NET Framework 4.6 and later
@@ -141,10 +141,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added support for ntds.dit files with conflicting defunct attributes.
-- Fixed the detection of default computer passwords.
-- Improved parsing of roaming CNG private keys.
-- Updated the target .NET Framework to 4.7.2.
+- Added Windows Server 2022 support.
 "@
     } # End of PSData hashtable
 

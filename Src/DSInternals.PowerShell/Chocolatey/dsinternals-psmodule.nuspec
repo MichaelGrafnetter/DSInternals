@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>4.5</version>
+    <version>4.6</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -37,18 +37,15 @@
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* Added support for ntds.dit files with conflicting defunct attributes.
-* Fixed the detection of default computer passwords.
-* Improved parsing of roaming CNG private keys.
-* Updated the target .NET Framework to 4.7.2.
+* Added Windows Server 2022 support.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->
       <dependency id="powershell" version="3.0.20121027" />
       <!-- Universal C Runtime. For RTM OS prior to Windows 10 and Windows Server 2016. -->
       <dependency id="kb2999226" version="1.0.20181019" />
-      <!-- .NET Framework 4.7+. For RTM OS prior to Windows 10 1703 and Windows Server 1709. -->
-      <dependency id="dotnetfx" version="4.7.0.0"  />
+      <!-- .NET Framework 4.7.2+. For RTM OS prior to Windows 10 1703 and Windows Server 1709. -->
+      <dependency id="dotnetfx" version="4.7.2.0"  />
     </dependencies>
   </metadata>
   <files>

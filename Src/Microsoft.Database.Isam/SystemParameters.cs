@@ -16,7 +16,7 @@ namespace Microsoft.Database.Isam
     /// <summary>
     /// Properties for per-instance system parameters
     /// </summary>
-    public class IsamSystemParameters
+    public partial class IsamSystemParameters
     {
         /// <summary>
         /// The instance.
@@ -468,38 +468,19 @@ namespace Microsoft.Database.Isam
         /// <summary>
         /// Gets or sets a system parameter which is an integer type (int).
         /// </summary>
-        public bool EnableIndexChecking
+        public int EnableIndexChecking
         {
             get
             {
-                int numericValue = 0;
+                IntPtr val = IntPtr.Zero;
                 string ignored;
-                Api.JetGetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.EnableIndexChecking, ref numericValue, out ignored, 0);
-                return Convert.ToBoolean(numericValue);
+                Api.JetGetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.EnableIndexChecking, ref val, out ignored, 0);
+                return unchecked((int)val);
             }
 
             set
             {
-                // int numericValue = value ? 1 : 0;
-                Api.JetSetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.EnableIndexChecking, Convert.ToInt32(value), null);
-            }
-        }
-
-        /// <summary>
-        /// Disables or enables all database engine callbacks to application provided functions.
-        /// </summary>
-        public bool DisableCallbacks
-        {
-            get
-            {
-                int numericValue = 0;
-                string ignored;
-                Api.JetGetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.DisableCallbacks, ref numericValue, out ignored, 0);
-                return Convert.ToBoolean(numericValue);
-            }
-            set
-            {
-                Api.JetSetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.DisableCallbacks, Convert.ToInt32(value), null);
+                Api.JetSetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.EnableIndexChecking, new IntPtr(value), null);
             }
         }
 

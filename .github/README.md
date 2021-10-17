@@ -4,7 +4,7 @@
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
 [![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg?logo=PowerShell)](#)
-[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019-007bb8.svg?logo=Windows)](#)
+[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019 | 2022](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019%20|%202022-007bb8.svg?logo=Windows)](#)
 [![.NET Framework 4.7.2+](https://img.shields.io/badge/.NET%20Framework-4.7.2%2B-007FFF.svg)](#)
 
 ## Introduction

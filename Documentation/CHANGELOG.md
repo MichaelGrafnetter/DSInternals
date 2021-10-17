@@ -9,6 +9,20 @@ All notable changes to this project will be documented in this file. The format 
 
 - The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
 
+## [4.6] - 2021-10-19
+
+### Added
+
+- Windows Server 2022 ntds.dit file modification is now supported.
+
+### Changed
+
+- Updated ManagedEsent to 1.9.4.1 and extracted customizations to partial classes.
+
+### Fixed
+
+- ESE parameter set now better mimics the one used in AD.
+
 ## [4.5] - 2021-10-14
 
 ### Fixed
@@ -410,7 +424,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.5...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.6...HEAD
+[4.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.5...v4.6
 [4.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4.1...v4.5
 [4.4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4...v4.4.1
 [4.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.3...v4.4

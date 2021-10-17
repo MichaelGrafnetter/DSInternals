@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DSInternals PowerShell Commands")]
-[assembly: AssemblyVersion("4.5")]
-[assembly: AssemblyFileVersion("4.5")]
+[assembly: AssemblyVersion("4.6")]
+[assembly: AssemblyFileVersion("4.6")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]

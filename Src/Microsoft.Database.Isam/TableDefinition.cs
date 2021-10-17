@@ -12,14 +12,13 @@
 namespace Microsoft.Database.Isam
 {
     using Microsoft.Isam.Esent.Interop;
-    using System.Collections.Generic;
 
     /// <summary>
     /// A Table Definition contains the schema for a single table.  It can be
     /// used to explore the schema for an existing table, modify the schema
     /// for an existing table, and to create the definition for a new table.
     /// </summary>
-    public class TableDefinition
+    public partial class TableDefinition
     {
         /// <summary>
         /// The database
@@ -124,21 +123,6 @@ namespace Microsoft.Database.Isam
             get
             {
                 return this.indexCollection;
-            }
-        }
-
-        /// <summary>
-        /// Gets a collection containing the tables indices.
-        /// </summary>
-        public IEnumerable<IndexInfo> Indices2
-        {
-            //HACK: We added support to retrieve the low-level IndexInfo instead of high-level IndexCollection.
-            /* There is a bug in Isam IndexCollection enumerator, which causes it to loop indefinitely
-             * through the first few indices under some very rare circumstances. */
-            get
-            {
-                // TODO: Possibly add a lock for thread safety.
-                return Api.GetTableIndexes(this.IsamSession.Sesid, this.Database.Dbid, this.Name);
             }
         }
 
