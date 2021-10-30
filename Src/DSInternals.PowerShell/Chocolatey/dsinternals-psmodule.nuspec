@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>4.6</version>
+    <version>4.7</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -37,7 +37,8 @@
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* Added Windows Server 2022 support.
+* The Test-PasswordQuality cmdlet can now detect kerberoastable user accounts. Its performance has also been slightly improved.
+* Objects returned by the Get-ADDBAccount, Get-ADReplAccount, and Get-ADSIAccount cmdlets now have the SupportedEncryptionTypes property.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->

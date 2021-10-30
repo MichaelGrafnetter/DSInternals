@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.6'
+ModuleVersion = '4.7'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -141,7 +141,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added Windows Server 2022 support.
+- The Test-PasswordQuality cmdlet can now detect kerberoastable user accounts. Its performance has also been slightly improved.
+- Objects returned by the Get-ADDBAccount, Get-ADReplAccount, and Get-ADSIAccount cmdlets now have the SupportedEncryptionTypes property.
 "@
     } # End of PSData hashtable
 

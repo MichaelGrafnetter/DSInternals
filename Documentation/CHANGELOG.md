@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Changed
+- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+
+## [4.7] - 2021-10-30
+
 ### Added
 
 - The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet can now identify [kerberoastable](https://attack.mitre.org/techniques/T1558/003/) user accounts.
@@ -12,12 +17,11 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Changed
 
-- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
 - DSInternals.Replication.Interop is targeting the latest Windows 10 SDK instead of a specific one.
 
 ### Fixed
 
-- Computer accounts are now skipped when searching duplicate passwords.
+- Computer accounts are now skipped when searching for duplicate passwords.
 - Improved exception handling when opening read-only database files.
 
 ## [4.6] - 2021-10-19
@@ -435,7 +439,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.6...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.7...HEAD
+[4.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.6...v4.7
 [4.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.5...v4.6
 [4.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4.1...v4.5
 [4.4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4...v4.4.1

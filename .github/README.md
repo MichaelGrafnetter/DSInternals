@@ -52,6 +52,23 @@ Since PowerShell 5, you can install the DSInternals module directly from the off
 Install-Module DSInternals -Force
 ```
 
+Additional steps might be required on some freshly installed computers before DSInternals can be downloaded:
+
+```powershell
+# TLS 1.2 must be enabled on older versions of Windows.
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+
+# Download the NuGet package manager binary.
+Install-PackageProvider -Name NuGet -Force
+
+# Register the PowerShell Gallery as package repository if it is missing for any reason.
+if($null -eq (Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue)) { Register-PSRepository -Default }
+
+# Download the DSInternals PowerShell module.
+Install-Module -Name DSInternals -Force
+
+```
+
 ### Chocolatey Package
 
 The DSInternals PowerShell Module can also be installed using the official [Chocolatey package](https://chocolatey.org/packages/dsinternals-psmodule) by executing the following Chocolatey command:
