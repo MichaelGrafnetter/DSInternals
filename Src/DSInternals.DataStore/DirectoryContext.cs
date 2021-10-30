@@ -47,27 +47,11 @@
                 this.DatabaseLogFilesPath = this.DSAWorkingDirectory;
             }
 
-            // TODO: Exception handling?
             // Note: IsamInstance constructor throws AccessDenied Exception when the path does not end with a backslash.
             this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(this.DatabaseLogFilesPath), tempDatabasePath, ADConstants.EseBaseName, JetInstanceName, readOnly, ADConstants.PageSize);
             try
             {
                 var isamParameters = this.instance.IsamSystemParameters;
-
-                if(EsentVersion.SupportsWindows10Features)
-                {
-                    try
-                    {
-                        // Required for Windows Server 2022 compatibility, as it limits the transaction log file format to 8920.
-                        // Note: Usage of JET_efvUsePersistedFormat still causes minor DB format upgrade.
-                        isamParameters.EngineFormatVersion = 0x40000002; // JET_efvUsePersistedFormat: Instructs the engine to use the minimal Engine Format Version of all loaded log and DB files.
-                    }
-                    catch (EsentInvalidParameterException)
-                    {
-                        // JET_efvUsePersistedFormat should be supported since Windows Server 2016.
-                        // Just continue even if it is not supported on the current Windows build.
-                    }
-                }
 
                 // Set the size of the transaction log files to AD defaults.
                 isamParameters.LogFileSize = ADConstants.EseLogFileSize;
@@ -107,6 +91,21 @@
                 {
                     // Delete obsolete log files.
                     isamParameters.DeleteOldLogs = true;
+
+                    if (EsentVersion.SupportsWindows10Features)
+                    {
+                        try
+                        {
+                            // Required for Windows Server 2022 compatibility, as it limits the transaction log file format to 8920.
+                            // Note: Usage of JET_efvUsePersistedFormat still causes minor DB format upgrade.
+                            // isamParameters.EngineFormatVersion = 0x40000002; // JET_efvUsePersistedFormat: Instructs the engine to use the minimal Engine Format Version of all loaded log and DB files.
+                        }
+                        catch (EsentInvalidParameterException)
+                        {
+                            // JET_efvUsePersistedFormat should be supported since Windows Server 2016.
+                            // Just continue even if it is not supported on the current Windows build.
+                        }
+                    }
                 }
 
                 this.session = this.instance.CreateSession();
@@ -119,11 +118,25 @@
                 this.LinkResolver = new LinkResolver(this.database, this.Schema);
                 this.DomainController = new DomainController(this);
             }
+            catch (EsentFileAccessDeniedException e)
+            {
+                // This exception was probably thrown by the OpenDatabase method
+                // HACK: Do not dispose the IsamSession object. Its Dispose method would throw an exception, which is a bug in ISAM.
+                GC.SuppressFinalize(this.session);
+                this.session = null;
+
+                // Free resources if anything failed
+                this.Dispose();
+
+                throw;
+            }
             catch (EsentErrorException e)
             {
+                // Free resources if anything failed
+                this.Dispose();
+
                 // EsentUnicodeTranslationFailException - This typically happens while opening a Windows Server 2003 DIT on a newer system.
                 // EsentSecondaryIndexCorruptedException - This typically happens when opening a Windows Server 2012 R2 DIT on Windows 7.
-                this.Dispose();
                 throw new InvalidDatabaseStateException("There was a problem reading the database, which probably comes from a different OS. Try defragmenting it first by running the 'esentutl /d ntds.dit' command.", this.DSADatabaseFile, e);
             }
             catch
