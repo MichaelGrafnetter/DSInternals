@@ -3288,6 +3288,7 @@ PrimaryGroupId: 513
 SidHistory:
 Enabled: True
 UserAccountControl: NormalAccount, PasswordNeverExpires
+SupportedEncryptionTypes: Default
 AdminCount: True
 Deleted: False
 LastLogonDate: 2/23/2015 10:27:18 AM
@@ -3331,6 +3332,7 @@ PrimaryGroupId: 513
 SidHistory:
 Enabled: True
 UserAccountControl: NormalAccount, PasswordNeverExpires
+SupportedEncryptionTypes: Default
 AdminCount: False
 Deleted: False
 LastLogonDate:  2/23/2015 10:27:18 AM
@@ -5114,6 +5116,7 @@ PrimaryGroupId: 513
 SidHistory:
 Enabled: True
 UserAccountControl: NormalAccount, PasswordNeverExpires
+SupportedEncryptionTypes: Default
 AdminCount: False
 Deleted: False
 LastLogonDate: 2/23/2015 10:27:18 AM
@@ -5410,7 +5413,7 @@ PS C:\&gt; Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob 
     </maml:alertSet>
     <command:examples>
       <command:example>
-        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADReplBackupKey -Server 'lon-dc1.contoso.com'
 &lt;# Sample Output:
 
@@ -10581,6 +10584,11 @@ Kerberos pre-authentication is not required for these accounts:
 
 Only DES encryption is allowed to be used with these accounts:
   CONTOSO\sql_svc01
+
+These accounts are susceptible to the Kerberoasting attack:
+  CONTOSO\Administrator
+  CONTOSO\sp_svc01
+  CONTOSO\sql_svc02
 
 These administrative accounts are allowed to be delegated to a service:
   CONTOSO\AdatumAdmin

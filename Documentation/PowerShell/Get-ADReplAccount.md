@@ -67,6 +67,7 @@ PrimaryGroupId: 513
 SidHistory:
 Enabled: True
 UserAccountControl: NormalAccount, PasswordNeverExpires
+SupportedEncryptionTypes: Default
 AdminCount: False
 Deleted: False
 LastLogonDate: 2/23/2015 10:27:18 AM

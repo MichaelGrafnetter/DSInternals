@@ -60,6 +60,11 @@
                 <PropertyName>UserAccountControl</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>SupportedEncryptionTypes: </Text>
+              <ExpressionBinding>
+                <PropertyName>SupportedEncryptionTypes</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
               <Text>AdminCount: </Text>
               <ExpressionBinding>
                 <PropertyName>AdminCount</PropertyName>

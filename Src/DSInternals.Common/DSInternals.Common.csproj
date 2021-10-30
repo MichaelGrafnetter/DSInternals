@@ -89,6 +89,7 @@
     <Compile Include="Data\Hello\KeyMaterialFido.cs" />
     <Compile Include="Data\Hello\VolumeType.cs" />
     <Compile Include="Data\Hello\KeyUsage.cs" />
+    <Compile Include="Data\Principals\SupportedEncryptionTypes.cs" />
     <Compile Include="Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Cryptography\Crc32.cs" />
     <Compile Include="Cryptography\GPPrefPwdObfuscator.cs" />

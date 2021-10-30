@@ -177,6 +177,12 @@
                 this.result.PreAuthNotRequired.Add(this.Account.LogonName);
             }
 
+            if(this.Account.SamAccountType == SamAccountType.User && this.Account.ServicePrincipalName?.Length > 0 && !this.Account.SupportsKerberosAESEncryption)
+            {
+                // This is a kerberoastable user/service account, because it has a SPN configured, but has Kerberos AES encryption support disabled.
+                this.result.Kerberoastable.Add(this.Account.LogonName);
+            }
+
             if (this.Account.SupplementalCredentials != null)
             {
                 if (this.Account.SupplementalCredentials.ClearText != null)
@@ -236,13 +242,14 @@
             }
             else
             {
+                // Computer accounts typically have random passwords, so we only perform the following tests for other account types like User or Trust.
                 this.LookupAccountNTHashInSortedFile();
-            }
 
-            if (this.hashToAccountMap != null)
-            {
-                // Add the current account's NT hash to the map for further processing.
-                this.AddAccountToHashMap();
+                if (this.hashToAccountMap != null)
+                {
+                    // Add the current account's NT hash to the map for further processing.
+                    this.AddAccountToHashMap();
+                }
             }
         }
 

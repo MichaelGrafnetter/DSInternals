@@ -147,6 +147,30 @@
         }
 
         /// <summary>
+        /// Gets the encryption types supported by this trust relationship.
+        /// </summary>
+        /// <remarks>Implemented on Windows Server 2008 operating system and later.</remarks>
+        public SupportedEncryptionTypes? SupportedEncryptionTypes
+        {
+            get;
+            private set;
+        }
+
+        public bool SupportsKerberosAESEncryption
+        {
+            get
+            {
+                if (!this.SupportedEncryptionTypes.HasValue)
+                {
+                    return false;
+                }
+
+                return this.SupportedEncryptionTypes.Value.HasFlag(Data.SupportedEncryptionTypes.AES128_CTS_HMAC_SHA1_96) ||
+                       this.SupportedEncryptionTypes.Value.HasFlag(Data.SupportedEncryptionTypes.AES256_CTS_HMAC_SHA1_96);
+            }
+        }
+
+        /// <summary>
         /// Gets a boolean value indicating whether this <see cref="DSAccount"/> is deleted.
         /// </summary>
         /// <value>
@@ -399,6 +423,11 @@
             // PrimaryGroupId
             dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out int? groupId);
             this.PrimaryGroupId = groupId.Value;
+
+            // SuportedEncryptionTypes
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SupportedEncryptionTypes, out int? numericSupportedEncryptionTypes);
+            // Note: The value is store as int in the DB, but the documentation says that it is an unsigned int
+            this.SupportedEncryptionTypes = (SupportedEncryptionTypes?) numericSupportedEncryptionTypes;
         }
 
         protected void LoadHashes(DirectoryObject dsObject, DirectorySecretDecryptor pek)

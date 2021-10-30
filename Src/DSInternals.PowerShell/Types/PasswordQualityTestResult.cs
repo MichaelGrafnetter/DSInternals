@@ -58,6 +58,11 @@
         public ISet<string> DESEncryptionOnly = new SortedSet<string>();
 
         /// <summary>
+        /// List of accounts that are susceptible to the Kerberoasting attack.
+        /// </summary>
+        public ISet<string> Kerberoastable = new SortedSet<string>();
+
+        /// <summary>
         /// List of administrative accounts that can be delegated.
         /// </summary>
         public ISet<string> DelegatableAdmins = new SortedSet<string>();

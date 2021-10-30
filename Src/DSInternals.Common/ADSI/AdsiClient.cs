@@ -29,6 +29,7 @@
             CommonDirectoryAttributes.SamAccountType,
             CommonDirectoryAttributes.AdminCount,
             CommonDirectoryAttributes.UserAccountControl,
+            CommonDirectoryAttributes.SupportedEncryptionTypes,
             CommonDirectoryAttributes.LastLogon,
             CommonDirectoryAttributes.LastLogonTimestamp,
             CommonDirectoryAttributes.GivenName,

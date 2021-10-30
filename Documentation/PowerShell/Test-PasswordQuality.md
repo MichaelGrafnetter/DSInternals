@@ -71,6 +71,11 @@ Kerberos pre-authentication is not required for these accounts:
 Only DES encryption is allowed to be used with these accounts:
   CONTOSO\sql_svc01
 
+These accounts are susceptible to the Kerberoasting attack:
+  CONTOSO\Administrator
+  CONTOSO\sp_svc01
+  CONTOSO\sql_svc02
+
 These administrative accounts are allowed to be delegated to a service:
   CONTOSO\AdatumAdmin
   CONTOSO\Administrator

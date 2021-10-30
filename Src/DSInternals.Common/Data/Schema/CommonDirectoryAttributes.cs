@@ -117,6 +117,8 @@
         public const int SIDHistoryId = 590433;
         public const string SupplementalCredentials = "supplementalCredentials";
         public const int SupplementalCredentialsId = 589949;
+        public const string SupportedEncryptionTypes = "msDS-SupportedEncryptionTypes";
+        public const int SupportedEncryptionTypesId = 591787;
         public const string Surname = "sn";
         public const int SurnameId = 4;
         public const string SystemFlags = "systemFlags";
@@ -128,7 +130,7 @@
         public const int UserPrincipalNameId = 590480;
         public const string USNCreated = "uSNCreated";
         public const string USNChanged = "uSNChanged";
-        public const string WhenCreated = "whenCreated";    
+        public const string WhenCreated = "whenCreated";
         public const string WhenChanged = "whenChanged";
     }
 }

@@ -5,9 +5,20 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Added
+
+- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet can now identify [kerberoastable](https://attack.mitre.org/techniques/T1558/003/) user accounts.
+- The [DSAccount](../Src/DSInternals.Common/Data/Principals/DSAccount.cs) class now exposes the [msDs-supportedEncryptionTypes](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/4f1f447a-4f35-49b1-a129-d76ea280a4c1) attribute in its `SupportedEncryptionTypes` property.
+
 ### Changed
 
 - The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+- DSInternals.Replication.Interop is targeting the latest Windows 10 SDK instead of a specific one.
+
+### Fixed
+
+- Computer accounts are now skipped when searching duplicate passwords.
+- Improved exception handling when opening read-only database files.
 
 ## [4.6] - 2021-10-19
 
