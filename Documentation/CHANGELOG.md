@@ -440,7 +440,7 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 Initial release!
 
 [Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.7...HEAD
-[4.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.6...v4.7
+[4.7]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.6...v4.7
 [4.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.5...v4.6
 [4.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4.1...v4.5
 [4.4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4...v4.4.1
