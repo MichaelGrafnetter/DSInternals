@@ -41,6 +41,34 @@ Get-ADDBAccount [-BootKey <Byte[]>] -ObjectGuid <Guid> -DatabasePath <String> [-
  [<CommonParameters>]
 ```
 
+### Extra
+Retrieve more User and Computer info
+```
+Get-ADDBAccount -All -Extra [-BootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+```
+
+### AccountTypes
+Set AccountType filter
+Possible values: All, User, Computer, Other
+Default: All
+```
+Get-ADDBAccount -All -AccountTypes User [-BootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+```
+
+### CredTypes
+Set CredType filter
+Possible values: All, LM, LM_History, NT, NT_History, Bitlocker, Other, None
+Default: All
+```
+Get-ADDBAccount -All -AccountTypes Computer -CredTypes NT, Bitlocker [-BootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+```
+
+### Count
+Limit results to N elements
+```
+Get-ADDBAccount -All -AccountTypes Computer -CredTypes NT, Bitlocker -Count 1 [-BootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
 
 Reads one or more accounts from an Active Directory database file. When provided with a boot key (AKA SysKey or system key), it also decrypts secret attributes.
@@ -66,10 +94,12 @@ SupportedEncryptionTypes: Default
 AdminCount: True
 Deleted: False
 LastLogonDate: 2/23/2015 10:27:18 AM
+Description: Built-in account for administering the computer/domain
 DisplayName:
 GivenName:
 Surname:
-Description: Built-in account for administering the computer/domain
+Generic User Account Info:
+Generic Computer Account Info:
 ServicePrincipalName:
 SecurityDescriptor: DiscretionaryAclPresent, SystemAclPresent, DiscretionaryAclAutoInherited, SystemAclAutoInherited, DiscretionaryAclProtected, SelfRelative
 Owner: S-1-5-21-1236425271-2880748467-2592687428-512
@@ -84,6 +114,7 @@ Credential Roaming
   Created:
   Modified:
   Credentials:
+Bitlocker Recovery Data:
 #>
 ```
 
@@ -110,10 +141,12 @@ SupportedEncryptionTypes: Default
 AdminCount: False
 Deleted: False
 LastLogonDate:  2/23/2015 10:27:18 AM
+Description:
 DisplayName: Joe Smith
 GivenName: Joe
 Surname: Smith
-Description:
+Generic User Account Info:
+Generic Computer Account Info:
 ServicePrincipalName:
 SecurityDescriptor: DiscretionaryAclPresent, SystemAclPresent, DiscretionaryAclAutoInherited, SystemAclAutoInherited, SelfRelative
 Owner: S-1-5-21-1236425271-2880748467-2592687428-512
@@ -194,6 +227,7 @@ Credential Roaming
     CNGCertificate: joe\SystemCertificates\My\Certificates\3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
     RSAPrivateKey: joe\Crypto\RSA\S-1-5-21-1236425271-2880748467-2592687428-1110\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
     CNGPrivateKey: joe\Crypto\Keys\E8F13C2BA0209401C4DFE839CD57375E26BBE38F
+Bitlocker Recovery Data:
 #>
 ```
 
@@ -376,6 +410,66 @@ Required: True
 Position: 0
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Extra
+Retrieve additionals information with User and Computer account types
+
+```yaml
+Type: Bool
+
+Required: False
+Position: 0
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AccountTypes
+Set AccountType filter
+
+TODO
+Possible values: All, User, Computer, Other
+Default: All
+
+```yaml
+Type: String
+
+Required: False
+Position: 0
+Default value: All
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CredTypes
+Set CredType filter
+
+TODO
+Possible values: All, LM, LM_History, NT, NT_History, Bitlocker, Other, None
+Default: All
+
+```yaml
+Type: String
+
+Required: False
+Position: 0
+Default value: All
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### Count
+Limit results to N elements
+
+```yaml
+Type: Int64
+
+Required: False
+Position: 0
+Default value: 0
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

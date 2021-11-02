@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+  <Controls>
+    <Control>
+      <Name>GenericComputerAccountInfo</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>DNS HostName: </Text>
+              <ExpressionBinding>
+                <PropertyName>DNSHostName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Managed By: </Text>
+              <ExpressionBinding>
+                <PropertyName>ManagedBy</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>CanonicalName: </Text>
+              <ExpressionBinding>
+                <PropertyName>CanonicalName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Location: </Text>
+              <ExpressionBinding>
+                <PropertyName>Location</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>OperatingSystem: </Text>
+              <ExpressionBinding>
+                <PropertyName>OperatingSystem</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>OperatingSystemVersion: </Text>
+              <ExpressionBinding>
+                <PropertyName>OperatingSystemVersion</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>OperatingSystemServicePack: </Text>
+              <ExpressionBinding>
+                <PropertyName>OperatingSystemServicePack</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>OperatingSystemHotfix: </Text>
+              <ExpressionBinding>
+                <PropertyName>OperatingSystemHotfix</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+  </Controls>
+  <ViewDefinitions>
+    <View>
+      <Name>GenericComputerAccountInfo</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.GenericComputerAccountInfo</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>GenericComputerAccountInfo</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

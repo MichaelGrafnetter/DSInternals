@@ -28,6 +28,11 @@
         public ISet<string> WeakPassword = new SortedSet<string>();
 
         /// <summary>
+        /// List of accounts with hashes that have a weak password.
+        /// </summary>
+        public ISet<string> WeakPasswordNTHashes = new SortedSet<string>();
+
+        /// <summary>
         /// List of computer accounts with default passwords.
         /// </summary>
         public ISet<string> DefaultComputerPassword = new SortedSet<string>();

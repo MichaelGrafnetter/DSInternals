@@ -1,9 +1,8 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Cryptography;
-using DSInternals.Common.Data;
+﻿using DSInternals.Common.Data;
 using DSInternals.DataStore;
 using DSInternals.PowerShell.Properties;
 using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 
 namespace DSInternals.PowerShell.Commands
@@ -12,12 +11,48 @@ namespace DSInternals.PowerShell.Commands
     [OutputType(typeof(DSAccount))]
     public class GetADDBAccountCommand : ADDBPrincipalCommandBase
     {
-        private const int ProgressReportingInterval = 25;
+        #region Constants
+        private int ProgressReportingInterval = 25;
         protected const string ParameterSetAll = "All";
+        protected DSAccount.AccountType accountTypes = DSAccount.AccountType.Default;
+        protected DSAccount.CredType credTypes = DSAccount.CredType.All;
+        protected ulong counter = 0;
+        protected byte[] bootKey = null;
+        private List<BitlockerRecoveryInfo> bitlockerData = null;
+        #endregion Constants
 
+        #region Parameters
         [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
         [Alias("AllAccounts", "ReturnAllAccounts")]
         public SwitchParameter All
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter Extra
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public string[] AccountTypes
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public string[] CredTypes
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public ulong Count
         {
             get;
             set;
@@ -33,43 +68,97 @@ namespace DSInternals.PowerShell.Commands
             get;
             set;
         }
+        #endregion Parameters
 
+        #region Cmdlet Overrides
         protected override void ProcessRecord()
         {
             // TODO: Exception handling: Object not found, malformed DN, ...
             // TODO: Map DSAccount to transfer object
-            if(this.ParameterSetName == ParameterSetAll)
+            if (AccountTypes != null && AccountTypes.Length > 0)
             {
-                this.ReturnAllAccounts(this.BootKey);
+                accountTypes = DSAccount.GetAccountType(AccountTypes);
+            }
+
+            if (CredTypes != null && CredTypes.Length > 0)
+            {
+                credTypes = DSAccount.GetCredType(CredTypes);
+            }
+
+            if (credTypes.HasFlag(DSAccount.CredType.All) || credTypes.HasFlag(DSAccount.CredType.Bitlocker))
+            {
+                this.bitlockerData = null;
+                var tmpbitlockerData = new List<BitlockerRecoveryInfo>();
+
+                using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+                {
+                    foreach (var obj in directoryAgent.GetBitlockerRecoveryInfoAll(null))
+                    {
+                        tmpbitlockerData.Add(obj);
+                    }
+                }
+
+                if (tmpbitlockerData.Count > 0)
+                {
+                    this.bitlockerData = tmpbitlockerData;
+                }
+            }
+
+            if (Count > 0)
+            {
+                counter = Count;
+            }
+
+            if (BootKey != null && BootKey.Length > 0)
+            {
+                bootKey = BootKey;
+            }
+
+            if (this.ParameterSetName == ParameterSetAll)
+            {
+                this.ReturnAllAccounts();
             }
             else
             {
-                this.ReturnSingleAccount(this.BootKey);
+                this.ReturnSingleAccount();
             }
         }
+        #endregion Cmdlet Overrides
 
-        private void ReturnAllAccounts(byte[] bootKey)
+        #region Helper Methods
+        private void ReturnAllAccounts()
         {
             // This operation might take some time so we report its status.
             var progress = new ProgressRecord(4, "Reading accounts from AD database", "Starting...");
-            int accountCount = 0;
+            ulong accountCount = 0;
+
+            if (counter < (ulong)ProgressReportingInterval)
+            {
+                ProgressReportingInterval = 2;
+            }
 
             // Disable the progress bar as we do not know the total number of accounts.
             progress.PercentComplete = -1;
             this.WriteProgress(progress);
 
-            foreach (var account in this.DirectoryAgent.GetAccounts(bootKey))
+            foreach (var account in this.DirectoryAgent.GetAccounts(bootKey, Extra.IsPresent, accountTypes, credTypes, bitlockerData))
             {
+                if (account == null)
+                    continue;
+
                 this.WriteObject(account);
                 accountCount++;
 
                 // Update progress
-                if(accountCount % ProgressReportingInterval == 1)
+                if(accountCount % (ulong)ProgressReportingInterval == 1)
                 {
                     // We do not want to change the progress too often, for performance reasons.
                     progress.StatusDescription = String.Format("{0}+ accounts", accountCount);
                     this.WriteProgress(progress);
                 }
+
+                if (counter > 0 && accountCount >= counter)
+                    break;
             }
 
             // Finished
@@ -77,26 +166,26 @@ namespace DSInternals.PowerShell.Commands
             this.WriteProgress(progress);
         }
 
-        private void ReturnSingleAccount(byte[] bootKey)
+        private void ReturnSingleAccount()
         {
             DSAccount account;
             switch (this.ParameterSetName)
             {
                 case parameterSetByDN:
                     var dn = new DistinguishedName(this.DistinguishedName);
-                    account = this.DirectoryAgent.GetAccount(dn, bootKey);
+                    account = this.DirectoryAgent.GetAccount(dn, bootKey, Extra.IsPresent, credTypes, bitlockerData);
                     break;
 
                 case parameterSetByName:
-                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, bootKey);
+                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, bootKey, Extra.IsPresent, credTypes, bitlockerData);
                     break;
 
                 case parameterSetByGuid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, bootKey);
+                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, bootKey, Extra.IsPresent, credTypes, bitlockerData);
                     break;
 
                 case parameterSetBySid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, bootKey);
+                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, bootKey, Extra.IsPresent, credTypes, bitlockerData);
                     break;
 
                 default:
@@ -105,5 +194,6 @@ namespace DSInternals.PowerShell.Commands
             }
             this.WriteObject(account);
         }
+        #endregion Helper Methods
     }
 }

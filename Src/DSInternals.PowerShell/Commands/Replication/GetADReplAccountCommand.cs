@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 using System.Security.Principal;
 using DSInternals.Common.Data;
@@ -12,8 +13,14 @@ namespace DSInternals.PowerShell.Commands
     [OutputType(typeof(DSAccount))]
     public class GetADReplAccountCommand : ADReplPrincipalCommandBase
     {
+        #region Constants
         protected const string ParameterSetAll = "All";
+        protected DSAccount.AccountType accountTypes = DSAccount.AccountType.Default;
+        protected DSAccount.CredType credTypes = DSAccount.CredType.All;
+        protected ulong counter = 0;
+        #endregion Constants
 
+        #region Parameters
         [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
         [Alias("AllAccounts", "ReturnAllAccounts")]
         public SwitchParameter All
@@ -30,9 +37,54 @@ namespace DSInternals.PowerShell.Commands
             get;
             set;
         }
-        
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter Extra
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public string[] AccountTypes
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public string[] CredTypes
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        public ulong Count
+        {
+            get;
+            set;
+        }
+        #endregion Parameters
+
+        #region Cmdlet Overrides
         protected override void ProcessRecord()
         {
+            if (AccountTypes != null && AccountTypes.Length > 0)
+            {
+                accountTypes = DSAccount.GetAccountType(AccountTypes);
+            }
+
+            if (CredTypes != null && CredTypes.Length > 0)
+            {
+                credTypes = DSAccount.GetCredType(CredTypes);
+            }
+
+            if (Count > 0)
+            {
+                counter = Count;
+            }
+
             if (this.ParameterSetName == ParameterSetAll)
             {
                 this.ReturnAllAccounts();
@@ -42,12 +94,18 @@ namespace DSInternals.PowerShell.Commands
                 this.ReturnSingleAccount();
             }
         }
+        #endregion Cmdlet Overrides
+
+        #region Helper Methods
 
         protected void ReturnAllAccounts()
         {
+            List<BitlockerRecoveryInfo> bitlockerRecoveryInfoList = null;
             // Write the initial progress
             // TODO: Extract strings as resources
             var progress = new ProgressRecord(1, "Replication", "Replicating Active Directory objects.");
+            ulong accountCount = 0;
+
             progress.PercentComplete = 0;
             this.WriteProgress(progress);
 
@@ -63,10 +121,59 @@ namespace DSInternals.PowerShell.Commands
             // Automatically infer domain name if no value is provided
             string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
 
-            // Replicate all accounts
-            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter))
+            if (accountTypes.HasFlag(DSAccount.AccountType.Default) || accountTypes.HasFlag(DSAccount.AccountType.All) || accountTypes.HasFlag(DSAccount.AccountType.Computer))
             {
+                if (credTypes.HasFlag(DSAccount.CredType.All) || credTypes.HasFlag(DSAccount.CredType.Bitlocker))
+                {
+                    // dump msFVE-RecoveryInformation
+                    bitlockerRecoveryInfoList = new List<BitlockerRecoveryInfo>();
+
+                    foreach (var bl in this.ReplicationClient.GetBitlockerRecoveryData(domainNamingContext, null))
+                    {
+                        if (bl == null)
+                            continue;
+
+                        bitlockerRecoveryInfoList.Add(bl);
+                    }
+                }
+            }
+
+            // Replicate all accounts
+            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter, Extra.IsPresent, accountTypes, credTypes))
+            {
+                if (account == null)
+                    continue;
+
+                if (bitlockerRecoveryInfoList != null)
+                {
+                    List<BitlockerRecoveryInfo> bl_curUser = bitlockerRecoveryInfoList.FindAll(
+                        delegate(BitlockerRecoveryInfo br)
+                        {
+                            return br.OwnerDN.Equals(account.DistinguishedName);
+                        }
+                    );
+
+                    int i = (bl_curUser != null) ? bl_curUser.Count : 0;
+
+                    if (i > 0)
+                    {
+                        BitlockerRecoveryInfo[] bitlockerRecoveryData = new BitlockerRecoveryInfo[i];
+
+                        bl_curUser.ForEach(
+                            delegate(BitlockerRecoveryInfo br)
+                            {
+                                bitlockerRecoveryData[--i] = br;
+                            }
+                        );
+
+                        account.BitlockerInfo = bitlockerRecoveryData;
+                    }
+                }
+
                 this.WriteObject(account);
+
+                if (counter > 0 && ++accountCount >= counter)
+                    break;
             }
 
             // Write progress completed
@@ -76,29 +183,30 @@ namespace DSInternals.PowerShell.Commands
 
         protected void ReturnSingleAccount()
         {
-            DSAccount account;
+            DSAccount account = null;
+
             switch (this.ParameterSetName)
             {
                 case ParameterSetByDN:
-                    account = this.ReplicationClient.GetAccount(this.DistinguishedName);
+                    account = this.ReplicationClient.GetAccount(this.DistinguishedName, Extra.IsPresent, credTypes);
                     break;
 
                 case ParameterSetByName:
                     var accountName = new NTAccount(this.Domain, this.SamAccountName);
-                    account = this.ReplicationClient.GetAccount(accountName);
+                    account = this.ReplicationClient.GetAccount(accountName, Extra.IsPresent, credTypes);
                     break;
 
                 case ParameterSetByGuid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectGuid);
+                    account = this.ReplicationClient.GetAccount(this.ObjectGuid, Extra.IsPresent, credTypes);
                     break;
 
                 case ParameterSetBySid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectSid);
+                    account = this.ReplicationClient.GetAccount(this.ObjectSid, Extra.IsPresent, credTypes);
                     break;
 
                 case ParameterSetByUPN:
                     var upn = new NTAccount(this.UserPrincipalName);
-                    account = this.ReplicationClient.GetAccount(upn);
+                    account = this.ReplicationClient.GetAccount(upn, Extra.IsPresent, credTypes);
                     break;
 
                 default:
@@ -106,7 +214,57 @@ namespace DSInternals.PowerShell.Commands
                     throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
             }
 
+            if (account != null)
+            {
+                if (account.SamAccountType.HasFlag(SamAccountType.Computer))
+                {
+                    if (credTypes.HasFlag(DSAccount.CredType.All) || credTypes.HasFlag(DSAccount.CredType.Bitlocker))
+                    {
+                        // Automatically infer domain name if no value is provided
+                        string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
+
+                        // dump msFVE-RecoveryInformation
+                        List<BitlockerRecoveryInfo> bitlockerRecoveryInfoList = new List<BitlockerRecoveryInfo>();
+
+                        foreach (var bl in this.ReplicationClient.GetBitlockerRecoveryData(domainNamingContext, null))
+                        {
+                            if (bl == null)
+                                continue;
+
+                            bitlockerRecoveryInfoList.Add(bl);
+                        }
+
+                        if (bitlockerRecoveryInfoList != null)
+                        {
+                            List<BitlockerRecoveryInfo> bl_curUser = bitlockerRecoveryInfoList.FindAll(
+                                delegate (BitlockerRecoveryInfo br)
+                                {
+                                    return br.OwnerDN.Equals(account.DistinguishedName);
+                                }
+                            );
+
+                            int i = (bl_curUser != null) ? bl_curUser.Count : 0;
+
+                            if (i > 0)
+                            {
+                                BitlockerRecoveryInfo[] bitlockerRecoveryData = new BitlockerRecoveryInfo[i];
+
+                                bl_curUser.ForEach(
+                                    delegate (BitlockerRecoveryInfo br)
+                                    {
+                                        bitlockerRecoveryData[--i] = br;
+                                    }
+                                );
+
+                                account.BitlockerInfo = bitlockerRecoveryData;
+                            }
+                        }
+                    }
+                }
+            }
+
             this.WriteObject(account);
         }
+        #endregion Helper Methods
     }
 }

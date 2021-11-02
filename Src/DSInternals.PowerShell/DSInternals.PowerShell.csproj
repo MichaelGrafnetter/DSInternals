@@ -59,6 +59,7 @@
     <Compile Include="Commands\Base\SamCommandBase.cs" />
     <Compile Include="Commands\Base\ADDBAccountStatusCommandBase.cs" />
     <Compile Include="Commands\Datastore\DisableADDBAccountCommand.cs" />
+    <Compile Include="Commands\Datastore\GetADDBBitlockerRecoveryInfoCommand.cs" />
     <Compile Include="Commands\Datastore\GetADDBKdsRootKeyCommand.cs" />
     <Compile Include="Commands\Datastore\EnableADDBAccountCommand.cs" />
     <Compile Include="Commands\Datastore\NewADDBRestoreFromMediaScriptCommand.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Commands\Datastore\GetADDBBackupKeyCommand.cs" />
     <Compile Include="Commands\Encryption\SaveDPAPIBlobCommand.cs" />
     <Compile Include="Commands\Replication\AddADReplNgcKeyCommand.cs" />
+    <Compile Include="Commands\Replication\GetADReplBitlockerRecoveryInfoCommand.cs" />
     <Compile Include="Commands\Replication\GetADReplBackupKeyCommand.cs" />
     <Compile Include="Commands\Replication\GetADReplAccountCommand.cs" />
     <Compile Include="Commands\Datastore\GetBootKeyCommand.cs" />
@@ -175,6 +177,9 @@
     <Content Include="License.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\DSInternals.GenericComputerAccountInfo.format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\DSInternals.Hash.format.ps1xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -239,6 +244,15 @@
     </Content>
     <Content Include="Views\DSInternals.AzureADUser.format.ps1xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\DSInternals.GenericUserAccountInfo.format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\DSInternals.BitlockerInfo.format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\DSInternals.LAPSCredential.format.ps1xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
