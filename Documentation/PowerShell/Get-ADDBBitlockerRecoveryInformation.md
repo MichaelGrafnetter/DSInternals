@@ -1,14 +1,14 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBBitlockerRecoveryInfo.md
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBBitlockerRecoveryInformation.md
 schema: 2.0.0
 ---
 
-# Get-ADDBBitlockerRecoveryInfo
+# Get-ADDBBitlockerRecoveryInformation
 
 ## SYNOPSIS
-Reads msFVE-RecoveryInformation objects from a ntds.dit. file. Can be used to decrypt bitlocker containers.
+Reads BitLocker recovery passwords from a ntds.dit file.
 
 ## SYNTAX
 
@@ -17,13 +17,14 @@ Get-ADDBBitlockerRecoveryInfo -DatabasePath <String> [-LogPath <String>] [<Commo
 ```
 
 ## DESCRIPTION
-Bitlocker Recovery Information can be used to unlock encrypted bitlocker containers (Operating System, USB Drive, ...). 
+
+Bitlocker recovery information (msFVE-RecoveryInformation objects) can be used to unlock volumes encrypted using BitLocker Drive Encryption. 
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBBitlockerRecoveryInfo -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
+PS C:\> Get-ADDBBitlockerRecoveryInformation -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
 <# Sample Output:
 [TODO]
 #>
@@ -62,20 +63,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ExportKeysPath
-Specifies the path to a file where Bitlocker KeyPackages and RecoveryPasswords are written, for instance, c:\ADDumpBitlocker
-
-```yaml
-Type: String
-Parameter Sets: (All)
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
@@ -85,10 +72,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### DSInternals.Common.Data.BitlockerRecoveryInfo
+### DSInternals.Common.Data.BitlockerRecoveryInformation
 
 ## NOTES
 
 ## RELATED LINKS
-
-[Get-ADReplBitlockerRecoveryInfo](Get-ADReplBitlockerRecoveryInfo.md)

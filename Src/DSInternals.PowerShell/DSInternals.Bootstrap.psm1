@@ -92,6 +92,10 @@ New-Alias -Name Set-LsaPolicy                    -Value Set-LsaPolicyInformation
 New-Alias -Name Write-ADReplNgcKey               -Value Add-ADReplNgcKey
 New-Alias -Name Write-ADNgcKey                   -Value Add-ADReplNgcKey
 New-Alias -Name Add-ADNgcKey                     -Value Add-ADReplNgcKey
+New-Alias -Name Get-ADDBBitLockerRecoveryInfo    -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBBitLockerKeyProtector    -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBFVERecoveryInformation   -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBFVERecoveryInfo          -Value Get-ADDBBitLockerRecoveryInformation
 
 # Export the aliases
 Export-ModuleMember -Alias * -Cmdlet *

@@ -3,9 +3,9 @@
     using DSInternals.Common.Properties;
     using System;
 
-    public class GenericUserAccountInfo
+    public class DSUser
     {
-        public GenericUserAccountInfo(DirectoryObject dsObject)
+        public DSUser(DirectoryObject dsObject)
         {
             // Parameter validation
             Validator.AssertNotNull(dsObject, nameof(dsObject));

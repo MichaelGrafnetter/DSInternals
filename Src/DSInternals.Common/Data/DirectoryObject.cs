@@ -162,7 +162,7 @@
             get
             {
                 byte[] admPwd;
-                this.ReadAttribute(CommonDirectoryAttributes.McsAdmPwd, out admPwd);
+                this.ReadAttribute(CommonDirectoryAttributes.LAPSPassword, out admPwd);
                 return (admPwd != null);
             }
         }

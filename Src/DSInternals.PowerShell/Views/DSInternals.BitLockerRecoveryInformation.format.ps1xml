@@ -2,23 +2,11 @@
 <Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
   <Controls>
     <Control>
-      <Name>BitlockerInfo</Name>
+      <Name>BitLockerRecoveryInformation</Name>
       <CustomControl>
         <CustomEntries>
           <CustomEntry>
             <CustomItem>
-              <!--
-              <Text>TPMOwnerInfo: </Text>
-              <ExpressionBinding>
-                <PropertyName>TPMOwnerInfo</PropertyName>
-              </ExpressionBinding>
-              <NewLine />
-              <Text>ObjectGUID: </Text>
-              <ExpressionBinding>
-                <PropertyName>ObjectGUID</PropertyName>
-              </ExpressionBinding>
-              <NewLine />
-              -->
               <Text>DistinguishedName: </Text>
               <ExpressionBinding>
                 <PropertyName>DistinguishedName</PropertyName>
@@ -68,9 +56,9 @@
   </Controls>
   <ViewDefinitions>
     <View>
-      <Name>BitlockerInfo</Name>
+      <Name>BitLockerRecoveryInformation</Name>
       <ViewSelectedBy>
-        <TypeName>DSInternals.Common.Data.BitlockerRecoveryInfo</TypeName>
+        <TypeName>DSInternals.Common.Data.BitLockerRecoveryInformation</TypeName>
       </ViewSelectedBy>
       <CustomControl>
         <CustomEntries>
@@ -78,7 +66,7 @@
             <CustomItem>
               <ExpressionBinding>
                 <ScriptBlock>$_</ScriptBlock>
-                <CustomControlName>BitlockerInfo</CustomControlName>
+                <CustomControlName>BitLockerRecoveryInformation</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
           </CustomEntry>

@@ -59,7 +59,7 @@
     <Compile Include="Commands\Base\SamCommandBase.cs" />
     <Compile Include="Commands\Base\ADDBAccountStatusCommandBase.cs" />
     <Compile Include="Commands\Datastore\DisableADDBAccountCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBBitlockerRecoveryInfoCommand.cs" />
+    <Compile Include="Commands\Datastore\GetADDBBitlockerRecoveryInformationCommand.cs" />
     <Compile Include="Commands\Datastore\GetADDBKdsRootKeyCommand.cs" />
     <Compile Include="Commands\Datastore\EnableADDBAccountCommand.cs" />
     <Compile Include="Commands\Datastore\NewADDBRestoreFromMediaScriptCommand.cs" />
@@ -78,12 +78,10 @@
     <Compile Include="Commands\Datastore\GetADDBBackupKeyCommand.cs" />
     <Compile Include="Commands\Encryption\SaveDPAPIBlobCommand.cs" />
     <Compile Include="Commands\Replication\AddADReplNgcKeyCommand.cs" />
-    <Compile Include="Commands\Replication\GetADReplBitlockerRecoveryInfoCommand.cs" />
     <Compile Include="Commands\Replication\GetADReplBackupKeyCommand.cs" />
     <Compile Include="Commands\Replication\GetADReplAccountCommand.cs" />
     <Compile Include="Commands\Datastore\GetBootKeyCommand.cs" />
     <Compile Include="Commands\Datastore\SetADDBDomainControllerCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBObjectCommand.cs" />
     <Compile Include="Commands\Datastore\GetADDBSchemaAttributeCommand.cs" />
     <Compile Include="Commands\Datastore\GetADDBIndexCommand.cs" />
     <Compile Include="Commands\Datastore\GetADDBAccountCommand.cs" />
@@ -249,7 +247,7 @@
     <Content Include="Views\DSInternals.GenericUserAccountInfo.format.ps1xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\DSInternals.BitlockerInfo.format.ps1xml">
+    <Content Include="Views\DSInternals.BitLockerRecoveryInformation.format.ps1xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\DSInternals.LAPSCredential.format.ps1xml">

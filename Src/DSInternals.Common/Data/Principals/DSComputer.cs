@@ -1,24 +1,50 @@
-﻿namespace DSInternals.Common.Data
-{
-    using DSInternals.Common.Properties;
-    using System;
+﻿using System;
+using DSInternals.Common.Cryptography;
 
-    public class GenericComputerAccountInfo
+namespace DSInternals.Common.Data.Principals
+{
+    public class DSComputer : DSAccount
     {
-        public GenericComputerAccountInfo(DirectoryObject dsObject)
+        public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.Default) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
             // Parameter validation
-            Validator.AssertNotNull(dsObject, nameof(dsObject));
+            //Validator.AssertNotNull(dsObject, nameof(dsObject));
 
-            if (!dsObject.IsComputerAccount)
-            {
-                throw new ArgumentException(Resources.ObjectNotAccountMessage);
-            }
+            //if (!dsObject.IsComputerAccount)
+            //{
+            //    throw new ArgumentException(Resources.ObjectNotAccountMessage);
+            //}
 
-            data_len = this.LoadGenericComputerAccountInfo(dsObject);
+            //data_len = this.LoadGenericComputerAccountInfo(dsObject);
+
+            //byte[] admPwd;
+            //dsObject.ReadAttribute(CommonDirectoryAttributes.LAPSPassword, out admPwd);
+            //this.LAPS_AdminPassword = Encoding.UTF8.GetString(admPwd);
+
+            //long? expTime;
+            //dsObject.ReadAttribute(CommonDirectoryAttributes.LAPSPasswordExpirationTime, out expTime);
+            //this.LAPT_AdminPasswordExpTime = (expTime != null) ? expTime.Value : 0;
+
+            //DateTime dt1 = new DateTime(this.LAPT_AdminPasswordExpTime, DateTimeKind.Utc);
+            //dt1 = dt1.AddYears(1600).ToLocalTime();
+            //this.LAPT_AdminPasswordExpTime_str = dt1.ToString();
         }
 
-        public ulong data_len = 0;
+        public string AdmPwd
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public string AdmPwdExpTime
+        {
+            get
+            {
+                return null;
+            }
+        }
 
         public string DNSHostName
         {
@@ -122,9 +148,9 @@
             }
 
             // operatingSystem:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.OperatingSystem))
+            if (dsObject.HasAttribute(CommonDirectoryAttributes.OperatingSystemName))
             {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.OperatingSystem, out string operatingSystem);
+                dsObject.ReadAttribute(CommonDirectoryAttributes.OperatingSystemName, out string operatingSystem);
                 if (!String.IsNullOrEmpty(operatingSystem))
                     ret += (ulong)operatingSystem.Length;
                 this.OperatingSystem = operatingSystem;

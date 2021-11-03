@@ -82,72 +82,17 @@ namespace DSInternals.Replication
             return this.drsConnection.GetReplicationCursors(namingContext);
         }
 
-        public IEnumerable<BitlockerRecoveryInfo> GetBitlockerRecoveryData(string domainNamingContext, ReplicationProgressHandler progressReporter = null, string exportKeysPath = null)
+        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets properties = AccountPropertySets.Default)
         {
             Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
             ReplicationCookie cookie = new ReplicationCookie(domainNamingContext);
-            return GetBitlockerRecoveryData(cookie, progressReporter, exportKeysPath);
+            return GetAccounts(cookie, progressReporter, properties);
         }
 
-        public IEnumerable<BitlockerRecoveryInfo> GetBitlockerRecoveryData(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, string exportKeysPath = null)
+        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, AccountPropertySets properties = AccountPropertySets.Default)
         {
             Validator.AssertNotNull(initialCookie, nameof(initialCookie));
-            // Create AD Bitlocker schema
-            var schema = BasicSchemaFactory.CreateBitlockerSchema();
-            var currentCookie = initialCookie;
-            ReplicationResult result;
-            int processedObjectCount = 0;
 
-            do
-            {
-                // Perform one replication cycle
-                result = this.drsConnection.ReplicateAllObjects(currentCookie);
-
-                // Report replication progress
-                if (progressReporter != null)
-                {
-                    processedObjectCount += result.Objects.Count;
-                    progressReporter(result.Cookie, processedObjectCount, result.TotalObjectCount);
-                }
-
-                // Process the returned objects
-                foreach (var obj in result.Objects)
-                {
-                    obj.Schema = schema;
-                    /*
-                    if (obj.IsTPM)
-                    {
-                        obj.ReadAttribute(CommonDirectoryAttributes.TPMOwnerInfo, out string tpmownerinfo);
-                        Console.WriteLine("TMPOwnerInfo: {0}", tpmownerinfo);
-                    }
-                    else
-                    */
-                    if (!obj.IsBitlocker)
-                        continue;
-
-                    var objBL = new BitlockerRecoveryInfo(obj, exportKeysPath);
-                    if (objBL == null)
-                        continue;
-
-                    yield return objBL;
-                }
-
-                // Update the position of the replication cursor
-                currentCookie = result.Cookie;
-            } while (result.HasMoreData);
-        }
-
-
-        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.Default, DSAccount.CredType credTypes = DSAccount.CredType.All)
-        {
-            Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
-            ReplicationCookie cookie = new ReplicationCookie(domainNamingContext);
-            return GetAccounts(cookie, progressReporter, extra, accountTypes, credTypes);
-        }
-
-        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, bool extra = false, DSAccount.AccountType accountTypes = DSAccount.AccountType.Default, DSAccount.CredType credTypes = DSAccount.CredType.All)
-        {
-            Validator.AssertNotNull(initialCookie, nameof(initialCookie));
             // Create AD schema
             var schema = BasicSchemaFactory.CreateSchema();
             var currentCookie = initialCookie;
@@ -171,44 +116,12 @@ namespace DSInternals.Replication
                 {
                     obj.Schema = schema;
 
-                    if (!accountTypes.HasFlag(DSAccount.AccountType.All))
+                    if (!obj.IsAccount)
                     {
-                        long max = 0;
-                        long err = 0;
-
-                        if (accountTypes.HasFlag(DSAccount.AccountType.User))
-                        {
-                            max++;
-                            if (!obj.IsUserAccount)
-                                err++;
-                        }
-
-                        if (accountTypes.HasFlag(DSAccount.AccountType.Computer))
-                        {
-                            max++;
-                            if (!obj.IsComputerAccount)
-                                err++;
-                        }
-
-                        if (accountTypes.HasFlag(DSAccount.AccountType.Other))
-                        {
-                            max++;
-                            if (!obj.IsOtherAccount)
-                                err++;
-                        }
-
-                        if (max > 0 && max == err)
-                            continue;
-
-                        if (max == 0 && !obj.IsAccount)
-                            continue;
+                        continue;
                     }
 
-                    var newAccount = new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, extra, credTypes);
-                    if (newAccount == null)
-                        continue;
-
-                    yield return newAccount;
+                    yield return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, properties);
                 }
 
                 // Update the position of the replication cursor
@@ -216,33 +129,33 @@ namespace DSInternals.Replication
             } while (result.HasMoreData);
         }
 
-        public DSAccount GetAccount(Guid objectGuid, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public DSAccount GetAccount(Guid objectGuid, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             var obj = this.drsConnection.ReplicateSingleObject(objectGuid);
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
-            return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, extra, credTypes);
+            return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, propertySets);
         }
 
-        public DSAccount GetAccount(string distinguishedName, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public DSAccount GetAccount(string distinguishedName, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             var obj = this.drsConnection.ReplicateSingleObject(distinguishedName);
             // TODO: Extract?
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
-            return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, extra, credTypes);
+            return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, propertySets);
         }
 
-        public DSAccount GetAccount(NTAccount accountName, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public DSAccount GetAccount(NTAccount accountName, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             Guid objectGuid = this.drsConnection.ResolveGuid(accountName);
-            return this.GetAccount(objectGuid, extra, credTypes);
+            return this.GetAccount(objectGuid, propertySets);
         }
 
-        public DSAccount GetAccount(SecurityIdentifier sid, bool extra = false, DSAccount.CredType credTypes = DSAccount.CredType.All)
+        public DSAccount GetAccount(SecurityIdentifier sid, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             Guid objectGuid = this.drsConnection.ResolveGuid(sid);
-            return this.GetAccount(objectGuid, extra, credTypes);
+            return this.GetAccount(objectGuid, propertySets);
         }
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(string domainNamingContext)

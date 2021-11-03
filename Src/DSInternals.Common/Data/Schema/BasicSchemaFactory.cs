@@ -85,15 +85,15 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ManagedById, CommonDirectoryAttributes.ManagedBy, AttributeSyntax.DNWithBinary));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CanonicalNameId, CommonDirectoryAttributes.CanonicalName, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.LocationId, CommonDirectoryAttributes.Location, AttributeSyntax.UnicodeString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemId, CommonDirectoryAttributes.OperatingSystem, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemNameId, CommonDirectoryAttributes.OperatingSystemName, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemVersionId, CommonDirectoryAttributes.OperatingSystemVersion, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemHotfixId, CommonDirectoryAttributes.OperatingSystemHotfix, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemServicePackId, CommonDirectoryAttributes.OperatingSystemServicePack, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.DNSHostNameId, CommonDirectoryAttributes.DNSHostName, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryPasswordId, CommonDirectoryAttributes.FVERecoveryPassword, AttributeSyntax.UnicodeString));
             // laps
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.McsAdmPwdId, CommonDirectoryAttributes.McsAdmPwd, AttributeSyntax.OctetString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.McsAdmPwdExpirationTimeId, CommonDirectoryAttributes.McsAdmPwdExpirationTime, AttributeSyntax.Int64));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.LAPSPasswordId, CommonDirectoryAttributes.LAPSPassword, AttributeSyntax.OctetString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.LAPSPasswordExpirationTimeId, CommonDirectoryAttributes.LAPSPasswordExpirationTime, AttributeSyntax.Int64));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.SupportedEncryptionTypesId, CommonDirectoryAttributes.SupportedEncryptionTypes, AttributeSyntax.Int));
 
             return new BasicSchema(attributes);

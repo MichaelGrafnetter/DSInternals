@@ -26,24 +26,24 @@
             bool hasChanged;
             switch (this.ParameterSetName)
             {
-                case ADDBObjectCommandBase.parameterSetByDN:
+                case ADDBObjectCommandBase.ParameterSetByDN:
                     // TODO: Extract these messages as a resource.
                     this.WriteVerbose(String.Format("Adding SID history to principal {0}.", this.DistinguishedName));
                     var dn = new DistinguishedName(this.DistinguishedName);
                     hasChanged = this.DirectoryAgent.AddSidHistory(dn, this.SidHistory, this.SkipMetaUpdate);
                     break;
 
-                case ADDBPrincipalCommandBase.parameterSetByName:
+                case ADDBPrincipalCommandBase.ParameterSetByName:
                     this.WriteVerbose(String.Format("Adding SID history to principal {0}.", this.SamAccountName));
                     hasChanged = this.DirectoryAgent.AddSidHistory(this.SamAccountName, this.SidHistory, this.SkipMetaUpdate);
                     break;
 
-                case ADDBObjectCommandBase.parameterSetByGuid:
+                case ADDBObjectCommandBase.ParameterSetByGuid:
                     this.WriteVerbose(String.Format("Adding SID history to principal {0}.", this.ObjectGuid));
                     hasChanged = this.DirectoryAgent.AddSidHistory(this.ObjectGuid, this.SidHistory, this.SkipMetaUpdate);
                     break;
 
-                case ADDBPrincipalCommandBase.parameterSetBySid:
+                case ADDBPrincipalCommandBase.ParameterSetBySid:
                     this.WriteVerbose(String.Format("Adding SID history to principal {0}.", this.ObjectSid));
                     hasChanged = this.DirectoryAgent.AddSidHistory(this.ObjectSid, this.SidHistory, this.SkipMetaUpdate);
                     break;

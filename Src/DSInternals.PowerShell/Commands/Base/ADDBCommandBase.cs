@@ -57,6 +57,7 @@
         {
             // TODO: Debug output
             this.WriteDebug("Opening the Active Directory database.");
+
             try
             {
                 // Resolve possibly relative paths to absolute paths:

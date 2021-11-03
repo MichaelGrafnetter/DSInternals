@@ -5,8 +5,18 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Added
+
+- Get-ADDBBitLockerRecoveryInformation cmdlet
+- Get-ADDBComputer cmdlet.
+
 ### Changed
+
 - The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+
+### Fixed
+
+- Improved export formats.
 
 ## [4.7] - 2021-10-30
 

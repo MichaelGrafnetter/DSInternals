@@ -51,8 +51,8 @@ Reads the DPAPI backup keys from a ntds.dit file.
 ### [Get-ADDBKdsRootKey](Get-ADDBKdsRootKey.md#get-addbkdsrootkey)
 Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
 
-### [Get-ADDBBitlockerRecoveryInfo](Get-ADDBBitlockerRecoveryInfo.md#get-addbbitlockerrecoveryinfo)
-Reads msFVE-RecoveryInformation objects from a ntds.dit. file. Can be used to decrypt bitlocker containers.
+### [Get-ADDBBitLockerRecoveryInformation](Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation)
+Reads BitLocker recovery passwords from a ntds.dit file.
 
 ### [Get-ADDBDomainController](Get-ADDBDomainController.md#get-addbdomaincontroller)
 Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name and DC site.
@@ -76,9 +76,6 @@ Physically removes specified object from a ntds.dit file, making it semantically
 
 ### [Get-ADReplAccount](Get-ADReplAccount.md#get-adreplaccount)
 Reads one or more accounts through the MS-DRSR protocol, including secret attributes.
-
-### [Get-ADReplBitlockerRecoveryInfo](Get-ADReplBitlockerRecoveryInfo.md#get-adreplbitlockerrecoveryinfo)
-Reads msFVE-RecoveryInformation objects through the MS-DRSR protocol, including secret attributes.
 
 ### [Get-ADReplBackupKey](Get-ADReplBackupKey.md#get-adreplbackupkey)
 Reads the DPAPI backup keys from a domain controller through the MS-DRSR protocol.

@@ -48,7 +48,7 @@
             {
                 switch (this.ParameterSetName)
                 {
-                    case parameterSetByDN:
+                    case ParameterSetByDN:
                         var dn = new DistinguishedName(this.DistinguishedName);
                         if (this.ShouldProcess(this.DistinguishedName, "Remove Object from Database"))
                         {
@@ -61,7 +61,7 @@
                         }
                         break;
 
-                    case parameterSetByGuid:
+                    case ParameterSetByGuid:
                         if (this.ShouldProcess(this.ObjectGuid.ToString(), "Remove Object from Database"))
                         {
                             this.DirectoryAgent.RemoveObject(this.ObjectGuid);

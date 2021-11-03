@@ -84,6 +84,7 @@
         public const int ObjectSidId = 589970;
         public const string ObjectTypeId = "ObjectTypeId";
         public const string OperatingSystemName = "operatingSystem";
+        public const int OperatingSystemNameId = 590187;
         public const string Options = "options";
         public const string OrganizationalUnitName = "ou";
         public const string ParentDNTag = "PDNT";
@@ -198,8 +199,6 @@
         public const int CanonicalNameId = 590740;
         public const string Location = "location";
         public const int LocationId = 590046;
-        public const string OperatingSystem = "operatingSystem";
-        public const int OperatingSystemId = 590187;
         public const string OperatingSystemVersion = "operatingSystemVersion";
         public const int OperatingSystemVersionId = 590188;
         public const string OperatingSystemHotfix = "operatingSystemHotfix";
@@ -217,9 +216,9 @@
         public const int FVERecoveryGuidId = 591789;
         public const string FVERecoveryPassword = "msFVE-RecoveryPassword";
         public const int FVERecoveryPasswordId = 591788;
-        public const string McsAdmPwd = "ms-Mcs-AdmPwd";
-        public const int McsAdmPwdId = -1859393137;
-        public const string McsAdmPwdExpirationTime = "ms-Mcs-AdmPwdExpirationTime";
-        public const int McsAdmPwdExpirationTimeId = -1741909977;
+        public const string LAPSPassword = "ms-Mcs-AdmPwd";
+        public const int LAPSPasswordId = -1859393137;
+        public const string LAPSPasswordExpirationTime = "ms-Mcs-AdmPwdExpirationTime";
+        public const int LAPSPasswordExpirationTimeId = -1741909977;
     }
 }
