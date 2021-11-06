@@ -120,14 +120,14 @@ namespace DSInternals.Common.Data.Principals
             }
 
             // managedBy:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.ManagedBy))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.ManagedBy, out byte[] binaryManagedBy);
-                string managedBy = dsObject.ParseDSDN(binaryManagedBy);
-                if (!String.IsNullOrEmpty(managedBy))
-                    ret += (ulong)managedBy.Length;
-                this.ManagedBy = managedBy;
-            }
+            //if (dsObject.HasAttribute(CommonDirectoryAttributes.ManagedBy))
+            //{
+            //    dsObject.ReadAttribute(CommonDirectoryAttributes.ManagedBy, out byte[] binaryManagedBy);
+            //    string managedBy = dsObject.ParseDSDN(binaryManagedBy);
+            //    if (!String.IsNullOrEmpty(managedBy))
+            //        ret += (ulong)managedBy.Length;
+            //    this.ManagedBy = managedBy;
+            //}
 
             // canonicalName:
             if (dsObject.HasAttribute(CommonDirectoryAttributes.CanonicalName))

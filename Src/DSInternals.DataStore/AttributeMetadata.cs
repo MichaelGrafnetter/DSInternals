@@ -1,4 +1,5 @@
 ﻿using System;
+using DSInternals.Common;
 
 namespace DSInternals.DataStore
 {
@@ -81,12 +82,11 @@ namespace DSInternals.DataStore
         {
             get
             {
-                DateTime result = DateTime.FromFileTime(this.LastOriginatingChangeTimestamp * ADConstants.GeneralizedTimeCoefficient);
-                return result;
+                return this.LastOriginatingChangeTimestamp.FromGeneralizedTime();
             }
             private set
             {
-                this.LastOriginatingChangeTimestamp = value.ToFileTime() / ADConstants.GeneralizedTimeCoefficient;
+                this.LastOriginatingChangeTimestamp = value.ToGeneralizedTime();
             }
         }
 

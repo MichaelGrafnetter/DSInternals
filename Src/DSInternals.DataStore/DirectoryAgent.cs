@@ -18,6 +18,8 @@
         // TODO: Add Rid range checks
         public const int RidMin = 1;
 
+        private const string ComputerNameSuffix = "$";
+
         private DirectoryContext context;
         private Cursor dataTableCursor;
         private bool ownsContext;
@@ -141,6 +143,7 @@
 
         public IEnumerable<BitLockerRecoveryInformation> GetBitlockerRecoveryInformation()
         {
+            // TODO: Check if the schema contains BitLocker information.
             // TODO: Containerized seach
             foreach (var bitlockerInfo in this.FindObjectsByCategory(CommonDirectoryClasses.FVERecoveryInformation))
             {
@@ -154,22 +157,81 @@
 
         public BitLockerRecoveryInformation GetBitlockerRecoveryInformation(DistinguishedName dn)
         {
-            throw new NotImplementedException();
+            // TODO: Check if the schema contains BitLocker information.
+
+            // Validate the input
+            Validator.AssertNotNull(dn, nameof(dn));
+
+            // Find the object by DN
+            var foundObject = this.FindObject(dn);
+
+            // Read BitLocker properties
+            return this.GetBitlockerRecoveryInformation(foundObject, dn);
         }
 
         public BitLockerRecoveryInformation GetBitlockerRecoveryInformation(Guid objectId)
         {
-            throw new NotImplementedException();
+            // TODO: Check if the schema contains BitLocker information.
+
+            // Find the object by objectGuid
+            var foundObject = this.FindObject(objectId);
+
+            // Read BitLocker properties
+            return this.GetBitlockerRecoveryInformation(foundObject, objectId);
+        }
+        public BitLockerRecoveryInformation GetBitlockerRecoveryInformationByRecoveryGuid(Guid recoveryGuid)
+        {
+            // TODO: Check if the schema contains BitLocker information.
+
+            // Find the object by recovery GUID
+            var foundObject = this.FindObject(CommonDirectoryAttributes.FVERecoveryGuid, recoveryGuid);
+
+            // Read BitLocker properties
+            return this.GetBitlockerRecoveryInformation(foundObject, recoveryGuid);
+        }
+
+        private BitLockerRecoveryInformation GetBitlockerRecoveryInformation(DatastoreObject foundObject, object objectIdentifier)
+        {
+            // Check object type
+            int recoveryInformationClassId = this.context.Schema.FindClassId(CommonDirectoryClasses.FVERecoveryInformation);
+            foundObject.ReadAttribute(CommonDirectoryAttributes.ObjectCategory, out int? objectCategory);
+
+            if (objectCategory != recoveryInformationClassId)
+            {
+                throw new DirectoryObjectOperationException("Target object class is not msFVE-RecoveryInformation.", objectIdentifier);
+            }
+
+            // Read BitLocker properties
+            return new BitLockerRecoveryInformation(foundObject);
         }
 
         public IEnumerable<BitLockerRecoveryInformation> GetBitlockerRecoveryInformation(string computerName)
         {
-            throw new NotImplementedException();
-        }
+            // TODO: Check if the schema contains BitLocker information.
 
-        public BitLockerRecoveryInformation GetBitlockerRecoveryInformationByKeyId(Guid keyId)
-        {
-            throw new NotImplementedException();
+            // Validate the input
+            Validator.AssertNotNullOrEmpty(computerName, nameof(computerName));
+
+            // Apped the $ character to the computer name if missing, to construct a proper SAM account name.
+            string samAccountName = computerName.EndsWith(ComputerNameSuffix) ? computerName : (computerName + ComputerNameSuffix);
+
+            // Find the computer object
+            var computerObject = this.FindObject(samAccountName);
+
+            // Find all children of type msFVE-RecoveryInformation
+            int recoveryInformationClassId = this.context.Schema.FindClassId(CommonDirectoryClasses.FVERecoveryInformation);
+            this.dataTableCursor.FindChildren(this.context.Schema);
+
+            while (this.dataTableCursor.MoveNext())
+            {
+                var childObject = new DatastoreObject(this.dataTableCursor, this.context);
+                childObject.ReadAttribute(CommonDirectoryAttributes.ObjectCategory, out int? objectCategory);
+
+                if (objectCategory == recoveryInformationClassId)
+                {
+                    yield return new BitLockerRecoveryInformation(childObject);
+                }
+            }
         }
 
         public IEnumerable<DirectoryObject> FindObjectsByCategory(string className, bool includeDeleted = false)
@@ -310,18 +372,29 @@
         }
 
         /// <exception cref="DirectoryObjectNotFoundException"></exception>
-        public DatastoreObject FindObject(Guid objectGuid)
+        public DatastoreObject FindObject(Guid attributeValue)
         {
-            string objectGuidIndex = this.context.Schema.FindIndexName(CommonDirectoryAttributes.ObjectGUID);
-            this.dataTableCursor.CurrentIndex = objectGuidIndex;
-            bool found = this.dataTableCursor.GotoKey(Key.Compose(objectGuid.ToByteArray()));
+            return this.FindObject(CommonDirectoryAttributes.ObjectGUID, attributeValue);
+        }
+
+        /// <exception cref="DirectoryObjectNotFoundException"></exception>
+        protected DatastoreObject FindObject(string attributeName, Guid attributeValue)
+        {
+            Validator.AssertNotNullOrEmpty(attributeName, nameof(attributeName));
+
+            // TODO: Check if the attribute has an index
+
+            string attributeIndex = this.context.Schema.FindIndexName(attributeName);
+            this.dataTableCursor.CurrentIndex = attributeIndex;
+            bool found = this.dataTableCursor.GotoKey(Key.Compose(attributeValue.ToByteArray()));
+
             if (found)
             {
                 return new DatastoreObject(this.dataTableCursor, this.context);
             }
             else
             {
-                throw new DirectoryObjectNotFoundException(objectGuid);
+                throw new DirectoryObjectNotFoundException(attributeValue);
             }
         }
 

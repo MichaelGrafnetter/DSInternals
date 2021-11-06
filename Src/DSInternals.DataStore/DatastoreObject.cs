@@ -12,6 +12,7 @@
     {
         private DirectoryContext context;
         private Cursor cursor;
+
         public DatastoreObject(Cursor datatableCursor, DirectoryContext context)
         {
             this.cursor = datatableCursor;

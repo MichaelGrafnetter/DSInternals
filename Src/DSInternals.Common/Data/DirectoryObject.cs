@@ -87,29 +87,15 @@
             value = (SamAccountType?)numericValue;
         }
 
-        public void ReadAttribute(string name, out DateTime? value)
+        public void ReadAttribute(string name, out DateTime? value, bool asGeneralizedTime)
         {
             value = null;
             long? timestamp;
             this.ReadAttribute(name, out timestamp);
             if(timestamp.HasValue && timestamp.Value > 0)
             {
-                value = DateTime.FromFileTime(timestamp.Value); 
+                value = asGeneralizedTime ? timestamp.Value.FromGeneralizedTime() : DateTime.FromFileTime(timestamp.Value); 
             }
-        }
-
-        // based on https://github.com/MichaelGrafnetter/DSInternals/issues/49
-        public string ParseDSDN(byte[] binaryVal)
-        {
-            if (binaryVal != null && binaryVal.Length > 0)
-            {
-                int curOff = 4 + 16 + 28;
-                uint curNameLen = BitConverter.ToUInt32(binaryVal.Skip(curOff).Take(4).ToArray(), 0);
-                curOff += 4;
-                return Encoding.Unicode.GetString(binaryVal.Skip(curOff).Take((int)(curNameLen * 2)).ToArray());
-            }
-
-            return null;
         }
 
         public bool IsDeleted
@@ -122,69 +108,6 @@
             }
         }
 
-        public bool HasOtherCreds
-        {
-            get
-            {
-                byte[] encryptedSupplementalCredentials, roamingTimeStamp;
-                byte[][] keyCredentialBlobs;
-                this.ReadAttribute(CommonDirectoryAttributes.SupplementalCredentials, out encryptedSupplementalCredentials);
-                this.ReadAttribute(CommonDirectoryAttributes.PKIRoamingTimeStamp, out roamingTimeStamp);
-                this.ReadLinkedValues(CommonDirectoryAttributes.KeyCredentialLink, out keyCredentialBlobs);
-                return (encryptedSupplementalCredentials != null || roamingTimeStamp != null || keyCredentialBlobs != null);
-            }
-        }
-
-        public bool HasNTHash
-        {
-            get
-            {
-                byte[] nt, ntHistory;
-                this.ReadAttribute(CommonDirectoryAttributes.NTHash, out nt);
-                this.ReadAttribute(CommonDirectoryAttributes.NTHashHistory, out ntHistory);
-                return (nt != null || ntHistory != null);
-            }
-        }
-
-        public bool HasLMHash
-        {
-            get
-            {
-                byte[] lm, lmHistory;
-                this.ReadAttribute(CommonDirectoryAttributes.LMHash, out lm);
-                this.ReadAttribute(CommonDirectoryAttributes.LMHashHistory, out lmHistory);
-                return (lm != null || lmHistory != null);
-            }
-        }
-
-        public bool HasLAPS
-        {
-            get
-            {
-                byte[] admPwd;
-                this.ReadAttribute(CommonDirectoryAttributes.LAPSPassword, out admPwd);
-                return (admPwd != null);
-            }
-        }
-
-        public bool IsBitlocker
-        {
-            get
-            {
-                // make better
-                return this.HasAttribute(CommonDirectoryAttributes.FVERecoveryGuid);
-            }
-        }
-        /*
-        public bool IsTPM
-        {
-            get
-            {
-                // make better
-                return this.HasAttribute(CommonDirectoryAttributes.TPMOwnerInfo);
-            }
-        }
-        */
         public bool IsAccount
         {
             get
@@ -216,61 +139,6 @@
                     case SamAccountType.Trust:
                     case SamAccountType.SecurityGroup:
                     case SamAccountType.Alias:
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        }
-
-        public bool IsOtherAccount
-        {
-            get
-            {
-                SamAccountType? accountType;
-                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
-                switch (accountType)
-                {
-                    case SamAccountType.Domain:
-                    case SamAccountType.SecurityGroup:
-                    case SamAccountType.DistributuionGroup:
-                    case SamAccountType.Alias:
-                    case SamAccountType.NonSecurityAlias:
-                    case SamAccountType.ApplicationBasicGroup:
-                    case SamAccountType.ApplicationQueryGroup:
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        }
-
-        public bool IsUserAccount
-        {
-            get
-            {
-                SamAccountType? accountType;
-                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
-                switch (accountType)
-                {
-                    case SamAccountType.User:
-                    case SamAccountType.Trust:
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        }
-
-        public bool IsComputerAccount
-        {
-            get
-            {
-                SamAccountType? accountType;
-                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
-                switch (accountType)
-                {
-                    case SamAccountType.Computer:
                         return true;
                     default:
                         return false;

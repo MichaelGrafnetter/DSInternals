@@ -10,18 +10,48 @@ namespace DSInternals.Common.Data
             // Parameter validation
             Validator.AssertNotNull(dsObject, nameof(dsObject));
 
-            throw new NotImplementedException();
-            //dsObject.ReadAttribute(CommonDirectoryAttributes.Name, out this.FVE_Name);
-            //dsObject.ReadAttribute(CommonDirectoryAttributes.CommonName, out this.FVE_CommonName);
-            //dsObject.ReadAttribute(CommonDirectoryAttributes.FVEVolumeGuid, out this.FVE_VolumeGuid);
-            //dsObject.ReadAttribute(CommonDirectoryAttributes.FVERecoveryGuid, out this.FVE_RecoveryGuid);
-            //dsObject.ReadAttribute(CommonDirectoryAttributes.FVEKeyPackage, out this.FVE_KeyPackage);
-            //dsObject.ReadAttribute(CommonDirectoryAttributes.FVERecoveryPassword, out this.FVE_RecoveryPassword);
-            //dsObject.ReadAttribute(CommonDirectoryAttributes.WhenChanged, out this.FVE_WhenChanged);
-            //dsObject.ReadAttribute(CommonDirectoryAttributes.WhenCreated, out this.FVE_WhenCreated);
+            // Load generic attribute values
+            this.DistinguishedName = dsObject.DistinguishedName;
+            this.ObjectGuid = dsObject.Guid;
+
+            // whenCreated
+            dsObject.ReadAttribute(CommonDirectoryAttributes.WhenCreated, out DateTime? whenCreated, true);
+            this.WhenCreated = whenCreated.Value;
+
+            // Load BitLocker-specific mandatory attribute values
+
+            // ms-FVE-RecoveryGuid
+            dsObject.ReadAttribute(CommonDirectoryAttributes.FVERecoveryGuid, out Guid? recoveryGuid);
+            this.RecoveryGuid = recoveryGuid.Value;
+
+            // ms-FVE-RecoveryPassword
+            dsObject.ReadAttribute(CommonDirectoryAttributes.FVERecoveryPassword, out string recoveryPassword);
+            this.RecoveryPassword = recoveryPassword;
+
+            // Load BitLocker-specific optional attribute values
+
+            // ms-FVE-VolumeGuid
+            dsObject.ReadAttribute(CommonDirectoryAttributes.FVEVolumeGuid, out Guid? volumeGuid);
+            this.VolumeGuid = volumeGuid;
+
+            // ms-FVE-KeyPackage
+            dsObject.ReadAttribute(CommonDirectoryAttributes.FVEKeyPackage, out byte[] keyPackage);
+            this.KeyPackage = KeyPackage;
         }
 
-        public Guid VolumeGuid
+        public string DistinguishedName
+        {
+            get;
+            private set;
+        }
+
+        public Guid ObjectGuid
+        {
+            get;
+            private set;
+        }
+
+        public Guid? VolumeGuid
         {
             get;
             private set;
@@ -40,12 +70,6 @@ namespace DSInternals.Common.Data
         }
 
         public byte[] KeyPackage
-        {
-            get;
-            private set;
-        }
-
-        public DateTime WhenChanged
         {
             get;
             private set;

@@ -13,11 +13,11 @@
         #region Parameters
         private const string ParameterSetAll = "All";
         private const string ParameterSetByComputerName = "ByComputerName";
-        private const string ParameterSetByKeyIdentifier = "ByKeyIdentifier";
+        private const string ParameterSetByRecoveryGuid = "ByKeyIdentifier";
 
-        [Parameter(Mandatory = true, ParameterSetName = ParameterSetByKeyIdentifier, ValueFromPipelineByPropertyName = true)]
-        [Alias("KeyID", "RecoveryGuid", "RecoveryId")]
-        public Guid KeyIdentifier
+        [Parameter(Mandatory = true, ParameterSetName = ParameterSetByRecoveryGuid, ValueFromPipelineByPropertyName = true)]
+        [Alias("KeyIdentifier", "KeyId", "RecoveryId", "KeyProtectorId")]
+        public Guid RecoveryGuid
         {
             get;
             set;
@@ -77,8 +77,8 @@
                     info = this.DirectoryAgent.GetBitlockerRecoveryInformation(dn);
                     break;
 
-                case ParameterSetByKeyIdentifier:
-                    info = this.DirectoryAgent.GetBitlockerRecoveryInformationByKeyId(this.KeyIdentifier);
+                case ParameterSetByRecoveryGuid:
+                    info = this.DirectoryAgent.GetBitlockerRecoveryInformationByRecoveryGuid(this.RecoveryGuid);
                     break;
 
                 case ParameterSetByGuid:

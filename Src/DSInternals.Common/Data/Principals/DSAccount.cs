@@ -427,11 +427,11 @@
                 this.PrimaryGroupId = groupId.Value;
 
                 // LastLogon:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out DateTime? lastLogon);
+                dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out DateTime? lastLogon, false);
                 this.LastLogon = lastLogon;
 
                 // LastLogonTimestamp:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogonTimestamp, out DateTime? lastLogonTimestamp);
+                dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogonTimestamp, out DateTime? lastLogonTimestamp, false);
                 this.LastLogonTimestamp = lastLogonTimestamp;
 
                 // Description

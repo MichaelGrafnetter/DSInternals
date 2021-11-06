@@ -62,7 +62,6 @@
     <Compile Include="PrefixMap.cs" />
     <Compile Include="SchemaAttribute.cs" />
     <Compile Include="Extensions\CursorExtensions.cs" />
-    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Enums\DomainControllerOptions.cs" />
     <Compile Include="DirectoryContext.cs" />
     <Compile Include="DistinguishedNameResolver.cs" />

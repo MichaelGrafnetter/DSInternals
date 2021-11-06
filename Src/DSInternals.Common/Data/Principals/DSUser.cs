@@ -10,10 +10,10 @@
             // Parameter validation
             Validator.AssertNotNull(dsObject, nameof(dsObject));
 
-            if (!dsObject.IsUserAccount)
-            {
-                throw new ArgumentException(Resources.ObjectNotAccountMessage);
-            }
+            //if (!dsObject.IsUserAccount)
+            //{
+            //    throw new ArgumentException(Resources.ObjectNotAccountMessage);
+            //}
 
             data_len = this.LoadGenericUserAccountInfo(dsObject);
         }
@@ -351,14 +351,14 @@
             }
 
             // Manager:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Manager))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Manager, out byte[] binaryManager);
-                string manager = dsObject.ParseDSDN(binaryManager);
-                if (!String.IsNullOrEmpty(manager))
-                    ret += (ulong)manager.Length;
-                this.Manager = manager;
-            }
+            //if (dsObject.HasAttribute(CommonDirectoryAttributes.Manager))
+            //{
+            //    dsObject.ReadAttribute(CommonDirectoryAttributes.Manager, out byte[] binaryManager);
+            //    string manager = dsObject.ParseDSDN(binaryManager);
+            //    if (!String.IsNullOrEmpty(manager))
+            //        ret += (ulong)manager.Length;
+            //    this.Manager = manager;
+            //}
 
             // HomeDirectory:
             if (dsObject.HasAttribute(CommonDirectoryAttributes.HomeDirectory))

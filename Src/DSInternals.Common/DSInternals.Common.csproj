@@ -130,6 +130,7 @@
     <Compile Include="Exceptions\DirectoryObjectNotFoundException.cs" />
     <Compile Include="Exceptions\DirectoryObjectOperationException.cs" />
     <Compile Include="Exceptions\SchemaAttributeNotFoundException.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\NetworkCredentialExtensions.cs" />
     <Compile Include="Extensions\NTAccountExtensions.cs" />
     <Compile Include="Extensions\RSAExtensions.cs" />

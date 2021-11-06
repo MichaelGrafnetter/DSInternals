@@ -138,7 +138,8 @@ namespace DSInternals.Replication.Model
 
         protected void ReadAttribute(int attributeId, out DistinguishedName value)
         {
-            // TODO: Implement
+            // TODO: Implement support for DS-DN syntax.
+            // Hint: https://github.com/MichaelGrafnetter/DSInternals/issues/49
             throw new NotImplementedException();
         }
 

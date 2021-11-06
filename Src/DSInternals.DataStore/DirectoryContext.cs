@@ -98,7 +98,7 @@
                         {
                             // Required for Windows Server 2022 compatibility, as it limits the transaction log file format to 8920.
                             // Note: Usage of JET_efvUsePersistedFormat still causes minor DB format upgrade.
-                            // isamParameters.EngineFormatVersion = 0x40000002; // JET_efvUsePersistedFormat: Instructs the engine to use the minimal Engine Format Version of all loaded log and DB files.
+                            isamParameters.EngineFormatVersion = 0x40000002; // JET_efvUsePersistedFormat: Instructs the engine to use the minimal Engine Format Version of all loaded log and DB files.
                         }
                         catch (EsentInvalidParameterException)
                         {
