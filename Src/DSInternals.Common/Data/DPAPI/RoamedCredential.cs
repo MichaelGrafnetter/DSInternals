@@ -190,8 +190,9 @@
                         break;
                 }
 
-                // The identifier of the blob is also its file name
-                sb.Append(this.Id);
+                // The identifier of the blob is also its file name. Any invalid characters must be remved first. 
+                string fileName = string.Concat(this.Id.Split(Path.GetInvalidFileNameChars()));
+                sb.Append(fileName);
 
                 return sb.ToString();
             }
