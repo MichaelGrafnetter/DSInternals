@@ -3,10 +3,18 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [4.8] - 2022-12-06
 
 ### Changed
-- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+
+- Upgraded to the latest [JSON.NET library](https://www.newtonsoft.com/json) to fix some security issues.
+- Upgraded to the latest [CBOR library](https://github.com/peteroupc/CBOR) to fix some security issues.
+- Added pipeline input support to the `-SamAccountName` parameter of the [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlet.
+- All PowerShell cmdlets that modify the `ntds.dit` file now have the `-Force` parameter.
+
+### Fixed
+
+- Fixed a regression error in `ntds.dit` file modification on Windows Server 2022 that was introduced in release [4.7].
 
 ## [4.7] - 2021-10-30
 
@@ -439,7 +447,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.7...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.8...HEAD
+[4.8]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.7...v4.8
 [4.7]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.6...v4.7
 [4.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.5...v4.6
 [4.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4.1...v4.5
