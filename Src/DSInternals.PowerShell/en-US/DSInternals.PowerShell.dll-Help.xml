@@ -10,7 +10,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This cmdlet can be used to add any value to the sIDHistory attribute by directly modifying the Active Directory database. Note that the Active Directory Migration Tool (ADMT) is the only supported way of modifying the sIDHistory attribute.</maml:para>
+      <maml:para>This cmdlet can be used to add any value to the sIDHistory attribute by directly modifying the Active Directory database. Note that the Active Directory Migration Tool (ADMT) is the only supported way of modifying the sIDHistory attribute. Improper usage of this cmdlet may cause irreversible damage to the target Active Directory environment.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -38,6 +38,17 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -88,6 +99,17 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -150,6 +172,17 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -225,6 +258,17 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -286,6 +330,18 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
@@ -532,7 +588,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Add-ADReplNgcKey</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Login, sam, AccountName, User">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
             <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
@@ -544,7 +600,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="AccountDomain, UserDomain">
           <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Specifies the NetBIOS domain name of the target Active Directory account.</maml:para>
@@ -840,7 +896,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="AccountDomain, UserDomain">
         <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Specifies the NetBIOS domain name of the target Active Directory account.</maml:para>
@@ -900,7 +956,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Login, sam, AccountName, User">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
           <maml:para>Specifies the identifier of the target Active Directory account.</maml:para>
@@ -2174,6 +2230,17 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -2211,6 +2278,17 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -2261,6 +2339,17 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -2324,6 +2413,17 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -2373,6 +2473,18 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
@@ -2539,6 +2651,17 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -2576,6 +2699,17 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -2626,6 +2760,17 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -2689,6 +2834,17 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -2738,6 +2894,18 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
@@ -4691,7 +4859,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-ADReplAccount</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Login, sam, AccountName, User">
           <maml:name>SamAccountName</maml:name>
           <maml:Description>
             <maml:para>Specifies the identifier of the account that will be replicated.</maml:para>
@@ -4703,7 +4871,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="AccountDomain, UserDomain">
           <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Specifies the NetBIOS domain name of the account that will be replicated.</maml:para>
@@ -4963,7 +5131,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="AccountDomain, UserDomain">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="AccountDomain, UserDomain">
         <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Specifies the NetBIOS domain name of the account that will be replicated.</maml:para>
@@ -5023,7 +5191,7 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
         </dev:type>
         <dev:defaultValue>TCP</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam, AccountName, User">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Login, sam, AccountName, User">
         <maml:name>SamAccountName</maml:name>
         <maml:Description>
           <maml:para>Specifies the identifier of the account that will be replicated.</maml:para>
@@ -7643,6 +7811,17 @@ PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -Direc
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -7704,6 +7883,17 @@ PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -Direc
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -7778,6 +7968,17 @@ PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -Direc
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -7865,6 +8066,17 @@ PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -Direc
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -7938,6 +8150,18 @@ PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -Direc
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
@@ -8148,6 +8372,17 @@ PS C:\&gt; Set-ADDBAccountPassword -SamAccountName john `
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -8221,6 +8456,17 @@ PS C:\&gt; Set-ADDBAccountPassword -SamAccountName john `
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -8307,6 +8553,17 @@ PS C:\&gt; Set-ADDBAccountPassword -SamAccountName john `
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -8406,6 +8663,17 @@ PS C:\&gt; Set-ADDBAccountPassword -SamAccountName john `
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -8491,6 +8759,18 @@ PS C:\&gt; Set-ADDBAccountPassword -SamAccountName john `
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>
@@ -9172,6 +9452,17 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -9221,6 +9512,17 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -9283,6 +9585,17 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
@@ -9358,6 +9671,17 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:Description>
@@ -9419,6 +9743,18 @@ PS C:\&gt; Set-ADDBDomainController -DatabasePath .\ntds.dit -Epoch $currentEpoc
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
         <maml:name>LogPath</maml:name>

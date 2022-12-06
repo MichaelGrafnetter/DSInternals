@@ -15,28 +15,28 @@ Sets the password hash for a user, computer, or service account stored in a ntds
 ### ByName
 ```
 Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] [-SamAccountName] <String> -DatabasePath <String> [-LogPath <String>]
- [<CommonParameters>]
+ -BootKey <Byte[]> [-SkipMetaUpdate] [-Force] [-SamAccountName] <String> -DatabasePath <String>
+ [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
 Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] -ObjectSid <SecurityIdentifier> -DatabasePath <String> [-LogPath <String>]
- [<CommonParameters>]
+ -BootKey <Byte[]> [-SkipMetaUpdate] [-Force] -ObjectSid <SecurityIdentifier> -DatabasePath <String>
+ [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
 Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] -DistinguishedName <String> -DatabasePath <String> [-LogPath <String>]
- [<CommonParameters>]
+ -BootKey <Byte[]> [-SkipMetaUpdate] [-Force] -DistinguishedName <String> -DatabasePath <String>
+ [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
 Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>]
+ -BootKey <Byte[]> [-SkipMetaUpdate] [-Force] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
@@ -102,6 +102,21 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Force
+Forces the cmdlet to perform the desired operation.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

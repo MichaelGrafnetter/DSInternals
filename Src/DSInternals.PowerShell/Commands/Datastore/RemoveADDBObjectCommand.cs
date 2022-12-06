@@ -31,7 +31,6 @@
 
         protected override void BeginProcessing()
         {
-            base.BeginProcessing();
             if(! Force.IsPresent)
             {
                 // Do not continue with operation until the user enforces it.
@@ -40,7 +39,10 @@
                 var error = new ErrorRecord(exception, "RemoveADDBObject_ForceRequired", ErrorCategory.InvalidArgument, null);
                 this.ThrowTerminatingError(error);
             }
+
+            base.BeginProcessing();
         }
+
         protected override void ProcessRecord()
         {
             // TODO: Extract message strings as resources
