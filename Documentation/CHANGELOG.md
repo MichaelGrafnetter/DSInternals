@@ -7,13 +7,13 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Changed
 
-- Implemented [FIPS compliance requirement](https://learn.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/system-cryptography-use-fips-compliant-algorithms-for-encryption-hashing-and-signing) check (issues #97, #111, and #152).
+- Implemented [FIPS compliance requirement](https://learn.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/system-cryptography-use-fips-compliant-algorithms-for-encryption-hashing-and-signing) check (issues [#97](https://github.com/MichaelGrafnetter/DSInternals/issues/97), [#111](https://github.com/MichaelGrafnetter/DSInternals/issues/111), and [#152](https://github.com/MichaelGrafnetter/DSInternals/issues/152)).
 - Added a check that the module is running on Windows.
 - The [Set-ADDBBootKey](PowerShell/Set-ADDBBootKey.md#set-addbbootkey) cmdlet now also has the `-Force` parameter, as do all other cmdlets for offline DB modification.
 
 ### Fixed
 
-- The [Get-BootKey](PowerShell/Get-BootKey.md#get-bootkey) cmdlet should now be able to read inconsistent/corrupted SYSTEM registry hives (issue #47).
+- The [Get-BootKey](PowerShell/Get-BootKey.md#get-bootkey) cmdlet should now be able to read inconsistent/corrupted SYSTEM registry hives (issue [#47](https://github.com/MichaelGrafnetter/DSInternals/issues/47)).
 
 ## [4.8] - 2022-12-06
 
