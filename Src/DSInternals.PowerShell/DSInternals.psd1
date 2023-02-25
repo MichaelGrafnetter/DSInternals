@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.8'
+ModuleVersion = '4.9'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -23,7 +23,7 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) 2015-2022 Michael Grafnetter. All rights reserved.'
+Copyright = '(c) 2015-2023 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
@@ -128,7 +128,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows', 'FIDO'
+        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows', 'FIDO', 'NTDS'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/License.txt'
@@ -141,9 +141,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed a regression error in ntds.dit file modification on Windows Server 2022.
-- Added pipeline input support to the -SamAccountName parameter of the Get-ADReplAccount cmdlet.
-- All cmdlets that modify the ntds.dit file now require the -Force parameter to be present.
+- Implemented the FIPS compliance requirement and OS checks.
+- The Get-BootKey cmdlet should now be able to read inconsistent/corrupted SYSTEM registry hives.
 "@
     } # End of PSData hashtable
 

@@ -3,6 +3,18 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [4.9] - 2023-02-25
+
+### Changed
+
+- Implemented [FIPS compliance requirement](https://learn.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/system-cryptography-use-fips-compliant-algorithms-for-encryption-hashing-and-signing) check (issues #97, #111, and #152).
+- Added a check that the module is running on Windows.
+- The [Set-ADDBBootKey](PowerShell/Set-ADDBBootKey.md#set-addbbootkey) cmdlet now also has the `-Force` parameter, as do all other cmdlets for offline DB modification.
+
+### Fixed
+
+- The [Get-BootKey](PowerShell/Get-BootKey.md#get-bootkey) cmdlet should now be able to read inconsistent/corrupted SYSTEM registry hives (issue #47).
+
 ## [4.8] - 2022-12-06
 
 ### Changed
@@ -447,7 +459,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.8...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.9...HEAD
+[4.9]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.8...v4.9
 [4.8]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.7...v4.8
 [4.7]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.6...v4.7
 [4.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.5...v4.6

@@ -59,7 +59,7 @@ BEGIN
             VALUE "FileDescription", "DSInternals Replication Interop Library"
             VALUE "FileVersion", "4.8.0.0"
             VALUE "InternalName", "DSInternals.Replication.Interop"
-            VALUE "LegalCopyright", "Copyright © 2015-2022 Michael Grafnetter"
+            VALUE "LegalCopyright", "Copyright © 2015-2023 Michael Grafnetter"
             VALUE "OriginalFilename", "DSInternals.Replication.Interop.dll"
             VALUE "ProductName", "DSInternals PowerShell Module"
             VALUE "ProductVersion", "4.8.0.0"
