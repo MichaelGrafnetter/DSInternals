@@ -55,8 +55,34 @@ catch [System.IO.IOException]
 }
 
 #
+# Check if the MD5 hash function is available.
+#
+
+if([System.Security.Cryptography.CryptoConfig]::AllowOnlyFipsAlgorithms)
+{
+    [string] $message = 'Only FIPS certified cryptographic algorithms are enabled in .NET. DSInternals cmdlets that require the MD5 hash function will not work as expected.'
+    [string] $configPath = [System.Diagnostics.Process]::GetCurrentProcess().Path + '.config'
+    [string] $recommendedAction = 'Add the <enforceFIPSPolicy enabled="false"/> directive to the "{0}" file.' -f $configPath
+
+    Write-Error -Message $message `
+                -RecommendedAction $recommendedAction `
+                -Category ([System.Management.Automation.ErrorCategory]::SecurityError)
+}
+
+#
+# Check if the current OS is Windows.
+#
+
+if($env:OS -ne 'Windows_NT')
+{
+    Write-Error -Message 'The DSInternals PowerShell module is only supported on Windows.' `
+                -Category ([System.Management.Automation.ErrorCategory]::NotImplemented)
+}
+
+#
 # Type Data
 # Note: *.types.ps1xml cannot be used for the following configuration, because it is processed before *.psm1 and would thus fail loading platform-specific assemblies. 
+#
 
 Update-TypeData -TypeName 'DSInternals.Common.Data.SupplementalCredentials' `
                 -TypeConverter ([DSInternals.PowerShell.SupplementalCredentialsDeserializer]) `
