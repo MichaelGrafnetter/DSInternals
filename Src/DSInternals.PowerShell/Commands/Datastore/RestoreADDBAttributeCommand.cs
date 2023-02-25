@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Management.Automation;
+using DSInternals.PowerShell.Properties;
 
 namespace DSInternals.PowerShell.Commands
 {
@@ -25,6 +26,13 @@ namespace DSInternals.PowerShell.Commands
             set;
         }
 
+        [Parameter]
+        public SwitchParameter Force
+        {
+            get;
+            set;
+        }
+
         protected override bool ReadOnly
         {
             get
@@ -36,6 +44,14 @@ namespace DSInternals.PowerShell.Commands
         protected override void ProcessRecord()
         {
             throw new NotImplementedException();
+
+            if (!Force.IsPresent)
+            {
+                // Do not continue with operation until the user enforces it.
+                var exception = new ArgumentException(Resources.WarningMessage);
+                var error = new ErrorRecord(exception, "RestoreADDBAttribute_ForceRequired", ErrorCategory.InvalidArgument, null);
+                this.ThrowTerminatingError(error);
+            }
         }
     }
 }

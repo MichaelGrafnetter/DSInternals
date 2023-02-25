@@ -13,7 +13,7 @@ Re-encrypts a ntds.dit file with a new BootKey/SysKey.
 ## SYNTAX
 
 ```
-Set-ADDBBootKey -OldBootKey <Byte[]> [-NewBootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>]
+Set-ADDBBootKey -OldBootKey <Byte[]> [-NewBootKey <Byte[]>] [-Force] -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
@@ -43,6 +43,21 @@ Parameter Sets: (All)
 Aliases: Database, DBPath, DatabaseFilePath, DBFilePath
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+Forces the cmdlet to perform the desired operation.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

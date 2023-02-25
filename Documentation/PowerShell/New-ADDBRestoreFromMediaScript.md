@@ -170,14 +170,14 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
 
         # Re-encrypt the DB with the new boot key.
         $currentBootKey = Get-BootKey -Online
-        Set-ADDBBootKey -DatabasePath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -OldBootKey 610bc29e6f62ca7004e9872cd51a0116 -NewBootKey $currentBootKey
+        Set-ADDBBootKey -DatabasePath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -OldBootKey 610bc29e6f62ca7004e9872cd51a0116 -NewBootKey $currentBootKey -Force
 
         # Clone the DC account password.
         $ntdsParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
         InlineScript {
             # Note: SupplementalCredentials do not get serialized properly without using the InlineScript activity.
             $dcAccount = Get-ADDBAccount -SamAccountName 'LON-DC1$' -DatabasePath $using:ntdsParams.'DSA Database file' -LogPath $using:ntdsParams.'Database log files path' -BootKey $using:currentBootKey
-            Set-ADDBAccountPasswordHash -ObjectGuid 9bb4d6f4-060a-4585-9f18-625774e7c088 -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DatabasePath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -BootKey $using:currentBootKey
+            Set-ADDBAccountPasswordHash -ObjectGuid 9bb4d6f4-060a-4585-9f18-625774e7c088 -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DatabasePath 'C:\Backup\Active Directory\ntds.dit' -LogPath 'C:\Backup\Active Directory' -BootKey $using:currentBootKey -Force
         }
 
         # Replace the database and transaction logs.

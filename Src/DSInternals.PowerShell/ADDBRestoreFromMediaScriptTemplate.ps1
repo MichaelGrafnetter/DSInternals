@@ -1,11 +1,10 @@
 ﻿<#
 .SYNOPSIS
-Restores the {DCName} domain controller from ntds.dit.
+Restores the {DCName} domain controller from its ntds.dit file.
 
 .REMARKS
 This script should only be executed on a freshly installed {OSName}. Use at your own risk.
 The DSInternals PowerShell module must be installed for all users on the target server.
-
 
 Author: Michael Grafnetter
 
@@ -20,7 +19,7 @@ $vssResult = ([wmiclass] 'Win32_ShadowCopy').Create("$env:SystemDrive\", 'Client
 Write-Host 'Installing the Active Directory module for Windows PowerShell...'
 Add-WindowsFeature -Name RSAT-AD-PowerShell -ErrorAction Stop 
 
-# All the other operations will be executed by a restartable workflow running in SYSTEM context.
+# All the other operations will be executed by a restartable workflow running in the SYSTEM context.
 Write-Host 'Registering restartable workflows...'
 
 # Delete any pre-existing scheduled jobs with the same names before registering new ones.
@@ -73,14 +72,14 @@ $initTask = Register-ScheduledJob -Name DSInternals-RFM-Initializer -ScriptBlock
 
         # Re-encrypt the DB with the new boot key.
         $currentBootKey = Get-BootKey -Online
-        Set-ADDBBootKey -DatabasePath '{SourceDBPath}' -LogPath '{SourceLogDirPath}' -OldBootKey {OldBootKey} -NewBootKey $currentBootKey
+        Set-ADDBBootKey -DatabasePath '{SourceDBPath}' -LogPath '{SourceLogDirPath}' -OldBootKey {OldBootKey} -NewBootKey $currentBootKey -Force
 
         # Clone the DC account password.
         $ntdsParams = Get-ItemProperty -Path registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
         InlineScript {
             # Note: SupplementalCredentials do not get serialized properly without using the InlineScript activity.
             $dcAccount = Get-ADDBAccount -SamAccountName '{DCName}$' -DatabasePath $using:ntdsParams.'DSA Database file' -LogPath $using:ntdsParams.'Database log files path' -BootKey $using:currentBootKey
-            Set-ADDBAccountPasswordHash -ObjectGuid {DCGuid} -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DatabasePath '{SourceDBPath}' -LogPath '{SourceLogDirPath}' -BootKey $using:currentBootKey
+            Set-ADDBAccountPasswordHash -ObjectGuid {DCGuid} -NTHash $dcAccount.NTHash -SupplementalCredentials $dcAccount.SupplementalCredentials -DatabasePath '{SourceDBPath}' -LogPath '{SourceLogDirPath}' -BootKey $using:currentBootKey -Force
         }
 
         # Replace the database and transaction logs.
