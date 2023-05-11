@@ -41,7 +41,7 @@ DotNetFrameworkVersion = '4.7.2' # This requirement is not enforced by older ver
 # Minimum version of the common language runtime (CLR) required by this module
 CLRVersion = '4.0.30319.42000' # Corresponds to .NET Framework 4.6 and later
 
-# Processor architecture (None, X86, Amd64) required by this module
+# Processor architecture (None, X86, Amd64, ARM64) required by this module
 ProcessorArchitecture = 'None'
 
 # Type files (.ps1xml) to be loaded when importing this module
@@ -118,6 +118,7 @@ FileList = 'AutoMapper.dll',
            'Newtonsoft.Json.dll',
            'Numbers.dll',
            'amd64\DSInternals.Replication.Interop.dll',
+           'arm64\DSInternals.Replication.Interop.dll',
            'x86\DSInternals.Replication.Interop.dll',
            'en-US\about_DSInternals.help.txt',
            'en-US\DSInternals.PowerShell.dll-Help.xml'

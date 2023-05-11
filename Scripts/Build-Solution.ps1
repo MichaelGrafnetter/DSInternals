@@ -15,7 +15,7 @@ Import-Module $modulePath -ErrorAction Stop
 
 $targets = 'Build' # 'Clean'
 $configurations = 'Release', 'Debug'
-$platforms = 'x86','x64'
+$platforms = 'x86','x64','ARM64'
 
 # Delete the entire Build directory
 if(Test-Path $buildDir)

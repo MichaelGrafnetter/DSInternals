@@ -13,7 +13,7 @@
 [string] $interopAssemblyPath = Join-Path $PSScriptRoot "$env:PROCESSOR_ARCHITECTURE\DSInternals.Replication.Interop.dll"
 try
 {
-    Add-Type -Path $interopAssemblyPath
+    Add-Type -Path $interopAssemblyPath -ErrorAction Stop
 }
 catch [System.IO.IOException]
 {
@@ -26,7 +26,7 @@ catch [System.IO.IOException]
 
     # Check the presence of the Universal C Runtime
     [string] $ucrtPath = Join-Path ([System.Environment]::SystemDirectory) 'ucrtbase.dll'
-    [bool] $ucrtPresent = Test-Path $ucrtPath
+    [bool] $ucrtPresent = Test-Path -Path $ucrtPath
 
     if(-not $ucrtPresent)
     {
@@ -36,7 +36,7 @@ catch [System.IO.IOException]
     }
 
     # Check if the interop assembly is blocked
-    [object] $zoneIdentifier = Get-Item $interopAssemblyPath -Stream 'Zone.Identifier' -ErrorAction SilentlyContinue
+    [object] $zoneIdentifier = Get-Item -Path $interopAssemblyPath -Stream 'Zone.Identifier' -ErrorAction SilentlyContinue
 
     if($zoneIdentifier -ne $null)
     {

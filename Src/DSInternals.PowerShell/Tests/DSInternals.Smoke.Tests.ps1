@@ -90,10 +90,10 @@ Describe 'DSInternals PowerShell Module' {
             $licenseFile |  Should -FileContentMatch ('Copyright \(c\) 2015-{0}' -f (Get-Date).Year)
         }
 
-        It 'contains Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' } -Test {
+        It 'contains Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' },@{ Platform = 'arm64' } -Test {
             param([string] $Platform)
 
-            # Regardless of the runtime version, we expect 2-3 additional DLLs to be present in the x86/amd64 directory
+            # Regardless of the runtime version, we expect 2-3 additional DLLs to be present in the x86/amd64/arm64 directory
             $platformSpecificPath = Join-Path $ModulePath $Platform
             Get-ChildItem -Path $platformSpecificPath -Recurse -Include msvc*,vcruntime* |
                 Measure-Object |
