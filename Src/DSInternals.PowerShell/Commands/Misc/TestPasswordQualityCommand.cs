@@ -473,19 +473,21 @@
         private void TestSamAccountNameAsPassword()
         {
             string userLowerPassword = this.Account.SamAccountName.ToLower();
-            string userExactPassword = this.Account.SamAccountName;
+            
             byte[] userLowerHash = NTHash.ComputeHash(userLowerPassword);
-            byte[] userExactHash = NTHash.ComputeHash(userExactPassword);
+            
             if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, userLowerHash))
             {
                 // Username Password is lowercase SamAccountName
-
                 this.result.SamAccountNameAsPassword.Add(this.Account.LogonName);
             }
             else
             {
+                string userExactPassword = this.Account.SamAccountName;
+                byte[] userExactHash = NTHash.ComputeHash(userExactPassword);
                 if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, userExactHash))
                 {
+                    
                     // Username Password is exact SamAccountName
                     this.result.SamAccountNameAsPassword.Add(this.Account.LogonName);
                 }
