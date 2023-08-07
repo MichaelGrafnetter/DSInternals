@@ -234,7 +234,11 @@
                 // Skip the remaining tests, because they only make sense for non-empty passwords.
                 return;
             }
-
+            if (this.Account.SamAccountType == SamAccountType.User)
+            {
+                // Check if the user has the SamAccountName as password.
+                this.TestSamAccountNameAsPassword();
+            }
             if (this.Account.SamAccountType == SamAccountType.Computer)
             {
                 // Check if the computer has a default password.
@@ -464,6 +468,28 @@
             }
 
             accountList.Add(this.Account.LogonName);
+        }
+
+        private void TestSamAccountNameAsPassword()
+        {
+            string userLowerPassword = this.Account.SamAccountName.ToLower();
+            string userExactPassword = this.Account.SamAccountName;
+            byte[] userLowerHash = NTHash.ComputeHash(userLowerPassword);
+            byte[] userExactHash = NTHash.ComputeHash(userExactPassword);
+            if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, userLowerHash))
+            {
+                // Username Password is lowercase SamAccountName
+
+                this.result.SamAccountNameAsPassword.Add(this.Account.LogonName);
+            }
+            else
+            {
+                if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, userExactHash))
+                {
+                    // Username Password is exact SamAccountName
+                    this.result.SamAccountNameAsPassword.Add(this.Account.LogonName);
+                }
+            }
         }
 
         private void TestComputerDefaultPassword()
