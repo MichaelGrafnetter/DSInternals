@@ -28,6 +28,11 @@
         public ISet<string> WeakPassword = new SortedSet<string>();
 
         /// <summary>
+        /// List of user accounts with SamAccountName as passwords.
+        /// </summary>
+        public ISet<string> SamAccountNameAsPassword = new SortedSet<string>();
+
+        /// <summary>
         /// List of computer accounts with default passwords.
         /// </summary>
         public ISet<string> DefaultComputerPassword = new SortedSet<string>();
