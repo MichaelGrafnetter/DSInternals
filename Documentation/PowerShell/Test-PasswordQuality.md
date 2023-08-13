@@ -59,6 +59,9 @@ These groups of accounts have the same passwords:
     CONTOSO\admin
     CONTOSO\sql_svc01
 
+These user accounts have the SamAccountName as password:
+  CONTOSO\sccm_admin
+
 These computer accounts have default passwords:
   CONTOSO\DESKTOP27$
 
