@@ -80,6 +80,18 @@ choco install dsinternals-psmodule --confirm
 
 This package is self-contained and it will also install all dependencies. Note that package versions prior to 3.5 were not official.
 
+### WAPT Package
+
+The DSInternals PowerShell Module can also be installed using the [WAPT package](https://wapt.tranquil.it/store/tis-dsinternals/).
+
+The package can be installed by the [WAPT console](https://www.wapt.fr/en/doc/wapt-console-usage.html) or by the [WAPT Command-line interface](https://www.wapt.fr/en/doc/wapt-command-line-interface.html) like so:
+
+```powershell
+wapt-get install dsinternals
+```
+
+This package is self-contained and it will also install all dependencies.
+
 ### Offline Module Distribution (PowerShell 3+)
 
 1. Download the [current release](https://github.com/MichaelGrafnetter/DSInternals/releases) from GitHub.
