@@ -3,6 +3,18 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [4.10] - 2023-09-16
+
+### Added
+
+- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet now checks if a user's password is equal to their SamAccountName attribute, thanks to @BlueCurby.
+- Replication cmdlets in the PowerShell module should now work on the ARM64 platform as well. Tests were performed using the [Windows Dev Kit 2023, AKA Project Volterra](https://learn.microsoft.com/en-us/windows/arm/dev-kit/).
+
+### Fixed
+
+- Fixed a rare security descriptor parsing issue.
+- Parallel reading of multiple databases is now supported.
+
 ## [4.9] - 2023-02-25
 
 ### Changed
@@ -459,7 +471,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.9...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.10...HEAD
+[4.10]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.9...v4.10
 [4.9]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.8...v4.9
 [4.8]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.7...v4.8
 [4.7]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.6...v4.7

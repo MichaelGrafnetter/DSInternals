@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>4.9</version>
+    <version>4.10</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -37,8 +37,10 @@
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* Implemented the FIPS compliance requirement and OS checks.
-* The Get-BootKey cmdlet should now be able to read inconsistent/corrupted SYSTEM registry hives.
+* The Test-PasswordQuality cmdlet now checks if a user's password is equal to their SamAccountName attribute.
+* Added support for the ARM64 platform (tested on Windows Dev Kit 2023 / Project Volterra).
+* Fixed a rare security descriptor parsing issue.
+* Parallel reading of multiple databases is now supported.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->
