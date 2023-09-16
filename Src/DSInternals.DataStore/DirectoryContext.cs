@@ -7,7 +7,7 @@
 
     public class DirectoryContext : IDisposable
     {
-        private const string JetInstanceName = "DSInternals";
+        private const string JetInstanceNameFormat = "DSInternals-{0:D}";
 
         private IsamInstance instance;
         private IsamSession session;
@@ -47,8 +47,12 @@
                 this.DatabaseLogFilesPath = this.DSAWorkingDirectory;
             }
 
+            // Achieve instance name uniquness by appending a GUID to "DSInternals-"
+            string jetInstanceName = String.Format(JetInstanceNameFormat, Guid.NewGuid());
+
             // Note: IsamInstance constructor throws AccessDenied Exception when the path does not end with a backslash.
-            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(this.DatabaseLogFilesPath), tempDatabasePath, ADConstants.EseBaseName, JetInstanceName, readOnly, ADConstants.PageSize);
+            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(this.DatabaseLogFilesPath), tempDatabasePath, ADConstants.EseBaseName, jetInstanceName, readOnly, ADConstants.PageSize);
+
             try
             {
                 var isamParameters = this.instance.IsamSystemParameters;
