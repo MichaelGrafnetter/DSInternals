@@ -55,6 +55,14 @@ jobs:
         configuration: '$(buildConfiguration)'
         restoreNugetPackages: false
 
+    - task: VSBuild@1
+      displayName: 'VSBuild ($(buildConfiguration) ARM64)'
+      inputs:
+        solution: '$(solution)'
+        platform: 'ARM64'
+        configuration: '$(buildConfiguration)'
+        restoreNugetPackages: false
+
     - task: VSTest@2
       displayName: 'VSTest Unit Tests'
       inputs:
