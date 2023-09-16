@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace DSInternals.DataStore
 {
     /// <summary>
@@ -17,6 +19,9 @@ namespace DSInternals.DataStore
         Win2008R2 = 4,
         Win2012 = 5,
         Win2012R2 = 6,
-        WinThreshold = 7
+        Win2016 = 7,
+        [Obsolete]
+        WinThreshold = Win2016,
+        Win2025 = 10
     }
 }
