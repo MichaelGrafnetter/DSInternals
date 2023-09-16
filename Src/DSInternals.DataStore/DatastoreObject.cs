@@ -192,17 +192,25 @@
 
         public override void ReadAttribute(string name, out RawSecurityDescriptor value)
         {
-            byte[] binarySecurityDescriptorId;
-            // The value is stored as 8 bytes instead of 64-bit integer
-            this.ReadAttribute(name, out binarySecurityDescriptorId);
+            this.ReadAttribute(name, out byte[] binaryValue);
 
-            if (binarySecurityDescriptorId == null)
+            if (binaryValue == null)
             {
                 value = null;
                 return;
             }
-            long securityDescriptorId = BitConverter.ToInt64(binarySecurityDescriptorId, 0);
-            value = this.context.SecurityDescriptorRersolver.GetDescriptor(securityDescriptorId);
+
+            if(binaryValue.Length == sizeof(long))
+            {
+                // The binary value is a 64-bit foreign key
+                long securityDescriptorId = BitConverter.ToInt64(binaryValue, 0);
+                value = this.context.SecurityDescriptorRersolver.GetDescriptor(securityDescriptorId);
+            }
+            else
+            {
+                // The binary value contains the security descriptor
+                value = new RawSecurityDescriptor(binaryValue, 0);
+            }
         }
 
         public void ReadAttribute(string name, out AttributeMetadataCollection value)
