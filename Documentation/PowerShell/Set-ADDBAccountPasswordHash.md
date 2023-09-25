@@ -250,5 +250,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Set-ADDBAccountPassword](Set-ADDBAccountPassword.md)
 [Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md)
+[Unlock-ADDBAccount](Unlock-ADDBAccount.md)
 [Get-BootKey](Get-BootKey.md)
 [Get-ADDBAccount](Get-ADDBAccount.md)

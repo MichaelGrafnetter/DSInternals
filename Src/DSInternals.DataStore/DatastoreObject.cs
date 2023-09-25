@@ -238,8 +238,15 @@
 
         public bool SetAttribute(string name, DateTime newValue)
         {
-
-            return this.SetAttribute<long>(name, newValue.ToFileTime());
+            if(newValue != DateTime.MinValue)
+            {
+                return this.SetAttribute<long>(name, newValue.ToFileTime());
+            }
+            else
+            {
+                // The value of Never cannot be converted to FileTime.
+                return this.SetAttribute<long>(name, 0);
+            }
         }
 
         public bool SetAttribute(string name, byte[] newValue)

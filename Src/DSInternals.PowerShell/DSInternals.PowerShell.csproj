@@ -59,6 +59,7 @@
     <Compile Include="Commands\Base\SamCommandBase.cs" />
     <Compile Include="Commands\Base\ADDBAccountStatusCommandBase.cs" />
     <Compile Include="Commands\Datastore\DisableADDBAccountCommand.cs" />
+    <Compile Include="Commands\Datastore\UnlockADDBAccountCommand.cs" />
     <Compile Include="Commands\Datastore\GetADDBKdsRootKeyCommand.cs" />
     <Compile Include="Commands\Datastore\EnableADDBAccountCommand.cs" />
     <Compile Include="Commands\Datastore\NewADDBRestoreFromMediaScriptCommand.cs" />

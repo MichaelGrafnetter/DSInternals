@@ -6,7 +6,7 @@
       <Method Name="WriteVerboseResult" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAIACAAAAA=</HashCode>
+      <HashCode>AAAAABAAAAAAAAgAAAAAAAAAAAAAAAAAAAAIACAIAAA=</HashCode>
       <FileName>Commands\Base\ADDBModifyPrincipalCommandBase.cs</FileName>
       <NewMemberFileName>Commands\Base\ADDBPrincipalCommandBase.cs</NewMemberFileName>
     </TypeIdentifier>
@@ -31,7 +31,7 @@
       <Method Name="Dispose" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>IAAAABAAACAAAAAAAAAAAAAAAAAAAAABAAAIAAAAAIA=</HashCode>
+      <HashCode>IAAAABAAACAAAAAIAAAAAAAAAAAAAAABAAAIAAAAAAA=</HashCode>
       <FileName>Commands\Base\ADDBCommandBase.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -64,7 +64,7 @@
       <Method Name="ProcessRecord" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAIAIAQAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAIAIAQAIAAA=</HashCode>
       <FileName>Commands\Datastore\RestoreADDBAttributeCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -107,7 +107,7 @@
       <Method Name="ProcessRecord" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAABAAAAAAAAAAAAAAAAQAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <HashCode>AAAAABAAAAAIAAAAAAAAAAQAAAAAAAAAAAAIAAAAAAA=</HashCode>
       <FileName>Commands\Datastore\GetADDBSchemaAttributeCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -160,9 +160,6 @@
   </Class>
   <Class Name="DSInternals.PowerShell.Commands.GetADDBKdsRootKeyCommand" Collapsed="true">
     <Position X="20" Y="3" Width="2.5" />
-    <Members>
-      <Method Name="BeginProcessing" Hidden="true" />
-    </Members>
     <TypeIdentifier>
       <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Commands\Datastore\GetADDBKdsRootKeyCommand.cs</FileName>
@@ -194,7 +191,7 @@
       <Method Name="BeginProcessing" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAABABAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAQ=</HashCode>
+      <HashCode>AAAAABABAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAIAAQ=</HashCode>
       <FileName>Commands\Datastore\SetADDBBootKeyCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -240,6 +237,16 @@
     <TypeIdentifier>
       <HashCode>AIAAAIAAAgIAAAAAAAAAAABAAQAAAAAAAAAIAAAAAgI=</HashCode>
       <FileName>Commands\Datastore\NewADDBRestoreFromMediaScriptCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSInternals.PowerShell.Commands.UnlockADDBAccountCommand" Collapsed="true">
+    <Position X="16" Y="10" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Commands\Datastore\UnlockADDBAccountCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

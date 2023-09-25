@@ -1,74 +1,54 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBAccountPassword.md
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Unlock-ADDBAccount.md
 schema: 2.0.0
 ---
 
-# Set-ADDBAccountPassword
+# Unlock-ADDBAccount
 
 ## SYNOPSIS
-Sets the password for a user, computer, or service account stored in a ntds.dit file.
+Unlocks an Active Directory account in an offline ntds.dit file.
 
 ## SYNTAX
 
 ### ByName
 ```
-Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] [-Force]
- [-SamAccountName] <String> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Unlock-ADDBAccount [-SkipMetaUpdate] [-Force] [-SamAccountName] <String> -DatabasePath <String>
+ [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] [-Force]
- -ObjectSid <SecurityIdentifier> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Unlock-ADDBAccount [-SkipMetaUpdate] [-Force] -ObjectSid <SecurityIdentifier> -DatabasePath <String>
+ [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] [-Force]
- -DistinguishedName <String> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Unlock-ADDBAccount [-SkipMetaUpdate] [-Force] -DistinguishedName <String> -DatabasePath <String>
+ [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] [-Force]
- -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Unlock-ADDBAccount [-SkipMetaUpdate] [-Force] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-
-Generates new password hashes of the given password, including NT hash, WDigest hashes and Kerberos DES, AES128 and AES256 keys and encrypts them into the database using boot key.
+Finds an account in Active Directory database file and sets its *lockoutTime* attribute to 0.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> $pass = Read-Host -AsSecureString -Prompt 'Provide new password for user john'
-PS C:\> Set-ADDBAccountPassword -SamAccountName john `
-                                -NewPassword $pass `
-                                -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
-                                -BootKey 0be7a2afe1713642182e9b96f73a75da
+PS C:\> Unlock-ADDBAccount -SamAccountName john -DatabasePath .\ntds.dit
 ```
 
-Performs an offline password reset for user *john*.
+Finds an account with name *john* and unlocks it.
 
 ## PARAMETERS
-
-### -BootKey
-Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.
-
-```yaml
-Type: Byte[]
-Parameter Sets: (All)
-Aliases: Key, SysKey, SystemKey
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -DatabasePath
 Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.
@@ -127,21 +107,6 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NewPassword
-Specifies a new password value. This value is stored as an encrypted string.
-
-```yaml
-Type: SecureString
-Parameter Sets: (All)
-Aliases: Password, Pwd, Pass, AccountPassword, p
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -210,8 +175,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Security.SecureString
-
 ### System.String
 
 ### System.Security.Principal.SecurityIdentifier
@@ -226,8 +189,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[Set-ADDBAccountPasswordHash](Set-ADDBAccountPasswordHash.md)
-[Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md)
-[Unlock-ADDBAccount](Unlock-ADDBAccount.md)
-[Get-BootKey](Get-BootKey.md)
+[Enable-ADDBAccount](Enable-ADDBAccount.md)
+[Disable-ADDBAccount](Disable-ADDBAccount.md)
 [Get-ADDBAccount](Get-ADDBAccount.md)
