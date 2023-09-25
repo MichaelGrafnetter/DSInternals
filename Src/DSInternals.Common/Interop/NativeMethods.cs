@@ -15,12 +15,14 @@ namespace DSInternals.Common.Interop
         internal const int LMHashNumBytes = NTHashNumBits / 8;
         internal const int LMPasswordMaxChars = 14;
         internal const int NTPasswordMaxChars = 128;
+        internal const int KdsRootKeySize = 64;
 
         private const int MaxRegistryKeyClassSize = 256;
         private const string Advapi = "advapi32.dll";
         private const string CryptDll = "cryptdll.Dll";
         private const string Ntdll = "ntdll.dll";
         private const string Mpr = "mpr.dll";
+        private const string KdsCli = "KdsCli.dll";
         private const string LMOwfInternalName = "SystemFunction006";
         private const string NTOwfInternalName = "SystemFunction007";
         private const string LMOwfEncryptInternalName = "SystemFunction024";
@@ -48,7 +50,7 @@ namespace DSInternals.Common.Interop
         /// <see>https://github.com/wine-mirror/wine/blob/master/dlls/advapi32/crypt_md4.c</see>
         [DllImport(Advapi, SetLastError = true, EntryPoint = NTOwfInternalName, CharSet = CharSet.Unicode)]
         private static extern NtStatus RtlCalculateNtOwfPassword([In] ref SecureUnicodeString password, [MarshalAs(UnmanagedType.LPArray, SizeConst = NTHashNumBytes), In, Out] byte[] hash);
-        
+
         /// <summary>
         /// Takes the passed NtPassword and performs a one-way-function on it.
         /// Uses the RSA MD4 function 
@@ -161,7 +163,7 @@ namespace DSInternals.Common.Interop
             // Wrap to get rid of the unnecessary pointer to int
             return RtlEncryptLmOwfPwdWithIndex(lmOwfPassword, ref index, encryptedLmOwfPassword);
         }
-        
+
         /// <summary>
         /// Faster arbitrary length data encryption function (using RC4)
         /// </summary>
@@ -281,7 +283,7 @@ namespace DSInternals.Common.Interop
         {
             uint securityDescriptorSize;
             bool result = ConvertStringSecurityDescriptorToSecurityDescriptor(stringSecurityDescriptor, stringSDRevision, out securityDescriptor, out securityDescriptorSize);
-            if(result)
+            if (result)
             {
                 return Win32ErrorCode.Success;
             }
@@ -290,5 +292,130 @@ namespace DSInternals.Common.Interop
                 return (Win32ErrorCode)Marshal.GetLastWin32Error();
             }
         }
+
+        /// <param name="rootKeyId">Root key identifier of the requested key. It can be set to NULL.</param>
+        /// <param name="l0KeyId">L0 index of the requested group key. It MUST be a signed 32-bit integer greater than or equal to -1.</param>
+        /// <param name="l1KeyId">L1 index of the requested group key. It MUST be a signed 32-bit integer between -1 and 31 (inclusive).</param>
+        /// <param name="l2KeyId">L2 index of the requested group key. It MUST be a 32-bit integer between -1 and 31 (inclusive).</param>
+        /// <param name="level">Group key level.</param>
+        /// <returns>If the function succeeds, the return value is NO_ERROR.</returns>
+        internal static Win32ErrorCode GenerateKDFContext(
+            Guid rootKeyId,
+            int l0KeyId,
+            int l1KeyId,
+            int l2KeyId,
+            GroupKeyLevel level,
+            out byte[] context,
+            out int counterOffset)
+        {
+            var result = GenerateKDFContext(
+                rootKeyId,
+                l0KeyId,
+                l1KeyId,
+                l2KeyId,
+                level,
+                out SafeSidKeyProviderHandle contextHandle,
+                out int contextLength,
+                out counterOffset
+            );
+            
+            try
+            {
+                context = contextHandle.ToArray(contextLength);
+            }
+            finally
+            {
+                contextHandle.Close();
+            }
+
+            return result;
+        }
+
+        [DllImport(KdsCli, SetLastError = true)]
+        private static extern Win32ErrorCode GenerateKDFContext(
+            Guid rootKeyId,
+            int l0KeyId,
+            int l1KeyId,
+            int l2KeyId,
+            GroupKeyLevel level,
+            out SafeSidKeyProviderHandle context,
+            out int contextLength,
+            out int counterOffset);
+
+        internal static Win32ErrorCode GenerateDerivedKey(
+            string kdfAlgorithmName,
+            byte[] kdfParameters,
+            byte[] secret,
+            byte[] context,
+            int? counterOffset,
+            byte[] label,
+            int iteration,
+            out byte[] derivedKey,
+            out string invalidAttribute)
+        {
+
+            int kdfParametersLength = kdfParameters?.Length ?? 0;
+            int secretLength = secret?.Length ?? 0;
+            int contextLength = context?.Length ?? 0;
+            int labelLength = label?.Length ?? 0;
+            byte[] derivedKeyBuffer = new byte[KdsRootKeySize];
+            StringBuilder invalidAttributeBuffer = new StringBuilder(byte.MaxValue);
+
+            // Deal with the optional int parameter
+            int counterOffsetValue = counterOffset.GetValueOrDefault();
+            var counterOffsetHandle = GCHandle.Alloc(counterOffsetValue);
+
+            try
+            {
+                Win32ErrorCode result = GenerateDerivedKey(
+                    kdfAlgorithmName,
+                    kdfParameters,
+                    kdfParametersLength,
+                    secret,
+                    secretLength,
+                    context,
+                    contextLength,
+                    (counterOffset.HasValue ? (IntPtr) counterOffsetHandle : IntPtr.Zero),
+                    label,
+                    labelLength,
+                    iteration,
+                    derivedKeyBuffer,
+                    KdsRootKeySize,
+                    ref invalidAttributeBuffer
+                );
+
+                derivedKey = derivedKeyBuffer;
+                invalidAttribute = invalidAttributeBuffer.ToString();
+                return result;
+            }
+            finally
+            {
+                counterOffsetHandle.Free();
+            }
+        }
+
+        [DllImport(KdsCli, CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern Win32ErrorCode GenerateDerivedKey(
+            string kdfAlgorithmName,
+            byte[] kdfParameters,
+            int kdfParametersLength,
+            byte[] secret,
+            int secretLength,
+            byte[] context,
+            int contextLength,
+            IntPtr counterOffset,
+            byte[] label,
+            int labelLength,
+            int iteration,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] key,
+            int keyLength,
+            ref StringBuilder invalidAttribute);
+
+        /// <summary>
+        /// Frees memory allocated for a credentials structure by the GenerateKDFContext and GenerateDerivedKey functions.
+        /// </summary>
+        /// <param name="memory">Memory to be freed.</param>
+        [DllImport(KdsCli)]
+        internal static extern void SIDKeyProvFree([In] IntPtr memory);
     }
 }

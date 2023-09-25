@@ -81,6 +81,15 @@ namespace DSInternals.Common
             }
         }
 
+        public static void AssertEquals(int expectedValue, int actualValue, string paramName)
+        {
+            if (expectedValue != actualValue)
+            {
+                string message = String.Format(Resources.UnexpectedValueMessage, actualValue, expectedValue);
+                throw new ArgumentException(message, paramName);
+            }
+        }
+
         public static void AssertEquals(char expectedValue, char actualValue, string paramName)
         {
             if (expectedValue.CompareTo(actualValue) != 0)

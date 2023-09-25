@@ -52,5 +52,21 @@ namespace DSInternals.Common.Test
             KdsRootKey.ParseSecretAgreementParameters(new byte[0] { });
             throw new AssertInconclusiveException();
         }
+
+        [TestMethod]
+        public void ComputeL0Key_Vector1()
+        {
+            byte[] l0Key = KdsRootKey.ComputeL0Key(
+                Guid.Parse("7dc95c96-fa85-183a-dff5-f70696bf0b11"),
+                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary(),
+                "SP800_108_CTR_HMAC",
+                "00000000010000000e000000000000005300480041003500310032000000".HexToBinary(),
+                361
+            );
+
+            Assert.AreEqual(
+                "76d7341bbf6f85f439a14d3f68c6de31a83d2c55b1371c9c122f5b6f0eccff282973da43349da2b21a0a89b050b49e9ace951323f27638ccbfce8b6a0ead782b",
+                l0Key.ToHex());
+        }
     }
 }

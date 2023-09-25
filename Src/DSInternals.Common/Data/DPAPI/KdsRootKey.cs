@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using DSInternals.Common.Interop;
 
 namespace DSInternals.Common.Data
 {
@@ -10,11 +11,16 @@ namespace DSInternals.Common.Data
     /// </summary>
     public class KdsRootKey
     {
+        private const int L0KeyIteration = 1;
+        private const int L1KeyIteration = 32;
+        private const int L2KeyIteration = 32;
+
         private int? version;
         private DateTime ?creationTime;
         private DateTime ?effectiveTime;
         private byte[] privateKey;
         private string kdfAlgorithmName;
+        private byte[] rawKdfParameters;
         private string secretAgreementAlgorithmName;
         private byte[] secretAgreementAlgorithmParam;
         private int? privateKeyLength;
@@ -53,9 +59,7 @@ namespace DSInternals.Common.Data
             dsObject.ReadAttribute(CommonDirectoryAttributes.KdsKdfAlgorithm, out this.kdfAlgorithmName);
 
             // KDF algorithm parameters (only 1 in current implementation)
-            byte[] rawKdfParams;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsKdfParameters, out rawKdfParams);
-            this.KdfParameters = ParseKdfParameters(rawKdfParams);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsKdfParameters, out this.rawKdfParameters);
 
             // Secret agreement algorithm
             dsObject.ReadAttribute(CommonDirectoryAttributes.KdsSecretAgreementAlgorithm, out this.secretAgreementAlgorithmName);
@@ -148,8 +152,10 @@ namespace DSInternals.Common.Data
         /// </summary>
         public Dictionary<uint, string> KdfParameters
         {
-            get;
-            private set;
+            get
+            {
+                return ParseKdfParameters(this.rawKdfParameters);
+            }
         }
 
         /// <summary>
@@ -194,6 +200,53 @@ namespace DSInternals.Common.Data
             {
                 return this.privateKeyLength.Value;
             }
+        }
+
+        public byte[] ComputeL0Key(int l0KeyId)
+        {
+            return ComputeL0Key(
+                this.KeyId,
+                this.KeyValue,
+                this.KdfAlgorithm,
+                this.rawKdfParameters,
+                l0KeyId
+            );
+        }
+
+        public static byte[] ComputeL0Key(
+            Guid kdsRootKeyId,
+            byte[] kdsRootKey,
+            string kdfAlgorithm,
+            byte[] kdfParameters,
+            int l0KeyId)
+        {
+            var result = NativeMethods.GenerateKDFContext(
+                kdsRootKeyId,
+                l0KeyId,
+                -1,
+                -1,
+                GroupKeyLevel.L0,
+                out byte[] kdfContext,
+                out int counterOffset
+            );
+
+            Validator.AssertSuccess(result);
+
+            result = NativeMethods.GenerateDerivedKey(
+                kdfAlgorithm,
+                kdfParameters,
+                kdsRootKey,
+                kdfContext,
+                null,
+                null,
+                L0KeyIteration,
+                out byte[] l0Key,
+                out string invalidAtribute
+            );
+
+            Validator.AssertSuccess(result);
+
+            return l0Key;
         }
 
         public static Dictionary<uint,string> ParseKdfParameters(byte[] blob)
