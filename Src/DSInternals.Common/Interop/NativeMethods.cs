@@ -15,7 +15,6 @@ namespace DSInternals.Common.Interop
         internal const int LMHashNumBytes = NTHashNumBits / 8;
         internal const int LMPasswordMaxChars = 14;
         internal const int NTPasswordMaxChars = 128;
-        internal const int KdsRootKeySize = 64;
 
         private const int MaxRegistryKeyClassSize = 256;
         private const string Advapi = "advapi32.dll";
@@ -348,8 +347,9 @@ namespace DSInternals.Common.Interop
             byte[] secret,
             byte[] context,
             int? counterOffset,
-            byte[] label,
+            string label,
             int iteration,
+            int desiredKeyLength,
             out byte[] derivedKey,
             out string invalidAttribute)
         {
@@ -357,13 +357,13 @@ namespace DSInternals.Common.Interop
             int kdfParametersLength = kdfParameters?.Length ?? 0;
             int secretLength = secret?.Length ?? 0;
             int contextLength = context?.Length ?? 0;
-            int labelLength = label?.Length ?? 0;
-            byte[] derivedKeyBuffer = new byte[KdsRootKeySize];
+            int labelLength = label!= null ? Encoding.Unicode.GetMaxByteCount(label.Length) : 0; // size of the unicode string, including the trailing zero
+            byte[] derivedKeyBuffer = new byte[desiredKeyLength];
             StringBuilder invalidAttributeBuffer = new StringBuilder(byte.MaxValue);
 
             // Deal with the optional int parameter
             int counterOffsetValue = counterOffset.GetValueOrDefault();
-            var counterOffsetHandle = GCHandle.Alloc(counterOffsetValue);
+            var counterOffsetHandle = GCHandle.Alloc(counterOffsetValue, GCHandleType.Pinned);
 
             try
             {
@@ -375,12 +375,12 @@ namespace DSInternals.Common.Interop
                     secretLength,
                     context,
                     contextLength,
-                    (counterOffset.HasValue ? (IntPtr) counterOffsetHandle : IntPtr.Zero),
+                    (counterOffset.HasValue ? counterOffsetHandle.AddrOfPinnedObject() : IntPtr.Zero),
                     label,
                     labelLength,
                     iteration,
                     derivedKeyBuffer,
-                    KdsRootKeySize,
+                    desiredKeyLength,
                     ref invalidAttributeBuffer
                 );
 
@@ -404,7 +404,7 @@ namespace DSInternals.Common.Interop
             byte[] context,
             int contextLength,
             IntPtr counterOffset,
-            byte[] label,
+            string label,
             int labelLength,
             int iteration,
             [MarshalAs(UnmanagedType.LPArray)] byte[] key,

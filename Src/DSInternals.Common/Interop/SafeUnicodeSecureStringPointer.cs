@@ -25,6 +25,28 @@ namespace DSInternals.Common.Interop
             }
         }
 
+        public SafeUnicodeSecureStringPointer(byte[] password)
+            : base(true)
+        {
+            if (password != null)
+            {
+                if(password.Length % sizeof(char) == 1)
+                {
+                    // Unicode strings must have even number of bytes
+                    new ArgumentOutOfRangeException(nameof(password));
+                }
+
+                IntPtr buffer = Marshal.AllocHGlobal(password.Length + sizeof(char));
+                Marshal.Copy(password, 0, buffer, password.Length);
+
+                // Add the trailing zero
+                Marshal.WriteInt16(buffer, password.Length, 0);
+
+                this.SetHandle(buffer);
+                this.numChars = password.Length / sizeof(char);
+            }
+        }
+
         public int NumChars
         {
             get

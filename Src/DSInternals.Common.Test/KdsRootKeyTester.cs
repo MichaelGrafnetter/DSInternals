@@ -1,7 +1,8 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DSInternals.Common.Data;
+using System.Security.Principal;
 using DSInternals.Common.Cryptography;
+using DSInternals.Common.Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Common.Test
 {
@@ -67,6 +68,37 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(
                 "76d7341bbf6f85f439a14d3f68c6de31a83d2c55b1371c9c122f5b6f0eccff282973da43349da2b21a0a89b050b49e9ace951323f27638ccbfce8b6a0ead782b",
                 l0Key.ToHex());
+        }
+
+        [TestMethod]
+        public void GetGmsaPassword_Vector1()
+        {
+            byte[] binaryPassword = KdsRootKey.GetPassword(
+                new SecurityIdentifier("S-1-5-21-2468531440-3719951020-3687476655-1109"),
+                null,
+                Guid.Parse("7dc95c96-fa85-183a-dff5-f70696bf0b11"),
+                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary(),
+                "SP800_108_CTR_HMAC",
+                "00000000010000000e000000000000005300480041003500310032000000".HexToBinary(),
+                DateTime.FromFileTimeUtc(133387453261266352));
+
+            Assert.AreEqual("0b5fbfb646dd7bce4f160ad69edb86ba", NTHash.ComputeHash(binaryPassword).ToHex());
+        }
+
+        [TestMethod]
+        public void GetGmsaPassword_Vector2()
+        {
+            var managedPasswordId = new ProtectionKeyIdentifier("010000004b44534b02000000690100001a00000018000000965cc97d85fa3a18dff5f70696bf0b1100000000180000001800000063006f006e0074006f0073006f002e0063006f006d00000063006f006e0074006f0073006f002e0063006f006d000000".HexToBinary());
+            byte[] binaryPassword = KdsRootKey.GetPassword(
+                new SecurityIdentifier("S-1-5-21-2468531440-3719951020-3687476655-1109"),
+                managedPasswordId,
+                Guid.Parse("7dc95c96-fa85-183a-dff5-f70696bf0b11"),
+                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary(),
+                "SP800_108_CTR_HMAC",
+                "00000000010000000e000000000000005300480041003500310032000000".HexToBinary(),
+                DateTime.FromFileTimeUtc(133403352475182719));
+
+            Assert.AreEqual("0b5fbfb646dd7bce4f160ad69edb86ba", NTHash.ComputeHash(binaryPassword).ToHex());
         }
     }
 }

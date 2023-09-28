@@ -20,7 +20,7 @@
 
         public static byte[] ComputeHash(SecureString password)
         {
-            Validator.AssertMaxLength(password, MaxInputLength, "password");
+            Validator.AssertMaxLength(password, MaxInputLength, nameof(password));
 
             byte[] hash;
             using(SafeUnicodeSecureStringPointer passwordPtr = new SafeUnicodeSecureStringPointer(password))
@@ -31,9 +31,22 @@
             return hash;
         }
 
+        public static byte[] ComputeHash(byte[] password)
+        {
+            Validator.AssertMaxLength(password, MaxInputLength*sizeof(char), nameof(password));
+
+            byte[] hash;
+            using (SafeUnicodeSecureStringPointer passwordPtr = new SafeUnicodeSecureStringPointer(password))
+            {
+                NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(passwordPtr, out hash);
+                Validator.AssertSuccess(result);
+            }
+            return hash;
+        }
+
         public static byte[] ComputeHash(string password)
         {
-            Validator.AssertMaxLength(password, MaxInputLength, "password");
+            Validator.AssertMaxLength(password, MaxInputLength, nameof(password));
 
             byte[] hash;
             NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(password, out hash);

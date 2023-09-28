@@ -26,7 +26,7 @@ namespace DSInternals.Common.Interop
             }
             else if (text.Length > MaxLength)
             {
-                throw new ArgumentOutOfRangeException("text");
+                throw new ArgumentOutOfRangeException(nameof(text));
             }
             else
             {
