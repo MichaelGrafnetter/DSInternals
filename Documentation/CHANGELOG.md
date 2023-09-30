@@ -3,6 +3,18 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [4.11] - 2023-10-01
+
+### Added
+
+- Added the [Get-ADDBServiceAccount](PowerShell/Get-ADDBServiceAccount.md#get-addbserviceaccount) cmdlet for offline managed password derivation.
+- Implemented the [Unlock-ADDBAccount](PowerShell/Unlock-ADDBAccount.md#unlock-addbaccount) cmdlet that can perform offline account unlock.
+
+### Fixed
+
+- Fixed Kerberos PBKDF2 salt derivation for service accounts in the [ConvertTo-KerberosKey](PowerShell/ConvertTo-KerberosKey.md#convertto-kerberoskey) cmdlet and the corresponding 
+[KerberosKeyDerivation](../Src/DSInternals.Common/Cryptography/KerberosKeyDerivation.cs) class.
+
 ## [4.10] - 2023-09-16
 
 ### Added
@@ -471,7 +483,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.10...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.11...HEAD
+[4.11]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.10...v4.11
 [4.10]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.9...v4.10
 [4.9]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.8...v4.9
 [4.8]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.7...v4.8

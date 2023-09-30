@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.10'
+ModuleVersion = '4.11'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -143,10 +143,9 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The Test-PasswordQuality cmdlet now checks if a user's password is equal to their SamAccountName attribute.
-- Added support for the ARM64 platform (tested on Windows Dev Kit 2023 / Project Volterra).
-- Fixed a rare security descriptor parsing issue.
-- Parallel reading of multiple databases is now supported.
+- Added the Get-ADDBServiceAccount cmdlet for offline managed password derivation.
+- Implemented the Unlock-ADDBAccount cmdlet that can perform offline account unlock.
+- Fixed Kerberos PBKDF2 salt derivation for service accounts in the ConvertTo-KerberosKey cmdlet.
 "@
     } # End of PSData hashtable
 
