@@ -247,6 +247,7 @@
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the type of the account object.
         /// </summary>
@@ -266,6 +267,10 @@
             get;
             private set;
         }
+
+        /// <summary>
+        /// List of principal names used for mutual authentication with an instance of a service.
+        /// </summary>
 
         public string[] ServicePrincipalName
         {

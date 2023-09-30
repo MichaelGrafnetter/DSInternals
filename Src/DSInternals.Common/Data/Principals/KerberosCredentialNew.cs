@@ -22,22 +22,18 @@
             this.ReadCredentials(blob);
         }
 
-        public KerberosCredentialNew(SecureString password, string principal, string realm) :
-            this(password, KerberosKeyDerivation.DeriveSalt(principal, realm))
+        public KerberosCredentialNew(SecureString password, string principal, string realm, bool includeDES = true) :
+            this(password, KerberosKeyDerivation.DeriveSalt(principal, realm), includeDES)
         {
         }
 
-        public KerberosCredentialNew(SecureString password, string salt)
+        public KerberosCredentialNew(SecureString password, string salt, bool includeDES = true)
         {
             Validator.AssertNotNull(password, "password");
             Validator.AssertNotNull(salt, "salt");
 
             this.DefaultSalt = salt;
             this.DefaultIterationCount = KerberosKeyDerivation.DefaultIterationCount;
-
-            // Generate DES key
-            byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
-            var desKeyData = new KerberosKeyDataNew(KerberosKeyType.DES_CBC_MD5, desKey, this.DefaultIterationCount);
 
             // Generate AES keys
             byte[] aes128Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
@@ -46,7 +42,19 @@
             byte[] aes256Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
             var aes256KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, aes256Key, this.DefaultIterationCount);
 
-            this.Credentials = new KerberosKeyDataNew[] { aes256KeyData, aes128KeyData, desKeyData };
+            if(includeDES)
+            {
+                // Generate DES key
+                byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
+                var desKeyData = new KerberosKeyDataNew(KerberosKeyType.DES_CBC_MD5, desKey, this.DefaultIterationCount);
+
+                this.Credentials = new KerberosKeyDataNew[] { aes256KeyData, aes128KeyData, desKeyData };
+            }
+            else
+            {
+                // AES keys only
+                this.Credentials = new KerberosKeyDataNew[] { aes256KeyData, aes128KeyData };
+            }
         }
 
         public short Flags

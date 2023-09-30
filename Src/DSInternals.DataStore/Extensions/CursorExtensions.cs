@@ -224,7 +224,7 @@ namespace DSInternals.DataStore
             if (timestamp.HasValue)
             {
                 // 0 = January 1, 1601 1:00:00 AM = Never
-                return DateTime.FromFileTime(timestamp.Value * ADConstants.GeneralizedTimeCoefficient);
+                return timestamp.Value.FromGeneralizedTime();
             }
             else
             {
@@ -395,9 +395,9 @@ namespace DSInternals.DataStore
             if (newValue.HasValue)
             {
                 // Treat the value as generalized time
-                newTimeStamp = newValue.Value.ToFileTime() / ADConstants.GeneralizedTimeCoefficient;
+                newTimeStamp = newValue.Value.ToGeneralizedTime();
             }
-            
+
             // Push the value to the DB
             return cursor.SetValue(columnId, newTimeStamp);
         }

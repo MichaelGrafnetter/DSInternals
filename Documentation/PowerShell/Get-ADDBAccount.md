@@ -399,6 +399,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Get-BootKey](Get-BootKey.md)
+[Get-ADDBServiceAccount](Get-ADDBServiceAccount.md)
 [Get-ADReplAccount](Get-ADDBAccount.md)
 [Get-ADSIAccount](Get-ADSIAccount.md)
 [Test-PasswordQuality](Test-PasswordQuality.md)

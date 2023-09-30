@@ -54,6 +54,9 @@ Reads the DPAPI backup keys from a ntds.dit file.
 ### [Get-ADDBKdsRootKey](Get-ADDBKdsRootKey.md#get-addbkdsrootkey)
 Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
 
+### [Get-ADDBServiceAccount](Get-ADDBServiceAccount.md#get-addbserviceaccount)
+Reads all Group Managed Service Accounts (gMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
+
 ### [Get-ADDBDomainController](Get-ADDBDomainController.md#get-addbdomaincontroller)
 Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name and DC site.
 

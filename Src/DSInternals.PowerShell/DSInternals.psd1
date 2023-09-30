@@ -56,6 +56,7 @@ FormatsToProcess = 'Views\DSInternals.AzureADUser.format.ps1xml',
                    'Views\DSInternals.FidoKeyMaterial.format.ps1xml',
                    'Views\DSInternals.DSAccount.format.ps1xml',
                    'Views\DSInternals.DSAccount.ExportViews.format.ps1xml',
+                   'Views\DSInternals.GroupManagedServiceAccount.format.ps1xml',
                    'Views\DSInternals.PasswordQualityTestResult.format.ps1xml',
                    'Views\DSInternals.KdsRootKey.format.ps1xml',
                    'Views\DSInternals.SamDomainPasswordInformation.format.ps1xml',
@@ -78,7 +79,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Get-ADReplAccount', 'ConvertTo-Hex', 'ConvertTo-KerberosKey',
                   'ConvertFrom-ADManagedPasswordBlob',
                   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
-                  'Set-ADDBBootKey', 'Test-PasswordQuality',
+                  'Set-ADDBBootKey', 'Test-PasswordQuality', 'Get-ADDBServiceAccount',
                   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
                   'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
@@ -99,7 +100,7 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink', 'Get-LsaPolicy',
                   'Set-LsaPolicy', 'Get-SystemKey', 'Write-ADReplNgcKey', 'Write-ADNgcKey',
                   'Add-ADNgcKey', 'New-ADKeyCredential', 'New-ADKeyCredentialLink',
-                  'New-ADNgcKey'
+                  'New-ADNgcKey','Get-ADDBGroupManagedServiceAccount'
 
 # List of assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @('DSInternals.Common.dll')

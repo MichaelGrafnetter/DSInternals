@@ -92,32 +92,33 @@ Update-TypeData -TypeName 'DSInternals.Common.Data.SupplementalCredentials' `
 # Cmdlet aliases
 #
 
-New-Alias -Name Set-ADAccountPasswordHash        -Value Set-SamAccountPasswordHash
-New-Alias -Name Set-WinUserPasswordHash          -Value Set-SamAccountPasswordHash
-New-Alias -Name Get-ADPasswordPolicy             -Value Get-SamPasswordPolicy
-New-Alias -Name Get-ADDefaultPasswordPolicy      -Value Get-SamPasswordPolicy
-New-Alias -Name ConvertFrom-UnattendXmlPassword  -Value ConvertFrom-UnicodePassword
-New-Alias -Name ConvertTo-AADHash                -Value ConvertTo-OrgIdHash
-New-Alias -Name ConvertTo-MsoPasswordHash        -Value ConvertTo-OrgIdHash
-New-Alias -Name Get-ADReplicationAccount         -Value Get-ADReplAccount
-New-Alias -Name ConvertFrom-ManagedPasswordBlob  -Value ConvertFrom-ADManagedPasswordBlob
-New-Alias -Name Get-SysKey                       -Value Get-BootKey
-New-Alias -Name Get-SystemKey                    -Value Get-BootKey
-New-Alias -Name Set-ADDBSysKey                   -Value Set-ADDBBootKey
-New-Alias -Name Test-ADPasswordQuality           -Value Test-PasswordQuality
-New-Alias -Name Test-ADDBPasswordQuality         -Value Test-PasswordQuality
-New-Alias -Name Test-ADReplPasswordQuality       -Value Test-PasswordQuality
-New-Alias -Name Get-KeyCredential                -Value Get-ADKeyCredential
-New-Alias -Name Get-KeyCredentialLink            -Value Get-ADKeyCredential
-New-Alias -Name Get-ADKeyCredentialLink          -Value Get-ADKeyCredential
-New-Alias -Name New-ADKeyCredential              -Value Get-ADKeyCredential
-New-Alias -Name New-ADKeyCredentialLink          -Value Get-ADKeyCredential
-New-Alias -Name New-ADNgcKey                     -Value Get-ADKeyCredential
-New-Alias -Name Get-LsaPolicy                    -Value Get-LsaPolicyInformation
-New-Alias -Name Set-LsaPolicy                    -Value Set-LsaPolicyInformation
-New-Alias -Name Write-ADReplNgcKey               -Value Add-ADReplNgcKey
-New-Alias -Name Write-ADNgcKey                   -Value Add-ADReplNgcKey
-New-Alias -Name Add-ADNgcKey                     -Value Add-ADReplNgcKey
+New-Alias -Name Set-ADAccountPasswordHash          -Value Set-SamAccountPasswordHash
+New-Alias -Name Set-WinUserPasswordHash            -Value Set-SamAccountPasswordHash
+New-Alias -Name Get-ADPasswordPolicy               -Value Get-SamPasswordPolicy
+New-Alias -Name Get-ADDefaultPasswordPolicy        -Value Get-SamPasswordPolicy
+New-Alias -Name ConvertFrom-UnattendXmlPassword    -Value ConvertFrom-UnicodePassword
+New-Alias -Name ConvertTo-AADHash                  -Value ConvertTo-OrgIdHash
+New-Alias -Name ConvertTo-MsoPasswordHash          -Value ConvertTo-OrgIdHash
+New-Alias -Name Get-ADReplicationAccount           -Value Get-ADReplAccount
+New-Alias -Name ConvertFrom-ManagedPasswordBlob    -Value ConvertFrom-ADManagedPasswordBlob
+New-Alias -Name Get-SysKey                         -Value Get-BootKey
+New-Alias -Name Get-SystemKey                      -Value Get-BootKey
+New-Alias -Name Set-ADDBSysKey                     -Value Set-ADDBBootKey
+New-Alias -Name Test-ADPasswordQuality             -Value Test-PasswordQuality
+New-Alias -Name Test-ADDBPasswordQuality           -Value Test-PasswordQuality
+New-Alias -Name Test-ADReplPasswordQuality         -Value Test-PasswordQuality
+New-Alias -Name Get-KeyCredential                  -Value Get-ADKeyCredential
+New-Alias -Name Get-KeyCredentialLink              -Value Get-ADKeyCredential
+New-Alias -Name Get-ADKeyCredentialLink            -Value Get-ADKeyCredential
+New-Alias -Name New-ADKeyCredential                -Value Get-ADKeyCredential
+New-Alias -Name New-ADKeyCredentialLink            -Value Get-ADKeyCredential
+New-Alias -Name New-ADNgcKey                       -Value Get-ADKeyCredential
+New-Alias -Name Get-LsaPolicy                      -Value Get-LsaPolicyInformation
+New-Alias -Name Set-LsaPolicy                      -Value Set-LsaPolicyInformation
+New-Alias -Name Write-ADReplNgcKey                 -Value Add-ADReplNgcKey
+New-Alias -Name Write-ADNgcKey                     -Value Add-ADReplNgcKey
+New-Alias -Name Add-ADNgcKey                       -Value Add-ADReplNgcKey
+New-Alias -Name Get-ADDBGroupManagedServiceAccount -Value Get-ADDBServiceAccount
 
 # Export the aliases
 Export-ModuleMember -Alias * -Cmdlet *

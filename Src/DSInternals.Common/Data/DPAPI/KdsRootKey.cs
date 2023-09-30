@@ -12,14 +12,18 @@ namespace DSInternals.Common.Data
     /// </summary>
     public class KdsRootKey
     {
-        private const int L0KeyIteration = 1;
-        private const int L1KeyIteration = 32;
-        private const int L2KeyIteration = 32;
+        private const int L0KeyModulus = 1;
+        private const int L1KeyModulus = 32;
+        private const int L2KeyModulus = 32;
         private const long KdsKeyCycleDuration = 360000000000; // 10 hrs in FileTime
         private const long MaxClockSkew = 3000000000; // 5 min in FileTime
         private const string GmsaKdfLabel = "GMSA PASSWORD";
+        private const string SecretAgreementParametersHeaderMagic = "DHPM";
+        private const int ExpectedKdfParametersVersion = 0;
+        private const int SecretAgreementParametersMinSize = 2 * sizeof(int) + 4; // Lengths + magic
         private const int DefaultKdsKeySize = 64;
         private const int GmsaPasswordLength = 256;
+        private const int DefaultManagedPasswordInterval = 30; // 30 days
 
         // TODO: Move to GMSA
         private static readonly byte[] DefaultGMSASecurityDescriptor = {
@@ -167,7 +171,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Parameters for the key derivation algorithm.
         /// </summary>
-        public Dictionary<uint, string> KdfParameters
+        public Dictionary<int, string> KdfParameters
         {
             get
             {
@@ -219,15 +223,14 @@ namespace DSInternals.Common.Data
             }
         }
 
-        public byte[] ComputeL0Key(int l0KeyId)
+        public byte[] GetManagedPassword(
+            SecurityIdentifier gMsaSid,
+            DateTime previousPasswordChange,
+            DateTime effectiveTime,
+            int? managedPasswordInterval = null
+            )
         {
-            return ComputeL0Key(
-                this.KeyId,
-                this.KeyValue,
-                this.KdfAlgorithm,
-                this.rawKdfParameters,
-                l0KeyId
-            );
+            return GetPassword(gMsaSid, this.KeyId, this.KeyValue, this.KdfAlgorithm, this.rawKdfParameters, previousPasswordChange, effectiveTime, managedPasswordInterval ?? DefaultManagedPasswordInterval);
         }
 
         public static byte[] ComputeL0Key(
@@ -256,7 +259,7 @@ namespace DSInternals.Common.Data
                 kdfContext,
                 null,
                 null,
-                L0KeyIteration,
+                L0KeyModulus,
                 DefaultKdsKeySize,
                 out byte[] l0Key,
                 out string invalidAtribute
@@ -281,7 +284,7 @@ namespace DSInternals.Common.Data
             var result = NativeMethods.GenerateKDFContext(
                 kdsRootKeyId,
                 l0KeyId,
-                L1KeyIteration - 1,
+                L1KeyModulus - 1,
                 -1,
                 GroupKeyLevel.L1,
                 out byte[] context,
@@ -309,7 +312,7 @@ namespace DSInternals.Common.Data
 
             byte[] l1KeyCurrent;
 
-            int iteration = L1KeyIteration - l1KeyId - 1;
+            int iteration = L1KeyModulus - l1KeyId - 1;
 
             if(iteration > 0)
             {
@@ -373,12 +376,11 @@ namespace DSInternals.Common.Data
             int l1KeyId,
             int l2KeyId)
         {
-
             var result = NativeMethods.GenerateKDFContext(
                 kdsRootKeyId,
                 l0KeyId,
                 l1KeyId,
-                L2KeyIteration - 1,
+                L2KeyModulus - 1,
                 GroupKeyLevel.L2,
                 out byte[] context,
                 out int counterOffset);
@@ -392,7 +394,7 @@ namespace DSInternals.Common.Data
                     context,
                     counterOffset,
                     null,
-                    L2KeyIteration - l2KeyId,
+                    L2KeyModulus - l2KeyId,
                     DefaultKdsKeySize,
                     out byte[] l2Key,
                     out string invalidAttribute);
@@ -411,7 +413,6 @@ namespace DSInternals.Common.Data
             byte[] l2Key,
             int l0KeyId,
             int l1KeyId,
-            int l2KeyId,
             int l1KeyIteration,
             int l2KeyIteration,
             int nextL1KeyId,
@@ -499,10 +500,11 @@ namespace DSInternals.Common.Data
             bool isPublicKey
             )
         {
+            // TODO: Consider caching the L0 key.
             (byte[] l1KeyCurrent, byte[] l1KeyPrevious) =
                 GenerateL1Key(kdsRootKeyId, kdfAlgorithm, kdfParameters, l0Key, l0KeyId, l1KeyId, securityDescriptor);
 
-            if(l2KeyId == L2KeyIteration - 1 && isPublicKey == false)
+            if(l2KeyId == L2KeyModulus - 1 && isPublicKey == false)
             {
                 return (l1KeyCurrent, null);
             }
@@ -514,7 +516,7 @@ namespace DSInternals.Common.Data
             }
         }
 
-        public static (byte[] l0Key, byte[] l1Key, byte[] l2Key) GetSidKeyLocal(
+        public static (byte[] l1Key, byte[] l2Key) GetSidKeyLocal(
             Guid kdsRootKeyId,
             byte[] kdsRootKey,
             string kdfAlgorithm,
@@ -527,42 +529,106 @@ namespace DSInternals.Common.Data
         {
             byte[] l0Key = ComputeL0Key(kdsRootKeyId, kdsRootKey, kdfAlgorithm, kdfParameters, l0KeyId);
 
-            (byte[] l1Key, byte[] l2Key) = ComputeSidPrivateKey(kdsRootKeyId, kdfAlgorithm, kdfParameters, l0Key, securityDescriptor, l0KeyId, l1KeyId, l2KeyId, false);
-
-            return (l0Key, l1Key, l2Key);
+            return ComputeSidPrivateKey(kdsRootKeyId, kdfAlgorithm, kdfParameters, l0Key, securityDescriptor, l0KeyId, l1KeyId, l2KeyId, false);
         }
 
         public static byte[] GetPassword(
-            SecurityIdentifier sid,
-            ProtectionKeyIdentifier managedPasswordId,
+            SecurityIdentifier gMsaSid,
             Guid kdsRootKeyId,
             byte[] kdsRootKey,
             string kdfAlgorithm,
             byte[] kdfParameters,
-            DateTime effectiveTime
+            DateTime lastPasswordChange
             )
         {
-            (int l0KeyId, int l1KeyId, int l2KeyId) = GetIntervalId(effectiveTime);
-            (byte[] l0Key, byte[] l1Key, byte[] l2Key) = GetSidKeyLocal(kdsRootKeyId, kdsRootKey, kdfAlgorithm, kdfParameters, DefaultGMSASecurityDescriptor, l0KeyId, l1KeyId, l2KeyId);
+            return GetPassword(gMsaSid, kdsRootKeyId, kdsRootKey, kdfAlgorithm, kdfParameters, lastPasswordChange, lastPasswordChange);
+        }
 
-            return GenerateGmsaPassword(
-                managedPasswordId,
-                sid,
-                kdsRootKeyId,
-                kdsRootKey,
-                kdfAlgorithm,
-                kdfParameters,
-                l0KeyId,
-                l1KeyId,
-                l2KeyId,
-                l0Key,
-                l1Key,
-                l2Key);
+        public static byte[] GetPassword(
+            SecurityIdentifier gMsaSid,
+            Guid kdsRootKeyId,
+            byte[] kdsRootKey,
+            string kdfAlgorithm,
+            byte[] kdfParameters,
+            DateTime previousPasswordChange,
+            DateTime effectiveTime,
+            int managedPasswordInterval = DefaultManagedPasswordInterval
+            )
+        {
+            (int l0KeyId, int l1KeyId, int l2KeyId) = GetIntervalId(previousPasswordChange, effectiveTime, managedPasswordInterval);
+
+            return GetPassword(gMsaSid, kdsRootKeyId, kdsRootKey, kdfAlgorithm, kdfParameters, l0KeyId, l1KeyId, l2KeyId);
+        }
+
+        public static byte[] GetPassword(
+            SecurityIdentifier gMsaSid,
+            Guid kdsRootKeyId,
+            byte[] kdsRootKey,
+            string kdfAlgorithm,
+            byte[] kdfParameters,
+            int l0KeyId,
+            int l1KeyId,
+            int l2KeyId
+            )
+        {
+            Validator.AssertNotNull(kdsRootKey, nameof(kdsRootKey));
+            Validator.AssertNotNullOrWhiteSpace(kdfAlgorithm, nameof(kdfAlgorithm));
+            Validator.AssertNotNull(gMsaSid, nameof(gMsaSid));
+
+            if(l0KeyId < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(l0KeyId));
+            }
+
+            if(l1KeyId < 0 || l1KeyId >= L1KeyModulus)
+            {
+                throw new ArgumentOutOfRangeException(nameof(l1KeyId));
+            }
+
+            if (l2KeyId < 0 || l2KeyId >= L2KeyModulus)
+            {
+                throw new ArgumentOutOfRangeException(nameof(l2KeyId));
+            }
+
+            (byte[] l1Key, byte[] l2Key) = GetSidKeyLocal(kdsRootKeyId, kdsRootKey, kdfAlgorithm, kdfParameters, DefaultGMSASecurityDescriptor, l0KeyId, l1KeyId, l2KeyId);
+
+            if (l2Key == null || l2Key.Length == 0)
+            {
+                // Recalculate the L2 key with new parameters
+                int nextl2KeyId = L2KeyModulus - 1;
+                l2Key = ClientComputeL2Key(
+                    null,
+                    kdsRootKeyId,
+                    kdfAlgorithm,
+                    kdfParameters,
+                    l1Key,
+                    null,
+                    l0KeyId,
+                    l1KeyId,
+                    0,
+                    1,
+                    0,
+                    nextl2KeyId);
+            }
+
+            NativeMethods.GenerateDerivedKey(
+                    kdfAlgorithm,
+                    kdfParameters,
+                    l2Key,
+                    gMsaSid.GetBinaryForm(),
+                    null,
+                    GmsaKdfLabel,
+                    1,
+                    GmsaPasswordLength,
+                    out byte[] generatedPassword,
+                    out string invalidAttribute
+                );
+
+            return generatedPassword;
         }
 
         public static void ParseSIDKeyResult(
             ProtectionKeyIdentifier managedPasswordId,
-            int l0KeyId,
             int l1KeyId,
             int l2KeyId,
             bool isL2KeyEmpty,
@@ -597,8 +663,8 @@ namespace DSInternals.Common.Data
 
                 if (isL2KeyEmpty || l1KeyId > managedPasswordId.L1KeyId)
                 {
-                    l2KeyIteration = L2KeyIteration - managedPasswordId.L2KeyId;
-                    nextL2KeyId = L2KeyIteration - 1;
+                    l2KeyIteration = L2KeyModulus - managedPasswordId.L2KeyId;
+                    nextL2KeyId = L2KeyModulus - 1;
                 }
                 else
                 {
@@ -614,159 +680,145 @@ namespace DSInternals.Common.Data
                 if (isL2KeyEmpty)
                 {
                     l2KeyIteration = 1;
-                    nextL2KeyId = L2KeyIteration - 1;
+                    nextL2KeyId = L2KeyModulus - 1;
                 }
             }
         }
-        
-        public static byte[] GenerateGmsaPassword(
-            ProtectionKeyIdentifier managedPasswordId,
-            SecurityIdentifier sid,
-            Guid kdsRootKeyId,
-            byte[] kdsRootKey,
-            string kdfAlgorithm,
-            byte[] kdfParameters,
-            int l0KeyId,
-            int l1KeyId,
-            int l2KeyId,
-            byte[] l0Key,
-            byte[] l1Key,
-            byte[] l2Key
-            )
-        {
-            ParseSIDKeyResult(
-                managedPasswordId,
-                l0KeyId,
-                l1KeyId,
-                l2KeyId,
-                l2Key == null,
-                out int l1KeyIteration,
-                out int nextL1KeyId,
-                out int l2KeyIteration,
-                out int nextL2KeyId);
-
-            byte[] nextL2Key = l2Key;
-
-            if (l1KeyIteration > 0 || l2KeyIteration > 0)
-            {
-                nextL2Key = ClientComputeL2Key(
-                    managedPasswordId,
-                    kdsRootKeyId,
-                    kdfAlgorithm,
-                    kdfParameters,
-                    l1Key,
-                    l2Key,
-                    l0KeyId,
-                    l1KeyId,
-                    l2KeyId,
-                    l1KeyIteration,
-                    l2KeyIteration,
-                    nextL1KeyId,
-                    nextL2KeyId);
-            }
-
-            NativeMethods.GenerateDerivedKey(
-                    kdfAlgorithm,
-                    kdfParameters,
-                    nextL2Key,
-                    sid.GetBinaryForm(),
-                    null,
-                    GmsaKdfLabel,
-                    1,
-                    GmsaPasswordLength,
-                    out byte[] generatedPassword,
-                    out string invalidAttribute
-                );
-
-            return generatedPassword;
-        }
-
-        public static (int l0KeyId, int l1KeyId, int l2KeyId) GetCurrentIntervalId(
-            bool isClockSkewConsidered = false
-            )
-        {
-            return GetIntervalId(DateTime.Now, isClockSkewConsidered);
-        }
 
         public static (int l0KeyId, int l1KeyId, int l2KeyId) GetIntervalId(
+            DateTime previousPasswordChange,
             DateTime effectiveTime,
+            int managedPasswordInterval = DefaultManagedPasswordInterval,
             bool isClockSkewConsidered = false
             )
         {
-            long effectiveFileTime = effectiveTime.ToFileTimeUtc();
+            if(managedPasswordInterval <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(managedPasswordInterval));
+            }
+
+            if(effectiveTime < previousPasswordChange)
+            {
+                throw new ArgumentOutOfRangeException(nameof(effectiveTime));
+            }
+
+            int daysDifference = (int)(effectiveTime - previousPasswordChange).TotalDays;
+            int totalPasswordCycles = daysDifference / managedPasswordInterval;
+            DateTime effectiveIntervalStartTime = previousPasswordChange.AddDays(managedPasswordInterval * totalPasswordCycles);
+
+            long effectiveIntervalId = effectiveIntervalStartTime.ToFileTimeUtc();
 
             if(isClockSkewConsidered)
             {
-                effectiveFileTime += MaxClockSkew;
+                effectiveIntervalId += MaxClockSkew;
             }
 
-            int effectiveCycleId = (int)(effectiveFileTime / KdsKeyCycleDuration);
+            int effectiveKdsCycleId = (int)(effectiveIntervalId / KdsKeyCycleDuration);
 
-            int l0KeyId = effectiveCycleId / (L1KeyIteration * L2KeyIteration);
-            int l1KeyId = (effectiveCycleId / L2KeyIteration) % L1KeyIteration;
-            int l2KeyId = effectiveCycleId % L2KeyIteration;
+            int l0KeyId = effectiveKdsCycleId / (L1KeyModulus * L2KeyModulus);
+            int l1KeyId = (effectiveKdsCycleId / L2KeyModulus) % L1KeyModulus;
+            int l2KeyId = effectiveKdsCycleId % L2KeyModulus;
 
             return (l0KeyId, l1KeyId, l2KeyId);
         }
-        public static Dictionary<uint,string> ParseKdfParameters(byte[] blob)
+
+        public static DateTime GetRootIntervalStart(int l0KeyId, int l1KeyId, int l2KeyId)
+        {
+            if(l0KeyId < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(l0KeyId));
+            }
+
+            if(l1KeyId < 0 || l1KeyId >= L1KeyModulus)
+            {
+                throw new ArgumentOutOfRangeException(nameof(l1KeyId));
+            }
+
+            if (l2KeyId < 0 || l2KeyId >= L2KeyModulus)
+            {
+                throw new ArgumentOutOfRangeException(nameof(l2KeyId));
+            }
+
+            long effectiveTimestamp = l2KeyId + l1KeyId * L1KeyModulus + l0KeyId * L1KeyModulus * L2KeyModulus;
+
+            return DateTime.FromFileTime(effectiveTimestamp * KdsKeyCycleDuration);
+        }
+
+        public static Dictionary<int,string> ParseKdfParameters(byte[] blob)
         {
             if(blob == null || blob.Length == 0)
             {
                 return null;
             }
-            // TODO: Validate length
 
-            var result = new Dictionary<uint,string>();
+            int aggregatedMinLength = 2 * sizeof(int); // version + param count
+            Validator.AssertMinLength(blob, aggregatedMinLength, nameof(blob));
+
+            var result = new Dictionary<int,string>();
 
             using (Stream stream = new MemoryStream(blob))
             {
                 using (BinaryReader reader = new BinaryReader(stream))
                 {
-                    uint version = reader.ReadUInt32();
-                    // TODO: Test that version == 0
+                    int version = reader.ReadInt32();
+                    Validator.AssertEquals(ExpectedKdfParametersVersion, version, nameof(version));
 
-                    uint parameterCount = reader.ReadUInt32();
+                    int parameterCount = reader.ReadInt32();
+
+                    aggregatedMinLength += parameterCount * 2 * sizeof(int); // + valueLength + parameterId
+                    Validator.AssertMinLength(blob, aggregatedMinLength, nameof(blob));
 
                     for (uint i = 0; i < parameterCount; i++)
                     {
                         int valueLength = reader.ReadInt32();
-                        uint parameterId = reader.ReadUInt32();
-                        // TODO: Test that paramId == 0
+                        int parameterId = reader.ReadInt32();
+
+                        aggregatedMinLength += valueLength;
+                        Validator.AssertMinLength(blob, aggregatedMinLength, nameof(blob));
 
                         byte[] binaryValue = reader.ReadBytes(valueLength);
-                        
+
                         // Remove the trailing 0 at the end.
                         string value = UnicodeEncoding.Unicode.GetString(binaryValue, 0, valueLength - sizeof(char));
                         result.Add(parameterId, value);
                     }
+
+                    // Check that there are no unread bytes left.
+                    Validator.AssertLength(blob, aggregatedMinLength, nameof(blob));
                 }
             }
+
             return result;
         }
 
-        public static void ParseSecretAgreementParameters(byte[] blob)
+        public static (byte[] p, byte[] g) ParseSecretAgreementParameters(byte[] blob)
         {
             if (blob == null || blob.Length == 0)
             {
-                return;
+                return (null, null);
             }
-            // TODO: Validate minimum length
+
+            Validator.AssertMinLength(blob, SecretAgreementParametersMinSize, nameof(blob));
 
             using (Stream stream = new MemoryStream(blob))
             {
                 using (BinaryReader reader = new BinaryReader(stream))
                 {
-                    var length = reader.ReadInt32();
-                    // TODO: validate actual length
+                    int length = reader.ReadInt32();
+                    Validator.AssertLength(blob, length, nameof(blob));
 
-                    var binaryMagic = reader.ReadBytes(sizeof(int));
+                    byte[] binaryMagic = reader.ReadBytes(sizeof(int));
                     string magic = ASCIIEncoding.ASCII.GetString(binaryMagic);
-                    // TODO: Test that magic is DHPM
+                    Validator.AssertEquals(SecretAgreementParametersHeaderMagic, magic, nameof(blob));
 
-                    // DH:
+                    // DH public parameters:
                     int keySize = reader.ReadInt32();
-                    var p = reader.ReadBytes(keySize);
-                    var g = reader.ReadBytes(keySize);
+                    Validator.AssertEquals(length, SecretAgreementParametersMinSize + 2 * keySize, nameof(length));
+
+                    byte[] p = reader.ReadBytes(keySize);
+                    byte[] g = reader.ReadBytes(keySize);
+
+                    return (p, g);
                 }
             }
         }

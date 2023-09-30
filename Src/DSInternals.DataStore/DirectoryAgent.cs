@@ -136,6 +136,43 @@
             }
         }
 
+        public IEnumerable<GroupManagedServiceAccount> GetGroupManagedServiceAccounts(DateTime effectiveTime)
+        {
+            // Fetch all KDS root keys first.
+            var rootKeys = new Dictionary<Guid, KdsRootKey>();
+
+            foreach (var rootKey in this.GetKdsRootKeys())
+            {
+                // Some servers, like RODCs might not contain key values
+                if (rootKey.KeyValue != null)
+                {
+                    // Allow the key to be found by ID
+                    rootKeys.Add(rootKey.KeyId, rootKey);
+                }
+            }
+
+            // Now fetch all gMSAs and associate them with the KDS root keys
+            // TODO: Test if schema contains the msDS-GroupManagedServiceAccount class.
+            foreach (var gmsaObject in this.FindObjectsByCategory(CommonDirectoryClasses.GroupManagedServiceAccount))
+            {
+                var gmsa = new GroupManagedServiceAccount(gmsaObject);
+
+                if (gmsa.ManagedPasswordId != null)
+                {
+                    // Find the proper key by Guid
+                    Guid associateRootKeyId = gmsa.ManagedPasswordId.RootKeyId;
+                    bool keyFound = rootKeys.TryGetValue(associateRootKeyId, out var associatedRootKey);
+
+                    if (keyFound)
+                    {
+                        gmsa.CalculatePassword(associatedRootKey, effectiveTime);
+                    }
+                }
+
+                yield return gmsa;
+            }
+        }
+
         public IEnumerable<DirectoryObject> FindObjectsByCategory(string className, bool includeDeleted = false)
         {
             // Find all objects with the right objectCategory

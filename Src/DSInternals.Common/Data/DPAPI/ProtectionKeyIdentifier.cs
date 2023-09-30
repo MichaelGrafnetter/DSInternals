@@ -51,6 +51,17 @@
             private set;
         }
 
+        public override string ToString()
+        {
+            return string.Format("RootKey={0}, Cycle={1} (L0={2}, L1={3}, L2={4})",
+                this.RootKeyId,
+                KdsRootKey.GetRootIntervalStart(this.L0KeyId, this.L1KeyId, this.L2KeyId),
+                this.L0KeyId,
+                this.L1KeyId,
+                this.L2KeyId
+                );
+        }
+
         public ProtectionKeyIdentifier(byte[] blob)
         {
             Validator.AssertMinLength(blob, StructureHeaderLength, nameof(blob));
