@@ -140,6 +140,7 @@
         {
             // Fetch all KDS root keys first.
             var rootKeys = new Dictionary<Guid, KdsRootKey>();
+            KdsRootKey latestRootKey = null;
 
             foreach (var rootKey in this.GetKdsRootKeys())
             {
@@ -148,6 +149,12 @@
                 {
                     // Allow the key to be found by ID
                     rootKeys.Add(rootKey.KeyId, rootKey);
+
+                    // Check if this key is the newest found yet
+                    if(rootKey.EffectiveTime <= effectiveTime && (latestRootKey == null || latestRootKey.CreationTime < rootKey.CreationTime))
+                    {
+                        latestRootKey = rootKey;
+                    }
                 }
             }
 
@@ -159,13 +166,23 @@
 
                 if (gmsa.ManagedPasswordId != null)
                 {
-                    // Find the proper key by Guid
-                    Guid associateRootKeyId = gmsa.ManagedPasswordId.RootKeyId;
-                    bool keyFound = rootKeys.TryGetValue(associateRootKeyId, out var associatedRootKey);
-
-                    if (keyFound)
+                    DateTime nextPasswordChange = gmsa.PasswordLastSet.Value.AddDays(gmsa.ManagedPasswordInterval.Value);
+                    KdsRootKey rootKeyToUse;
+                    if (nextPasswordChange <= effectiveTime)
                     {
-                        gmsa.CalculatePassword(associatedRootKey, effectiveTime);
+                        // The existing password has already expired, so generate the managed password based on the latest Root Key
+                        rootKeyToUse = latestRootKey;
+                    }
+                    else
+                    {
+                        // Generate the managed password based on the Root Key currently associated with it
+                        Guid associateRootKeyId = gmsa.ManagedPasswordId.RootKeyId;
+                        rootKeys.TryGetValue(associateRootKeyId, out rootKeyToUse);
+                    }
+
+                    if (rootKeyToUse != null)
+                    {
+                        gmsa.CalculatePassword(rootKeyToUse, effectiveTime);
                     }
                 }
 
