@@ -98,8 +98,8 @@ namespace DSInternals
 			{
 				auto clientInfo = make_midl_ptr<DRS_EXTENSIONS_INT>();
 				clientInfo->dwFlags = DRS_EXT::ALL_EXT;
-				clientInfo->dwFlagsExt = DRS_EXT2::DRS_EXT_LH_BETA2 | DRS_EXT2::DRS_EXT_RECYCLE_BIN | DRS_EXT2::DRS_EXT_PAM;
-				clientInfo->dwExtCaps = DRS_EXT2::DRS_EXT_LH_BETA2 | DRS_EXT2::DRS_EXT_RECYCLE_BIN | DRS_EXT2::DRS_EXT_PAM;
+				clientInfo->dwFlagsExt = DRS_EXT2::DRS_EXT_LH_BETA2 | DRS_EXT2::DRS_EXT_RECYCLE_BIN | DRS_EXT2::DRS_EXT_PAM | DRS_EXT2::DRS_EXT_32K_PAGES;
+				clientInfo->dwExtCaps = DRS_EXT2::DRS_EXT_LH_BETA2 | DRS_EXT2::DRS_EXT_RECYCLE_BIN | DRS_EXT2::DRS_EXT_PAM | DRS_EXT2::DRS_EXT_32K_PAGES;
 				clientInfo->dwReplEpoch = this->_serverReplEpoch;
 				return clientInfo;
 			}

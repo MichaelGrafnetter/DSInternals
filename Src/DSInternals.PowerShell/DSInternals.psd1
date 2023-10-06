@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.11'
+ModuleVersion = '4.12'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -143,9 +143,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Get-ADDBServiceAccount cmdlet for offline managed password derivation.
-- Implemented the Unlock-ADDBAccount cmdlet that can perform offline account unlock.
-- Fixed Kerberos PBKDF2 salt derivation for service accounts in the ConvertTo-KerberosKey cmdlet.
+- Support for Windows Server 2025 Insider Preview.
+- Improved KDS Root Key selection algorithm.
 "@
     } # End of PSData hashtable
 

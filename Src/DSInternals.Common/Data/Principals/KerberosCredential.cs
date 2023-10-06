@@ -32,7 +32,11 @@
             byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
             var desKeyData = new KerberosKeyData(KerberosKeyType.DES_CBC_MD5, desKey);
 
-            this.Credentials = new KerberosKeyData[] { desKeyData };
+            // TODO: Generate RC4 key
+            // byte[] rc4Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.RC4_HMAC_NT, password, this.DefaultSalt);
+            // var rc4KeyData = new KerberosKeyData(KerberosKeyType.RC4_HMAC_NT, rc4Key);
+
+            this.Credentials = new KerberosKeyData[] { desKeyData /*, rc4KeyData */ };
         }
 
         public short Flags

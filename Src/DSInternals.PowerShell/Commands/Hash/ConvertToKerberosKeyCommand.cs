@@ -63,14 +63,26 @@
         {
             this.WriteVerbose("Calculating Kerberos keys.");
 
-            var aes256 = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, this.Password, this.Salt, this.Iterations);
-            this.WriteObject(aes256);
+            // TODO: AES SHA2 ETypes are not yet supported by the crypto library
+            /*
+            var aes256sha2 = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA384_192, this.Password, this.Salt, this.Iterations);
+            this.WriteObject(aes256sha2);
 
-            var aes128 = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, this.Password, this.Salt, this.Iterations);
-            this.WriteObject(aes128);
+            var aes128sha2 = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA256_128, this.Password, this.Salt, this.Iterations);
+            this.WriteObject(aes128sha2);
+            */
+
+            var aes256sha1 = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, this.Password, this.Salt, this.Iterations);
+            this.WriteObject(aes256sha1);
+
+            var aes128sha1 = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, this.Password, this.Salt, this.Iterations);
+            this.WriteObject(aes128sha1);
 
             var des = new KerberosKeyDataNew(KerberosKeyType.DES_CBC_MD5, this.Password, this.Salt, this.Iterations);
             this.WriteObject(des);
+
+            var rc4 = new KerberosKeyDataNew(KerberosKeyType.RC4_HMAC_NT, this.Password, this.Salt, this.Iterations);
+            this.WriteObject(rc4);
         }
         #endregion Cmdlet Overrides
     }

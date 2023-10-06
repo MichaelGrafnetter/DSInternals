@@ -37,6 +37,16 @@ namespace DSInternals.Common.Data
         AES256_CTS_HMAC_SHA1_96 = 16,
 
         /// <summary>
+        /// Advanced Encryption Standard in 128-bit cipher block with Hashed Message Authentication Code using the Secure Hash Algorithm (2)
+        /// </summary>
+        AES128_CTS_HMAC_SHA256_128 = 32,
+
+        /// <summary>
+        /// Advanced Encryption Standard in 256-bit cipher block with Hashed Message Authentication Code using the Secure Hash Algorithm (2)
+        /// </summary>
+        AES256_CTS_HMAC_SHA384_192 = 64,
+
+        /// <summary>
         /// Flexible Authentication Secure Tunneling (FAST) supported
         /// </summary>
         FAST = 0x10000,

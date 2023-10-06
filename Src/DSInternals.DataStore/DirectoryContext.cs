@@ -27,7 +27,18 @@
             }
 
             this.DSADatabaseFile = dbFilePath;
-            ValidateDatabaseState(this.DSADatabaseFile);
+
+            // Retrieve info about the DB (Win Version, Page Size, State,...)
+            JET_DBINFOMISC dbInfo;
+            Api.JetGetDatabaseFileInfo(dbFilePath, out dbInfo, JET_DbInfo.Misc);
+
+            if (dbInfo.dbstate != JET_dbstate.CleanShutdown)
+            {
+                // Database might be inconsistent
+                throw new InvalidDatabaseStateException("The database is not in a clean state. Try to recover it first by running the 'esentutl /r edb /d' command.", dbFilePath);
+            }
+
+            this.PageSize = dbInfo.cbPageSize;
 
             this.DSAWorkingDirectory = Path.GetDirectoryName(this.DSADatabaseFile);
             string checkpointDirectoryPath = this.DSAWorkingDirectory;
@@ -51,7 +62,7 @@
             string jetInstanceName = String.Format(JetInstanceNameFormat, Guid.NewGuid());
 
             // Note: IsamInstance constructor throws AccessDenied Exception when the path does not end with a backslash.
-            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(this.DatabaseLogFilesPath), tempDatabasePath, ADConstants.EseBaseName, jetInstanceName, readOnly, ADConstants.PageSize);
+            this.instance = new IsamInstance(AddPathSeparator(checkpointDirectoryPath), AddPathSeparator(this.DatabaseLogFilesPath), tempDatabasePath, ADConstants.EseBaseName, jetInstanceName, readOnly, this.PageSize);
 
             try
             {
@@ -149,6 +160,12 @@
                 this.Dispose();
                 throw;
             }
+        }
+
+        public int PageSize
+        {
+            get;
+            private set;
         }
 
         public string DSAWorkingDirectory
@@ -292,19 +309,6 @@
             else
             {
                 return path + Path.DirectorySeparatorChar;
-            }
-        }
-
-        public static void ValidateDatabaseState(string dbFilePath)
-        {
-            // Retrieve info about the DB (Win Version, Page Size, State,...)
-            JET_DBINFOMISC dbInfo;
-            Api.JetGetDatabaseFileInfo(dbFilePath, out dbInfo, JET_DbInfo.Misc);
-
-            if (dbInfo.dbstate != JET_dbstate.CleanShutdown)
-            {
-                // Database might be inconsistent
-                throw new InvalidDatabaseStateException("The database is not in a clean state. Try to recover it first by running the 'esentutl /r edb /d' command.", dbFilePath);
             }
         }
     }
