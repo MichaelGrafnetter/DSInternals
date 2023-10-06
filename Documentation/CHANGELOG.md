@@ -3,6 +3,18 @@
 # Changelog
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [4.12] - 2023-10-06
+
+### Added
+
+- The [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlet now works against Windows Server 2025 Insider Preview with the [32k database page size optional feature](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/whats-new-active-directory-domain-services-insider-preview#32k-database-page-size-optional-feature) enabled.
+- The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet is now able to read databases originating from Windows Server 2025 Insider Preview with the [32k database page size optional feature](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/whats-new-active-directory-domain-services-insider-preview#32k-database-page-size-optional-feature) enabled.
+- Added support for parsing AES SHA2 Kerbers keys.
+
+### Fixed
+
+- Improved KDS Root Key selection algorithm in the [Get-ADDBServiceAccount](PowerShell/Get-ADDBServiceAccount.md#get-addbserviceaccount) cmdlet.
+
 ## [4.11] - 2023-10-01
 
 ### Added
@@ -483,7 +495,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.11...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.12...HEAD
+[4.12]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.11...v4.12
 [4.11]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.10...v4.11
 [4.10]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.9...v4.10
 [4.9]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.8...v4.9
