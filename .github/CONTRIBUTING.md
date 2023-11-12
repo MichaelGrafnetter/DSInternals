@@ -1,4 +1,5 @@
-![DSInternals Logo](DSInternals.png)
+![DSInternals Logo](DSInternals-Dark.png#gh-light-mode-only)
+![DSInternals Logo](DSInternals-Light.png#gh-dark-mode-only)
 
 # Contributing to the Project
 

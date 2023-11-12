@@ -1,4 +1,5 @@
-![DSInternals Logo](DSInternals.png)
+![DSInternals Logo](DSInternals-Dark.png#gh-light-mode-only)
+![DSInternals Logo](DSInternals-Light.png#gh-dark-mode-only)
 
 # Directory Services Internals<br/>PowerShell Module and Framework
 
@@ -128,8 +129,10 @@ The online version of [PowerShell Get-Help documentation](../Documentation/Power
 
 ### Blog Posts
 
-I have also published a series of articles about the DSInternals module on [my blog](https://www.dsinternals.com/en/list-of-cmdlets-in-the-dsinternals-module/). Here are a few of them:
+I have also published a series of articles about the DSInternals module on [my blog](https://www.dsinternals.com/en/). Here are a few of them:
 
+- [New Offline Capabilities in DSInternals 4.11](https://www.dsinternals.com/en/dsinternals-v4.11/)
+- [Cross-Forest Duplicate Password Discovery](https://www.dsinternals.com/en/cross-forest-duplicate-password-discovery/)
 - [CQLabs – Extracting Roamed Private Keys from Active Directory](https://cqureacademy.com/blog/extracting-roamed-private-keys)
 - [CQLabs – Offline Attacks on Active Directory](https://cqureacademy.com/cqure-labs/cqlabs-dsinternals-powershell-module)
 - [Auditing Active Directory Password Quality](https://www.dsinternals.com/en/auditing-active-directory-password-quality/)
