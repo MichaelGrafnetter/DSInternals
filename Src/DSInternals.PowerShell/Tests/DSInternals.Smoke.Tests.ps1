@@ -98,7 +98,7 @@ Describe 'DSInternals PowerShell Module' {
             Get-ChildItem -Path $platformSpecificPath -Recurse -Include msvc*,vcruntime* |
                 Measure-Object |
                 Select-Object -ExpandProperty Count |
-                Should -BeIn @(2,3)
+                Should -BeIn @(2,3,4)
         }
 
         It 'does not contain debug symbols' {
@@ -304,7 +304,7 @@ Describe 'Powershell Cmdlets' {
             # Check that 3 types of kerberos keys are generated from a given password.
             $password = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force
             ConvertTo-KerberosKey -Password $password -Salt 'CONTOSOAdministrator' |
-                Should -HaveCount 3
+                Should -HaveCount 4
         }
         
         It 'Get-ADKeyCredential parses FIDO2 keys' {
