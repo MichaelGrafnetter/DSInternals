@@ -5,6 +5,12 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [4.13] - 2023-12-20
+
+### Fixed
+
+- The [Set-LsaPolicyInformation](PowerShell/Set-LsaPolicyInformation.md#set-lsapolicyinformation) cmdlet now generates the [UNICODE_STRING](https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_unicode_string) structure with the trailing null character, to improve compatibility with NETLOGON. This issue mainly affects the functionality of the [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet. Thanks Christoffer Andersson for reporting this issue and sorry Microsoft support escalation engineers for the trouble this bug has caused.
+
 ## [4.12] - 2023-10-06
 
 ### Added
@@ -497,7 +503,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.12...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.13...HEAD
+[4.13]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.12...v4.13
 [4.12]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.11...v4.12
 [4.11]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.10...v4.11
 [4.10]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.9...v4.10

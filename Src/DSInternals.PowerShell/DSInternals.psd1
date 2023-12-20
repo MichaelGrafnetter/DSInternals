@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.12'
+ModuleVersion = '4.13'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -143,8 +143,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Support for Windows Server 2025 Insider Preview.
-- Improved KDS Root Key selection algorithm.
+- Fixed a bug in LSA Policy modification.
 "@
     } # End of PSData hashtable
 
