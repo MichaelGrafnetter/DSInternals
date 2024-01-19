@@ -1,19 +1,19 @@
 ![DSInternals Logo](../.github/DSInternals-Dark.png#gh-light-mode-only)
 ![DSInternals Logo](../.github/DSInternals-Light.png#gh-dark-mode-only)
 
-# Changelog 
+# Changelog
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [4.13] - 2023-12-20 
+## [4.13] - 2023-12-20
 
-### Fixed 
+### Fixed
 
 - The [Set-LsaPolicyInformation](PowerShell/Set-LsaPolicyInformation.md#set-lsapolicyinformation) cmdlet now generates the [UNICODE_STRING](https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_unicode_string) structure with the trailing null character, to improve compatibility with NETLOGON. This issue mainly affects the functionality of the [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet. Thanks Christoffer Andersson for reporting this issue and sorry Microsoft support escalation engineers for the trouble this bug has caused.
 
-## [4.12] - 2023-10-06 
+## [4.12] - 2023-10-06
 
-### Added 
+### Added
 
 - The [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlet now works against Windows Server 2025 Insider Preview with the [32k database page size optional feature](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/whats-new-active-directory-domain-services-insider-preview#32k-database-page-size-optional-feature) enabled.
 - The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet is now able to read databases originating from Windows Server 2025 Insider Preview with the [32k database page size optional feature](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/whats-new-active-directory-domain-services-insider-preview#32k-database-page-size-optional-feature) enabled.
@@ -68,11 +68,11 @@ All notable changes to this project will be documented in this file. The format 
 - Added pipeline input support to the `-SamAccountName` parameter of the [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlet.
 - All PowerShell cmdlets that modify the `ntds.dit` file now have the `-Force` parameter.
 
-### Fixed 
+### Fixed
 
 - Fixed a regression error in `ntds.dit` file modification on Windows Server 2022 that was introduced in release [4.7].
 
-## [4.7] - 2021-10-30 
+## [4.7] - 2021-10-30
 
 ### Added
 
