@@ -5,9 +5,9 @@
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
 [![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg?logo=PowerShell)](#)
-[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019 | 2022](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019%20|%202022-007bb8.svg?logo=Windows%2011)](#)
+[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019 | 2022 | 2025](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019%20|%202022|%202025-007bb8.svg?logo=Windows%2011)](#)
 [![.NET Framework 4.7.2+](https://img.shields.io/badge/Framework-4.7.2%2B-007FFF.svg?logo=.net)](#)
-[![Architecture x64 | x86 | amd64](https://img.shields.io/badge/Architecture-x64%20|%20x86%20|%20ARM64-0071c5.svg?logo=Amazon%20EC2)](#)
+[![Architecture x64 | x86 | arm64](https://img.shields.io/badge/Architecture-x64%20|%20x86%20|%20ARM64-0071c5.svg?logo=Amazon%20EC2)](#)
 
 ## Introduction
 
@@ -58,7 +58,7 @@ Additional steps might be required on some freshly installed computers before DS
 
 ```powershell
 # TLS 1.2 must be enabled on older versions of Windows.
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+[System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::Tls12
 
 # Download the NuGet package manager binary.
 Install-PackageProvider -Name NuGet -Force
@@ -68,7 +68,6 @@ if($null -eq (Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue)) {
 
 # Download the DSInternals PowerShell module.
 Install-Module -Name DSInternals -Force
-
 ```
 
 ### Chocolatey Package

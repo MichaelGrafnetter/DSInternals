@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [4.14] - 2024-04-13
+
+### Fixed
+
+- Increased tolerance for malformed DPAPI CNG private keys.
+- Improved parsing of conflicting secret object names, e.g., `CN=BCKUPKEY_PREFERRED Secret\\0ACNF:26c8edbb-6b48-4f11-9e13-9ddbccedab5a,CN=System,DC=contoso,DC=com`.
+
 ## [4.13] - 2023-12-20
 
 ### Fixed
@@ -503,7 +510,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.13...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.14...HEAD
+[4.14]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.13...v4.14
 [4.13]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.12...v4.13
 [4.12]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.11...v4.12
 [4.11]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.10...v4.11
