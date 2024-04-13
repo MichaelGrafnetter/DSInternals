@@ -10,7 +10,6 @@
     -->
     <TargetProcessorArchitecture Condition=" '$(Platform)'=='x64' ">amd64</TargetProcessorArchitecture>
     <TargetProcessorArchitecture Condition=" '$(Platform)'=='Win32' ">x86</TargetProcessorArchitecture>
-    <TargetProcessorArchitecture Condition=" '$(Platform)'=='ARM' ">arm</TargetProcessorArchitecture>
     <TargetProcessorArchitecture Condition=" '$(Platform)'=='ARM64' ">arm64</TargetProcessorArchitecture>
   </PropertyGroup>
   <!-- Output Paths -->
