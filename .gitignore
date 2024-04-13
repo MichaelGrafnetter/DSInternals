@@ -209,3 +209,6 @@ FakesAssemblies/
 # MIDL generated code
 /Src/DSInternals.Replication.Interop/drsr.h
 /Src/DSInternals.Replication.Interop/drsr.cpp
+
+# Test Data
+[Tt]est[Dd]ata/

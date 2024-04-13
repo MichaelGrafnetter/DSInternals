@@ -86,7 +86,8 @@
                     // The actual roamed data
                     this.Data = reader.ReadBytes(dataSize);
 
-                    if(this.Type == RoamedCredentialType.CNGPrivateKey && dataSize > 0)
+                    // Note: The data structure might be corrupted and Data.Length can be less than dataSize.
+                    if (this.Type == RoamedCredentialType.CNGPrivateKey && this.Data.Length > 0)
                     {
                         // Remove Software KSP NCRYPT_OPAQUETRANSPORT_BLOB header
                         this.Data = new CngSoftwareProviderTransportBlob(this.Data).KeyData;

@@ -58,11 +58,45 @@ namespace DSInternals.Common.Test
         }
 
         [TestMethod]
+        public void DPAPIBackupKey_PreferredRSAKeyPointerConflict()
+        {
+            // Test vector
+            byte[] blob = "ec56e7ef7cf83a49902f259030203445".HexToBinary();
+            string distinguishedName = "CN=BCKUPKEY_PREFERRED Secret\\0ACNF:26c8edbb-6b48-4f11-9e13-9ddbccedab5a,CN=System,DC=contoso,DC=com";
+
+            // Parse the input
+            var key = new DPAPIBackupKey(distinguishedName, blob);
+
+            // Validate the results
+            Assert.AreEqual(DPAPIBackupKeyType.PreferredRSAKeyPointer, key.Type);
+            Assert.AreEqual(Guid.Parse("efe756ec-f87c-493a-902f-259030203445"), key.KeyId);
+            Assert.IsNull(key.FilePath);
+            Assert.IsNull(key.KiwiCommand);
+        }
+
+        [TestMethod]
         public void DPAPIBackupKey_PreferredLegacyKeyPointer()
         {
             // Test vector
             byte[] blob = "d5525c587817434d9d7bc22b4f7e5fa4".HexToBinary();
             string distinguishedName = "CN=BCKUPKEY_P Secret,CN=System,DC=Adatum,DC=com";
+
+            // Parse the input
+            var key = new DPAPIBackupKey(distinguishedName, blob);
+
+            // Validate the results
+            Assert.AreEqual(DPAPIBackupKeyType.PreferredLegacyKeyPointer, key.Type);
+            Assert.AreEqual(Guid.Parse("585c52d5-1778-4d43-9d7b-c22b4f7e5fa4"), key.KeyId);
+            Assert.IsNull(key.FilePath);
+            Assert.IsNull(key.KiwiCommand);
+        }
+
+        [TestMethod]
+        public void DPAPIBackupKey_PreferredLegacyKeyPointerConflict()
+        {
+            // Test vector
+            byte[] blob = "d5525c587817434d9d7bc22b4f7e5fa4".HexToBinary();
+            string distinguishedName = "CN=BCKUPKEY_P Secret\\0ACNF:202d1e62-cf69-4446-9578-fce798843cde,CN=System,DC=contoso,DC=com";
 
             // Parse the input
             var key = new DPAPIBackupKey(distinguishedName, blob);
