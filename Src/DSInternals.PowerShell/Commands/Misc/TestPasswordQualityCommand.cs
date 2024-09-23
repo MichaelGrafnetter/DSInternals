@@ -15,6 +15,10 @@
     public class TestPasswordQualityCommand : PSCmdletEx, IDisposable
     {
         #region Constants
+        protected const string ParamSetSingleSortedFile = "SingleFile";
+
+        protected const string ParamSetMultipuleSortedFile = "MultiFile";
+
         /// <summary>
         /// Expected number of users being processed.
         /// </summary>
@@ -87,7 +91,7 @@
             set;
         }
 
-        [Parameter]
+        [Parameter(ParameterSetName = ParamSetSingleSortedFile)]
         [ValidateNotNullOrEmpty]
         public string WeakPasswordHashesSortedFile
         {
@@ -95,7 +99,7 @@
             set;
         }
 
-        [Parameter]
+        [Parameter(ParameterSetName = ParamSetMultipuleSortedFile)]
         [ValidateNotNullOrEmpty]
         public string WeakPasswordHashesSortedFilePath
         {
