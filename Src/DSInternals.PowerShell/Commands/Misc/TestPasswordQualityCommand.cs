@@ -313,6 +313,8 @@
                 {
                     // Assuming all went well, we should be able to set up to search this much smaller file for the hashes
                     this.sortedHashFileSearcher = new SortedFileSearcher(sortedHashesFile);
+
+                    // In the split database the hashes are stored in the sorted files starting with the 6th character (since the filename is the first 5
                     hash = hash.Substring(5);
                 }
             }
