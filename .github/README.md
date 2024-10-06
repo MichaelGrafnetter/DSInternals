@@ -58,13 +58,16 @@ Additional steps might be required on some freshly installed computers before DS
 
 ```powershell
 # TLS 1.2 must be enabled on older versions of Windows.
-[System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::Tls12
+[System.Net.ServicePointManager]::SecurityProtocol =
+    [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
 
 # Download the NuGet package manager binary.
 Install-PackageProvider -Name NuGet -Force
 
 # Register the PowerShell Gallery as package repository if it is missing for any reason.
-if($null -eq (Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue)) { Register-PSRepository -Default }
+if($null -eq (Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue)) {
+    Register-PSRepository -Default
+}
 
 # Download the DSInternals PowerShell module.
 Install-Module -Name DSInternals -Force
