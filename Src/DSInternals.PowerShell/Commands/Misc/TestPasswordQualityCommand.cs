@@ -15,6 +15,10 @@
     public class TestPasswordQualityCommand : PSCmdletEx, IDisposable
     {
         #region Constants
+        protected const string ParamSetSingleSortedFile = "SingleFile";
+
+        protected const string ParamSetMultipuleSortedFile = "MultiFile";
+
         /// <summary>
         /// Expected number of users being processed.
         /// </summary>
@@ -87,9 +91,17 @@
             set;
         }
 
-        [Parameter]
+        [Parameter(ParameterSetName = ParamSetSingleSortedFile)]
         [ValidateNotNullOrEmpty]
         public string WeakPasswordHashesSortedFile
+        {
+            get;
+            set;
+        }
+
+        [Parameter(ParameterSetName = ParamSetMultipuleSortedFile)]
+        [ValidateNotNullOrEmpty]
+        public string WeakPasswordHashesSortedFilePath
         {
             get;
             set;
@@ -115,10 +127,11 @@
             // Test the optional file path in advance to throw an early error.
             this.ResolveFilePath(this.WeakPasswordHashesFile);
             this.ResolveFilePath(this.WeakPasswordsFile);
+            this.ResolveDirectoryPath(this.WeakPasswordHashesSortedFilePath);
 
             // Open the sorted weak password hashes file, as we will be searching it on-the-fly.
             string sortedHashesFile = this.ResolveFilePath(this.WeakPasswordHashesSortedFile);
-            if(sortedHashesFile != null)
+            if (sortedHashesFile != null)
             {
                 this.sortedHashFileSearcher = new SortedFileSearcher(sortedHashesFile);
             }
@@ -294,10 +307,26 @@
 
         private void LookupAccountNTHashInSortedFile()
         {
+            string hash = this.Account.NTHash.ToHex(true);
+            // If there is a file path present, the hashes are in seperate sorted files
+            if (this.WeakPasswordHashesSortedFilePath != null)
+            {
+                // The files in the path should be named with the first 5 chararacters of the hash and the extension txt, like ABDD0.txt
+                string sortedHashesFile = this.ResolveFilePath(this.WeakPasswordHashesSortedFilePath + hash.Substring(0, 5) + ".txt");
+                if (sortedHashesFile != null)
+                {
+                    // Assuming all went well, we should be able to set up to search this much smaller file for the hashes
+                    this.sortedHashFileSearcher = new SortedFileSearcher(sortedHashesFile);
+
+                    // In the split database the hashes are stored in the sorted files starting with the 6th character (since the filename is the first 5
+                    hash = hash.Substring(5);
+                }
+            }
+
             if (this.sortedHashFileSearcher != null)
             {
                 // Check the password on the fly in the sorted file using binary search
-                bool found = this.sortedHashFileSearcher.FindString(this.Account.NTHash.ToHex());
+                bool found = this.sortedHashFileSearcher.FindString(hash);
                 if (found)
                 {
                     this.result.WeakPassword.UnionWith(new string[] { this.Account.LogonName });
