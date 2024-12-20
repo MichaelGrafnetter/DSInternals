@@ -17,6 +17,7 @@
         public const long EpochMinValue = 1;
         public const long EpochMaxValue = int.MaxValue;
         private const string CrossRefContainerRDN = "CN=Partitions";
+        private const char DnsNameSeparator = '.';
 
         // List of columns in the hiddentable:
         private const string ntdsSettingsCol = "dsa_col";
@@ -79,7 +80,7 @@
             // TODO: Export other database flags, not just IsADAM.
             // TODO: Load database health
             this.highestUSNCache = this.systemTableCursor.RetrieveColumnAsLong(highestCommitedUsnCol).Value;
-            
+
             // Now we can load the Invocation ID and other information from the datatable:
             using (var dataTableCursor = context.OpenDataTable())
             {
@@ -104,12 +105,12 @@
 
                 // Goto DC object (parent of NTDS):
                 bool dcFound = dataTableCursor.GotoParentObject(schema);
-                
+
                 // Load data from the DC object
-                
+
                 // Load DC name:
                 string dcName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.CommonName));
-                
+
                 // DC name is null in the initial database, so use NTDS Settings object's CN instead
                 this.Name = dcName ?? ntdsName;
 
@@ -384,6 +385,14 @@
         {
             get;
             private set;
+        }
+
+        public string HostName
+        {
+            get
+            {
+                return !String.IsNullOrEmpty(this.DNSHostName) ? this.DNSHostName.Split(DnsNameSeparator)[0] : this.Name;
+            }
         }
 
         public DistinguishedName ServerReference

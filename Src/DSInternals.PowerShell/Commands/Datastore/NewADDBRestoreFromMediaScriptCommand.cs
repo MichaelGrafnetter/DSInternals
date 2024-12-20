@@ -48,7 +48,7 @@
         {
             get;
             set;
-        }        
+        }
 
         protected override void ProcessRecord()
         {
@@ -86,6 +86,7 @@
             string template = LoadScriptTemplate();
             var script = new StringBuilder(template).
                 Replace("{DCName}", dc.Name).
+                Replace("{DCHostName}", dc.HostName).
                 Replace("{DCGuid}", dc.Guid.ToString()).
                 Replace("{DCDistinguishedName}", dc.ServerReference.ToString()).
                 Replace("{DomainName}", dc.DomainName).
