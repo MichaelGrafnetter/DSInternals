@@ -3606,7 +3606,7 @@ Credential Roaming
         <dev:code>PS C:\&gt; $results = Get-ADDBAccount -DatabasePath '.\Active Directory\ntds.dit' `
                                    -BootKey acdba64a3929261b04e5270c3ef973cf `
                                    -All  |
-                   Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt</dev:code>
+                   Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v8.txt</dev:code>
         <dev:remarks>
           <maml:para>Performs an offline credential hygiene audit of AD database against HIBP.</maml:para>
         </dev:remarks>
@@ -5572,7 +5572,7 @@ Credential Roaming
       <command:example>
         <maml:title>-------------------------- Example 3 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $results = Get-ADReplAccount -All -Server 'lon-dc1.contoso.com' |
-                   Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt</dev:code>
+                   Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v8.txt</dev:code>
         <dev:remarks>
           <maml:para>Performs an online credential hygiene audit of AD against HIBP.</maml:para>
         </dev:remarks>
@@ -10947,7 +10947,19 @@ PS C:\&gt; Set-AzureADUserEx -UserPrincipalName 'john@contoso.com' -KeyCredentia
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WeakPasswordHashesSortedFile</maml:name>
           <maml:Description>
-            <maml:para>Path to a file that contains NT hashes of weak passwords, one hash in HEX format per line. The hashes must be sorted alphabetically, because a binary search is performed. This parameter is typically used with a list of leaked password hashes from HaveIBeenPwned.</maml:para>
+            <maml:para>Path to a file that contains NT hashes of weak passwords, one hash in HEX format per line. The hashes must be sorted alphabetically, because a binary search is performed. This parameter is typically used with a list of leaked password hashes from HaveIBeenPwned, v8 and earlier.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>WeakPasswordHashesSortedFilePath</maml:name>
+          <maml:Description>
+            <maml:para>Path to a directory of files named as the first five characters of an NT hash (00000.txt - FFFFF.txt), each of which contain NT hashes of weak passwords, one hash in HEX format per line, starting with the 6th character in the hash. The hashes must be sorted alphabetically, because a binary search is performed. This parameter is typically used with a list of leaked password hashes from HaveIBeenPwned after v8.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -11097,8 +11109,8 @@ PS C:\&gt; Set-AzureADUserEx -UserPrincipalName 'john@contoso.com' -KeyCredentia
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
-            Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
-&lt;# Sample Output:
+          Test-PasswordQuality -WeakPasswordHashesSortedFilePath P:\pwnedpasswords_ntlm
+          &lt;# Sample Output:
 
 Active Directory Password Quality Report
 ----------------------------------------
@@ -11168,7 +11180,7 @@ These accounts that require smart card authentication have a password:
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $results = Get-ADReplAccount -All -Server LON-DC1 |
                    Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' `
-                                        -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt</dev:code>
+                                        -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v8.txt</dev:code>
         <dev:remarks>
           <maml:para>Performs an online credential hygiene audit of AD against HIBP + a custom wordlist.</maml:para>
         </dev:remarks>
