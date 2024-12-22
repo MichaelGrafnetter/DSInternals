@@ -61,6 +61,9 @@
                 this.BootKey = BootKeyRetriever.GetBootKey(resolvedRegistryPath);
             }
 
+            // Fetch the local server's boot key from the registry:
+            byte[] localBootKey = BootKeyRetriever.GetBootKey();
+
             using (var dsa = new DirectoryAgent(this.DirectoryContext))
             {
                 bool bootKeyIsValid = dsa.CheckBootKey(this.BootKey);
@@ -82,6 +85,10 @@
             // TODO: Check DNS partition presence
             // TODO: Check backup expiration time
 
+            string targetDatabaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "NTDS");
+            string targetDatabasePath = Path.Combine(targetDatabaseDirectory, "ntds.dit");
+            string targetSysvolPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "SYSVOL");
+
             // Load the RFM script template and replace placeholders with values from the DB:
             string template = LoadScriptTemplate();
             var script = new StringBuilder(template).
@@ -100,13 +107,15 @@
                 Replace("{ForestModeString}", (dc.ForestMode).ToString()).
                 Replace("{OSName}", dc.OSName).
                 Replace("{OldBootKey}", this.BootKey.ToHex()).
+                Replace("{CurrentBootKey}", localBootKey.ToHex()).
                 Replace("{SourceDBPath}", this.DirectoryContext.DSADatabaseFile).
                 Replace("{SourceDBDirPath}", this.DirectoryContext.DSAWorkingDirectory).
                 Replace("{SourceLogDirPath}", this.DirectoryContext.DatabaseLogFilesPath).
-                Replace("{TargetDBDirPath}", @"$env:SYSTEMROOT\NTDS").
-                Replace("{TargetLogDirPath}", @"$env:SYSTEMROOT\NTDS").
+                Replace("{TargetDBDirPath}",  targetDatabaseDirectory).
+                Replace("{TargetDBPath}", targetDatabasePath).
+                Replace("{TargetLogDirPath}", targetDatabaseDirectory).
                 Replace("{SourceSysvolPath}", this.ResolveDirectoryPath(this.SysvolPath)).
-                Replace("{TargetSysvolPath}", @"$env:SYSTEMROOT\SYSVOL");
+                Replace("{TargetSysvolPath}", targetSysvolPath);
 
             // We need to inject cleartext version of the password into the script for dcpromo. The SecureString will therefore have to appear in managed memory, which is against best practices.
             using (var dsrmPassword = new SafeUnicodeSecureStringPointer(this.SafeModeAdministratorPassword))

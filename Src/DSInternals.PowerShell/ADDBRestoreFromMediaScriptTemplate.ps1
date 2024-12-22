@@ -10,7 +10,7 @@ This script performs a multi-phase domain controller restore from an IFM backup:
 - Phase 2: Rename the computer and reboot if necessary.
 - Phase 3: Install the required Windows features and reboot if needed.
 - Phase 4: Promote the server to a domain controller.
-- Phase 5: Restore the AD database, re-encrypt it, reset the DC password, and reconfigure LSA policies.
+- Phase 5: Restore the AD database, re-encrypt it, and reconfigure LSA policies.
 - Phase 6: Replace the SYSVOL directory, restore ACLs if available, and reboot the server.
 - Phase 7: Reconfigure the SYSVOL replication subscription.
 
@@ -25,11 +25,11 @@ The DSInternals PowerShell module must be installed for all users on the target 
 It is recommended to change the DSRM password after DC promotion.
 
 Author:  Michael Grafnetter
-Version: 2.0
+Version: 2.1
 
 #>
 
-#Requires -Version 3 -Modules DSInternals,ServerManager -RunAsAdministrator
+#Requires -Version 3 -Modules DSInternals -RunAsAdministrator
 
 param(
     [Parameter(Mandatory = $false)]
@@ -39,10 +39,10 @@ param(
 
 # Make sure that the required data types and cmdlets are available.
 Import-Module -Name DSInternals -ErrorAction Stop
-Import-Module -Name ServerManager -ErrorAction Stop
 
 function Main {
     [string] $script:LogFile = "$env:windir\Logs\DSInternals-RestoreFromMedia.txt"
+    [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     Write-Log -Message "Starting script execution in phase $Phase..."
 
     # The script must be executed locally so that it is accessible even after a reboot.
@@ -85,13 +85,16 @@ function Main {
         3 {
             Write-Log -Message 'Installing the required Windows features...'
 
-            # Note: dcpromo.exe would install most of these features if absent.
-            # TODO: Check if these features are called the same in all OS versions.
+            # Note: The ServerManager module is not available during Safe Boot. It is therefore not imported globally.
+            Import-Module -Name ServerManager -ErrorAction Stop
+
+            # Notes:
+            # The dcpromo.exe tool would install most of these features if absent.
+            # The BitLocker Recovery Password Viewer is called RSAT-Bitlocker-RecPwd on Windows Server 2008 R2 and cannot be instaleld on non-domain computers.
+            # The AD-Domain-Services component would try to install UNIX-related components on Windows Server 2008 R2, which cannot be installed on non-domain computers.
             [string[]] $featuresToInstall = @(
-                'AD-Domain-Services',
                 'DNS',
                 'GPMC',
-                'RSAT-ADDS',
                 'RSAT-AD-AdminCenter',
                 'RSAT-ADDS-Tools',
                 'RSAT-AD-PowerShell',
@@ -100,9 +103,12 @@ function Main {
                 'RSAT-Feature-Tools-BitLocker-BdeAducExt' # BitLocker Recovery Password Viewer is not installed by default
             )
 
+            # Notes:
+            # The Add-WindowsFeature alias is used instead of Install-WindowsFeature for compatibility reasons.
+            # The -IncludeManagementTools parameter is not used because it is not available on Windows Server 2008 R2.
             [object[]] $featuresRequiringRestart = Get-WindowsFeature |
                 Where-Object Name -in $featuresToInstall |
-                Install-WindowsFeature -IncludeManagementTools -IncludeAllSubFeature |
+                Add-WindowsFeature -IncludeAllSubFeature |
                 Where-Object RestartNeeded -ne ([Microsoft.Windows.ServerManager.Commands.RestartState]::No) 2>> $script:LogFile
 
             [bool] $restartNeeded = $null -ne $featuresRequiringRestart
@@ -126,14 +132,14 @@ function Main {
             }
 
             # Prevent the Server Manager from saying that additional configuration is required.
-            # TODO: Test the following registry key on Windows Server 2008 R2.
+            # Note: The Roles key does not exist on Windows Server 2008 R2.
             Write-Log -Message 'Marking the AD DS role as already configured by the Server Manager...'
             Set-ItemProperty -Path 'registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\10' `
                              -Name 'ConfigurationStatus' `
                              -Value 2 `
                              -Type DWord `
                              -Force `
-                             -ErrorAction Continue `
+                             -ErrorAction SilentlyContinue `
                              -Verbose *>> $script:LogFile
 
             # Avoid FSMO role holder being unavailable until it has completed replication of a writeable directory partition.
@@ -160,45 +166,9 @@ function Main {
                 Write-Log -Message 'Stopping the NTDS service...'
                 Stop-Service -Name NTDS -Force -Verbose *>> $script:LogFile
             } else {
-                # Note: This is the most common case, as AD DS should not be running after a fresh dcpromo.
+                # Note: This is the most common case, as AD DS should not be running before a reboot.
                 Write-Log -Message 'The NTDS service is stopped. Proceeding with database restoration...'
             }
-
-            # Re-encrypt the DB with the new boot key.
-            Write-Log -Message 'Fetching the current boot key (system key) from the HKLM\SYSTEM registry hive...'
-            [byte[]] $currentBootKey = Get-BootKey -Online 2>> $script:LogFile
-
-            Write-Log -Message 'Re-encrypting the database with the new boot key...'
-            Set-ADDBBootKey -DatabasePath '{SourceDBPath}' `
-                            -LogPath '{SourceLogDirPath}' `
-                            -OldBootKey '{OldBootKey}' `
-                            -NewBootKey $currentBootKey `
-                            -ErrorAction Stop `
-                            -Force `
-                            -Verbose *>> $script:LogFile
-
-            # Fetch the DB and transaction log locations.
-            Write-Log -Message 'Fetching NTDS service parameters from the registry...'
-            [PSCustomObject] $ntdsParams = Get-ItemProperty -Path 'registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters' 2>> $script:LogFile
-
-            # Fetch the DC account password from the newly created DC.
-            Write-Log -Message 'Fetching the new DC account password hashes...'
-            [DSInternals.Common.Data.DSAccount] $dcAccount = Get-ADDBAccount -SamAccountName '{DCName}$' `
-                                                                             -DatabasePath $ntdsParams.'DSA Database file' `
-                                                                             -LogPath $ntdsParams.'Database log files path' `
-                                                                             -BootKey $currentBootKey `
-                                                                             -ErrorAction Stop 2>> $script:LogFile
-
-            # Clone the DC account password to the database that is being restored.
-            Write-Log -Message 'Cloning the DC account password hashes...'
-            Set-ADDBAccountPasswordHash -ObjectGuid '{DCGuid}' `
-                                        -NTHash $dcAccount.NTHash `
-                                        -SupplementalCredentials $dcAccount.SupplementalCredentials `
-                                        -DatabasePath '{SourceDBPath}' `
-                                        -LogPath '{SourceLogDirPath}' `
-                                        -BootKey $currentBootKey `
-                                        -Verbose `
-                                        -Force *>> $script:LogFile
 
             # Replace the database files using robocopy.
             # Copy the database (*.dit, *.edb), checkpoint (*.chk), and flush map (*.jfm) files.
@@ -207,16 +177,21 @@ function Main {
             # /NDL: No directory list
             # /NJS: No job summary
             Write-Log -Message 'Replacing the AD database files...'
-            robocopy.exe '{SourceDBDirPath}' $ntdsParams.'DSA Working Directory' *.dit *.edb *.chk *.jfm /MIR /NP /NDL /NJS *>> $script:LogFile
+            robocopy.exe '{SourceDBDirPath}' '{TargetDBDirPath}' *.dit *.edb *.chk *.jfm /MIR /NP /NDL /NJS *>> $script:LogFile
 
             # Replace the transaction logs using robocopy.
             # Copy the transaction logs (*.log) and reserved transaction log files (*.jrs).
-            # /MIR: Mirrors the directory tree
-            # /NP: No progress
-            # /NDL: No directory list
-            # /NJS: No job summary
             Write-Log -Message 'Replacing the AD database transaction log files...'
-            robocopy.exe '{SourceLogDirPath}' $ntdsParams.'Database log files path' *.log *.jrs /MIR /NP /NDL /NJS *>> $script:LogFile
+            robocopy.exe '{SourceLogDirPath}' '{TargetLogDirPath}' *.log *.jrs /MIR /NP /NDL /NJS *>> $script:LogFile
+
+            # Re-encrypt the DB with the new boot key. We would get into a BSOD loop if the DC is unable to decrypt the database.
+            Write-Log -Message 'Re-encrypting the database with the new boot key...'
+            Set-ADDBBootKey -DatabasePath '{TargetDBPath}' `
+                            -LogPath '{TargetLogDirPath}' `
+                            -OldBootKey '{OldBootKey}' `
+                            -NewBootKey '{CurrentBootKey}' `
+                            -Force `
+                            -Verbose *>> $script:LogFile
 
             # Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
             Write-Log -Message 'Reconfiguring the LSA policies...'
@@ -236,15 +211,20 @@ function Main {
                              -Force `
                              -Verbose *>> $script:LogFile
 
-            # Remove the DSA Database Epoch value to bypass database rollback detection.
+            # Remove the DSA Database Epoch value to bypass the database rollback detection.
             Write-Log -Message 'Clearing the DSA Database Epoch value...'
             Remove-ItemProperty -Path 'registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters' `
                                 -Name 'DSA Database Epoch' `
                                 -Force `
                                 -Verbose *>> $script:LogFile
 
-            # Reboot and continue to the next phase.
-            Register-ScheduledScript -ExecutePhase 6 -RebootRequired
+
+            # Note:
+            # The DC account is created/modified during the first boot after promotion.
+            # The machine account password thus does not need to be copied by this script.
+
+            # Continue to the next phase.
+            Register-ScheduledScript -ExecutePhase 6
         }
         6 {
             # Replace the SYSVOL directory.
@@ -253,12 +233,12 @@ function Main {
             # /XJ: Excludes junction points, several of which are present in SYSVOL.
             # /COPYALL: Copies all file information, including data, attributes, timestamps, NTFS ACLs (permissions), owner information, and auditing information.
             # /SECFIX: Fixes file security on all files, even skipped ones.
-            # /TIMFIX: This fixes file times on all files, even skipped ones.
+            # /TIMFIX: Fixes file times on all files, even skipped ones.
             # /NP: No progress
             # /NDL: No directory list
             Write-Log -Message 'Replacing the SYSVOL files...'
             [string] $sourcePath = Join-Path -Path '{SourceSysvolPath}' -ChildPath '{DomainName}'
-            [string] $targetPath = Join-Path -Path "{TargetSysvolPath}" -ChildPath 'domain'
+            [string] $targetPath = Join-Path -Path '{TargetSysvolPath}' -ChildPath 'domain'
             robocopy.exe $sourcePath $targetPath /MIR /XD DfsrPrivate /XJ /COPYALL /SECFIX /TIMFIX /NP /NDL *>> $script:LogFile
 
             # Check if an optional SYSVOL Group Policy ACL backup is present.
@@ -266,13 +246,13 @@ function Main {
             [string] $sysvolAclBackupPath = Join-Path -Path '{SourceSysvolPath}' -ChildPath 'PolicyPermissions.txt'
             if(Test-Path -Path $sysvolAclBackupPath -PathType Leaf) {
                 Write-Log -Message 'Restoring the SYSVOL Group Policy ACLs...'
-                [string] $aclRestorePath = Join-Path -Path "{TargetSysvolPath}" -ChildPath 'domain\Policies'
+                [string] $aclRestorePath = Join-Path -Path '{TargetSysvolPath}' -ChildPath 'domain\Policies'
                 icacls.exe $aclRestorePath /restore $sysvolAclBackupPath *>> $script:LogFile
             } else {
                 Write-Log -Message 'No SYSVOL ACL backup found. Skipping the ACL restoration.'
             }
 
-            # A reboot is required for AD to start normally.
+            # A reboot is required for AD to start.
             Register-ScheduledScript -ExecutePhase 7 -RebootRequired
         }
         7 {
@@ -290,12 +270,12 @@ function Main {
 
             # Update DFS-R subscription if present in AD.
             Update-DfsrSubscription -DomainControllerDN '{DCDistinguishedName}' `
-                                    -SysvolPath "{TargetSysvolPath}" `
+                                    -SysvolPath '{TargetSysvolPath}' `
                                     -DomainName '{DomainName}'
 
             # Update FRS subscription if present in AD.
             Update-FrsSubscription -DomainControllerDN '{DCDistinguishedName}' `
-                                   -SysvolPath "{TargetSysvolPath}"
+                                   -SysvolPath '{TargetSysvolPath}'
         }
     }
 
@@ -380,7 +360,7 @@ function Register-ScheduledScript {
     # Generate the complete command line
     [string] $commandLine = '"{0}" -ExecutionPolicy Bypass -NonInteractive -NoProfile -NoLogo -File "{1}" -Phase {2}' -f $psPath,$scriptPath,$ExecutePhase
 
-    # NOTE: The ScheduledTasks module is not used because it is not available on Windows Server 2008 R2.
+    # Note: The ScheduledTasks module is not used because it is not available on Windows Server 2008 R2.
     Write-Log -Message 'Registering the script to be executed as a scheduled task...'
     schtasks.exe /Create /TN $taskName /TR $commandLine /SC ONSTART /RU SYSTEM /RL HIGHEST /F *>> $script:LogFile
 
