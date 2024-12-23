@@ -5,6 +5,28 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [4.15] - 2024-12-23
+
+This is a PowerShell-only release.
+
+### Added
+
+- Implemented support for individual *.txt files from HIBP in the [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet.
+
+### Fixed
+
+- The [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet now generates a more robust DC recovery script:
+  - Regular scheduled tasks are used instead of PowerShell scheduled jobs and workflows.
+  - The script can be executed under the SYSTEM account.
+  - Domain controller names longer than 15 characters are now fully supported.
+  - SYSVOL GPO ACLs are optionally restored as well.
+  - The Directory Services Restore Mode (DSRM) phase is skipped and only 2 reboots are required instead of 3.
+  - The entire process has been tested on Windows Server 2022 and Windows Server 2008 R2.
+
+### Removed
+
+- The [Add-ADDBSidHistory](PowerShell/Add-ADDBSidHistory.md#add-addbsidhistory) cmdlet has been removed to prevent it from being used in migration scenarios.
+
 ## [4.14] - 2024-04-13
 
 ### Fixed
@@ -510,7 +532,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.14...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15...HEAD
+[4.15]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.14...v4.15
 [4.14]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.13...v4.14
 [4.13]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.12...v4.13
 [4.12]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.11...v4.12

@@ -128,7 +128,7 @@ Version: 2.1
 
 #>
 
-#Requires -Version 3 -Modules DSInternals,ServerManager -RunAsAdministrator
+#Requires -Version 3 -Modules DSInternals -RunAsAdministrator
 
 param(
     [Parameter(Mandatory = $false)]
@@ -186,6 +186,7 @@ function Main {
 
             # Note: The ServerManager module is not available during Safe Boot. It is therefore not imported globally.
             Import-Module -Name ServerManager -ErrorAction Stop
+
             # Notes:
             # The dcpromo.exe tool would install most of these features if absent.
             # The BitLocker Recovery Password Viewer is called RSAT-Bitlocker-RecPwd on Windows Server 2008 R2 and cannot be instaleld on non-domain computers.

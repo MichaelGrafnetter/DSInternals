@@ -38,6 +38,11 @@
         /// Separator of hashes in the file from HaveIBeenPwned.
         /// </summary>
         private const char HashSeparator = ':';
+
+        /// <summary>
+        /// Length of the hash prefix (K-anonymity) in the files from HaveIBeenPwned.
+        /// </summary>
+        private const int HashPrefixLength = 5;
         #endregion Constants
 
         #region Parameters
@@ -92,6 +97,7 @@
         }
 
         [Parameter(ParameterSetName = ParamSetSingleSortedFile)]
+        [Alias("HIBPFile", "HaveIBeenPwnedFile")]
         [ValidateNotNullOrEmpty]
         public string WeakPasswordHashesSortedFile
         {
@@ -100,6 +106,7 @@
         }
 
         [Parameter(ParameterSetName = ParamSetMultipuleSortedFile)]
+        [Alias("WeakPasswordHashesSortedDirectory", "HIBPDirectory", "HaveIBeenPwnedDirectory")]
         [ValidateNotNullOrEmpty]
         public string WeakPasswordHashesSortedFilePath
         {
@@ -312,14 +319,14 @@
             if (this.WeakPasswordHashesSortedFilePath != null)
             {
                 // The files in the path should be named with the first 5 chararacters of the hash and the extension txt, like ABDD0.txt
-                string sortedHashesFile = this.ResolveFilePath(this.WeakPasswordHashesSortedFilePath + hash.Substring(0, 5) + ".txt");
+                string sortedHashesFile = this.ResolveFilePath(this.WeakPasswordHashesSortedFilePath + hash.Substring(0, HashPrefixLength) + ".txt");
                 if (sortedHashesFile != null)
                 {
                     // Assuming all went well, we should be able to set up to search this much smaller file for the hashes
                     this.sortedHashFileSearcher = new SortedFileSearcher(sortedHashesFile);
 
                     // In the split database the hashes are stored in the sorted files starting with the 6th character (since the filename is the first 5
-                    hash = hash.Substring(5);
+                    hash = hash.Substring(HashPrefixLength);
                 }
             }
 
@@ -502,9 +509,8 @@
         private void TestSamAccountNameAsPassword()
         {
             string userLowerPassword = this.Account.SamAccountName.ToLower();
-            
             byte[] userLowerHash = NTHash.ComputeHash(userLowerPassword);
-            
+
             if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, userLowerHash))
             {
                 // Username Password is lowercase SamAccountName
@@ -516,7 +522,6 @@
                 byte[] userExactHash = NTHash.ComputeHash(userExactPassword);
                 if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, userExactHash))
                 {
-                    
                     // Username Password is exact SamAccountName
                     this.result.SamAccountNameAsPassword.Add(this.Account.LogonName);
                 }

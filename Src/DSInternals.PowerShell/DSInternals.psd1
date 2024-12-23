@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.14'
+ModuleVersion = '4.15'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -72,7 +72,7 @@ FunctionsToExport = @()
 CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswordHash',
                   'ConvertFrom-UnicodePassword', 'ConvertTo-UnicodePassword',
                   'ConvertTo-OrgIdHash', 'ConvertFrom-GPPrefPassword',
-                  'ConvertTo-GPPrefPassword', 'Add-ADDBSidHistory',
+                  'ConvertTo-GPPrefPassword', # 'Add-ADDBSidHistory',
                   'Set-ADDBPrimaryGroup', 'Get-ADDBDomainController',
                   'Set-ADDBDomainController', 'Get-ADDBSchemaAttribute',
                   'Remove-ADDBObject', 'Get-ADDBAccount', 'Get-BootKey',
@@ -143,7 +143,9 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Minor credential roaming parser improvement.
+- Implemented support for individual *.txt files from HIBP in the Test-PasswordQuality cmdlet.
+- The New-ADDBRestoreFromMediaScript cmdlet now generates a more robust DC recovery script.
+- The Add-ADDBSidHistory cmdlet has been removed to prevent it from being used in migration scenarios.
 "@
     } # End of PSData hashtable
 

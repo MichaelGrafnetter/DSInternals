@@ -473,7 +473,6 @@ function Update-FrsSubscription {
         # Download the updated FRS configuration from AD.
         Write-Log -Message 'Polling AD for FRS configuration changes...'
         ntfrsutl.exe poll /now *>> $script:LogFile
-        # TODO: Check what happens if the FRS service is disabled on the new DC.
     } else {
         Write-Log -Message 'FRS subscription was not found in AD. This is expected.'
     }
