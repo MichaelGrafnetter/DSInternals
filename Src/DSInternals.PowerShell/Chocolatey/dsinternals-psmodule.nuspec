@@ -3,14 +3,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>4.15</version>
+    <version>4.15.1</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
     <authors>Michael Grafnetter</authors>
     <projectUrl>https://github.com/MichaelGrafnetter/DSInternals</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/Src/Icons/module_black.png</iconUrl>
-    <copyright>(c) 2015-2024 Michael Grafnetter. All rights reserved.</copyright>
+    <copyright>(c) 2015-2025 Michael Grafnetter. All rights reserved.</copyright>
     <licenseUrl>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/License.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src</projectSourceUrl>
@@ -37,9 +37,7 @@ The DSInternals PowerShell Module has these main features:
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* Implemented support for individual *.txt files from HIBP in the Test-PasswordQuality cmdlet.
-* The New-ADDBRestoreFromMediaScript cmdlet now generates a more robust DC recovery script.
-* The Add-ADDBSidHistory cmdlet has been removed to prevent it from being used in migration scenarios.
+* The Test-PasswordQuality cmdlet should no longer return the AmbiguousParameterSet error.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->

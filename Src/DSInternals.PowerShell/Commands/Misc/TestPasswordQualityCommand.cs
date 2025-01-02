@@ -10,7 +10,7 @@
     using System.Management.Automation;
     using System.Text;
 
-    [Cmdlet(VerbsDiagnostic.Test, "PasswordQuality")]
+    [Cmdlet(VerbsDiagnostic.Test, "PasswordQuality", DefaultParameterSetName = ParamSetSingleSortedFile)]
     [OutputType(new Type[] { typeof(PasswordQualityTestResult) })]
     public class TestPasswordQualityCommand : PSCmdletEx, IDisposable
     {

@@ -16,7 +16,7 @@
     <releaseNotes>
 - Minor credential roaming parser improvement.
     </releaseNotes>
-    <copyright>Copyright (c) 2015-2024 Michael Grafnetter. All rights reserved.</copyright>
+    <copyright>Copyright (c) 2015-2025 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security RPC DRSR</tags>
     <references>
       <reference file="DSInternals.Replication.dll" />

@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.15'
+ModuleVersion = '4.15.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -23,7 +23,7 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) 2015-2024 Michael Grafnetter. All rights reserved.'
+Copyright = '(c) 2015-2025 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
@@ -143,9 +143,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Implemented support for individual *.txt files from HIBP in the Test-PasswordQuality cmdlet.
-- The New-ADDBRestoreFromMediaScript cmdlet now generates a more robust DC recovery script.
-- The Add-ADDBSidHistory cmdlet has been removed to prevent it from being used in migration scenarios.
+- The Test-PasswordQuality cmdlet should no longer return the AmbiguousParameterSet error.
 "@
     } # End of PSData hashtable
 

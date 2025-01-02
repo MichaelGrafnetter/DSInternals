@@ -5,6 +5,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [4.15.1] - 2025-01-02
+
+This is a PowerShell-only bugfix release.
+
+### Fixed
+
+- Resolved the `AmbiguousParameterSet` error returned by the [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet.
+
 ## [4.15] - 2024-12-23
 
 This is a PowerShell-only release.
@@ -532,7 +540,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...HEAD
+[4.15.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15...v4.15.1
 [4.15]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.14...v4.15
 [4.14]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.13...v4.14
 [4.13]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.12...v4.13

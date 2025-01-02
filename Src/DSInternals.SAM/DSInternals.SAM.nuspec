@@ -16,7 +16,7 @@
     <releaseNotes>
 - Updated dependency version.
     </releaseNotes>
-    <copyright>Copyright (c) 2015-2024 Michael Grafnetter. All rights reserved.</copyright>
+    <copyright>Copyright (c) 2015-2025 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security RPC SAMR LSARPC AD Identity Active Directory</tags>
     <references>
       <reference file="DSInternals.SAM.dll" />
