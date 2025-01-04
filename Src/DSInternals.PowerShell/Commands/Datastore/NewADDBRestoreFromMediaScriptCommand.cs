@@ -85,9 +85,10 @@
             // TODO: Check DNS partition presence
             // TODO: Check backup expiration time
 
-            string targetDatabaseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "NTDS");
+            string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+            string targetDatabaseDirectory = Path.Combine(windir, "NTDS");
             string targetDatabasePath = Path.Combine(targetDatabaseDirectory, "ntds.dit");
-            string targetSysvolPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "SYSVOL");
+            string targetSysvolPath = Path.Combine(windir, "SYSVOL");
 
             // Load the RFM script template and replace placeholders with values from the DB:
             string template = LoadScriptTemplate();
@@ -101,6 +102,9 @@
                 Replace("{ForestName}", dc.ForestName).
                 Replace("{DomainGuid}", dc.DomainGuid.ToString()).
                 Replace("{DomainSid}", dc.DomainSid.ToString()).
+                Replace("{ConfigNC}", dc.ConfigurationNamingContext.ToString()).
+                Replace("{RootDomainNC}", dc.ForestRootNamingContext.ToString()).
+                Replace("{NTDSSettingsObject}", dc.NTDSSettingsObjectDN.ToString()).
                 Replace("{DomainMode}", ((int)dc.DomainMode).ToString()).
                 Replace("{ForestMode}", ((int)dc.ForestMode).ToString()).
                 Replace("{DomainModeString}", (dc.DomainMode).ToString()).

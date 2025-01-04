@@ -90,6 +90,7 @@
                 bool ntdsFound = dataTableCursor.GotoKey(Key.Compose(this.NTDSSettingsDNT));
 
                 // Load data from the NTDS Settings object
+                this.NTDSSettingsObjectDN = context.DistinguishedNameResolver.Resolve(this.NTDSSettingsDNT);
                 this.InvocationId = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.InvocationId)).Value;
                 this.DsaGuid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGUID)).Value;
                 this.Options = dataTableCursor.RetrieveColumnAsDomainControllerOptions(schema.FindColumnId(CommonDirectoryAttributes.Options));
@@ -98,6 +99,9 @@
                 // Retrieve Configuration Naming Context
                 this.ConfigurationNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextDNTag)).Value;
                 this.ConfigurationNamingContext = context.DistinguishedNameResolver.Resolve(this.ConfigurationNamingContextDNT);
+
+                // Forest Root Domain NC should be the parent of the Configuration NC
+                this.ForestRootNamingContext = this.ConfigurationNamingContext.Parent
 
                 // Retrieve Schema Naming Context
                 this.SchemaNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.SchemaLocation)).Value;
@@ -120,6 +124,9 @@
                 // Load server reference to domain partition:
                 int dcDNTag = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.DNTag)).Value;
                 this.ServerReferenceDNT = context.LinkResolver.GetLinkedDNTag(dcDNTag, CommonDirectoryAttributes.ServerReference);
+
+                // Load the DSA object DN
+                this.ServerObjectDN = context.DistinguishedNameResolver.Resolve(dcDNTag);
 
                 // Goto Servers object (parent of DC):
                 bool serversFound = dataTableCursor.GotoParentObject(schema);
@@ -395,7 +402,20 @@
             }
         }
 
+        // TODO: Rename to ComputerObjectDN
         public DistinguishedName ServerReference
+        {
+            get;
+            private set;
+        }
+
+        public DistinguishedName NTDSSettingsObjectDN
+        {
+            get;
+            private set;
+        }
+
+        public DistinguishedName ServerObjectDN
         {
             get;
             private set;
@@ -525,6 +545,12 @@
         }
 
         public DistinguishedName DomainNamingContext
+        {
+            get;
+            private set;
+        }
+
+        public DistinguishedName ForestRootNamingContext
         {
             get;
             private set;

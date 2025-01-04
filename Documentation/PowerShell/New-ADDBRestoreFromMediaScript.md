@@ -124,7 +124,7 @@ The DSInternals PowerShell module must be installed for all users on the target 
 It is recommended to change the DSRM password after DC promotion.
 
 Author:  Michael Grafnetter
-Version: 2.1
+Version: 2.2
 
 #>
 
@@ -292,7 +292,7 @@ function Main {
                             -Force `
                             -Verbose *>> $script:LogFile
 
-            # Reconfigure LSA policies. We would get into a BSOD loop if they do not match the corresponding values in the database.
+            # Reconfigure LSA policies. We would get into a BSOD loop if they did not match the corresponding values in the database.
             Write-Log -Message 'Reconfiguring the LSA policies...'
             Set-LsaPolicyInformation -DomainName 'ADATUM' `
                                      -DnsDomainName 'Adatum.com' `
@@ -300,6 +300,33 @@ function Main {
                                      -DomainGuid '279b615e-ae79-4c86-a61a-50f687b9f7b8' `
                                      -DomainSid 'S-1-5-21-1817670852-3242289776-1304069626' `
                                      -Verbose *>> $script:LogFile
+
+            # Set the proper Configuration NC. This step is required for non-root domains.
+            Write-Log -Message 'Changing the configuration naming context...'
+            Set-ItemProperty -Path 'registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters' `
+                             -Name 'Configuration NC' `
+                             -Value 'CN=Configuration,DC=Adatum,DC=com' `
+                             -Type String `
+                             -Force `
+                             -Verbose *>> $script:LogFile
+
+            # Set the proper root domain distinguished name. This step is required for non-root domains.
+            Write-Log -Message 'Changing the root domain...'
+            Set-ItemProperty -Path 'registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters' `
+                             -Name 'Root Domain' `
+                             -Value 'DC=Adatum,DC=com' `
+                             -Type String `
+                             -Force `
+                             -Verbose *>> $script:LogFile
+
+            # Set the distinguished name of NTDS Settings object. This step is required for non-default sites and non-root domains.
+            Write-Log -Message 'Changing the machine distinguished name...'
+            Set-ItemProperty -Path 'registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters' `
+                             -Name 'Machine DN Name' `
+                             -Value 'CN=NTDS Settings,CN=LON-DC1,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=Adatum,DC=com' `
+                             -Type String `
+                             -Force `
+                             -Verbose *>> $script:LogFile
 
             # Tell the DC that its DB has intentionally been restored. A new InvocationID will be generated as soon as the service starts.
             Write-Log -Message 'Marking the database as restored from backup...'
@@ -316,7 +343,6 @@ function Main {
                                 -Name 'DSA Database Epoch' `
                                 -Force `
                                 -Verbose *>> $script:LogFile
-
 
             # Note:
             # The DC account is created/modified during the first boot after promotion.
