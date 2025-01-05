@@ -73,7 +73,7 @@
                 }
             }
 
-            var dc = this.DirectoryContext.DomainController;
+            DomainController dc = this.DirectoryContext.DomainController;
             if (this.SysvolPath == null)
             {
                 // Presume that the database is part of an IFM backup:
@@ -86,13 +86,13 @@
             // TODO: Check backup expiration time
 
             string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-            string targetDatabaseDirectory = Path.Combine(windir, "NTDS");
+            string targetDatabaseDirectory = Path.Combine(winDir, "NTDS");
             string targetDatabasePath = Path.Combine(targetDatabaseDirectory, "ntds.dit");
-            string targetSysvolPath = Path.Combine(windir, "SYSVOL");
+            string targetSysvolPath = Path.Combine(winDir, "SYSVOL");
 
             // Load the RFM script template and replace placeholders with values from the DB:
             string template = LoadScriptTemplate();
-            var script = new StringBuilder(template).
+            StringBuilder script = new StringBuilder(template).
                 Replace("{DCName}", dc.Name).
                 Replace("{DCHostName}", dc.HostName).
                 Replace("{DCGuid}", dc.Guid.ToString()).

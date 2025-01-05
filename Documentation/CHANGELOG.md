@@ -5,6 +5,16 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [4.16] - 2025-01-05
+
+### Added
+
+- The `DomainController` class exposes more DC properties, including `ServerObjectDN`, `NTDSSettingsObjectDN`, and `ForestRootNamingContext`.
+
+### Fixed
+
+- The [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet now properly sets the `Configuration NC`, `Root Domain`, and `Machine DN Name` registry values under the `HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters` key.
+
 ## [4.15.1] - 2025-01-02
 
 This is a PowerShell-only bugfix release.
@@ -541,6 +551,7 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 Initial release!
 
 [Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...HEAD
+[4.15.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...v4.16
 [4.15.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15...v4.15.1
 [4.15]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.14...v4.15
 [4.14]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.13...v4.14

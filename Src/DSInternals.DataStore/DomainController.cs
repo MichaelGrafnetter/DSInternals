@@ -12,6 +12,7 @@
     /// </summary>
     public class DomainController : IDisposable, IDomainController
     {
+        // TODO: Refactor properties and add more of them to the IDomainController interface.
         public const long UsnMinValue = 1;
         public const long UsnMaxValue = long.MaxValue;
         public const long EpochMinValue = 1;
@@ -101,7 +102,7 @@
                 this.ConfigurationNamingContext = context.DistinguishedNameResolver.Resolve(this.ConfigurationNamingContextDNT);
 
                 // Forest Root Domain NC should be the parent of the Configuration NC
-                this.ForestRootNamingContext = this.ConfigurationNamingContext.Parent
+                this.ForestRootNamingContext = this.ConfigurationNamingContext.Parent;
 
                 // Retrieve Schema Naming Context
                 this.SchemaNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.SchemaLocation)).Value;

@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.15.1'
+ModuleVersion = '4.16'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -143,7 +143,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The Test-PasswordQuality cmdlet should no longer return the AmbiguousParameterSet error.
+- The New-ADDBRestoreFromMediaScript cmdlet now properly sets the "Configuration NC", "Root Domain", and "Machine DN Name" registry values under the "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" key.
 "@
     } # End of PSData hashtable
 
