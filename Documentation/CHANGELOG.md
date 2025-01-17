@@ -550,8 +550,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...HEAD
-[4.15.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...v4.16
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.16...HEAD
+[4.16]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...v4.16
 [4.15.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15...v4.15.1
 [4.15]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.14...v4.15
 [4.14]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.13...v4.14
