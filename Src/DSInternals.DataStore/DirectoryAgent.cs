@@ -483,7 +483,10 @@
 
         protected bool UnlockAccount(DatastoreObject targetObject, object targetObjectIdentifier, bool skipMetaUpdate)
         {
-            if (!targetObject.IsAccount)
+            // Check that the object is a user/computer account
+            targetObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out SamAccountType? accountType);
+
+            if (accountType != SamAccountType.User && accountType != SamAccountType.Computer)
             {
                 throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
             }

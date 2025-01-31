@@ -205,12 +205,12 @@ namespace DSInternals.DataStore
             }
         }
 
-         public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, Columnid columnId)
+        public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, Columnid columnId, bool asGeneralizedTime)
         {
             long? timestamp = cursor.RetrieveColumnAsLong(columnId);
             if (timestamp.HasValue)
             {
-                return DateTime.FromFileTime(timestamp.Value);
+                return asGeneralizedTime ? timestamp.Value.FromGeneralizedTime() : DateTime.FromFileTime(timestamp.Value);
             }
             else
             {
@@ -218,24 +218,10 @@ namespace DSInternals.DataStore
             }
         }
 
-        public static DateTime? RetrieveColumnAsGeneralizedTime(this Cursor cursor, Columnid columnId)
-        {
-            long? timestamp = cursor.RetrieveColumnAsLong(columnId);
-            if (timestamp.HasValue)
-            {
-                // 0 = January 1, 1601 1:00:00 AM = Never
-                return timestamp.Value.FromGeneralizedTime();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public static DateTime? RetrieveColumnAsGeneralizedTime(this Cursor cursor, string columnName)
+        public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, string columnName, bool asGeneralizedTime)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
-            return cursor.RetrieveColumnAsGeneralizedTime(columnId);
+            return cursor.RetrieveColumnAsTimestamp(columnId, asGeneralizedTime);
         }
 
         public static DomainControllerOptions RetrieveColumnAsDomainControllerOptions(this Cursor cursor, Columnid columnId)

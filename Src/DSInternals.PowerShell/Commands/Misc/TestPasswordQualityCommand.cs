@@ -73,20 +73,6 @@
         }
 
         [Parameter]
-        public SwitchParameter IncludeNTHistoryHashes
-        {
-            get;
-            set;
-        }
-
-        [Parameter]
-        public SwitchParameter IncludeWeakPasswordNTHashes
-        {
-            get;
-            set;
-        }
-
-        [Parameter]
         [ValidateNotNull]
         public string[] WeakPasswords
         {
@@ -350,26 +336,6 @@
                 if (found)
                 {
                     this.result.WeakPassword.UnionWith(new string[] { this.Account.LogonName });
-                    if (IncludeWeakPasswordNTHashes.IsPresent)
-                    {
-                        this.result.WeakPasswordNTHashes.UnionWith(new string[] { string.Format("{0}:{1}", this.Account.LogonName, this.Account.NTHash.ToHex()) });
-                    }
-                }
-
-                if (IncludeNTHistoryHashes.IsPresent && this.Account.NTHashHistory != null)
-                {
-                    for (int i = 1; i < this.Account.NTHashHistory.Length; i++)
-                    {
-                        found = this.sortedHashFileSearcher.FindString(this.Account.NTHashHistory[i].ToHex());
-                        if (found)
-                        {
-                            this.result.WeakPassword.UnionWith(new string[] { string.Format("{0}_history{1}", this.Account.LogonName, (i - 1)) });
-                            if (IncludeWeakPasswordNTHashes.IsPresent)
-                            {
-                                this.result.WeakPasswordNTHashes.UnionWith(new string[] { string.Format("{0}_history{1}:{2}", this.Account.LogonName, (i - 1), this.Account.NTHashHistory[i].ToHex()) });
-                            }
-                        }
-                    }
                 }
             }
         }

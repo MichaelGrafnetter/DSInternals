@@ -119,10 +119,6 @@ namespace DSInternals.Common.Data
             {
                 // Optimization: Do not try to read the password if no expiration time is set.
                 dsObject.ReadAttribute(CommonDirectoryAttributes.LAPSPassword, out byte[] admPwdBinary);
-
-
-
-
                 this.AdminPassword = Encoding.UTF8.GetString(admPwdBinary);
             }
         }

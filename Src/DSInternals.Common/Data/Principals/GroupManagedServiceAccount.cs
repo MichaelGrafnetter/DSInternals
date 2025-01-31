@@ -235,9 +235,9 @@ namespace DSInternals.Common.Data
             dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out string[] spn);
             this.ServicePrincipalName = spn;
 
-            // UAC:
+            // UAC (should never be null)
             dsObject.ReadAttribute(CommonDirectoryAttributes.UserAccountControl, out int? numericUac);
-            this.UserAccountControl = (UserAccountControl)numericUac.Value;
+            this.UserAccountControl = (UserAccountControl)(numericUac ?? 0);
 
             // Deleted:
             dsObject.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out bool isDeleted);
@@ -253,12 +253,12 @@ namespace DSInternals.Common.Data
             this.SupportedEncryptionTypes = (SupportedEncryptionTypes?)numericSupportedEncryptionTypes;
 
             // pwdLastSet
-            dsObject.ReadAttribute(CommonDirectoryAttributes.PasswordLastSet, out DateTime? passwordLastSet);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PasswordLastSet, out DateTime? passwordLastSet, false);
             this.PasswordLastSet = passwordLastSet;
 
             // whenCreated (should never be null)
-            dsObject.ReadAttribute(CommonDirectoryAttributes.WhenCreated, out long? whenCreated);
-            this.WhenCreated = whenCreated.Value.FromGeneralizedTime();
+            dsObject.ReadAttribute(CommonDirectoryAttributes.WhenCreated, out DateTime? whenCreated, true);
+            this.WhenCreated = whenCreated ?? DateTime.MinValue;
         }
 
         public void CalculatePassword(KdsRootKey kdsRootKey, DateTime effectiveTime)
