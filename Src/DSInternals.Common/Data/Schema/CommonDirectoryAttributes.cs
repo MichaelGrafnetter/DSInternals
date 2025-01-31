@@ -65,6 +65,10 @@
         public const string LMHashHistory = "lmPwdHistory";
         public const int LMHashHistoryId = 589984;
         public const int LMHashId = 589879;
+        public const string LockoutTime = "lockoutTime";
+        public const string ManagedPasswordId = "msDS-ManagedPasswordId";
+        public const string ManagedPasswordPreviousId = "msDS-ManagedPasswordPreviousId";
+        public const string ManagedPasswordInterval = "msDS-ManagedPasswordInterval";
         public const string MasterNamingContexts = "msDS-hasMasterNCs";
         public const string Member = "member";
         public const string Name = "name";

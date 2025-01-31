@@ -105,7 +105,15 @@ namespace DSInternals.DataStore
         {
             using (var ccsKey = systemKey.OpenSubKey(CurrentControlSetKey))
             {
-                return (int)ccsKey.GetValue(CurrentControlSetValue, DefaultControlSetId);
+                if(ccsKey != null)
+                {
+                    return (int)ccsKey.GetValue(CurrentControlSetValue, DefaultControlSetId);
+                }
+                else
+                {
+                    // The "Select" value may be absent in SYSTEM registry hives that were copied from live systems without the corresponding transaction logs.
+                    return DefaultControlSetId;
+                }
             }
         }
 

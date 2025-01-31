@@ -12,11 +12,13 @@
     /// </summary>
     public class DomainController : IDisposable, IDomainController
     {
+        // TODO: Refactor properties and add more of them to the IDomainController interface.
         public const long UsnMinValue = 1;
         public const long UsnMaxValue = long.MaxValue;
         public const long EpochMinValue = 1;
         public const long EpochMaxValue = int.MaxValue;
         private const string CrossRefContainerRDN = "CN=Partitions";
+        private const char DnsNameSeparator = '.';
 
         // List of columns in the hiddentable:
         private const string ntdsSettingsCol = "dsa_col";
@@ -79,7 +81,7 @@
             // TODO: Export other database flags, not just IsADAM.
             // TODO: Load database health
             this.highestUSNCache = this.systemTableCursor.RetrieveColumnAsLong(highestCommitedUsnCol).Value;
-            
+
             // Now we can load the Invocation ID and other information from the datatable:
             using (var dataTableCursor = context.OpenDataTable())
             {
@@ -89,6 +91,7 @@
                 bool ntdsFound = dataTableCursor.GotoKey(Key.Compose(this.NTDSSettingsDNT));
 
                 // Load data from the NTDS Settings object
+                this.NTDSSettingsObjectDN = context.DistinguishedNameResolver.Resolve(this.NTDSSettingsDNT);
                 this.InvocationId = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.InvocationId)).Value;
                 this.DsaGuid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGUID)).Value;
                 this.Options = dataTableCursor.RetrieveColumnAsDomainControllerOptions(schema.FindColumnId(CommonDirectoryAttributes.Options));
@@ -98,18 +101,21 @@
                 this.ConfigurationNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextDNTag)).Value;
                 this.ConfigurationNamingContext = context.DistinguishedNameResolver.Resolve(this.ConfigurationNamingContextDNT);
 
+                // Forest Root Domain NC should be the parent of the Configuration NC
+                this.ForestRootNamingContext = this.ConfigurationNamingContext.Parent;
+
                 // Retrieve Schema Naming Context
                 this.SchemaNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.SchemaLocation)).Value;
                 this.SchemaNamingContext = context.DistinguishedNameResolver.Resolve(this.SchemaNamingContextDNT);
 
                 // Goto DC object (parent of NTDS):
                 bool dcFound = dataTableCursor.GotoParentObject(schema);
-                
+
                 // Load data from the DC object
-                
+
                 // Load DC name:
                 string dcName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.CommonName));
-                
+
                 // DC name is null in the initial database, so use NTDS Settings object's CN instead
                 this.Name = dcName ?? ntdsName;
 
@@ -119,6 +125,9 @@
                 // Load server reference to domain partition:
                 int dcDNTag = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.DNTag)).Value;
                 this.ServerReferenceDNT = context.LinkResolver.GetLinkedDNTag(dcDNTag, CommonDirectoryAttributes.ServerReference);
+
+                // Load the DSA object DN
+                this.ServerObjectDN = context.DistinguishedNameResolver.Resolve(dcDNTag);
 
                 // Goto Servers object (parent of DC):
                 bool serversFound = dataTableCursor.GotoParentObject(schema);
@@ -386,7 +395,28 @@
             private set;
         }
 
+        public string HostName
+        {
+            get
+            {
+                return !String.IsNullOrEmpty(this.DNSHostName) ? this.DNSHostName.Split(DnsNameSeparator)[0] : this.Name;
+            }
+        }
+
+        // TODO: Rename to ComputerObjectDN
         public DistinguishedName ServerReference
+        {
+            get;
+            private set;
+        }
+
+        public DistinguishedName NTDSSettingsObjectDN
+        {
+            get;
+            private set;
+        }
+
+        public DistinguishedName ServerObjectDN
         {
             get;
             private set;
@@ -516,6 +546,12 @@
         }
 
         public DistinguishedName DomainNamingContext
+        {
+            get;
+            private set;
+        }
+
+        public DistinguishedName ForestRootNamingContext
         {
             get;
             private set;

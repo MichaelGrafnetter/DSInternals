@@ -1,11 +1,13 @@
-![DSInternals Logo](DSInternals.png)
+![DSInternals Logo](DSInternals-Dark.png#gh-light-mode-only)
+![DSInternals Logo](DSInternals-Light.png#gh-dark-mode-only)
 
 # Directory Services Internals<br/>PowerShell Module and Framework
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
 [![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg?logo=PowerShell)](#)
-[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019 | 2022](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019%20|%202022-007bb8.svg?logo=Windows)](#)
-[![.NET Framework 4.7.2+](https://img.shields.io/badge/.NET%20Framework-4.7.2%2B-007FFF.svg)](#)
+[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019 | 2022 | 2025](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019%20|%202022|%202025-007bb8.svg?logo=Windows%2011)](#)
+[![.NET Framework 4.7.2+](https://img.shields.io/badge/Framework-4.7.2%2B-007FFF.svg?logo=.net)](#)
+[![Architecture x64 | x86 | arm64](https://img.shields.io/badge/Architecture-x64%20|%20x86%20|%20ARM64-0071c5.svg?logo=Amazon%20EC2)](#)
 
 ## Introduction
 
@@ -56,17 +58,19 @@ Additional steps might be required on some freshly installed computers before DS
 
 ```powershell
 # TLS 1.2 must be enabled on older versions of Windows.
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+[System.Net.ServicePointManager]::SecurityProtocol =
+    [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
 
 # Download the NuGet package manager binary.
 Install-PackageProvider -Name NuGet -Force
 
 # Register the PowerShell Gallery as package repository if it is missing for any reason.
-if($null -eq (Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue)) { Register-PSRepository -Default }
+if($null -eq (Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue)) {
+    Register-PSRepository -Default
+}
 
 # Download the DSInternals PowerShell module.
 Install-Module -Name DSInternals -Force
-
 ```
 
 ### Chocolatey Package
@@ -78,6 +82,18 @@ choco install dsinternals-psmodule --confirm
 ```
 
 This package is self-contained and it will also install all dependencies. Note that package versions prior to 3.5 were not official.
+
+### WAPT Package
+
+The DSInternals PowerShell Module can also be installed using the [WAPT package](https://wapt.tranquil.it/store/tis-dsinternals/).
+
+The package can be installed by the [WAPT console](https://www.wapt.fr/en/doc/wapt-console-usage.html) or by the [WAPT Command-line interface](https://www.wapt.fr/en/doc/wapt-command-line-interface.html) like so:
+
+```powershell
+wapt-get install dsinternals
+```
+
+This package is self-contained and it will also install all dependencies.
 
 ### Offline Module Distribution (PowerShell 3+)
 
@@ -101,7 +117,7 @@ The easiest way of integrating the DSInternals functionality into .NET applicati
 
 ### Building from Source Code
 
-[![Visual Studio 2017 | 2019](https://img.shields.io/badge/Visual%20Studio-2017%20|%202019-383278.svg?logo=Visual-Studio-Code)](CONTRIBUTING.md#building-from-source-code)
+[![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-383278.svg?logo=Visual-Studio-Code)](CONTRIBUTING.md#building-from-source-code)
 [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/DSInternals?branchName=master)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2&branchName=master)
 [![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results&logo=Azure-DevOps)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2&branchName=master)
 
@@ -115,8 +131,10 @@ The online version of [PowerShell Get-Help documentation](../Documentation/Power
 
 ### Blog Posts
 
-I have also published a series of articles about the DSInternals module on [my blog](https://www.dsinternals.com/en/list-of-cmdlets-in-the-dsinternals-module/). Here are a few of them:
+I have also published a series of articles about the DSInternals module on [my blog](https://www.dsinternals.com/en/). Here are a few of them:
 
+- [New Offline Capabilities in DSInternals 4.11](https://www.dsinternals.com/en/dsinternals-v4.11/)
+- [Cross-Forest Duplicate Password Discovery](https://www.dsinternals.com/en/cross-forest-duplicate-password-discovery/)
 - [CQLabs – Extracting Roamed Private Keys from Active Directory](https://cqureacademy.com/blog/extracting-roamed-private-keys)
 - [CQLabs – Offline Attacks on Active Directory](https://cqureacademy.com/cqure-labs/cqlabs-dsinternals-powershell-module)
 - [Auditing Active Directory Password Quality](https://www.dsinternals.com/en/auditing-active-directory-password-quality/)

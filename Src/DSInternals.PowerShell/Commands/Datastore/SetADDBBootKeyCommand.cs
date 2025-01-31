@@ -1,7 +1,9 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
+    using System;
     using System.Management.Automation;
     using DSInternals.DataStore;
+    using DSInternals.PowerShell.Properties;
 
     [Cmdlet(VerbsCommon.Set, "ADDBBootKey")]
     [OutputType("None")]
@@ -29,8 +31,23 @@
             set;
         }
 
+        [Parameter]
+        public SwitchParameter Force
+        {
+            get;
+            set;
+        }
+
         protected override void BeginProcessing()
         {
+            if (!Force.IsPresent)
+            {
+                // Do not continue with operation until the user enforces it.
+                var exception = new ArgumentException(Resources.WarningMessage);
+                var error = new ErrorRecord(exception, "SetADDBBootKey_ForceRequired", ErrorCategory.InvalidArgument, null);
+                this.ThrowTerminatingError(error);
+            }
+
             base.BeginProcessing();
             using(var directoryAgent = new DirectoryAgent(this.DirectoryContext))
             {

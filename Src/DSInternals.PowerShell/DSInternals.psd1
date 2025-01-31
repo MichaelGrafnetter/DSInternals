@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.7'
+ModuleVersion = '4.16'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -23,7 +23,7 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) 2015-2021 Michael Grafnetter. All rights reserved.'
+Copyright = '(c) 2015-2025 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
@@ -41,7 +41,7 @@ DotNetFrameworkVersion = '4.7.2' # This requirement is not enforced by older ver
 # Minimum version of the common language runtime (CLR) required by this module
 CLRVersion = '4.0.30319.42000' # Corresponds to .NET Framework 4.6 and later
 
-# Processor architecture (None, X86, Amd64) required by this module
+# Processor architecture (None, X86, Amd64, ARM64) required by this module
 ProcessorArchitecture = 'None'
 
 # Type files (.ps1xml) to be loaded when importing this module
@@ -60,6 +60,7 @@ FormatsToProcess = 'Views\DSInternals.AzureADUser.format.ps1xml',
                    'Views\DSInternals.LAPSCredential.format.ps1xml',
                    'Views\DSInternals.DSAccount.format.ps1xml',
                    'Views\DSInternals.DSAccount.ExportViews.format.ps1xml',
+                   'Views\DSInternals.GroupManagedServiceAccount.format.ps1xml',
                    'Views\DSInternals.PasswordQualityTestResult.format.ps1xml',
                    'Views\DSInternals.KdsRootKey.format.ps1xml',
                    'Views\DSInternals.SamDomainPasswordInformation.format.ps1xml',
@@ -75,19 +76,19 @@ FunctionsToExport = @()
 CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswordHash',
                   'ConvertFrom-UnicodePassword', 'ConvertTo-UnicodePassword',
                   'ConvertTo-OrgIdHash', 'ConvertFrom-GPPrefPassword',
-                  'ConvertTo-GPPrefPassword', 'Add-ADDBSidHistory',
+                  'ConvertTo-GPPrefPassword', # 'Add-ADDBSidHistory',
                   'Set-ADDBPrimaryGroup', 'Get-ADDBDomainController',
                   'Set-ADDBDomainController', 'Get-ADDBSchemaAttribute',
                   'Remove-ADDBObject', 'Get-ADDBAccount', 'Get-BootKey',
                   'Get-ADReplAccount', 'ConvertTo-Hex', 'ConvertTo-KerberosKey',
                   'ConvertFrom-ADManagedPasswordBlob',
                   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
-                  'Set-ADDBBootKey', 'Test-PasswordQuality', 'Get-ADDBBitLockerRecoveryInformation',
+                  'Set-ADDBBootKey', 'Test-PasswordQuality', 'Get-ADDBServiceAccount','Get-ADDBBitLockerRecoveryInformation',
                   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
                   'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
                   'Set-LSAPolicyInformation', 'New-ADDBRestoreFromMediaScript','Get-LsaBackupKey',
-                  'Add-ADReplNgcKey', 'Get-AzureADUserEx', 'Set-AzureADUserEx'
+                  'Add-ADReplNgcKey', 'Get-AzureADUserEx', 'Set-AzureADUserEx','Unlock-ADDBAccount'
 
 # Variables to export from this module
 VariablesToExport = @()
@@ -103,7 +104,9 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink', 'Get-LsaPolicy',
                   'Set-LsaPolicy', 'Get-SystemKey', 'Write-ADReplNgcKey', 'Write-ADNgcKey',
                   'Add-ADNgcKey', 'New-ADKeyCredential', 'New-ADKeyCredentialLink',
-                  'New-ADNgcKey', 'Get-ADDBBitLockerRecoveryInfo', 'Get-ADDBBitLockerKeyProtector',
+                  'New-ADNgcKey', 'Get-ADDBGroupManagedServiceAccount', 'Get-ADDBBitLockerRecoveryInfo', 'Get-ADDBBitLockerKeyProtector',
+                  'Get-ADDBBitLockerRecoveryKey', 'Get-ADDBBitLockerKey', 'Get-ADDBBitLockerRecoveryPassword',
+                  'Get-ADDBFVERecoveryKey', 'Get-ADDBFVERecoveryPassword',
                   'Get-ADDBFVERecoveryInformation', 'Get-ADDBFVERecoveryInfo'
 
 # List of assemblies that must be loaded prior to importing this module
@@ -123,6 +126,7 @@ FileList = 'AutoMapper.dll',
            'Newtonsoft.Json.dll',
            'Numbers.dll',
            'amd64\DSInternals.Replication.Interop.dll',
+           'arm64\DSInternals.Replication.Interop.dll',
            'x86\DSInternals.Replication.Interop.dll',
            'en-US\about_DSInternals.help.txt',
            'en-US\DSInternals.PowerShell.dll-Help.xml'
@@ -133,7 +137,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows', 'FIDO'
+        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows', 'FIDO', 'NTDS'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/License.txt'
@@ -146,8 +150,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The Test-PasswordQuality cmdlet can now detect kerberoastable user accounts. Its performance has also been slightly improved.
-- Objects returned by the Get-ADDBAccount, Get-ADReplAccount, and Get-ADSIAccount cmdlets now have the SupportedEncryptionTypes property.
+- The New-ADDBRestoreFromMediaScript cmdlet now properly sets the "Configuration NC", "Root Domain", and "Machine DN Name" registry values under the "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" key.
 "@
     } # End of PSData hashtable
 

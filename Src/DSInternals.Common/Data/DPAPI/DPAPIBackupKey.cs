@@ -16,7 +16,12 @@
         private const int RSAPrivateKeyOffset = RSACertificateSizeOffset + sizeof(int);
         private const string BackupKeyNameFormat = "G$BCKUPKEY_{0}";
         private const string BackupKeyDNFormat = "CN=BCKUPKEY_{0} Secret,CN=System,{1}";
-        private const string BackupKeyDNRegex = "CN=BCKUPKEY_(.*) Secret,CN=System,.*";
+        // Examples:
+        // CN=BCKUPKEY_P Secret,CN=System,DC=contoso,DC=com
+        // CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=contoso,DC=com
+        // CN=BCKUPKEY_PREFERRED Secret\0ACNF:26c8edbb-6b48-4f11-9e13-9ddbccedab5a,CN=System,DC=contoso,DC=com
+        // CN=BCKUPKEY_ac9e427c-fa85-4b78-8db1-771d94c03bad Secret,CN=System,DC=contoso,DC=com
+        private const string BackupKeyDNRegex = "CN=BCKUPKEY_(.+) Secret(\\\\0ACNF:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?,CN=System,.+";
         private const string PreferredLegacyKeyPointerName = "P";
         private const string PreferredRSAKeyPointerName = "PREFERRED";
         private const string TemporaryKeyContainerName = "DSInternals";
@@ -237,7 +242,7 @@
         private static string GetSecretNameFromDN(string distinguishedName)
         {
             var match = Regex.Match(distinguishedName, BackupKeyDNRegex);
-            bool success = match.Success && (match.Groups.Count == 2);
+            bool success = match.Success && (match.Groups.Count >= 2);
             return success ? match.Groups[1].Value : null;
         }
 

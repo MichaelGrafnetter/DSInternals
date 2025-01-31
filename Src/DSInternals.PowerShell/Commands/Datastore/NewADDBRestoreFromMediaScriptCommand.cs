@@ -48,7 +48,7 @@
         {
             get;
             set;
-        }        
+        }
 
         protected override void ProcessRecord()
         {
@@ -61,6 +61,9 @@
                 this.BootKey = BootKeyRetriever.GetBootKey(resolvedRegistryPath);
             }
 
+            // Fetch the local server's boot key from the registry:
+            byte[] localBootKey = BootKeyRetriever.GetBootKey();
+
             using (var dsa = new DirectoryAgent(this.DirectoryContext))
             {
                 bool bootKeyIsValid = dsa.CheckBootKey(this.BootKey);
@@ -70,7 +73,7 @@
                 }
             }
 
-            var dc = this.DirectoryContext.DomainController;
+            DomainController dc = this.DirectoryContext.DomainController;
             if (this.SysvolPath == null)
             {
                 // Presume that the database is part of an IFM backup:
@@ -82,10 +85,16 @@
             // TODO: Check DNS partition presence
             // TODO: Check backup expiration time
 
+            string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+            string targetDatabaseDirectory = Path.Combine(winDir, "NTDS");
+            string targetDatabasePath = Path.Combine(targetDatabaseDirectory, "ntds.dit");
+            string targetSysvolPath = Path.Combine(winDir, "SYSVOL");
+
             // Load the RFM script template and replace placeholders with values from the DB:
             string template = LoadScriptTemplate();
-            var script = new StringBuilder(template).
+            StringBuilder script = new StringBuilder(template).
                 Replace("{DCName}", dc.Name).
+                Replace("{DCHostName}", dc.HostName).
                 Replace("{DCGuid}", dc.Guid.ToString()).
                 Replace("{DCDistinguishedName}", dc.ServerReference.ToString()).
                 Replace("{DomainName}", dc.DomainName).
@@ -93,19 +102,24 @@
                 Replace("{ForestName}", dc.ForestName).
                 Replace("{DomainGuid}", dc.DomainGuid.ToString()).
                 Replace("{DomainSid}", dc.DomainSid.ToString()).
+                Replace("{ConfigNC}", dc.ConfigurationNamingContext.ToString()).
+                Replace("{RootDomainNC}", dc.ForestRootNamingContext.ToString()).
+                Replace("{NTDSSettingsObject}", dc.NTDSSettingsObjectDN.ToString()).
                 Replace("{DomainMode}", ((int)dc.DomainMode).ToString()).
                 Replace("{ForestMode}", ((int)dc.ForestMode).ToString()).
                 Replace("{DomainModeString}", (dc.DomainMode).ToString()).
                 Replace("{ForestModeString}", (dc.ForestMode).ToString()).
                 Replace("{OSName}", dc.OSName).
                 Replace("{OldBootKey}", this.BootKey.ToHex()).
+                Replace("{CurrentBootKey}", localBootKey.ToHex()).
                 Replace("{SourceDBPath}", this.DirectoryContext.DSADatabaseFile).
                 Replace("{SourceDBDirPath}", this.DirectoryContext.DSAWorkingDirectory).
                 Replace("{SourceLogDirPath}", this.DirectoryContext.DatabaseLogFilesPath).
-                Replace("{TargetDBDirPath}", @"$env:SYSTEMROOT\NTDS").
-                Replace("{TargetLogDirPath}", @"$env:SYSTEMROOT\NTDS").
+                Replace("{TargetDBDirPath}",  targetDatabaseDirectory).
+                Replace("{TargetDBPath}", targetDatabasePath).
+                Replace("{TargetLogDirPath}", targetDatabaseDirectory).
                 Replace("{SourceSysvolPath}", this.ResolveDirectoryPath(this.SysvolPath)).
-                Replace("{TargetSysvolPath}", @"$env:SYSTEMROOT\SYSVOL");
+                Replace("{TargetSysvolPath}", targetSysvolPath);
 
             // We need to inject cleartext version of the password into the script for dcpromo. The SecureString will therefore have to appear in managed memory, which is against best practices.
             using (var dsrmPassword = new SafeUnicodeSecureStringPointer(this.SafeModeAdministratorPassword))

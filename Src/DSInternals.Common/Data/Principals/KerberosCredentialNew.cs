@@ -22,12 +22,12 @@
             this.ReadCredentials(blob);
         }
 
-        public KerberosCredentialNew(SecureString password, string principal, string realm) :
-            this(password, KerberosKeyDerivation.DeriveSalt(principal, realm))
+        public KerberosCredentialNew(SecureString password, string principal, string realm, bool includeDES = true) :
+            this(password, KerberosKeyDerivation.DeriveSalt(principal, realm), includeDES)
         {
         }
 
-        public KerberosCredentialNew(SecureString password, string salt)
+        public KerberosCredentialNew(SecureString password, string salt, bool includeDES = true)
         {
             Validator.AssertNotNull(password, "password");
             Validator.AssertNotNull(salt, "salt");
@@ -35,18 +35,37 @@
             this.DefaultSalt = salt;
             this.DefaultIterationCount = KerberosKeyDerivation.DefaultIterationCount;
 
-            // Generate DES key
-            byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
-            var desKeyData = new KerberosKeyDataNew(KerberosKeyType.DES_CBC_MD5, desKey, this.DefaultIterationCount);
+            // Generate AES SHA1 keys
+            byte[] aes128sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
+            var aes128sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, aes128sha1Key, this.DefaultIterationCount);
 
-            // Generate AES keys
-            byte[] aes128Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
-            var aes128KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, aes128Key, this.DefaultIterationCount);
+            byte[] aes256sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
+            var aes256sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, aes256sha1Key, this.DefaultIterationCount);
 
-            byte[] aes256Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
-            var aes256KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, aes256Key, this.DefaultIterationCount);
+            // TODO: Generate AES SHA2 keys (Windows Server 2025)
+            // byte[] aes128sha2Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA256_128, password, this.DefaultSalt);
+            // var aes128sha2KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA256_128, aes128sha2Key, this.DefaultIterationCount);
 
-            this.Credentials = new KerberosKeyDataNew[] { aes256KeyData, aes128KeyData, desKeyData };
+            // byte[] aes256sha2Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA384_192, password, this.DefaultSalt);
+            // var aes256sha2KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA384_192, aes256sha2Key, this.DefaultIterationCount);
+
+            // TODO: Generate RC4 key
+            // byte[] rc4Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.RC4_HMAC_NT, password, this.DefaultSalt);
+            // var rc4KeyData = new KerberosKeyDataNew(KerberosKeyType.RC4_HMAC_NT, rc4Key, this.DefaultIterationCount);
+
+            if (includeDES)
+            {
+                // Generate DES key
+                byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
+                var desKeyData = new KerberosKeyDataNew(KerberosKeyType.DES_CBC_MD5, desKey, this.DefaultIterationCount);
+
+                this.Credentials = new KerberosKeyDataNew[] { /* aes256sha2KeyData, aes128sha2KeyData, */ aes256sha1KeyData, aes128sha1KeyData, desKeyData /*, rc4KeyData */ };
+            }
+            else
+            {
+                // AES keys only
+                this.Credentials = new KerberosKeyDataNew[] { /* aes256sha2KeyData, aes128sha2KeyData */ aes256sha1KeyData, aes128sha1KeyData /*, rc4KeyData*/ };
+            }
         }
 
         public short Flags

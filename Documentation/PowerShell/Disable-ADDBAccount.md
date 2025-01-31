@@ -14,25 +14,25 @@ Disables an Active Directory account in an offline ntds.dit file.
 
 ### ByName
 ```
-Disable-ADDBAccount [-SkipMetaUpdate] [-SamAccountName] <String> -DatabasePath <String> [-LogPath <String>]
- [<CommonParameters>]
+Disable-ADDBAccount [-SkipMetaUpdate] [-Force] [-SamAccountName] <String> -DatabasePath <String>
+ [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Disable-ADDBAccount [-SkipMetaUpdate] -ObjectSid <SecurityIdentifier> -DatabasePath <String>
+Disable-ADDBAccount [-SkipMetaUpdate] [-Force] -ObjectSid <SecurityIdentifier> -DatabasePath <String>
  [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Disable-ADDBAccount [-SkipMetaUpdate] -DistinguishedName <String> -DatabasePath <String> [-LogPath <String>]
- [<CommonParameters>]
+Disable-ADDBAccount [-SkipMetaUpdate] [-Force] -DistinguishedName <String> -DatabasePath <String>
+ [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Disable-ADDBAccount [-SkipMetaUpdate] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>]
+Disable-ADDBAccount [-SkipMetaUpdate] [-Force] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
@@ -77,6 +77,21 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Force
+Forces the cmdlet to perform the desired operation.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -175,4 +190,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Enable-ADDBAccount](Enable-ADDBAccount.md)
+[Unlock-ADDBAccount](Unlock-ADDBAccount.md)
 [Get-ADDBAccount](Get-ADDBAccount.md)

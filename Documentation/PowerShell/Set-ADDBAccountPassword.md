@@ -14,26 +14,26 @@ Sets the password for a user, computer, or service account stored in a ntds.dit 
 
 ### ByName
 ```
-Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate]
+Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] [-Force]
  [-SamAccountName] <String> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate]
+Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] [-Force]
  -ObjectSid <SecurityIdentifier> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate]
+Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] [-Force]
  -DistinguishedName <String> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] -ObjectGuid <Guid>
- -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Set-ADDBAccountPassword -NewPassword <SecureString> -BootKey <Byte[]> [-SkipMetaUpdate] [-Force]
+ -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -97,6 +97,21 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Force
+Forces the cmdlet to perform the desired operation.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -213,5 +228,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Set-ADDBAccountPasswordHash](Set-ADDBAccountPasswordHash.md)
 [Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md)
+[Unlock-ADDBAccount](Unlock-ADDBAccount.md)
 [Get-BootKey](Get-BootKey.md)
 [Get-ADDBAccount](Get-ADDBAccount.md)

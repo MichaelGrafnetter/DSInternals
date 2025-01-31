@@ -19,6 +19,10 @@
     <CreateHardLinksForCopyLocalIfPossible>true</CreateHardLinksForCopyLocalIfPossible>
     <CreateHardLinksForPublishFilesIfPossible>true</CreateHardLinksForPublishFilesIfPossible>
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- Some crypto API functions are not available in WoW64.-->
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <!-- Signing configuration -->
   <PropertyGroup>
     <DoSign Condition=" '$(Configuration)'=='Release' ">true</DoSign>

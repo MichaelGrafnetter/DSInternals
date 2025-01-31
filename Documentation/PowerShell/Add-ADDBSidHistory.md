@@ -14,32 +14,32 @@ Adds one or more values to the sIDHistory attribute of an object in a ntds.dit f
 
 ### ByName
 ```
-Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] [-SamAccountName] <String>
+Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] [-Force] [-SamAccountName] <String>
  -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] -ObjectSid <SecurityIdentifier>
- -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] [-Force]
+ -ObjectSid <SecurityIdentifier> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] -DistinguishedName <String>
+Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] [-Force] -DistinguishedName <String>
  -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] -ObjectGuid <Guid>
+Add-ADDBSidHistory -SidHistory <SecurityIdentifier[]> [-SkipMetaUpdate] [-Force] -ObjectGuid <Guid>
  -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 This cmdlet can be used to add any value to the sIDHistory attribute by directly modifying the Active Directory database.
-Note that the Active Directory Migration Tool (ADMT) is the only supported way of modifying the sIDHistory attribute.
+Note that the Active Directory Migration Tool (ADMT) is the only supported way of modifying the sIDHistory attribute. Improper usage of this cmdlet may cause irreversible damage to the target Active Directory environment.
 
 ## EXAMPLES
 
@@ -91,6 +91,21 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Force
+Forces the cmdlet to perform the desired operation.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

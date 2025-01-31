@@ -14,26 +14,26 @@ Modifies the primaryGroupId attribute of an object in a ntds.dit file.
 
 ### ByName
 ```
-Set-ADDBPrimaryGroup -PrimaryGroupId <Int32> [-SkipMetaUpdate] [-SamAccountName] <String>
+Set-ADDBPrimaryGroup -PrimaryGroupId <Int32> [-SkipMetaUpdate] [-Force] [-SamAccountName] <String>
  -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Set-ADDBPrimaryGroup -PrimaryGroupId <Int32> [-SkipMetaUpdate] -ObjectSid <SecurityIdentifier>
+Set-ADDBPrimaryGroup -PrimaryGroupId <Int32> [-SkipMetaUpdate] [-Force] -ObjectSid <SecurityIdentifier>
  -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Set-ADDBPrimaryGroup -PrimaryGroupId <Int32> [-SkipMetaUpdate] -DistinguishedName <String>
+Set-ADDBPrimaryGroup -PrimaryGroupId <Int32> [-SkipMetaUpdate] [-Force] -DistinguishedName <String>
  -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Set-ADDBPrimaryGroup -PrimaryGroupId <Int32> [-SkipMetaUpdate] -ObjectGuid <Guid> -DatabasePath <String>
- [-LogPath <String>] [<CommonParameters>]
+Set-ADDBPrimaryGroup -PrimaryGroupId <Int32> [-SkipMetaUpdate] [-Force] -ObjectGuid <Guid>
+ -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -79,6 +79,21 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Force
+Forces the cmdlet to perform the desired operation.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

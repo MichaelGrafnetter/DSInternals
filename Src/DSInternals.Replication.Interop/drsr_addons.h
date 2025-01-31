@@ -207,7 +207,11 @@ enum DRS_EXT2 : DWORD
 	/// <summary>
 	/// If present, signifies that the DC has enabled the Privileged Access Management optional feature.
 	/// </summary>
-	DRS_EXT_PAM = 0x00000200
+	DRS_EXT_PAM = 0x00000200,
+	/// <summary>
+	/// If present, signifies that the DC has enabled the Database 32k Pages optional feature.
+	/// </summary>
+	DRS_EXT_32K_PAGES = 0x00001000
 };
 
 DEFINE_ENUM_FLAG_OPERATORS(DRS_EXT2)

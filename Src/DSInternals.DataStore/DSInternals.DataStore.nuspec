@@ -14,10 +14,9 @@
     <description>DSInternals DataStore is an advanced framework for offline ntds.dit file manipulation. It can be used to extract password hashes from Active Directory backups or to modify the sIDHistory and primaryGroupId attributes.</description>
     <summary>DSInternals DataStore is an advanced framework for offline ntds.dit file manipulation.</summary>
     <releaseNotes>
-- The msDs-supportedEncryptionTypes attribute can now be retrieved from database files.
-- Improved exception handling when opening read-only database files.
+- The `DomainController` class exposes more DC properties, including `ServerObjectDN`, `NTDSSettingsObjectDN`, and `ForestRootNamingContext`.
     </releaseNotes>
-    <copyright>Copyright (c) 2015-2021 Michael Grafnetter. All rights reserved.</copyright>
+    <copyright>Copyright (c) 2015-2025 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security NTDS AD Identity Active Directory</tags>
     <references>
       <reference file="DSInternals.DataStore.dll" />

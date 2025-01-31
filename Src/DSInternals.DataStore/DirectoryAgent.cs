@@ -127,32 +127,6 @@
             return account;
         }
 
-        public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)
-        {
-            Validator.AssertNotNull(bootKey, nameof(bootKey));
-            var pek = this.GetSecretDecryptor(bootKey);
-            // TODO: Refactor using Linq
-            foreach (var secret in this.FindObjectsByCategory(CommonDirectoryClasses.Secret))
-            {
-                // RODCs and partial replicas on GCs do not contain secrets
-                if (secret.IsWritable)
-                {
-                    yield return new DPAPIBackupKey(secret, pek);
-                }
-            }
-        }
-
-        public IEnumerable<KdsRootKey> GetKdsRootKeys()
-        {
-            // TODO: Refactor using Linq
-            // TODO: Test if schema contains the ms-Kds-Prov-RootKey class.
-            // TODO: Test on RODC?
-            foreach (var keyObject in this.FindObjectsByCategory(CommonDirectoryClasses.KdsRootKey))
-            {
-                yield return new KdsRootKey(keyObject);
-            }
-        }
-
         public IEnumerable<DirectoryObject> FindObjectsByCategory(string className, bool includeDeleted = false)
         {
             // Find all objects with the right objectCategory
@@ -353,6 +327,30 @@
             return this.SetAccountStatus(obj, objectGuid, enabled, skipMetaUpdate);
         }
 
+        public bool UnlockAccount(DistinguishedName dn, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(dn);
+            return this.UnlockAccount(obj, dn, skipMetaUpdate);
+        }
+
+        public bool UnlockAccount(string samAccountName, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(samAccountName);
+            return this.UnlockAccount(obj, samAccountName, skipMetaUpdate);
+        }
+
+        public bool UnlockAccount(SecurityIdentifier objectSid, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(objectSid);
+            return this.UnlockAccount(obj, objectSid, skipMetaUpdate);
+        }
+
+        public bool UnlockAccount(Guid objectGuid, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(objectGuid);
+            return this.UnlockAccount(obj, objectGuid, skipMetaUpdate);
+        }
+
         public bool SetPrimaryGroupId(DistinguishedName dn, int groupId, bool skipMetaUpdate)
         {
             var obj = this.FindObject(dn);
@@ -479,6 +477,27 @@
                 this.dataTableCursor.BeginEditForUpdate();
                 bool hasChanged = targetObject.SetAttribute<int>(CommonDirectoryAttributes.UserAccountControl, (int?)uac);
                 this.CommitAttributeUpdate(targetObject, CommonDirectoryAttributes.UserAccountControl, transaction, hasChanged, skipMetaUpdate);
+                return hasChanged;
+            }
+        }
+
+        protected bool UnlockAccount(DatastoreObject targetObject, object targetObjectIdentifier, bool skipMetaUpdate)
+        {
+            if (!targetObject.IsAccount)
+            {
+                throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
+            }
+
+            using (var transaction = this.context.BeginTransaction())
+            {
+                this.dataTableCursor.BeginEditForUpdate();
+                bool hasChanged = targetObject.SetAttribute(CommonDirectoryAttributes.LockoutTime, DateTime.MinValue);
+
+                // Even if the account had previously been unlocked locally,
+                // the current unlock operation still needs to be made authoritative for other DCs.
+                hasChanged = hasChanged || !skipMetaUpdate;
+
+                this.CommitAttributeUpdate(targetObject, CommonDirectoryAttributes.LockoutTime, transaction, hasChanged, skipMetaUpdate);
                 return hasChanged;
             }
         }

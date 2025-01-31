@@ -125,7 +125,16 @@ namespace DSInternals.Common.Test
             // Test integrity
             Assert.AreEqual(credentials2.ClearText, credentials.ClearText);
             Assert.AreEqual(credentials2.NTLMStrongHash.Length, credentials.NTLMStrongHash.Length);
+
+            // Test WDigest
             Assert.AreEqual(credentials2.WDigest.Length, credentials.WDigest.Length);
+            Assert.AreEqual(credentials2.WDigest[0].ToHex(), credentials.WDigest[0].ToHex());
+
+            // Test Kerberos
+            Assert.AreEqual(credentials2.Kerberos.DefaultSalt, credentials.Kerberos.DefaultSalt);
+            Assert.AreEqual(credentials2.Kerberos.Credentials[0].KeyType, credentials.Kerberos.Credentials[0].KeyType);
+
+            // Test key serialization
             Assert.AreEqual(credentials2.Kerberos.ToByteArray().ToHex(), credentials.Kerberos.ToByteArray().ToHex());
             Assert.AreEqual(credentials2.KerberosNew.ToByteArray().ToHex(), credentials.KerberosNew.ToByteArray().ToHex());
         }

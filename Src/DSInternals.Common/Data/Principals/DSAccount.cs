@@ -256,6 +256,9 @@
             private set;
         }
 
+        /// <summary>
+        /// List of principal names used for mutual authentication with an instance of a service.
+        /// </summary>
         public string[] ServicePrincipalName
         {
             get;

@@ -6,14 +6,17 @@ Help Version: 1.0
 Locale: en-US
 ---
 
-![DSInternals Logo](../../.github/DSInternals.png)
+![DSInternals Logo](../../.github/DSInternals-Dark.png#gh-light-mode-only)
+![DSInternals Logo](../../.github/DSInternals-Light.png#gh-dark-mode-only)
 
 # Directory Services Internals PowerShell Module
 
 ## Description
+
 The DSInternals PowerShell Module exposes several internal features of Active Directory and Azure Active Directory. These include FIDO2 and NGC key auditing, offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.
 
 ## Azure Active Directory Cmdlets
+
 These cmdlets utilize an undocumented API endpoint that exposes information not available through the Microsoft Graph API nor Azure AD Graph API.
 
 ### [Get-AzureADUserEx](Get-AzureADUserEx.md#get-azureaduserex)
@@ -33,6 +36,9 @@ Enables an Active Directory account in an offline ntds.dit file.
 ### [Disable-ADDBAccount](Disable-ADDBAccount.md#disable-addbaccount)
 Disables an Active Directory account in an offline ntds.dit file.
 
+### [Unlock-ADDBAccount](Unlock-ADDBAccount.md#unlock-addbaccount)
+Unlocks an Active Directory account in an offline ntds.dit file.
+
 ### [Add-ADDBSidHistory](Add-ADDBSidHistory.md#add-addbsidhistory)
 Adds one or more values to the sIDHistory attribute of an object in a ntds.dit file.
 
@@ -50,6 +56,9 @@ Reads the DPAPI backup keys from a ntds.dit file.
 
 ### [Get-ADDBKdsRootKey](Get-ADDBKdsRootKey.md#get-addbkdsrootkey)
 Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
+
+### [Get-ADDBServiceAccount](Get-ADDBServiceAccount.md#get-addbserviceaccount)
+Reads all Group Managed Service Accounts (gMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
 
 ### [Get-ADDBBitLockerRecoveryInformation](Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation)
 Reads BitLocker recovery passwords from a ntds.dit file.

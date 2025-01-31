@@ -10,6 +10,7 @@
         public const int AttributeSchemaId = 196622;
         public const string Schema = "dMD";
         public const string KdsRootKey = "msKds-ProvRootKey";
+        public const string GroupManagedServiceAccount = "msDS-GroupManagedServiceAccount";
         public const string FVERecoveryInformation = "msFVE-RecoveryInformation";
     }
 }

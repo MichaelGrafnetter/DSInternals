@@ -6,7 +6,7 @@ namespace DSInternals.Common.Interop
     /// <summary>
     /// The UnicodeString structure is used to define Unicode strings.
     /// </summary>
-    /// <see>http://msdn.microsoft.com/library/windows/hardware/ff564879.aspx</see>
+    /// <see>https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_unicode_string</see>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct UnicodeString
     {
@@ -26,19 +26,27 @@ namespace DSInternals.Common.Interop
             }
             else if (text.Length > MaxLength)
             {
-                throw new ArgumentOutOfRangeException("text");
+                throw new ArgumentOutOfRangeException(nameof(text));
             }
             else
             {
                 this.Buffer = text;
+
                 // Length of the unicode string.
-                this.Length = this.MaximumLength = (ushort)(text.Length * UnicodeCharLength);
+                this.Length = (ushort)(text.Length * UnicodeCharLength);
+
+                // Length of the unicode string, including the trailing null character.
+                // Important: Some Windows components, including the Local Security Authority (LSA) do not behave properly if Length==MaximumLength.
+                this.MaximumLength = (ushort)(this.Length + UnicodeCharLength);
             }
         }
 
         /// <summary>
         /// The length, in bytes, of the string stored in Buffer.
         /// </summary>
+        /// <remarks>
+        /// If the string is null-terminated, Length does not include the trailing null character.
+        /// </remarks>
         public ushort Length;
 
         /// <summary>

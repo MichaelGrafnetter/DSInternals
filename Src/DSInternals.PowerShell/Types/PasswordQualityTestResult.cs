@@ -28,9 +28,9 @@
         public ISet<string> WeakPassword = new SortedSet<string>();
 
         /// <summary>
-        /// List of accounts with hashes that have a weak password.
+        /// List of user accounts with SamAccountName as passwords.
         /// </summary>
-        public ISet<string> WeakPasswordNTHashes = new SortedSet<string>();
+        public ISet<string> SamAccountNameAsPassword = new SortedSet<string>();
 
         /// <summary>
         /// List of computer accounts with default passwords.

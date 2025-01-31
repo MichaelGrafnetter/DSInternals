@@ -12,10 +12,18 @@ Performs AD audit, including checks for weak, duplicate, default and empty passw
 
 ## SYNTAX
 
+### Using monolithic password hashes sorted file (HIBP v8 and earlier)
 ```
 Test-PasswordQuality [-Account] <DSAccount> [-SkipDuplicatePasswordTest] [-IncludeDisabledAccounts]
  [-WeakPasswords <String[]>] [-WeakPasswordsFile <String>] [-WeakPasswordHashesFile <String>]
  [-WeakPasswordHashesSortedFile <String>] [<CommonParameters>]
+```
+
+### Using multiple password hashes sorted files (HIBP after v8)
+```
+Test-PasswordQuality [-Account] <DSAccount> [-SkipDuplicatePasswordTest] [-IncludeDisabledAccounts]
+ [-WeakPasswords <String[]>] [-WeakPasswordsFile <String>] [-WeakPasswordHashesFile <String>]
+ [-WeakPasswordHashesSortedFilePath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,7 +39,7 @@ Although the cmdlet output is formatted in a human readable fashion, it is still
 ### Example 1
 ```powershell
 PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
-            Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
+            Test-PasswordQuality -WeakPasswordHashesSortedFilePath P:\pwnedpasswords_ntlm
 <# Sample Output:
 
 Active Directory Password Quality Report
@@ -58,6 +66,9 @@ These groups of accounts have the same passwords:
   Group 2:
     CONTOSO\admin
     CONTOSO\sql_svc01
+
+These user accounts have the SamAccountName as password:
+  CONTOSO\sccm_admin
 
 These computer accounts have default passwords:
   CONTOSO\DESKTOP27$
@@ -99,7 +110,7 @@ Performs an offline credential hygiene audit of AD database against HIBP.
 ```powershell
 PS C:\> $results = Get-ADReplAccount -All -Server LON-DC1 |
                    Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' `
-                                        -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
+                                        -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v8.txt
 ```
 
 Performs an online credential hygiene audit of AD against HIBP + a custom wordlist.
@@ -117,7 +128,7 @@ Performs a dictionary attack against a set of accounts. The Test-PasswordQuality
 ```powershell
 PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
             where DistinguishedName -like '*OU=Employees,DC=contoso,DC=com' |
-            Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
+            Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFilePath P:\pwnedpasswords_ntlm
 ```
 
 Performs an offline credential hygiene audit of a selected OU from AD database against HIBP.
@@ -206,11 +217,26 @@ Accept wildcard characters: False
 ```
 
 ### -WeakPasswordHashesSortedFile
-Path to a file that contains NT hashes of weak passwords, one hash in HEX format per line. The hashes must be sorted alphabetically, because a binary search is performed. This parameter is typically used with a list of leaked password hashes from HaveIBeenPwned.
+Path to a file that contains NT hashes of weak passwords, one hash in HEX format per line. The hashes must be sorted alphabetically, because a binary search is performed. This parameter is typically used with a list of leaked password hashes from HaveIBeenPwned, v8 and earlier.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: SingleFile
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WeakPasswordHashesSortedFilePath
+Path to a directory of files named as the first five characters of an NT hash (00000.txt - FFFFF.txt), each of which contain NT hashes of weak passwords, one hash in HEX format per line, starting with the 6th character in the hash. The hashes must be sorted alphabetically, because a binary search is performed. This parameter is typically used with a list of leaked password hashes from HaveIBeenPwned after v8.
+
+```yaml
+Type: String
+Parameter Sets: MultiFile
 Aliases:
 
 Required: False

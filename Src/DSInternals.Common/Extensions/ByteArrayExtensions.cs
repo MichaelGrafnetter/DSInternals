@@ -125,9 +125,8 @@
                 result.AppendChar(c);
             }
 
-            // If we reached this point, the \0 char has not been found, so throw an exception.
-            // TODO: Add a reasonable exception message
-            throw new ArgumentException();
+            // If we reached this point, the \0 char has not been found.
+            return result;
         }
 
         public static void SwapBytes(this byte[] bytes, int index1, int index2)

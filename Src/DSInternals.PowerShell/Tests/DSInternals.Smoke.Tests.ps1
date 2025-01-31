@@ -90,15 +90,15 @@ Describe 'DSInternals PowerShell Module' {
             $licenseFile |  Should -FileContentMatch ('Copyright \(c\) 2015-{0}' -f (Get-Date).Year)
         }
 
-        It 'contains Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' } -Test {
+        It 'contains Visual C++ Runtime (<Platform>)' -TestCases @{ Platform = 'x86' },@{ Platform = 'amd64' },@{ Platform = 'arm64' } -Test {
             param([string] $Platform)
 
-            # Regardless of the runtime version, we expect 2-3 additional DLLs to be present in the x86/amd64 directory
+            # Regardless of the runtime version, we expect 2-3 additional DLLs to be present in the x86/amd64/arm64 directory
             $platformSpecificPath = Join-Path $ModulePath $Platform
             Get-ChildItem -Path $platformSpecificPath -Recurse -Include msvc*,vcruntime* |
                 Measure-Object |
                 Select-Object -ExpandProperty Count |
-                Should -BeIn @(2,3)
+                Should -BeIn @(2,3,4)
         }
 
         It 'does not contain debug symbols' {
@@ -304,7 +304,7 @@ Describe 'Powershell Cmdlets' {
             # Check that 3 types of kerberos keys are generated from a given password.
             $password = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force
             ConvertTo-KerberosKey -Password $password -Salt 'CONTOSOAdministrator' |
-                Should -HaveCount 3
+                Should -HaveCount 4
         }
         
         It 'Get-ADKeyCredential parses FIDO2 keys' {

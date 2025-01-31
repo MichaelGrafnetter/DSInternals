@@ -14,6 +14,7 @@ namespace DSInternals.PowerShell.Commands
         [Parameter(
             Mandatory = true,
             Position = 0,
+            ValueFromPipeline = true,
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = ParameterSetByName
         )]
@@ -28,7 +29,6 @@ namespace DSInternals.PowerShell.Commands
         [Parameter(
             Mandatory = false,
             Position = 1,
-            ValueFromPipelineByPropertyName = true,
             ParameterSetName = ParameterSetByName
         )]
         [ValidateNotNullOrEmpty]

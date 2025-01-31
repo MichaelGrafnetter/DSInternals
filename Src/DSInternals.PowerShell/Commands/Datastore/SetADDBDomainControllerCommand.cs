@@ -51,7 +51,6 @@
 
         protected override void BeginProcessing()
         {
-            base.BeginProcessing();
             if (!Force.IsPresent)
             {
                 // Do not continue with operation until the user enforces it.
@@ -59,6 +58,9 @@
                 var error = new ErrorRecord(exception, "SetADDBDomainController_ForceRequired", ErrorCategory.InvalidArgument, null);
                 this.ThrowTerminatingError(error);
             }
+
+            base.BeginProcessing();
+
             try
             {
                 this.DirectoryAgent = new DirectoryAgent(this.DirectoryContext);

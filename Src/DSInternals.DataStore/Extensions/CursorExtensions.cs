@@ -205,12 +205,12 @@ namespace DSInternals.DataStore
             }
         }
 
-        public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, Columnid columnId, bool asGeneralizedTime)
+         public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, Columnid columnId)
         {
             long? timestamp = cursor.RetrieveColumnAsLong(columnId);
             if (timestamp.HasValue)
             {
-                return asGeneralizedTime ? timestamp.Value.FromGeneralizedTime() : DateTime.FromFileTime(timestamp.Value);
+                return DateTime.FromFileTime(timestamp.Value);
             }
             else
             {
@@ -218,11 +218,26 @@ namespace DSInternals.DataStore
             }
         }
 
-        public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, string columnName, bool asGeneralizedTime)
+        public static DateTime? RetrieveColumnAsGeneralizedTime(this Cursor cursor, Columnid columnId)
+        {
+            long? timestamp = cursor.RetrieveColumnAsLong(columnId);
+            if (timestamp.HasValue)
+            {
+                // 0 = January 1, 1601 1:00:00 AM = Never
+                return timestamp.Value.FromGeneralizedTime();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static DateTime? RetrieveColumnAsGeneralizedTime(this Cursor cursor, string columnName)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
-            return cursor.RetrieveColumnAsTimestamp(columnId, asGeneralizedTime);
+            return cursor.RetrieveColumnAsGeneralizedTime(columnId);
         }
+
         public static DomainControllerOptions RetrieveColumnAsDomainControllerOptions(this Cursor cursor, Columnid columnId)
         {
             int? numeric = cursor.RetrieveColumnAsInt(columnId);
@@ -381,7 +396,7 @@ namespace DSInternals.DataStore
             {
                 newTimeStamp = asGeneralizedTime ? newValue.Value.ToGeneralizedTime() : newValue.Value.ToFileTime();
             }
-            
+
             // Push the value to the DB
             return cursor.SetValue(columnId, newTimeStamp);
         }

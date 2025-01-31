@@ -1,6 +1,8 @@
-![DSInternals Logo](../.github/DSInternals.png)
+![DSInternals Logo](../.github/DSInternals-Dark.png#gh-light-mode-only)
+![DSInternals Logo](../.github/DSInternals-Light.png#gh-dark-mode-only)
 
 # Changelog
+
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
@@ -9,10 +11,121 @@ All notable changes to this project will be documented in this file. The format 
 
 - Get-ADDBBitLockerRecoveryInformation cmdlet
 - Get-ADDBComputer cmdlet.
+- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+
+## [4.16] - 2025-01-05
+
+### Added
+
+- The `DomainController` class exposes more DC properties, including `ServerObjectDN`, `NTDSSettingsObjectDN`, and `ForestRootNamingContext`.
+
+### Fixed
+
+- The [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet now properly sets the `Configuration NC`, `Root Domain`, and `Machine DN Name` registry values under the `HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters` key.
+
+## [4.15.1] - 2025-01-02
+
+This is a PowerShell-only bugfix release.
+
+### Fixed
+
+- Resolved the `AmbiguousParameterSet` error returned by the [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet.
+
+## [4.15] - 2024-12-23
+
+This is a PowerShell-only release.
+
+### Added
+
+- Implemented support for individual *.txt files from HIBP in the [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet.
+
+### Fixed
+
+- The [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet now generates a more robust DC recovery script:
+  - Regular scheduled tasks are used instead of PowerShell scheduled jobs and workflows.
+  - The script can be executed under the SYSTEM account.
+  - Domain controller names longer than 15 characters are now fully supported.
+  - SYSVOL GPO ACLs are optionally restored as well.
+  - The Directory Services Restore Mode (DSRM) phase is skipped and only 2 reboots are required instead of 3.
+  - The entire process has been tested on Windows Server 2022 and Windows Server 2008 R2.
+
+### Removed
+
+- The [Add-ADDBSidHistory](PowerShell/Add-ADDBSidHistory.md#add-addbsidhistory) cmdlet has been removed to prevent it from being used in migration scenarios.
+
+## [4.14] - 2024-04-13
+
+### Fixed
+
+- Increased tolerance for malformed DPAPI CNG private keys.
+- Improved parsing of conflicting secret object names, e.g., `CN=BCKUPKEY_PREFERRED Secret\\0ACNF:26c8edbb-6b48-4f11-9e13-9ddbccedab5a,CN=System,DC=contoso,DC=com`.
+
+## [4.13] - 2023-12-20
+
+### Fixed
+
+- The [Set-LsaPolicyInformation](PowerShell/Set-LsaPolicyInformation.md#set-lsapolicyinformation) cmdlet now generates the [UNICODE_STRING](https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_unicode_string) structure with the trailing null character, to improve compatibility with NETLOGON. This issue mainly affects the functionality of the [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet. Thanks Christoffer Andersson for reporting this issue and sorry Microsoft support escalation engineers for the trouble this bug has caused.
+
+## [4.12] - 2023-10-06
+
+### Added
+
+- The [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlet now works against Windows Server 2025 Insider Preview with the [32k database page size optional feature](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/whats-new-active-directory-domain-services-insider-preview#32k-database-page-size-optional-feature) enabled.
+- The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet is now able to read databases originating from Windows Server 2025 Insider Preview with the [32k database page size optional feature](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/whats-new-active-directory-domain-services-insider-preview#32k-database-page-size-optional-feature) enabled.
+- Added support for parsing AES SHA2 Kerbers keys.
+
+### Fixed
+
+- Improved KDS Root Key selection algorithm in the [Get-ADDBServiceAccount](PowerShell/Get-ADDBServiceAccount.md#get-addbserviceaccount) cmdlet.
+
+## [4.11] - 2023-10-01
+
+### Added
+
+- Added the [Get-ADDBServiceAccount](PowerShell/Get-ADDBServiceAccount.md#get-addbserviceaccount) cmdlet for offline managed password derivation.
+- Implemented the [Unlock-ADDBAccount](PowerShell/Unlock-ADDBAccount.md#unlock-addbaccount) cmdlet that can perform offline account unlock.
+
+### Fixed
+
+- Fixed Kerberos PBKDF2 salt derivation for service accounts in the [ConvertTo-KerberosKey](PowerShell/ConvertTo-KerberosKey.md#convertto-kerberoskey) cmdlet and the corresponding 
+[KerberosKeyDerivation](../Src/DSInternals.Common/Cryptography/KerberosKeyDerivation.cs) class.
+
+## [4.10] - 2023-09-16
+
+### Added
+
+- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet now checks if a user's password is equal to their SamAccountName attribute, thanks to @BlueCurby.
+- Replication cmdlets in the PowerShell module should now work on the ARM64 platform as well. Tests were performed using the [Windows Dev Kit 2023, AKA Project Volterra](https://learn.microsoft.com/en-us/windows/arm/dev-kit/).
+
+### Fixed
+
+- Fixed a rare security descriptor parsing issue.
+- Parallel reading of multiple databases is now supported.
+
+## [4.9] - 2023-02-25
 
 ### Changed
 
-- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+- Implemented [FIPS compliance requirement](https://learn.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/system-cryptography-use-fips-compliant-algorithms-for-encryption-hashing-and-signing) check (issues [#97](https://github.com/MichaelGrafnetter/DSInternals/issues/97), [#111](https://github.com/MichaelGrafnetter/DSInternals/issues/111), and [#152](https://github.com/MichaelGrafnetter/DSInternals/issues/152)).
+- Added a check that the module is running on Windows.
+- The [Set-ADDBBootKey](PowerShell/Set-ADDBBootKey.md#set-addbbootkey) cmdlet now also has the `-Force` parameter, as do all other cmdlets for offline DB modification.
+
+### Fixed
+
+- The [Get-BootKey](PowerShell/Get-BootKey.md#get-bootkey) cmdlet should now be able to read inconsistent/corrupted SYSTEM registry hives (issue [#47](https://github.com/MichaelGrafnetter/DSInternals/issues/47)).
+
+## [4.8] - 2022-12-06
+
+### Changed
+
+- Upgraded to the latest [JSON.NET library](https://www.newtonsoft.com/json) to fix some security issues.
+- Upgraded to the latest [CBOR library](https://github.com/peteroupc/CBOR) to fix some security issues.
+- Added pipeline input support to the `-SamAccountName` parameter of the [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlet.
+- All PowerShell cmdlets that modify the `ntds.dit` file now have the `-Force` parameter.
+
+### Fixed
+
+- Fixed a regression error in `ntds.dit` file modification on Windows Server 2022 that was introduced in release [4.7].
 
 ### Fixed
 
@@ -449,7 +562,17 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.7...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.16...HEAD
+[4.16]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...v4.16
+[4.15.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15...v4.15.1
+[4.15]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.14...v4.15
+[4.14]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.13...v4.14
+[4.13]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.12...v4.13
+[4.12]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.11...v4.12
+[4.11]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.10...v4.11
+[4.10]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.9...v4.10
+[4.9]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.8...v4.9
+[4.8]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.7...v4.8
 [4.7]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.6...v4.7
 [4.6]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.5...v4.6
 [4.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.4.1...v4.5
