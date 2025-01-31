@@ -1,16 +1,11 @@
-﻿using DSInternals.Common.Data;
-using DSInternals.Replication.Model;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Security.Principal;
 using DSInternals.Replication.Interop;
 using NDceRpc;
 using NDceRpc.Microsoft.Interop;
 using NDceRpc.Native;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Security.Principal;
-using DSInternals.Common.Interop;
-using DSInternals.Common.Cryptography;
-using DSInternals.Common;
 
 namespace DSInternals.Replication
 {
@@ -52,6 +47,7 @@ namespace DSInternals.Replication
                     // Lazy loading
                     this.LoadDomainInfo();
                 }
+
                 return this.domainNamingContext;
             }
         }
@@ -65,6 +61,7 @@ namespace DSInternals.Replication
                     // Lazy loading
                     this.LoadDomainInfo();
                 }
+
                 return this.netBIOSDomainName;
             }
         }
@@ -116,12 +113,13 @@ namespace DSInternals.Replication
                 {
                     obj.Schema = schema;
 
-                    if (!obj.IsAccount)
-                    {
-                        continue;
-                    }
+                    var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, properties);
 
-                    yield return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, properties);
+                    if (account != null)
+                    {
+                        // CreateAccount returns null for other object types
+                        yield return account;
+                    }
                 }
 
                 // Update the position of the replication cursor
@@ -134,16 +132,31 @@ namespace DSInternals.Replication
             var obj = this.drsConnection.ReplicateSingleObject(objectGuid);
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
-            return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, propertySets);
+            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, propertySets);
+
+            if(account == null)
+            {
+                // If the target object is not an account, CreateAccount returns null
+                throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, objectGuid);
+            }
+
+            return account;
         }
 
         public DSAccount GetAccount(string distinguishedName, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             var obj = this.drsConnection.ReplicateSingleObject(distinguishedName);
-            // TODO: Extract?
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
-            return new DSAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, propertySets);
+            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, propertySets);
+
+            if (account == null)
+            {
+                // If the target object is not an account, CreateAccount returns null
+                throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, distinguishedName);
+            }
+
+            return account;
         }
 
         public DSAccount GetAccount(NTAccount accountName, AccountPropertySets propertySets = AccountPropertySets.Default)

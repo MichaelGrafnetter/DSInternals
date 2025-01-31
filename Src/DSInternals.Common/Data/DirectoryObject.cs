@@ -1,11 +1,9 @@
 ﻿namespace DSInternals.Common.Data
 {
-    using DSInternals.Common.Cryptography;
     using System;
     using System.Linq;
     using System.Security.AccessControl;
     using System.Security.Principal;
-    using System.Text;
 
     public abstract class DirectoryObject
     {
@@ -105,44 +103,6 @@
                 bool result;
                 this.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out result);
                 return result;
-            }
-        }
-
-        public bool IsAccount
-        {
-            get
-            {
-                SamAccountType? accountType;
-                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
-                switch (accountType)
-                {
-                    case SamAccountType.User:
-                    case SamAccountType.Computer:
-                    case SamAccountType.Trust:
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        }
-        // TODO: No schema exception?
-        public bool IsSecurityPrincipal
-        {
-            get
-            {
-                SamAccountType? accountType;
-                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
-                switch (accountType)
-                {
-                    case SamAccountType.User:
-                    case SamAccountType.Computer:
-                    case SamAccountType.Trust:
-                    case SamAccountType.SecurityGroup:
-                    case SamAccountType.Alias:
-                        return true;
-                    default:
-                        return false;
-                }
             }
         }
 

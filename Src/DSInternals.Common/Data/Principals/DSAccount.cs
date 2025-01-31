@@ -15,9 +15,18 @@
             Validator.AssertNotNull(dsObject, nameof(dsObject));
             Validator.AssertNotNull(netBIOSDomainName, nameof(netBIOSDomainName));
 
-            if (!dsObject.IsAccount)
+            // Load and validate SamAccountType
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out SamAccountType? accountType);
+
+            switch (accountType)
             {
-                throw new ArgumentException(Resources.ObjectNotAccountMessage);
+                case SamAccountType.User:
+                case SamAccountType.Computer:
+                case SamAccountType.Trust:
+                    this.SamAccountType = accountType.Value;
+                    break;
+                default:
+                    throw new ArgumentException(Resources.ObjectNotAccountMessage);
             }
 
             // Common properties
@@ -25,12 +34,6 @@
 
             // Hashes and Supplemental Credentials
             this.LoadSecrets(dsObject, pek, propertySets);
-
-            if (propertySets.HasFlag(AccountPropertySets.RoamedCredentials))
-            {
-                // Credential Roaming
-                this.LoadRoamedCredentials(dsObject);
-            }
 
             if (propertySets.HasFlag(AccountPropertySets.KeyCredentials))
             {
@@ -85,42 +88,12 @@
         }
 
         /// <summary>
-        /// Gets the display name for this <see cref="DSAccount"/>.
-        /// </summary>
-        /// <value>
-        /// The display name.
-        /// </value>
-        public string DisplayName
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// Gets the description of the <see cref="DSAccount"/>.
         /// </summary>
         /// <value>
         /// The description.
         /// </value>
         public string Description
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the given name for the <see cref="DSAccount"/>.
-        /// </summary>
-        public string GivenName
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the surname for the user <see cref="DSAccount"/>. 
-        /// </summary>
-        public string Surname
         {
             get;
             private set;
@@ -219,6 +192,15 @@
                 // lastLogon is not replicated, lastLogonTimestamp is but it's not as accurate, so if we can't find lastLogon, try using lastLogonTimestamp instead
                 return this.LastLogon ?? this.LastLogonTimestamp;
             }
+        }
+
+        /// <summary>
+        /// Gets the Nullable DateTime that specifies the last date and time that the password was set for this account.
+        /// </summary>
+        public DateTime? LastPasswordSet
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -329,23 +311,6 @@
             private set;
         }
 
-        public DateTime? RoamedCredentialsCreated
-        {
-            get;
-            private set;
-        }
-
-        public DateTime? RoamedCredentialsModified
-        {
-            get;
-            private set;
-        }
-
-        public RoamedCredential[] RoamedCredentials
-        {
-            get;
-            private set;
-        }
 
         /// <summary>
         /// Device Registration / Windows Hello for Business Keys
@@ -358,10 +323,6 @@
 
         protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName, AccountPropertySets propertySets)
         {
-            // SamAccountType:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out int? numericAccountType);
-            this.SamAccountType = (SamAccountType)numericAccountType.Value;
-
             // SamAccountName
             dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out string samAccountName);
             this.SamAccountName = samAccountName;
@@ -434,21 +395,13 @@
                 dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogonTimestamp, out DateTime? lastLogonTimestamp, false);
                 this.LastLogonTimestamp = lastLogonTimestamp;
 
+                // PwdLastSet
+                dsObject.ReadAttribute(CommonDirectoryAttributes.PasswordLastSet, out DateTime? pwdLastSet, false);
+                this.LastPasswordSet = pwdLastSet;
+
                 // Description
                 dsObject.ReadAttribute(CommonDirectoryAttributes.Description, out string description);
                 this.Description = description;
-
-                // DisplayName:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.DisplayName, out string displayName);
-                this.DisplayName = displayName;
-
-                // GivenName:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.GivenName, out string givenName);
-                this.GivenName = givenName;
-
-                // Surname:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Surname, out string surname);
-                this.Surname = surname;
             }
         }
 
@@ -515,56 +468,6 @@
                     this.SupplementalCredentials = new SupplementalCredentials(binarySupplementalCredentials);
                 }
             }
-        }
-
-        /// <summary>
-        /// Loads credential roaming objects and timestamps.
-        /// </summary>
-        protected void LoadRoamedCredentials(DirectoryObject dsObject)
-        {
-            // These attributes have been added in Windows Server 2008, so they might not be present on older DCs.
-            byte[] roamingTimeStamp;
-            dsObject.ReadAttribute(CommonDirectoryAttributes.PKIRoamingTimeStamp, out roamingTimeStamp);
-
-            if (roamingTimeStamp == null)
-            {
-                // This account does not have roamed credentials, so we skip their processing
-                return;
-            }
-
-            // The 16B of the value consist of two 8B actual time stamps.
-            long createdTimeStamp = BitConverter.ToInt64(roamingTimeStamp, 0);
-            long modifiedTimeStamp = BitConverter.ToInt64(roamingTimeStamp, sizeof(long));
-
-            this.RoamedCredentialsCreated = DateTime.FromFileTime(createdTimeStamp);
-            this.RoamedCredentialsModified = DateTime.FromFileTime(modifiedTimeStamp);
-
-            byte[][] masterKeyBlobs;
-            dsObject.ReadLinkedValues(CommonDirectoryAttributes.PKIDPAPIMasterKeys, out masterKeyBlobs);
-
-            byte[][] credentialBlobs;
-            dsObject.ReadLinkedValues(CommonDirectoryAttributes.PKIAccountCredentials, out credentialBlobs);
-
-            // Parse the blobs and combine them into one array.
-            var credentials = new List<RoamedCredential>();
-
-            if (masterKeyBlobs != null)
-            {
-                foreach (var blob in masterKeyBlobs)
-                {
-                    credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
-                }
-            }
-
-            if(credentialBlobs != null)
-            {
-                foreach (var blob in credentialBlobs)
-                {
-                    credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
-                }
-            }
-
-            this.RoamedCredentials = credentials.ToArray();
         }
 
         /// <summary>

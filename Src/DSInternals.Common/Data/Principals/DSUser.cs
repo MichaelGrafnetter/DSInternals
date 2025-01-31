@@ -1,24 +1,78 @@
 ﻿namespace DSInternals.Common.Data
 {
-    using DSInternals.Common.Properties;
     using System;
+    using System.Collections.Generic;
+    using DSInternals.Common.Cryptography;
+    using DSInternals.Common.Properties;
 
-    public class DSUser
+    public class DSUser : DSAccount
     {
-        public DSUser(DirectoryObject dsObject)
+        public DSUser(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.Default) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
-            // Parameter validation
-            Validator.AssertNotNull(dsObject, nameof(dsObject));
+            if (this.SamAccountType != SamAccountType.User)
+            {
+                throw new ArgumentException(Resources.ObjectNotAccountMessage);
+            }
 
-            //if (!dsObject.IsUserAccount)
-            //{
-            //    throw new ArgumentException(Resources.ObjectNotAccountMessage);
-            //}
+            if (propertySets.HasFlag(AccountPropertySets.RoamedCredentials))
+            {
+                // Credential Roaming
+                this.LoadRoamedCredentials(dsObject);
+            }
 
-            data_len = this.LoadGenericUserAccountInfo(dsObject);
+            if(propertySets.HasFlag(AccountPropertySets.GenericInformation))
+            {
+                this.LoadGenericUserAccountInfo(dsObject);
+            }
         }
 
-        public ulong data_len = 0;
+        public DateTime? RoamedCredentialsCreated
+        {
+            get;
+            private set;
+        }
+
+        public DateTime? RoamedCredentialsModified
+        {
+            get;
+            private set;
+        }
+
+        public RoamedCredential[] RoamedCredentials
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the display name for this <see cref="DSAccount"/>.
+        /// </summary>
+        /// <value>
+        /// The display name.
+        /// </value>
+        public string DisplayName
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the given name for the <see cref="DSAccount"/>.
+        /// </summary>
+        public string GivenName
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the surname for the user <see cref="DSAccount"/>. 
+        /// </summary>
+        public string Surname
+        {
+            get;
+            private set;
+        }
 
         public string Initials
         {
@@ -68,13 +122,19 @@
             private set;
         }
 
+        public string EmployeeNumber
+        {
+            get;
+            private set;
+        }
+
         public string Office
         {
             get;
             private set;
         }
 
-        public string Tel
+        public string TelephoneNumber
         {
             get;
             private set;
@@ -86,13 +146,13 @@
             private set;
         }
 
-        public string HomeTel
+        public string HomePhone
         {
             get;
             private set;
         }
 
-        public string PagerNumber
+        public string Pager
         {
             get;
             private set;
@@ -104,7 +164,7 @@
             private set;
         }
 
-        public string IpTel
+        public string IpPhone
         {
             get;
             private set;
@@ -176,245 +236,178 @@
             private set;
         }
 
-        protected ulong LoadGenericUserAccountInfo(DirectoryObject dsObject)
+
+        /// <summary>
+        /// Loads credential roaming objects and timestamps.
+        /// </summary>
+        protected void LoadRoamedCredentials(DirectoryObject dsObject)
         {
-            ulong ret = 0;
+            // These attributes have been added in Windows Server 2008, so they might not be present on older DCs.
+            byte[] roamingTimeStamp;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PKIRoamingTimeStamp, out roamingTimeStamp);
+
+            if (roamingTimeStamp == null)
+            {
+                // This account does not have roamed credentials, so we skip their processing
+                return;
+            }
+
+            // The 16B of the value consist of two 8B actual time stamps.
+            long createdTimeStamp = BitConverter.ToInt64(roamingTimeStamp, 0);
+            long modifiedTimeStamp = BitConverter.ToInt64(roamingTimeStamp, sizeof(long));
+
+            this.RoamedCredentialsCreated = DateTime.FromFileTime(createdTimeStamp);
+            this.RoamedCredentialsModified = DateTime.FromFileTime(modifiedTimeStamp);
+
+            byte[][] masterKeyBlobs;
+            dsObject.ReadLinkedValues(CommonDirectoryAttributes.PKIDPAPIMasterKeys, out masterKeyBlobs);
+
+            byte[][] credentialBlobs;
+            dsObject.ReadLinkedValues(CommonDirectoryAttributes.PKIAccountCredentials, out credentialBlobs);
+
+            // Parse the blobs and combine them into one array.
+            var credentials = new List<RoamedCredential>();
+
+            if (masterKeyBlobs != null)
+            {
+                foreach (var blob in masterKeyBlobs)
+                {
+                    credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
+                }
+            }
+
+            if (credentialBlobs != null)
+            {
+                foreach (var blob in credentialBlobs)
+                {
+                    credentials.Add(new RoamedCredential(blob, this.SamAccountName, this.Sid));
+                }
+            }
+
+            this.RoamedCredentials = credentials.ToArray();
+        }
+
+        protected void LoadGenericUserAccountInfo(DirectoryObject dsObject)
+        {
+            // DisplayName:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.DisplayName, out string displayName);
+            this.DisplayName = displayName;
+
+            // GivenName:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.GivenName, out string givenName);
+            this.GivenName = givenName;
+
+            // Surname:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Surname, out string surname);
+            this.Surname = surname;
 
             // Initials:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Initials))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Initials, out string initials);
-                if (!String.IsNullOrEmpty(initials))
-                    ret += (ulong)initials.Length;
-                this.Initials = initials;
-            }
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Initials, out string initials);
+            this.Initials = initials;
 
-            // StreetAddress:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.StreetAddress))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.StreetAddress, out string streetAddress);
-                if (!String.IsNullOrEmpty(streetAddress))
-                    ret += (ulong)streetAddress.Length;
-                this.StreetAddress = streetAddress;
-            }
-
-            // City:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.City))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.City, out string city);
-                if (!String.IsNullOrEmpty(city))
-                    ret += (ulong)city.Length;
-                this.City = city;
-            }
-
-            // Postal Code:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.PostalCode))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.PostalCode, out string postalCode);
-                if (!String.IsNullOrEmpty(postalCode))
-                    ret += (ulong)postalCode.Length;
-                this.PostalCode = postalCode;
-            }
-
-            // State:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.State))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.State, out string state);
-                if (!String.IsNullOrEmpty(state))
-                    ret += (ulong)state.Length;
-                this.State = state;
-            }
-
-            // Country:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Country))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Country, out string country);
-                if (!String.IsNullOrEmpty(country))
-                    ret += (ulong)country.Length;
-                this.Country = country;
-            }
-
-            // PostOfficeBox:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.PostOfficeBox))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.PostOfficeBox, out string postOfficeBox);
-                if (!String.IsNullOrEmpty(postOfficeBox))
-                    ret += (ulong)postOfficeBox.Length;
-                this.PostOfficeBox = postOfficeBox;
-            }
             // EmployeeID:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.EmployeeID))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.EmployeeID, out string employeeID);
-                if (!String.IsNullOrEmpty(employeeID))
-                    ret += (ulong)employeeID.Length;
-                this.EmployeeID = employeeID;
-            }
+            dsObject.ReadAttribute(CommonDirectoryAttributes.EmployeeID, out string employeeID);
+            this.EmployeeID = employeeID;
 
-            // Office:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Office))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Office, out string office);
-                if (!String.IsNullOrEmpty(office))
-                    ret += (ulong)office.Length;
-                this.Office = office;
-            }
-
-            // Tel:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Tel))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Tel, out string tel);
-                if (!String.IsNullOrEmpty(tel))
-                    ret += (ulong)tel.Length;
-                this.Tel = tel;
-            }
-
-            // Email:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Email))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Email, out string email);
-                if (!String.IsNullOrEmpty(email))
-                    ret += (ulong)email.Length;
-                this.Email = email;
-            }
-
-            // HomeTel:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.HomeTel))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.HomeTel, out string homeTel);
-                if (!String.IsNullOrEmpty(homeTel))
-                    ret += (ulong)homeTel.Length;
-                this.HomeTel = homeTel;
-            }
-
-            // PagerNumber:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.PagerNumber))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.PagerNumber, out string pagerNumber);
-                if (!String.IsNullOrEmpty(pagerNumber))
-                    ret += (ulong)pagerNumber.Length;
-                this.PagerNumber = pagerNumber;
-            }
-
-            // Mobile:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Mobile))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Mobile, out string mobile);
-                if (!String.IsNullOrEmpty(mobile))
-                    ret += (ulong)mobile.Length;
-                this.Mobile = mobile;
-            }
-
-            // IpTel:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.IpTel))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.IpTel, out string ipTel);
-                if (!String.IsNullOrEmpty(ipTel))
-                    ret += (ulong)ipTel.Length;
-                this.IpTel = ipTel;
-            }
-
-            // WebPage:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.WebPage))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.WebPage, out string webPage);
-                if (!String.IsNullOrEmpty(webPage))
-                    ret += (ulong)webPage.Length;
-                this.WebPage = webPage;
-            }
-
-            // JobTitle:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.JobTitle))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.JobTitle, out string jobTitle);
-                if (!String.IsNullOrEmpty(jobTitle))
-                    ret += (ulong)jobTitle.Length;
-                this.JobTitle = jobTitle;
-            }
-
-            // Department:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Department))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Department, out string department);
-                if (!String.IsNullOrEmpty(department))
-                    ret += (ulong)department.Length;
-                this.Department = department;
-            }
-
-            // Company:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Company))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Company, out string company);
-                if (!String.IsNullOrEmpty(company))
-                    ret += (ulong)company.Length;
-                this.Company = company;
-            }
+            // EmployeeNumber:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.EmployeeID, out string employeeNumber);
+            this.EmployeeNumber = employeeNumber;
 
             // Manager:
-            //if (dsObject.HasAttribute(CommonDirectoryAttributes.Manager))
-            //{
-            //    dsObject.ReadAttribute(CommonDirectoryAttributes.Manager, out byte[] binaryManager);
-            //    string manager = dsObject.ParseDSDN(binaryManager);
-            //    if (!String.IsNullOrEmpty(manager))
-            //        ret += (ulong)manager.Length;
-            //    this.Manager = manager;
-            //}
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Manager, out DistinguishedName manager);
+            this.Manager = manager?.ToString();
+
+            // Email:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Email, out string email);
+            this.Email = email;
+
+            // StreetAddress:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.StreetAddress, out string streetAddress);
+            this.StreetAddress = streetAddress;
+
+            // City:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.City, out string city);
+            this.City = city;
+
+            // Postal Code:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PostalCode, out string postalCode);
+            this.PostalCode = postalCode;
+
+            // State:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.State, out string state);
+            this.State = state;
+
+            // Country:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Country, out string country);
+            this.Country = country;
+
+            // PostOfficeBox:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PostOfficeBox, out string postOfficeBox);
+            this.PostOfficeBox = postOfficeBox;
+            
+            // Office:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Office, out string office);
+            this.Office = office;
+
+            // Tel:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.TelephoneNumber, out string tel);
+            this.TelephoneNumber = tel;
+
+            // HomeTel:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.HomePhone, out string homeTel);
+            this.HomePhone = homeTel;
+
+            // PagerNumber:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PagerNumber, out string pagerNumber);
+            this.Pager = pagerNumber;
+
+            // Mobile:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Mobile, out string mobile);
+            this.Mobile = mobile;
+
+            // IpTel:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.IpPhone, out string ipTel);
+            this.IpPhone = ipTel;
+
+            // WebPage:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.WebPage, out string webPage);
+            this.WebPage = webPage;
+
+            // JobTitle:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.JobTitle, out string jobTitle);
+            this.JobTitle = jobTitle;
+
+            // Department:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Department, out string department);
+            this.Department = department;
+
+            // Company:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Company, out string company);
+            this.Company = company;
 
             // HomeDirectory:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.HomeDirectory))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.HomeDirectory, out string homeDirectory);
-                if (!String.IsNullOrEmpty(homeDirectory))
-                    ret += (ulong)homeDirectory.Length;
-                this.HomeDirectory = homeDirectory;
-            }
+            dsObject.ReadAttribute(CommonDirectoryAttributes.HomeDirectory, out string homeDirectory);
+            this.HomeDirectory = homeDirectory;
 
             // HomeDrive:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.HomeDrive))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.HomeDrive, out string homeDrive);
-                if (!String.IsNullOrEmpty(homeDrive))
-                    ret += (ulong)homeDrive.Length;
-                this.HomeDrive = homeDrive;
-            }
+            dsObject.ReadAttribute(CommonDirectoryAttributes.HomeDrive, out string homeDrive);
+            this.HomeDrive = homeDrive;
 
             // UnixHomeDirectory:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.UnixHomeDirectory))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.UnixHomeDirectory, out string unixHomeDirectory);
-                if (!String.IsNullOrEmpty(unixHomeDirectory))
-                    ret += (ulong)unixHomeDirectory.Length;
-                this.UnixHomeDirectory = unixHomeDirectory;
-            }
+            dsObject.ReadAttribute(CommonDirectoryAttributes.UnixHomeDirectory, out string unixHomeDirectory);
+            this.UnixHomeDirectory = unixHomeDirectory;
 
             // ProfilePath:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.ProfilePath))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.ProfilePath, out string profilePath);
-                if (!String.IsNullOrEmpty(profilePath))
-                    ret += (ulong)profilePath.Length;
-                this.ProfilePath = profilePath;
-            }
+            dsObject.ReadAttribute(CommonDirectoryAttributes.ProfilePath, out string profilePath);
+            this.ProfilePath = profilePath;
 
             // ScriptPath:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.ScriptPath))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.ScriptPath, out string scriptPath);
-                if (!String.IsNullOrEmpty(scriptPath))
-                    ret += (ulong)scriptPath.Length;
-                this.ScriptPath = scriptPath;
-            }
+            dsObject.ReadAttribute(CommonDirectoryAttributes.ScriptPath, out string scriptPath);
+            this.ScriptPath = scriptPath;
 
             // Notes:
-            if (dsObject.HasAttribute(CommonDirectoryAttributes.Notes))
-            {
-                dsObject.ReadAttribute(CommonDirectoryAttributes.Notes, out string notes);
-                if (!String.IsNullOrEmpty(notes))
-                    ret += (ulong)notes.Length;
-                this.Notes = notes;
-            }
-
-            return ret;
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Notes, out string notes);
+            this.Notes = notes;
         }
     }
 }

@@ -122,12 +122,12 @@
                     foreach (var searchResult in searchResults.Cast<SearchResult>())
                     {
                         var obj = new AdsiObjectAdapter(searchResult);
+                        var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, null);
 
-                        if (obj == null || !obj.IsAccount)
-                            continue;
-
-                        var account = new DSAccount(obj, this.NetBIOSDomainName, null);
-                        yield return account;
+                        if (account != null)
+                        {
+                            yield return account;
+                        }
                     }
                 }
             }

@@ -18,8 +18,6 @@
         // TODO: Add Rid range checks
         public const int RidMin = 1;
 
-        private const string ComputerNameSuffix = "$";
-
         private DirectoryContext context;
         private Cursor dataTableCursor;
         private bool ownsContext;
@@ -71,12 +69,22 @@
                 var obj = new DatastoreObject(this.dataTableCursor, this.context);
 
                 // TODO: This probably does not work on RODCs:
-                if (obj.IsDeleted || !obj.IsWritable || !obj.IsAccount)
+                if (obj.IsDeleted || !obj.IsWritable)
                 {
+                    // Ignore deleted and non-writable objects (GC).
+                    // TODO: Use an index with NC.
                     continue;
                 }
 
-                yield return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, propertySets);
+                var account = AccountFactory.CreateAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, propertySets);
+
+                if (account == null)
+                {
+                    // Note: Factory returns null for objects that are not accounts.
+                    continue;
+                }
+
+                yield return account;
             }
         }
 
@@ -106,13 +114,17 @@
 
         protected DSAccount GetAccount(DatastoreObject foundObject, object objectIdentifier, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
-            if (!foundObject.IsAccount)
+            
+            var pek = GetSecretDecryptor(bootKey);
+
+            var account = AccountFactory.CreateAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek, propertySets);
+
+            if (account == null)
             {
                 throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, objectIdentifier);
             }
 
-            var pek = GetSecretDecryptor(bootKey);
-            return new DSAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek, propertySets);
+            return account;
         }
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)
@@ -138,99 +150,6 @@
             foreach (var keyObject in this.FindObjectsByCategory(CommonDirectoryClasses.KdsRootKey))
             {
                 yield return new KdsRootKey(keyObject);
-            }
-        }
-
-        public IEnumerable<BitLockerRecoveryInformation> GetBitlockerRecoveryInformation()
-        {
-            // TODO: Check if the schema contains BitLocker information.
-            // TODO: Containerized seach
-            foreach (var bitlockerInfo in this.FindObjectsByCategory(CommonDirectoryClasses.FVERecoveryInformation))
-            {
-                // RODCs and partial replicas on GCs do not contain recovery passwords
-                if (bitlockerInfo.IsWritable)
-                {
-                    yield return new BitLockerRecoveryInformation(bitlockerInfo);
-                }
-            }
-        }
-
-        public BitLockerRecoveryInformation GetBitlockerRecoveryInformation(DistinguishedName dn)
-        {
-            // TODO: Check if the schema contains BitLocker information.
-
-            // Validate the input
-            Validator.AssertNotNull(dn, nameof(dn));
-
-            // Find the object by DN
-            var foundObject = this.FindObject(dn);
-
-            // Read BitLocker properties
-            return this.GetBitlockerRecoveryInformation(foundObject, dn);
-        }
-
-        public BitLockerRecoveryInformation GetBitlockerRecoveryInformation(Guid objectId)
-        {
-            // TODO: Check if the schema contains BitLocker information.
-
-            // Find the object by objectGuid
-            var foundObject = this.FindObject(objectId);
-
-            // Read BitLocker properties
-            return this.GetBitlockerRecoveryInformation(foundObject, objectId);
-        }
-        public BitLockerRecoveryInformation GetBitlockerRecoveryInformationByRecoveryGuid(Guid recoveryGuid)
-        {
-            // TODO: Check if the schema contains BitLocker information.
-
-            // Find the object by recovery GUID
-            var foundObject = this.FindObject(CommonDirectoryAttributes.FVERecoveryGuid, recoveryGuid);
-
-            // Read BitLocker properties
-            return this.GetBitlockerRecoveryInformation(foundObject, recoveryGuid);
-        }
-
-        private BitLockerRecoveryInformation GetBitlockerRecoveryInformation(DatastoreObject foundObject, object objectIdentifier)
-        {
-            // Check object type
-            int recoveryInformationClassId = this.context.Schema.FindClassId(CommonDirectoryClasses.FVERecoveryInformation);
-            foundObject.ReadAttribute(CommonDirectoryAttributes.ObjectCategory, out int? objectCategory);
-
-            if (objectCategory != recoveryInformationClassId)
-            {
-                throw new DirectoryObjectOperationException("Target object class is not msFVE-RecoveryInformation.", objectIdentifier);
-            }
-
-            // Read BitLocker properties
-            return new BitLockerRecoveryInformation(foundObject);
-        }
-
-        public IEnumerable<BitLockerRecoveryInformation> GetBitlockerRecoveryInformation(string computerName)
-        {
-            // TODO: Check if the schema contains BitLocker information.
-
-            // Validate the input
-            Validator.AssertNotNullOrEmpty(computerName, nameof(computerName));
-
-            // Apped the $ character to the computer name if missing, to construct a proper SAM account name.
-            string samAccountName = computerName.EndsWith(ComputerNameSuffix) ? computerName : (computerName + ComputerNameSuffix);
-
-            // Find the computer object
-            var computerObject = this.FindObject(samAccountName);
-
-            // Find all children of type msFVE-RecoveryInformation
-            int recoveryInformationClassId = this.context.Schema.FindClassId(CommonDirectoryClasses.FVERecoveryInformation);
-            this.dataTableCursor.FindChildren(this.context.Schema);
-
-            while (this.dataTableCursor.MoveNext())
-            {
-                var childObject = new DatastoreObject(this.dataTableCursor, this.context);
-                childObject.ReadAttribute(CommonDirectoryAttributes.ObjectCategory, out int? objectCategory);
-
-                if (objectCategory == recoveryInformationClassId)
-                {
-                    yield return new BitLockerRecoveryInformation(childObject);
-                }
             }
         }
 
@@ -460,9 +379,18 @@
 
         protected bool AddSidHistory(DatastoreObject targetObject, object targetObjectIdentifier, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
-            if (!targetObject.IsSecurityPrincipal)
+            // Check if modification of SID history makes sense for this object type
+            targetObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out SamAccountType? accountType);
+            switch (accountType)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
+                case SamAccountType.User:
+                case SamAccountType.Computer:
+                case SamAccountType.SecurityGroup:
+                case SamAccountType.Alias:
+                    // OK, continue
+                    break;
+                default:
+                    throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
             }
 
             using (var transaction = this.context.BeginTransaction())
@@ -557,7 +485,10 @@
 
         protected bool SetPrimaryGroupId(DatastoreObject targetObject, object targetObjectIdentifier, int groupId, bool skipMetaUpdate)
         {
-            if (!targetObject.IsAccount)
+            // Check that the object is a user/computer account
+            targetObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out SamAccountType? accountType);
+
+            if (accountType != SamAccountType.User && accountType != SamAccountType.Computer)
             {
                 throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
             }

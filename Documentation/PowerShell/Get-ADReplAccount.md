@@ -14,38 +14,38 @@ Reads one or more accounts through the MS-DRSR protocol, including secret attrib
 
 ### All
 ```
-Get-ADReplAccount [-All] [-NamingContext <String>] -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-All] [-NamingContext <String>] [-Properties <AccountPropertySets>] -Server <String>
+ [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### ByName
 ```
-Get-ADReplAccount [-SamAccountName] <String> [[-Domain] <String>] -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] [-SamAccountName] <String> [[-Domain] <String>]
+ -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### ByUPN
 ```
-Get-ADReplAccount -UserPrincipalName <String> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] -UserPrincipalName <String> -Server <String>
+ [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Get-ADReplAccount -ObjectSid <SecurityIdentifier> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] -ObjectSid <SecurityIdentifier> -Server <String>
+ [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Get-ADReplAccount [-DistinguishedName] <String> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] [-DistinguishedName] <String> -Server <String>
+ [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Get-ADReplAccount -ObjectGuid <Guid> -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
- [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] -ObjectGuid <Guid> -Server <String>
+ [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -297,6 +297,22 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Properties
+{{ Fill Properties Description }}
+
+```yaml
+Type: AccountPropertySets
+Parameter Sets: (All)
+Aliases: Property, PropertySets, PropertySet
+Accepted values: None, DistinguishedName, GenericInformation, SecurityDescriptor, NTHash, LMHash, PasswordHashes, NTHashHistory, LMHashHistory, PasswordHashHistory, SupplementalCredentials, KeyCredentials, RoamedCredentials, LAPS, All, Default
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

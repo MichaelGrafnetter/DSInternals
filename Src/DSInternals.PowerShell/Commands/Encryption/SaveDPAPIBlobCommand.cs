@@ -70,11 +70,17 @@
                     this.ProcessSingleObject(this.DPAPIObject);
                     break;
                 case AccountParameterSet:
-                    // Extract all roamed credentials from an account
-                    foreach(var blob in this.Account.RoamedCredentials ?? Enumerable.Empty<DPAPIObject>())
+                    // Extract all roamed credentials from a user account. Other account types do not have roamed credentials.
+                    var user = this.Account as DSUser;
+
+                    if(user?.RoamedCredentials != null)
                     {
-                        this.ProcessSingleObject(blob);
+                        foreach (var blob in user.RoamedCredentials)
+                        {
+                            this.ProcessSingleObject(blob);
+                        }
                     }
+                    
                     break;
             }
         }
@@ -82,6 +88,7 @@
         private void ProcessSingleObject(DPAPIObject blob)
         {
             string filePath = blob.FilePath;
+
             if (String.IsNullOrEmpty(filePath))
             {
                 // There is nothing to save

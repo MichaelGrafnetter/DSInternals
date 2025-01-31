@@ -90,6 +90,7 @@
     <Compile Include="Data\Hello\KeyMaterialFido.cs" />
     <Compile Include="Data\Hello\VolumeType.cs" />
     <Compile Include="Data\Hello\KeyUsage.cs" />
+    <Compile Include="Data\Principals\AccountFactory.cs" />
     <Compile Include="Data\Principals\AccountPropertySets.cs" />
     <Compile Include="Data\Principals\DSComputer.cs" />
     <Compile Include="Data\Principals\SupportedEncryptionTypes.cs" />
