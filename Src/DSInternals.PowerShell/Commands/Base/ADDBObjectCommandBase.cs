@@ -6,10 +6,10 @@
 
     public abstract class ADDBObjectCommandBase : ADDBCommandBase
     {
-        protected const string parameterSetByGuid = "ByGuid";
-        protected const string parameterSetByDN = "ByDN";
+        protected const string ParameterSetByGuid = "ByGuid";
+        protected const string ParameterSetByDN = "ByDN";
 
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, ParameterSetName = parameterSetByDN)]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, ParameterSetName = ParameterSetByDN)]
         [ValidateNotNullOrEmpty]
         [Alias("dn")]
         public string DistinguishedName
@@ -18,7 +18,7 @@
             set;
         }
 
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, ParameterSetName = parameterSetByGuid)]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, ParameterSetName = ParameterSetByGuid)]
         [ValidateNotNullOrEmpty]
         [Alias("Guid")]
         public Guid ObjectGuid
@@ -36,6 +36,7 @@
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
+
             try
             {
                 this.DirectoryAgent = new DirectoryAgent(this.DirectoryContext);
@@ -55,6 +56,7 @@
                 this.DirectoryAgent.Dispose();
                 this.DirectoryAgent = null;
             }
+
             base.Dispose(disposing);
         }
     }

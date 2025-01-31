@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+  <Controls>
+    <Control>
+      <Name>GenericUserAccountInfo</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>Initials: </Text>
+              <ExpressionBinding>
+                <PropertyName>Initials</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Street Address: </Text>
+              <ExpressionBinding>
+                <PropertyName>StreetAddress</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Post Office Box: </Text>
+              <ExpressionBinding>
+                <PropertyName>PostOfficeBox</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>City: </Text>
+              <ExpressionBinding>
+                <PropertyName>City</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>State: </Text>
+              <ExpressionBinding>
+                <PropertyName>State</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Postal Code: </Text>
+              <ExpressionBinding>
+                <PropertyName>PostalCode</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Country: </Text>
+              <ExpressionBinding>
+                <PropertyName>Country</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Office: </Text>
+              <ExpressionBinding>
+                <PropertyName>Office</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Tel: </Text>
+              <ExpressionBinding>
+                <PropertyName>Tel</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Email: </Text>
+              <ExpressionBinding>
+                <PropertyName>Email</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Home Tel: </Text>
+              <ExpressionBinding>
+                <PropertyName>HomeTel</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Pager Number: </Text>
+              <ExpressionBinding>
+                <PropertyName>PagerNumber</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Mobile: </Text>
+              <ExpressionBinding>
+                <PropertyName>Mobile</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Ip Tel: </Text>
+              <ExpressionBinding>
+                <PropertyName>IpTel</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Web Page: </Text>
+              <ExpressionBinding>
+                <PropertyName>WebPage</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Job Title: </Text>
+              <ExpressionBinding>
+                <PropertyName>JobTitle</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Department: </Text>
+              <ExpressionBinding>
+                <PropertyName>Department</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Company: </Text>
+              <ExpressionBinding>
+                <PropertyName>Company</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Employee ID: </Text>
+              <ExpressionBinding>
+                <PropertyName>EmployeeID</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Manager: </Text>
+              <ExpressionBinding>
+                <PropertyName>Manager</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Home Directory: </Text>
+              <ExpressionBinding>
+                <PropertyName>HomeDirectory</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Home Drive: </Text>
+              <ExpressionBinding>
+                <PropertyName>HomeDrive</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Unix Home Directory: </Text>
+              <ExpressionBinding>
+                <PropertyName>UnixHomeDirectory</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Profile Path: </Text>
+              <ExpressionBinding>
+                <PropertyName>ProfilePath</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Script Path: </Text>
+              <ExpressionBinding>
+                <PropertyName>ScriptPath</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Notes: </Text>
+              <ExpressionBinding>
+                <PropertyName>Notes</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+  </Controls>
+  <ViewDefinitions>
+    <View>
+      <Name>GenericUserAccountInfo</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.GenericUserAccountInfo</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>$_</ScriptBlock>
+                <CustomControlName>GenericUserAccountInfo</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

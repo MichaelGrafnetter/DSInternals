@@ -158,6 +158,16 @@
       <FileName>Commands\Datastore\GetADDBBackupKeyCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="DSInternals.PowerShell.Commands.GetADDBBitLockerRecoveryInfoCommand" Collapsed="true">
+    <Position X="20" Y="3" Width="2.5" />
+    <Members>
+      <Method Name="BeginProcessing" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\Datastore\GetADDBBitLockerRecoveryInfoCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="DSInternals.PowerShell.Commands.GetADDBKdsRootKeyCommand" Collapsed="true">
     <Position X="20" Y="3" Width="2.5" />
     <TypeIdentifier>

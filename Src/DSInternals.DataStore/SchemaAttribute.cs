@@ -219,6 +219,17 @@
         }
 
         /// <summary>
+        /// Gets a value indicating whether the schema property is marked as confidential.
+        /// </summary>
+        public bool IsConfidential
+        {
+            get
+            {
+                return this.SearchFlags.HasFlag(SearchFlags.Confidential);
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether only the system can modify this attribute.
         /// </summary>
         public bool IsSystemOnly

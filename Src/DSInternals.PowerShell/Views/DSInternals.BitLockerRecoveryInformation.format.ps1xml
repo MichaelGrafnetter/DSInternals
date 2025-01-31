@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+  <ViewDefinitions>
+    <View>
+      <Name>BitLockerRecoveryInformation</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.BitLockerRecoveryInformation</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>DistinguishedName</Label>
+                <PropertyName>DistinguishedName</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>KeyProtectorId</Label>
+                <PropertyName>RecoveryGuid</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>RecoveryPassword</Label>
+                <PropertyName>RecoveryPassword</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Date</Label>
+                <PropertyName>WhenCreated</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

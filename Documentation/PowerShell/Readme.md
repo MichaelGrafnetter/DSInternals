@@ -60,6 +60,9 @@ Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryptio
 ### [Get-ADDBServiceAccount](Get-ADDBServiceAccount.md#get-addbserviceaccount)
 Reads all Group Managed Service Accounts (gMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
 
+### [Get-ADDBBitLockerRecoveryInformation](Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation)
+Reads BitLocker recovery passwords from a ntds.dit file.
+
 ### [Get-ADDBDomainController](Get-ADDBDomainController.md#get-addbdomaincontroller)
 Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name and DC site.
 
@@ -88,6 +91,9 @@ Reads the DPAPI backup keys from a domain controller through the MS-DRSR protoco
 
 ### [Add-ADReplNgcKey](Add-ADReplNgcKey.md#add-adreplngckey)
 Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.
+
+### [Get-ADReplAccount](Get-ADReplAccount.md#get-adreplaccount)
+Reads one or more msFVE-RecoveryInfo objects through the MS-DRSR protocol, including backup keys and passwords attributes.
 
 ### [Get-SamPasswordPolicy](Get-SamPasswordPolicy.md#get-sampasswordpolicy)
 Queries Active Directory for the default password policy.

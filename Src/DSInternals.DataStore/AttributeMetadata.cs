@@ -82,8 +82,7 @@ namespace DSInternals.DataStore
         {
             get
             {
-                DateTime result = this.LastOriginatingChangeTimestamp.FromGeneralizedTime();
-                return result;
+                return this.LastOriginatingChangeTimestamp.FromGeneralizedTime();
             }
             private set
             {

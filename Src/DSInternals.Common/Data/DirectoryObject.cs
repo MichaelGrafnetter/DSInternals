@@ -1,6 +1,5 @@
 ﻿namespace DSInternals.Common.Data
 {
-    using DSInternals.Common.Cryptography;
     using System;
     using System.Linq;
     using System.Security.AccessControl;
@@ -69,16 +68,13 @@
 
         public void ReadAttribute(string name, out SecurityIdentifier[] value)
         {
+            value = null;
             byte[][] binarySids;
             // TODO: Always big endian?
             this.ReadAttribute(name, out binarySids);
             if(binarySids != null)
             {
                 value = binarySids.Select(binarySid => binarySid.ToSecurityIdentifier(this.HasBigEndianRid)).ToArray();
-            }
-            else
-            {
-                value = null;
             }
         }
 
@@ -89,17 +85,14 @@
             value = (SamAccountType?)numericValue;
         }
 
-        public void ReadAttribute(string name, out DateTime? value)
+        public void ReadAttribute(string name, out DateTime? value, bool asGeneralizedTime)
         {
+            value = null;
             long? timestamp;
             this.ReadAttribute(name, out timestamp);
             if(timestamp.HasValue && timestamp.Value > 0)
             {
-                value = DateTime.FromFileTime(timestamp.Value); 
-            }
-            else
-            {
-                value = null;
+                value = asGeneralizedTime ? timestamp.Value.FromGeneralizedTime() : DateTime.FromFileTime(timestamp.Value); 
             }
         }
 
@@ -110,44 +103,6 @@
                 bool result;
                 this.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out result);
                 return result;
-            }
-        }
-
-        public bool IsAccount
-        {
-            get
-            {
-                SamAccountType? accountType;
-                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
-                switch (accountType)
-                {
-                    case SamAccountType.User:
-                    case SamAccountType.Computer:
-                    case SamAccountType.Trust:
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        }
-        // TODO: No schema exception?
-        public bool IsSecurityPrincipal
-        {
-            get
-            {
-                SamAccountType? accountType;
-                this.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out accountType);
-                switch (accountType)
-                {
-                    case SamAccountType.User:
-                    case SamAccountType.Computer:
-                    case SamAccountType.Trust:
-                    case SamAccountType.SecurityGroup:
-                    case SamAccountType.Alias:
-                        return true;
-                    default:
-                        return false;
-                }
             }
         }
 

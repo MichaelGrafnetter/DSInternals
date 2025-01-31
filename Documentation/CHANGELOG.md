@@ -5,6 +5,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+- Get-ADDBBitLockerRecoveryInformation cmdlet
+- Get-ADDBComputer cmdlet.
+- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
+
 ## [4.16] - 2025-01-05
 
 ### Added
@@ -118,6 +126,10 @@ This is a PowerShell-only release.
 ### Fixed
 
 - Fixed a regression error in `ntds.dit` file modification on Windows Server 2022 that was introduced in release [4.7].
+
+### Fixed
+
+- Improved export formats.
 
 ## [4.7] - 2021-10-30
 

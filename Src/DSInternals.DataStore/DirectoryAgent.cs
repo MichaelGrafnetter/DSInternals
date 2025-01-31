@@ -56,7 +56,7 @@
             }
         }
 
-        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey)
+        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             var pek = this.GetSecretDecryptor(bootKey);
             // TODO: Use a more suitable index?
@@ -67,48 +67,64 @@
             while (this.dataTableCursor.MoveNext())
             {
                 var obj = new DatastoreObject(this.dataTableCursor, this.context);
+
                 // TODO: This probably does not work on RODCs:
-                if (obj.IsDeleted || !obj.IsWritable || !obj.IsAccount)
+                if (obj.IsDeleted || !obj.IsWritable)
                 {
+                    // Ignore deleted and non-writable objects (GC).
+                    // TODO: Use an index with NC.
                     continue;
                 }
-                yield return new DSAccount(obj, this.context.DomainController.NetBIOSDomainName, pek);
+
+                var account = AccountFactory.CreateAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, propertySets);
+
+                if (account == null)
+                {
+                    // Note: Factory returns null for objects that are not accounts.
+                    continue;
+                }
+
+                yield return account;
             }
         }
 
-        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey)
+        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             var obj = this.FindObject(dn);
-            return this.GetAccount(obj, dn, bootKey);
+            return this.GetAccount(obj, dn, bootKey, propertySets);
         }
 
-        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey)
+        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             var obj = this.FindObject(objectSid);
-            return this.GetAccount(obj, objectSid, bootKey);
+            return this.GetAccount(obj, objectSid, bootKey, propertySets);
         }
 
-        public DSAccount GetAccount(string samAccountName, byte[] bootKey)
+        public DSAccount GetAccount(string samAccountName, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             var obj = this.FindObject(samAccountName);
-            return this.GetAccount(obj, samAccountName, bootKey);
+            return this.GetAccount(obj, samAccountName, bootKey, propertySets);
         }
 
-        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey)
+        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
             var obj = this.FindObject(objectGuid);
-            return this.GetAccount(obj, objectGuid, bootKey);
+            return this.GetAccount(obj, objectGuid, bootKey, propertySets);
         }
 
-        protected DSAccount GetAccount(DatastoreObject foundObject, object objectIdentifier, byte[] bootKey)
+        protected DSAccount GetAccount(DatastoreObject foundObject, object objectIdentifier, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
         {
-            if (!foundObject.IsAccount)
+            
+            var pek = GetSecretDecryptor(bootKey);
+
+            var account = AccountFactory.CreateAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek, propertySets);
+
+            if (account == null)
             {
                 throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, objectIdentifier);
             }
 
-            var pek = GetSecretDecryptor(bootKey);
-            return new DSAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek);
+            return account;
         }
 
         public IEnumerable<DirectoryObject> FindObjectsByCategory(string className, bool includeDeleted = false)
@@ -122,11 +138,13 @@
             while (this.dataTableCursor.MoveNext())
             {
                 var obj = new DatastoreObject(this.dataTableCursor, this.context);
+
                 // Optionally skip deleted objects
                 if (!includeDeleted && obj.IsDeleted)
                 {
                     continue;
                 }
+
                 yield return obj;
             }
         }
@@ -197,6 +215,7 @@
                     return currentObject;
                 }
             }
+
             // If the code execution comes here, we have not found any object matching the criteria.
             throw new DirectoryObjectNotFoundException(samAccountName);
         }
@@ -245,20 +264,30 @@
             }
         }
 
+        /// <exception cref="DirectoryObjectNotFoundException"></exception>
+        public DatastoreObject FindObject(Guid attributeValue)
+        {
+            return this.FindObject(CommonDirectoryAttributes.ObjectGUID, attributeValue);
+        }
 
         /// <exception cref="DirectoryObjectNotFoundException"></exception>
-        public DatastoreObject FindObject(Guid objectGuid)
+        protected DatastoreObject FindObject(string attributeName, Guid attributeValue)
         {
-            string objectGuidIndex = this.context.Schema.FindIndexName(CommonDirectoryAttributes.ObjectGUID);
-            this.dataTableCursor.CurrentIndex = objectGuidIndex;
-            bool found = this.dataTableCursor.GotoKey(Key.Compose(objectGuid.ToByteArray()));
+            Validator.AssertNotNullOrEmpty(attributeName, nameof(attributeName));
+
+            // TODO: Check if the attribute has an index
+
+            string attributeIndex = this.context.Schema.FindIndexName(attributeName);
+            this.dataTableCursor.CurrentIndex = attributeIndex;
+            bool found = this.dataTableCursor.GotoKey(Key.Compose(attributeValue.ToByteArray()));
+
             if (found)
             {
                 return new DatastoreObject(this.dataTableCursor, this.context);
             }
             else
             {
-                throw new DirectoryObjectNotFoundException(objectGuid);
+                throw new DirectoryObjectNotFoundException(attributeValue);
             }
         }
 
@@ -348,10 +377,20 @@
 
         protected bool AddSidHistory(DatastoreObject targetObject, object targetObjectIdentifier, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
-            if (!targetObject.IsSecurityPrincipal)
+            // Check if modification of SID history makes sense for this object type
+            targetObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out SamAccountType? accountType);
+            switch (accountType)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
+                case SamAccountType.User:
+                case SamAccountType.Computer:
+                case SamAccountType.SecurityGroup:
+                case SamAccountType.Alias:
+                    // OK, continue
+                    break;
+                default:
+                    throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
             }
+
             using (var transaction = this.context.BeginTransaction())
             {
                 this.dataTableCursor.BeginEditForUpdate();
@@ -377,6 +416,7 @@
                     DateTime now = DateTime.Now;
                     obj.UpdateAttributeMeta(attributeNames, currentUsn, now);
                 }
+
                 this.dataTableCursor.AcceptChanges();
                 transaction.Commit();
             }
@@ -394,11 +434,13 @@
             {
                 return;
             }
+
             if (this.dataTableCursor != null)
             {
                 this.dataTableCursor.Dispose();
                 this.dataTableCursor = null;
             }
+
             if (this.ownsContext && this.context != null)
             {
                 this.context.Dispose();
@@ -462,10 +504,14 @@
 
         protected bool SetPrimaryGroupId(DatastoreObject targetObject, object targetObjectIdentifier, int groupId, bool skipMetaUpdate)
         {
-            if (!targetObject.IsAccount)
+            // Check that the object is a user/computer account
+            targetObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out SamAccountType? accountType);
+
+            if (accountType != SamAccountType.User && accountType != SamAccountType.Computer)
             {
                 throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
             }
+
             // TODO: Validator.ValidateRid
             // TODO: Test if the rid exists?
             using (var transaction = this.context.BeginTransaction())

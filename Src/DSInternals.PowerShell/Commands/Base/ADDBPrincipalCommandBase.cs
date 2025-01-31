@@ -5,14 +5,14 @@
 
     public abstract class ADDBPrincipalCommandBase : ADDBObjectCommandBase
     {
-        protected const string parameterSetByName = "ByName";
-        protected const string parameterSetBySid = "BySID";
+        protected const string ParameterSetByName = "ByName";
+        protected const string ParameterSetBySid = "BySID";
 
         [Parameter(
             Mandatory = true,
             Position = 0,
             ValueFromPipelineByPropertyName = true,
-            ParameterSetName = parameterSetByName
+            ParameterSetName = ParameterSetByName
         )]
         [ValidateNotNullOrEmpty]
         [Alias("Login", "sam")]
@@ -25,7 +25,7 @@
         [Parameter(
             Mandatory = true,
             ValueFromPipelineByPropertyName = true,
-            ParameterSetName = parameterSetBySid
+            ParameterSetName = ParameterSetBySid
         )]
         [ValidateNotNullOrEmpty]
         [Alias("Sid")]

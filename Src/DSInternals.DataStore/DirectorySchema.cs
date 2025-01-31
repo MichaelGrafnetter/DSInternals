@@ -139,7 +139,7 @@
             // Manually assign PDNT_index to PDNT_col
             var pdnt = FindAttribute(CommonDirectoryAttributes.ParentDNTag);
             pdnt.Index = ParentDNTagIndex;
-    }
+        }
 
         private void LoadColumnList(ColumnCollection columns)
         {
@@ -211,7 +211,7 @@
                 SchemaAttribute attribute;
 
                 bool found = this.attributesByInternalId.TryGetValue(id, out attribute);
-                if (! found)
+                if (!found)
                 {
                     // We are loading info about a new attribute
                     attribute = new SchemaAttribute();

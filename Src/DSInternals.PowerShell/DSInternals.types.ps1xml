@@ -15,6 +15,34 @@
     </Members>
   </Type>
   <Type>
+    <Name>DSInternals.Common.Data.GenericUserAccountInfo</Name>
+    <Members>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <NoteProperty>
+            <Name>SerializationDepth</Name>
+            <Value>1</Value>
+          </NoteProperty>
+        </Members>
+      </MemberSet>
+    </Members>
+  </Type>
+  <Type>
+    <Name>DSInternals.Common.Data.GenericComputerAccountInfo</Name>
+    <Members>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <NoteProperty>
+            <Name>SerializationDepth</Name>
+            <Value>1</Value>
+          </NoteProperty>
+        </Members>
+      </MemberSet>
+    </Members>
+  </Type>
+  <Type>
     <Name>DSInternals.Common.Data.SupplementalCredentials</Name>
     <Members>
       <ScriptProperty IsHidden="true">

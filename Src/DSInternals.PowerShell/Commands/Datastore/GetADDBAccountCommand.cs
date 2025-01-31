@@ -1,9 +1,8 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Cryptography;
-using DSInternals.Common.Data;
+﻿using DSInternals.Common.Data;
 using DSInternals.DataStore;
 using DSInternals.PowerShell.Properties;
 using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 
 namespace DSInternals.PowerShell.Commands
@@ -12,12 +11,24 @@ namespace DSInternals.PowerShell.Commands
     [OutputType(typeof(DSAccount))]
     public class GetADDBAccountCommand : ADDBPrincipalCommandBase
     {
-        private const int ProgressReportingInterval = 25;
+        #region Constants
+        private uint ProgressReportingInterval = 200;
         protected const string ParameterSetAll = "All";
+        #endregion Constants
 
+        #region Parameters
         [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
         [Alias("AllAccounts", "ReturnAllAccounts")]
         public SwitchParameter All
+        {
+            get;
+            set;
+        }
+
+        [Parameter(Mandatory = false)]
+        [Alias("Property", "PropertySets", "PropertySet")]
+        [PSDefaultValue(Value = AccountPropertySets.Default)]
+        public AccountPropertySets? Properties
         {
             get;
             set;
@@ -33,32 +44,45 @@ namespace DSInternals.PowerShell.Commands
             get;
             set;
         }
+        #endregion Parameters
+
+        #region Cmdlet Overrides
+        protected override void BeginProcessing()
+        {
+            base.BeginProcessing();
+
+            if(this.Properties == null)
+            {
+                this.Properties = AccountPropertySets.Default;
+            }
+        }
 
         protected override void ProcessRecord()
         {
             // TODO: Exception handling: Object not found, malformed DN, ...
-            // TODO: Map DSAccount to transfer object
-            if(this.ParameterSetName == ParameterSetAll)
+            if (this.ParameterSetName == ParameterSetAll)
             {
-                this.ReturnAllAccounts(this.BootKey);
+                this.ReturnAllAccounts();
             }
             else
             {
-                this.ReturnSingleAccount(this.BootKey);
+                this.ReturnSingleAccount();
             }
         }
+        #endregion Cmdlet Overrides
 
-        private void ReturnAllAccounts(byte[] bootKey)
+        #region Helper Methods
+        private void ReturnAllAccounts()
         {
             // This operation might take some time so we report its status.
             var progress = new ProgressRecord(4, "Reading accounts from AD database", "Starting...");
-            int accountCount = 0;
+            ulong accountCount = 0;
 
             // Disable the progress bar as we do not know the total number of accounts.
             progress.PercentComplete = -1;
             this.WriteProgress(progress);
 
-            foreach (var account in this.DirectoryAgent.GetAccounts(bootKey))
+            foreach (var account in this.DirectoryAgent.GetAccounts(this.BootKey, this.Properties.Value))
             {
                 this.WriteObject(account);
                 accountCount++;
@@ -77,33 +101,35 @@ namespace DSInternals.PowerShell.Commands
             this.WriteProgress(progress);
         }
 
-        private void ReturnSingleAccount(byte[] bootKey)
+        private void ReturnSingleAccount()
         {
             DSAccount account;
             switch (this.ParameterSetName)
             {
-                case parameterSetByDN:
+                case ParameterSetByDN:
                     var dn = new DistinguishedName(this.DistinguishedName);
-                    account = this.DirectoryAgent.GetAccount(dn, bootKey);
+                    account = this.DirectoryAgent.GetAccount(dn, this.BootKey, this.Properties.Value);
                     break;
 
-                case parameterSetByName:
-                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, bootKey);
+                case ParameterSetByName:
+                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, this.BootKey, this.Properties.Value);
                     break;
 
-                case parameterSetByGuid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, bootKey);
+                case ParameterSetByGuid:
+                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, this.BootKey, this.Properties.Value);
                     break;
 
-                case parameterSetBySid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, bootKey);
+                case ParameterSetBySid:
+                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, this.BootKey, this.Properties.Value);
                     break;
 
                 default:
                     // This should never happen:
                     throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
             }
+
             this.WriteObject(account);
         }
+        #endregion Helper Methods
     }
 }

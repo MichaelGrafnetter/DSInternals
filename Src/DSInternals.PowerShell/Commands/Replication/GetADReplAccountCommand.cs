@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 using System.Security.Principal;
 using DSInternals.Common.Data;
@@ -12,8 +13,11 @@ namespace DSInternals.PowerShell.Commands
     [OutputType(typeof(DSAccount))]
     public class GetADReplAccountCommand : ADReplPrincipalCommandBase
     {
+        #region Constants
         protected const string ParameterSetAll = "All";
+        #endregion Constants
 
+        #region Parameters
         [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
         [Alias("AllAccounts", "ReturnAllAccounts")]
         public SwitchParameter All
@@ -30,7 +34,28 @@ namespace DSInternals.PowerShell.Commands
             get;
             set;
         }
-        
+
+        [Parameter(Mandatory = false)]
+        [Alias("Property", "PropertySets", "PropertySet")]
+        [PSDefaultValue(Value = AccountPropertySets.Default)]
+        public AccountPropertySets? Properties
+        {
+            get;
+            set;
+        }
+        #endregion Parameters
+
+        #region Cmdlet Overrides
+        protected override void BeginProcessing()
+        {
+            base.BeginProcessing();
+
+            if (this.Properties == null)
+            {
+                this.Properties = AccountPropertySets.Default;
+            }
+        }
+
         protected override void ProcessRecord()
         {
             if (this.ParameterSetName == ParameterSetAll)
@@ -42,6 +67,9 @@ namespace DSInternals.PowerShell.Commands
                 this.ReturnSingleAccount();
             }
         }
+        #endregion Cmdlet Overrides
+
+        #region Helper Methods
 
         protected void ReturnAllAccounts()
         {
@@ -64,7 +92,7 @@ namespace DSInternals.PowerShell.Commands
             string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
 
             // Replicate all accounts
-            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter))
+            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter, this.Properties.Value))
             {
                 this.WriteObject(account);
             }
@@ -76,29 +104,30 @@ namespace DSInternals.PowerShell.Commands
 
         protected void ReturnSingleAccount()
         {
-            DSAccount account;
+            DSAccount account = null;
+
             switch (this.ParameterSetName)
             {
                 case ParameterSetByDN:
-                    account = this.ReplicationClient.GetAccount(this.DistinguishedName);
+                    account = this.ReplicationClient.GetAccount(this.DistinguishedName, this.Properties.Value);
                     break;
 
                 case ParameterSetByName:
                     var accountName = new NTAccount(this.Domain, this.SamAccountName);
-                    account = this.ReplicationClient.GetAccount(accountName);
+                    account = this.ReplicationClient.GetAccount(accountName, this.Properties.Value);
                     break;
 
                 case ParameterSetByGuid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectGuid);
+                    account = this.ReplicationClient.GetAccount(this.ObjectGuid, this.Properties.Value);
                     break;
 
                 case ParameterSetBySid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectSid);
+                    account = this.ReplicationClient.GetAccount(this.ObjectSid, this.Properties.Value);
                     break;
 
                 case ParameterSetByUPN:
                     var upn = new NTAccount(this.UserPrincipalName);
-                    account = this.ReplicationClient.GetAccount(upn);
+                    account = this.ReplicationClient.GetAccount(upn, this.Properties.Value);
                     break;
 
                 default:
@@ -108,5 +137,6 @@ namespace DSInternals.PowerShell.Commands
 
             this.WriteObject(account);
         }
+        #endregion Helper Methods
     }
 }

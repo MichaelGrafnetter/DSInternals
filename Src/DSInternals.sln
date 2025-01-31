@@ -95,6 +95,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\Enable-ADDBAccount.md = ..\Documentation\PowerShell\Enable-ADDBAccount.md
 		..\Documentation\PowerShell\Get-ADDBAccount.md = ..\Documentation\PowerShell\Get-ADDBAccount.md
 		..\Documentation\PowerShell\Get-ADDBBackupKey.md = ..\Documentation\PowerShell\Get-ADDBBackupKey.md
+		..\Documentation\PowerShell\Get-ADDBBitlockerRecoveryInformation.md = ..\Documentation\PowerShell\Get-ADDBBitlockerRecoveryInformation.md
 		..\Documentation\PowerShell\Get-ADDBDomainController.md = ..\Documentation\PowerShell\Get-ADDBDomainController.md
 		..\Documentation\PowerShell\Get-ADDBKdsRootKey.md = ..\Documentation\PowerShell\Get-ADDBKdsRootKey.md
 		..\Documentation\PowerShell\Get-ADDBSchemaAttribute.md = ..\Documentation\PowerShell\Get-ADDBSchemaAttribute.md

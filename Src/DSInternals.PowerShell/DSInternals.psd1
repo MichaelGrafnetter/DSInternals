@@ -54,6 +54,10 @@ FormatsToProcess = 'Views\DSInternals.AzureADUser.format.ps1xml',
                    'Views\DSInternals.Kerberos.format.ps1xml',
                    'Views\DSInternals.KeyCredential.format.ps1xml',
                    'Views\DSInternals.FidoKeyMaterial.format.ps1xml',
+                   'Views\DSInternals.GenericUserAccountInfo.format.ps1xml',
+                   'Views\DSInternals.GenericComputerAccountInfo.format.ps1xml',
+                   'Views\DSInternals.BitLockerRecoveryInformation.format.ps1xml',
+                   'Views\DSInternals.LAPSCredential.format.ps1xml',
                    'Views\DSInternals.DSAccount.format.ps1xml',
                    'Views\DSInternals.DSAccount.ExportViews.format.ps1xml',
                    'Views\DSInternals.GroupManagedServiceAccount.format.ps1xml',
@@ -79,7 +83,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Get-ADReplAccount', 'ConvertTo-Hex', 'ConvertTo-KerberosKey',
                   'ConvertFrom-ADManagedPasswordBlob',
                   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
-                  'Set-ADDBBootKey', 'Test-PasswordQuality', 'Get-ADDBServiceAccount',
+                  'Set-ADDBBootKey', 'Test-PasswordQuality', 'Get-ADDBServiceAccount','Get-ADDBBitLockerRecoveryInformation',
                   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
                   'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
@@ -100,7 +104,10 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink', 'Get-LsaPolicy',
                   'Set-LsaPolicy', 'Get-SystemKey', 'Write-ADReplNgcKey', 'Write-ADNgcKey',
                   'Add-ADNgcKey', 'New-ADKeyCredential', 'New-ADKeyCredentialLink',
-                  'New-ADNgcKey','Get-ADDBGroupManagedServiceAccount'
+                  'New-ADNgcKey', 'Get-ADDBGroupManagedServiceAccount', 'Get-ADDBBitLockerRecoveryInfo', 'Get-ADDBBitLockerKeyProtector',
+                  'Get-ADDBBitLockerRecoveryKey', 'Get-ADDBBitLockerKey', 'Get-ADDBBitLockerRecoveryPassword',
+                  'Get-ADDBFVERecoveryKey', 'Get-ADDBFVERecoveryPassword',
+                  'Get-ADDBFVERecoveryInformation', 'Get-ADDBFVERecoveryInfo'
 
 # List of assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @('DSInternals.Common.dll')

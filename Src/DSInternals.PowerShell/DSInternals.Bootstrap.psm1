@@ -119,6 +119,15 @@ New-Alias -Name Write-ADReplNgcKey                 -Value Add-ADReplNgcKey
 New-Alias -Name Write-ADNgcKey                     -Value Add-ADReplNgcKey
 New-Alias -Name Add-ADNgcKey                       -Value Add-ADReplNgcKey
 New-Alias -Name Get-ADDBGroupManagedServiceAccount -Value Get-ADDBServiceAccount
+New-Alias -Name Get-ADDBBitLockerRecoveryInfo      -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBBitLockerRecoveryKey       -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBBitLockerKey               -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBBitLockerKeyProtector      -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBBitLockerRecoveryPassword  -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBFVERecoveryInformation     -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBFVERecoveryInfo            -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBFVERecoveryKey             -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBFVERecoveryPassword        -Value Get-ADDBBitLockerRecoveryInformation
 
 # Export the aliases
 Export-ModuleMember -Alias * -Cmdlet *

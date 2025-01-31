@@ -80,6 +80,11 @@
                 <PropertyName>LastLogonDate</PropertyName>
               </ExpressionBinding>
               <NewLine />
+              <Text>Description: </Text>
+              <ExpressionBinding>
+                <PropertyName>Description</PropertyName>
+               </ExpressionBinding>
+              <NewLine />
               <Text>DisplayName: </Text>
               <ExpressionBinding>
                 <PropertyName>DisplayName</PropertyName>
@@ -95,11 +100,28 @@
                 <PropertyName>Surname</PropertyName>
               </ExpressionBinding>
               <NewLine />
-              <Text>Description: </Text>
-              <ExpressionBinding>
-                <PropertyName>Description</PropertyName>
-              </ExpressionBinding>
+              <Text>Generic User Account Info:</Text>
               <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>GenericUserAccountInfo</PropertyName>
+                    <CustomControlName>GenericUserAccountInfo</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>Generic Computer Account Info:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>GenericComputerAccountInfo</PropertyName>
+                    <CustomControlName>GenericComputerAccountInfo</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
               <Text>ServicePrincipalName: </Text>
               <ExpressionBinding>
                 <PropertyName>ServicePrincipalName</PropertyName>
@@ -196,6 +218,30 @@
                       </ExpressionBinding>
                     </CustomItem>
                   </Frame>
+                </CustomItem>
+              </Frame>
+              <Text>LAPS Credential:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>LAPS</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>LAPS</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>BitLocker Recovery Data:</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>BitLockerInfo</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>BitLockerInfo</CustomControlName>
+                  </ExpressionBinding>
                 </CustomItem>
               </Frame>
             </CustomItem>

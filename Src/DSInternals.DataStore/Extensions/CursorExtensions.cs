@@ -205,7 +205,7 @@ namespace DSInternals.DataStore
             }
         }
 
-        public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, Columnid columnId)
+         public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, Columnid columnId)
         {
             long? timestamp = cursor.RetrieveColumnAsLong(columnId);
             if (timestamp.HasValue)
@@ -381,21 +381,20 @@ namespace DSInternals.DataStore
             return cursor.SetValue(columnId, newValue, StringComparer.InvariantCulture);
         }
 
-        public static bool SetValue(this Cursor cursor, string columnName, DateTime? newValue)
+        public static bool SetValue(this Cursor cursor, string columnName, DateTime? newValue, bool asGeneralizedTime)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
-            return cursor.SetValue(columnId, newValue);
+            return cursor.SetValue(columnId, newValue, asGeneralizedTime);
         }
         
-        public static bool SetValue(this Cursor cursor, Columnid columnId, DateTime? newValue)
+        public static bool SetValue(this Cursor cursor, Columnid columnId, DateTime? newValue, bool asGeneralizedTime)
         {
             long? newTimeStamp = null;
 
             // Convert the value if there is any
             if (newValue.HasValue)
             {
-                // Treat the value as generalized time
-                newTimeStamp = newValue.Value.ToGeneralizedTime();
+                newTimeStamp = asGeneralizedTime ? newValue.Value.ToGeneralizedTime() : newValue.Value.ToFileTime();
             }
 
             // Push the value to the DB

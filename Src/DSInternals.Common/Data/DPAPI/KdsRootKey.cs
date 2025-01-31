@@ -66,10 +66,10 @@ namespace DSInternals.Common.Data
             dsObject.ReadAttribute(CommonDirectoryAttributes.KdsPrivateKey, out this.privateKey);
 
             // Creation time
-            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsCreationTime, out this.creationTime);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsCreationTime, out this.creationTime, false);
 
             // Effective time
-            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsEffectiveTime, out this.effectiveTime);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsEffectiveTime, out this.effectiveTime, false);
 
             // Guid
             string cn;

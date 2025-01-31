@@ -97,12 +97,20 @@
         protected bool SetAccountPasswordHash(DatastoreObject targetObject, object targetObjectIdentifier, byte[] newNtHash, SupplementalCredentials newSupplementalCredentials, byte[] bootKey, bool skipMetaUpdate)
         {
             // Validate input
-            Validator.AssertLength(newNtHash, NTHash.HashSize, "newNtHash");
-            Validator.AssertNotNull(bootKey, "bootKey");
+            Validator.AssertLength(newNtHash, NTHash.HashSize, nameof(newNtHash));
+            Validator.AssertNotNull(bootKey, nameof(bootKey));
 
-            if (!targetObject.IsAccount)
+            // Check that the object is an account
+            targetObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out SamAccountType? accountType);
+
+            switch (accountType)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
+                case SamAccountType.User:
+                case SamAccountType.Computer:
+                case SamAccountType.Trust:
+                    break;
+                default:
+                    throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
             }
 
             if (newSupplementalCredentials == null)

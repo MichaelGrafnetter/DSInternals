@@ -11,14 +11,15 @@ namespace DSInternals.Common
             return time.ToFileTime() / GeneralizedTimeCoefficient;
         }
 
+        /// <summary>
+        /// Converts a value of an Active Directory attribute with Generalized-Time syntax to DateTime.
+        /// </summary>
+        /// <remarks>
+        /// Active Directory attributes stored in this format include whenCreated, whenChanged, createTimeStamp, and modifyTimeStamp.
+        /// </remarks>
         public static DateTime FromGeneralizedTime(this long timestamp)
         {
             return DateTime.FromFileTime(timestamp * GeneralizedTimeCoefficient);
-        }
-
-        public static long ToTimeStamp(this DateTime time)
-        {
-            return time.ToFileTime();
         }
     }
 }

@@ -71,7 +71,7 @@
             }
 
             // Load and cache the backup expiration time
-            this.backupExpirationCache = this.systemTableCursor.RetrieveColumnAsGeneralizedTime(backupExpirationCol);
+            this.backupExpirationCache = this.systemTableCursor.RetrieveColumnAsTimestamp(backupExpirationCol, true);
 
             this.BackupUsn = this.systemTableCursor.RetrieveColumnAsLong(backupUsnCol);
             this.State = (DatabaseState) this.systemTableCursor.RetrieveColumnAsInt(stateCol).Value;

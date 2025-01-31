@@ -48,23 +48,23 @@ namespace DSInternals.PowerShell.Commands
             bool hasChanged;
             switch (this.ParameterSetName)
             {
-                case parameterSetByDN:
+                case ParameterSetByDN:
                     this.WriteVerbose(String.Format(verboseMessage, this.DistinguishedName));
                     var dn = new DistinguishedName(this.DistinguishedName);
                     hasChanged = this.DirectoryAgent.SetAccountPasswordHash(dn, this.NTHash, this.SupplementalCredentials, this.BootKey, this.SkipMetaUpdate);
                     break;
 
-                case parameterSetByName:
+                case ParameterSetByName:
                     this.WriteVerbose(String.Format(verboseMessage, this.SamAccountName));
                     hasChanged = this.DirectoryAgent.SetAccountPasswordHash(this.SamAccountName, this.NTHash, this.SupplementalCredentials, this.BootKey, this.SkipMetaUpdate);
                     break;
 
-                case parameterSetByGuid:
+                case ParameterSetByGuid:
                     this.WriteVerbose(String.Format(verboseMessage, this.ObjectGuid));
                     hasChanged = this.DirectoryAgent.SetAccountPasswordHash(this.ObjectGuid, this.NTHash, this.SupplementalCredentials, this.BootKey, this.SkipMetaUpdate);
                     break;
 
-                case parameterSetBySid:
+                case ParameterSetBySid:
                     this.WriteVerbose(String.Format(verboseMessage, this.ObjectSid));
                     hasChanged = this.DirectoryAgent.SetAccountPasswordHash(this.ObjectSid, this.NTHash, this.SupplementalCredentials, this.BootKey, this.SkipMetaUpdate);
                     break;

@@ -22,7 +22,7 @@
         /// <summary>
         /// BitLocker recovery key
         /// </summary>
-        BitlockerRecovery = 0x03,
+        BitLockerRecovery = 0x03,
 
         /// <summary>
         /// Unrecognized key usage
