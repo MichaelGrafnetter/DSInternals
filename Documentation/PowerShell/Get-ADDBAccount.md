@@ -57,16 +57,16 @@ Get-ADDBAccount -All -AccountTypes User [-BootKey <Byte[]>] -DatabasePath <Strin
 
 ### CredTypes
 Set CredType filter
-Possible values: All, LM, LM_History, NT, NT_History, Bitlocker, Other, None
+Possible values: All, LM, LM_History, NT, NT_History, BitLocker, Other, None
 Default: All
 ```
-Get-ADDBAccount -All -AccountTypes Computer -CredTypes NT, Bitlocker [-BootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Get-ADDBAccount -All -AccountTypes Computer -CredTypes NT, BitLocker [-BootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### Count
 Limit results to N elements
 ```
-Get-ADDBAccount -All -AccountTypes Computer -CredTypes NT, Bitlocker -Count 1 [-BootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Get-ADDBAccount -All -AccountTypes Computer -CredTypes NT, BitLocker -Count 1 [-BootKey <Byte[]>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -114,7 +114,7 @@ Credential Roaming
   Created:
   Modified:
   Credentials:
-Bitlocker Recovery Data:
+BitLocker Recovery Data:
 #>
 ```
 
@@ -227,7 +227,7 @@ Credential Roaming
     CNGCertificate: joe\SystemCertificates\My\Certificates\3B83BFA7037F6A79B3F3D17D229E1BC097F35B51
     RSAPrivateKey: joe\Crypto\RSA\S-1-5-21-1236425271-2880748467-2592687428-1110\701577141985b6923998dcca035c007a_f8b7bbef-d227-4ac7-badd-3a238a7f741e
     CNGPrivateKey: joe\Crypto\Keys\E8F13C2BA0209401C4DFE839CD57375E26BBE38F
-Bitlocker Recovery Data:
+BitLocker Recovery Data:
 #>
 ```
 
@@ -447,7 +447,7 @@ Accept wildcard characters: False
 Set CredType filter
 
 TODO
-Possible values: All, LM, LM_History, NT, NT_History, Bitlocker, Other, None
+Possible values: All, LM, LM_History, NT, NT_History, BitLocker, Other, None
 Default: All
 
 ```yaml

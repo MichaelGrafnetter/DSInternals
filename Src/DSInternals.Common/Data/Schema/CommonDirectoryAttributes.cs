@@ -218,8 +218,13 @@
         public const string FVERecoveryPassword = "msFVE-RecoveryPassword";
         public const int FVERecoveryPasswordId = 591788;
         public const string LAPSPassword = "ms-Mcs-AdmPwd";
-        public const int LAPSPasswordId = -1859393137;
         public const string LAPSPasswordExpirationTime = "ms-Mcs-AdmPwdExpirationTime";
-        public const int LAPSPasswordExpirationTimeId = -1741909977;
+        public const string WindowsLapsPasswordExpirationTime = "msLAPS-PasswordExpirationTime";
+        public const string WindowsLapsPassword = "msLAPS-Password";
+        public const string WindowsLapsEncryptedPassword = "msLAPS-EncryptedPassword";
+        public const string WindowsLapsEncryptedPasswordHistory = "msLAPS-EncryptedPasswordHistory";
+        public const string WindowsLapsEncryptedDsrmPassword = "msLAPS-EncryptedDSRMPassword";
+        public const string WindowsLapsEncryptedDsrmPasswordHistory = "msLAPS-EncryptedDSRMPasswordHistory";
+        public const string WindowsLapsCurrentPasswordVersion = "msLAPS-CurrentPasswordVersion";
     }
 }

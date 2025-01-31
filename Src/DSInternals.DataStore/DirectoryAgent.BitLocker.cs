@@ -10,7 +10,7 @@
     {
         private const string ComputerNameSuffix = "$";
 
-        public IEnumerable<BitLockerRecoveryInformation> GetBitlockerRecoveryInformation()
+        public IEnumerable<BitLockerRecoveryInformation> GetBitLockerRecoveryInformation()
         {
             // TODO: Containerized seach
             foreach (var bitlockerInfo in this.FindObjectsByCategory(CommonDirectoryClasses.FVERecoveryInformation))
@@ -23,7 +23,7 @@
             }
         }
 
-        public BitLockerRecoveryInformation GetBitlockerRecoveryInformation(DistinguishedName dn)
+        public BitLockerRecoveryInformation GetBitLockerRecoveryInformation(DistinguishedName dn)
         {
             // Validate the input
             Validator.AssertNotNull(dn, nameof(dn));
@@ -32,28 +32,28 @@
             var foundObject = this.FindObject(dn);
 
             // Read BitLocker properties
-            return this.GetBitlockerRecoveryInformation(foundObject, dn);
+            return this.GetBitLockerRecoveryInformation(foundObject, dn);
         }
 
-        public BitLockerRecoveryInformation GetBitlockerRecoveryInformation(Guid objectId)
+        public BitLockerRecoveryInformation GetBitLockerRecoveryInformation(Guid objectId)
         {
             // Find the object by objectGuid
             var foundObject = this.FindObject(objectId);
 
             // Read BitLocker properties
-            return this.GetBitlockerRecoveryInformation(foundObject, objectId);
+            return this.GetBitLockerRecoveryInformation(foundObject, objectId);
         }
 
-        public BitLockerRecoveryInformation GetBitlockerRecoveryInformationByRecoveryGuid(Guid recoveryGuid)
+        public BitLockerRecoveryInformation GetBitLockerRecoveryInformationByRecoveryGuid(Guid recoveryGuid)
         {
             // Find the object by recovery GUID
             var foundObject = this.FindObject(CommonDirectoryAttributes.FVERecoveryGuid, recoveryGuid);
 
             // Read BitLocker properties
-            return this.GetBitlockerRecoveryInformation(foundObject, recoveryGuid);
+            return this.GetBitLockerRecoveryInformation(foundObject, recoveryGuid);
         }
 
-        private BitLockerRecoveryInformation GetBitlockerRecoveryInformation(DatastoreObject foundObject, object objectIdentifier)
+        private BitLockerRecoveryInformation GetBitLockerRecoveryInformation(DatastoreObject foundObject, object objectIdentifier)
         {
             // Check object type
             int recoveryInformationClassId = this.context.Schema.FindClassId(CommonDirectoryClasses.FVERecoveryInformation);
@@ -68,7 +68,7 @@
             return new BitLockerRecoveryInformation(foundObject);
         }
 
-        public IEnumerable<BitLockerRecoveryInformation> GetBitlockerRecoveryInformation(string computerName)
+        public IEnumerable<BitLockerRecoveryInformation> GetBitLockerRecoveryInformation(string computerName)
         {
             // Validate the input
             Validator.AssertNotNullOrEmpty(computerName, nameof(computerName));

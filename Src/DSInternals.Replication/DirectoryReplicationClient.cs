@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Security.Principal;
+﻿using DSInternals.Common.Data;
+using DSInternals.Replication.Model;
 using DSInternals.Replication.Interop;
 using NDceRpc;
 using NDceRpc.Microsoft.Interop;
 using NDceRpc.Native;
-
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Security.Principal;
+using DSInternals.Common.Interop;
+using DSInternals.Common.Cryptography;
+using DSInternals.Common;
 namespace DSInternals.Replication
 {
     public class DirectoryReplicationClient : IDisposable

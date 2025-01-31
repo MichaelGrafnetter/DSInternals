@@ -1,7 +1,7 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBBitlockerRecoveryInformation.md
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBBitLockerRecoveryInformation.md
 schema: 2.0.0
 ---
 
@@ -43,19 +43,19 @@ Get-ADDBBitLockerRecoveryInformation -ObjectGuid <Guid> -DatabasePath <String> [
 
 ## DESCRIPTION
 
-Bitlocker recovery information (msFVE-RecoveryInformation objects) can be used to unlock volumes encrypted using BitLocker Drive Encryption. 
+BitLocker recovery information (msFVE-RecoveryInformation objects) can be used to unlock volumes encrypted using BitLocker Drive Encryption. 
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBBitlockerRecoveryInformation -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
+PS C:\> Get-ADDBBitLockerRecoveryInformation -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
 <# Sample Output:
 [TODO]
 #>
 ```
 
-Retrieves the Bitlocker Recovery Keys from an AD database.
+Retrieves the BitLocker Recovery Keys from an AD database.
 
 ## PARAMETERS
 

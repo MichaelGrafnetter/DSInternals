@@ -48,14 +48,14 @@
             switch (this.ParameterSetName)
             {
                 case ParameterSetAll:
-                    foreach (var recoveryInfo in this.DirectoryAgent.GetBitlockerRecoveryInformation())
+                    foreach (var recoveryInfo in this.DirectoryAgent.GetBitLockerRecoveryInformation())
                     {
                         this.WriteObject(recoveryInfo);
                     }
                     break;
 
                 case ParameterSetByComputerName:
-                    foreach (var recoveryInfo in this.DirectoryAgent.GetBitlockerRecoveryInformation(this.ComputerName))
+                    foreach (var recoveryInfo in this.DirectoryAgent.GetBitLockerRecoveryInformation(this.ComputerName))
                     {
                         this.WriteObject(recoveryInfo);
                     }
@@ -74,15 +74,15 @@
             {
                 case ParameterSetByDN:
                     var dn = new DistinguishedName(this.DistinguishedName);
-                    info = this.DirectoryAgent.GetBitlockerRecoveryInformation(dn);
+                    info = this.DirectoryAgent.GetBitLockerRecoveryInformation(dn);
                     break;
 
                 case ParameterSetByRecoveryGuid:
-                    info = this.DirectoryAgent.GetBitlockerRecoveryInformationByRecoveryGuid(this.RecoveryGuid);
+                    info = this.DirectoryAgent.GetBitLockerRecoveryInformationByRecoveryGuid(this.RecoveryGuid);
                     break;
 
                 case ParameterSetByGuid:
-                    info = this.DirectoryAgent.GetBitlockerRecoveryInformation(this.ObjectGuid);
+                    info = this.DirectoryAgent.GetBitLockerRecoveryInformation(this.ObjectGuid);
                     break;
 
                 default:

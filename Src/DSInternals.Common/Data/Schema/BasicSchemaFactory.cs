@@ -83,9 +83,7 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.OperatingSystemServicePackId, CommonDirectoryAttributes.OperatingSystemServicePack, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.DNSHostNameId, CommonDirectoryAttributes.DNSHostName, AttributeSyntax.UnicodeString));
 
-            // LAPS
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.LAPSPasswordId, CommonDirectoryAttributes.LAPSPassword, AttributeSyntax.OctetString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.LAPSPasswordExpirationTimeId, CommonDirectoryAttributes.LAPSPasswordExpirationTime, AttributeSyntax.Int64));
+            // TODO: LAPS
 
             // TPM + BitLocker
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.TPMOwnerInformationId, CommonDirectoryAttributes.TPMOwnerInformation, AttributeSyntax.UnicodeString));

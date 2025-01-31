@@ -232,15 +232,15 @@
                   </ExpressionBinding>
                 </CustomItem>
               </Frame>
-              <Text>Bitlocker Recovery Data:</Text>
+              <Text>BitLocker Recovery Data:</Text>
               <NewLine />
               <Frame>
                 <LeftIndent>2</LeftIndent>
                 <CustomItem>
                   <ExpressionBinding>
-                    <PropertyName>BitlockerInfo</PropertyName>
+                    <PropertyName>BitLockerInfo</PropertyName>
                     <EnumerateCollection />
-                    <CustomControlName>BitlockerInfo</CustomControlName>
+                    <CustomControlName>BitLockerInfo</CustomControlName>
                   </ExpressionBinding>
                 </CustomItem>
               </Frame>

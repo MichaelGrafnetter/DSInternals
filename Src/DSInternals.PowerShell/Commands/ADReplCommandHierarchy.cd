@@ -43,14 +43,14 @@
       <FileName>Commands\Replication\GetADReplBackupKeyCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DSInternals.PowerShell.Commands.GetADReplBitlockerRecoveryInfo">
+  <Class Name="DSInternals.PowerShell.Commands.GetADReplBitLockerRecoveryInfo">
     <Position X="3" Y="2.75" Width="2.5" />
     <Members>
       <Method Name="BeginProcessing" Hidden="true" />
     </Members>
     <TypeIdentifier>
       <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAhAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Commands\Replication\GetADReplBitlockerRecoveryInfoCommand.cs</FileName>
+      <FileName>Commands\Replication\GetADReplBitLockerRecoveryInfoCommand.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DSInternals.PowerShell.Commands.ADReplPrincipalCommandBase">

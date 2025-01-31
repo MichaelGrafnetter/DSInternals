@@ -122,5 +122,10 @@ namespace DSInternals.Common.Data
             //    }
             // }
         }
+
+        public override string ToString()
+        {
+            return String.Format("Recovery ID: {0}, Key: {1}, Date: {2}", this.RecoveryGuid, this.RecoveryPassword, this.WhenCreated);
+        }
     }
 }
