@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using DSInternals.Common.Cryptography;
 using DSInternals.Common.Properties;
@@ -14,24 +15,18 @@ namespace DSInternals.Common.Data
                 throw new ArgumentException(Resources.ObjectNotAccountMessage);
             }
 
-            if(propertySets.HasFlag(AccountPropertySets.GenericInformation))
+            if (propertySets.HasFlag(AccountPropertySets.GenericInformation))
             {
                 this.LoadGenericComputerAccountInfo(dsObject);
             }
 
-            if(propertySets.HasFlag(AccountPropertySets.LAPS))
+            if (propertySets.HasFlag(AccountPropertySets.LAPS))
             {
                 this.LoadLAPS(dsObject);
             }
         }
 
-        public string AdminPassword
-        {
-            get;
-            private set;
-        }
-
-        public DateTime? AdminPasswordExpirationTime
+        public IList<LapsPasswordInformation> LapsPasswords
         {
             get;
             private set;
@@ -112,14 +107,49 @@ namespace DSInternals.Common.Data
 
         protected void LoadLAPS(DirectoryObject dsObject)
         {
-            dsObject.ReadAttribute(CommonDirectoryAttributes.LAPSPasswordExpirationTime, out DateTime? expirationTime, false);
-            this.AdminPasswordExpirationTime = expirationTime;
+            LapsPasswordInformation legacyLapsPassword = null;
+            LapsPasswordInformation lapsPassword = null;
 
-            if(expirationTime != null)
+            // Legacy LAPS
+            dsObject.ReadAttribute(CommonDirectoryAttributes.LAPSPasswordExpirationTime, out DateTime? legacyExpirationTime, false);
+
+            if (legacyExpirationTime != null)
             {
                 // Optimization: Do not try to read the password if no expiration time is set.
                 dsObject.ReadAttribute(CommonDirectoryAttributes.LAPSPassword, out byte[] admPwdBinary);
-                this.AdminPassword = Encoding.UTF8.GetString(admPwdBinary);
+
+                if(admPwdBinary != null && admPwdBinary.Length > 0)
+                {
+                    string password = Encoding.UTF8.GetString(admPwdBinary);
+                    legacyLapsPassword = new LapsPasswordInformation(this.SamAccountName, password, legacyExpirationTime);
+                }
+            }
+
+            // Windows LAPS
+            dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsPasswordExpirationTime, out DateTime? expirationTime, false);
+
+            if (expirationTime != null)
+            {
+                // Read msLAPS-Password
+                dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsPassword, out string lapsJson);
+
+                if (!String.IsNullOrEmpty(lapsJson))
+                {
+                    LapsClearTextPassword passwordInfo = LapsClearTextPassword.Parse(lapsJson);
+                    lapsPassword = new LapsPasswordInformation(this.SamAccountName, passwordInfo, expirationTime);
+                }
+
+                // Read msLAPS-EncryptedPassword
+                // TODO: dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedPassword, out byte[] encryptedPassword);
+
+                // Read msLAPS-EncryptedPasswordHistory
+                // TODO: dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedPasswordHistory, out byte[][] encryptedPasswordHistory);
+
+                // Read msLAPS-EncryptedDSRMPassword
+                // TODO: dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedDsrmPassword, out byte[] encryptedDsrmPassword);
+
+                // Read msLAPS-EncryptedDSRMPasswordHistory
+                // TODO: dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedDsrmPasswordHistory, out byte[][] encryptedDsrmPasswordHistory);
             }
         }
     }

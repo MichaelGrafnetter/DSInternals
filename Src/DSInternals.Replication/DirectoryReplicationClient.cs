@@ -1,6 +1,11 @@
-﻿using DSInternals.Common.Data;
-using DSInternals.Replication.Model;
+﻿using DSInternals.Common;
+using DSInternals.Common.Cryptography;
+using DSInternals.Common.Data;
+using DSInternals.Common.Exceptions;
+using DSInternals.Common.Interop;
+using DSInternals.Common.Properties;
 using DSInternals.Replication.Interop;
+using DSInternals.Replication.Model;
 using NDceRpc;
 using NDceRpc.Microsoft.Interop;
 using NDceRpc.Native;
@@ -8,9 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Security.Principal;
-using DSInternals.Common.Interop;
-using DSInternals.Common.Cryptography;
-using DSInternals.Common;
+using System.Security.AccessControl;
 
 namespace DSInternals.Replication
 {
@@ -47,7 +50,7 @@ namespace DSInternals.Replication
         {
             get
             {
-                if(this.domainNamingContext == null)
+                if (this.domainNamingContext == null)
                 {
                     // Lazy loading
                     this.LoadDomainInfo();
@@ -139,7 +142,7 @@ namespace DSInternals.Replication
             obj.Schema = schema;
             var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, propertySets);
 
-            if(account == null)
+            if (account == null)
             {
                 // If the target object is not an account, CreateAccount returns null
                 throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, objectGuid);
@@ -241,14 +244,14 @@ namespace DSInternals.Replication
         private void CreateRpcConnection(string server, RpcProtocol protocol, NetworkCredential credential = null)
         {
             EndpointBindingInfo binding;
-            switch(protocol)
+            switch (protocol)
             {
                 case RpcProtocol.TCP:
                     binding = new EndpointBindingInfo(RpcProtseq.ncacn_ip_tcp, server, null);
                     break;
                 case RpcProtocol.SMB:
                     binding = new EndpointBindingInfo(RpcProtseq.ncacn_np, server, DrsNamedPipeName);
-                    if(credential != null)
+                    if (credential != null)
                     {
                         // Connect named pipe
                         this.npConnection = new NamedPipeConnection(server, credential);
@@ -290,7 +293,7 @@ namespace DSInternals.Replication
                 this.rpcConnection = null;
             }
 
-            if(this.npConnection != null)
+            if (this.npConnection != null)
             {
                 this.npConnection.Dispose();
                 this.npConnection = null;

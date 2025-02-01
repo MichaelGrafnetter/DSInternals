@@ -2,7 +2,7 @@
 
 namespace DSInternals.Common.Data
 {
-    public class LapsPassword
+    public class LapsClearTextPassword
     {
         [JsonProperty("n")]
         public string AccountName;
@@ -13,9 +13,9 @@ namespace DSInternals.Common.Data
         [JsonProperty("p")]
         public string Password;
 
-        public static LapsPassword Parse(string json)
+        public static LapsClearTextPassword Parse(string json)
         {
-            return JsonConvert.DeserializeObject<LapsPassword>(json);
+            return JsonConvert.DeserializeObject<LapsClearTextPassword>(json);
         }
     }
 }

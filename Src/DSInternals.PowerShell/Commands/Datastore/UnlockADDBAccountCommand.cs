@@ -17,23 +17,23 @@ namespace DSInternals.PowerShell.Commands
 
             switch (this.ParameterSetName)
             {
-                case parameterSetByDN:
+                case ParameterSetByDN:
                     this.WriteVerbose(String.Format(verboseMessage, this.DistinguishedName));
                     var dn = new DistinguishedName(this.DistinguishedName);
                     hasChanged = this.DirectoryAgent.UnlockAccount(dn, this.SkipMetaUpdate);
                     break;
 
-                case parameterSetByName:
+                case ParameterSetByName:
                     this.WriteVerbose(String.Format(verboseMessage, this.SamAccountName));
                     hasChanged = this.DirectoryAgent.UnlockAccount(this.SamAccountName, this.SkipMetaUpdate);
                     break;
 
-                case parameterSetByGuid:
+                case ParameterSetByGuid:
                     this.WriteVerbose(String.Format(verboseMessage, this.ObjectGuid));
                     hasChanged = this.DirectoryAgent.UnlockAccount(this.ObjectGuid, this.SkipMetaUpdate);
                     break;
 
-                case parameterSetBySid:
+                case ParameterSetBySid:
                     this.WriteVerbose(String.Format(verboseMessage, this.ObjectSid));
                     hasChanged = this.DirectoryAgent.UnlockAccount(this.ObjectSid, this.SkipMetaUpdate);
                     break;

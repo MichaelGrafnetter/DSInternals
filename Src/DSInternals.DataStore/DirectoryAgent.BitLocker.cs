@@ -77,6 +77,7 @@
             string samAccountName = computerName.EndsWith(ComputerNameSuffix) ? computerName : (computerName + ComputerNameSuffix);
 
             // Find the computer object
+            // TODO: Perform a containerized search
             var computerObject = this.FindObject(samAccountName);
 
             // Find all children of type msFVE-RecoveryInformation
