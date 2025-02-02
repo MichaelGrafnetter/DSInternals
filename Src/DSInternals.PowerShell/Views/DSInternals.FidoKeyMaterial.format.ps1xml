@@ -128,7 +128,6 @@
           <CustomEntry>
             <CustomItem>
               <ExpressionBinding>
-                <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>FidoAuthenticatorData</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
@@ -146,7 +145,6 @@
           <CustomEntry>
             <CustomItem>
               <ExpressionBinding>
-                <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>FidoAttestedCredentialData</CustomControlName>
               </ExpressionBinding>
             </CustomItem>

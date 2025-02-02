@@ -35,18 +35,12 @@
                 <PropertyName>DomainController</PropertyName>
               </ExpressionBinding>
               <NewLine />
-              <Text>Key</Text>
+              <Text>Key: </Text>
+              <ExpressionBinding>
+                <PropertyName>KeyValue</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
               <NewLine />
-              <Frame>
-                <LeftIndent>2</LeftIndent>
-                <CustomItem>
-                  <ExpressionBinding>
-                    <PropertyName>KeyValue</PropertyName>
-                    <CustomControlName>Hash</CustomControlName>
-                  </ExpressionBinding>
-                  <NewLine />
-                </CustomItem>
-              </Frame>
               <Text>Key Derivation Function</Text>
               <NewLine />
               <Frame>

@@ -11,7 +11,7 @@
                 <LeftIndent>2</LeftIndent>
                 <CustomItem>
                   <ExpressionBinding>
-                    <ScriptBlock>$_ | ConvertTo-Hex | foreach -Begin { [int] $i = 1 } -Process { if($i -gt 1) { "`n" }; "Hash {0:d2}: {1}" -f $i,$_ ; $i++ }</ScriptBlock>
+                    <ScriptBlock>ConvertTo-Hex $PSItem | ForEach-Object -Begin { [int] $i = 1 } -Process { if($i -gt 1) { "`n" }; "Hash {0:d2}: {1}" -f $i,$PSItem ; $i++ }</ScriptBlock>
                     <EnumerateCollection />
                   </ExpressionBinding>
                   <NewLine />
@@ -30,7 +30,7 @@
           <CustomEntry>
             <CustomItem>
               <ExpressionBinding>
-                <ScriptBlock>ConvertTo-Hex $_</ScriptBlock>
+                <ScriptBlock>ConvertTo-Hex $PSItem</ScriptBlock>
                 <EnumerateCollection />
               </ExpressionBinding>
             </CustomItem>

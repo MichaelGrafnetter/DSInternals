@@ -33,7 +33,11 @@
             this.LoadAccountInfo(dsObject, netBIOSDomainName, propertySets);
 
             // Hashes and Supplemental Credentials
-            this.LoadSecrets(dsObject, pek, propertySets);
+            if (pek != null)
+            {
+                // Only continue if we have a decryption key
+                this.LoadSecrets(dsObject, pek, propertySets);
+            }
 
             if (propertySets.HasFlag(AccountPropertySets.KeyCredentials))
             {
@@ -195,9 +199,9 @@
         }
 
         /// <summary>
-        /// Gets the Nullable DateTime that specifies the last date and time that the password was set for this account.
+        /// Gets the date and time when the password was set for this account.
         /// </summary>
-        public DateTime? LastPasswordSet
+        public DateTime? PasswordLastSet
         {
             get;
             private set;
@@ -326,24 +330,24 @@
 
         protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName, AccountPropertySets propertySets)
         {
-            // SamAccountName
+            // SamAccountName:
             dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out string samAccountName);
             this.SamAccountName = samAccountName;
 
-            // LogonName
+            // LogonName (DOMAIN\SamAccountName):
             if (!string.IsNullOrEmpty(samAccountName))
             {
                 this.LogonName = new NTAccount(netBIOSDomainName, samAccountName).ToString();
             }
 
-            // Service Principal Name(s)
+            // Service Principal Name(s):
             dsObject.ReadAttribute(CommonDirectoryAttributes.ServicePrincipalName, out string[] spn);
             this.ServicePrincipalName = spn;
 
-            // Guid:
+            // ObjectGuid:
             this.Guid = dsObject.Guid;
 
-            // Sid:
+            // ObjectSid:
             this.Sid = dsObject.Sid;
 
             // UAC:
@@ -363,15 +367,19 @@
             // Note: The value is stored as int in the DB, but the documentation says that it is an unsigned int
             this.SupportedEncryptionTypes = (SupportedEncryptionTypes?)numericSupportedEncryptionTypes;
 
+            // PrimaryGroupId:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out int? groupId);
+            this.PrimaryGroupId = groupId.Value;
+
             if (propertySets.HasFlag(AccountPropertySets.DistinguishedName))
             {
-                // DN:
+                // Note: DN loading from the DB involves one or more seeks.
                 this.DistinguishedName = dsObject.DistinguishedName;
             }
 
             if(propertySets.HasFlag(AccountPropertySets.SecurityDescriptor))
             {
-                // Security Descriptor:
+                // Note: Security descriptor loading from the DB involves a seek and binary data parsing.
                 dsObject.ReadAttribute(CommonDirectoryAttributes.SecurityDescriptor, out RawSecurityDescriptor securityDescriptor);
                 this.SecurityDescriptor = securityDescriptor;
             }
@@ -386,10 +394,6 @@
                 dsObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out string upn);
                 this.UserPrincipalName = upn;
 
-                // PrimaryGroupId:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.PrimaryGroupId, out int? groupId);
-                this.PrimaryGroupId = groupId.Value;
-
                 // LastLogon:
                 dsObject.ReadAttribute(CommonDirectoryAttributes.LastLogon, out DateTime? lastLogon, false);
                 this.LastLogon = lastLogon;
@@ -400,7 +404,7 @@
 
                 // PwdLastSet
                 dsObject.ReadAttribute(CommonDirectoryAttributes.PasswordLastSet, out DateTime? pwdLastSet, false);
-                this.LastPasswordSet = pwdLastSet;
+                this.PasswordLastSet = pwdLastSet;
 
                 // Description
                 dsObject.ReadAttribute(CommonDirectoryAttributes.Description, out string description);
@@ -410,12 +414,6 @@
 
         protected void LoadSecrets(DirectoryObject dsObject, DirectorySecretDecryptor pek, AccountPropertySets propertySets)
         {
-            if (pek == null)
-            {
-                // Do not continue if we do not have a decryption key
-                return;
-            }
-
             if (propertySets.HasFlag(AccountPropertySets.LMHash))
             {
                 // LM Hash:
@@ -482,18 +480,16 @@
             byte[][] keyCredentialBlobs;
             dsObject.ReadLinkedValues(CommonDirectoryAttributes.KeyCredentialLink, out keyCredentialBlobs);
 
-            // Parse the blobs and combine them into one array.
-            var credentials = new List<KeyCredential>();
-
             if (keyCredentialBlobs != null)
             {
-                foreach (var blob in keyCredentialBlobs)
+                // Parse the blobs and combine them into one array.
+                this.KeyCredentials = new KeyCredential[keyCredentialBlobs.Length];
+
+                for(int i = 0; i < keyCredentialBlobs.Length; i++)
                 {
-                    credentials.Add(new KeyCredential(blob, this.DistinguishedName));
+                    this.KeyCredentials[i] = new KeyCredential(keyCredentialBlobs[i], this.DistinguishedName);
                 }
             }
-
-            this.KeyCredentials = credentials.ToArray();
         }
     }
 }

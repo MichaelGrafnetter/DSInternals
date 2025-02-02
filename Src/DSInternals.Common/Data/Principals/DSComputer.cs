@@ -20,9 +20,14 @@ namespace DSInternals.Common.Data
                 this.LoadGenericComputerAccountInfo(dsObject);
             }
 
-            if (propertySets.HasFlag(AccountPropertySets.LAPS))
+            if (propertySets.HasFlag(AccountPropertySets.LegacyLAPS))
             {
-                this.LoadLAPS(dsObject);
+                this.LoadLegacyLAPS(dsObject);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.WindowsLAPS))
+            {
+                this.LoadWindowsLAPS(dsObject);
             }
         }
 
@@ -105,12 +110,10 @@ namespace DSInternals.Common.Data
             this.OperatingSystemServicePack = operatingSystemServicePack;
         }
 
-        protected void LoadLAPS(DirectoryObject dsObject)
+        protected void LoadLegacyLAPS(DirectoryObject dsObject)
         {
             LapsPasswordInformation legacyLapsPassword = null;
-            LapsPasswordInformation lapsPassword = null;
 
-            // Legacy LAPS
             dsObject.ReadAttribute(CommonDirectoryAttributes.LAPSPasswordExpirationTime, out DateTime? legacyExpirationTime, false);
 
             if (legacyExpirationTime != null)
@@ -125,17 +128,31 @@ namespace DSInternals.Common.Data
                 }
             }
 
-            // Windows LAPS
+            if (legacyLapsPassword != null)
+            {
+                if(this.LapsPasswords == null)
+                {
+                    this.LapsPasswords = new List<LapsPasswordInformation>();
+                }
+
+                this.LapsPasswords.Add(legacyLapsPassword);
+            }
+        }
+
+        protected void LoadWindowsLAPS(DirectoryObject dsObject)
+        {
+            LapsPasswordInformation lapsPassword = null;
+
             dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsPasswordExpirationTime, out DateTime? expirationTime, false);
 
             if (expirationTime != null)
             {
                 // Read msLAPS-Password
-                dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsPassword, out string lapsJson);
+                dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsPassword, out byte[] binaryLapsJson);
 
-                if (!String.IsNullOrEmpty(lapsJson))
+                if (binaryLapsJson != null && binaryLapsJson.Length > 0)
                 {
-                    LapsClearTextPassword passwordInfo = LapsClearTextPassword.Parse(lapsJson);
+                    LapsClearTextPassword passwordInfo = LapsClearTextPassword.Parse(binaryLapsJson);
                     lapsPassword = new LapsPasswordInformation(this.SamAccountName, passwordInfo, expirationTime);
                 }
 
@@ -150,6 +167,16 @@ namespace DSInternals.Common.Data
 
                 // Read msLAPS-EncryptedDSRMPasswordHistory
                 // TODO: dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedDsrmPasswordHistory, out byte[][] encryptedDsrmPasswordHistory);
+            }
+
+            if (lapsPassword != null)
+            {
+                if (this.LapsPasswords == null)
+                {
+                    this.LapsPasswords = new List<LapsPasswordInformation>();
+                }
+
+                this.LapsPasswords.Add(lapsPassword);
             }
         }
     }

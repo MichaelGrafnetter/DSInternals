@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+  <ViewDefinitions>
+    <View>
+      <Name>DSUser</Name>
+      <OutOfBand />
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.DSUser</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>DistinguishedName: </Text>
+              <ExpressionBinding>
+                <PropertyName>DistinguishedName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>SamAccountName: </Text>
+              <ExpressionBinding>
+                <PropertyName>SamAccountName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>UserPrincipalName: </Text>
+              <ExpressionBinding>
+                <PropertyName>UserPrincipalName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Enabled: </Text>
+              <ExpressionBinding>
+                <PropertyName>Enabled</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Deleted: </Text>
+              <ExpressionBinding>
+                <PropertyName>Deleted</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Sid: </Text>
+              <ExpressionBinding>
+                <PropertyName>Sid</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Guid: </Text>
+              <ExpressionBinding>
+                <PropertyName>Guid</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>SamAccountType: </Text>
+              <ExpressionBinding>
+                <PropertyName>SamAccountType</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>UserAccountControl: </Text>
+              <ExpressionBinding>
+                <PropertyName>UserAccountControl</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Description: </Text>
+              <ExpressionBinding>
+                <PropertyName>Description</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Notes: </Text>
+              <ExpressionBinding>
+                <PropertyName>Notes</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>PrimaryGroupId: </Text>
+              <ExpressionBinding>
+                <PropertyName>PrimaryGroupId</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>AdminCount: </Text>
+              <ExpressionBinding>
+                <PropertyName>AdminCount</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>SidHistory: </Text>
+              <ExpressionBinding>
+                <PropertyName>SidHistory</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>SupportedEncryptionTypes: </Text>
+              <ExpressionBinding>
+                <PropertyName>SupportedEncryptionTypes</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>ServicePrincipalName: </Text>
+              <ExpressionBinding>
+                <PropertyName>ServicePrincipalName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>LastLogonDate: </Text>
+              <ExpressionBinding>
+                <PropertyName>LastLogonDate</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>PasswordLastSet: </Text>
+              <ExpressionBinding>
+                <PropertyName>PasswordLastSet</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <ExpressionBinding>
+                <ScriptBlock>
+                  if ($PSItem.SecurityDescriptor) { "SecurityDescriptor: {0}`n" -f $PSItem.SecurityDescriptor.ControlFlags }
+                </ScriptBlock>
+              </ExpressionBinding>
+              <Text>GivenName: </Text>
+              <ExpressionBinding>
+                <PropertyName>GivenName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Surname: </Text>
+              <ExpressionBinding>
+                <PropertyName>Surname</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Initials: </Text>
+              <ExpressionBinding>
+                <PropertyName>Initials</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>DisplayName: </Text>
+              <ExpressionBinding>
+                <PropertyName>DisplayName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Email: </Text>
+              <ExpressionBinding>
+                <PropertyName>Email</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>StreetAddress: </Text>
+              <ExpressionBinding>
+                <PropertyName>StreetAddress</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>City: </Text>
+              <ExpressionBinding>
+                <PropertyName>City</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>PostalCode: </Text>
+              <ExpressionBinding>
+                <PropertyName>PostalCode</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>State: </Text>
+              <ExpressionBinding>
+                <PropertyName>State</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Country: </Text>
+              <ExpressionBinding>
+                <PropertyName>Country</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Office: </Text>
+              <ExpressionBinding>
+                <PropertyName>Office</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>TelephoneNumber: </Text>
+              <ExpressionBinding>
+                <PropertyName>TelephoneNumber</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Mobile: </Text>
+              <ExpressionBinding>
+                <PropertyName>Mobile</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>HomePhone: </Text>
+              <ExpressionBinding>
+                <PropertyName>HomePhone</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Company: </Text>
+              <ExpressionBinding>
+                <PropertyName>Company</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Department: </Text>
+              <ExpressionBinding>
+                <PropertyName>Department</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>JobTitle: </Text>
+              <ExpressionBinding>
+                <PropertyName>JobTitle</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>EmployeeID: </Text>
+              <ExpressionBinding>
+                <PropertyName>EmployeeID</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>EmployeeNumber: </Text>
+              <ExpressionBinding>
+                <PropertyName>EmployeeID</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Manager: </Text>
+              <ExpressionBinding>
+                <PropertyName>Manager</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>ProfilePath: </Text>
+              <ExpressionBinding>
+                <PropertyName>ProfilePath</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>ScriptPath: </Text>
+              <ExpressionBinding>
+                <PropertyName>ScriptPath</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Key Credentials</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>KeyCredentials</PropertyName>
+                    <EnumerateCollection />
+                    <CustomControlName>KeyCredential</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>Credential Roaming</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <Text>Created: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>RoamedCredentialsCreated</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>Modified: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>RoamedCredentialsModified</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>Credentials: </Text>
+                  <NewLine />
+                  <Frame>
+                    <LeftIndent>2</LeftIndent>
+                    <CustomItem>
+                      <ExpressionBinding>
+                        <PropertyName>RoamedCredentials</PropertyName>
+                        <EnumerateCollection />
+                        <CustomControlName>RoamedCredential</CustomControlName>
+                      </ExpressionBinding>
+                    </CustomItem>
+                  </Frame>
+                </CustomItem>
+              </Frame>
+              <ExpressionBinding>
+                <CustomControlName>DSAccountSecrets</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

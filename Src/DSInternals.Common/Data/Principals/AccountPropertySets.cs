@@ -16,10 +16,13 @@ namespace DSInternals.Common.Data
         LMHashHistory,
         PasswordHashHistory = NTHashHistory | LMHashHistory,
         SupplementalCredentials,
+        Secrets = PasswordHashes | PasswordHashHistory | SupplementalCredentials,
         KeyCredentials,
         RoamedCredentials,
-        LAPS,
-        All = DistinguishedName | GenericInformation | SecurityDescriptor | PasswordHashes | PasswordHashHistory | SupplementalCredentials | KeyCredentials | RoamedCredentials | LAPS,
+        WindowsLAPS,
+        LegacyLAPS,
+        LAPS = WindowsLAPS | LegacyLAPS,
+        All = DistinguishedName | GenericInformation | SecurityDescriptor | Secrets | KeyCredentials | RoamedCredentials | LAPS,
         Default = All
     }
 }

@@ -239,7 +239,6 @@
           <CustomEntry>
             <CustomItem>
               <ExpressionBinding>
-                <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>SupplementalCredentials</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
@@ -257,7 +256,6 @@
           <CustomEntry>
             <CustomItem>
               <ExpressionBinding>
-                <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>KerberosCredential</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
@@ -275,7 +273,6 @@
           <CustomEntry>
             <CustomItem>
               <ExpressionBinding>
-                <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>KerberosCredentialNew</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
@@ -293,7 +290,6 @@
           <CustomEntry>
             <CustomItem>
               <ExpressionBinding>
-                <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>KerberosKeyData</CustomControlName>
               </ExpressionBinding>
             </CustomItem>
@@ -311,7 +307,6 @@
           <CustomEntry>
             <CustomItem>
               <ExpressionBinding>
-                <ScriptBlock>$_</ScriptBlock>
                 <CustomControlName>KerberosKeyDataNew</CustomControlName>
               </ExpressionBinding>
             </CustomItem>

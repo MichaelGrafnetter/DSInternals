@@ -15,7 +15,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>DSInternals.Common.Data.GenericUserAccountInfo</Name>
+    <Name>DSInternals.Common.Data.DSComputer</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>
@@ -29,7 +29,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>DSInternals.Common.Data.GenericComputerAccountInfo</Name>
+    <Name>DSInternals.Common.Data.DSUser</Name>
     <Members>
       <MemberSet>
         <Name>PSStandardMembers</Name>

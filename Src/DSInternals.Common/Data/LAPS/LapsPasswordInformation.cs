@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSInternals.Common.Data
 {
@@ -29,7 +25,7 @@ namespace DSInternals.Common.Data
             this.ComputerName = computerName;
             this.Account = password.AccountName;
             this.Password = password.Password;
-            // TODO: this.PasswordUpdateTime = password.UpdateTimestamp;
+            this.PasswordUpdateTime = password.UpdateTimestamp;
             this.ExpirationTimestamp = expiration;
             this.Source = LapsPasswordSource.CleartextPassword;
             this.DecryptionStatus = LapsDecryptionStatus.NotApplicable;

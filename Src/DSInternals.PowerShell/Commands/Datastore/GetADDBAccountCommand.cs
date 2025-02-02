@@ -1,14 +1,13 @@
-﻿using DSInternals.Common.Data;
+﻿using System;
+using System.Management.Automation;
+using DSInternals.Common.Data;
 using DSInternals.DataStore;
 using DSInternals.PowerShell.Properties;
-using System;
-using System.Collections.Generic;
-using System.Management.Automation;
 
 namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, "ADDBAccount")]
-    [OutputType(typeof(DSAccount))]
+    [OutputType(typeof(DSAccount), typeof(DSUser), typeof(DSComputer))]
     public class GetADDBAccountCommand : ADDBPrincipalCommandBase
     {
         #region Constants
