@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Management.Automation;
+using DSInternals.Common.Cryptography;
 using DSInternals.Common.Data;
 using DSInternals.DataStore;
 using DSInternals.PowerShell.Properties;
@@ -26,12 +27,12 @@ namespace DSInternals.PowerShell.Commands
 
         [Parameter(Mandatory = false)]
         [Alias("Property", "PropertySets", "PropertySet")]
-        [PSDefaultValue(Value = AccountPropertySets.Default)]
-        public AccountPropertySets? Properties
+        [PSDefaultValue(Value = "All")]
+        public AccountPropertySets Properties
         {
             get;
             set;
-        }
+        } = AccountPropertySets.All;
 
         [Parameter(Mandatory = false)]
         [ValidateNotNull]
@@ -43,6 +44,32 @@ namespace DSInternals.PowerShell.Commands
             get;
             set;
         }
+
+        [Parameter(Mandatory = false)]
+        [Alias("View", "ExportView", "Format")]
+        [ValidateSet(
+            "JohnNT",
+            "JohnNTHistory",
+            "JohnLM",
+            "JohnLMHistory",
+            "HashcatNT",
+            "HashcatNTHistory",
+            "HashcatLM",
+            "HashcatLMHistory",
+            "NTHash",
+            "NTHashHistory",
+            "LMHash",
+            "LMHashHistory",
+            "Ophcrack",
+            "PWDump",
+            "PWDumpHistory"
+        )]
+        public AccountExportFormat? ExportFormat
+        {
+            get;
+            set;
+        }
+
         #endregion Parameters
 
         #region Cmdlet Overrides
@@ -50,9 +77,18 @@ namespace DSInternals.PowerShell.Commands
         {
             base.BeginProcessing();
 
-            if(this.Properties == null)
+            if(this.ExportFormat != null)
             {
-                this.Properties = AccountPropertySets.Default;
+                // Override the property sets to match the requirements of the export formats.
+                this.Properties = this.ExportFormat.GetRequiredProperties();
+            }
+
+            // Check if any of the secret attributes is to be loaded
+            bool secretsShouldBeDecrypted = (this.Properties & AccountPropertySets.Secrets) != AccountPropertySets.None;
+
+            if (this.BootKey == null && secretsShouldBeDecrypted)
+            {
+                this.WriteWarning("Password hashes cannot be decrypted as no system key has been provided.");
             }
         }
 
@@ -81,7 +117,7 @@ namespace DSInternals.PowerShell.Commands
             progress.PercentComplete = -1;
             this.WriteProgress(progress);
 
-            foreach (var account in this.DirectoryAgent.GetAccounts(this.BootKey, this.Properties.Value))
+            foreach (var account in this.DirectoryAgent.GetAccounts(this.BootKey, this.Properties))
             {
                 this.WriteObject(account);
                 accountCount++;
@@ -107,19 +143,19 @@ namespace DSInternals.PowerShell.Commands
             {
                 case ParameterSetByDN:
                     var dn = new DistinguishedName(this.DistinguishedName);
-                    account = this.DirectoryAgent.GetAccount(dn, this.BootKey, this.Properties.Value);
+                    account = this.DirectoryAgent.GetAccount(dn, this.BootKey, this.Properties);
                     break;
 
                 case ParameterSetByName:
-                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, this.BootKey, this.Properties.Value);
+                    account = this.DirectoryAgent.GetAccount(this.SamAccountName, this.BootKey, this.Properties);
                     break;
 
                 case ParameterSetByGuid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, this.BootKey, this.Properties.Value);
+                    account = this.DirectoryAgent.GetAccount(this.ObjectGuid, this.BootKey, this.Properties);
                     break;
 
                 case ParameterSetBySid:
-                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, this.BootKey, this.Properties.Value);
+                    account = this.DirectoryAgent.GetAccount(this.ObjectSid, this.BootKey, this.Properties);
                     break;
 
                 default:
@@ -128,6 +164,23 @@ namespace DSInternals.PowerShell.Commands
             }
 
             this.WriteObject(account);
+        }
+
+        private new void WriteObject(object sendToPipeline)
+        {
+            if (this.ExportFormat != null)
+            {
+                // Add a virtual type to the object to change the default out-of-band View, e.g., DSInternals.Common.Data.DSAccount#PwDump.
+                PSObject psObject = PSObject.AsPSObject(sendToPipeline);
+                string virtualTypeName = String.Format("{0}#{1}", typeof(DSAccount).FullName, this.ExportFormat.ToString());
+                psObject.TypeNames.Insert(0, virtualTypeName);
+                base.WriteObject(psObject);
+            }
+            else
+            {
+                // Pass-through the original object without any changes.
+                base.WriteObject(sendToPipeline);
+            }
         }
         #endregion Helper Methods
     }

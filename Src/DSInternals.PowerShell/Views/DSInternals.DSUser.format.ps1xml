@@ -201,11 +201,11 @@
                 <PropertyName>EmployeeID</PropertyName>
               </ExpressionBinding>
               <NewLine />
-              <Text>Manager: </Text>
               <ExpressionBinding>
-                <PropertyName>Manager</PropertyName>
+                <ScriptBlock>
+                  if ($PSItem.Manager) { "Manager: {0}`n" -f $PSItem.Manager }
+                </ScriptBlock>
               </ExpressionBinding>
-              <NewLine />
               <Text>ProfilePath: </Text>
               <ExpressionBinding>
                 <PropertyName>ProfilePath</PropertyName>

@@ -4,7 +4,7 @@ namespace DSInternals.Common.Data
 {
     public static class AccountFactory
     {
-        public static DSAccount CreateAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public static DSAccount CreateAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             // Validate the input.
             Validator.AssertNotNull(dsObject, nameof(dsObject));

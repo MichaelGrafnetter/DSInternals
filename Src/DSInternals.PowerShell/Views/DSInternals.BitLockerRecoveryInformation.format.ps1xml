@@ -2,7 +2,41 @@
 <Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
   <ViewDefinitions>
     <View>
-      <Name>BitLockerRecoveryInformation</Name>
+      <Name>BitLockerRecoveryInformationTable</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.BitLockerRecoveryInformation</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>ComputerName</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>RecoveryGuid</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>RecoveryPassword</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>ComputerName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>RecoveryGuid</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>RecoveryPassword</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>BitLockerRecoveryInformationList</Name>
       <ViewSelectedBy>
         <TypeName>DSInternals.Common.Data.BitLockerRecoveryInformation</TypeName>
       </ViewSelectedBy>
@@ -15,7 +49,11 @@
                 <PropertyName>DistinguishedName</PropertyName>
               </ListItem>
               <ListItem>
-                <Label>KeyProtectorId</Label>
+                <Label>ComputerName</Label>
+                <PropertyName>ComputerName</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>RecoveryGuid</Label>
                 <PropertyName>RecoveryGuid</PropertyName>
               </ListItem>
               <ListItem>
@@ -23,7 +61,7 @@
                 <PropertyName>RecoveryPassword</PropertyName>
               </ListItem>
               <ListItem>
-                <Label>Date</Label>
+                <Label>WhenCreated</Label>
                 <PropertyName>WhenCreated</PropertyName>
               </ListItem>
             </ListItems>

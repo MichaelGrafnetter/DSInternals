@@ -14,38 +14,43 @@ Reads one or more accounts through the MS-DRSR protocol, including secret attrib
 
 ### All
 ```
-Get-ADReplAccount [-All] [-NamingContext <String>] [-Properties <AccountPropertySets>] -Server <String>
- [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-All] [-NamingContext <String>] [-Properties <AccountPropertySets>]
+ [-ExportFormat <AccountExportFormat>] -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
+ [<CommonParameters>]
 ```
 
 ### ByName
 ```
-Get-ADReplAccount [-Properties <AccountPropertySets>] [-SamAccountName] <String> [[-Domain] <String>]
- -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>]
+ [-SamAccountName] <String> [[-Domain] <String>] -Server <String> [-Credential <PSCredential>]
+ [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ### ByUPN
 ```
-Get-ADReplAccount [-Properties <AccountPropertySets>] -UserPrincipalName <String> -Server <String>
- [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>]
+ -UserPrincipalName <String> -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
+ [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Get-ADReplAccount [-Properties <AccountPropertySets>] -ObjectSid <SecurityIdentifier> -Server <String>
- [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>]
+ -ObjectSid <SecurityIdentifier> -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
+ [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Get-ADReplAccount [-Properties <AccountPropertySets>] [-DistinguishedName] <String> -Server <String>
- [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>]
+ [-DistinguishedName] <String> -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
+ [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Get-ADReplAccount [-Properties <AccountPropertySets>] -ObjectGuid <Guid> -Server <String>
- [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>] -ObjectGuid <Guid>
+ -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -169,7 +174,7 @@ Replicates all Active Directory accounts from the target domain controller.
 
 ### Example 3
 ```powershell
-PS C:\> $results = Get-ADReplAccount -All -Server 'lon-dc1.contoso.com' |
+PS C:\> $results = Get-ADReplAccount -All -Server 'lon-dc1.contoso.com' -Properties Secrets |
                    Test-PasswordQuality -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v5.txt
 ```
 
@@ -178,8 +183,10 @@ Performs an online credential hygiene audit of AD against HIBP.
 ### Example 4
 
 ```powershell
-PS C:\> Get-ADReplAccount -All -Server LON-DC1 |
-            Format-Custom -View PwDump |
+PS C:\> Get-ADReplAccount -All -Server LON-DC1 -ExportFormat PwDump |
+            Where-Object SamAccountType -eq User |
+            Where-Object Enabled -eq $true |
+            Where-Object NTHash -ne $null |
             Out-File -FilePath users.pwdump -Encoding ascii
 ```
 
@@ -188,7 +195,7 @@ Replicates all Active Directory accounts from the target domain controller and e
 ### Example 5
 ```powershell
 PS C:\> Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
-PS C:\> Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' -Properties RoamedCredentials | Save-DPAPIBlob -DirectoryPath '.\Output'
 ```
 
 Replicates all DPAPI backup keys and roamed credentials (certificates, private keys, and DPAPI master keys) from the target Active Directory domain controller and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.
@@ -255,6 +262,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ExportFormat
+Specifies the format in which the account information will be displayed.
+
+```yaml
+Type: AccountExportFormat
+Parameter Sets: (All)
+Aliases: View, ExportView, Format
+Accepted values: JohnNT, JohnNTHistory, JohnLM, JohnLMHistory, HashcatNT, HashcatNTHistory, HashcatLM, HashcatLMHistory, NTHash, NTHashHistory, LMHash, LMHashHistory, Ophcrack, PWDump, PWDumpHistory
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -NamingContext
 Specifies the naming context root of the replica to replicate.
 
@@ -301,17 +324,17 @@ Accept wildcard characters: False
 ```
 
 ### -Properties
-{{ Fill Properties Description }}
+Specifies the set of properties that will be retrieved for each account.
 
 ```yaml
 Type: AccountPropertySets
 Parameter Sets: (All)
 Aliases: Property, PropertySets, PropertySet
-Accepted values: None, DistinguishedName, GenericInformation, SecurityDescriptor, NTHash, LMHash, PasswordHashes, NTHashHistory, LMHashHistory, PasswordHashHistory, SupplementalCredentials, KeyCredentials, RoamedCredentials, LAPS, All, Default
+Accepted values: None, DistinguishedName, GenericInformation, SecurityDescriptor, NTHash, LMHash, PasswordHashes, NTHashHistory, LMHashHistory, PasswordHashHistory, SupplementalCredentials, Secrets, KeyCredentials, RoamedCredentials, WindowsLAPS, LegacyLAPS, LAPS, All
 
 Required: False
 Position: Named
-Default value: None
+Default value: All
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -391,6 +414,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ### DSInternals.Common.Data.DSAccount
+
+### DSInternals.Common.Data.DSUser
+
+### DSInternals.Common.Data.DSComputer
 
 ## NOTES
 

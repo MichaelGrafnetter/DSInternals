@@ -1,15 +1,14 @@
 ﻿namespace DSInternals.Common.Data
 {
-    using DSInternals.Common.Cryptography;
-    using DSInternals.Common.Properties;
     using System;
-    using System.Collections.Generic;
     using System.Security.AccessControl;
     using System.Security.Principal;
+    using DSInternals.Common.Cryptography;
+    using DSInternals.Common.Properties;
 
     public class DSAccount
     {
-        public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             // Parameter validation
             Validator.AssertNotNull(dsObject, nameof(dsObject));
@@ -17,6 +16,12 @@
 
             // Load and validate SamAccountType
             dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out SamAccountType? accountType);
+
+            if(propertySets.HasFlag(AccountPropertySets.KeyCredentials) && ! propertySets.HasFlag(AccountPropertySets.DistinguishedName))
+            {
+                // Object DN is needed for key credential construction
+                propertySets |= AccountPropertySets.DistinguishedName;
+            }
 
             switch (accountType)
             {
@@ -384,7 +389,7 @@
                 this.SecurityDescriptor = securityDescriptor;
             }
 
-            if(propertySets.HasFlag(AccountPropertySets.GenericInformation))
+            if(propertySets.HasFlag(AccountPropertySets.GenericAccountInfo))
             {
                 // SidHistory:
                 dsObject.ReadAttribute(CommonDirectoryAttributes.SIDHistory, out SecurityIdentifier[] sidHistory);

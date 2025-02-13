@@ -102,6 +102,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Types\AccountExportFormat.cs" />
     <Compile Include="Types\DomainController.cs" />
     <Compile Include="Types\LsaPolicyInformation.cs" />
     <Compile Include="Types\PasswordQualityTestResult.cs" />

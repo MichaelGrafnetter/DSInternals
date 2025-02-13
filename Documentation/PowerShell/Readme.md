@@ -124,12 +124,50 @@ The output of the [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount) and [Get
 - **HashcatNTHistory** - NT hashes, including historical ones, in Hashcat's format.
 - **HashcatLMHistory** - LM hashes, including historical ones, in Hashcat's format.
 
+#### Example
+
+The following command replicates all Active Directory accounts from the target domain controller
+and exports their NT password hashes to a file format that is supported by Hashcat:
+
+```powershell
+PS C:\> Get-ADReplAccount -All -Server LON-DC1  -ExportFormat HashcatNT |
+            Where-Object SamAccountType -eq User |
+            Where-Object Enabled -eq $true |
+            Where-Object NTHash -ne $null |
+            Out-File -FilePath users.txt -Encoding ascii
+```
+
+The file can then be loaded into Hashcat:
+
+```bash
+hashcat --hash-type 1000 --username --attack-mode 0 users.txt /usr/share/wordlists/rockyou.txt
+```
+
 ### John the Ripper
 
 - **JohnNT** - NT hashes in the format supported by John the Ripper.
 - **JohnLM** - LM hashes in the format supported by John the Ripper.
 - **JohnNTHistory** - NT hashes, including historical ones, in the format supported by John the Ripper.
 - **JohnLMHistory** - LM hashes, including historical ones, in the format supported by John the Ripper.
+
+#### Example
+
+The following command exports NT password hashes from an Active Directory database
+to a file format that is supported by John the Ripper:
+
+```powershell
+PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key -ExportFormat JohnNT |
+            Where-Object SamAccountType -eq User |
+            Where-Object Enabled -eq $true |
+            Where-Object NTHash -ne $null |
+            Out-File -FilePath users.txt -Encoding utf8
+```
+
+The file can then be loaded into John the Ripper:
+
+```bash
+john --wordlist=/usr/share/wordlists/rockyou.txt --format=NT users.txt
+```
 
 ### Ophcrack
 
@@ -144,25 +182,24 @@ The output of the [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount) and [Get
 - **NTHashHistory** - NT hashes, including historical ones, without account names.
 - **LMHashHistory** - LM hashes, including historical ones, without account names.
 
-### Example 1
+#### Example
+
+The following command exports NT and LM password hashes from an Active Directory database
+to the pwdump file format:
 
 ```powershell
-PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
-            Format-Custom -View PwDump |
-            Out-File -FilePath users.pwdump -Encoding ascii
+PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key -ExportFormat PwDump |
+            Where-Object SamAccountType -eq User |
+            Where-Object Enabled -eq $true |
+            Where-Object NTHash -ne $null |
+            Out-File -FilePath users.pwdump -Encoding utf8
 ```
 
-Exports NT and LM password hashes from an Active Directory database to a pwdump file.
+The file can then be loaded into John the Ripper:
 
-### Example 2
-
-```powershell
-PS C:\> Get-ADReplAccount -All -Server LON-DC1 |
-            Format-Custom -View JohnNT |
-            Out-File -FilePath users.txt -Encoding ascii
+```bash
+john --wordlist=/usr/share/wordlists/rockyou.txt users.pwdump
 ```
-
-Replicates all Active Directory accounts from the target domain controller and exports their NT password hashes to a file format that is supported by John the Ripper.
 
 ## Cmdlets for Password Hash Calculation
 

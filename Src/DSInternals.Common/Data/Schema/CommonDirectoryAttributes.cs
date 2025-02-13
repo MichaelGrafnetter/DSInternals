@@ -194,10 +194,10 @@
         public const int PostOfficeBoxId = 18;
         public const string City = "l";
         public const int CityId = 7;
-        public const string Country = "co";
-        public const int CountryId = 131203;
-        public const string Notes = "notes";
-        public const int NotesId = 590089;
+        public const string Country = "c";
+        public const int CountryId = 6;
+        public const string Comment = "info";
+        public const int CommentId = 131153;
         public const string PostalCode = "postalCode";
         public const int PostalCodeId = 17;
         public const string ManagedBy = "managedBy";

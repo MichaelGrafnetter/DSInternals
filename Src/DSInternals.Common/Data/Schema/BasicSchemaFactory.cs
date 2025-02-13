@@ -71,7 +71,7 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CityId, CommonDirectoryAttributes.City, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.PostalCodeId, CommonDirectoryAttributes.PostalCode, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CountryId, CommonDirectoryAttributes.Country, AttributeSyntax.UnicodeString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.NotesId, CommonDirectoryAttributes.Notes, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CommentId, CommonDirectoryAttributes.Comment, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ManagerId, CommonDirectoryAttributes.Manager, AttributeSyntax.DN));
 
             // Computer

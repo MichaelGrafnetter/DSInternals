@@ -1,12 +1,12 @@
 ﻿namespace DSInternals.DataStore
 {
-    using DSInternals.Common;
-    using DSInternals.Common.Data;
-    using Microsoft.Database.Isam;
     using System;
     using System.Linq;
     using System.Security.AccessControl;
     using System.Security.Principal;
+    using DSInternals.Common;
+    using DSInternals.Common.Data;
+    using Microsoft.Database.Isam;
 
     public sealed class DatastoreObject : DirectoryObject
     {
@@ -186,16 +186,17 @@
         public override void ReadAttribute(string name, out DistinguishedName value)
         {
             value = null;
+
             if (this.context.Schema.ContainsAttribute(name))
             {
                 Columnid columnId = this.context.Schema.FindColumnId(name);
-                if (columnId != null)
+
+                // The value can either be located in the datatable or in the link table
+                int? dnt = columnId != null ? this.cursor.RetrieveColumnAsDNTag(columnId) : this.context.LinkResolver.GetLinkedDNTag(this.DNTag, name);
+
+                if (dnt != null)
                 {
-                    var dnt = this.cursor.RetrieveColumnAsDNTag(columnId);
-                    if (dnt != null)
-                    {
-                        value = this.context.DistinguishedNameResolver.Resolve(dnt.Value);
-                    }
+                    value = this.context.DistinguishedNameResolver.Resolve(dnt.Value);
                 }
             }
         }

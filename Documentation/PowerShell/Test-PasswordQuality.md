@@ -12,14 +12,14 @@ Performs AD audit, including checks for weak, duplicate, default and empty passw
 
 ## SYNTAX
 
-### Using monolithic password hashes sorted file (HIBP v8 and earlier)
+### SingleFile (Default)
 ```
 Test-PasswordQuality [-Account] <DSAccount> [-SkipDuplicatePasswordTest] [-IncludeDisabledAccounts]
  [-WeakPasswords <String[]>] [-WeakPasswordsFile <String>] [-WeakPasswordHashesFile <String>]
  [-WeakPasswordHashesSortedFile <String>] [<CommonParameters>]
 ```
 
-### Using multiple password hashes sorted files (HIBP after v8)
+### MultiFile
 ```
 Test-PasswordQuality [-Account] <DSAccount> [-SkipDuplicatePasswordTest] [-IncludeDisabledAccounts]
  [-WeakPasswords <String[]>] [-WeakPasswordsFile <String>] [-WeakPasswordHashesFile <String>]
@@ -38,7 +38,7 @@ Although the cmdlet output is formatted in a human readable fashion, it is still
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf |
+PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey acdba64a3929261b04e5270c3ef973cf -Properties Secrets |
             Test-PasswordQuality -WeakPasswordHashesSortedFilePath P:\pwnedpasswords_ntlm
 <# Sample Output:
 
@@ -108,7 +108,7 @@ Performs an offline credential hygiene audit of AD database against HIBP.
 
 ### Example 2
 ```powershell
-PS C:\> $results = Get-ADReplAccount -All -Server LON-DC1 |
+PS C:\> $results = Get-ADReplAccount -All -Server LON-DC1 -Properties Secrets |
                    Test-PasswordQuality -WeakPasswords 'Pa$$w0rd','April2019' `
                                         -WeakPasswordHashesSortedFile pwned-passwords-ntlm-ordered-by-hash-v8.txt
 ```
@@ -126,7 +126,7 @@ Performs a dictionary attack against a set of accounts. The Test-PasswordQuality
 
 ### Example 4
 ```powershell
-PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key |
+PS C:\> Get-ADDBAccount -All -DatabasePath ntds.dit -BootKey $key -Properties Secrets,DistinguishedName |
             where DistinguishedName -like '*OU=Employees,DC=contoso,DC=com' |
             Test-PasswordQuality -IncludeDisabledAccounts -WeakPasswordHashesSortedFilePath P:\pwnedpasswords_ntlm
 ```
@@ -222,7 +222,7 @@ Path to a file that contains NT hashes of weak passwords, one hash in HEX format
 ```yaml
 Type: String
 Parameter Sets: SingleFile
-Aliases:
+Aliases: HIBPFile, HaveIBeenPwnedFile
 
 Required: False
 Position: Named
@@ -237,7 +237,7 @@ Path to a directory of files named as the first five characters of an NT hash (0
 ```yaml
 Type: String
 Parameter Sets: MultiFile
-Aliases:
+Aliases: WeakPasswordHashesSortedDirectory, HIBPDirectory, HaveIBeenPwnedDirectory
 
 Required: False
 Position: Named

@@ -56,7 +56,7 @@
             }
         }
 
-        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             var pek = this.GetSecretDecryptor(bootKey);
             // TODO: Use a more suitable index?
@@ -88,31 +88,31 @@
             }
         }
 
-        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             var obj = this.FindObject(dn);
             return this.GetAccount(obj, dn, bootKey, propertySets);
         }
 
-        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             var obj = this.FindObject(objectSid);
             return this.GetAccount(obj, objectSid, bootKey, propertySets);
         }
 
-        public DSAccount GetAccount(string samAccountName, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public DSAccount GetAccount(string samAccountName, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             var obj = this.FindObject(samAccountName);
             return this.GetAccount(obj, samAccountName, bootKey, propertySets);
         }
 
-        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             var obj = this.FindObject(objectGuid);
             return this.GetAccount(obj, objectGuid, bootKey, propertySets);
         }
 
-        protected DSAccount GetAccount(DatastoreObject foundObject, object objectIdentifier, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.Default)
+        protected DSAccount GetAccount(DatastoreObject foundObject, object objectIdentifier, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             
             var pek = GetSecretDecryptor(bootKey);

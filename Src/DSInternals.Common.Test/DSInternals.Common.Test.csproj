@@ -76,6 +76,7 @@
     <Compile Include="KdsRootKeyTester.cs" />
     <Compile Include="KerberosCredentialNewTester.cs" />
     <Compile Include="KerberosCredentialTester.cs" />
+    <Compile Include="LapsTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Cryptography\SecureStringExtensionsTester.cs" />
     <Compile Include="ProtectionKeyIdentifierTester.cs" />

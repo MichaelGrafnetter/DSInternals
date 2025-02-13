@@ -7,7 +7,7 @@
 
     public class DSUser : DSAccount
     {
-        public DSUser(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.Default) : base(dsObject, netBIOSDomainName, pek, propertySets)
+        public DSUser(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
             if (this.SamAccountType != SamAccountType.User)
             {
@@ -20,9 +20,15 @@
                 this.LoadRoamedCredentials(dsObject);
             }
 
-            if(propertySets.HasFlag(AccountPropertySets.GenericInformation))
+            if (propertySets.HasFlag(AccountPropertySets.GenericUserInfo))
             {
                 this.LoadGenericUserAccountInfo(dsObject);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.Manager))
+            {
+                // This is a linked value, so it takes multiple seeks to load it.
+                this.LoadManager(dsObject);
             }
         }
 
@@ -313,10 +319,6 @@
             dsObject.ReadAttribute(CommonDirectoryAttributes.EmployeeID, out string employeeNumber);
             this.EmployeeNumber = employeeNumber;
 
-            // Manager:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.Manager, out DistinguishedName manager);
-            this.Manager = manager?.ToString();
-
             // Email:
             dsObject.ReadAttribute(CommonDirectoryAttributes.Email, out string email);
             this.Email = email;
@@ -344,7 +346,7 @@
             // PostOfficeBox:
             dsObject.ReadAttribute(CommonDirectoryAttributes.PostOfficeBox, out string postOfficeBox);
             this.PostOfficeBox = postOfficeBox;
-            
+
             // Office:
             dsObject.ReadAttribute(CommonDirectoryAttributes.Office, out string office);
             this.Office = office;
@@ -405,9 +407,15 @@
             dsObject.ReadAttribute(CommonDirectoryAttributes.ScriptPath, out string scriptPath);
             this.ScriptPath = scriptPath;
 
-            // Notes:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.Notes, out string notes);
+            // Notes / Comment:
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Comment, out string notes);
             this.Notes = notes;
+        }
+
+        protected void LoadManager(DirectoryObject dsObject)
+        {
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Manager, out DistinguishedName manager);
+            this.Manager = manager?.ToString();
         }
     }
 }

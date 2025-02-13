@@ -81,11 +81,11 @@
                 <PropertyName>Description</PropertyName>
               </ExpressionBinding>
               <NewLine />
-              <Text>ManagedBy: </Text>
               <ExpressionBinding>
-                <PropertyName>ManagedBy</PropertyName>
+                <ScriptBlock>
+                  if ($PSItem.ManagedBy) { "ManagedBy: {0}`n" -f $PSItem.ManagedBy }
+                </ScriptBlock>
               </ExpressionBinding>
-              <NewLine />
               <ExpressionBinding>
                 <ScriptBlock>
                   if ($PSItem.Location) { "Location: {0}`n" -f $PSItem.Location }

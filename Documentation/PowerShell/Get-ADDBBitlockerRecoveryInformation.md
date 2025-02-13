@@ -49,18 +49,21 @@ BitLocker recovery information (msFVE-RecoveryInformation objects) can be used t
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBBitLockerRecoveryInformation -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
+PS C:\> Get-ADDBBitLockerRecoveryInformation -All -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
 <# Sample Output:
-[TODO]
+ComputerName RecoveryGuid                         RecoveryPassword
+------------ ------------                         ----------------
+PC01         704b1998-54ea-4899-8f46-81628b6a0731 366561-423260-035024-137224-631070-580492-357566-596908
+PC02         caeaa622-6c6a-4d2b-8e33-29e46df659af 782066-216356-283624-291397-405614-078166-321530-943804
 #>
 ```
 
-Retrieves the BitLocker Recovery Keys from an AD database.
+Retrieves all BitLocker recovery keys from an AD database.
 
 ## PARAMETERS
 
 ### -All
-{{ Fill All Description }}
+Indicates that all BitLocker recovery keys should be read from the selected database.
 
 ```yaml
 Type: SwitchParameter
@@ -75,7 +78,7 @@ Accept wildcard characters: False
 ```
 
 ### -ComputerName
-{{ Fill ComputerName Description }}
+Specifies the name of the computer whose BitLocker recovery keys should be fetched from the database.
 
 ```yaml
 Type: String
@@ -105,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -DistinguishedName
-{{ Fill DistinguishedName Description }}
+Specifies the distinguished name of the recovery key to fetch from the database.
 
 ```yaml
 Type: String
@@ -120,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogPath
-{{ Fill LogPath Description }}
+Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.
 
 ```yaml
 Type: String
@@ -135,7 +138,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectGuid
-{{ Fill ObjectGuid Description }}
+Specifies the recovery key object identifier to search for, for instance, 9a36024b-3e97-4305-8315-5ed0ff646367.
 
 ```yaml
 Type: Guid
@@ -150,7 +153,7 @@ Accept wildcard characters: False
 ```
 
 ### -RecoveryGuid
-Specifies the RecoveryGuid to search, for instance, 11c43ee8-b9d3-4e51-b73f-bd9dda66e29c
+Specifies the recovery key identifier to search for, for instance, 11c43ee8-b9d3-4e51-b73f-bd9dda66e29c.
 
 ```yaml
 Type: Guid

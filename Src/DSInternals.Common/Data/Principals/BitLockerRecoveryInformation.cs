@@ -45,6 +45,16 @@ namespace DSInternals.Common.Data
             private set;
         }
 
+        public string ComputerName
+        {
+            get
+            {
+                // Computer name should be the parent RDN
+                var parsedDN = new DistinguishedName(this.DistinguishedName);
+                return parsedDN.Components.Count >= 2 ? parsedDN.Components[1].Value : null;
+            }
+        }
+
         public Guid ObjectGuid
         {
             get;
@@ -79,48 +89,6 @@ namespace DSInternals.Common.Data
         {
             get;
             private set;
-        }
-
-        /// <summary>
-        /// Saves the BitLocker recovery information to an appropriate file in the current directory.
-        /// </summary>
-        public void Save()
-        {
-            this.Save(Directory.GetCurrentDirectory());
-        }
-
-        /// <summary>
-        /// Saves the BitLocker Recovery Information to an appropriate file in the specified directory.
-        /// </summary>
-        /// <param name="directoryPath">Directory to save the recovery information to.</param>
-        public void Save(string directoryPath)
-        {
-            throw new NotImplementedException();
-            //if (exportKeysPath != null && exportKeysPath.Length > 0)
-            //{
-            //    string exportBasePath = exportKeysPath + '.';
-            //    if (oDN != null && oDN.Length > 0)
-            //    {
-            //        exportBasePath += oDN + '.';
-            //    }
-            //    exportBasePath += this.FVE_RecoveryGuid;
-
-            //    string exportKPpath = exportBasePath + ".KeyPackage.bin";
-            //    string exportRPpath = exportBasePath + ".RecoveryPassword.txt";
-
-            //    using (FileStream fs = File.Create(exportKPpath))
-            //    {
-            //        fs.Write(this.FVE_KeyPackage, 0, this.FVE_KeyPackage.Length);
-            //        fs.Close();
-            //    }
-
-            //    using (FileStream fs = File.Create(exportRPpath))
-            //    {
-            //        byte[] rp = new UTF8Encoding(true).GetBytes(this.FVE_RecoveryPassword);
-            //        fs.Write(rp, 0, rp.Length);
-            //        fs.Close();
-            //    }
-            // }
         }
 
         public override string ToString()

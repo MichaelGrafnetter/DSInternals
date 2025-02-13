@@ -8,14 +8,14 @@ namespace DSInternals.Common.Data
 {
     public class DSComputer : DSAccount
     {
-        public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.Default) : base(dsObject, netBIOSDomainName, pek, propertySets)
+        public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
             if (this.SamAccountType != SamAccountType.Computer)
             {
                 throw new ArgumentException(Resources.ObjectNotAccountMessage);
             }
 
-            if (propertySets.HasFlag(AccountPropertySets.GenericInformation))
+            if (propertySets.HasFlag(AccountPropertySets.GenericComputerInfo))
             {
                 this.LoadGenericComputerAccountInfo(dsObject);
             }
@@ -28,6 +28,12 @@ namespace DSInternals.Common.Data
             if (propertySets.HasFlag(AccountPropertySets.WindowsLAPS))
             {
                 this.LoadWindowsLAPS(dsObject);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.ManagedBy))
+            {
+                // This is a linked value, so it takes multiple seeks to load it.
+                this.LoadManagedBy(dsObject);
             }
         }
 
@@ -79,15 +85,21 @@ namespace DSInternals.Common.Data
             private set;
         }
 
+        public string ComputerName
+        {
+            get
+            {
+                // TODO: Also try to fetch DNSHostName and use it as the primary source of computer name.
+                // Computer account names always end with $.
+                return this.SamAccountName?.TrimEnd('$');
+            }
+        }
+
         protected void LoadGenericComputerAccountInfo(DirectoryObject dsObject)
         {
             // dNSHostName:
             dsObject.ReadAttribute(CommonDirectoryAttributes.DNSHostName, out string dnshostname);
             this.DNSHostName = dnshostname;
-
-            // managedBy:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.ManagedBy, out DistinguishedName managedBy);
-            this.ManagedBy = managedBy?.ToString();
 
             // location:
             dsObject.ReadAttribute(CommonDirectoryAttributes.Location, out string location);
@@ -110,6 +122,12 @@ namespace DSInternals.Common.Data
             this.OperatingSystemServicePack = operatingSystemServicePack;
         }
 
+        protected void LoadManagedBy(DirectoryObject dsObject)
+        {
+            dsObject.ReadAttribute(CommonDirectoryAttributes.ManagedBy, out DistinguishedName managedBy);
+            this.ManagedBy = managedBy?.ToString();
+        }
+
         protected void LoadLegacyLAPS(DirectoryObject dsObject)
         {
             LapsPasswordInformation legacyLapsPassword = null;
@@ -124,7 +142,7 @@ namespace DSInternals.Common.Data
                 if(admPwdBinary != null && admPwdBinary.Length > 0)
                 {
                     string password = Encoding.UTF8.GetString(admPwdBinary);
-                    legacyLapsPassword = new LapsPasswordInformation(this.SamAccountName, password, legacyExpirationTime);
+                    legacyLapsPassword = new LapsPasswordInformation(this.ComputerName, password, legacyExpirationTime);
                 }
             }
 
@@ -153,7 +171,7 @@ namespace DSInternals.Common.Data
                 if (binaryLapsJson != null && binaryLapsJson.Length > 0)
                 {
                     LapsClearTextPassword passwordInfo = LapsClearTextPassword.Parse(binaryLapsJson);
-                    lapsPassword = new LapsPasswordInformation(this.SamAccountName, passwordInfo, expirationTime);
+                    lapsPassword = new LapsPasswordInformation(this.ComputerName, passwordInfo, expirationTime);
                 }
 
                 // Read msLAPS-EncryptedPassword

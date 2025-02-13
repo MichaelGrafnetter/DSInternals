@@ -87,14 +87,14 @@ namespace DSInternals.Replication
             return this.drsConnection.GetReplicationCursors(namingContext);
         }
 
-        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets properties = AccountPropertySets.Default)
+        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets properties = AccountPropertySets.All)
         {
             Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
             ReplicationCookie cookie = new ReplicationCookie(domainNamingContext);
             return GetAccounts(cookie, progressReporter, properties);
         }
 
-        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, AccountPropertySets properties = AccountPropertySets.Default)
+        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, AccountPropertySets properties = AccountPropertySets.All)
         {
             Validator.AssertNotNull(initialCookie, nameof(initialCookie));
 
@@ -135,7 +135,7 @@ namespace DSInternals.Replication
             } while (result.HasMoreData);
         }
 
-        public DSAccount GetAccount(Guid objectGuid, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public DSAccount GetAccount(Guid objectGuid, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             var obj = this.drsConnection.ReplicateSingleObject(objectGuid);
             var schema = BasicSchemaFactory.CreateSchema();
@@ -151,7 +151,7 @@ namespace DSInternals.Replication
             return account;
         }
 
-        public DSAccount GetAccount(string distinguishedName, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public DSAccount GetAccount(string distinguishedName, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             var obj = this.drsConnection.ReplicateSingleObject(distinguishedName);
             var schema = BasicSchemaFactory.CreateSchema();
@@ -167,13 +167,13 @@ namespace DSInternals.Replication
             return account;
         }
 
-        public DSAccount GetAccount(NTAccount accountName, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public DSAccount GetAccount(NTAccount accountName, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             Guid objectGuid = this.drsConnection.ResolveGuid(accountName);
             return this.GetAccount(objectGuid, propertySets);
         }
 
-        public DSAccount GetAccount(SecurityIdentifier sid, AccountPropertySets propertySets = AccountPropertySets.Default)
+        public DSAccount GetAccount(SecurityIdentifier sid, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             Guid objectGuid = this.drsConnection.ResolveGuid(sid);
             return this.GetAccount(objectGuid, propertySets);
