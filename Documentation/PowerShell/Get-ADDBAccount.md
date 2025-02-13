@@ -577,7 +577,7 @@ Specifies the set of properties that will be retrieved for each account.
 Type: AccountPropertySets
 Parameter Sets: (All)
 Aliases: Property, PropertySets, PropertySet
-Accepted values: None, DistinguishedName, GenericInformation, SecurityDescriptor, NTHash, LMHash, PasswordHashes, NTHashHistory, LMHashHistory, PasswordHashHistory, SupplementalCredentials, Secrets, KeyCredentials, RoamedCredentials, WindowsLAPS, LegacyLAPS, LAPS, All
+Accepted values: None, DistinguishedName, GenericAccountInfo, GenericUserInfo, GenericComputerInfo, GenericInfo, SecurityDescriptor, NTHash, LMHash, PasswordHashes, NTHashHistory, LMHashHistory, PasswordHashHistory, SupplementalCredentials, Secrets, KeyCredentials, RoamedCredentials, WindowsLAPS, LegacyLAPS, LAPS, ManagedBy, Manager, All
 
 Required: False
 Position: Named

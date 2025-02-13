@@ -316,7 +316,7 @@
             this.EmployeeID = employeeID;
 
             // EmployeeNumber:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.EmployeeID, out string employeeNumber);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.EmployeeNumber, out string employeeNumber);
             this.EmployeeNumber = employeeNumber;
 
             // Email:
@@ -324,7 +324,7 @@
             this.Email = email;
 
             // StreetAddress:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.StreetAddress, out string streetAddress);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.Street, out string streetAddress);
             this.StreetAddress = streetAddress;
 
             // City:

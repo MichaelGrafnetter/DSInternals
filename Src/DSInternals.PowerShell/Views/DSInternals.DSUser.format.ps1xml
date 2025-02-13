@@ -198,7 +198,7 @@
               <NewLine />
               <Text>EmployeeNumber: </Text>
               <ExpressionBinding>
-                <PropertyName>EmployeeID</PropertyName>
+                <PropertyName>EmployeeNumber</PropertyName>
               </ExpressionBinding>
               <NewLine />
               <ExpressionBinding>

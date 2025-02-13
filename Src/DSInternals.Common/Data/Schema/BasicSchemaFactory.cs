@@ -66,7 +66,7 @@
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ProfilePathId, CommonDirectoryAttributes.ProfilePath, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.ScriptPathId, CommonDirectoryAttributes.ScriptPath, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.StateId, CommonDirectoryAttributes.State, AttributeSyntax.UnicodeString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.StreetAddressId, CommonDirectoryAttributes.StreetAddress, AttributeSyntax.UnicodeString));
+            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.StreetId, CommonDirectoryAttributes.Street, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.PostOfficeBoxId, CommonDirectoryAttributes.PostOfficeBox, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.CityId, CommonDirectoryAttributes.City, AttributeSyntax.UnicodeString));
             attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.PostalCodeId, CommonDirectoryAttributes.PostalCode, AttributeSyntax.UnicodeString));

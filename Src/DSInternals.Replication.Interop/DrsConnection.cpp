@@ -660,7 +660,7 @@ namespace DSInternals
 			ReplicaObjectCollection^ DrsConnection::ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount)
 			{
 				// Read linked values first
-				// TODO: Handle the case when linked attributes of an object are split between reveral responses.
+				// TODO: Handle the case when linked attributes of an object are split between several responses.
 				auto linkedValueCollection = gcnew ReplicatedLinkedValueCollection();
 				for (int i = 0; i < valueCount; i++)
 				{

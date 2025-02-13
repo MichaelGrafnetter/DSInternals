@@ -10,6 +10,10 @@ schema: 2.0.0
 ## SYNOPSIS
 Adds one or more values to the sIDHistory attribute of an object in a ntds.dit file.
 
+> [!WARNING]
+> This cmdlet has been removed from the DSInternals PowerShell module.
+> Information in this topic is provided for reference purposes only.
+
 ## SYNTAX
 
 ### ByName

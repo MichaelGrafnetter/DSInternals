@@ -78,6 +78,9 @@ namespace DSInternals.PowerShell.Commands
             this.Properties &= ~AccountPropertySets.ManagedBy;
             this.Properties &= ~AccountPropertySets.Manager;
 
+            // TODO: LAPS-related attribute schema loading is not yet implemented.
+            this.Properties &= ~AccountPropertySets.LAPS;
+
             if (this.ExportFormat != null)
             {
                 // Override the property sets to match the requirements of the export formats.

@@ -186,10 +186,8 @@
         public const int ScriptPathId = 589886;
         public const string State = "st";
         public const int StateId = 8;
-        public const string Street = "street";
+        public const string Street = "streetAddress";
         public const int StreetId = 131328;
-        public const string StreetAddress = "streetAddress";
-        public const int StreetAddressId = 9;
         public const string PostOfficeBox = "postOfficeBox";
         public const int PostOfficeBoxId = 18;
         public const string City = "l";
