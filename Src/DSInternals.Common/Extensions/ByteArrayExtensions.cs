@@ -1,12 +1,12 @@
-﻿namespace DSInternals.Common
-{
-    using System;
-    using System.IO;
-    using System.Security;
-    using System.Security.Principal;
-    using System.Text;
-    using DSInternals.Common.Properties;
+﻿using System;
+using System.IO;
+using System.Security;
+using System.Security.Principal;
+using System.Text;
+using DSInternals.Common.Properties;
 
+namespace DSInternals.Common
+{
     public static class ByteArrayExtensions
     {
         private const string HexDigitsUpper = "0123456789ABCDEF";
@@ -83,7 +83,13 @@
             return hex.HexToBinary(0, hex.Length);
         }
 
+        [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
         public static string ToHex(this byte[] bytes, bool caps = false)
+        {
+            return bytes == null ? null : ToHex(bytes.AsSpan(), caps);
+        }
+
+        public static string ToHex(this ReadOnlySpan<byte> bytes, bool caps = false)
         {
             if (bytes == null)
             {
@@ -92,11 +98,15 @@
 
             string hexDigits = caps ? HexDigitsUpper : HexDigitsLower;
 
-            StringBuilder hex = new StringBuilder(bytes.Length * 2);
-            foreach(byte currentByte in bytes)
+            // Use stack allocation for short strings
+            int stringLength = bytes.Length * 2;
+            Span<char> hex = stringLength <= 1024 ? stackalloc char[stringLength] : new char[stringLength];
+
+            int i = 0;
+            foreach (byte currentByte in bytes)
             {
-                hex.Append(hexDigits[(int)(currentByte >> 4)]);
-                hex.Append(hexDigits[(int)(currentByte & 0xF)]);
+                hex[i++] = hexDigits[(int)(currentByte >> 4)];
+                hex[i++] = hexDigits[(int)(currentByte & 0xF)];
             }
 
             return hex.ToString();
@@ -141,6 +151,7 @@
         /// </summary>
         /// <param name="number">The integer to encode.</param>
         /// <returns>Array of bytes, in big endian order.</returns>
+        [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
         public static byte[] GetBigEndianBytes(this uint number)
         {
             byte[] bytes = BitConverter.GetBytes(number);
@@ -151,6 +162,7 @@
             return bytes;
         }
 
+        [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
         public static uint ToUInt32BigEndian(this byte[] bytes, int startIndex = 0)
         {
             if(BitConverter.IsLittleEndian)
@@ -161,6 +173,7 @@
             return BitConverter.ToUInt32(bytes, startIndex);
         }
 
+        [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
         public static ushort ToUInt16BigEndian(this byte[] bytes, int startIndex = 0)
         {
             if (BitConverter.IsLittleEndian)
@@ -204,12 +217,14 @@
             return new SecurityIdentifier(output, 0);
         }
 
+        [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
         public static byte[] Cut(this byte[] blob, int offset)
         {
             Validator.AssertNotNull(blob, "blob");
             return blob.Cut(offset, blob.Length - offset);
         }
 
+        [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
         public static byte[] Cut(this byte[] blob, int offset, int count)
         {
             Validator.AssertNotNull(blob, "blob");

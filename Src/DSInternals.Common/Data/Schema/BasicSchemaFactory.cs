@@ -85,13 +85,6 @@
 
             // TODO: LAPS
 
-            // TPM + BitLocker
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.TPMOwnerInformationId, CommonDirectoryAttributes.TPMOwnerInformation, AttributeSyntax.UnicodeString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVEKeyPackageId, CommonDirectoryAttributes.FVEKeyPackage, AttributeSyntax.OctetString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVEVolumeGuidId, CommonDirectoryAttributes.FVEVolumeGuid, AttributeSyntax.OctetString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryGuidId, CommonDirectoryAttributes.FVERecoveryGuid, AttributeSyntax.OctetString));
-            attributes.Add((ISchemaAttribute)new BasicSchemaAttribute(CommonDirectoryAttributes.FVERecoveryPasswordId, CommonDirectoryAttributes.FVERecoveryPassword, AttributeSyntax.UnicodeString));
-
             return new BasicSchema(attributes);
         }
     }

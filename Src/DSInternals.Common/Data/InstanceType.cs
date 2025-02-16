@@ -9,7 +9,7 @@ namespace DSInternals.Common.Data
     /// </summary>
     /// <see>https://msdn.microsoft.com/en-us/library/cc219986.aspx</see>
     [Flags]
-    public enum InstanceType : int
+    public enum InstanceType : uint
     {
         /// <summary>
         /// The object is not writable on this directory and is not a naming context.
@@ -18,7 +18,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// The head of naming context.
         /// </summary>
-        NamingContextHead = 0x00000001,
+        NamingContextHead = Windows.Win32.PInvoke.DS_INSTANCETYPE_IS_NC_HEAD,
         /// <summary>
         /// This replica is not instantiated.
         /// </summary>
@@ -26,7 +26,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// The object is writable on this directory.
         /// </summary>
-        Writable = 0x00000004,
+        Writable = Windows.Win32.PInvoke.DS_INSTANCETYPE_NC_IS_WRITEABLE,
         /// <summary>
         /// The naming context above this one on this directory is held.
         /// </summary>
@@ -34,10 +34,10 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// The naming context is being constructed for the first time via replication.
         /// </summary>
-        Constructing = 0x00000010,
+        Constructing = Windows.Win32.PInvoke.DS_INSTANCETYPE_NC_COMING,
         /// <summary>
         /// The naming context is being removed from the local directory system agent (DSA).
         /// </summary>
-        Removing = 0x00000020
+        Removing = Windows.Win32.PInvoke.DS_INSTANCETYPE_NC_GOING
     }
 }
