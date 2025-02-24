@@ -6,7 +6,7 @@ namespace DSInternals.DataStore
 {
     public partial class DirectoryAgent : IDisposable
     {
-        public IEnumerable<DnsResourceRecord> GetDnsRecords(bool skipRootHints = true, bool skipTombstoned = false)
+        public IEnumerable<DnsResourceRecord> GetDnsRecords(bool skipRootHints = true, bool skipTombstoned = true)
         {
             foreach (var node in this.FindObjectsByCategory(CommonDirectoryClasses.DnsNode))
             {

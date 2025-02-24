@@ -128,6 +128,7 @@ New-Alias -Name Get-ADDBFVERecoveryInformation     -Value Get-ADDBBitLockerRecov
 New-Alias -Name Get-ADDBFVERecoveryInfo            -Value Get-ADDBBitLockerRecoveryInformation
 New-Alias -Name Get-ADDBFVERecoveryKey             -Value Get-ADDBBitLockerRecoveryInformation
 New-Alias -Name Get-ADDBFVERecoveryPassword        -Value Get-ADDBBitLockerRecoveryInformation
+New-Alias -Name Get-ADDBDnsRecord                  -Value Get-ADDBDnsResourceRecord
 
 # Export the aliases
 Export-ModuleMember -Alias * -Cmdlet *

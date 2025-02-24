@@ -49,6 +49,8 @@ namespace DSInternals.Common.Data
         TLSA = DNS_TYPE.DNS_TYPE_TLSA,
         CERT = DNS_TYPE.DNS_TYPE_CERT,
         TKEY = DNS_TYPE.DNS_TYPE_TKEY,
-        TSIG = DNS_TYPE.DNS_TYPE_TSIG
+        TSIG = DNS_TYPE.DNS_TYPE_TSIG,
+        CAA = 257,
+        SSHFP = 44
     }
 }

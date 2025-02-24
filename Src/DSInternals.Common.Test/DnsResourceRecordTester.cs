@@ -16,7 +16,7 @@
             Assert.AreEqual(ResourceRecordType.ZERO, record.Type);
             Assert.AreEqual(TimeSpan.Zero, record.TTL);
             Assert.AreEqual((uint)18, record.Serial);
-            Assert.AreEqual("\\# 0 ; Tombstoned on 2025-02-10 11:59:49Z", record.Data);
+            Assert.AreEqual("\\# 0 ; Tombstoned at 2025-02-10 11:59:49Z", record.Data);
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@
             var record = DnsResourceRecord.Create("contoso.com", "@", input);
             Assert.AreEqual(ResourceRecordType.TXT, record.Type);
             Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
-            Assert.AreEqual("\"google-site-verification=\" \"rXOxyZounnZasA8Z7oaD3c14JdjS9aKSWvsR1EbUSIQ\"", record.Data);
+            Assert.AreEqual("( \"google-site-verification=\" \"rXOxyZounnZasA8Z7oaD3c14JdjS9aKSWvsR1EbUSIQ\" )", record.Data);
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@
             var record = DnsResourceRecord.Create("contoso.com", "_ldap._tcp", input);
             Assert.AreEqual(ResourceRecordType.SRV, record.Type);
             Assert.AreEqual(TimeSpan.FromMinutes(10), record.TTL);
-            Assert.AreEqual("0 100 389\tcontoso-dc2.contoso.com.", record.Data);
+            Assert.AreEqual("0 100 389  contoso-dc2.contoso.com.", record.Data);
         }
 
         [TestMethod]
@@ -124,11 +124,11 @@
         {
             byte[] input = "4800060005f00000a600000000000e100000000000000000000000a500000384000002580001518000000e1018030a636f6e746f736f2d646307636f6e746f736f03636f6d0018030a686f73746d617374657207636f6e746f736f03636f6d00".HexToBinary();
             string expectedData = @"contoso-dc.contoso.com. hostmaster.contoso.com. (
-                        		165          ; serial number
-                        		900          ; refresh
-                        		600          ; retry
-                        		86400        ; expire
-                        		3600       ) ; default TTL";
+                                                                            165          ; serial number
+                                                                            900          ; refresh
+                                                                            600          ; retry
+                                                                            86400        ; expire
+                                                                            3600       ) ; default TTL";
 
             var record = DnsResourceRecord.Create("contoso.com", "@", input);
             Assert.AreEqual(ResourceRecordType.SOA, record.Type);

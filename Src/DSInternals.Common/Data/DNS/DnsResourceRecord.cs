@@ -12,14 +12,19 @@ namespace DSInternals.Common.Data
         private static readonly int DnsResourceRecordHeaderSize = Marshal.SizeOf<DnsResourceRecordHeader>();
         private static readonly int SrvResourceRecordHeaderSize = Marshal.SizeOf<SrvResourceRecordHeader>();
         private static readonly int SoaResourceRecordHeaderSize = Marshal.SizeOf<SoaResourceRecordHeader>();
-        private const int ZoneFileFirstColumnWidth = 24;
+
+        // The first column must be wide enough for most SRV records to fit in.
+        private const int ZoneFileNameColumnWidth = 60;
+        private const int ZoneFileTtlColumnWidth = 6;
+        private const int ZoneFileTypeColumnWidth = 4 + 5 + 1; // E.g. "IN  CNAME "
 
         /// <summary>
         /// If the RDATA is of zero length, the text representation contains only the \# token and the single zero representing the length.
         /// </summary>
         private const string EmptyResourceData = "\\# 0";
-        private static readonly string ZoneFileFirstColumnBlank = new string(' ', ZoneFileFirstColumnWidth);
-        private static readonly string ZoneFileFirstThreeColumnsBlank = $"{ZoneFileFirstColumnBlank}\t\t";
+        private static readonly string ZoneFileNameColumnBlank = new string(' ', ZoneFileNameColumnWidth);
+        private static readonly string ZoneFileTtlColumnBlank = new string(' ', ZoneFileTtlColumnWidth);
+        private static readonly string ZoneFileFirstThreeColumnsBlank = new string(' ', ZoneFileNameColumnWidth + ZoneFileTtlColumnWidth + ZoneFileTypeColumnWidth);
 
         /// <summary>
         /// The DNS zone in which this record is located.
@@ -97,7 +102,13 @@ namespace DSInternals.Common.Data
         {
             get
             {
-                bool isKnownRecordType = Enum.IsDefined(typeof(ResourceRecordType), this.Type);
+                bool isKnownRecordType = this.Type switch
+                {
+                    // Windows Server does not natively support CAA and SSHFP records.
+                    ResourceRecordType.CAA => false,
+                    ResourceRecordType.SSHFP => false,
+                    _ => Enum.IsDefined(typeof(ResourceRecordType), this.Type)
+                };
 
                 // Use the numeric value for unknown/unsupported types, e.g., TYPE257.
                 return isKnownRecordType ? this.Type.ToString() : $"TYPE{(ushort)this.Type}";
@@ -170,25 +181,27 @@ namespace DSInternals.Common.Data
             if (this.Type == ResourceRecordType.ZERO)
             {
                 // Tombstoned records will be commented out.
-                result.Append("; ");
+                result.Append($"; {this.Name,-ZoneFileNameColumnWidth + 3} ");
             }
-
-            // Record name
-            result.AppendFormat("{0,-23} ", this.Name);
+            else
+            {
+                // Compensate the width for the trailing space
+                result.Append($"{this.Name,-ZoneFileNameColumnWidth + 1} ");
+            }
 
             // TTL
             if (this.TTL != TimeSpan.Zero)
             {
-                result.Append((uint)this.TTL.TotalSeconds);
-                result.Append('\t');
+                result.Append($"{(uint)this.TTL.TotalSeconds,-ZoneFileTtlColumnWidth + 1} ");
+            }
+            else
+            {
+                // Omit the TTL
+                result.Append(ZoneFileTtlColumnBlank);
             }
 
-            // Class, Type, and Data, e.g., IN  A 10.1.2.3
-            result.Append("IN  ");
-            result.Append(this.TypeString);
-            result.Append('\t');
-            result.Append(this.Data);
-
+            // Class, Type, and Data, e.g., IN  A     10.1.2.3
+            result.Append($"IN  {this.TypeString,-ZoneFileTypeColumnWidth + 5} {this.Data}");
             return result.ToString();
         }
 
@@ -368,7 +381,7 @@ namespace DSInternals.Common.Data
                 return EmptyResourceData;
             }
 
-            int binaryIPAddress = BinaryPrimitives.ReadInt32LittleEndian(buffer);
+            uint binaryIPAddress = BinaryPrimitives.ReadUInt32LittleEndian(buffer);
             return new IPAddress(binaryIPAddress).ToString();
         }
 
@@ -436,8 +449,11 @@ namespace DSInternals.Common.Data
                 return EmptyResourceData;
             }
 
-            var result = new StringBuilder(buffer.Length);
+            var result = new StringBuilder(buffer.Length + 10);
             int currentOffset = 0;
+
+            // Account for multiple strings
+            result.Append("( ");
 
             while (currentOffset < buffer.Length)
             {
@@ -454,10 +470,9 @@ namespace DSInternals.Common.Data
                 result.Append(' ');
             }
 
-            // Remove the trailing space
-            result.Remove(result.Length - 1, 1);
+            result.Append(')');
 
-            // Example: "google-site-verification=" "rXOxyZounnZasA8Z7oaD3c14JdjS9aKSWvsR1EbUSIQ"
+            // Example: ( "google-site-verification=" "rXOxyZounnZasA8Z7oaD3c14JdjS9aKSWvsR1EbUSIQ" )
             return result.ToString();
         }
 
@@ -478,8 +493,8 @@ namespace DSInternals.Common.Data
 
             string nameTarget = ParseFQDN(buffer.Slice(SrvResourceRecordHeaderSize));
 
-            // Example: 10 20 389 dc01.contoso.com
-            return $"{header.Priority} {header.Weight} {header.Port}\t{nameTarget}";
+            // Example: 10 20 389  dc01.contoso.com
+            return $"{header.Priority} {header.Weight} {header.Port,-4} {nameTarget}";
         }
 
         /// <summary>

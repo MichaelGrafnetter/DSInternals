@@ -96,6 +96,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\Get-ADDBAccount.md = ..\Documentation\PowerShell\Get-ADDBAccount.md
 		..\Documentation\PowerShell\Get-ADDBBackupKey.md = ..\Documentation\PowerShell\Get-ADDBBackupKey.md
 		..\Documentation\PowerShell\Get-ADDBBitlockerRecoveryInformation.md = ..\Documentation\PowerShell\Get-ADDBBitlockerRecoveryInformation.md
+		..\Documentation\PowerShell\Get-ADDBDnsResourceRecord.md = ..\Documentation\PowerShell\Get-ADDBDnsResourceRecord.md
 		..\Documentation\PowerShell\Get-ADDBDomainController.md = ..\Documentation\PowerShell\Get-ADDBDomainController.md
 		..\Documentation\PowerShell\Get-ADDBKdsRootKey.md = ..\Documentation\PowerShell\Get-ADDBKdsRootKey.md
 		..\Documentation\PowerShell\Get-ADDBSchemaAttribute.md = ..\Documentation\PowerShell\Get-ADDBSchemaAttribute.md
@@ -110,6 +111,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\Get-LsaPolicyInformation.md = ..\Documentation\PowerShell\Get-LsaPolicyInformation.md
 		..\Documentation\PowerShell\Get-SamPasswordPolicy.md = ..\Documentation\PowerShell\Get-SamPasswordPolicy.md
 		..\Documentation\PowerShell\New-ADDBRestoreFromMediaScript.md = ..\Documentation\PowerShell\New-ADDBRestoreFromMediaScript.md
+		..\Documentation\PowerShell\New-ADDBRestoreFromMediaScript.Sample.ps1 = ..\Documentation\PowerShell\New-ADDBRestoreFromMediaScript.Sample.ps1
 		..\Documentation\PowerShell\Readme.md = ..\Documentation\PowerShell\Readme.md
 		..\Documentation\PowerShell\Remove-ADDBObject.md = ..\Documentation\PowerShell\Remove-ADDBObject.md
 		..\Documentation\PowerShell\Save-DPAPIBlob.md = ..\Documentation\PowerShell\Save-DPAPIBlob.md
@@ -122,6 +124,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\Set-LsaPolicyInformation.md = ..\Documentation\PowerShell\Set-LsaPolicyInformation.md
 		..\Documentation\PowerShell\Set-SamAccountPasswordHash.md = ..\Documentation\PowerShell\Set-SamAccountPasswordHash.md
 		..\Documentation\PowerShell\Test-PasswordQuality.md = ..\Documentation\PowerShell\Test-PasswordQuality.md
+		..\Documentation\PowerShell\Unlock-ADDBAccount.md = ..\Documentation\PowerShell\Unlock-ADDBAccount.md
 	EndProjectSection
 EndProject
 Global

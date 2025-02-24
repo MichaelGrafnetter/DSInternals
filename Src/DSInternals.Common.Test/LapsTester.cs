@@ -24,12 +24,12 @@ namespace DSInternals.Common.Test
         [TestMethod]
         public void LAPS_Parse_Cleartext()
         {
-            byte[] binaryLapsPassword = "7b226e223a2241646d696e6973747261746f72222c2274223a22316438313631623431633431636465222c2270223a2241366133233725656221353762653461344239355a34333339346261393536646536396535643839373523243861366429346638326461366164353030484778227d".HexToBinary();
+            byte[] binaryLapsPassword = "7b226e223a2241646d696e6973747261746f72222c2274223a22316438313631623431633431636465222c2270223a2241366133233725656221353762653461344239355a343333393462613935366465363965356438393735227d".HexToBinary();
             var rawLapsPassword = LapsClearTextPassword.Parse(binaryLapsPassword);
             LapsPasswordInformation laps = new LapsPasswordInformation("CONTOSO-PC1", rawLapsPassword, DateTime.Now);
 
             Assert.AreEqual("Administrator", laps.Account);
-            Assert.AreEqual("A6a#27^eb!57be4a4B95Z43394ba956de69e5d8975", laps.Password);
+            Assert.AreEqual("A6a3#7%eb!57be4a4B95Z43394ba956de69e5d8975", laps.Password);
             Assert.AreEqual(LapsPasswordSource.CleartextPassword, laps.Source);
             Assert.AreEqual(LapsDecryptionStatus.NotApplicable, laps.DecryptionStatus);
         }

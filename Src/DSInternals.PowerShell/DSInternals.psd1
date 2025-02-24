@@ -109,7 +109,7 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'New-ADNgcKey', 'Get-ADDBGroupManagedServiceAccount', 'Get-ADDBBitLockerRecoveryInfo', 'Get-ADDBBitLockerKeyProtector',
                   'Get-ADDBBitLockerRecoveryKey', 'Get-ADDBBitLockerKey', 'Get-ADDBBitLockerRecoveryPassword',
                   'Get-ADDBFVERecoveryKey', 'Get-ADDBFVERecoveryPassword',
-                  'Get-ADDBFVERecoveryInformation', 'Get-ADDBFVERecoveryInfo'
+                  'Get-ADDBFVERecoveryInformation', 'Get-ADDBFVERecoveryInfo', 'Get-ADDBDnsRecord'
 
 # List of assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @('DSInternals.Common.dll')
@@ -127,6 +127,10 @@ FileList = 'AutoMapper.dll',
            'NDceRpc.Microsoft.dll',
            'Newtonsoft.Json.dll',
            'Numbers.dll',
+           'System.Buffers.dll',
+           'System.Memory.dll',
+           'System.Numerics.Vectors.dll',
+           'System.Runtime.CompilerServices.Unsafe.dll',
            'amd64\DSInternals.Replication.Interop.dll',
            'arm64\DSInternals.Replication.Interop.dll',
            'x86\DSInternals.Replication.Interop.dll',
@@ -139,7 +143,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows', 'FIDO', 'NTDS'
+        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'DNS', 'BitLocker', 'LAPS', 'PSModule', 'Windows', 'FIDO', 'NTDS'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/License.txt'

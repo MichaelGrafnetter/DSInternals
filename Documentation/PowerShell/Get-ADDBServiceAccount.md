@@ -1,7 +1,7 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version:
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBServiceAccount.md
 schema: 2.0.0
 ---
 

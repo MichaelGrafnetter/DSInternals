@@ -4803,6 +4803,193 @@ PC02         caeaa622-6c6a-4d2b-8e33-29e46df659af 782066-216356-283624-291397-40
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBBitLockerRecoveryInformation.md</maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDomainController</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-ADDBDnsResourceRecord</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>ADDBDnsResourceRecord</command:noun>
+      <maml:description>
+        <maml:para>Retrieves DNS resource records from an Active Directory database.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Retrieves DNS resource records from an offline Active Directory database. The output can include tombstoned records and root hints if specified.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-ADDBDnsResourceRecord</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="RootHints, RootServers">
+          <maml:name>IncludeRootHints</maml:name>
+          <maml:description>
+            <maml:para>Indicates that root hints should be included in the output.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tombstones, IncludeTombstoned">
+          <maml:name>IncludeTombstones</maml:name>
+          <maml:description>
+            <maml:para>Indicates that tombstoned DNS records should be included in the output.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+          <maml:name>LogPath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="RootHints, RootServers">
+        <maml:name>IncludeRootHints</maml:name>
+        <maml:description>
+          <maml:para>Indicates that root hints should be included in the output.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tombstones, IncludeTombstoned">
+        <maml:name>IncludeTombstones</maml:name>
+        <maml:description>
+          <maml:para>Indicates that tombstoned DNS records should be included in the output.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+        <maml:name>LogPath</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.Data.DnsResourceRecord</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBDnsResourceRecord -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit' |
+            Where-Object Zone -eq 'contoso.com' |
+            Where-Object Type -in SOA,NS,A,CNAME,MX,CNAME |
+            Sort-Object -Property Name
+&lt;# Sample Output:
+@                               3600  IN  SOA   dc01.contoso.com. hostmaster.contoso.com. (
+                                                186          ; serial number
+                                                900          ; refresh
+                                                600          ; retry
+                                                86400        ; expire
+                                                3600       ) ; default TTL
+@                               3600  IN  NS    dc01.contoso.com.
+@                               3600  IN  NS    dc02.contoso.com.
+@                               600   IN  A     10.213.0.3
+@                               600   IN  A     10.213.0.9
+_msdcs                          3600  IN  NS    dc01.contoso.com.
+certauth.login                  3600  IN  A     10.213.0.4
+dc01                            3600  IN  A     10.213.0.3
+dc02                            3600  IN  A     10.213.0.9
+DomainDnsZones                  600   IN  A     10.213.0.9
+DomainDnsZones                  600   IN  A     10.213.0.3
+ForestDnsZones                  600   IN  A     10.213.0.9
+ForestDnsZones                  600   IN  A     10.213.0.3
+ftp                             3600  IN  CNAME www
+login                           3600  IN  A     10.213.0.4
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Extracts all DNS recource records from the offline Active Directory database file and displays the SOA, NS, A, CNAME, MX, and CNAME records from the contoso.com zone in a text format compatible with Windows Server and BIND zone files.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBDnsResourceRecord.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDomainController</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -5396,6 +5583,10 @@ KDS Derived Secrets
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBServiceAccount.md</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADDBKdsRootKey</maml:linkText>
         <maml:uri></maml:uri>
@@ -11685,6 +11876,10 @@ PS C:\&gt; Set-AzureADUserEx -UserPrincipalName 'john@contoso.com' -KeyCredentia
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-AzureADUserEx.md</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-AzureADUserEx</maml:linkText>
         <maml:uri></maml:uri>
