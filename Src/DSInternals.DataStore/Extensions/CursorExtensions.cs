@@ -111,7 +111,8 @@ namespace DSInternals.DataStore
                 object value = cursor.Record[columnId, valueIndex];
                 result.Add((byte[])value);
                 valueIndex++;
-            }            
+            }
+
             return result.Count > 0 ? result.ToArray() : null;
         }
 

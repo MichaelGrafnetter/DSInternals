@@ -13,5 +13,7 @@
         public const string GroupManagedServiceAccount = "msDS-GroupManagedServiceAccount";
         public const string DelegatedManagedServiceAccount = "msDS-DelegatedManagedServiceAccount";
         public const string FVERecoveryInformation = "msFVE-RecoveryInformation";
+        public const string DnsZone = "dnsZone";
+        public const string DnsNode = "dnsNode";
     }
 }

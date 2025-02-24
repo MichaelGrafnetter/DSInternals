@@ -228,5 +228,7 @@
         public const string WindowsLapsEncryptedDsrmPassword = "msLAPS-EncryptedDSRMPassword";
         public const string WindowsLapsEncryptedDsrmPasswordHistory = "msLAPS-EncryptedDSRMPasswordHistory";
         public const string WindowsLapsCurrentPasswordVersion = "msLAPS-CurrentPasswordVersion";
+        public const string DnsRecord = "dnsRecord";
+        public const string DnsTombstoned = "dNSTombstoned";
     }
 }

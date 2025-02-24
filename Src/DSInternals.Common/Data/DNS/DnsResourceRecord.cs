@@ -3,7 +3,6 @@ using System.Buffers.Binary;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
-using DSInternals.Common.Properties;
 
 namespace DSInternals.Common.Data
 {
@@ -14,41 +13,144 @@ namespace DSInternals.Common.Data
         private static readonly int SrvResourceRecordHeaderSize = Marshal.SizeOf<SrvResourceRecordHeader>();
         private static readonly int SoaResourceRecordHeaderSize = Marshal.SizeOf<SoaResourceRecordHeader>();
         private const int ZoneFileFirstColumnWidth = 24;
+
+        /// <summary>
+        /// If the RDATA is of zero length, the text representation contains only the \# token and the single zero representing the length.
+        /// </summary>
+        private const string EmptyResourceData = "\\# 0";
         private static readonly string ZoneFileFirstColumnBlank = new string(' ', ZoneFileFirstColumnWidth);
         private static readonly string ZoneFileFirstThreeColumnsBlank = $"{ZoneFileFirstColumnBlank}\t\t";
 
         /// <summary>
+        /// The DNS zone in which this record is located.
+        /// </summary>
+        public string Zone
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// The host name of the resource record.
+        /// </summary>
+        public string Name
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// The type of the resource record.
         /// </summary>
-        public ResourceRecordType Type;
+        public ResourceRecordType Type
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// Resource record properties.
         /// </summary>
-        public ResourceRecordRank Rank;
+        public ResourceRecordRank Rank
+        {
+            get;
+            private set;
+        } = ResourceRecordRank.Zone;
 
         /// <summary>
         /// The serial number of the SOA record of the zone containing this resource record.
         /// </summary>
-        public uint Serial;
+        public uint Serial
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// The duration after which this record will expire.
         /// </summary>
-        public TimeSpan TTL;
+        public TimeSpan TTL
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// The time stamp for the record when it received the last update.
         /// </summary>
-        public DateTime? TimeStamp;
+        public DateTime? TimeStamp
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// The resource record's data.
         /// </summary>
-        public string Data;
-
-        private DnsResourceRecord(DnsResourceRecordHeader header, string data)
+        public string Data
         {
+            get;
+            private set;
+        }
+
+        private string TypeString
+        {
+            get
+            {
+                bool isKnownRecordType = Enum.IsDefined(typeof(ResourceRecordType), this.Type);
+
+                // Use the numeric value for unknown/unsupported types, e.g., TYPE257.
+                return isKnownRecordType ? this.Type.ToString() : $"TYPE{(ushort)this.Type}";
+            }
+        }
+
+        public DnsResourceRecord(string zone, string name, ResourceRecordType type, uint serial, string data, TimeSpan? ttl = null, DateTime? timeStamp = null, ResourceRecordRank rank = ResourceRecordRank.Zone)
+        {
+            if (string.IsNullOrWhiteSpace(zone))
+            {
+                throw new ArgumentNullException(nameof(zone));
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            if (ttl.HasValue)
+            {
+                if (ttl.Value.TotalSeconds > uint.MaxValue)
+                {
+                    // The TTL is stored as a 32-bit unsigned integer.
+                    throw new ArgumentOutOfRangeException(nameof(ttl));
+                }
+
+                this.TTL = ttl.Value;
+            }
+
+            else
+            {
+                // Defaults to 1h.
+                this.TTL = TimeSpan.FromHours(1);
+            }
+
+            this.Zone = zone;
+            this.Name = name;
+            this.Type = type;
+            this.Rank = rank;
+            this.Serial = serial;
+            this.TimeStamp = timeStamp;
+            this.Data = data;
+        }
+
+        private DnsResourceRecord(string zone, string name, DnsResourceRecordHeader header, string data)
+        {
+            this.Zone = zone;
+            this.Name = name;
             this.Type = header.Type;
             this.Rank = header.Rank;
             this.Rank = header.Rank;
@@ -59,6 +161,35 @@ namespace DSInternals.Common.Data
             this.TimeStamp = header.TimeStamp == 0 ? null : DateTime.FromFileTimeUtc((long)header.TimeStamp * 60 * 60 * 10000000);
 
             this.Data = data;
+        }
+
+        override public string ToString()
+        {
+            var result = new StringBuilder();
+
+            if (this.Type == ResourceRecordType.ZERO)
+            {
+                // Tombstoned records will be commented out.
+                result.Append("; ");
+            }
+
+            // Record name
+            result.AppendFormat("{0,-23} ", this.Name);
+
+            // TTL
+            if (this.TTL != TimeSpan.Zero)
+            {
+                result.Append((uint)this.TTL.TotalSeconds);
+                result.Append('\t');
+            }
+
+            // Class, Type, and Data, e.g., IN  A 10.1.2.3
+            result.Append("IN  ");
+            result.Append(this.TypeString);
+            result.Append('\t');
+            result.Append(this.Data);
+
+            return result.ToString();
         }
 
         /// <summary>
@@ -140,10 +271,25 @@ namespace DSInternals.Common.Data
             public uint MinimumTTL;
         }
 
-        public static DnsResourceRecord Parse(ReadOnlySpan<byte> binaryRecord)
+        public static DnsResourceRecord Create(string zone, string name, ReadOnlySpan<byte> binaryRecordData)
         {
+            if (string.IsNullOrWhiteSpace(zone))
+            {
+                throw new ArgumentNullException(nameof(zone));
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if(binaryRecordData == null || binaryRecordData.Length < DnsResourceRecordHeaderSize)
+            {
+                throw new ArgumentOutOfRangeException(nameof(binaryRecordData), binaryRecordData.Length, "Invalid DNS_RPC_RECORD data.");
+            }
+
             // Parse the binary structure header
-            var header = MemoryMarshal.Read<DnsResourceRecordHeader>(binaryRecord);
+            var header = MemoryMarshal.Read<DnsResourceRecordHeader>(binaryRecordData);
 
             if (header.Version != StructVersion)
             {
@@ -158,7 +304,7 @@ namespace DSInternals.Common.Data
             }
 
             // We now know the length, in bytes, of the Data field.
-            var binaryData = binaryRecord.Slice(DnsResourceRecordHeaderSize, header.DataLength);
+            var binaryData = binaryRecordData.Slice(DnsResourceRecordHeaderSize, header.DataLength);
 
             // Type-specific conversion of the binary data to a string.
             string data = header.Type switch
@@ -209,58 +355,68 @@ namespace DSInternals.Common.Data
                 _ => ParseUnknown(binaryData)
             };
 
-            return new DnsResourceRecord(header, data);
+            return new DnsResourceRecord(zone, name, header, data);
         }
 
         /// <summary>
         /// Parses the DNS_RPC_RECORD_A structure.
         /// </summary>
-        private static string ParseA(ReadOnlySpan<byte> binaryData)
+        private static string ParseA(ReadOnlySpan<byte> buffer)
         {
-            int binaryIPAddress = BinaryPrimitives.ReadInt32LittleEndian(binaryData);
+            if (buffer == null || buffer.Length == 0)
+            {
+                return EmptyResourceData;
+            }
+
+            int binaryIPAddress = BinaryPrimitives.ReadInt32LittleEndian(buffer);
             return new IPAddress(binaryIPAddress).ToString();
         }
 
         /// <summary>
         /// Parses the DNS_RPC_RECORD_AAAA structure.
         /// </summary>
-        private static string ParseAAAA(ReadOnlySpan<byte> binaryData)
+        private static string ParseAAAA(ReadOnlySpan<byte> buffer)
         {
+            if (buffer == null || buffer.Length == 0)
+            {
+                return EmptyResourceData;
+            }
+
             // This conversion is less efficient because of backwards compatibility with .NET Framework.
-            return new IPAddress(binaryData.ToArray()).ToString();
+            return new IPAddress(buffer.ToArray()).ToString();
         }
 
         /// <summary>
         /// Parses the DNS_COUNT_NAME structure.
         /// </summary>
-        private static string ParseFQDN(ReadOnlySpan<byte> data)
+        private static string ParseFQDN(ReadOnlySpan<byte> buffer)
         {
-            if (data == null || data.Length <= 2 || data[0] == 0)
+            if (buffer == null || buffer.Length <= 2 || buffer[0] == 0)
             {
                 // To represent an empty string, cchNameLength MUST be zero and dnsName MUST be empty.
                 return string.Empty;
             }
 
-            var result = new StringBuilder(data.Length);
+            var result = new StringBuilder(buffer.Length);
             int currentOffset = 0;
 
-            byte length = data[currentOffset++];
-            if(data.Length - 2 != length)
+            byte length = buffer[currentOffset++];
+            if (buffer.Length - 2 != length)
             {
                 // Note: The length in the data structure excludes itself and the trailing zero.
-                throw new ArgumentException("Unexpected DNS_COUNT_NAME structure length.", nameof(data));
+                throw new ArgumentException("Unexpected DNS_COUNT_NAME structure length.", nameof(buffer));
             }
 
-            byte labelCount = data[currentOffset++];
+            byte labelCount = buffer[currentOffset++];
 
             for (byte i = 0; i < labelCount; i++)
             {
-                byte labelLength = data[currentOffset++];
-                string label = ParseUTF8String(data.Slice(currentOffset, labelLength));
+                byte labelLength = buffer[currentOffset++];
+                string label = ParseUTF8String(buffer.Slice(currentOffset, labelLength));
                 currentOffset += labelLength;
                 result.Append(label);
 
-                if(labelCount > 0)
+                if (labelCount > 0)
                 {
                     // DNS name segment delimiter and FQDN terminator. Omit for single-label CNAMEs.
                     result.Append('.');
@@ -277,7 +433,7 @@ namespace DSInternals.Common.Data
         {
             if (buffer == null || buffer.Length <= 1 || buffer[0] == 0)
             {
-                return string.Empty;
+                return EmptyResourceData;
             }
 
             var result = new StringBuilder(buffer.Length);
@@ -312,7 +468,7 @@ namespace DSInternals.Common.Data
         {
             var header = MemoryMarshal.Read<SrvResourceRecordHeader>(buffer);
 
-            if(BitConverter.IsLittleEndian)
+            if (BitConverter.IsLittleEndian)
             {
                 // These fields use big-endian byte order.
                 header.Priority = BinaryPrimitives.ReverseEndianness(header.Priority);
@@ -364,6 +520,11 @@ namespace DSInternals.Common.Data
         /// </summary>
         private static string ParseMX(ReadOnlySpan<byte> buffer)
         {
+            if (buffer == null || buffer.Length == 0)
+            {
+                return EmptyResourceData;
+            }
+
             ushort preference = BinaryPrimitives.ReadUInt16BigEndian(buffer);
             string nameExchange = ParseFQDN(buffer.Slice(sizeof(ushort)));
 
@@ -378,7 +539,10 @@ namespace DSInternals.Common.Data
         {
             // Extract the tombstoned timestamp in the FILETIME format.
             long fileTime = BinaryPrimitives.ReadInt64LittleEndian(buffer);
-            return DateTime.FromFileTimeUtc(fileTime).ToString("u");
+            DateTime tombstonedTimeStamp = DateTime.FromFileTimeUtc(fileTime);
+
+            // Send the timestamp in a comment.
+            return $"\\# 0 ; Tombstoned at {tombstonedTimeStamp:u}";
         }
 
         /// <summary>
@@ -389,9 +553,9 @@ namespace DSInternals.Common.Data
         /// </remarks>
         private static string ParseUnknown(ReadOnlySpan<byte> buffer)
         {
-            if(buffer == null || buffer.Length == 0)
+            if (buffer == null || buffer.Length == 0)
             {
-                return string.Empty;
+                return EmptyResourceData;
             }
 
             // Example: \\# 18 00056973737565656e74727573742e6e6574

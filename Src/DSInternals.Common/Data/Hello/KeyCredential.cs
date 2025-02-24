@@ -37,6 +37,11 @@
         private KeyMaterialFido _cachedFidoKeyMaterial;
 
         /// <summary>
+        /// Cached hash of the entries.
+        /// </summary>
+        private byte[] _cachedHash;
+
+        /// <summary>
         /// Defines the version of the structure.
         /// </summary>
         public KeyCredentialVersion Version
@@ -360,7 +365,8 @@
                                 this.Identifier = ConvertFromBinaryIdentifier(value, this.Version);
                                 break;
                             case KeyCredentialEntryType.KeyHash:
-                                // We do not need to validate the integrity of the data by the hash
+                                // TODO: Validate the integrity of the data against the hash. Hacktools might produce malformed CNG keys.
+                                this._cachedHash = value;
                                 break;
                             case KeyCredentialEntryType.KeyMaterial:
                                 this.RawKeyMaterial = value;
@@ -497,7 +503,9 @@
                     blobWriter.Write(binaryKeyId);
 
                     // Key Hash
-                    byte[] keyHash = ComputeHash(binaryProperties);
+                    // Use the cached value if present. Compute the hash otherwise.
+                    byte[] keyHash = this._cachedHash ?? ComputeHash(binaryProperties);
+
                     blobWriter.Write((ushort)keyHash.Length);
                     blobWriter.Write((byte)KeyCredentialEntryType.KeyHash);
                     blobWriter.Write(keyHash);
@@ -505,6 +513,7 @@
                     // Append the remaining entries
                     blobWriter.Write(binaryProperties);
                 }
+
                 return blobStream.ToArray();
             }
         }
