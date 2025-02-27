@@ -13,7 +13,8 @@ Gets all Active Directory user accounts from a given domain controller using ADS
 ## SYNTAX
 
 ```
-Get-ADSIAccount [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-Server <String>] [-Credential <PSCredential>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -64,6 +65,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Properties
+Specifies the set of properties that will be retrieved for each account.
+
+```yaml
+Type: AccountPropertySets
+Parameter Sets: (All)
+Aliases: Property, PropertySets, PropertySet
+Accepted values: None, DistinguishedName, GenericAccountInfo, GenericUserInfo, GenericComputerInfo, GenericInfo, SecurityDescriptor, NTHash, LMHash, PasswordHashes, NTHashHistory, LMHashHistory, PasswordHashHistory, SupplementalCredentials, Secrets, KeyCredentials, RoamedCredentials, WindowsLAPS, LegacyLAPS, LAPS, ManagedBy, Manager, All
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Server
 Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.
 
@@ -89,6 +106,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ### DSInternals.Common.Data.DSAccount
+
+### DSInternals.Common.Data.DSUser
+
+### DSInternals.Common.Data.DSComputer
 
 ## NOTES
 

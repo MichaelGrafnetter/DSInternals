@@ -1,12 +1,12 @@
 ﻿namespace DSInternals.Common.ADSI
 {
-    using DSInternals.Common.Data;
     using System;
     using System.Collections.Generic;
     using System.DirectoryServices;
     using System.DirectoryServices.ActiveDirectory;
     using System.Linq;
     using System.Net;
+    using DSInternals.Common.Data;
 
     public class AdsiClient : IDisposable
     {
@@ -17,32 +17,6 @@
             CommonDirectoryAttributes.NetBIOSName
         };
         private const string AccountsFilter = "(objectClass=user)";
-        private static readonly string[] AccountPropertiesToLoad = new string[] {
-            CommonDirectoryAttributes.CommonName,
-            CommonDirectoryAttributes.DN,
-            CommonDirectoryAttributes.DisplayName,
-            CommonDirectoryAttributes.ServicePrincipalName,
-            CommonDirectoryAttributes.UserPrincipalName,
-            CommonDirectoryAttributes.ObjectGUID,
-            CommonDirectoryAttributes.ObjectSid,
-            CommonDirectoryAttributes.SAMAccountName,
-            CommonDirectoryAttributes.SamAccountType,
-            CommonDirectoryAttributes.AdminCount,
-            CommonDirectoryAttributes.UserAccountControl,
-            CommonDirectoryAttributes.SupportedEncryptionTypes,
-            CommonDirectoryAttributes.LastLogon,
-            CommonDirectoryAttributes.LastLogonTimestamp,
-            CommonDirectoryAttributes.GivenName,
-            CommonDirectoryAttributes.Surname,
-            CommonDirectoryAttributes.Description,
-            CommonDirectoryAttributes.SIDHistory,
-            CommonDirectoryAttributes.SecurityDescriptor,
-            CommonDirectoryAttributes.PrimaryGroupId,
-            CommonDirectoryAttributes.PKIAccountCredentials,
-            CommonDirectoryAttributes.PKIDPAPIMasterKeys,
-            CommonDirectoryAttributes.PKIRoamingTimeStamp,
-            CommonDirectoryAttributes.KeyCredentialLink
-        };
 
         private DirectoryEntry searchRoot;
 
@@ -113,9 +87,127 @@
             private set;
         }
 
-        public IEnumerable<DSAccount> GetAccounts()
+        public IEnumerable<DSAccount> GetAccounts(AccountPropertySets propertySets = AccountPropertySets.All)
         {
-            using (var searcher = new DirectorySearcher(this.searchRoot, AccountsFilter, AccountPropertiesToLoad, SearchScope.Subtree))
+            // Not all property sets work as secret attributes are never sent ove LDAP.
+            var accountPropertiesToLoad = new List<string>();
+
+            // Always frtch these attributes:
+            accountPropertiesToLoad.AddRange([
+                CommonDirectoryAttributes.ServicePrincipalName,
+                CommonDirectoryAttributes.ObjectGUID,
+                CommonDirectoryAttributes.ObjectSid,
+                CommonDirectoryAttributes.SAMAccountName,
+                CommonDirectoryAttributes.SamAccountType,
+                CommonDirectoryAttributes.UserAccountControl,
+                CommonDirectoryAttributes.AdminCount,
+                CommonDirectoryAttributes.SupportedEncryptionTypes,
+                CommonDirectoryAttributes.PrimaryGroupId
+             ]);
+
+            if (propertySets.HasFlag(AccountPropertySets.DistinguishedName) || propertySets.HasFlag(AccountPropertySets.KeyCredentials))
+            {
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.DN);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.WindowsLAPS))
+            {
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.WindowsLapsPasswordExpirationTime);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.WindowsLapsPassword);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.WindowsLapsCurrentPasswordVersion);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.LegacyLAPS))
+            {
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.LAPSPassword);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.LAPSPasswordExpirationTime);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.GenericAccountInfo))
+            {
+                accountPropertiesToLoad.AddRange([
+                    CommonDirectoryAttributes.UserPrincipalName,
+                    CommonDirectoryAttributes.SIDHistory,
+                    CommonDirectoryAttributes.LastLogon,
+                    CommonDirectoryAttributes.LastLogonTimestamp,
+                    CommonDirectoryAttributes.Description,
+                    CommonDirectoryAttributes.PasswordLastSet
+                ]);
+             }
+
+            if (propertySets.HasFlag(AccountPropertySets.GenericUserInfo))
+            {
+                accountPropertiesToLoad.AddRange([
+                    CommonDirectoryAttributes.DisplayName,
+                    CommonDirectoryAttributes.GivenName,
+                    CommonDirectoryAttributes.Surname,
+                    CommonDirectoryAttributes.Initials,
+                    CommonDirectoryAttributes.EmployeeID,
+                    CommonDirectoryAttributes.EmployeeNumber,
+                    CommonDirectoryAttributes.Email,
+                    CommonDirectoryAttributes.Street,
+                    CommonDirectoryAttributes.City,
+                    CommonDirectoryAttributes.State,
+                    CommonDirectoryAttributes.PostalCode,
+                    CommonDirectoryAttributes.Country,
+                    CommonDirectoryAttributes.PostOfficeBox,
+                    CommonDirectoryAttributes.TelephoneNumber,
+                    CommonDirectoryAttributes.HomePhone,
+                    CommonDirectoryAttributes.Mobile,
+                    CommonDirectoryAttributes.PagerNumber,
+                    CommonDirectoryAttributes.IpPhone,
+                    CommonDirectoryAttributes.WebPage,
+                    CommonDirectoryAttributes.JobTitle,
+                    CommonDirectoryAttributes.Department,
+                    CommonDirectoryAttributes.Office,
+                    CommonDirectoryAttributes.Company,
+                    CommonDirectoryAttributes.HomeDirectory,
+                    CommonDirectoryAttributes.HomeDrive,
+                    CommonDirectoryAttributes.ProfilePath,
+                    CommonDirectoryAttributes.ScriptPath,
+                    CommonDirectoryAttributes.UnixHomeDirectory,
+                    CommonDirectoryAttributes.Comment
+                ]);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.GenericComputerInfo))
+            {
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.Location);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.OperatingSystemName);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.OperatingSystemVersion);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.OperatingSystemHotfix);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.OperatingSystemServicePack);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.DNSHostName);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.KeyCredentials))
+            {
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.KeyCredentialLink);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.Manager))
+            {
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.Manager);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.ManagedBy))
+            {
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.ManagedBy);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.RoamedCredentials))
+            {
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.PKIAccountCredentials);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.PKIDPAPIMasterKeys);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.PKIRoamingTimeStamp);
+            }
+
+            if (propertySets.HasFlag(AccountPropertySets.SecurityDescriptor))
+            {
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.SecurityDescriptor);
+            }
+
+            using (var searcher = new DirectorySearcher(this.searchRoot, AccountsFilter, accountPropertiesToLoad.ToArray(), SearchScope.Subtree))
             {
                 using (var searchResults = searcher.FindAll())
                 {

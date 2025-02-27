@@ -7570,6 +7570,43 @@ ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Property, PropertySets, PropertySet">
+          <maml:name>Properties</maml:name>
+          <maml:description>
+            <maml:para>Specifies the set of properties that will be retrieved for each account.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DistinguishedName</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericAccountInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericUserInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericComputerInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityDescriptor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SupplementalCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Secrets</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">KeyCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RoamedCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LegacyLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ManagedBy</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Manager</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">All</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AccountPropertySets</command:parameterValue>
+          <dev:type>
+            <maml:name>AccountPropertySets</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
           <maml:name>Server</maml:name>
           <maml:description>
@@ -7593,6 +7630,18 @@ ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Property, PropertySets, PropertySet">
+        <maml:name>Properties</maml:name>
+        <maml:description>
+          <maml:para>Specifies the set of properties that will be retrieved for each account.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">AccountPropertySets</command:parameterValue>
+        <dev:type>
+          <maml:name>AccountPropertySets</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -7624,6 +7673,22 @@ ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
       <command:returnValue>
         <dev:type>
           <maml:name>DSInternals.Common.Data.DSAccount</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.Data.DSUser</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.Data.DSComputer</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -12775,7 +12840,7 @@ These accounts are susceptible to the Kerberoasting attack:
   CONTOSO\sp_svc01
   CONTOSO\sql_svc02
 
-These administrative accounts are allowed to be delegated to a service:
+These administrative accounts (current or former ones) are allowed to be delegated:
   CONTOSO\AdatumAdmin
   CONTOSO\Administrator
 
