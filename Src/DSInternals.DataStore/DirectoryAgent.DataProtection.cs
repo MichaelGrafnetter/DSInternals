@@ -12,7 +12,7 @@
         {
             Validator.AssertNotNull(bootKey, "bootKey");
             var pek = this.GetSecretDecryptor(bootKey);
-            // TODO: Refactor using Linq
+
             foreach (var secret in this.FindObjectsByCategory(CommonDirectoryClasses.Secret))
             {
                 // RODCs and partial replicas on GCs do not contain secrets
@@ -27,11 +27,14 @@
         #region DPAPI NG / Group Key Distribution Service
         public IEnumerable<KdsRootKey> GetKdsRootKeys()
         {
-            // TODO: Refactor using Linq
             // TODO: Test if schema contains the ms-Kds-Prov-RootKey class.
             foreach (var keyObject in this.FindObjectsByCategory(CommonDirectoryClasses.KdsRootKey))
             {
-                yield return new KdsRootKey(keyObject);
+                if (keyObject.IsWritable)
+                {
+                    // RODCs do not contain key values
+                    yield return new KdsRootKey(keyObject);
+                }
             }
         }
 

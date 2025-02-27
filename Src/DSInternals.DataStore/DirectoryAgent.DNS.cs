@@ -10,7 +10,7 @@ namespace DSInternals.DataStore
         {
             foreach (var node in this.FindObjectsByCategory(CommonDirectoryClasses.DnsNode))
             {
-                if(skipTombstoned)
+                if (skipTombstoned)
                 {
                     node.ReadAttribute(CommonDirectoryAttributes.DnsTombstoned, out bool isTombstoned);
                     if (isTombstoned)
@@ -20,8 +20,15 @@ namespace DSInternals.DataStore
                     }
                 }
 
-                node.ReadAttribute(CommonDirectoryAttributes.DNTag, out DistinguishedName dn);
                 node.ReadAttribute(CommonDirectoryAttributes.DnsRecord, out byte[][] records);
+                if (records == null)
+                {
+                    // Skip the node, as it does not contain any DNS records.
+                    // The object might come from a partial replica of the domain partition.
+                    continue;
+                }
+
+                node.ReadAttribute(CommonDirectoryAttributes.DNTag, out DistinguishedName dn);
 
                 // Record host name is the first RDN in the node distinguished name.
                 string name = dn.Components[0].Value;
