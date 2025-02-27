@@ -87,7 +87,7 @@ These accounts are susceptible to the Kerberoasting attack:
   CONTOSO\sp_svc01
   CONTOSO\sql_svc02
 
-These administrative accounts are allowed to be delegated to a service:
+These administrative accounts (current or former ones) are allowed to be delegated:
   CONTOSO\AdatumAdmin
   CONTOSO\Administrator
 
