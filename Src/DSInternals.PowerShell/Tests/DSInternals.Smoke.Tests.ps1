@@ -119,11 +119,12 @@ Describe 'DSInternals PowerShell Module' {
 
     Context 'Views' {
         
-        # Get all .NET types referenced by Views
+        # Get all .NET types referenced by Views, with the exception of virtual types (containing #)
         $typeNames = Get-ChildItem -Filter *.format.ps1xml -Path $ModulePath -Recurse -File |
                         Select-Xml -XPath '//TypeName/text()' |
                         ForEach-Object { $PSItem.Node.Value } |
                         Sort-Object -Unique |
+                        Where-Object { $PSItem -notlike '*#*' } |
                         ForEach-Object { @{ TypeName = $PSItem } }
 
         # Import the DSInternals PowerShell Module
@@ -261,7 +262,7 @@ Describe 'DSInternals PowerShell Module' {
             }
 
             It 'has the same release notes as the module' {
-                $chocolateySpec.package.metadata.releaseNotes.Replace("`r`n","`n").Trim() | Should Be $manifest.PrivateData.PSData.ReleaseNotes.Replace("`r`n","`n").Replace('- ','* ').Trim()
+                $chocolateySpec.package.metadata.releaseNotes.Replace("`r`n","`n").Replace('`','').Trim() | Should Be $manifest.PrivateData.PSData.ReleaseNotes.Replace("`r`n","`n").Replace('- ','* ').Trim()
             }
 
             It 'has the same copyright info as the module' {
