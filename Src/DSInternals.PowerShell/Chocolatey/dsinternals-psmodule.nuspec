@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>4.16</version>
+    <version>5.0</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -37,7 +37,12 @@ The DSInternals PowerShell Module has these main features:
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* The `New-ADDBRestoreFromMediaScript` cmdlet now properly sets the `Configuration NC`, `Root Domain`, and `Machine DN Name` registry values under the `HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters` key.
+* Added the `Get-ADDBBitLockerRecoveryInformation` cmdlet for retrieving BitLocker recovery keys from `ntds.dit` files.
+* Added the `Get-ADDBDnsResourceRecord` cmdlet for retrieving DNS resource records from `ntds.dit` files.
+* The `Get-ADDBAccount`, `Get-ADReplAccount`, and `Get-ADSIAccount` cmdlets have a new parameter called `-Properties` for specifying the properties to be fetched, which greatly increases the performance.
+* The `Get-ADDBAccount` and `Get-ADReplAccount` cmdlets have a new parameter called `-ExportFormat`, which replaces the `Format-Custom` cmdlet when exporting data to `hashcat`, `pwdump`, and other formats.
+* Legacy LAPS and Windows LAPS cleartext passwords can now be extracted from `ntds.dit` files using the `Get-ADDBAccount` cmdlet.
+* More user and computer attributes can optionally be retrieved by the `Get-ADDBAccount`, `Get-ADReplAccount`, and `Get-ADSIAccount` cmdlets, including email addresses, phone numbers, managers, and OS versions.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->

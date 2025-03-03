@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.16'
+ModuleVersion = '5.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -156,7 +156,12 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The New-ADDBRestoreFromMediaScript cmdlet now properly sets the "Configuration NC", "Root Domain", and "Machine DN Name" registry values under the "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" key.
+- Added the Get-ADDBBitLockerRecoveryInformation cmdlet for retrieving BitLocker recovery keys from ntds.dit files.
+- Added the Get-ADDBDnsResourceRecord cmdlet for retrieving DNS resource records from ntds.dit files.
+- The Get-ADDBAccount, Get-ADReplAccount, and Get-ADSIAccount cmdlets have a new parameter called -Properties for specifying the properties to be fetched, which greatly increases the performance.
+- The Get-ADDBAccount and Get-ADReplAccount cmdlets have a new parameter called -ExportFormat, which replaces the Format-Custom cmdlet when exporting data to hashcat, pwdump, and other formats.
+- Legacy LAPS and Windows LAPS cleartext passwords can now be extracted from ntds.dit files using the Get-ADDBAccount cmdlet. 
+- More user and computer attributes can optionally be retrieved by the Get-ADDBAccount, Get-ADReplAccount, and Get-ADSIAccount cmdlets, including email addresses, phone numbers, managers, and OS versions.
 "@
     } # End of PSData hashtable
 

@@ -7,15 +7,16 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [5.0] - 2025-03-03
+
 ### Added
 
-- Get-ADDBBitLockerRecoveryInformation cmdlet
-- Get-ADDBComputer cmdlet.
-- The PowerShell module now advertizes `Desktop` as the required edition. Note that *PowerShell Core* is not supported because of heavy dependency on Win32 API.
-
-### Fixed
-
-- Improved export formats.
+- Added the [Get-ADDBBitLockerRecoveryInformation](PowerShell/Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation) cmdlet for retrieving BitLocker recovery keys from `ntds.dit` files.
+- Added the [Get-ADDBDnsResourceRecord](PowerShell/Get-ADDBDnsResourceRecord.md#get-addbdnsresourcerecord) cmdlet for retrieving DNS resource records from `ntds.dit` files.
+- The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount), [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount), and [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlets have a new parameter called `-Properties` for specifying the properties to be fetched, which greatly increases the performance.
+- The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) and [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlets have a new parameter called `-ExportFormat`, which replaces the `Format-Custom` cmdlet when exporting data to `hashcat`, `pwdump`, and other formats.
+- Legacy LAPS and Windows LAPS cleartext passwords can now be extracted from `ntds.dit` files using the [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet. 
+- More user and computer attributes can optionally be retrieved by the [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount), [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount), and [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlets, including email addresses, phone numbers, managers, and OS versions.
 
 ## [4.16] - 2025-01-05
 
@@ -562,7 +563,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.16...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.0...HEAD
+[5.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.16...v5.0
 [4.16]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...v4.16
 [4.15.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15...v4.15.1
 [4.15]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.14...v4.15
