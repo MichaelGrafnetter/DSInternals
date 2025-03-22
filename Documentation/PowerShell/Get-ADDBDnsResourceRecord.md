@@ -132,4 +132,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
+[Get-ADDBDnsZone](Get-ADDBDnsZone.md)
 [Get-ADDBDomainController](Get-ADDBDomainController.md)

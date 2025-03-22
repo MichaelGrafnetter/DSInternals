@@ -25,7 +25,7 @@ The DSInternals PowerShell module must be installed for all users on the target 
 It is recommended to change the DSRM password after DC promotion.
 
 Author:  Michael Grafnetter
-Version: 2.2
+Version: 2.3
 
 #>
 
@@ -43,6 +43,7 @@ Import-Module -Name DSInternals -ErrorAction Stop
 function Main {
     [string] $script:LogFile = "$env:windir\Logs\DSInternals-RestoreFromMedia.txt"
     [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    $PSDefaultParameterValues = @{ 'Out-File:Encoding' = 'utf8' }
     Write-Log -Message "Starting script execution in phase $Phase..."
 
     # The script must be executed locally so that it is accessible even after a reboot.

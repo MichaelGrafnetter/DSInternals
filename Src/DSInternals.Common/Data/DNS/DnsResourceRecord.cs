@@ -22,7 +22,6 @@ namespace DSInternals.Common.Data
         /// If the RDATA is of zero length, the text representation contains only the \# token and the single zero representing the length.
         /// </summary>
         private const string EmptyResourceData = "\\# 0";
-        private static readonly string ZoneFileNameColumnBlank = new string(' ', ZoneFileNameColumnWidth);
         private static readonly string ZoneFileTtlColumnBlank = new string(' ', ZoneFileTtlColumnWidth);
         private static readonly string ZoneFileFirstThreeColumnsBlank = new string(' ', ZoneFileNameColumnWidth + ZoneFileTtlColumnWidth + ZoneFileTypeColumnWidth);
 

@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '5.0'
+ModuleVersion = '5.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -90,7 +90,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
                   'Set-LSAPolicyInformation', 'New-ADDBRestoreFromMediaScript','Get-LsaBackupKey',
                   'Add-ADReplNgcKey', 'Get-AzureADUserEx', 'Set-AzureADUserEx','Unlock-ADDBAccount',
-                  'Get-ADDBDnsResourceRecord'
+                  'Get-ADDBDnsResourceRecord', 'Get-ADDBDnsZone'
 
 # Variables to export from this module
 VariablesToExport = @()
@@ -156,12 +156,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Get-ADDBBitLockerRecoveryInformation cmdlet for retrieving BitLocker recovery keys from ntds.dit files.
-- Added the Get-ADDBDnsResourceRecord cmdlet for retrieving DNS resource records from ntds.dit files.
-- The Get-ADDBAccount, Get-ADReplAccount, and Get-ADSIAccount cmdlets have a new parameter called -Properties for specifying the properties to be fetched, which greatly increases the performance.
-- The Get-ADDBAccount and Get-ADReplAccount cmdlets have a new parameter called -ExportFormat, which replaces the Format-Custom cmdlet when exporting data to hashcat, pwdump, and other formats.
-- Legacy LAPS and Windows LAPS cleartext passwords can now be extracted from ntds.dit files using the Get-ADDBAccount cmdlet. 
-- More user and computer attributes can optionally be retrieved by the Get-ADDBAccount, Get-ADReplAccount, and Get-ADSIAccount cmdlets, including email addresses, phone numbers, managers, and OS versions.
+- Added the Get-ADDBDnsZone cmdlet for listing AD-integrated DNS zones from ntds.dit files.
+- The New-ADDBRestoreFromMediaScript cmdlet has a new parameter called -SkipDNSServer, which prevents the DNS Server role from being installed on the restored domain controller.
 "@
     } # End of PSData hashtable
 

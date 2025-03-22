@@ -66,6 +66,9 @@ Reads BitLocker recovery passwords from a ntds.dit file.
 ### [Get-ADDBDnsResourceRecord](Get-ADDBDnsResourceRecord.md#get-addbdnsresourcerecord)
 Retrieves DNS resource records from an Active Directory database.
 
+### [Get-ADDBDnsZone](Get-ADDBDnsZone.md#get-addbdnszone)
+Retrieves the list of DNS zones stored in an Active Directory database.
+
 ### [Get-ADDBDomainController](Get-ADDBDomainController.md#get-addbdomaincontroller)
 Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name and DC site.
 

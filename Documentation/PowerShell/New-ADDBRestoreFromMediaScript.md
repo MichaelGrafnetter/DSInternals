@@ -14,7 +14,8 @@ Generates a PowerShell script that can be used to restore a domain controller fr
 
 ```
 New-ADDBRestoreFromMediaScript [-BootKey <Byte[]>] [-SysvolPath <String>]
- -SafeModeAdministratorPassword <SecureString> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+ -SafeModeAdministratorPassword <SecureString> [-SkipDNSServer] -DatabasePath <String> [-LogPath <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -136,6 +137,21 @@ Parameter Sets: (All)
 Aliases: SafeModeAdminPassword, AdminPassword, DSRMPassword
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SkipDNSServer
+Prevents the DNS Server role to be installed on the restored domain controller.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: DoNotInstallDNS, DoNotInstallDNSServer, DontInstallDNS, SkipDNS
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

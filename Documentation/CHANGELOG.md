@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [5.1] - 2025-03-22
+
+### Added
+
+- Added the [Get-ADDBDnsZone](PowerShell/Get-ADDBDnsZone.md#get-addbdnszone) cmdlet for reading the list of AD-integrated DNS zones from a `ntds.dit` file.
+- The [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet has a new parameter called `-SkipDNSServer`, which prevents the DNS Server role from being installed on the restored domain controller.
+
 ## [5.0] - 2025-03-03
 
 ### Added
@@ -563,7 +570,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.0...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.1...HEAD
+[5.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.0...v5.1
 [5.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.16...v5.0
 [4.16]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...v4.16
 [4.15.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15...v4.15.1

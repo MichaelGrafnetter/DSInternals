@@ -25,7 +25,7 @@ The DSInternals PowerShell module must be installed for all users on the target 
 It is recommended to change the DSRM password after DC promotion.
 
 Author:  Michael Grafnetter
-Version: 2.2
+Version: 2.3
 
 #>
 
@@ -43,6 +43,7 @@ Import-Module -Name DSInternals -ErrorAction Stop
 function Main {
     [string] $script:LogFile = "$env:windir\Logs\DSInternals-RestoreFromMedia.txt"
     [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    $PSDefaultParameterValues = @{ 'Out-File:Encoding' = 'utf8' }
     Write-Log -Message "Starting script execution in phase $Phase..."
 
     # The script must be executed locally so that it is accessible even after a reboot.
@@ -93,12 +94,12 @@ function Main {
             # The BitLocker Recovery Password Viewer is called RSAT-Bitlocker-RecPwd on Windows Server 2008 R2 and cannot be instaleld on non-domain computers.
             # The AD-Domain-Services component would try to install UNIX-related components on Windows Server 2008 R2, which cannot be installed on non-domain computers.
             [string[]] $featuresToInstall = @(
-                'DNS',
+                {InstallDNSComment}'DNS',
                 'GPMC',
                 'RSAT-AD-AdminCenter',
                 'RSAT-ADDS-Tools',
                 'RSAT-AD-PowerShell',
-                'RSAT-DNS-Server',
+                {InstallDNSComment}'RSAT-DNS-Server',
                 'RSAT-DFS-Mgmt-Con', # dfsrdiag.exe is not installed by default
                 'RSAT-Feature-Tools-BitLocker-BdeAducExt' # BitLocker Recovery Password Viewer is not installed by default
             )
@@ -126,7 +127,7 @@ function Main {
                 Write-Log -Message 'Promoting the server to a domain controller...'
 
                 # Note: In order to maintain compatibility with Windows Server 2008 R2, the ADDSDeployment PS module is not used.
-                dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:"{DomainName}" /DomainNetBiosName:"{NetBIOSDomainName}" /DomainLevel:{DomainMode} /ForestLevel:{ForestMode} '/SafeModeAdminPassword:"{DSRMPassword}"' /DatabasePath:"{TargetDBDirPath}" /LogPath:"{TargetLogDirPath}" /SysVolPath:"{TargetSysvolPath}" /AllowDomainReinstall:Yes /CreateDNSDelegation:No /DNSOnNetwork:No /InstallDNS:Yes /RebootOnCompletion:No *>> $script:LogFile
+                dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:"{DomainName}" /DomainNetBiosName:"{NetBIOSDomainName}" /DomainLevel:{DomainMode} /ForestLevel:{ForestMode} '/SafeModeAdminPassword:"{DSRMPassword}"' /DatabasePath:"{TargetDBDirPath}" /LogPath:"{TargetLogDirPath}" /SysVolPath:"{TargetSysvolPath}" /AllowDomainReinstall:Yes /CreateDNSDelegation:No /DNSOnNetwork:{DNSOnNetwork} /InstallDNS:{InstallDNS} /RebootOnCompletion:No *>> $script:LogFile
             } else {
                 Write-Log -Message 'The server is already a domain controller. Skipping dcpromo execution.'
             }

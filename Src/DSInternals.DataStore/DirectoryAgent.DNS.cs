@@ -6,6 +6,8 @@ namespace DSInternals.DataStore
 {
     public partial class DirectoryAgent : IDisposable
     {
+        private const string RootHintsZoneName = "RootDNSServers";
+
         public IEnumerable<DnsResourceRecord> GetDnsRecords(bool skipRootHints = true, bool skipTombstoned = true)
         {
             foreach (var node in this.FindObjectsByCategory(CommonDirectoryClasses.DnsNode))
@@ -47,6 +49,19 @@ namespace DSInternals.DataStore
                     }
 
                     yield return record;
+                }
+            }
+        }
+
+        public IEnumerable<string> GetDnsZone()
+        {
+            foreach (var zone in this.FindObjectsByCategory(CommonDirectoryClasses.DnsZone))
+            {
+                zone.ReadAttribute(CommonDirectoryAttributes.DomainComponent, out string fqdn);
+
+                if (fqdn != RootHintsZoneName)
+                {
+                    yield return fqdn;
                 }
             }
         }

@@ -50,9 +50,47 @@
             set;
         }
 
+        [Parameter(Mandatory = false)]
+        [Alias("DoNotInstallDNS", "DoNotInstallDNSServer", "DontInstallDNS", "SkipDNS")]
+        public SwitchParameter SkipDNSServer
+        {
+            get;
+            set;
+        }
+
         protected override void ProcessRecord()
         {
-            if(this.BootKey == null)
+            DomainController dc = this.DirectoryContext.DomainController;
+
+            if (dc.IsADAM)
+            {
+                this.ThrowTerminatingError(new ErrorRecord(
+                    new NotSupportedException("AD LDS databases are not supported by this operation."),
+                    "ADAMRestoreUnsupported",
+                    ErrorCategory.InvalidOperation,
+                    null));
+            }
+
+            if (dc.WritablePartitions.Length <= 0)
+            {
+                this.ThrowTerminatingError(new ErrorRecord(
+                    new NotSupportedException("RODC databases are not supported by this operation."),
+                    "RODCRestoreUnsupported",
+                    ErrorCategory.InvalidOperation,
+                    null));
+            }
+
+            if (!dc.IsGlobalCatalog)
+            {
+                this.WriteWarning("The database does not originate from a Global Catalog. At least one GC must be online for AD to work properly.");
+            }
+
+            if (dc.BackupExpiration.HasValue && dc.BackupExpiration.Value < DateTime.Now)
+            {
+                this.WriteWarning("The database backup seems to be past its shelf life, which could break replication.");
+            }
+
+            if (this.BootKey == null)
             {
                 // No boot key has been provided so we need to get one from registry.
                 // Presume that the database is part of an IFM backup:
@@ -69,21 +107,19 @@
                 bool bootKeyIsValid = dsa.CheckBootKey(this.BootKey);
                 if(!bootKeyIsValid)
                 {
-                    throw new ArgumentException("The boot key provided cannot be used to decrypt the database.", "BootKey");
+                    this.ThrowTerminatingError(new ErrorRecord(
+                        new ArgumentException("The boot key provided cannot be used to decrypt the database.", nameof(BootKey)),
+                        "BootKeyInvalid",
+                        ErrorCategory.InvalidArgument,
+                        null));
                 }
             }
 
-            DomainController dc = this.DirectoryContext.DomainController;
             if (this.SysvolPath == null)
             {
                 // Presume that the database is part of an IFM backup:
                 this.SysvolPath = Path.Combine(this.DirectoryContext.DSAWorkingDirectory, DefaultSysvolPath);
             }
-
-            // TODO: Check that the DC is a GC
-            // TODO: Check that the DC is not a RODC
-            // TODO: Check DNS partition presence
-            // TODO: Check backup expiration time
 
             string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
             string targetDatabaseDirectory = Path.Combine(winDir, "NTDS");
@@ -115,11 +151,14 @@
                 Replace("{SourceDBPath}", this.DirectoryContext.DSADatabaseFile).
                 Replace("{SourceDBDirPath}", this.DirectoryContext.DSAWorkingDirectory).
                 Replace("{SourceLogDirPath}", this.DirectoryContext.DatabaseLogFilesPath).
-                Replace("{TargetDBDirPath}",  targetDatabaseDirectory).
+                Replace("{TargetDBDirPath}", targetDatabaseDirectory).
                 Replace("{TargetDBPath}", targetDatabasePath).
                 Replace("{TargetLogDirPath}", targetDatabaseDirectory).
                 Replace("{SourceSysvolPath}", this.ResolveDirectoryPath(this.SysvolPath)).
-                Replace("{TargetSysvolPath}", targetSysvolPath);
+                Replace("{TargetSysvolPath}", targetSysvolPath).
+                Replace("{DNSOnNetwork}", this.SkipDNSServer.IsPresent ? "Yes" : "No").
+                Replace("{InstallDNSComment}", this.SkipDNSServer.IsPresent ? "# " : string.Empty).
+                Replace("{InstallDNS}", this.SkipDNSServer.IsPresent ? "No" : "Yes");
 
             // We need to inject cleartext version of the password into the script for dcpromo. The SecureString will therefore have to appear in managed memory, which is against best practices.
             using (var dsrmPassword = new SafeUnicodeSecureStringPointer(this.SafeModeAdministratorPassword))

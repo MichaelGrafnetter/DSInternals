@@ -4987,6 +4987,127 @@ login                           3600  IN  A     10.213.0.4
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBDnsResourceRecord.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
+        <maml:linkText>Get-ADDBDnsZone</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDomainController</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-ADDBDnsZone</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>ADDBDnsZone</command:noun>
+      <maml:description>
+        <maml:para>Retrieves the list of DNS zones stored in an Active Directory database.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet retrieves the list of DNS zones that are stored in the specified Active Directory database file. This can be useful in some disaster recovery scenarios.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-ADDBDnsZone</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+          <maml:name>LogPath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+        <maml:name>LogPath</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBDnsZone -DatabasePath .\ntds.dit
+
+&lt;# Sample Output:
+_msdcs.contoso.com
+contoso.com
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves the DNS zones from the specified Active Directory database file.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDnsResourceRecord</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Get-ADDBDomainController</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -8847,6 +8968,17 @@ PasswordHistoryCount        : 0
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DoNotInstallDNS, DoNotInstallDNSServer, DontInstallDNS, SkipDNS">
+          <maml:name>SkipDNSServer</maml:name>
+          <maml:description>
+            <maml:para>Prevents the DNS Server role to be installed on the restored domain controller.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SysVol">
           <maml:name>SysvolPath</maml:name>
           <maml:description>
@@ -8909,6 +9041,18 @@ PasswordHistoryCount        : 0
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DoNotInstallDNS, DoNotInstallDNSServer, DontInstallDNS, SkipDNS">
+        <maml:name>SkipDNSServer</maml:name>
+        <maml:description>
+          <maml:para>Prevents the DNS Server role to be installed on the restored domain controller.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SysVol">
         <maml:name>SysvolPath</maml:name>
