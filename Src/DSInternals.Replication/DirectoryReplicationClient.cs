@@ -1,4 +1,8 @@
-﻿using DSInternals.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Security.Principal;
+using DSInternals.Common;
 using DSInternals.Common.Cryptography;
 using DSInternals.Common.Data;
 using DSInternals.Common.Exceptions;
@@ -9,11 +13,6 @@ using DSInternals.Replication.Model;
 using NDceRpc;
 using NDceRpc.Microsoft.Interop;
 using NDceRpc.Native;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Security.Principal;
-using System.Security.AccessControl;
 
 namespace DSInternals.Replication
 {
@@ -87,16 +86,18 @@ namespace DSInternals.Replication
             return this.drsConnection.GetReplicationCursors(namingContext);
         }
 
-        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets properties = AccountPropertySets.All)
+        public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
             ReplicationCookie cookie = new ReplicationCookie(domainNamingContext);
-            return GetAccounts(cookie, progressReporter, properties);
+            return GetAccounts(cookie, progressReporter, propertySets);
         }
 
-        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, AccountPropertySets properties = AccountPropertySets.All)
+        public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             Validator.AssertNotNull(initialCookie, nameof(initialCookie));
+
+            propertySets = SkipUnsupportedProperties(propertySets);
 
             // Create AD schema
             var schema = BasicSchemaFactory.CreateSchema();
@@ -121,7 +122,7 @@ namespace DSInternals.Replication
                 {
                     obj.Schema = schema;
 
-                    var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, properties);
+                    var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, propertySets);
 
                     if (account != null)
                     {
@@ -137,6 +138,8 @@ namespace DSInternals.Replication
 
         public DSAccount GetAccount(Guid objectGuid, AccountPropertySets propertySets = AccountPropertySets.All)
         {
+            propertySets = SkipUnsupportedProperties(propertySets);
+
             var obj = this.drsConnection.ReplicateSingleObject(objectGuid);
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
@@ -153,6 +156,8 @@ namespace DSInternals.Replication
 
         public DSAccount GetAccount(string distinguishedName, AccountPropertySets propertySets = AccountPropertySets.All)
         {
+            propertySets = SkipUnsupportedProperties(propertySets);
+
             var obj = this.drsConnection.ReplicateSingleObject(distinguishedName);
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
@@ -320,6 +325,18 @@ namespace DSInternals.Replication
             // Get the PDC Emulator's NetBIOS account name and extract the domain part.
             NTAccount pdcAccount = this.drsConnection.ResolveAccountName(pdcAccountDN);
             this.netBIOSDomainName = pdcAccount.NetBIOSDomainName();
+        }
+
+        private static AccountPropertySets SkipUnsupportedProperties(AccountPropertySets propertySets)
+        {
+            // TODO: Retrieval of linked objects is not yet implemented in the replication client.
+            propertySets &= ~AccountPropertySets.ManagedBy;
+            propertySets &= ~AccountPropertySets.Manager;
+
+            // TODO: LAPS-related attribute schema loading is not yet implemented.
+            propertySets &= ~AccountPropertySets.LAPS;
+
+            return propertySets;
         }
     }
 }
