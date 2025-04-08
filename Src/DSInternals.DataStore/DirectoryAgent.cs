@@ -305,26 +305,46 @@
 
         public bool SetAccountStatus(DistinguishedName dn, bool enabled, bool skipMetaUpdate)
         {
-            var obj = this.FindObject(dn);
-            return this.SetAccountStatus(obj, dn, enabled, skipMetaUpdate);
+            return this.SetAccountControl(dn, enabled, null, null, null, null, null, skipMetaUpdate);
         }
 
         public bool SetAccountStatus(string samAccountName, bool enabled, bool skipMetaUpdate)
         {
-            var obj = this.FindObject(samAccountName);
-            return this.SetAccountStatus(obj, samAccountName, enabled, skipMetaUpdate);
+            return this.SetAccountControl(samAccountName, enabled, null, null, null, null, null, skipMetaUpdate);
         }
 
         public bool SetAccountStatus(SecurityIdentifier objectSid, bool enabled, bool skipMetaUpdate)
         {
-            var obj = this.FindObject(objectSid);
-            return this.SetAccountStatus(obj, objectSid, enabled, skipMetaUpdate);
+            return this.SetAccountControl(objectSid, enabled, null, null, null, null, null, skipMetaUpdate);
         }
 
         public bool SetAccountStatus(Guid objectGuid, bool enabled, bool skipMetaUpdate)
         {
+            return this.SetAccountControl(objectGuid, enabled, null, null, null, null, null, skipMetaUpdate);
+        }
+
+        public bool SetAccountControl(DistinguishedName dn, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(dn);
+            return this.SetAccountControl(obj, dn, enabled, cannotChangePassword, passwordNeverExpires, smartcardLogonRequired, useDESKeyOnly, homedirRequired, skipMetaUpdate);
+        }
+
+        public bool SetAccountControl(string samAccountName, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(samAccountName);
+            return this.SetAccountControl(obj, samAccountName, enabled, cannotChangePassword, passwordNeverExpires, smartcardLogonRequired, useDESKeyOnly, homedirRequired, skipMetaUpdate);
+        }
+
+        public bool SetAccountControl(SecurityIdentifier objectSid, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
+        {
+            var obj = this.FindObject(objectSid);
+            return this.SetAccountControl(obj, objectSid, enabled,cannotChangePassword, passwordNeverExpires, smartcardLogonRequired, useDESKeyOnly, homedirRequired, skipMetaUpdate);
+        }
+
+        public bool SetAccountControl(Guid objectGuid, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
+        {
             var obj = this.FindObject(objectGuid);
-            return this.SetAccountStatus(obj, objectGuid, enabled, skipMetaUpdate);
+            return this.SetAccountControl(obj, objectGuid, enabled,cannotChangePassword, passwordNeverExpires, smartcardLogonRequired, useDESKeyOnly, homedirRequired, skipMetaUpdate);
         }
 
         public bool UnlockAccount(DistinguishedName dn, bool skipMetaUpdate)
@@ -448,7 +468,7 @@
             }
         }
 
-        protected bool SetAccountStatus(DatastoreObject targetObject, object targetObjectIdentifier, bool enabled, bool skipMetaUpdate)
+        protected bool SetAccountControl(DatastoreObject targetObject, object targetObjectIdentifier, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
         {
             using (var transaction = this.context.BeginTransaction())
             {
@@ -463,17 +483,17 @@
                 }
 
                 var uac = (UserAccountControl)numericUac.Value;
-                if (enabled)
-                {
-                    // Clear the ADS_UF_ACCOUNTDISABLE flag
-                    uac &= ~UserAccountControl.Disabled;
-                }
-                else
-                {
-                    // Set the ADS_UF_ACCOUNTDISABLE flag
-                    uac |= UserAccountControl.Disabled;
-                }
 
+                // Modify the flags
+                bool? disabled = enabled.HasValue ? !enabled : null;
+                uac.SetFlags(UserAccountControl.Disabled, disabled);
+                uac.SetFlags(UserAccountControl.PasswordCantChange, cannotChangePassword);
+                uac.SetFlags(UserAccountControl.PasswordNeverExpires, passwordNeverExpires);
+                uac.SetFlags(UserAccountControl.SmartCardRequired, smartcardLogonRequired);
+                uac.SetFlags(UserAccountControl.UseDesKeyOnly, useDESKeyOnly);
+                uac.SetFlags(UserAccountControl.HomeDirRequired, homedirRequired);
+
+                // Save the changes
                 this.dataTableCursor.BeginEditForUpdate();
                 bool hasChanged = targetObject.SetAttribute<int>(CommonDirectoryAttributes.UserAccountControl, (int?)uac);
                 this.CommitAttributeUpdate(targetObject, CommonDirectoryAttributes.UserAccountControl, transaction, hasChanged, skipMetaUpdate);

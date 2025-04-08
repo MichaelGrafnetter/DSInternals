@@ -113,4 +113,22 @@
         /// </summary>
         TrustedToAuthenticateForDelegation = 0x01000000
     }
+
+    public static class UserAccountControlExtensions
+    {
+        public static void SetFlags(ref this UserAccountControl uac, UserAccountControl flag, bool? status)
+        {
+            if(status == true)
+            {
+                // Set the flag
+                uac |= flag;
+            }
+            else if(status == false)
+            {
+                // Clear the flag
+                uac &= ~flag;
+            }
+            // If status is null, keep the original flags
+        }
+    }
 }

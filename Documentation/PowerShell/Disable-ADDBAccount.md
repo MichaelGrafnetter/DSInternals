@@ -191,4 +191,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Enable-ADDBAccount](Enable-ADDBAccount.md)
 [Unlock-ADDBAccount](Unlock-ADDBAccount.md)
+[Set-ADDBAccountControl](Set-ADDBAccountControl.md)
 [Get-ADDBAccount](Get-ADDBAccount.md)

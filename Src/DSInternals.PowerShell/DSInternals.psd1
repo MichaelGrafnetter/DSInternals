@@ -90,7 +90,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
                   'Set-LSAPolicyInformation', 'New-ADDBRestoreFromMediaScript','Get-LsaBackupKey',
                   'Add-ADReplNgcKey', 'Get-AzureADUserEx', 'Set-AzureADUserEx','Unlock-ADDBAccount',
-                  'Get-ADDBDnsResourceRecord', 'Get-ADDBDnsZone'
+                  'Get-ADDBDnsResourceRecord', 'Get-ADDBDnsZone','Set-ADDBAccountControl'
 
 # Variables to export from this module
 VariablesToExport = @()

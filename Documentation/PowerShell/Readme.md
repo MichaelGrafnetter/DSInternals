@@ -39,6 +39,9 @@ Disables an Active Directory account in an offline ntds.dit file.
 ### [Unlock-ADDBAccount](Unlock-ADDBAccount.md#unlock-addbaccount)
 Unlocks an Active Directory account in an offline ntds.dit file.
 
+### [Set-ADDBAccountControl](Set-ADDBAccountControl.md#set-addbaccountcontrol)
+Modifies user account control (UAC) values for an Active Directory account in an offline ntds.dit file.
+
 ### [Add-ADDBSidHistory](Add-ADDBSidHistory.md#add-addbsidhistory)
 Adds one or more values to the sIDHistory attribute of an object in a ntds.dit file.
 

@@ -115,6 +115,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		..\Documentation\PowerShell\Readme.md = ..\Documentation\PowerShell\Readme.md
 		..\Documentation\PowerShell\Remove-ADDBObject.md = ..\Documentation\PowerShell\Remove-ADDBObject.md
 		..\Documentation\PowerShell\Save-DPAPIBlob.md = ..\Documentation\PowerShell\Save-DPAPIBlob.md
+		..\Documentation\PowerShell\Set-ADDBAccountControl.md = ..\Documentation\PowerShell\Set-ADDBAccountControl.md
 		..\Documentation\PowerShell\Set-ADDBAccountPassword.md = ..\Documentation\PowerShell\Set-ADDBAccountPassword.md
 		..\Documentation\PowerShell\Set-ADDBAccountPasswordHash.md = ..\Documentation\PowerShell\Set-ADDBAccountPasswordHash.md
 		..\Documentation\PowerShell\Set-ADDBBootKey.md = ..\Documentation\PowerShell\Set-ADDBBootKey.md

@@ -1,74 +1,68 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBAccountPasswordHash.md
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Set-ADDBAccountControl.md
 schema: 2.0.0
 ---
 
-# Set-ADDBAccountPasswordHash
+# Set-ADDBAccountControl
 
 ## SYNOPSIS
-Sets the password hash for a user, computer, or service account stored in a ntds.dit file.
+Modifies user account control (UAC) values for an Active Directory account in an offline ntds.dit file.
 
 ## SYNTAX
 
 ### ByName
 ```
-Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] [-Force] [-SamAccountName] <String> -DatabasePath <String>
- [-LogPath <String>] [<CommonParameters>]
+Set-ADDBAccountControl [-Enabled <Boolean>] [-CannotChangePassword <Boolean>] [-PasswordNeverExpires <Boolean>]
+ [-SmartcardLogonRequired <Boolean>] [-UseDESKeyOnly <Boolean>] [-HomedirRequired <Boolean>] [-SkipMetaUpdate]
+ [-Force] [-SamAccountName] <String> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] [-Force] -ObjectSid <SecurityIdentifier> -DatabasePath <String>
- [-LogPath <String>] [<CommonParameters>]
+Set-ADDBAccountControl [-Enabled <Boolean>] [-CannotChangePassword <Boolean>] [-PasswordNeverExpires <Boolean>]
+ [-SmartcardLogonRequired <Boolean>] [-UseDESKeyOnly <Boolean>] [-HomedirRequired <Boolean>] [-SkipMetaUpdate]
+ [-Force] -ObjectSid <SecurityIdentifier> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] [-Force] -DistinguishedName <String> -DatabasePath <String>
- [-LogPath <String>] [<CommonParameters>]
+Set-ADDBAccountControl [-Enabled <Boolean>] [-CannotChangePassword <Boolean>] [-PasswordNeverExpires <Boolean>]
+ [-SmartcardLogonRequired <Boolean>] [-UseDESKeyOnly <Boolean>] [-HomedirRequired <Boolean>] [-SkipMetaUpdate]
+ [-Force] -DistinguishedName <String> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Set-ADDBAccountPasswordHash -NTHash <Byte[]> [-SupplementalCredentials <SupplementalCredentials>]
- -BootKey <Byte[]> [-SkipMetaUpdate] [-Force] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>]
- [<CommonParameters>]
+Set-ADDBAccountControl [-Enabled <Boolean>] [-CannotChangePassword <Boolean>] [-PasswordNeverExpires <Boolean>]
+ [-SmartcardLogonRequired <Boolean>] [-UseDESKeyOnly <Boolean>] [-HomedirRequired <Boolean>] [-SkipMetaUpdate]
+ [-Force] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Writes the specified NT hash and optionally an entire supplementalCredentials data structure into an offline database.
-Also enables cross-database / cross-forest password migration without the requirement of a domain trust being in place.
+Finds an account in Active Directory database file and modifies the appropriate bit(s) in its *userAccountControl* attribute.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> $pass = Read-Host -AsSecureString -Prompt 'Provide new password for user hacker'
-PS C:\> $hash = ConvertTo-NTHash $pass
-PS C:\> Set-ADDBAccountPasswordHash -SamAccountName john `
-                                    -NTHash $hash `
-                                    -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
-                                    -BootKey 0be7a2afe1713642182e9b96f73a75da
+PS C:\> Set-ADDBAccountControl -SamAccountName john -SmartcardLogonRequired $false -PasswordNeverExpires $true -DatabasePath .\ntds.dit
 ```
 
-Performs an offline password reset for user *john* by injecting a raw NT hash value.
+Finds an account with name *john*, disables the smart card logon requirement, and unexpires its password.
 
 ## PARAMETERS
 
-### -BootKey
-Specifies the boot key (AKA system key) that will be used to decrypt/encrypt values of secret attributes.
+### -CannotChangePassword
+Indicates whether the account can change its password.
 
 ```yaml
-Type: Byte[]
+Type: Boolean
 Parameter Sets: (All)
-Aliases: Key, SysKey, SystemKey
+Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -105,11 +99,41 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -Enabled
+Indicates whether the account is enabled.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Force
 Forces the cmdlet to perform the desired operation.
 
 ```yaml
 Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HomedirRequired
+Indicates whether a home directory is required for the account.
+
+```yaml
+Type: Boolean
 Parameter Sets: (All)
 Aliases:
 
@@ -132,21 +156,6 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NTHash
-Specifies the NT hash of a password that will be written to the target AD database.
-
-```yaml
-Type: Byte[]
-Parameter Sets: (All)
-Aliases: Hash, PasswordHash, NTLMHash, MD4Hash, h
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -180,6 +189,21 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -PasswordNeverExpires
+Indicates whether the password of the account can expire.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -SamAccountName
 Specifies the identifier of an account on which to perform this operation.
 
@@ -210,18 +234,33 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SupplementalCredentials
-Specifies the kerberos keys and WDigest hashes that will be written to the target AD database.
+### -SmartcardLogonRequired
+Indicates whether a smart card is required to logon.
 
 ```yaml
-Type: SupplementalCredentials
+Type: Boolean
 Parameter Sets: (All)
-Aliases: KerberosKeys, sc, c
+Aliases:
 
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseDESKeyOnly
+Indicates whether the account is restricted to use only Data Encryption Standard (DES) encryption types for keys.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -229,10 +268,6 @@ Accept wildcard characters: False
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-### System.Byte[]
-
-### DSInternals.Common.Data.SupplementalCredentials
 
 ### System.String
 
@@ -249,10 +284,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Set-ADDBAccountPassword](Set-ADDBAccountPassword.md)
-[Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md)
+[Set-ADDBAccountPasswordHash](Set-ADDBAccountPasswordHash.md)
 [Enable-ADDBAccount](Enable-ADDBAccount.md)
 [Disable-ADDBAccount](Disable-ADDBAccount.md)
-[Set-ADDBAccountControl](Set-ADDBAccountControl.md)
 [Unlock-ADDBAccount](Unlock-ADDBAccount.md)
-[Get-BootKey](Get-BootKey.md)
 [Get-ADDBAccount](Get-ADDBAccount.md)
