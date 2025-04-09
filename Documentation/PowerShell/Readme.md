@@ -45,6 +45,10 @@ Modifies user account control values for an Active Directory account in an offli
 ### [Add-ADDBSidHistory](Add-ADDBSidHistory.md#add-addbsidhistory)
 Adds one or more values to the sIDHistory attribute of an object in a ntds.dit file.
 
+> [!WARNING]
+> This cmdlet has been removed from the DSInternals PowerShell module.
+> Information in this topic is provided for reference purposes only.
+
 ### [Set-ADDBAccountPassword](Set-ADDBAccountPassword.md#set-addbaccountpassword)
 Sets the password for a user, computer, or service account stored in a ntds.dit file.
 
@@ -100,9 +104,6 @@ Reads the DPAPI backup keys from a domain controller through the MS-DRSR protoco
 
 ### [Add-ADReplNgcKey](Add-ADReplNgcKey.md#add-adreplngckey)
 Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.
-
-### [Get-ADReplAccount](Get-ADReplAccount.md#get-adreplaccount)
-Reads one or more msFVE-RecoveryInfo objects through the MS-DRSR protocol, including backup keys and passwords attributes.
 
 ### [Get-SamPasswordPolicy](Get-SamPasswordPolicy.md#get-sampasswordpolicy)
 Queries Active Directory for the default password policy.
