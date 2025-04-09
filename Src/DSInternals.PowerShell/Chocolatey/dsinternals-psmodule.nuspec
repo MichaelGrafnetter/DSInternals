@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>5.1</version>
+    <version>5.2</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -37,8 +37,8 @@ The DSInternals PowerShell Module has these main features:
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* Added the `Get-ADDBDnsZone` cmdlet for listing AD-integrated DNS zones from ntds.dit files.
-* The `New-ADDBRestoreFromMediaScript` cmdlet has a new parameter called `-SkipDNSServer`, which prevents the DNS Server role from being installed on the restored domain controller.
+* Added the `Set-ADDBAccountControl` cmdlet for offline modification of the `userAccountControl` attribute flags.
+* The `New-ADDBRestoreFromMediaScript` cmdlet has a new parameter called `-PostInstallScriptPath`.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->

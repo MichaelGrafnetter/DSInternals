@@ -14,8 +14,8 @@ Generates a PowerShell script that can be used to restore a domain controller fr
 
 ```
 New-ADDBRestoreFromMediaScript [-BootKey <Byte[]>] [-SysvolPath <String>]
- -SafeModeAdministratorPassword <SecureString> [-SkipDNSServer] -DatabasePath <String> [-LogPath <String>]
- [<CommonParameters>]
+ -SafeModeAdministratorPassword <SecureString> [-SkipDNSServer] [-PostInstallScriptPath <String>]
+ -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -120,6 +120,21 @@ Specifies a non-UNC path to a directory that contains the backup of domain log f
 Type: String
 Parameter Sets: (All)
 Aliases: Log, TransactionLogPath
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PostInstallScriptPath
+Specifies the path to an optional post-installation script that will be executed after the restore process is complete.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named

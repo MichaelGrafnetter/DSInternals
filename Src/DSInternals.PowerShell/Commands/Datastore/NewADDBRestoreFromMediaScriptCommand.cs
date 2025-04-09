@@ -58,6 +58,14 @@
             set;
         }
 
+        [Parameter(Mandatory = false)]
+        [ValidateNotNullOrEmpty]
+        public string PostInstallScriptPath
+        {
+            get;
+            set;
+        }
+
         protected override void ProcessRecord()
         {
             DomainController dc = this.DirectoryContext.DomainController;
@@ -126,6 +134,13 @@
             string targetDatabasePath = Path.Combine(targetDatabaseDirectory, "ntds.dit");
             string targetSysvolPath = Path.Combine(winDir, "SYSVOL");
 
+            string postInstallScriptAbsolutePath = string.Empty;
+
+            if (!string.IsNullOrEmpty(this.PostInstallScriptPath))
+            {
+                postInstallScriptAbsolutePath = this.ResolveFilePath(this.PostInstallScriptPath);
+            }
+
             // Load the RFM script template and replace placeholders with values from the DB:
             string template = LoadScriptTemplate();
             StringBuilder script = new StringBuilder(template).
@@ -158,7 +173,8 @@
                 Replace("{TargetSysvolPath}", targetSysvolPath).
                 Replace("{DNSOnNetwork}", this.SkipDNSServer.IsPresent ? "Yes" : "No").
                 Replace("{InstallDNSComment}", this.SkipDNSServer.IsPresent ? "# " : string.Empty).
-                Replace("{InstallDNS}", this.SkipDNSServer.IsPresent ? "No" : "Yes");
+                Replace("{InstallDNS}", this.SkipDNSServer.IsPresent ? "No" : "Yes").
+                Replace("{PostInstallScriptPath}", postInstallScriptAbsolutePath);
 
             // We need to inject cleartext version of the password into the script for dcpromo. The SecureString will therefore have to appear in managed memory, which is against best practices.
             using (var dsrmPassword = new SafeUnicodeSecureStringPointer(this.SafeModeAdministratorPassword))

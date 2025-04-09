@@ -13,6 +13,7 @@ This script performs a multi-phase domain controller restore from an IFM backup:
 - Phase 5: Restore the AD database, re-encrypt it, and reconfigure LSA policies.
 - Phase 6: Replace the SYSVOL directory, restore ACLs if available, and reboot the server.
 - Phase 7: Reconfigure the SYSVOL replication subscription.
+- Phase 8: Run an optional post-installation script.
 
 Script exection logs can be found in the C:\Windows\Logs\DSInternals-RestoreFromMedia.txt file.
 
@@ -25,7 +26,7 @@ The DSInternals PowerShell module must be installed for all users on the target 
 It is recommended to change the DSRM password after DC promotion.
 
 Author:  Michael Grafnetter
-Version: 2.3
+Version: 2.4
 
 #>
 
@@ -33,7 +34,7 @@ Version: 2.3
 
 param(
     [Parameter(Mandatory = $false)]
-    [ValidateRange(0, 7)]
+    [ValidateRange(0, 8)]
     [int] $Phase = 0
 )
 
@@ -42,7 +43,6 @@ Import-Module -Name DSInternals -ErrorAction Stop
 
 function Main {
     [string] $script:LogFile = "$env:windir\Logs\DSInternals-RestoreFromMedia.txt"
-    [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     $PSDefaultParameterValues = @{ 'Out-File:Encoding' = 'utf8' }
     Write-Log -Message "Starting script execution in phase $Phase..."
 
@@ -303,6 +303,19 @@ function Main {
             # Update FRS subscription if present in AD.
             Update-FrsSubscription -DomainControllerDN '{DCDistinguishedName}' `
                                    -SysvolPath '{TargetSysvolPath}'
+
+            # Continue to the next phase.
+            Register-ScheduledScript -ExecutePhase 8
+        }
+        8 {
+            # Execute an optional post-installation script.
+            [string] $postInstallScriptPath = '{PostInstallScriptPath}'
+            if(-not [string]::IsNullOrEmpty($postInstallScriptPath)) {
+                Write-Log -Message 'Executing the post-installation script...'
+                & $postInstallScriptPath *>> $script:LogFile
+            } else {
+                Write-Log -Message 'No post-installation script is configured. Skipping execution.'
+            }
         }
     }
 

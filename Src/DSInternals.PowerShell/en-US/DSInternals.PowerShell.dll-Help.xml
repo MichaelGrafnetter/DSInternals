@@ -8964,6 +8964,18 @@ PasswordHistoryCount        : 0
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PostInstallScriptPath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to an optional post-installation script that will be executed after the restore process is complete.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SafeModeAdminPassword, AdminPassword, DSRMPassword">
           <maml:name>SafeModeAdministratorPassword</maml:name>
           <maml:description>
@@ -9030,6 +9042,18 @@ PasswordHistoryCount        : 0
         <maml:name>LogPath</maml:name>
         <maml:description>
           <maml:para>Specifies a non-UNC path to a directory that contains the backup of domain log files. If not specified, the value of the DatabasePath parameter is used.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>PostInstallScriptPath</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to an optional post-installation script that will be executed after the restore process is complete.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -9697,7 +9721,7 @@ PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -Direc
       <command:verb>Set</command:verb>
       <command:noun>ADDBAccountControl</command:noun>
       <maml:description>
-        <maml:para>Modifies user account control (UAC) values for an Active Directory account in an offline ntds.dit file.</maml:para>
+        <maml:para>Modifies user account control values for an Active Directory account in an offline ntds.dit file.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>

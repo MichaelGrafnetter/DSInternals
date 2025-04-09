@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-ADDBAccountControl
 
 ## SYNOPSIS
-Modifies user account control (UAC) values for an Active Directory account in an offline ntds.dit file.
+Modifies user account control values for an Active Directory account in an offline ntds.dit file.
 
 ## SYNTAX
 

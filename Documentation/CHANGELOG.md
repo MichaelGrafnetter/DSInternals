@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [5.2] - 2025-04-09
+
+### Added
+
+- Added the [Set-ADDBAccountControl](PowerShell/Set-ADDBAccountControl.md#set-addbaccountcontrol) cmdlet for offline modification of the `userAccountControl` attribute flags.
+- Added a new parameter called `-PostInstallScriptPath` to the [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet.
+
+### Fixed
+
+- Resolved issue #193: Call to `GetAccounts()` returns `NotImplementedException`.
+
 ## [5.1] - 2025-03-22
 
 ### Added
@@ -570,7 +581,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.1...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.2...HEAD
+[5.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.1...v5.2
 [5.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.0...v5.1
 [5.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.16...v5.0
 [4.16]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.15.1...v4.16

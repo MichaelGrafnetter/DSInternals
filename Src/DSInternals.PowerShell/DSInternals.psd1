@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '5.1'
+ModuleVersion = '5.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -156,8 +156,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Get-ADDBDnsZone cmdlet for listing AD-integrated DNS zones from ntds.dit files.
-- The New-ADDBRestoreFromMediaScript cmdlet has a new parameter called -SkipDNSServer, which prevents the DNS Server role from being installed on the restored domain controller.
+- Added the Set-ADDBAccountControl cmdlet for offline modification of the userAccountControl attribute flags.
+- The New-ADDBRestoreFromMediaScript cmdlet has a new parameter called -PostInstallScriptPath.
 "@
     } # End of PSData hashtable
 
