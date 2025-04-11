@@ -14,7 +14,7 @@
     <description>This package is shared between all other DSInternals packages. Its main features are Azure AD Graph API and ADSI clients for for retrieval of cryptographic material. It contains implementations of common hash functions used by Windows, including NT hash, LM hash and OrgId hash. It also contains methods for SysKey/BootKey retrieval.</description>
     <summary>This package is shared between all other DSInternals packages.</summary>
     <releaseNotes>
-- Added the UserAccountControlExtensions class.
+- Resolved an issue with parsing the unixHomeDirectory attribute values.
     </releaseNotes>
     <copyright>Copyright (c) 2015-2025 Michael Grafnetter. All rights reserved.</copyright>
     <tags>ActiveDirectory Security AD AAD Identity Active Directory</tags>

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using System.Text;
 
 namespace DSInternals.DataStore
 {
@@ -39,20 +40,33 @@ namespace DSInternals.DataStore
             return (FunctionalLevel)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
         }
 
-        public static string RetrieveColumnAsString(this Cursor cursor, Columnid columnId)
+        public static string RetrieveColumnAsString(this Cursor cursor, Columnid columnId, bool unicode = true)
         {
             object value = cursor.Record[columnId];
-            if(value != DBNull.Value)
+            if (value != DBNull.Value)
             {
-                return (string)value;
+                // Try to interpret the value as a Unicode string by default
+                string stringValue = value as string;
+                if (stringValue != null)
+                {
+                    return stringValue;
+                }
+
+                byte[] binaryValue = value as byte[];
+                if (binaryValue != null)
+                {
+                    // This is likely an IA5 string (ASCII)
+                    Encoding encoding = unicode ? Encoding.Unicode : Encoding.ASCII;
+                    stringValue = encoding.GetString(binaryValue);
+                    return stringValue;
+                }
             }
-            else
-            {
-                return null;
-            }
+
+            // All other cases
+            return null;
         }
 
-        public static string[] RetrieveColumnAsStringArray(this Cursor cursor, Columnid columnId)
+        public static string[] RetrieveColumnAsStringArray(this Cursor cursor, Columnid columnId, bool unicode = true)
         {
             var record = cursor.Record;
             var result = new List<string>();
@@ -61,7 +75,21 @@ namespace DSInternals.DataStore
             while (record.SizeOf(columnId, valueIndex) > 0)
             {
                 object value = cursor.Record[columnId, valueIndex];
-                result.Add((string)value);
+
+                // Try to interpret the value as a Unicode string by default
+                string stringValue = value as string;
+                if (stringValue == null)
+                {
+                    byte[] binaryValue = value as byte[];
+                    if (binaryValue != null)
+                    {
+                        // This is likely an IA5 string (ASCII)
+                        Encoding encoding = unicode ? Encoding.Unicode : Encoding.ASCII;
+                        stringValue = encoding.GetString(binaryValue);
+                    }
+                }
+
+                result.Add(stringValue);
                 valueIndex++;
             }
 

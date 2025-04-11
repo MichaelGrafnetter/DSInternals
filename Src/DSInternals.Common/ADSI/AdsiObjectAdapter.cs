@@ -77,13 +77,15 @@
             value = this.ReadAttributeSingle<long?>(name);
         }
 
-        public override void ReadAttribute(string name, out string value)
+        public override void ReadAttribute(string name, out string value, bool unicode = true)
         {
+            // Unicode vs. IA5 strings are handled by ADSI itself.
             value = this.ReadAttributeSingle<string>(name);
         }
 
-        public override void ReadAttribute(string name, out string[] values)
+        public override void ReadAttribute(string name, out string[] values, bool unicode = true)
         {
+            // Unicode vs. IA5 strings are handled by ADSI itself.
             values = this.ReadAttributeMulti<string>(name);
         }
 

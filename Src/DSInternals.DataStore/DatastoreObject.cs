@@ -144,7 +144,7 @@
             }
         }
 
-        public override void ReadAttribute(string name, out string value)
+        public override void ReadAttribute(string name, out string value, bool unicode = true)
         {
             value = null;
             if (this.context.Schema.ContainsAttribute(name))
@@ -152,12 +152,12 @@
                 Columnid columnId = this.context.Schema.FindColumnId(name);
                 if (columnId != null)
                 {
-                    value = this.cursor.RetrieveColumnAsString(columnId);
+                    value = this.cursor.RetrieveColumnAsString(columnId, unicode);
                 }
             }
         }
 
-        public override void ReadAttribute(string name, out string[] values)
+        public override void ReadAttribute(string name, out string[] values, bool unicode = true)
         {
             values = null;
             if (this.context.Schema.ContainsAttribute(name))
@@ -165,7 +165,7 @@
                 Columnid columnId = this.context.Schema.FindColumnId(name);
                 if (columnId != null)
                 {
-                    values = this.cursor.RetrieveColumnAsStringArray(columnId);
+                    values = this.cursor.RetrieveColumnAsStringArray(columnId, unicode);
                 }
             }
         }

@@ -396,7 +396,7 @@
             this.HomeDrive = homeDrive;
 
             // UnixHomeDirectory:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.UnixHomeDirectory, out string unixHomeDirectory);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.UnixHomeDirectory, out string unixHomeDirectory, unicode: false);
             this.UnixHomeDirectory = unixHomeDirectory;
 
             // ProfilePath:

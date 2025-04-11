@@ -14,7 +14,7 @@ using namespace System::Security::Permissions;
 //
 [assembly:AssemblyTitleAttribute(L"DSInternals Replication Interop Library")];
 // Note: Do not forget to change the version in version.rc files.
-[assembly:AssemblyVersionAttribute("5.2")];
+[assembly:AssemblyVersionAttribute("5.3")];
 [assembly:AssemblyDescriptionAttribute(L"")];
 [assembly:AssemblyConfigurationAttribute(L"")];
 [assembly:AssemblyCompanyAttribute(L"")];

@@ -118,21 +118,23 @@ namespace DSInternals.Replication.Model
             value = (binaryValue != null) ? BitConverter.ToInt64(binaryValue, 0) : (long?)null;
         }
 
-        protected void ReadAttribute(int attributeId, out string value)
+        protected void ReadAttribute(int attributeId, out string value, bool unicode = true)
         {
+            var encoding = unicode ? Encoding.Unicode : Encoding.ASCII;
             byte[] binaryValue;
             this.ReadAttribute(attributeId, out binaryValue);
-            value = (binaryValue != null) ? Encoding.Unicode.GetString(binaryValue) : null;
+            value = (binaryValue != null) ? encoding.GetString(binaryValue) : null;
         }
 
-        protected void ReadAttribute(int attributeId, out string[] values)
+        protected void ReadAttribute(int attributeId, out string[] values, bool unicode = true)
         {
+            var encoding = unicode ? Encoding.Unicode : Encoding.ASCII;
             values = null;
             byte[][] binaryValues;
             this.ReadAttribute(attributeId, out binaryValues);
             if(binaryValues != null)
             {
-                values = binaryValues.Select(item => Encoding.Unicode.GetString(item)).ToArray();
+                values = binaryValues.Select(item => encoding.GetString(item)).ToArray();
             }
         }
 
@@ -192,16 +194,16 @@ namespace DSInternals.Replication.Model
             this.ReadAttribute(attributeId, out value);
         }
 
-        public override void ReadAttribute(string name, out string value)
+        public override void ReadAttribute(string name, out string value, bool unicode = true)
         {
             int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out value);
+            this.ReadAttribute(attributeId, out value, unicode);
         }
 
-        public override void ReadAttribute(string name, out string[] values)
+        public override void ReadAttribute(string name, out string[] values, bool unicode = true)
         {
             int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out values);
+            this.ReadAttribute(attributeId, out values, unicode);
         }
 
         public override void ReadAttribute(string name, out DistinguishedName value)

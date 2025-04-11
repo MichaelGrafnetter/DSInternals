@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '5.2'
+ModuleVersion = '5.3'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -156,8 +156,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Set-ADDBAccountControl cmdlet for offline modification of the userAccountControl attribute flags.
-- The New-ADDBRestoreFromMediaScript cmdlet has a new parameter called -PostInstallScriptPath.
+- Resolved an issue with parsing the unixHomeDirectory attribute values.
 "@
     } # End of PSData hashtable
 

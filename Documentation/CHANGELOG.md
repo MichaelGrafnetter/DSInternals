@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [5.3] - 2025-04-11
+
+### Fixed
+
+- Resolved an issue with parsing the `unixHomeDirectory` attribute values (#196).
+
 ## [5.2] - 2025-04-09
 
 ### Added
