@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Management.Automation;
-using DSInternals.Common.Cryptography;
 using DSInternals.Common.Data;
 using DSInternals.DataStore;
 using DSInternals.PowerShell.Properties;
@@ -79,8 +78,19 @@ namespace DSInternals.PowerShell.Commands
 
             if(this.ExportFormat != null)
             {
-                // Override the property sets to match the requirements of the export formats.
-                this.Properties = this.ExportFormat.GetRequiredProperties();
+                // Override the property set to match the requirements of the export formats.
+                AccountPropertySets requiredProperties = this.ExportFormat.GetRequiredProperties();
+
+                if (this.Properties == AccountPropertySets.All)
+                {
+                    // The user did not explicitly specify any properties, so we set them to the required ones.
+                    this.Properties = requiredProperties;
+                }
+                else
+                {
+                    // Merge the required properties with the user-specified ones.
+                    this.Properties |= requiredProperties;
+                }
             }
 
             // Check if any of the secret attributes is to be loaded
