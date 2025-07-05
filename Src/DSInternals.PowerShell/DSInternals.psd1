@@ -108,7 +108,7 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'Add-ADNgcKey', 'New-ADKeyCredential', 'New-ADKeyCredentialLink',
                   'New-ADNgcKey', 'Get-ADDBGroupManagedServiceAccount', 'Get-ADDBBitLockerRecoveryInfo', 'Get-ADDBBitLockerKeyProtector',
                   'Get-ADDBBitLockerRecoveryKey', 'Get-ADDBBitLockerKey', 'Get-ADDBBitLockerRecoveryPassword',
-                  'Get-ADDBFVERecoveryKey', 'Get-ADDBFVERecoveryPassword',
+                  'Get-ADDBFVERecoveryKey', 'Get-ADDBFVERecoveryPassword', 'Get-ADDBDelegatedManagedServiceAccount',
                   'Get-ADDBFVERecoveryInformation', 'Get-ADDBFVERecoveryInfo', 'Get-ADDBDnsRecord'
 
 # List of assemblies that must be loaded prior to importing this module
@@ -128,6 +128,7 @@ FileList = 'AutoMapper.dll',
            'Newtonsoft.Json.dll',
            'Numbers.dll',
            'System.Buffers.dll',
+           'System.Formats.Asn1.dll',
            'System.Memory.dll',
            'System.Numerics.Vectors.dll',
            'System.Runtime.CompilerServices.Unsafe.dll',

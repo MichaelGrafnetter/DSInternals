@@ -4227,6 +4227,21 @@ PS C:\&gt; $account = Get-ADDBAccount -Sid $adminSid `
           <maml:para>Retrieves information about a the the built-in Administrator account, even if it was renamed.</maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 9 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBAccount -DatabasePath '.\ADBackup\Active Directory\ntds.dit' -All -Properties LAPS | Select-Object -ExpandProperty LapsPasswords
+&lt;# Sample Output:
+ComputerName Account       Password                 Expires   Source
+------------ -------       --------                 -------   -----                                                                                                                                                
+DC01         Administrator PluralTrimmingSuggest    2/3/2025  EncryptedDSRMPassword
+DC02         Administrator RoundupFructoseRoundworm 2/3/2025  EncryptedDSRMPassword
+ADFS01       WLapsAdmin    HerbsSkidUnproven        2/3/2025  EncryptedPassword
+PC01         Administrator A6a3#7%eb!57be4a4B95Z433 1/24/2025 CleartextPassword
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves and decrypts all Windows+Legacy LAPS passwords from a ntds.dit file.</maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
@@ -5559,11 +5574,11 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
       <command:verb>Get</command:verb>
       <command:noun>ADDBServiceAccount</command:noun>
       <maml:description>
-        <maml:para>Reads all Group Managed Service Accounts (gMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.</maml:para>
+        <maml:para>Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>As none of the required information is encrypted, the BootKey is not required. Does not work on database files from RODCs.</maml:para>
+      <maml:para>As none of the required information is encrypted, the BootKey is not required. Does not work on database files from RODCs though.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -5690,6 +5705,7 @@ ManagedPasswordInterval: 30
 ManagedPasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=9/9/2023 10:00:00 AM (L0=361, L1=26, L2=24)
 ManagedPasswordPreviousId:
 KDS Derived Secrets
+  EffectivePasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=6/25/2025 8:00:00 PM (L0=363, L1=11, L2=29)
   NTHash: 0b5fbfb646dd7bce4f160ad69edb86ba
   Kerberos Keys
     AES256_CTS_HMAC_SHA1_96

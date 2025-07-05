@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-ADDBServiceAccount
 
 ## SYNOPSIS
-Reads all Group Managed Service Accounts (gMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
+Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
 
 ## SYNTAX
 
@@ -19,7 +19,7 @@ Get-ADDBServiceAccount [-EffectiveTime <DateTime>] -DatabasePath <String> [-LogP
 
 ## DESCRIPTION
 As none of the required information is encrypted, the BootKey is not required.
-Does not work on database files from RODCs.
+Does not work on database files from RODCs though.
 
 ## EXAMPLES
 
@@ -43,6 +43,7 @@ ManagedPasswordInterval: 30
 ManagedPasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=9/9/2023 10:00:00 AM (L0=361, L1=26, L2=24)
 ManagedPasswordPreviousId:
 KDS Derived Secrets
+  EffectivePasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=6/25/2025 8:00:00 PM (L0=363, L1=11, L2=29)
   NTHash: 0b5fbfb646dd7bce4f160ad69edb86ba
   Kerberos Keys
     AES256_CTS_HMAC_SHA1_96

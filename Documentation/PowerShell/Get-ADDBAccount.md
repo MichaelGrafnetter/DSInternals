@@ -447,6 +447,21 @@ PS C:\> $account = Get-ADDBAccount -Sid $adminSid `
 
 Retrieves information about a the the built-in Administrator account, even if it was renamed.
 
+### Example 9
+```powershell
+PS C:\> Get-ADDBAccount -DatabasePath '.\ADBackup\Active Directory\ntds.dit' -All -Properties LAPS | Select-Object -ExpandProperty LapsPasswords
+<# Sample Output:
+ComputerName Account       Password                 Expires   Source
+------------ -------       --------                 -------   -----                                                                                                                                                
+DC01         Administrator PluralTrimmingSuggest    2/3/2025  EncryptedDSRMPassword
+DC02         Administrator RoundupFructoseRoundworm 2/3/2025  EncryptedDSRMPassword
+ADFS01       WLapsAdmin    HerbsSkidUnproven        2/3/2025  EncryptedPassword
+PC01         Administrator A6a3#7%eb!57be4a4B95Z433 1/24/2025 CleartextPassword
+#>
+```
+
+Retrieves and decrypts all Windows+Legacy LAPS passwords from a ntds.dit file.
+
 ## PARAMETERS
 
 ### -All
