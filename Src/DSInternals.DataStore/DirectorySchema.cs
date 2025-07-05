@@ -101,6 +101,12 @@
             return this.FindAttribute(attributeName).Index;
         }
 
+        public bool ContainsClass(string className)
+        {
+            Validator.AssertNotNullOrWhiteSpace(className, nameof(classesByName));
+            return this.classesByName.ContainsKey(className);
+        }
+
         // TODO: Rename to CategoryDNT
         public int FindClassId(string className)
         {

@@ -205,7 +205,7 @@ namespace DSInternals.Common.Data
 
                 if (encryptedDsrmPassword != null && encryptedDsrmPassword.Length > 0)
                 {
-                    var dsrmPassword = new LapsEncryptedPassword(binaryEncryptedPassword);
+                    var dsrmPassword = new LapsEncryptedPassword(encryptedDsrmPassword);
                     var dsrmPasswordInfo = new LapsPasswordInformation(this.ComputerName, dsrmPassword, LapsPasswordSource.EncryptedDSRMPassword, expirationTime.Value, rootKeys);
                     windowsLapsPasswords.Add(dsrmPasswordInfo);
                 }

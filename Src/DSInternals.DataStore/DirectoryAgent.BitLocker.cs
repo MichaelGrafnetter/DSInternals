@@ -12,7 +12,15 @@
 
         public IEnumerable<BitLockerRecoveryInformation> GetBitLockerRecoveryInformation()
         {
+            bool bitlockerSupported = this.context.Schema.ContainsClass(CommonDirectoryClasses.FVERecoveryInformation);
+            if (!bitlockerSupported)
+            {
+                // The msFVE-RecoveryInformation class is not contained in the schema.
+                yield break;
+            }
+
             // TODO: Containerized seach
+
             foreach (var bitlockerInfo in this.FindObjectsByCategory(CommonDirectoryClasses.FVERecoveryInformation))
             {
                 // RODCs and partial replicas on GCs do not contain recovery passwords
@@ -70,6 +78,13 @@
 
         public IEnumerable<BitLockerRecoveryInformation> GetBitLockerRecoveryInformation(string computerName)
         {
+            bool bitlockerSupported = this.context.Schema.ContainsClass(CommonDirectoryClasses.FVERecoveryInformation);
+            if (!bitlockerSupported)
+            {
+                // The msFVE-RecoveryInformation class is not contained in the schema.
+                yield break;
+            }
+
             // Validate the input
             Validator.AssertNotNullOrEmpty(computerName, nameof(computerName));
 

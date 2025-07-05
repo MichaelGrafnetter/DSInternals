@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using DSInternals.Common;
     using DSInternals.Common.Data;
 
@@ -27,7 +28,12 @@
         #region DPAPI NG / Group Key Distribution Service
         public IEnumerable<KdsRootKey> GetKdsRootKeys()
         {
-            // TODO: Test if schema contains the ms-Kds-Prov-RootKey class.
+            if (!this.context.Schema.ContainsClass(CommonDirectoryClasses.KdsRootKey))
+            {
+                // The schema does not support the ms-Kds-Prov-RootKey class.
+                yield break;
+            }
+
             foreach (var keyObject in this.FindObjectsByCategory(CommonDirectoryClasses.KdsRootKey))
             {
                 if (keyObject.IsWritable)
@@ -57,6 +63,18 @@
 
         public IEnumerable<GroupManagedServiceAccount> GetGroupManagedServiceAccounts(DateTime effectiveTime)
         {
+            // Support for gMSAs has been added in Windows Server 2012
+            bool gMSASupported = this.context.Schema.ContainsClass(CommonDirectoryClasses.GroupManagedServiceAccount);
+
+            // Support for dMSAs has been added in Windows Server 2025
+            bool dMSASupported = this.context.Schema.ContainsClass(CommonDirectoryClasses.DelegatedManagedServiceAccount);
+
+            if (!gMSASupported)
+            {
+                // The AD schema does not support gMSAs, on which dMSAs depend as well.
+                yield break;
+            }
+
             // Fetch all KDS root keys first.
             var rootKeys = new Dictionary<Guid, KdsRootKey>();
             KdsRootKey latestRootKey = null;
@@ -77,9 +95,17 @@
                 }
             }
 
-            // Now fetch all gMSAs and associate them with the KDS root keys
-            // TODO: Test if schema contains the msDS-GroupManagedServiceAccount class.
-            foreach (var gmsaObject in this.FindObjectsByCategory(CommonDirectoryClasses.GroupManagedServiceAccount))
+            var gmsaObjects = this.FindObjectsByCategory(CommonDirectoryClasses.GroupManagedServiceAccount);
+
+            if (dMSASupported)
+            {
+                // dMSAs are an extension of gMSAs, so we can treat them the same.
+                var dmsaObjects = this.FindObjectsByCategory(CommonDirectoryClasses.DelegatedManagedServiceAccount);
+                gmsaObjects = gmsaObjects.Concat(dmsaObjects);
+            }
+
+            // Now fetch all gMSAs and dMSAs and associate them with the KDS root keys.
+            foreach (var gmsaObject in gmsaObjects)
             {
                 var gmsa = new GroupManagedServiceAccount(gmsaObject);
 

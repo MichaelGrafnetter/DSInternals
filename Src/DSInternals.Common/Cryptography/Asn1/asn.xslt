@@ -110,7 +110,6 @@ using System;<xsl:if test="asn:SequenceOf | asn:SetOf">
 using System.Collections.Generic;</xsl:if>
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Security.Cryptography.Asn1;
 using System.Formats.Asn1;
 
 namespace <xsl:value-of select="@namespace" />
