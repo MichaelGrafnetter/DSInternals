@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:Sequence
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="EnvelopedData"
+  namespace="DSInternals.Common.Cryptography.Asn1.Pkcs7">
+
+  <!--
+    https://tools.ietf.org/html/rfc5652#section-6.1
+
+    EnvelopedData ::= SEQUENCE {
+        version CMSVersion,
+        originatorInfo [0] IMPLICIT OriginatorInfo OPTIONAL,
+        recipientInfos RecipientInfos,
+        encryptedContentInfo EncryptedContentInfo,
+        unprotectedAttrs [1] IMPLICIT UnprotectedAttributes OPTIONAL
+    }
+
+    RecipientInfos ::= SET SIZE (1..MAX) OF RecipientInfo
+  -->
+  <asn:Integer name="Version" backingType="int" />
+  <asn:AsnType name="OriginatorInfo" typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.OriginatorInfo" implicitTag="0" optional="true" />
+  <asn:SetOf name="RecipientInfos">
+    <asn:AsnType typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo" />
+  </asn:SetOf>
+  <asn:AsnType name="EncryptedContentInfo" typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.EncryptedContentInfo" />
+  <asn:SetOf name="UnprotectedAttributes" implicitTag="1" optional="true">
+    <asn:AsnType typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute" />
+  </asn:SetOf>
+</asn:Sequence>

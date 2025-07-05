@@ -7,6 +7,7 @@ using DSInternals.Common.Cryptography;
 using DSInternals.Common.Exceptions;
 using DSInternals.Common.Interop;
 using DSInternals.Common.Properties;
+using Windows.Win32.Foundation;
 
 namespace DSInternals.Common
 {
@@ -16,6 +17,24 @@ namespace DSInternals.Common
         {
             Win32ErrorCode code = NativeMethods.RtlNtStatusToDosError(status);
             AssertSuccess(code);
+        }
+
+        internal static void AssertSuccess(NTSTATUS status)
+        {
+            if(status.SeverityCode == NTSTATUS.Severity.Success)
+            {
+                // No error has occured
+                return;
+            }
+
+            if (status == NTSTATUS.STATUS_INVALID_PARAMETER)
+            {
+                // TODO: Translate NTSTATUS to .NET exceptions
+                throw new ArgumentException();
+            }
+
+            // TODO: Translate NTSTATUS to .NET exceptions
+            throw new Win32Exception();
         }
 
         public static void AssertSuccess(Win32ErrorCode code)
@@ -166,6 +185,24 @@ namespace DSInternals.Common
             {
                 var exception = new ArgumentOutOfRangeException(paramName, data.Length, Resources.InputShorterThanMinMessage);
                 // DEBUG: exception.Data.Add("BinaryBlob", data.ToHex());
+                throw exception;
+            }
+        }
+
+        public static void AssertMinLength(ReadOnlySpan<byte> data, int minLength, string paramName)
+        {
+            if (data.Length < minLength)
+            {
+                var exception = new ArgumentOutOfRangeException(paramName, data.Length, Resources.InputShorterThanMinMessage);
+                throw exception;
+            }
+        }
+
+        public static void AssertMinLength(ReadOnlyMemory<byte> data, int minLength, string paramName)
+        {
+            if (data.Length < minLength)
+            {
+                var exception = new ArgumentOutOfRangeException(paramName, data.Length, Resources.InputShorterThanMinMessage);
                 throw exception;
             }
         }

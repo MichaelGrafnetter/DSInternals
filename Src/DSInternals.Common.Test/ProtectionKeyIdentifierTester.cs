@@ -8,7 +8,7 @@ namespace DSInternals.Common.Test
     public class ProtectionKeyIdentifierTester
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ProtectionKeyIdentifier_Null()
         {
             var obj = new ProtectionKeyIdentifier(null);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DSInternals.Common.Data
 {
@@ -16,7 +17,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Constructor for a Windows LAPS password.
+        /// Constructor for a cleartext Windows LAPS password.
         /// </summary>
         public LapsPasswordInformation(string computerName, LapsClearTextPassword password, DateTime? expiration)
         {
@@ -29,6 +30,52 @@ namespace DSInternals.Common.Data
             this.ExpirationTimestamp = expiration;
             this.Source = LapsPasswordSource.CleartextPassword;
             this.DecryptionStatus = LapsDecryptionStatus.NotApplicable;
+        }
+
+        public LapsPasswordInformation(string computerName, LapsEncryptedPassword encryptedPassword, LapsPasswordSource source, DateTime? expiration, IDictionary<Guid, KdsRootKey> rootKeys = null)
+        {
+            Validator.AssertNotNull(encryptedPassword, nameof(encryptedPassword));
+
+            // Validate the source type
+            this.Source = source switch
+            {
+                LapsPasswordSource.EncryptedPassword or Data.LapsPasswordSource.EncryptedPasswordHistory or LapsPasswordSource.EncryptedDSRMPassword or LapsPasswordSource.EncryptedDSRMPasswordHistory => source,
+                _ => throw new ArgumentOutOfRangeException(nameof(source))
+            };
+
+            this.ComputerName = computerName;
+            this.PasswordUpdateTime = encryptedPassword.UpdateTimeStamp;
+            this.ExpirationTimestamp = expiration;
+
+            // Try to locate the root key and cache the derived group key.
+            bool rootKeyFound = false;
+
+            if (rootKeys != null)
+            {
+                Guid rootKeyId = encryptedPassword.EncryptedBlob.ProtectionKeyIdentifier.RootKeyId;
+                rootKeyFound = rootKeys.TryGetValue(rootKeyId, out var rootKey);
+
+                if (rootKeyFound)
+                {
+                    var gke = GroupKeyEnvelope.Create(rootKey, encryptedPassword.EncryptedBlob.ProtectionKeyIdentifier, encryptedPassword.EncryptedBlob.TargetSid);
+                    gke.WriteToCache();
+                }
+            }
+
+            // Decrypt the data using the native Win32 API, which uses the pre-cached group keys if available.
+            bool isSuccess = encryptedPassword.TryDecrypt(out LapsClearTextPassword decryptedPassword);
+
+            if (isSuccess)
+            {
+                this.DecryptionStatus = LapsDecryptionStatus.Success;
+                this.Account = decryptedPassword.AccountName;
+                this.Password = decryptedPassword.Password;
+            }
+            else
+            {
+                // Check if offline or online decryption attempt failed.
+                this.DecryptionStatus = rootKeyFound ? LapsDecryptionStatus.Error : LapsDecryptionStatus.Unauthorized;
+            }
         }
 
         public string ComputerName { get; private set; }

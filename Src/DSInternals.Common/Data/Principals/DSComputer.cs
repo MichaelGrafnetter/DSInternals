@@ -8,7 +8,9 @@ namespace DSInternals.Common.Data
 {
     public class DSComputer : DSAccount
     {
-        public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
+        private List<LapsPasswordInformation>? _lapsPasswords;
+
+        public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IDictionary<Guid, KdsRootKey> rootKeys = null, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
             if (this.SamAccountType != SamAccountType.Computer)
             {
@@ -27,7 +29,7 @@ namespace DSInternals.Common.Data
 
             if (propertySets.HasFlag(AccountPropertySets.WindowsLAPS))
             {
-                this.LoadWindowsLAPS(dsObject);
+                this.LoadWindowsLAPS(dsObject, rootKeys);
             }
 
             if (propertySets.HasFlag(AccountPropertySets.ManagedBy))
@@ -37,10 +39,9 @@ namespace DSInternals.Common.Data
             }
         }
 
-        public IList<LapsPasswordInformation> LapsPasswords
+        public IReadOnlyList<LapsPasswordInformation>? LapsPasswords
         {
-            get;
-            private set;
+            get => _lapsPasswords;
         }
 
         public string DNSHostName
@@ -130,7 +131,7 @@ namespace DSInternals.Common.Data
 
         protected void LoadLegacyLAPS(DirectoryObject dsObject)
         {
-            LapsPasswordInformation legacyLapsPassword = null;
+            LapsPasswordInformation? legacyLapsPassword = null;
 
             dsObject.ReadAttribute(CommonDirectoryAttributes.LAPSPasswordExpirationTime, out DateTime? legacyExpirationTime, false);
 
@@ -148,53 +149,91 @@ namespace DSInternals.Common.Data
 
             if (legacyLapsPassword != null)
             {
-                if(this.LapsPasswords == null)
+                if(this._lapsPasswords == null)
                 {
-                    this.LapsPasswords = new List<LapsPasswordInformation>();
+                    this._lapsPasswords = new List<LapsPasswordInformation>();
                 }
 
-                this.LapsPasswords.Add(legacyLapsPassword);
+                this._lapsPasswords.Add(legacyLapsPassword);
             }
         }
 
-        protected void LoadWindowsLAPS(DirectoryObject dsObject)
+        protected void LoadWindowsLAPS(DirectoryObject dsObject, IDictionary<Guid, KdsRootKey> rootKeys = null)
         {
-            LapsPasswordInformation lapsPassword = null;
-
             dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsPasswordExpirationTime, out DateTime? expirationTime, false);
 
             if (expirationTime != null)
             {
+                var windowsLapsPasswords = new List<LapsPasswordInformation>();
+
                 // Read msLAPS-Password
                 dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsPassword, out byte[] binaryLapsJson);
 
                 if (binaryLapsJson != null && binaryLapsJson.Length > 0)
                 {
-                    LapsClearTextPassword passwordInfo = LapsClearTextPassword.Parse(binaryLapsJson);
-                    lapsPassword = new LapsPasswordInformation(this.ComputerName, passwordInfo, expirationTime);
+                    // Parse the binary LAPS password
+                    var cleartextPassword = LapsClearTextPassword.Parse(binaryLapsJson);
+                    var cleartextPasswordInfo = new LapsPasswordInformation(this.ComputerName, cleartextPassword, expirationTime);
+                    windowsLapsPasswords.Add(cleartextPasswordInfo);
                 }
 
                 // Read msLAPS-EncryptedPassword
-                // TODO: dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedPassword, out byte[] encryptedPassword);
+                dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedPassword, out byte[] binaryEncryptedPassword);
 
-                // Read msLAPS-EncryptedPasswordHistory
-                // TODO: dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedPasswordHistory, out byte[][] encryptedPasswordHistory);
-
-                // Read msLAPS-EncryptedDSRMPassword
-                // TODO: dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedDsrmPassword, out byte[] encryptedDsrmPassword);
-
-                // Read msLAPS-EncryptedDSRMPasswordHistory
-                // TODO: dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedDsrmPasswordHistory, out byte[][] encryptedDsrmPasswordHistory);
-            }
-
-            if (lapsPassword != null)
-            {
-                if (this.LapsPasswords == null)
+                if (binaryEncryptedPassword != null && binaryEncryptedPassword.Length > 0)
                 {
-                    this.LapsPasswords = new List<LapsPasswordInformation>();
+                    var encryptedPassword = new LapsEncryptedPassword(binaryEncryptedPassword);
+                    var encryptedPasswordInfo = new LapsPasswordInformation(this.ComputerName, encryptedPassword, LapsPasswordSource.EncryptedPassword, expirationTime.Value, rootKeys);
+                    windowsLapsPasswords.Add(encryptedPasswordInfo);
                 }
 
-                this.LapsPasswords.Add(lapsPassword);
+                // Read msLAPS-EncryptedPasswordHistory
+                dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedPasswordHistory, out byte[][] encryptedPasswordHistory);
+
+                if (encryptedPasswordHistory != null && encryptedPasswordHistory.Length > 0)
+                {
+                    foreach (var binaryHistoricalPassword in encryptedPasswordHistory)
+                    {
+                        var historicalPassword = new LapsEncryptedPassword(binaryHistoricalPassword);
+                        var historicalPasswordInfo = new LapsPasswordInformation(this.ComputerName, historicalPassword, LapsPasswordSource.EncryptedPasswordHistory, expiration: null, rootKeys);
+                        windowsLapsPasswords.Add(historicalPasswordInfo);
+                    }
+                }
+
+                // Read msLAPS-EncryptedDSRMPassword
+                dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedDsrmPassword, out byte[] encryptedDsrmPassword);
+
+                if (encryptedDsrmPassword != null && encryptedDsrmPassword.Length > 0)
+                {
+                    var dsrmPassword = new LapsEncryptedPassword(binaryEncryptedPassword);
+                    var dsrmPasswordInfo = new LapsPasswordInformation(this.ComputerName, dsrmPassword, LapsPasswordSource.EncryptedDSRMPassword, expirationTime.Value, rootKeys);
+                    windowsLapsPasswords.Add(dsrmPasswordInfo);
+                }
+
+                // Read msLAPS-EncryptedDSRMPasswordHistory
+                dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsEncryptedDsrmPasswordHistory, out byte[][] encryptedDsrmPasswordHistory);
+
+                if (encryptedDsrmPasswordHistory != null && encryptedDsrmPasswordHistory.Length > 0)
+                {
+                    foreach (var binarydsrmPassword in encryptedDsrmPasswordHistory)
+                    {
+                        var historicalDsrmPassword = new LapsEncryptedPassword(binarydsrmPassword);
+                        var historicalDsrmPasswordInfo = new LapsPasswordInformation(this.ComputerName, historicalDsrmPassword, LapsPasswordSource.EncryptedDSRMPasswordHistory, expiration: null, rootKeys);
+                        windowsLapsPasswords.Add(historicalDsrmPasswordInfo);
+                    }
+                }
+
+                if(windowsLapsPasswords.Count > 0)
+                {
+                    if (this._lapsPasswords == null)
+                    {
+                        this._lapsPasswords = windowsLapsPasswords;
+                    }
+                    else
+                    {
+                        this._lapsPasswords.AddRange(windowsLapsPasswords);
+                    }
+                }
             }
         }
     }

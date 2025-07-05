@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:Sequence
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="DigestInfo"
+  namespace="DSInternals.Common.Cryptography.Asn1.Pkcs1">
+
+  <!--
+    https://tools.ietf.org/html/rfc2313#section-10.1.2
+
+    DigestInfo ::= SEQUENCE {
+        digestAlgorithm DigestAlgorithmIdentifier,
+        digest Digest
+    }
+
+    DigestAlgorithmIdentifier ::= AlgorithmIdentifier
+    Digest ::= OCTET STRING
+  -->
+  <asn:AsnType name="DigestAlgorithm" typeName="DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier" />
+  <asn:OctetString name="Digest" />
+</asn:Sequence>

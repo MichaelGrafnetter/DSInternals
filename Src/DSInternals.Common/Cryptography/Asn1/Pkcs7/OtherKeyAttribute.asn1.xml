@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:Sequence
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="OtherKeyAttribute"
+  namespace="DSInternals.Common.Cryptography.Asn1.Pkcs7">
+
+  <!--
+    https://tools.ietf.org/html/rfc5652#section-10.2.7
+
+    OtherKeyAttribute ::= SEQUENCE {
+        keyAttrId OBJECT IDENTIFIER,
+        keyAttr ANY DEFINED BY keyAttrId OPTIONAL
+    }
+  -->
+  <asn:ObjectIdentifier name="AttributeId" backingType="string" />
+  <asn:AnyValue name="AttributeValue" optional="true" />
+</asn:Sequence>

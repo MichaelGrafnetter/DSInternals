@@ -61,13 +61,12 @@ namespace DSInternals.Common.Test
         [TestMethod]
         public void ComputeL0Key_Vector1()
         {
-            byte[] l0Key = KdsRootKey.ComputeL0Key(
+            var kdsRootKey = new KdsRootKey(
                 Guid.Parse("7dc95c96-fa85-183a-dff5-f70696bf0b11"),
-                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary(),
-                "SP800_108_CTR_HMAC",
-                "00000000010000000e000000000000005300480041003500310032000000".HexToBinary(),
-                361
+                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary()
             );
+
+            byte[] l0Key = kdsRootKey.GetL0Key(361);
 
             Assert.AreEqual(
                 "76d7341bbf6f85f439a14d3f68c6de31a83d2c55b1371c9c122f5b6f0eccff282973da43349da2b21a0a89b050b49e9ace951323f27638ccbfce8b6a0ead782b",
@@ -77,64 +76,72 @@ namespace DSInternals.Common.Test
         [TestMethod]
         public void GetGmsaPassword_Vector1()
         {
-            byte[] binaryPassword = KdsRootKey.GetPassword(
-                new SecurityIdentifier("S-1-5-21-2468531440-3719951020-3687476655-1109"),
+            // Input parameters
+            var kdsRootKey = new KdsRootKey(
                 Guid.Parse("7dc95c96-fa85-183a-dff5-f70696bf0b11"),
-                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary(),
-                "SP800_108_CTR_HMAC",
-                "00000000010000000e000000000000005300480041003500310032000000".HexToBinary(),
-                DateTime.FromFileTimeUtc(133387453261266352));
+                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary()
+                );
+            DateTime lastPasswordChange = DateTime.FromFileTimeUtc(133387453261266352);
+            var gmsaSid = new SecurityIdentifier("S-1-5-21-2468531440-3719951020-3687476655-1109");
 
+            // Calculate and validate the managed password
+            var managedPasswordId = new ProtectionKeyIdentifier(kdsRootKey.KeyId, lastPasswordChange);
+            byte[] binaryPassword = GroupManagedServiceAccount.CalculateManagedPassword(gmsaSid, managedPasswordId, kdsRootKey);
             Assert.AreEqual("0b5fbfb646dd7bce4f160ad69edb86ba", NTHash.ComputeHash(binaryPassword).ToHex());
         }
 
         [TestMethod]
         public void GetGmsaPassword_Vector2()
         {
-            byte[] binaryPassword = KdsRootKey.GetPassword(
-                new SecurityIdentifier("S-1-5-21-2468531440-3719951020-3687476655-1109"),
+            // Input parameters
+            var kdsRootKey = new KdsRootKey(
                 Guid.Parse("7dc95c96-fa85-183a-dff5-f70696bf0b11"),
-                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary(),
-                "SP800_108_CTR_HMAC",
-                "00000000010000000e000000000000005300480041003500310032000000".HexToBinary(),
-                DateTime.FromFileTimeUtc(133387453261266352),
-                DateTime.FromFileTimeUtc(133403352475182719),
-                30
+                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary()
                 );
+            DateTime lastPasswordChange = DateTime.FromFileTimeUtc(133387453261266352);
+            DateTime effectiveTime = DateTime.FromFileTimeUtc(133403352475182719);
+            int managedPasswordInterval = 30;
+            var gmsaSid = new SecurityIdentifier("S-1-5-21-2468531440-3719951020-3687476655-1109");
 
+            // Calculate and validate the managed password
+            (int l0KeyId, int l1KeyId, int l2KeyId) = GroupManagedServiceAccount.GetIntervalId(lastPasswordChange, effectiveTime, managedPasswordInterval);
+            var managedPasswordId = new ProtectionKeyIdentifier(kdsRootKey.KeyId, l0KeyId, l1KeyId, l2KeyId);
+            byte[] binaryPassword = GroupManagedServiceAccount.CalculateManagedPassword(gmsaSid, managedPasswordId, kdsRootKey);
             Assert.AreEqual("0b5fbfb646dd7bce4f160ad69edb86ba", NTHash.ComputeHash(binaryPassword).ToHex());
         }
 
         [TestMethod]
         public void GetGmsaPassword_Vector3()
         {
-            var managedPasswordId = new ProtectionKeyIdentifier("010000004b44534b02000000690100001a00000018000000965cc97d85fa3a18dff5f70696bf0b1100000000180000001800000063006f006e0074006f0073006f002e0063006f006d00000063006f006e0074006f0073006f002e0063006f006d000000".HexToBinary());
-            byte[] binaryPassword = KdsRootKey.GetPassword(
-                new SecurityIdentifier("S-1-5-21-2468531440-3719951020-3687476655-1109"),
+            // Input parameters
+            var kdsRootKey = new KdsRootKey(
                 Guid.Parse("7dc95c96-fa85-183a-dff5-f70696bf0b11"),
-                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary(),
-                "SP800_108_CTR_HMAC",
-                "00000000010000000e000000000000005300480041003500310032000000".HexToBinary(),
-                managedPasswordId.L0KeyId,
-                managedPasswordId.L1KeyId,
-                managedPasswordId.L2KeyId
+                "814ad2f3928ff96d3650487967392feab3924f3d0dff8629d46a723640101cff8ca2cbd6aba40805cf03b380803b27837d80663eb4d18fd4cec414ebb2271fe2".HexToBinary()
                 );
+            var managedPasswordId = new ProtectionKeyIdentifier("010000004b44534b02000000690100001a00000018000000965cc97d85fa3a18dff5f70696bf0b1100000000180000001800000063006f006e0074006f0073006f002e0063006f006d00000063006f006e0074006f0073006f002e0063006f006d000000".HexToBinary());
+            var gmsaSid = new SecurityIdentifier("S-1-5-21-2468531440-3719951020-3687476655-1109");
 
+            // Calculate and validate the managed password
+            byte[] binaryPassword = GroupManagedServiceAccount.CalculateManagedPassword(gmsaSid, managedPasswordId, kdsRootKey);
             Assert.AreEqual("0b5fbfb646dd7bce4f160ad69edb86ba", NTHash.ComputeHash(binaryPassword).ToHex());
         }
         [TestMethod]
         public void GetGmsaPassword_Vector4()
         {
-            byte[] binaryPassword = KdsRootKey.GetPassword(
-                new SecurityIdentifier("S-1-5-21-1040335485-253814736-2627409954-1145"),
+            // Input parameters
+            var kdsRootKey = new KdsRootKey(
                 Guid.Parse("0670b5ed-f2aa-9a86-dd0e-49cfc2130533"),
-                "902bc244751f7cfb1bbafff7586585d467496953da553fd3decae08421b6c0ab5f60637541655b8be90fa319e24041875eccd465e253ceba238e1d475c80f64b".HexToBinary(),
-                "SP800_108_CTR_HMAC",
-                "00000000010000000e000000000000005300480041003500310032000000".HexToBinary(),
-                DateTime.FromFileTimeUtc(133211195280000000), // whenCreated ( 6 months diff)
-                DateTime.FromFileTimeUtc(133404554396754922)
+                "902bc244751f7cfb1bbafff7586585d467496953da553fd3decae08421b6c0ab5f60637541655b8be90fa319e24041875eccd465e253ceba238e1d475c80f64b".HexToBinary()
                 );
+            DateTime creationTime = DateTime.FromFileTimeUtc(133211195280000000);
+            DateTime effectiveTime = DateTime.FromFileTimeUtc(133404554396754922); // 6 months diff
+            int managedPasswordInterval = 30;
+            var gmsaSid = new SecurityIdentifier("S-1-5-21-1040335485-253814736-2627409954-1145");
 
+            // Calculate and validate the managed password
+            (int l0KeyId, int l1KeyId, int l2KeyId) = GroupManagedServiceAccount.GetIntervalId(creationTime, effectiveTime, managedPasswordInterval);
+            var managedPasswordId = new ProtectionKeyIdentifier(kdsRootKey.KeyId, l0KeyId, l1KeyId, l2KeyId);
+            byte[] binaryPassword = GroupManagedServiceAccount.CalculateManagedPassword(gmsaSid, managedPasswordId, kdsRootKey);
             Assert.AreEqual("e510057c721830f0b27482833cff4986", NTHash.ComputeHash(binaryPassword).ToHex());
         }
 

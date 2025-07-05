@@ -14,7 +14,7 @@
         // 2^30
         public const int RidMax = 1 << 30;
 
-        //TODO: SidCompatibilityVersion?
+        // TODO: SidCompatibilityVersion?
         // TODO: Add Rid range checks
         public const int RidMin = 1;
 
@@ -58,6 +58,13 @@
 
         public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
+            bool sidProtectorSupported =
+                propertySets.HasFlag(AccountPropertySets.WindowsLAPS) &&
+                this.context.DomainController.ForestMode >= FunctionalLevel.Win2012;
+
+            // Fetch all KDS root keys to decrypt encrypted LAPS passwords
+            IDictionary<Guid, KdsRootKey> rootKeys = sidProtectorSupported ? this.GetRootKeyMap() : null;
+
             var pek = this.GetSecretDecryptor(bootKey);
             // TODO: Use a more suitable index?
             string samAccountTypeIndex = this.context.Schema.FindIndexName(CommonDirectoryAttributes.SamAccountType);
@@ -76,7 +83,7 @@
                     continue;
                 }
 
-                var account = AccountFactory.CreateAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, propertySets);
+                var account = AccountFactory.CreateAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, rootKeys, propertySets);
 
                 if (account == null)
                 {
@@ -114,10 +121,16 @@
 
         protected DSAccount GetAccount(DatastoreObject foundObject, object objectIdentifier, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
-            
             var pek = GetSecretDecryptor(bootKey);
 
-            var account = AccountFactory.CreateAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek, propertySets);
+            bool sidProtectorSupported =
+                propertySets.HasFlag(AccountPropertySets.WindowsLAPS) &&
+                this.context.DomainController.ForestMode >= FunctionalLevel.Win2012;
+
+            // Fetch all KDS root keys to decrypt encrypted LAPS passwords
+            IDictionary<Guid, KdsRootKey> rootKeys = sidProtectorSupported ? this.GetRootKeyMap() : null;
+
+            var account = AccountFactory.CreateAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek, rootKeys, propertySets);
 
             if (account == null)
             {

@@ -5,6 +5,7 @@
   <Import Project="..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props" Condition="Exists('..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="..\Configuration\Common.csproj.props" />
+  <Import Project="Cryptography\Asn1\AsnXml.targets" />
   <PropertyGroup>
     <ProjectGuid>{7D47F040-D3A9-43CA-9F69-EF91FAF2C23A}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -53,22 +54,29 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.6.0\lib\net462\System.Buffers.dll</HintPath>
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.Memory, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.6.0\lib\net462\System.Memory.dll</HintPath>
+    <Reference Include="System.Formats.Asn1, Version=9.0.0.6, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Formats.Asn1.9.0.6\lib\net462\System.Formats.Asn1.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.6.0\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.0\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.6.1\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADSI\AdsiClient.cs" />
@@ -80,6 +88,39 @@
     <Compile Include="AzureAD\ODataErrorMessage.cs" />
     <Compile Include="AzureAD\OdataErrorResponse.cs" />
     <Compile Include="AzureAD\OdataPagedResponse.cs" />
+    <Compile Include="Cryptography\Asn1\DpapiNg\ProtectionKeyDescriptor.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs12\CertBag.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs12\MacData.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs12\Pfx.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs12\SafeBag.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs12\SecretBag.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs1\DigestInfo.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\Attribute.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\CertificateChoice.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\ContentInfo.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\EncapsulatedContentInfo.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\EncryptedContentInfo.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\EnvelopedData.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\IssuerAndSerialNumber.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\KEKIdentifier.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\KEKRecipientInfo.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\KeyAgreeRecipientIdentifier.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\KeyAgreeRecipientInfo.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\KeyTransRecipientInfo.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\OriginatorIdentifierOrKey.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\OriginatorInfo.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\OriginatorPublicKey.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\OtherCertificateFormat.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\OtherKeyAttribute.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\OtherKeyAttribute.manual.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\RecipientEncryptedKey.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\RecipientIdentifier.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\RecipientInfo.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\RecipientKeyIdentifier.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\SignedData.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\SignerIdentifier.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\Pkcs7\SignerInfo.asn1.xml.generated.cs" />
+    <Compile Include="Cryptography\Asn1\X509\AlgorithmIdentifier.asn1.xml.generated.cs" />
     <Compile Include="Cryptography\HashEqualityComparer.cs" />
     <Compile Include="Cryptography\KerberosKeyDerivation.cs" />
     <Compile Include="Cryptography\SortedFileSearcher.cs" />
@@ -90,8 +131,12 @@
     <Compile Include="Data\DNS\ResourceRecordFlags.cs" />
     <Compile Include="Data\DNS\ResourceRecordRank.cs" />
     <Compile Include="Data\DNS\ResourceRecordType.cs" />
+    <Compile Include="Cryptography\Asn1\DpapiNg\CngProtectedDataBlob.cs" />
+    <Compile Include="Data\DPAPI\GroupKeyEnvelope.cs" />
+    <Compile Include="Data\DPAPI\GroupKeyEnvelopeFlags.cs" />
     <Compile Include="Data\LAPS\LapsDecryptionStatus.cs" />
     <Compile Include="Data\LAPS\LapsClearTextPassword.cs" />
+    <Compile Include="Data\LAPS\LapsEncryptedPassword.cs" />
     <Compile Include="Data\LAPS\LapsPasswordInformation.cs" />
     <Compile Include="Data\LAPS\LapsPasswordSource.cs" />
     <Compile Include="Data\Principals\BitLockerRecoveryInformation.cs" />
@@ -204,6 +249,11 @@
     <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Cryptography\Asn1\asn.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Cryptography\Asn1\AsnXml.targets" />
+    <None Include="Cryptography\Asn1\README.md" />
     <None Include="Data\DSDataRepresentation.cd" />
     <None Include="DSInternals.Common.nuspec">
       <SubType>Designer</SubType>
@@ -230,7 +280,9 @@
     <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\System.Text.Json.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NativeMethods.txt" />
+    <None Include="Cryptography\Asn1\asn.xslt" />
+    <AsnXml Include="**\*.asn1.xml" />
+    <None Include="NativeMethods.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -240,5 +292,7 @@
     <Error Condition="!Exists('..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props'))" />
+    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
   </Target>
+  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
 </Project>

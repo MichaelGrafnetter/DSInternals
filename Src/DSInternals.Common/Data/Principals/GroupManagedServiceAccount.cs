@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security;
 using System.Security.Principal;
+using DSInternals.Common.Interop;
 
 namespace DSInternals.Common.Data
 {
@@ -11,9 +12,21 @@ namespace DSInternals.Common.Data
     public class GroupManagedServiceAccount
     {
         /// <summary>
+        /// Default security descriptor for gMSA passwords.
+        /// </summary>
+        /// <remarks>
+        /// SDDL: D:(A;;CCDCRPWPCRGRSY;;;ED) - Enterprise Domain Controllers
+        /// </remarks>
+        private static readonly byte[] DefaultGMSASecurityDescriptor = "010004803000000000000000000000001400000002001c0001000000000014009f011200010100000000000509000000010100000000000512000000".HexToBinary();
+        private const string GmsaKdfLabel = "GMSA PASSWORD";
+        private const int GmsaPasswordLength = 256;
+        private const int DefaultManagedPasswordInterval = 30; // in days
+        private const long MaxClockSkew = 3000000000; // 5 min in FileTime
+
+        /// <summary>
         /// Key identifier for the current managed password data.
         /// </summary>
-        public ProtectionKeyIdentifier ManagedPasswordId
+        public ProtectionKeyIdentifier? ManagedPasswordId
         {
             get;
             private set;
@@ -22,7 +35,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Key identifier for the previous managed password data.
         /// </summary>
-        public ProtectionKeyIdentifier ManagedPasswordPreviousId
+        public ProtectionKeyIdentifier? ManagedPasswordPreviousId
         {
             get;
             private set;
@@ -40,7 +53,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Gets the distinguished name (DN) for this <see cref="DSAccount"/>.
         /// </summary>
-        public string DistinguishedName
+        public string? DistinguishedName
         {
             get;
             private set;
@@ -49,7 +62,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Gets the Security ID (SID) of the <see cref="DSAccount"/>.
         /// </summary>
-        public SecurityIdentifier Sid
+        public SecurityIdentifier? Sid
         {
             get;
             private set;
@@ -61,7 +74,7 @@ namespace DSInternals.Common.Data
         /// <value>
         /// The unique identifier.
         /// </value>
-        public Guid Guid
+        public Guid? Guid
         {
             get;
             private set;
@@ -73,7 +86,7 @@ namespace DSInternals.Common.Data
         /// <value>
         /// The description.
         /// </value>
-        public string Description
+        public string? Description
         {
             get;
             private set;
@@ -130,7 +143,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Gets or sets the SAM account name for this <see cref="DSAccount"/>.
         /// </summary>
-        public string SamAccountName
+        public string? SamAccountName
         {
             get;
             private set;
@@ -139,7 +152,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// List of principal names used for mutual authentication with an instance of a service.
         /// </summary>
-        public string[] ServicePrincipalName
+        public string[]? ServicePrincipalName
         {
             get;
             private set;
@@ -158,35 +171,41 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Gets the current password.
+        /// Gets the current encrypted password.
         /// </summary>
-        public SecureString SecureManagedPassword
+        public SecureString? SecureManagedPassword
         {
             get;
             private set;
         }
 
         /// <summary>
-        /// Gets the current password.
+        /// Gets the current cleartext password.
         /// </summary>
-        public string ManagedPassword
+        public string? ManagedPassword
         {
             get
             {
-                return this.SecureManagedPassword.ToUnicodeString();
+                return this.SecureManagedPassword?.ToUnicodeString();
             }
         }
 
         /// <summary>
         /// Gets the account's password in Windows NT operating system one-way format (OWF).
         /// </summary>
-        public byte[] NTHash
+        public byte[]? NTHash
         {
             get;
             private set;
         }
 
-        public KerberosKeyDataNew[] KerberosKeys
+        public KerberosKeyDataNew[]? KerberosKeys
+        {
+            get;
+            private set;
+        }
+
+        public ProtectionKeyIdentifier? EffectivePasswordId
         {
             get;
             private set;
@@ -194,20 +213,20 @@ namespace DSInternals.Common.Data
 
         public GroupManagedServiceAccount(DirectoryObject dsObject)
         {
-            // TODO: Check that this object is a gMSA
+            // TODO: Check that this object is a gMSA or dMSA
 
             /* Load gMSA-specific attributes first */
 
             // Read and parse msDS-ManagedPasswordId
             dsObject.ReadAttribute(CommonDirectoryAttributes.ManagedPasswordId, out byte[] rawManagedPasswordId);
-            if(rawManagedPasswordId != null )
+            if (rawManagedPasswordId != null )
             {
                 this.ManagedPasswordId = new ProtectionKeyIdentifier(rawManagedPasswordId);
             }
 
             // Read and parse msDS-ManagedPasswordPreviousId
             dsObject.ReadAttribute(CommonDirectoryAttributes.ManagedPasswordPreviousId, out byte[] rawManagedPasswordPreviousId);
-            if(rawManagedPasswordPreviousId != null)
+            if (rawManagedPasswordPreviousId != null)
             {
                 this.ManagedPasswordPreviousId = new ProtectionKeyIdentifier(rawManagedPasswordPreviousId);
             }
@@ -263,23 +282,123 @@ namespace DSInternals.Common.Data
 
         public void CalculatePassword(KdsRootKey kdsRootKey, DateTime effectiveTime)
         {
-            Validator.AssertNotNull(kdsRootKey, nameof(kdsRootKey));
+            if (kdsRootKey == null)
+            {
+                throw new ArgumentOutOfRangeException(nameof(kdsRootKey));
+            }
 
-            // Calculate the managed password
+            // Calculate and cache the effective managed password cycle
             DateTime previousPasswordChange = this.PasswordLastSet ?? this.WhenCreated;
-            byte[] managedPassword = kdsRootKey.GetManagedPassword(this.Sid, previousPasswordChange, effectiveTime, this.ManagedPasswordInterval);
+            (int l0KeyId, int l1KeyId, int l2KeyId) = GetIntervalId(previousPasswordChange, effectiveTime, this.ManagedPasswordInterval ?? DefaultManagedPasswordInterval);
+            this.EffectivePasswordId = new ProtectionKeyIdentifier(kdsRootKey.KeyId, l0KeyId, l1KeyId, l2KeyId);
+
+            // Calculate and cache the effective managed password
+            byte[] managedPassword = CalculateManagedPassword(this.Sid, this.EffectivePasswordId.Value, kdsRootKey);
             this.SecureManagedPassword = managedPassword.ReadSecureWString(0);
             managedPassword.ZeroFill(); // Remove the cleartext password from memory
 
             // Derive password hashes, as the password itself is not that important
             this.NTHash = Cryptography.NTHash.ComputeHash(this.SecureManagedPassword);
 
-            if (this.ManagedPasswordId != null)
+            if (this.ManagedPasswordId.HasValue && this.ManagedPasswordId.Value.DomainName != null)
             {
                 // We only need the DNS domain name from the managed password id. This attribute should always be populated.
                 // TODO: We are not generating DES keys, as this feature does not yield expected results yet.
-                this.KerberosKeys = new KerberosCredentialNew(this.SecureManagedPassword, this.SamAccountName, this.ManagedPasswordId.DomainName, false).Credentials;
+                this.KerberosKeys = new KerberosCredentialNew(this.SecureManagedPassword, this.SamAccountName, this.ManagedPasswordId.Value.DomainName, false).Credentials;
             }
+        }
+
+        public static byte[] CalculateManagedPassword(SecurityIdentifier gMsaSid, ProtectionKeyIdentifier keyIdentifier, KdsRootKey kdsRootKey)
+        {
+            if (gMsaSid == null)
+            {
+                throw new ArgumentNullException(nameof(gMsaSid));
+            }
+
+            if (kdsRootKey == null)
+            {
+                throw new ArgumentOutOfRangeException(nameof(kdsRootKey));
+            }
+
+            if (keyIdentifier.RootKeyId != kdsRootKey.KeyId)
+            {
+                throw new InvalidOperationException("The provided KDS root key does not match the gMSA password identifier.");
+            }
+
+            (byte[] l1Key, byte[] l2Key) = kdsRootKey.ComputeSidPrivateKey(DefaultGMSASecurityDescriptor, keyIdentifier.L0KeyId, keyIdentifier.L1KeyId, keyIdentifier.L2KeyId);
+
+            if (l2Key == null || l2Key.Length == 0)
+            {
+                // TODO: Add test cases for this branch
+                // Recalculate the L2 key with new parameters
+                int nextl2KeyId = KdsRootKey.L2KeyModulus - 1;
+                (_, l2Key) = KdsRootKey.ClientComputeL2Key(
+                    kdsRootKey.KeyId,
+                    kdsRootKey.KdfAlgorithm,
+                    kdsRootKey.RawKdfParameters,
+                    l1Key,
+                    l2Key: null,
+                    keyIdentifier.L0KeyId,
+                    keyIdentifier.L1KeyId,
+                    l1KeyIteration: 0,
+                    l2KeyIteration: 1,
+                    nextL1KeyId: 0,
+                    nextl2KeyId);
+            }
+
+            Win32ErrorCode result = NativeMethods.GenerateDerivedKey(
+                    kdsRootKey.KdfAlgorithm,
+                    kdsRootKey.RawKdfParameters,
+                    secret: l2Key,
+                    context: gMsaSid.GetBinaryForm(),
+                    counterOffset: null,
+                    GmsaKdfLabel,
+                    iteration: 1,
+                    GmsaPasswordLength,
+                    out byte[] generatedPassword,
+                    out string invalidAttribute
+                );
+
+            Validator.AssertSuccess(result);
+
+            return generatedPassword;
+        }
+
+        public static (int l0KeyId, int l1KeyId, int l2KeyId) GetIntervalId(
+            DateTime previousPasswordChange,
+            DateTime effectiveTime,
+            int managedPasswordInterval = DefaultManagedPasswordInterval,
+            bool isClockSkewConsidered = false
+            )
+        {
+            if (managedPasswordInterval <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(managedPasswordInterval));
+            }
+
+            if (effectiveTime < previousPasswordChange)
+            {
+                throw new ArgumentOutOfRangeException(nameof(effectiveTime));
+            }
+
+            int daysDifference = (int)(effectiveTime - previousPasswordChange).TotalDays;
+            int totalPasswordCycles = daysDifference / managedPasswordInterval;
+            DateTime effectiveIntervalStartTime = previousPasswordChange.AddDays(managedPasswordInterval * totalPasswordCycles);
+
+            long effectiveIntervalId = effectiveIntervalStartTime.ToFileTimeUtc();
+
+            if (isClockSkewConsidered)
+            {
+                effectiveIntervalId += MaxClockSkew;
+            }
+
+            int effectiveKdsCycleId = (int)(effectiveIntervalId / KdsRootKey.KdsKeyCycleDuration);
+
+            int l0KeyId = effectiveKdsCycleId / (KdsRootKey.L1KeyModulus * KdsRootKey.L2KeyModulus);
+            int l1KeyId = (effectiveKdsCycleId / KdsRootKey.L2KeyModulus) % KdsRootKey.L1KeyModulus;
+            int l2KeyId = effectiveKdsCycleId % KdsRootKey.L2KeyModulus;
+
+            return (l0KeyId, l1KeyId, l2KeyId);
         }
     }
 }

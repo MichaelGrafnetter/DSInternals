@@ -38,6 +38,23 @@
             }
         }
 
+        public IDictionary<Guid, KdsRootKey> GetRootKeyMap()
+        {
+            var rootKeys = new Dictionary<Guid, KdsRootKey>();
+
+            foreach (var rootKey in this.GetKdsRootKeys())
+            {
+                // Some servers, like RODCs might not contain key values
+                if (rootKey.KeyValue != null)
+                {
+                    // Allow the key to be found by ID
+                    rootKeys.Add(rootKey.KeyId, rootKey);
+                }
+            }
+
+            return rootKeys;
+        }
+
         public IEnumerable<GroupManagedServiceAccount> GetGroupManagedServiceAccounts(DateTime effectiveTime)
         {
             // Fetch all KDS root keys first.
@@ -78,7 +95,7 @@
                     else
                     {
                         // Generate the managed password based on the Root Key currently associated with it
-                        Guid associateRootKeyId = gmsa.ManagedPasswordId.RootKeyId;
+                        Guid associateRootKeyId = gmsa.ManagedPasswordId.Value.RootKeyId;
                         rootKeys.TryGetValue(associateRootKeyId, out rootKeyToUse);
                     }
 

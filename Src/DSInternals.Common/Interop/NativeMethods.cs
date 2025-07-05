@@ -1,9 +1,10 @@
-﻿using DSInternals.Common.Data;
-using Microsoft.Win32.SafeHandles;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
+using DSInternals.Common.Data;
+using Microsoft.Win32.SafeHandles;
+using Windows.Win32.Security.Cryptography;
 
 namespace DSInternals.Common.Interop
 {
@@ -22,6 +23,8 @@ namespace DSInternals.Common.Interop
         private const string Ntdll = "ntdll.dll";
         private const string Mpr = "mpr.dll";
         private const string KdsCli = "KdsCli.dll";
+        private const string BCrypt = "bcrypt.dll";
+        private const string NCrypt = "ncrypt.dll";
         private const string LMOwfInternalName = "SystemFunction006";
         private const string NTOwfInternalName = "SystemFunction007";
         private const string LMOwfEncryptInternalName = "SystemFunction024";
@@ -353,7 +356,6 @@ namespace DSInternals.Common.Interop
             out byte[] derivedKey,
             out string invalidAttribute)
         {
-
             int kdfParametersLength = kdfParameters?.Length ?? 0;
             int secretLength = secret?.Length ?? 0;
             int contextLength = context?.Length ?? 0;
@@ -417,5 +419,76 @@ namespace DSInternals.Common.Interop
         /// <param name="memory">Memory to be freed.</param>
         [DllImport(KdsCli)]
         internal static extern void SIDKeyProvFree([In] IntPtr memory);
+
+        internal static Win32ErrorCode GetSIDKeyCacheFolder(
+            byte[] targetSecurityDescriptor,
+            out string userStorageArea,
+            out string sidKeyCacheFolder,
+            bool isLowBox = false)
+        {
+            Win32ErrorCode result = GetSIDKeyCacheFolder(targetSecurityDescriptor, targetSecurityDescriptor?.Length ?? 0, isLowBox, out var userStorageAreaHandle, out var sidKeyCacheFolderHandle);
+
+            userStorageArea = userStorageAreaHandle.StringValue;
+            sidKeyCacheFolder = sidKeyCacheFolderHandle.StringValue;
+
+            return result;
+        }
+
+        [DllImport(KdsCli, CharSet = CharSet.Unicode)]
+        private static extern Win32ErrorCode GetSIDKeyCacheFolder(byte[] targetSecurityDescriptor, int targetSecurityDescriptorLength, bool isLowBox, out SafeSidKeyProviderHandle userStorageArea, out SafeSidKeyProviderHandle sidKeyCacheFolder);
+
+        internal static Win32ErrorCode GetSIDKeyFileName(Guid rootKeyId, int l0KeyId, bool publicKey, string sidKeyFolder, out string sidKeyFileName)
+        {
+            Win32ErrorCode result = GetSIDKeyFileName(rootKeyId, l0KeyId, publicKey, sidKeyFolder, out SafeSidKeyProviderHandle sidKeyFileNameHnadle);
+            sidKeyFileName = sidKeyFileNameHnadle.StringValue;
+            return result;
+        }
+
+        [DllImport(KdsCli, CharSet = CharSet.Unicode)]
+        private static extern Win32ErrorCode GetSIDKeyFileName(Guid rootKeyId, int l0KeyId, bool publicKey, string sidKeyFolder, out SafeSidKeyProviderHandle sidKeyFileName);
+
+        internal static Win32ErrorCode WriteSIDKeyInCache(byte[] sidKey, byte[] targetSecurityDescriptor, string sidKeyFolder, string sidKeyStorageArea)
+        {
+            return WriteSIDKeyInCache(sidKey, sidKey?.Length ?? 0, targetSecurityDescriptor, targetSecurityDescriptor?.Length ?? 0, sidKeyFolder, sidKeyStorageArea);
+        }
+
+
+        [DllImport(KdsCli, CharSet = CharSet.Unicode)]
+        private static extern Win32ErrorCode WriteSIDKeyInCache(byte[] sidKey, int sidKeyLength, byte[] targetSecurityDescriptor, int targetSecurityDescriptorLength, string sidKeyFolder, string sidKeyStorageArea);
+
+        [DllImport(KdsCli, CharSet = CharSet.Unicode)]
+        internal static extern Win32ErrorCode DeleteAllCachedKeys(string sidFromCaller = null);
+
+        internal static unsafe Win32ErrorCode NCryptUnprotectSecret(ReadOnlySpan<byte> protectedBlob, out ReadOnlySpan<byte> data)
+        {
+            fixed(byte* protectedBlobPtr = protectedBlob)
+            {
+                Win32ErrorCode result = NCryptUnprotectSecret(
+                    descriptorHandle: IntPtr.Zero,
+                    NCRYPT_FLAGS.NCRYPT_SILENT_FLAG,
+                    protectedBlobPtr,
+                    protectedBlob.Length,
+                    memPara: IntPtr.Zero,
+                    windowHandle: IntPtr.Zero,
+                    out SafeSidKeyProviderHandle dataHandle,
+                    out int dataLength
+                 );
+
+                data = new ReadOnlySpan<byte>(dataHandle.ToArray(dataLength));
+                dataHandle.Close();
+                return result;
+            }
+        }
+
+        [DllImport(NCrypt)]
+        private static unsafe extern Win32ErrorCode NCryptUnprotectSecret(
+            IntPtr descriptorHandle,
+            NCRYPT_FLAGS flags,
+            byte* protectedBlob,
+            int protectedBlobLength,
+            IntPtr memPara,
+            IntPtr windowHandle,
+            out SafeSidKeyProviderHandle data,
+            out int dataLength);
     }
 }

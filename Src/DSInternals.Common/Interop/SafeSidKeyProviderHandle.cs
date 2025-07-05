@@ -33,6 +33,14 @@ namespace DSInternals.Common.Interop
             return binaryData;
         }
 
+        public string StringValue
+        {
+            get
+            {
+                return this.IsInvalid ? null : Marshal.PtrToStringUni(this.handle);
+            }
+        }
+
         [SecurityCritical]
         protected override bool ReleaseHandle()
         {

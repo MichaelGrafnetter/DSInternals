@@ -51,12 +51,15 @@ namespace DSInternals.Common.Data
             return JsonConvert.DeserializeObject<LapsClearTextPassword>(json);
         }
 
-        public static LapsClearTextPassword Parse(byte[] binaryJson)
+        public static unsafe LapsClearTextPassword Parse(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {
-            Validator.AssertNotNull(binaryJson, nameof(binaryJson));
+            var encoding = utf16 ? Encoding.Unicode : Encoding.UTF8;
 
-            string json = Encoding.UTF8.GetString(binaryJson);
-            return Parse(json);
+            fixed (byte* binaryJsonPtr = binaryJson)
+            {
+                string json = encoding.GetString(binaryJsonPtr, binaryJson.Length);
+                return Parse(json);
+            }
         }
     }
 }

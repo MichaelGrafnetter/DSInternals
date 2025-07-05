@@ -17,6 +17,12 @@
         {
             base.BeginProcessing();
 
+            if (this.DirectoryContext.DomainController.ForestMode < FunctionalLevel.Win2012)
+            {
+                var record = new ErrorRecord(new NotSupportedException("Support for gMSAs has been added in Windows Server 2012 FFL."), "gMSA_Insuffitient_FFL", ErrorCategory.InvalidOperation, targetObject: null);
+                this.ThrowTerminatingError(record);
+            }
+
             // Current date is the default value
             DateTime passwordEffectiveTime = this.EffectiveTime ?? DateTime.Now;
 

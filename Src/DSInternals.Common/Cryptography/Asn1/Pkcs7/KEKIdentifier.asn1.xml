@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:Sequence
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="KEKIdentifier"
+  namespace="DSInternals.Common.Cryptography.Asn1.Pkcs7">
+  <!--
+    https://tools.ietf.org/html/rfc5652#section-6.2.3
+
+    KEKIdentifier ::= SEQUENCE {
+        keyIdentifier OCTET STRING,
+        date GeneralizedTime OPTIONAL,
+        other OtherKeyAttribute OPTIONAL }
+  -->
+  <asn:OctetString name="KeyIdentifier" />
+  <asn:GeneralizedTime name="Date" optional="true" />
+  <asn:AsnType name="Other" typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.OtherKeyAttribute" optional="true" />
+</asn:Sequence>
