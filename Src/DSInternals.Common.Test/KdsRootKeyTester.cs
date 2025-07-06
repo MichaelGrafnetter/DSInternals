@@ -148,7 +148,7 @@ namespace DSInternals.Common.Test
         [TestMethod]
         public void IntervalCalculation_Reverse()
         {
-            DateTime effectiveTime = KdsRootKey.GetRootIntervalStart(361, 28, 4);
+            DateTime effectiveTime = KdsRootKey.GetKeyStartTime(361, 28, 4);
 
             Assert.AreEqual(new DateTime(2023, 9, 27).Date, effectiveTime.Date);
         }

@@ -174,7 +174,7 @@
 
         public override string ToString()
         {
-            DateTime cycle = KdsRootKey.GetRootIntervalStart(this.L0KeyId, this.L1KeyId, this.L2KeyId);
+            DateTime cycle = KdsRootKey.GetKeyStartTime(this.L0KeyId, this.L1KeyId, this.L2KeyId);
 
             return string.Format("RootKey={0}, Cycle={1} (L0={2}, L1={3}, L2={4})",
                 this.RootKeyId,

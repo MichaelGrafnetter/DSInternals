@@ -65,7 +65,7 @@ Reads the DPAPI backup keys from a ntds.dit file.
 Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
 
 ### [Get-ADDBServiceAccount](Get-ADDBServiceAccount.md#get-addbserviceaccount)
-Reads all Group Managed Service Accounts (gMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
+Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
 
 ### [Get-ADDBBitLockerRecoveryInformation](Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation)
 Reads BitLocker recovery passwords from a ntds.dit file.

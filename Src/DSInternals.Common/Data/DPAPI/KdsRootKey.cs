@@ -300,7 +300,7 @@ namespace DSInternals.Common.Data
 
             int iteration = L1KeyModulus - l1KeyId - 1;
 
-            if(iteration > 0)
+            if (iteration > 0) // l1KeyId < 31
             {
                 // Decrease the counter
                 context[counterOffset]--;
@@ -322,7 +322,7 @@ namespace DSInternals.Common.Data
 
             byte[] l1KeyPrevious = null;
 
-            if(l1KeyId > 0)
+            if (l1KeyId > 0)
             {
                 // Set L1 key ID
                 context[counterOffset] = (byte)(l1KeyId - 1);
@@ -379,7 +379,7 @@ namespace DSInternals.Common.Data
             return (nextL1Key, nextL2Key);
         }
 
-        public static DateTime GetRootIntervalStart(int l0KeyId, int l1KeyId, int l2KeyId)
+        public static DateTime GetKeyStartTime(int l0KeyId, int l1KeyId, int l2KeyId)
         {
             if(l0KeyId < 0)
             {

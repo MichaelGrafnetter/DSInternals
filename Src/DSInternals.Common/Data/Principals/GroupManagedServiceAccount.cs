@@ -15,13 +15,14 @@ namespace DSInternals.Common.Data
         /// Default security descriptor for gMSA passwords.
         /// </summary>
         /// <remarks>
-        /// SDDL: D:(A;;CCDCRPWPCRGRSY;;;ED) - Enterprise Domain Controllers
+        /// SDDL: O:SYD:(A;;FRFW;;;ED) - Enterprise Domain Controllers
+        /// https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/9cd2fc5e-7305-4fb8-b233-2a60bc3eec68
         /// </remarks>
         private static readonly byte[] DefaultGMSASecurityDescriptor = "010004803000000000000000000000001400000002001c0001000000000014009f011200010100000000000509000000010100000000000512000000".HexToBinary();
         private const string GmsaKdfLabel = "GMSA PASSWORD";
         private const int GmsaPasswordLength = 256;
         private const int DefaultManagedPasswordInterval = 30; // in days
-        private const long MaxClockSkew = 3000000000; // 5 min in FileTime
+        private static readonly TimeSpan MaxClockSkew = TimeSpan.FromMinutes(5);
 
         /// <summary>
         /// Key identifier for the current managed password data.
@@ -385,20 +386,12 @@ namespace DSInternals.Common.Data
             int totalPasswordCycles = daysDifference / managedPasswordInterval;
             DateTime effectiveIntervalStartTime = previousPasswordChange.AddDays(managedPasswordInterval * totalPasswordCycles);
 
-            long effectiveIntervalId = effectiveIntervalStartTime.ToFileTimeUtc();
-
             if (isClockSkewConsidered)
             {
-                effectiveIntervalId += MaxClockSkew;
+                effectiveIntervalStartTime += MaxClockSkew;
             }
 
-            int effectiveKdsCycleId = (int)(effectiveIntervalId / KdsRootKey.KdsKeyCycleDuration);
-
-            int l0KeyId = effectiveKdsCycleId / (KdsRootKey.L1KeyModulus * KdsRootKey.L2KeyModulus);
-            int l1KeyId = (effectiveKdsCycleId / KdsRootKey.L2KeyModulus) % KdsRootKey.L1KeyModulus;
-            int l2KeyId = effectiveKdsCycleId % KdsRootKey.L2KeyModulus;
-
-            return (l0KeyId, l1KeyId, l2KeyId);
+            return KdsRootKey.GetKeyId(effectiveIntervalStartTime);
         }
     }
 }
