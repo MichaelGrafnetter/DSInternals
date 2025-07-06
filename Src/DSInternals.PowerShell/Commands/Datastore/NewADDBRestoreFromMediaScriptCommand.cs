@@ -66,6 +66,14 @@
             set;
         }
 
+        [Parameter(Mandatory = false)]
+        [ValidateNotNullOrEmpty]
+        public string StatusReportScriptPath
+        {
+            get;
+            set;
+        }
+
         protected override void ProcessRecord()
         {
             DomainController dc = this.DirectoryContext.DomainController;
@@ -141,6 +149,13 @@
                 postInstallScriptAbsolutePath = this.ResolveFilePath(this.PostInstallScriptPath);
             }
 
+            string statusReportScriptAbsolutePath = string.Empty;
+
+            if (!string.IsNullOrEmpty(this.StatusReportScriptPath))
+            {
+                statusReportScriptAbsolutePath = this.ResolveFilePath(this.StatusReportScriptPath);
+            }
+
             // Load the RFM script template and replace placeholders with values from the DB:
             string template = LoadScriptTemplate();
             StringBuilder script = new StringBuilder(template).
@@ -174,6 +189,7 @@
                 Replace("{DNSOnNetwork}", this.SkipDNSServer.IsPresent ? "Yes" : "No").
                 Replace("{InstallDNSComment}", this.SkipDNSServer.IsPresent ? "# " : string.Empty).
                 Replace("{InstallDNS}", this.SkipDNSServer.IsPresent ? "No" : "Yes").
+                Replace("{StatusReportScriptPath}", statusReportScriptAbsolutePath).
                 Replace("{PostInstallScriptPath}", postInstallScriptAbsolutePath);
 
             // We need to inject cleartext version of the password into the script for dcpromo. The SecureString will therefore have to appear in managed memory, which is against best practices.

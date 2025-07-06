@@ -26,7 +26,7 @@ The DSInternals PowerShell module must be installed for all users on the target 
 It is recommended to change the DSRM password after DC promotion.
 
 Author:  Michael Grafnetter
-Version: 2.4
+Version: 2.5
 
 #>
 
@@ -48,6 +48,9 @@ function Main {
 
     # The script must be executed locally so that it is accessible even after a reboot.
     Test-ScriptPath
+
+    # Optionally execute a custom script, while providing it with the current phase information
+    Invoke-StatusReportScript
 
     switch($script:Phase)
     {
@@ -534,6 +537,25 @@ function Write-Log {
     [string] $logMessage = '{0:yyyy-MM-dd HH:mm:ss} {1}' -f (Get-Date), $Message
     Write-Host $logMessage
     Add-Content -Path $script:LogFile -Value $logMessage -Encoding UTF8
+}
+
+<#
+.SYNOPSIS
+Invokes an optional script for reporting operation status, e.g., through a callback.
+#>
+function Invoke-StatusReportScript
+{
+    param(
+        [Parameter(Mandatory = $false)]
+        [string] $ScriptPath = '{StatusReportScriptPath}'
+    )
+
+    if(-not [string]::IsNullOrEmpty($ScriptPath)) {
+        Write-Log -Message "Executing the status reporting script..."
+        & $ScriptPath $script:Phase *>> $script:LogFile
+    } else {
+        Write-Log -Message 'No status reporting script is configured. Skipping execution...'
+    }
 }
 
 #endregion Helper Functions

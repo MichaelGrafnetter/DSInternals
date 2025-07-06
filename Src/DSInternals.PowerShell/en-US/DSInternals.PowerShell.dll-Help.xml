@@ -9015,6 +9015,18 @@ PasswordHistoryCount        : 0
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>StatusReportScriptPath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to an optional script that will be executed before each phase of the restore process.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SysVol">
           <maml:name>SysvolPath</maml:name>
           <maml:description>
@@ -9101,6 +9113,18 @@ PasswordHistoryCount        : 0
           <maml:uri />
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>StatusReportScriptPath</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to an optional script that will be executed before each phase of the restore process.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SysVol">
         <maml:name>SysvolPath</maml:name>

@@ -102,10 +102,10 @@ Describe 'DSInternals PowerShell Module' {
         }
 
         It 'does not contain debug symbols' {
-            # Only the DSInternals.DataStore.pdb should be present to simplify troubleshooting.
+            # Only the DSInternals.DataStore.pdb and its dependencies should be present to simplify troubleshooting.
 
             Get-ChildItem -Path $ModulePath -Recurse -Filter *.pdb |
-                Should -HaveCount 1
+                Should -HaveCount 3
         }
 
         It 'does not contain unit tests' {
@@ -175,7 +175,7 @@ Describe 'DSInternals PowerShell Module' {
             $Assembly.VersionInfo.ProductName | Should -Not -BeNullOrEmpty
         }
 
-        $expectedCopyrightInfo = '*© 2015-{0}*' -f (Get-Date).Year
+        $expectedCopyrightInfo = '*  2015-{0}*' -f (Get-Date).Year
 
         It '<Assembly> has up-to-date copyright information' -TestCases $ownedAssemblies -Test {
             param($Assembly)
