@@ -1,6 +1,6 @@
-﻿
-using System.Globalization;
-using Microsoft.Isam.Esent.Interop.Vista;
+﻿using Microsoft.Isam.Esent.Interop.Vista;
+using Windows.Win32;
+using Windows.Win32.Globalization;
 
 namespace DSInternals.DataStore
 {
@@ -12,9 +12,21 @@ namespace DSInternals.DataStore
         public const string SecurityDescriptorTableName = "sd_table";
         public const string EseBaseName = "edb";
         public const string EseTempDatabaseName = "temp.edb";
-        public const int EseLogFileSize = 10240; // 10M
-        public const int EseIndexDefaultLocale = 1033; // = DS_DEFAULT_LOCALE = EN-US | SORT_DEFAULT
-        public const int EseIndexDefaultCompareOptions = 0x00000001 | 0x00000002 | 0x00010000 | 0x00020000 | 0x00001000; // = DS_DEFAULT_LOCALE_COMPARE_FLAGS | LCMAP_SORTKEY = NORM_IGNORECASE | NORM_IGNOREKANATYPE | NORM_IGNORENONSPACE | NORM_IGNOREWIDTH | SORT_STRINGSORT
+        public const int EseLogFileSize = 10240; // 10MB
+        /// <summary>
+        /// Corresponds to DS_DEFAULT_LOCALE
+        /// </summary>
+        public const uint EseIndexDefaultLocale = PInvoke.LANG_ENGLISH | PInvoke.SUBLANG_ENGLISH_US << 10 | PInvoke.SORT_DEFAULT << 16;
+        /// <summary>
+        /// Corresponds to DS_DEFAULT_LOCALE_COMPARE_FLAGS | LCMAP_SORTKEY
+        /// </summary>
+        public const uint EseIndexDefaultCompareOptions = (uint)(
+            COMPARE_STRING_FLAGS.NORM_IGNORECASE |
+            COMPARE_STRING_FLAGS.NORM_IGNOREKANATYPE |
+            COMPARE_STRING_FLAGS.NORM_IGNORENONSPACE |
+            COMPARE_STRING_FLAGS.NORM_IGNOREWIDTH |
+            COMPARE_STRING_FLAGS.SORT_STRINGSORT) |
+            PInvoke.LCMAP_SORTKEY;
         public const LegacyFileNames EseLegacyFileNames = LegacyFileNames.EightDotThreeSoftCompat | LegacyFileNames.ESE98FileNames;
         public const int EseMaxOpenTables = 1000;
         public const int NotAnObjectDNTag = 1;

@@ -31,7 +31,7 @@
         {
             TableDefinition dataTable = database.Tables[ADConstants.DataTableName];
             this.LoadColumnList(dataTable.Columns);
-            this.LoadAttributeIndices(dataTable.Indices2);
+            this.LoadAttributeIndices(dataTable.GetIndices2(database));
             using (var cursor = database.OpenCursor(ADConstants.DataTableName))
             {
                 this.LoadClassList(cursor);

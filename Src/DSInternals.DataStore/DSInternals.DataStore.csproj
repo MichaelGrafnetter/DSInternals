@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props" Condition="Exists('..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props')" />
+  <Import Project="..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props" Condition="Exists('..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props')" />
+  <Import Project="..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props" Condition="Exists('..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="..\Configuration\Common.csproj.props" />
   <PropertyGroup>
@@ -18,6 +21,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +40,16 @@
     <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Esent.Interop, Version=2.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Database.ManagedEsent.2.0.4\lib\netstandard2.0\Esent.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Isam, Version=2.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Database.Isam.2.0.4\lib\netstandard2.0\Esent.Isam.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Windows.SDK.Win32Docs, Version=0.1.42.13748, Culture=neutral, PublicKeyToken=7c40c7c34b1fcfe1, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Windows.SDK.Win32Docs.0.1.42-alpha\lib\netstandard2.0\Microsoft.Windows.SDK.Win32Docs.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -80,6 +95,8 @@
     <Compile Include="Enums\PekListFlags.cs" />
     <Compile Include="Enums\PekListVersion.cs" />
     <Compile Include="Exceptions\InvalidDatabaseStateException.cs" />
+    <Compile Include="Extensions\IsamInstanceExtensions.cs" />
+    <Compile Include="Extensions\TableDefinitionExtentions.cs" />
     <Compile Include="PrefixMap.cs" />
     <Compile Include="SchemaAttribute.cs" />
     <Compile Include="Extensions\CursorExtensions.cs" />
@@ -103,23 +120,33 @@
       <Name>DSInternals.Common</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Microsoft.Database.Isam\Microsoft.Database.Isam.csproj">
-      <Project>{21cc632c-b09a-4db7-bd6e-7f7d2716f58f}</Project>
-      <Name>Microsoft.Database.Isam</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Microsoft.Isam.Esent.Interop\Microsoft.Isam.Esent.Interop.csproj">
-      <Project>{e929e163-52a0-4aac-917b-6d7faf70c45e}</Project>
-      <Name>Microsoft.Isam.Esent.Interop</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="DSInternals.DataStore.nuspec" />
     <None Include="packages.config" />
     <None Include="package\install.ps1" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\MessagePack.Annotations.dll" />
+    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\MessagePack.dll" />
+    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\Microsoft.Bcl.AsyncInterfaces.dll" />
+    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\Microsoft.Windows.CsWin32.dll" />
+    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\Microsoft.Windows.SDK.Win32Docs.dll" />
+    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\System.Text.Encodings.Web.dll" />
+    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\System.Text.Json.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NativeMethods.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

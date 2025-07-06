@@ -5,6 +5,8 @@
     using Microsoft.Database.Isam;
     using Microsoft.Isam.Esent.Interop;
 
+    using NATIVE_UNICODEINDEX = Windows.Win32.Storage.Jet.JET_UNICODEINDEX;
+
     public class DirectoryContext : IDisposable
     {
         private const string JetInstanceNameFormat = "DSInternals-{0:D}";
@@ -68,6 +70,9 @@
             {
                 var isamParameters = this.instance.IsamSystemParameters;
 
+                // Some ESE functionality required for AD is not exposed by the official .NET wrapper.
+                var isamParametersExt = this.instance.GetIsamSystemParametersExt();
+
                 // Set the size of the transaction log files to AD defaults.
                 isamParameters.LogFileSize = ADConstants.EseLogFileSize;
 
@@ -75,7 +80,7 @@
                 isamParameters.DeleteOutOfRangeLogs = true;
 
                 // Check the database for indexes over Unicode key columns that were built using an older version of the NLS library.
-                isamParameters.EnableIndexChecking2 = true;
+                isamParametersExt.EnableIndexChecking2 = true;
 
                 // Automatically clean up indexes over Unicode key columns as necessary to avoid database format changes caused by changes to the NLS library.
                 isamParameters.EnableIndexCleanup = true;
@@ -84,28 +89,28 @@
                 isamParameters.CircularLog = true;
 
                 // Disable all database engine callbacks to application provided functions. This enables us to open Win2016 DBs on non-DC systems.
-                isamParameters.DisableCallbacks = true;
+                isamParametersExt.DisableCallbacks = true;
 
                 // Increase the limit of maximum open tables.
                 isamParameters.MaxOpenTables = ADConstants.EseMaxOpenTables;
 
                 // Enable backwards compatibility with the file naming conventions of earlier releases of the database engine.
-                isamParameters.LegacyFileNames = ADConstants.EseLegacyFileNames;
+                isamParametersExt.LegacyFileNames = ADConstants.EseLegacyFileNames;
 
                 // Set EN-US to be used by any index over a Unicode key column.
-                isamParameters.UnicodeIndexDefault = new JET_UNICODEINDEX()
+                isamParametersExt.UnicodeIndexDefault = new NATIVE_UNICODEINDEX()
                 {
                     lcid = ADConstants.EseIndexDefaultLocale,
                     dwMapFlags = ADConstants.EseIndexDefaultCompareOptions
                 };
 
                 // Force crash recovery to look for the database referenced in the transaction log in the specified folder.
-                isamParameters.AlternateDatabaseRecoveryPath = this.DSAWorkingDirectory;
+                isamParametersExt.AlternateDatabaseRecoveryPath = this.DSAWorkingDirectory;
 
                 if (!readOnly)
                 {
                     // Delete obsolete log files.
-                    isamParameters.DeleteOldLogs = true;
+                    isamParametersExt.DeleteOldLogs = true;
 
                     if (EsentVersion.SupportsWindows10Features)
                     {
@@ -113,7 +118,7 @@
                         {
                             // Required for Windows Server 2022 compatibility, as it limits the transaction log file format to 8920.
                             // Note: Usage of JET_efvUsePersistedFormat still causes minor DB format upgrade.
-                            isamParameters.EngineFormatVersion = 0x40000002; // JET_efvUsePersistedFormat: Instructs the engine to use the minimal Engine Format Version of all loaded log and DB files.
+                            isamParametersExt.EngineFormatVersion = 0x40000002; // JET_efvUsePersistedFormat: Instructs the engine to use the minimal Engine Format Version of all loaded log and DB files.
                         }
                         catch (EsentInvalidParameterException)
                         {
