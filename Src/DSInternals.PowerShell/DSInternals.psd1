@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '5.3'
+ModuleVersion = '5.4'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -158,7 +158,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Resolved an issue with parsing the unixHomeDirectory attribute values.
+- The Get-ADDBServiceAccount cmdlet now retrieves both msDS-GroupManagedServiceAccount and msDS-DelegatedManagedServiceAccount object types from ntds.dit files.
+- The Get-ADDBAccount cmdlet can now decrypt all Windows LAPS passwords in offline mode.
 "@
     } # End of PSData hashtable
 

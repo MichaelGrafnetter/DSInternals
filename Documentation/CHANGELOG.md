@@ -7,6 +7,22 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [5.4] - 2025-07-07
+
+### Added
+
+- The [Get-ADDBServiceAccount](PowerShell/Get-ADDBServiceAccount.md#get-addbserviceaccount) cmdlet now retrieves both `msDS-GroupManagedServiceAccount` and `msDS-DelegatedManagedServiceAccount` object types from `ntds.dit` files, making the **Offline Golden dMSA Attack** possible.
+- The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet can now decrypt all Windows LAPS passwords in offline mode, including `msLAPS-EncryptedPassword`, `msLAPS-EncryptedPasswordHistory`, `msLAPS-EncryptedDSRMPassword`, and `msLAPS-EncryptedDSRMPasswordHistory`. This enables several new disaster recovery scenarios.
+- The [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet has a new optional parameter called `-StatusReportScriptPath`, which can be used to execute callbacks/hooks during the restore process.
+
+### Changed
+
+- Replaced a custom fork of the [ManagedEsent](https://github.com/microsoft/ManagedEsent) library with the [official NuGet packages](https://www.nuget.org/packages/Microsoft.Database.Isam). Some hacks are still implemented using reflection.
+
+### Fixed
+
+- The `-Properties` parameter of the [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) and [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlets can now be used together with the `-ExportFormat` parameter. This enables account filtering based on their distinguished names.
+
 ## [5.3] - 2025-04-11
 
 ### Fixed
@@ -587,7 +603,9 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.2...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.4...HEAD
+[5.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.3...v5.4
+[5.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.2...v5.3
 [5.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.1...v5.2
 [5.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.0...v5.1
 [5.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v4.16...v5.0

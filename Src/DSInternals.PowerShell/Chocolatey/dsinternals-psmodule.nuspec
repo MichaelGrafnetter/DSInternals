@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>5.3</version>
+    <version>5.4</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -37,7 +37,8 @@ The DSInternals PowerShell Module has these main features:
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* Resolved an issue with parsing the `unixHomeDirectory` attribute values.
+* The Get-ADDBServiceAccount cmdlet now retrieves both msDS-GroupManagedServiceAccount and msDS-DelegatedManagedServiceAccount object types from ntds.dit files.
+* The Get-ADDBAccount cmdlet can now decrypt all Windows LAPS passwords in offline mode.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->
