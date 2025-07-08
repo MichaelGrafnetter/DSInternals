@@ -191,7 +191,7 @@ Describe 'DSInternals PowerShell Module' {
             It 'CHANGELOG should be up-to-date' {
                 $changeLogPath = Join-Path $MarkdownDocumentationPath 'CHANGELOG.md'
 
-                # Check that the verisons match
+                # Check that the versions match
                 $moduleVersion = $manifest.ModuleVersion
                 Select-String -Path $changeLogPath -Pattern "## [$moduleVersion]" -SimpleMatch -Quiet | Should Be $true
             }
