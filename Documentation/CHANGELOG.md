@@ -7,13 +7,14 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
-## [5.4] - 2025-07-07
+## [5.4] - 2025-07-08
 
 ### Added
 
 - The [Get-ADDBServiceAccount](PowerShell/Get-ADDBServiceAccount.md#get-addbserviceaccount) cmdlet now retrieves both `msDS-GroupManagedServiceAccount` and `msDS-DelegatedManagedServiceAccount` object types from `ntds.dit` files, making the **Offline Golden dMSA Attack** possible.
 - The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet can now decrypt all Windows LAPS passwords in offline mode, including `msLAPS-EncryptedPassword`, `msLAPS-EncryptedPasswordHistory`, `msLAPS-EncryptedDSRMPassword`, and `msLAPS-EncryptedDSRMPasswordHistory`. This enables several new disaster recovery scenarios.
 - The [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet has a new optional parameter called `-StatusReportScriptPath`, which can be used to execute callbacks/hooks during the restore process.
+- The [Get-ADDBDomainController](PowerShell/Get-ADDBDomainController.md#get-addbdomaincontroller) cmdlet can now identify RODC databases.
 
 ### Changed
 
@@ -22,6 +23,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - The `-Properties` parameter of the [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) and [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlets can now be used together with the `-ExportFormat` parameter. This enables account filtering based on their distinguished names.
+- Fixed a regression bug that prevented the `-Expiration` parameter of the [Set-ADDBDomainController](PowerShell/Set-ADDBDomainController.md#set-addbdomaincontroller) cmdlet from working.
 
 ## [5.3] - 2025-04-11
 

@@ -109,6 +109,12 @@
             set;
         }
 
+        public bool IsReadOnly
+        {
+            get;
+            set;
+        }
+
         public DomainControllerOptions Options
         {
             get;
@@ -121,19 +127,7 @@
             set;
         }
 
-        public string OSVersion
-        {
-            get;
-            set;
-        }
-
-        public uint? OSVersionMajor
-        {
-            get;
-            set;
-        }
-
-        public uint? OSVersionMinor
+        public Version OSVersion
         {
             get;
             set;

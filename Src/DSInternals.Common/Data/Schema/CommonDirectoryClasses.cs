@@ -15,5 +15,15 @@
         public const string FVERecoveryInformation = "msFVE-RecoveryInformation";
         public const string DnsZone = "dnsZone";
         public const string DnsNode = "dnsNode";
+
+        /// <summary>
+        /// NTDS Settings of a writable DC.
+        /// </summary>
+        public const string NtdsSettings = "nTDSDSA";
+
+        /// <summary>
+        /// NTDS Settings of a RODC.
+        /// </summary>
+        public const string NtdsSettingsRO = "nTDSDSARO";
     }
 }

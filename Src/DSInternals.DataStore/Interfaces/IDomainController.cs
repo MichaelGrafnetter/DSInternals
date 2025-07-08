@@ -24,13 +24,12 @@
         Guid InvocationId { get; }
         bool IsADAM { get; }
         bool IsGlobalCatalog { get; }
+        bool IsReadOnly { get; }
         string Name { get; }
         string NetBIOSDomainName { get; }
         DomainControllerOptions Options { get; }
         string OSName { get; }
-        string OSVersion { get; }
-        uint? OSVersionMajor { get; }
-        uint? OSVersionMinor { get; }
+        Version OSVersion { get; }
         DistinguishedName SchemaNamingContext { get; }
         DistinguishedName ServerReference { get; }
         SecurityIdentifier Sid { get; }

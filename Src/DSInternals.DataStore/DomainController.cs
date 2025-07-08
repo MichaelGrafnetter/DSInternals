@@ -1,11 +1,11 @@
 ﻿namespace DSInternals.DataStore
 {
-    using DSInternals.Common.Data;
-    using Microsoft.Database.Isam;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Principal;
+    using DSInternals.Common.Data;
+    using Microsoft.Database.Isam;
 
     /// <summary>
     /// The DomainController class represents a domain controller in an Active Directory domain.
@@ -52,11 +52,19 @@
             // Load attributes from the hiddentable:
             this.NTDSSettingsDNT = this.systemTableCursor.RetrieveColumnAsInt(ntdsSettingsCol).Value;
 
-            if(this.systemTableCursor.TableDefinition.Columns.Contains(osVersionMajorCol))
+            // Some databases like the initial adamntds.dit or ntds.dit on Windows Server 2003 do not contain the OS Version
+            if (this.systemTableCursor.TableDefinition.Columns.Contains(osVersionMajorCol))
             {
-                // Some databases like the initial adamntds.dit or ntds.dit on Windows Server 2003 do not contain the OS Version
-                this.OSVersionMinor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMinorCol);
-                this.OSVersionMajor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMajorCol);
+                uint? osVersionMinor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMinorCol);
+                uint? osVersionMajor = this.systemTableCursor.RetrieveColumnAsUInt(osVersionMajorCol);
+
+                if (osVersionMajor.HasValue && osVersionMinor.HasValue)
+                {
+                    this.OSVersion = new Version(
+                        (int)osVersionMajor.Value,
+                        (int)osVersionMinor.Value
+                    );
+                }
             }
 
             if (this.systemTableCursor.TableDefinition.Columns.Contains(epochCol))
@@ -96,6 +104,20 @@
                 this.DsaGuid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGUID)).Value;
                 this.Options = dataTableCursor.RetrieveColumnAsDomainControllerOptions(schema.FindColumnId(CommonDirectoryAttributes.Options));
                 string ntdsName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.CommonName));
+
+                // The RODC feature is supported since Windows Server 2008+ (version 6.0)
+                if (this.OSVersion >= new Version(6,0))
+                {
+                    // Check if this is a RODC
+                    int? ntdsSettingsObjectCategory = dataTableCursor.RetrieveColumnAsInt(schema.FindColumnId(CommonDirectoryAttributes.ObjectCategory));
+                    int rodcNtdsSettingsClass = schema.FindClassId(CommonDirectoryClasses.NtdsSettingsRO);
+
+                    // The objectCategory should be either nTDSDSA or nTDSDSARO
+                    if (ntdsSettingsObjectCategory == rodcNtdsSettingsClass)
+                    {
+                        this.IsReadOnly = true;
+                    }
+                }
 
                 // Retrieve Configuration Naming Context
                 this.ConfigurationNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextDNTag)).Value;
@@ -263,23 +285,7 @@
         /// <summary>
         /// Gets the operating system version of this domain controller.
         /// </summary>
-        public string OSVersion
-        {
-            get
-            {
-                if(this.OSVersionMajor == null)
-                {
-                    return null;
-                }
-                return String.Format("{0}.{1}", this.OSVersionMajor, this.OSVersionMinor);
-            }
-        }
-        public uint? OSVersionMajor
-        {
-            get;
-            private set;
-        }
-        public uint? OSVersionMinor
+        public Version? OSVersion
         {
             get;
             private set;
@@ -353,12 +359,12 @@
             }
             set
             {
-                if(this.epochCache == null)
+                if (this.epochCache == null)
                 {
                     // This is a legacy DB without the epoch_col, so we cannot change it.
-                    // TODO: Extract as a resource.
                     throw new InvalidOperationException("Current database does not support epoch information.");
                 }
+
                 // Update table
                 this.systemTableCursor.BeginEditForUpdate();
                 this.systemTableCursor.EditRecord[epochCol] = value;
@@ -436,7 +442,7 @@
             {
                 // Update table
                 this.systemTableCursor.BeginEditForUpdate();
-                this.systemTableCursor.SetValue(backupExpirationCol, value);
+                this.systemTableCursor.SetValue(backupExpirationCol, value, true);
                 this.systemTableCursor.AcceptChanges();
 
                 // Cache the value
@@ -494,6 +500,15 @@
             {
                 return this.Options.HasFlag(DomainControllerOptions.GlobalCatalog);
             }
+        }
+
+        /// <summary>
+        /// Indicates wheteher this is a RODC.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get;
+            private set;
         }
 
         /// <summary>

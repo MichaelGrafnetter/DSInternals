@@ -175,7 +175,7 @@ Describe 'DSInternals PowerShell Module' {
             $Assembly.VersionInfo.ProductName | Should -Not -BeNullOrEmpty
         }
 
-        $expectedCopyrightInfo = '*  2015-{0}*' -f (Get-Date).Year
+        $expectedCopyrightInfo = '* 2015-{0}*' -f (Get-Date).Year
 
         It '<Assembly> has up-to-date copyright information' -TestCases $ownedAssemblies -Test {
             param($Assembly)
