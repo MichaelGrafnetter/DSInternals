@@ -12,8 +12,14 @@ Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryptio
 
 ## SYNTAX
 
+### All (Default)
 ```
-Get-ADDBKdsRootKey -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Get-ADDBKdsRootKey [-All] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+```
+
+### ByGuid
+```
+Get-ADDBKdsRootKey [-RootKeyId] <Guid> -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,6 +71,21 @@ Retrieves a KDS Root Key from an AD database and then uses the "CQURE DPAPI NG P
 
 ## PARAMETERS
 
+### -All
+Indicates that all KDS Root Keys should be fetched.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DatabasePath
 Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.
 
@@ -95,12 +116,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RootKeyId
+Specifies a single KDS Root Key to be fetched.
+
+```yaml
+Type: Guid
+Parameter Sets: ByGuid
+Aliases: Id, KeyId
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### System.Guid
 
 ## OUTPUTS
 
