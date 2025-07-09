@@ -134,6 +134,9 @@
     <Compile Include="Cryptography\Asn1\DpapiNg\CngProtectedDataBlob.cs" />
     <Compile Include="Data\DPAPI\GroupKeyEnvelope.cs" />
     <Compile Include="Data\DPAPI\GroupKeyEnvelopeFlags.cs" />
+    <Compile Include="Data\DPAPI\IKdsRootKeyResolver.cs" />
+    <Compile Include="Data\DPAPI\KdsRootKeyCache.cs" />
+    <Compile Include="Data\DPAPI\StaticKdsRootKeyResolver.cs" />
     <Compile Include="Data\LAPS\LapsDecryptionStatus.cs" />
     <Compile Include="Data\LAPS\LapsClearTextPassword.cs" />
     <Compile Include="Data\LAPS\LapsEncryptedPassword.cs" />

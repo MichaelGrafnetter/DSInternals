@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using DSInternals.Common.Data;
@@ -21,11 +20,10 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(2024, encryptedLaps.UpdateTimeStamp.Year);
 
             var rootKey = new KdsRootKey(encryptedLaps.EncryptedBlob.ProtectionKeyIdentifier.RootKeyId, rootKeyValue);
-            var rootKeys = new Dictionary<Guid, KdsRootKey>();
-            rootKeys.Add(rootKey.KeyId, rootKey);
+            var rootKeyResolver = new StaticKdsRootKeyResolver(rootKey);
 
             // Try to decrypt the password
-            var lapsInfo = new LapsPasswordInformation("PC01", encryptedLaps, LapsPasswordSource.EncryptedPassword, null, rootKeys);
+            var lapsInfo = new LapsPasswordInformation("PC01", encryptedLaps, LapsPasswordSource.EncryptedPassword, null, rootKeyResolver);
             Assert.AreEqual(expectedPassword, lapsInfo.Password);
         }
 

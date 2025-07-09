@@ -122,7 +122,7 @@ namespace DSInternals.Replication
                 {
                     obj.Schema = schema;
                     // TODO: Add support for retrieving KDS Roos Keys through replication
-                    var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, rootKeys: null, propertySets);
+                    var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, rootKeyResolver: null, propertySets);
 
                     if (account != null)
                     {
@@ -144,7 +144,7 @@ namespace DSInternals.Replication
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
             // TODO: Add support for KDS Root Keys
-            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, rootKeys: null, propertySets);
+            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, rootKeyResolver: null, propertySets);
 
             if (account == null)
             {
@@ -163,7 +163,7 @@ namespace DSInternals.Replication
             var schema = BasicSchemaFactory.CreateSchema();
             obj.Schema = schema;
             // TODO: Add support for KDS Root Keys
-            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, rootKeys: null, propertySets);
+            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, rootKeyResolver: null, propertySets);
 
             if (account == null)
             {

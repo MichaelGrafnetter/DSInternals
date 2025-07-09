@@ -26,41 +26,6 @@
         #endregion Data Protection API (DPAPI)
 
         #region DPAPI NG / Group Key Distribution Service
-        public IEnumerable<KdsRootKey> GetKdsRootKeys()
-        {
-            if (!this.context.Schema.ContainsClass(CommonDirectoryClasses.KdsRootKey))
-            {
-                // The schema does not support the ms-Kds-Prov-RootKey class.
-                yield break;
-            }
-
-            foreach (var keyObject in this.FindObjectsByCategory(CommonDirectoryClasses.KdsRootKey))
-            {
-                if (keyObject.IsWritable)
-                {
-                    // RODCs do not contain key values
-                    yield return new KdsRootKey(keyObject);
-                }
-            }
-        }
-
-        public IDictionary<Guid, KdsRootKey> GetRootKeyMap()
-        {
-            var rootKeys = new Dictionary<Guid, KdsRootKey>();
-
-            foreach (var rootKey in this.GetKdsRootKeys())
-            {
-                // Some servers, like RODCs might not contain key values
-                if (rootKey.KeyValue != null)
-                {
-                    // Allow the key to be found by ID
-                    rootKeys.Add(rootKey.KeyId, rootKey);
-                }
-            }
-
-            return rootKeys;
-        }
-
         public IEnumerable<GroupManagedServiceAccount> GetGroupManagedServiceAccounts(DateTime effectiveTime)
         {
             // Support for gMSAs has been added in Windows Server 2012
@@ -75,25 +40,8 @@
                 yield break;
             }
 
-            // Fetch all KDS root keys first.
-            var rootKeys = new Dictionary<Guid, KdsRootKey>();
-            KdsRootKey latestRootKey = null;
-
-            foreach (var rootKey in this.GetKdsRootKeys())
-            {
-                // Some servers, like RODCs might not contain key values
-                if (rootKey.KeyValue != null)
-                {
-                    // Allow the key to be found by ID
-                    rootKeys.Add(rootKey.KeyId, rootKey);
-
-                    // Check if this key is the newest found yet
-                    if (rootKey.EffectiveTime <= effectiveTime && (latestRootKey == null || latestRootKey.CreationTime < rootKey.CreationTime))
-                    {
-                        latestRootKey = rootKey;
-                    }
-                }
-            }
+            var rootKeyResolver = new KdsRootKeyCache(new DatastoreRootKeyResolver(this.context), preloadCache: true);
+            KdsRootKey? latestRootKey = rootKeyResolver.GetKdsRootKey(effectiveTime);
 
             var gmsaObjects = this.FindObjectsByCategory(CommonDirectoryClasses.GroupManagedServiceAccount);
 
@@ -109,10 +57,10 @@
             {
                 var gmsa = new GroupManagedServiceAccount(gmsaObject);
 
-                if (gmsa.ManagedPasswordId != null)
+                if (gmsa.ManagedPasswordId.HasValue)
                 {
                     DateTime nextPasswordChange = gmsa.PasswordLastSet.Value.AddDays(gmsa.ManagedPasswordInterval.Value);
-                    KdsRootKey rootKeyToUse;
+                    KdsRootKey? rootKeyToUse;
                     if (nextPasswordChange <= effectiveTime)
                     {
                         // The existing password has already expired, so generate the managed password based on the latest Root Key
@@ -122,7 +70,7 @@
                     {
                         // Generate the managed password based on the Root Key currently associated with it
                         Guid associateRootKeyId = gmsa.ManagedPasswordId.Value.RootKeyId;
-                        rootKeys.TryGetValue(associateRootKeyId, out rootKeyToUse);
+                        rootKeyToUse = rootKeyResolver.GetKdsRootKey(associateRootKeyId);
                     }
 
                     if (rootKeyToUse != null)

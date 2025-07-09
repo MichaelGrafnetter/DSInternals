@@ -10,7 +10,7 @@ namespace DSInternals.Common.Data
     {
         private List<LapsPasswordInformation>? _lapsPasswords;
 
-        public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IDictionary<Guid, KdsRootKey> rootKeys = null, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
+        public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
             if (this.SamAccountType != SamAccountType.Computer)
             {
@@ -29,7 +29,7 @@ namespace DSInternals.Common.Data
 
             if (propertySets.HasFlag(AccountPropertySets.WindowsLAPS))
             {
-                this.LoadWindowsLAPS(dsObject, rootKeys);
+                this.LoadWindowsLAPS(dsObject, rootKeyResolver);
             }
 
             if (propertySets.HasFlag(AccountPropertySets.ManagedBy))
@@ -158,7 +158,7 @@ namespace DSInternals.Common.Data
             }
         }
 
-        protected void LoadWindowsLAPS(DirectoryObject dsObject, IDictionary<Guid, KdsRootKey> rootKeys = null)
+        protected void LoadWindowsLAPS(DirectoryObject dsObject, IKdsRootKeyResolver rootKeyResolver = null)
         {
             dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsPasswordExpirationTime, out DateTime? expirationTime, false);
 
@@ -183,7 +183,7 @@ namespace DSInternals.Common.Data
                 if (binaryEncryptedPassword != null && binaryEncryptedPassword.Length > 0)
                 {
                     var encryptedPassword = new LapsEncryptedPassword(binaryEncryptedPassword);
-                    var encryptedPasswordInfo = new LapsPasswordInformation(this.ComputerName, encryptedPassword, LapsPasswordSource.EncryptedPassword, expirationTime.Value, rootKeys);
+                    var encryptedPasswordInfo = new LapsPasswordInformation(this.ComputerName, encryptedPassword, LapsPasswordSource.EncryptedPassword, expirationTime.Value, rootKeyResolver);
                     windowsLapsPasswords.Add(encryptedPasswordInfo);
                 }
 
@@ -195,7 +195,7 @@ namespace DSInternals.Common.Data
                     foreach (var binaryHistoricalPassword in encryptedPasswordHistory)
                     {
                         var historicalPassword = new LapsEncryptedPassword(binaryHistoricalPassword);
-                        var historicalPasswordInfo = new LapsPasswordInformation(this.ComputerName, historicalPassword, LapsPasswordSource.EncryptedPasswordHistory, expiration: null, rootKeys);
+                        var historicalPasswordInfo = new LapsPasswordInformation(this.ComputerName, historicalPassword, LapsPasswordSource.EncryptedPasswordHistory, expiration: null, rootKeyResolver);
                         windowsLapsPasswords.Add(historicalPasswordInfo);
                     }
                 }
@@ -206,7 +206,7 @@ namespace DSInternals.Common.Data
                 if (encryptedDsrmPassword != null && encryptedDsrmPassword.Length > 0)
                 {
                     var dsrmPassword = new LapsEncryptedPassword(encryptedDsrmPassword);
-                    var dsrmPasswordInfo = new LapsPasswordInformation(this.ComputerName, dsrmPassword, LapsPasswordSource.EncryptedDSRMPassword, expirationTime.Value, rootKeys);
+                    var dsrmPasswordInfo = new LapsPasswordInformation(this.ComputerName, dsrmPassword, LapsPasswordSource.EncryptedDSRMPassword, expirationTime.Value, rootKeyResolver);
                     windowsLapsPasswords.Add(dsrmPasswordInfo);
                 }
 
@@ -218,7 +218,7 @@ namespace DSInternals.Common.Data
                     foreach (var binarydsrmPassword in encryptedDsrmPasswordHistory)
                     {
                         var historicalDsrmPassword = new LapsEncryptedPassword(binarydsrmPassword);
-                        var historicalDsrmPasswordInfo = new LapsPasswordInformation(this.ComputerName, historicalDsrmPassword, LapsPasswordSource.EncryptedDSRMPasswordHistory, expiration: null, rootKeys);
+                        var historicalDsrmPasswordInfo = new LapsPasswordInformation(this.ComputerName, historicalDsrmPassword, LapsPasswordSource.EncryptedDSRMPasswordHistory, expiration: null, rootKeyResolver);
                         windowsLapsPasswords.Add(historicalDsrmPasswordInfo);
                     }
                 }

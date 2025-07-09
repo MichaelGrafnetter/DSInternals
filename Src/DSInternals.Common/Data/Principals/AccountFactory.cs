@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using DSInternals.Common.Cryptography;
+﻿using DSInternals.Common.Cryptography;
 
 namespace DSInternals.Common.Data
 {
     public static class AccountFactory
     {
-        public static DSAccount CreateAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IDictionary<Guid, KdsRootKey> rootKeys = null, AccountPropertySets propertySets = AccountPropertySets.All)
+        public static DSAccount CreateAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             // Validate the input.
             Validator.AssertNotNull(dsObject, nameof(dsObject));
@@ -19,7 +17,7 @@ namespace DSInternals.Common.Data
                 case SamAccountType.User:
                     return new DSUser(dsObject, netBIOSDomainName, pek, propertySets);
                 case SamAccountType.Computer:
-                    return new DSComputer(dsObject, netBIOSDomainName, pek, rootKeys, propertySets);
+                    return new DSComputer(dsObject, netBIOSDomainName, pek, rootKeyResolver, propertySets);
                 case SamAccountType.Trust:
                     return new DSAccount(dsObject, netBIOSDomainName, pek, propertySets);
                 default:

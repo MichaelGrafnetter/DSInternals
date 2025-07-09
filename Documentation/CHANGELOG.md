@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
-## [5.4] - 2025-07-08
+## [5.4.1] - 2025-07-09
 
 ### Added
 
@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. The format 
 - The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet can now decrypt all Windows LAPS passwords in offline mode, including `msLAPS-EncryptedPassword`, `msLAPS-EncryptedPasswordHistory`, `msLAPS-EncryptedDSRMPassword`, and `msLAPS-EncryptedDSRMPasswordHistory`. This enables several new disaster recovery scenarios.
 - The [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet has a new optional parameter called `-StatusReportScriptPath`, which can be used to execute callbacks/hooks during the restore process.
 - The [Get-ADDBDomainController](PowerShell/Get-ADDBDomainController.md#get-addbdomaincontroller) cmdlet can now identify RODC databases.
+- The [Get-ADDBKdsRootKey](PowerShell/Get-ADDBKdsRootKey.md#get-addbkdsrootkey) cmdlet has a new parameter called `-RootKeyId`, allowing the retrieval of specific KDS root keys.
 
 ### Changed
 
@@ -605,8 +606,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.4...HEAD
-[5.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.3...v5.4
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.4.1...HEAD
+[5.4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.3...v5.4.1
 [5.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.2...v5.3
 [5.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.1...v5.2
 [5.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.0...v5.1

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace DSInternals.Common.Data
 {
@@ -32,7 +31,7 @@ namespace DSInternals.Common.Data
             this.DecryptionStatus = LapsDecryptionStatus.NotApplicable;
         }
 
-        public LapsPasswordInformation(string computerName, LapsEncryptedPassword encryptedPassword, LapsPasswordSource source, DateTime? expiration, IDictionary<Guid, KdsRootKey> rootKeys = null)
+        public LapsPasswordInformation(string computerName, LapsEncryptedPassword encryptedPassword, LapsPasswordSource source, DateTime? expiration, IKdsRootKeyResolver rootKeyResolver = null)
         {
             Validator.AssertNotNull(encryptedPassword, nameof(encryptedPassword));
 
@@ -50,12 +49,12 @@ namespace DSInternals.Common.Data
             // Try to locate the root key and cache the derived group key.
             bool rootKeyFound = false;
 
-            if (rootKeys != null)
+            if (rootKeyResolver != null)
             {
                 Guid rootKeyId = encryptedPassword.EncryptedBlob.ProtectionKeyIdentifier.RootKeyId;
-                rootKeyFound = rootKeys.TryGetValue(rootKeyId, out var rootKey);
+                KdsRootKey? rootKey = rootKeyResolver.GetKdsRootKey(rootKeyId);
 
-                if (rootKeyFound)
+                if (rootKey != null)
                 {
                     var gke = GroupKeyEnvelope.Create(rootKey, encryptedPassword.EncryptedBlob.ProtectionKeyIdentifier, encryptedPassword.EncryptedBlob.TargetSid);
                     gke.WriteToCache();

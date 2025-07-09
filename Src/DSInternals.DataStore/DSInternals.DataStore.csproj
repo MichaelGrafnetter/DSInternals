@@ -76,6 +76,7 @@
     <Compile Include="Cryptography\DataStoreSecretDecryptor.cs" />
     <Compile Include="DatabaseFlags.cs" />
     <Compile Include="DatastoreObject.cs" />
+    <Compile Include="DatastoreRootKeyResolver.cs" />
     <Compile Include="DirectoryAgent.cs" />
     <Compile Include="DirectoryAgent.BitLocker.cs">
       <DependentUpon>DirectoryAgent.cs</DependentUpon>

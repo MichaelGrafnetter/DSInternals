@@ -1,13 +1,13 @@
 ﻿namespace DSInternals.DataStore
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Security.Principal;
     using DSInternals.Common;
     using DSInternals.Common.Data;
     using DSInternals.Common.Exceptions;
     using DSInternals.Common.Properties;
     using Microsoft.Database.Isam;
-    using System;
-    using System.Collections.Generic;
-    using System.Security.Principal;
 
     public partial class DirectoryAgent : IDisposable
     {
@@ -63,7 +63,7 @@
                 this.context.DomainController.ForestMode >= FunctionalLevel.Win2012;
 
             // Fetch all KDS root keys to decrypt encrypted LAPS passwords
-            IDictionary<Guid, KdsRootKey> rootKeys = sidProtectorSupported ? this.GetRootKeyMap() : null;
+            IKdsRootKeyResolver rootKeyResolver = propertySets.HasFlag(AccountPropertySets.WindowsLAPS) ? new KdsRootKeyCache(new DatastoreRootKeyResolver(this.context), preloadCache: false) : null;
 
             var pek = this.GetSecretDecryptor(bootKey);
             // TODO: Use a more suitable index?
@@ -83,7 +83,7 @@
                     continue;
                 }
 
-                var account = AccountFactory.CreateAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, rootKeys, propertySets);
+                var account = AccountFactory.CreateAccount(obj, this.context.DomainController.NetBIOSDomainName, pek, rootKeyResolver, propertySets);
 
                 if (account == null)
                 {
@@ -123,14 +123,10 @@
         {
             var pek = GetSecretDecryptor(bootKey);
 
-            bool sidProtectorSupported =
-                propertySets.HasFlag(AccountPropertySets.WindowsLAPS) &&
-                this.context.DomainController.ForestMode >= FunctionalLevel.Win2012;
-
-            // Fetch all KDS root keys to decrypt encrypted LAPS passwords
-            IDictionary<Guid, KdsRootKey> rootKeys = sidProtectorSupported ? this.GetRootKeyMap() : null;
-
-            var account = AccountFactory.CreateAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek, rootKeys, propertySets);
+            // Fetch KDS root keys to decrypt encrypted LAPS passwords
+            IKdsRootKeyResolver rootKeyResolver = new KdsRootKeyCache(new DatastoreRootKeyResolver(context), preloadCache:false);
+            
+            var account = AccountFactory.CreateAccount(foundObject, this.context.DomainController.NetBIOSDomainName, pek, rootKeyResolver, propertySets);
 
             if (account == null)
             {

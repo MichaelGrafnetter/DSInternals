@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '5.4'
+ModuleVersion = '5.4.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
