@@ -1,8 +1,8 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Linq;
+using DSInternals.Common;
+using DSInternals.Common.Schema;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.DataStore.Test
 {
@@ -40,8 +40,8 @@ namespace DSInternals.DataStore.Test
             var collection1 = new AttributeMetadataCollection();
 
             // Add new elements
-            collection1.Update(CommonDirectoryAttributes.SupplementalCredentialsId, Guid.NewGuid(), DateTime.Now, 100);
-            collection1.Update(CommonDirectoryAttributes.UserAccountControlId, Guid.NewGuid(), DateTime.Now, 200);
+            collection1.Update(AttributeType.SupplementalCredentials, Guid.NewGuid(), DateTime.Now, 100);
+            collection1.Update(AttributeType.UserAccountControl, Guid.NewGuid(), DateTime.Now, 200);
             Assert.AreEqual(2, collection1.Count);
 
             // Serialize
@@ -64,28 +64,28 @@ namespace DSInternals.DataStore.Test
 
             // Add some unique entries in sorted order
             var metadata = new AttributeMetadataCollection();
-            metadata.Update(CommonDirectoryAttributes.ObjectClassId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.SurnameId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.GivenNameId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.InstanceTypeId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.DisplayNameId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.UserAccountControlId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.LMHashId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.ObjectSidId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.LMHashHistoryId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.SAMAccountNameId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.SamAccountTypeId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.UserPrincipalNameId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.ObjectCategoryId, invocationId, now, usn);
-            metadata.Update(CommonDirectoryAttributes.PKIRoamingTimeStampId, invocationId, now, usn);
+            metadata.Update(AttributeType.ObjectClass, invocationId, now, usn);
+            metadata.Update(AttributeType.Surname, invocationId, now, usn);
+            metadata.Update(AttributeType.GivenName, invocationId, now, usn);
+            metadata.Update(AttributeType.InstanceType, invocationId, now, usn);
+            metadata.Update(AttributeType.DisplayName, invocationId, now, usn);
+            metadata.Update(AttributeType.UserAccountControl, invocationId, now, usn);
+            metadata.Update(AttributeType.LMHash, invocationId, now, usn);
+            metadata.Update(AttributeType.ObjectSid, invocationId, now, usn);
+            metadata.Update(AttributeType.LMHashHistory, invocationId, now, usn);
+            metadata.Update(AttributeType.SamAccountName, invocationId, now, usn);
+            metadata.Update(AttributeType.SamAccountType, invocationId, now, usn);
+            metadata.Update(AttributeType.UserPrincipalName, invocationId, now, usn);
+            metadata.Update(AttributeType.ObjectCategory, invocationId, now, usn);
+            metadata.Update(AttributeType.PKIRoamingTimeStamp, invocationId, now, usn);
             Assert.AreEqual(14, metadata.Count);
 
             // Modify an existing attribute
-            metadata.Update(CommonDirectoryAttributes.UserAccountControlId, invocationId, now, ++usn);
+            metadata.Update(AttributeType.UserAccountControl, invocationId, now, ++usn);
             Assert.AreEqual(14, metadata.Count);
 
             // Add a new attribute
-            metadata.Update(CommonDirectoryAttributes.SupplementalCredentialsId, invocationId, now, ++usn);
+            metadata.Update(AttributeType.SupplementalCredentials, invocationId, now, ++usn);
             Assert.AreEqual(15, metadata.Count);
 
             // Check the order and uniqueness of attribute ids

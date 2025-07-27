@@ -1,6 +1,7 @@
 ﻿namespace DSInternals.Common.Data
 {
     using DSInternals.Common.Cryptography;
+    using DSInternals.Common.Schema;
     using System;
     using System.IO;
     using System.Security.Cryptography;

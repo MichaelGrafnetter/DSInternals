@@ -1,4 +1,5 @@
 ﻿using DSInternals.Common;
+using DSInternals.Common.Schema;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +28,7 @@ namespace DSInternals.DataStore
             }
         }
 
-        public IList<int> Attributes
+        public IList<AttributeType> Attributes
         {
             get
             {
@@ -38,7 +39,7 @@ namespace DSInternals.DataStore
         /// <summary>
         /// Holds a list of attribute metadata sorted by attribute ID.
         /// </summary>
-        protected SortedList<int,AttributeMetadata> InnerList
+        protected SortedList<AttributeType,AttributeMetadata> InnerList
         {
             get;
             private set;
@@ -52,7 +53,7 @@ namespace DSInternals.DataStore
             {
                 // Initialize an empty collection
                 this.Unknown = DefaultUnknownValue;
-                this.InnerList = new SortedList<int, AttributeMetadata>();
+                this.InnerList = new SortedList<AttributeType, AttributeMetadata>();
                 return;
             }
 
@@ -69,10 +70,10 @@ namespace DSInternals.DataStore
                     Validator.AssertLength(buffer, expectedBufferSize, nameof(buffer));
 
                     // Read all entries
-                    this.InnerList = new SortedList<int, AttributeMetadata>((int)numEntries);
+                    this.InnerList = new SortedList<AttributeType, AttributeMetadata>((int)numEntries);
                     for (int i = 1; i <= numEntries; i++)
                     {
-                        int attributeId = reader.ReadInt32();
+                        AttributeType attributeId = (AttributeType) reader.ReadUInt32();
                         int version = reader.ReadInt32();
                         long timestamp = reader.ReadInt64();
                         Guid originatingDSA = new Guid(reader.ReadBytes(16));
@@ -93,7 +94,7 @@ namespace DSInternals.DataStore
             }
         }
 
-        public void Update(int attributeId, Guid invocationId, DateTime time, long usn)
+        public void Update(AttributeType attributeId, Guid invocationId, DateTime time, long usn)
         {
             this.InnerList.TryGetValue(attributeId, out AttributeMetadata entry);
 
@@ -124,7 +125,7 @@ namespace DSInternals.DataStore
 
                     foreach (var entry in this.InnerList)
                     {
-                        writer.Write(entry.Key);
+                        writer.Write((uint)entry.Key);
                         writer.Write(entry.Value.Version);
                         writer.Write(entry.Value.LastOriginatingChangeTimestamp);
                         writer.Write(entry.Value.LastOriginatingInvocationId.ToByteArray());

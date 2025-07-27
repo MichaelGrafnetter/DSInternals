@@ -192,5 +192,46 @@
             get;
             set;
         }
+
+        /// <summary>
+        /// Creates a data transport object from a native DC.
+        /// </summary>
+        public static DomainController Create(IDomainController nativeDC)
+        {
+            return new DomainController()
+            {
+                Name = nativeDC.Name,
+                DNSHostName = nativeDC.DNSHostName,
+                ServerReference = nativeDC.ServerReference,
+                DsaGuid = nativeDC.DsaGuid,
+                Guid = nativeDC.Guid,
+                InvocationId = nativeDC.InvocationId,
+                Sid = nativeDC.Sid,
+                OSName = nativeDC.OSName,
+                OSVersion = nativeDC.OSVersion,
+                DomainName = nativeDC.DomainName,
+                ForestName = nativeDC.ForestName,
+                NetBIOSDomainName = nativeDC.NetBIOSDomainName,
+                DomainSid = nativeDC.DomainSid,
+                DomainGuid = nativeDC.DomainGuid,
+                DomainMode = nativeDC.DomainMode,
+                ForestMode = nativeDC.ForestMode,
+                SiteName = nativeDC.SiteName,
+                IsADAM = nativeDC.IsADAM,
+                IsGlobalCatalog = nativeDC.IsGlobalCatalog,
+                IsReadOnly = nativeDC.IsReadOnly,
+                Options = nativeDC.Options,
+                DomainNamingContext = nativeDC.DomainNamingContext,
+                ConfigurationNamingContext = nativeDC.ConfigurationNamingContext,
+                SchemaNamingContext = nativeDC.SchemaNamingContext,
+                WritablePartitions = nativeDC.WritablePartitions,
+                Epoch = nativeDC.Epoch,
+                BackupExpiration = nativeDC.BackupExpiration,
+                BackupUsn = nativeDC.BackupUsn,
+                UsnAtIfm = nativeDC.UsnAtIfm,
+                HighestCommittedUsn = nativeDC.HighestCommittedUsn,
+                State = nativeDC.State
+            };
+        }
     }
 }

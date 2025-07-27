@@ -1,10 +1,11 @@
 ﻿using DSInternals.Common.Cryptography;
+using DSInternals.Common.Schema;
 
 namespace DSInternals.Common.Data
 {
     public static class AccountFactory
     {
-        public static DSAccount CreateAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All)
+        public static DSAccount? CreateAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             // Validate the input.
             Validator.AssertNotNull(dsObject, nameof(dsObject));

@@ -1,5 +1,4 @@
-﻿
-namespace DSInternals.DataStore
+﻿namespace DSInternals.Common.Schema
 {
     public enum AttributeOmSyntax : int
     {
@@ -16,7 +15,7 @@ namespace DSInternals.DataStore
         UtcTimeString = 23,
         GeneralisedTimeString = 24,
         UnicodeString = 64,
-        I8 = 65,
+        LargeInteger = 65,
         ObjectSecurityDescriptor = 66,
         Object = 127,
     }

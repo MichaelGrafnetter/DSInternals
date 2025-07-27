@@ -2,6 +2,7 @@
 using System.Security;
 using System.Security.Principal;
 using DSInternals.Common.Interop;
+using DSInternals.Common.Schema;
 
 namespace DSInternals.Common.Data
 {
@@ -264,7 +265,7 @@ namespace DSInternals.Common.Data
             this.Deleted = isDeleted;
 
             // SamAccountName:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out string samAccountName);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountName, out string samAccountName);
             this.SamAccountName = samAccountName;
 
             // SuportedEncryptionTypes

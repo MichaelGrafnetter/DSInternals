@@ -1,5 +1,6 @@
 ﻿using DSInternals.Common;
 using DSInternals.Common.Data;
+using DSInternals.Common.Schema;
 using System;
 using System.Linq;
 using System.Security.Principal;
@@ -13,18 +14,19 @@ namespace DSInternals.Replication.Model
         private Guid guid;
         private SecurityIdentifier sid;
 
-        public ReplicaObject(String distinguishedName, Guid objectGuid, SecurityIdentifier objectSid, ReplicaAttributeCollection attributes)
+        public ReplicaObject(String distinguishedName, Guid objectGuid, SecurityIdentifier objectSid, ReplicaAttributeCollection attributes, BaseSchema schema)
         {
             this.guid = objectGuid;
             this.distinguishedName = distinguishedName;
             this.sid = objectSid;
             this.Attributes = attributes;
+            this.Schema = schema;
         }
-        // TODO: ISchema
-        public BasicSchema Schema
+
+        public BaseSchema Schema
         {
             get;
-            set;
+            private set;
         }
 
         public override string DistinguishedName
@@ -71,12 +73,12 @@ namespace DSInternals.Replication.Model
             }
         }
 
-        protected bool HasAttribute(int attributeId)
+        protected bool HasAttribute(AttributeType attributeId)
         {
             return this.Attributes.ContainsKey(attributeId);
         }
 
-        protected void ReadAttribute(int attributeId, out byte[][] values)
+        protected void ReadAttribute(AttributeType attributeId, out byte[][] values)
         {
             values = null;
             ReplicaAttribute attribute;
@@ -91,12 +93,12 @@ namespace DSInternals.Replication.Model
             }
         }
 
-        protected void ReadAttribute(int attributeId, out byte[] value)
+        protected void ReadAttribute(AttributeType attributeId, out byte[] value)
         {
             this.ReadAttribute(attributeId, out value, 0);
         }
 
-        protected void ReadAttribute(int attributeId, out byte[] value, int valueIndex)
+        protected void ReadAttribute(AttributeType attributeId, out byte[] value, int valueIndex)
         {
             byte[][] values;
             this.ReadAttribute(attributeId, out values);
@@ -104,21 +106,21 @@ namespace DSInternals.Replication.Model
             value = containsValue ? values[valueIndex] : null;
         }
 
-        protected void ReadAttribute(int attributeId, out int? value)
+        protected void ReadAttribute(AttributeType attributeId, out int? value)
         {
             byte[] binaryValue;
             this.ReadAttribute(attributeId, out binaryValue);
             value = (binaryValue != null) ? BitConverter.ToInt32(binaryValue, 0) : (int?)null;
         }
 
-        protected void ReadAttribute(int attributeId, out long? value)
+        protected void ReadAttribute(AttributeType attributeId, out long? value)
         {
             byte[] binaryValue;
             this.ReadAttribute(attributeId, out binaryValue);
             value = (binaryValue != null) ? BitConverter.ToInt64(binaryValue, 0) : (long?)null;
         }
 
-        protected void ReadAttribute(int attributeId, out string value, bool unicode = true)
+        protected void ReadAttribute(AttributeType attributeId, out string value, bool unicode = true)
         {
             var encoding = unicode ? Encoding.Unicode : Encoding.ASCII;
             byte[] binaryValue;
@@ -126,7 +128,7 @@ namespace DSInternals.Replication.Model
             value = (binaryValue != null) ? encoding.GetString(binaryValue) : null;
         }
 
-        protected void ReadAttribute(int attributeId, out string[] values, bool unicode = true)
+        protected void ReadAttribute(AttributeType attributeId, out string[] values, bool unicode = true)
         {
             var encoding = unicode ? Encoding.Unicode : Encoding.ASCII;
             values = null;
@@ -138,26 +140,26 @@ namespace DSInternals.Replication.Model
             }
         }
 
-        protected void ReadAttribute(int attributeId, out DistinguishedName value)
+        protected void ReadAttribute(AttributeType attributeId, out DistinguishedName value)
         {
             // TODO: Implement support for DS-DN syntax.
             // Hint: https://github.com/MichaelGrafnetter/DSInternals/issues/49
             throw new NotImplementedException();
         }
 
-        protected void ReadAttribute(int attributeId, out SecurityIdentifier value)
+        protected void ReadAttribute(AttributeType attributeId, out SecurityIdentifier value)
         {
             byte[] binaryValue;
             this.ReadAttribute(attributeId, out binaryValue);
             value = (binaryValue != null) ? new SecurityIdentifier(binaryValue, 0) : null;
         }
-        protected void ReadAttribute(int attributeId, out SamAccountType? value)
+        protected void ReadAttribute(AttributeType attributeId, out SamAccountType? value)
         {
             int? numericValue;
             this.ReadAttribute(attributeId, out numericValue);
             value = numericValue.HasValue ? (SamAccountType)numericValue.Value : (SamAccountType?)null;
         }
-        protected void ReadAttribute(int attributeId, out bool value)
+        protected void ReadAttribute(AttributeType attributeId, out bool value)
         {
             int? numericValue;
             this.ReadAttribute(attributeId, out numericValue);
@@ -166,53 +168,109 @@ namespace DSInternals.Replication.Model
 
         public override bool HasAttribute(string name)
         {
-            int attributeId = this.Schema.FindAttributeId(name);
-            return this.HasAttribute(attributeId);
+            AttributeType? attributeId = this.Schema.FindAttributeId(name);
+            return attributeId.HasValue && this.HasAttribute(attributeId.Value);
         }
 
         public override void ReadAttribute(string name, out byte[] value)
         {
-            int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out value);
+            AttributeType? attributeId = this.Schema.FindAttributeId(name);
+            if (attributeId != null)
+            {
+                this.ReadAttribute(attributeId.Value, out value);
+            }
+            else
+            {
+                // The schema does not even contain this attribute.
+                value = null;
+            }
         }
 
         public override void ReadAttribute(string name, out byte[][] value)
         {
-            int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out value);
+            AttributeType? attributeId = this.Schema.FindAttributeId(name);
+            if (attributeId != null)
+            {
+                this.ReadAttribute(attributeId.Value, out value);
+            }
+            else
+            {
+                // The schema does not even contain this attribute.
+                value = null;
+            }
         }
 
         public override void ReadAttribute(string name, out int? value)
         {
-            int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out value);
+            AttributeType? attributeId = this.Schema.FindAttributeId(name);
+            if (attributeId != null)
+            {
+                this.ReadAttribute(attributeId.Value, out value);
+            }
+            else
+            {
+                // The schema does not even contain this attribute.
+                value = null;
+            }
         }
 
         public override void ReadAttribute(string name, out long? value)
         {
-            int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out value);
+            AttributeType? attributeId = this.Schema.FindAttributeId(name);
+            if (attributeId != null)
+            {
+                this.ReadAttribute(attributeId.Value, out value);
+            }
+            else
+            {
+                // The schema does not even contain this attribute.
+                value = null;
+            }
         }
 
-        public override void ReadAttribute(string name, out string value, bool unicode = true)
+        public override void ReadAttribute(string name, out string? value, bool unicode = true)
         {
-            int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out value, unicode);
+            AttributeType? attributeId = this.Schema.FindAttributeId(name);
+            if (attributeId != null)
+            {
+                this.ReadAttribute(attributeId.Value, out value, unicode);
+            }
+            else
+            {
+                // The schema does not even contain this attribute.
+                value = null;
+            }
         }
 
-        public override void ReadAttribute(string name, out string[] values, bool unicode = true)
+        public override void ReadAttribute(string name, out string[]? values, bool unicode = true)
         {
-            int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out values, unicode);
+            AttributeType? attributeId = this.Schema.FindAttributeId(name);
+            if (attributeId != null)
+            {
+                this.ReadAttribute(attributeId.Value, out values, unicode);
+            }
+            else
+            {
+                // The schema does not even contain this attribute.
+                values = null;
+            }
         }
 
-        public override void ReadAttribute(string name, out DistinguishedName value)
+        public override void ReadAttribute(string name, out DistinguishedName? value)
         {
-            int attributeId = this.Schema.FindAttributeId(name);
-            this.ReadAttribute(attributeId, out value);
+            AttributeType? attributeId = this.Schema.FindAttributeId(name);
+            if (attributeId != null)
+            {
+                this.ReadAttribute(attributeId.Value, out value);
+            }
+            else
+            {
+                // The schema does not even contain this attribute.
+                value = null;
+            }
         }
 
-        public override void ReadLinkedValues(string attributeName, out byte[][] values)
+        public override void ReadLinkedValues(string attributeName, out byte[][]? values)
         {
             // The linked values have already been merged with regular attributes using LoadLinkedValues
             // TODO: We currently only support DN-Binary linked values.

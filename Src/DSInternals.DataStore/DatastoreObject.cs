@@ -6,6 +6,8 @@
     using System.Security.Principal;
     using DSInternals.Common;
     using DSInternals.Common.Data;
+    using DSInternals.Common.Exceptions;
+    using DSInternals.Common.Schema;
     using Microsoft.Database.Isam;
 
     public sealed class DatastoreObject : DirectoryObject
@@ -27,12 +29,12 @@
             }
         }
 
-        public int DNTag
+        public DNTag DNTag
         {
             get
             {
-                Columnid columnId = this.context.Schema.FindColumnId(CommonDirectoryAttributes.DNTag);
-                int? dnt = cursor.RetrieveColumnAsDNTag(columnId);
+                Columnid columnId = this.context.Schema.DistinguishedNameTagColumnId;
+                DNTag? dnt = cursor.RetrieveColumnAsDNTag(columnId);
                 return dnt.Value;
             }
         }
@@ -41,8 +43,7 @@
         {
             get
             {
-                Guid? guid;
-                this.ReadAttribute(CommonDirectoryAttributes.ObjectGUID, out guid);
+                this.ReadAttribute(CommonDirectoryAttributes.ObjectGuid, out Guid? guid);
                 return guid ?? Guid.Empty;
             }
         }
@@ -51,9 +52,18 @@
         {
             get
             {
-                SecurityIdentifier sid;
-                this.ReadAttribute(CommonDirectoryAttributes.ObjectSid, out sid);
+                this.ReadAttribute(CommonDirectoryAttributes.ObjectSid, out SecurityIdentifier sid);
                 return sid;
+            }
+        }
+
+        public bool IsPhantomObject
+        {
+            get
+            {
+                // Check the value of the OBJ_col
+                bool isObject = this.cursor.RetrieveColumnAsBoolean(this.context.Schema.ObjectColumnId);
+                return !isObject;
             }
         }
 
@@ -67,7 +77,7 @@
 
         public bool AddAttribute(string name, SecurityIdentifier[] valuesToAdd)
         {
-            Columnid columnId = this.context.Schema.FindColumnId(CommonDirectoryAttributes.SIDHistory);
+            Columnid? columnId = this.context.Schema.FindColumnId(CommonDirectoryAttributes.SidHistory);
             if (columnId != null)
             {
                 bool hasChanged = this.cursor.AddMultiValue(columnId, valuesToAdd);
@@ -90,115 +100,72 @@
 
         public override bool HasAttribute(string name)
         {
-            if(this.context.Schema.ContainsAttribute(name))
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+
+            if (columnId != null)
             {
                 // Read the appropriate column and check if it has a value
-                Columnid columnId = this.context.Schema.FindColumnId(name);
-                if (columnId != null)
-                {
-                    long columnSize = cursor.Record.SizeOf(columnId);
-                    return columnSize > 0;
-                }
+                long columnSize = cursor.Record.SizeOf(columnId);
+                return columnSize > 0;
             }
-
-            // The schema does not even contain this attribute, so the object cannot have it.
-            return false;
+            else
+            {
+                // The schema does not even contain this attribute, so the object cannot have it.
+                return false;
+            }
         }
 
         public override void ReadAttribute(string name, out byte[] value)
         {
-            value = null;
-            if(this.context.Schema.ContainsAttribute(name))
-            {
-                Columnid columnId = this.context.Schema.FindColumnId(name);
-                if (columnId != null)
-                {
-                    value = this.cursor.RetrieveColumnAsByteArray(columnId);
-                }
-            }
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+            value = columnId != null ? this.cursor.RetrieveColumnAsByteArray(columnId) : null;
         }
 
         public override void ReadAttribute(string name, out byte[][] value)
         {
-            value = null;
-            if (this.context.Schema.ContainsAttribute(name))
-            {
-                Columnid columnId = this.context.Schema.FindColumnId(name);
-                if (columnId != null)
-                {
-                    value = this.cursor.RetrieveColumnAsMultiByteArray(columnId);
-                }
-            }
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+            value = columnId != null ? this.cursor.RetrieveColumnAsMultiByteArray(columnId) : null;
         }
 
         public override void ReadAttribute(string name, out int? value)
         {
-            value = null;
-            if (this.context.Schema.ContainsAttribute(name))
-            {
-                Columnid columnId = this.context.Schema.FindColumnId(name);
-                if (columnId != null)
-                {
-                    value = this.cursor.RetrieveColumnAsInt(columnId);
-                }
-            }
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+            value = columnId != null ? this.cursor.RetrieveColumnAsInt(columnId) : null;
+        }
+
+        public void ReadAttribute(string name, out DNTag? value)
+        {
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+            value = columnId != null ? (DNTag?)this.cursor.RetrieveColumnAsInt(columnId) : null;
         }
 
         public override void ReadAttribute(string name, out string value, bool unicode = true)
         {
-            value = null;
-            if (this.context.Schema.ContainsAttribute(name))
-            {
-                Columnid columnId = this.context.Schema.FindColumnId(name);
-                if (columnId != null)
-                {
-                    value = this.cursor.RetrieveColumnAsString(columnId, unicode);
-                }
-            }
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+            value = columnId != null ? this.cursor.RetrieveColumnAsString(columnId, unicode) : null;
         }
 
         public override void ReadAttribute(string name, out string[] values, bool unicode = true)
         {
-            values = null;
-            if (this.context.Schema.ContainsAttribute(name))
-            {
-                Columnid columnId = this.context.Schema.FindColumnId(name);
-                if (columnId != null)
-                {
-                    values = this.cursor.RetrieveColumnAsStringArray(columnId, unicode);
-                }
-            }
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+            values = columnId != null ? this.cursor.RetrieveColumnAsStringArray(columnId, unicode) : null;
         }
 
         public override void ReadAttribute(string name, out long? value)
         {
-            value = null;
-            if (this.context.Schema.ContainsAttribute(name))
-            {
-                Columnid columnId = this.context.Schema.FindColumnId(name);
-                if (columnId != null)
-                {
-                    value = this.cursor.RetrieveColumnAsLong(columnId);
-                }
-            }
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+            value = columnId != null ? this.cursor.RetrieveColumnAsLong(columnId) : null;
         }
 
-        public override void ReadAttribute(string name, out DistinguishedName value)
+        public override void ReadAttribute(string name, out DistinguishedName? value)
         {
-            value = null;
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
 
-            if (this.context.Schema.ContainsAttribute(name))
-            {
-                Columnid columnId = this.context.Schema.FindColumnId(name);
+            // The value can either be located in the datatable or in the link table
+            DNTag? dnt = columnId != null ? this.cursor.RetrieveColumnAsDNTag(columnId) : this.context.LinkResolver.GetLinkedDNTag(this.DNTag, name);
 
-                // The value can either be located in the datatable or in the link table
-                int? dnt = columnId != null ? this.cursor.RetrieveColumnAsDNTag(columnId) : this.context.LinkResolver.GetLinkedDNTag(this.DNTag, name);
-
-                if (dnt != null)
-                {
-                    value = this.context.DistinguishedNameResolver.Resolve(dnt.Value);
-                }
-            }
+            // Translate the distinguished name tag to DN
+            value = dnt.HasValue ? this.context.DistinguishedNameResolver.Resolve(dnt.Value) : null;
         }
 
         public override void ReadAttribute(string name, out RawSecurityDescriptor value)
@@ -211,7 +178,7 @@
                 return;
             }
 
-            if(binaryValue.Length == sizeof(long))
+            if (binaryValue.Length == sizeof(long))
             {
                 // The binary value is a 64-bit foreign key
                 long securityDescriptorId = BitConverter.ToInt64(binaryValue, 0);
@@ -224,28 +191,44 @@
             }
         }
 
+        public void ReadAttribute(string name, out ClassType? value)
+        {
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+            value = columnId != null ? this.cursor.RetrieveColumnAsObjectCategory(columnId) : null;
+        }
+
         public void ReadAttribute(string name, out AttributeMetadataCollection value)
         {
-            value = null;
-            if (this.context.Schema.ContainsAttribute(name))
+            Columnid? columnId = this.context.Schema.FindColumnId(name);
+
+            if (columnId != null)
             {
-                byte[] binaryValue;
-                this.ReadAttribute(name, out binaryValue);
+                this.ReadAttribute(name, out byte[] binaryValue);
                 value = new AttributeMetadataCollection(binaryValue);
+            }
+            else
+            {
+                value = null;
             }
         }
 
         public override void ReadLinkedValues(string attributeName, out byte[][] values)
         {
-            var rawValues = this.context.LinkResolver.GetLinkedValues(this.DNTag, attributeName);
             // Cut off the first 4 bytes, which is the length of the entire structure.
-            values = rawValues.Select( rawValue => rawValue.Cut(sizeof(int)) ).ToArray();
+            values = this.context.LinkResolver.GetLinkedValues(this.DNTag, attributeName)
+                .Select( link => link.LinkData.Cut(sizeof(int)) ).ToArray();
         }
 
         public bool SetAttribute<T>(string name, T? newValue) where T : struct
         {
             // TODO: This must be called from a transaction
-            Columnid columnId  = this.context.Schema.FindColumnId(name);
+            Columnid? columnId  = this.context.Schema.FindColumnId(name);
+
+            if (columnId == null)
+            {
+                throw new SchemaAttributeNotFoundException(name);
+            }
+
             bool hasChanged = this.cursor.SetValue(columnId, newValue);
             return hasChanged;
         }
@@ -289,16 +272,22 @@
             this.SetAttribute<long>(CommonDirectoryAttributes.WhenChanged, time.ToGeneralizedTime());
 
             // Update the replPropertyMetaData attribute (read-modify-write)
-            this.ReadAttribute(CommonDirectoryAttributes.PropertyMetaData, out AttributeMetadataCollection meta);
+            this.ReadAttribute(CommonDirectoryAttributes.ReplicationPropertyMetaData, out AttributeMetadataCollection meta);
 
-            foreach(var attributeName in attributeNames)
+            foreach(string attributeName in attributeNames)
             {
                 // We go through all attributes that are changed in this transaction
-                int attributeId = this.context.Schema.FindAttribute(attributeName).Id.Value;
-                meta.Update(attributeId, this.context.DomainController.InvocationId, time, usn);
+                AttributeType? attributeId = this.context.Schema.FindAttribute(attributeName)?.AttributeId;
+
+                if (!attributeId.HasValue)
+                {
+                    throw new SchemaAttributeNotFoundException(attributeName);
+                }
+
+                meta.Update(attributeId.Value, this.context.DomainController.InvocationId, time, usn);
             }
             
-            this.SetAttribute(CommonDirectoryAttributes.PropertyMetaData, meta.ToByteArray());
+            this.SetAttribute(CommonDirectoryAttributes.ReplicationPropertyMetaData, meta.ToByteArray());
         }
     }
 }

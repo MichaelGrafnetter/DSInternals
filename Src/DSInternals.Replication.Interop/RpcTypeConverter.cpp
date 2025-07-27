@@ -153,6 +153,17 @@ namespace DSInternals
 
 				return gcnew SecurityIdentifier(IntPtr((void*)& dsName->Sid));
 			}
+
+			cli::array<byte>^ RpcTypeConverter::ToByteArray(const OID_t& prefix)
+			{
+				// Allocate managed array
+				auto managedValue = gcnew cli::array<byte>(prefix.length);
+				// Pin it so the GC does not touch it
+				pin_ptr<byte> managedValuePin = &managedValue[0];
+				// Copy data from native to managed memory
+				memcpy(managedValuePin, prefix.elements, prefix.length);
+				return managedValue;
+			}
 		}
 	}
 }

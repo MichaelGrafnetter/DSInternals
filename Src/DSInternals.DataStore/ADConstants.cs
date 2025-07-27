@@ -29,8 +29,5 @@ namespace DSInternals.DataStore
             PInvoke.LCMAP_SORTKEY;
         public const LegacyFileNames EseLegacyFileNames = LegacyFileNames.EightDotThreeSoftCompat | LegacyFileNames.ESE98FileNames;
         public const int EseMaxOpenTables = 1000;
-        public const int NotAnObjectDNTag = 1;
-        public const int RootDNTag = 2;
-        public const int RootSecurityDescriptorId = 1;
     }
 }

@@ -158,10 +158,9 @@ I have also published a series of articles about the DSInternals module on [my b
 This project utilizes the following 3<sup>rd</sup> party copyrighted material:
 
 - [ManagedEsent](https://github.com/Microsoft/ManagedEsent) - Provides managed access to esent.dll, the embeddable database engine native to Windows.
-- [AutoMapper](https://github.com/AutoMapper/AutoMapper) - A convention-based object-object mapper in .NET.
 - [NDceRpc](https://github.com/OpenSharp/NDceRpc) - Integration of WCF and .NET with MS-RPC and binary serialization.
 - [PBKDF2.NET](https://github.com/therealmagicmike/PBKDF2.NET) - Provides PBKDF2 for .NET Framework.
-- [Bouncy Castle](https://www.bouncycastle.org/csharp/index.html) - A lightweight cryptography API for Java and C#. 
+- [Bouncy Castle](https://www.bouncycastle.org/csharp/index.html) - A lightweight cryptography API for Java and C#.
 - [Json.NET](https://github.com/JamesNK/Newtonsoft.Json) - Popular high-performance JSON framework for .NET.
 - [Peter O. CBOR](https://github.com/peteroupc/CBOR) - A C# implementation of Concise Binary Object Representation (RFC 7049).
 

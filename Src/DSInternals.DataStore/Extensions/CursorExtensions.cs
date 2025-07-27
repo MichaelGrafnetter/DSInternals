@@ -1,13 +1,13 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Cryptography;
-using DSInternals.Common.Data;
-using Microsoft.Database.Isam;
-using Microsoft.Isam.Esent.Interop;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
+using DSInternals.Common;
+using DSInternals.Common.Cryptography;
+using DSInternals.Common.Schema;
+using Microsoft.Database.Isam;
+using Microsoft.Isam.Esent.Interop;
 
 namespace DSInternals.DataStore
 {
@@ -15,14 +15,15 @@ namespace DSInternals.DataStore
     {
         // TODO: Move some of these extensions to DirectoryObject
         // TODO: Convert return value to out or template
-        public static SearchFlags RetrieveColumnAsSearchFlags(this Cursor cursor, Columnid columnId)
+        public static AttributeSearchFlags RetrieveColumnAsSearchFlags(this Cursor cursor, Columnid columnId)
         {
-            return (SearchFlags)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
+            return (AttributeSearchFlags)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
         }
 
         public static AttributeSyntax RetrieveColumnAsAttributeSyntax(this Cursor cursor, Columnid columnId)
         {
-            return (AttributeSyntax)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
+            int? numericValue = cursor.RetrieveColumnAsInt(columnId);
+            return numericValue.HasValue ? (AttributeSyntax)numericValue.Value : AttributeSyntax.Undefined;
         }
 
         public static AttributeSystemFlags RetrieveColumnAsAttributeSystemFlags(this Cursor cursor, Columnid columnId)
@@ -144,9 +145,24 @@ namespace DSInternals.DataStore
             return result.Count > 0 ? result.ToArray() : null;
         }
 
-        public static int? RetrieveColumnAsDNTag(this Cursor cursor, Columnid columnId)
+        public static DNTag? RetrieveColumnAsDNTag(this Cursor cursor, string columnName)
         {
-            return cursor.RetrieveColumnAsInt(columnId);
+            return (DNTag?)cursor.RetrieveColumnAsInt(columnName);
+        }
+
+        public static DNTag? RetrieveColumnAsDNTag(this Cursor cursor, Columnid columnId)
+        {
+            return (DNTag?)cursor.RetrieveColumnAsInt(columnId);
+        }
+
+        public static AttributeType? RetrieveColumnAsAttributeType(this Cursor cursor, Columnid columnId)
+        {
+            return (AttributeType?)unchecked((uint?)cursor.RetrieveColumnAsInt(columnId));
+        }
+
+        public static ClassType? RetrieveColumnAsObjectCategory(this Cursor cursor, Columnid columnId)
+        {
+            return (ClassType?)unchecked((uint?)cursor.RetrieveColumnAsInt(columnId));
         }
 
         public static int? RetrieveColumnAsInt(this Cursor cursor, Columnid columnId)
@@ -212,8 +228,7 @@ namespace DSInternals.DataStore
             object value = cursor.Record[columnId];
             if (value != DBNull.Value)
             {
-                //TODO: Test RetrieveColumnAsBoolean
-                return ((int)value != 0);
+                return !(value.Equals(0));
             }
             else
             {
@@ -420,10 +435,10 @@ namespace DSInternals.DataStore
         {
             // TODO: Check if we are really dealing with the datatable.
             // Read parent DN Tag of the current record
-            int parentDNTag = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.ParentDNTag)).Value;
+            DNTag parentDNTag = dataTableCursor.RetrieveColumnAsDNTag(schema.ParentDistinguishedNameTagColumnId).Value;
 
-            // Set the index to PDNT column
-            dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.DNTag);
+            // Set the index to DNT column
+            dataTableCursor.CurrentIndex = DirectorySchema.DistinguishedNameTagIndex;
 
             // Position the cursor to the only matching record
             return dataTableCursor.GotoKey(Key.Compose(parentDNTag));
@@ -433,10 +448,10 @@ namespace DSInternals.DataStore
         {
             // TODO: Check if we are really dealing with the datatable.
             // Read DN Tag of the current record
-            int dnTag = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.DNTag)).Value;
+            DNTag dnTag = dataTableCursor.RetrieveColumnAsDNTag(schema.DistinguishedNameTagColumnId).Value;
             
             // Set the index to PDNT column to get all children pointing to the current record
-            dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.ParentDNTag);
+            dataTableCursor.CurrentIndex = DirectorySchema.ParentDistinguishedNameTagIndex;
 
             // Position the cursor before the first child (Indexed columns: PDNT_col, name)
             dataTableCursor.FindRecords(MatchCriteria.EqualTo, Key.ComposeWildcard(dnTag));
@@ -448,6 +463,7 @@ namespace DSInternals.DataStore
             return cursor.MoveNext();
         }
 
+        [Obsolete]
         public static Location SaveLocation(this Cursor cursor)
         {
             Location location;
@@ -463,6 +479,7 @@ namespace DSInternals.DataStore
             return location;
         }
 
+        [Obsolete]
         public static void RestoreLocation(this Cursor cursor, Location location)
         {
             if (location != null)

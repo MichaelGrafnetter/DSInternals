@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Security.Principal;
     using DSInternals.Common.Data;
+    using DSInternals.Common.Schema;
     using Microsoft.Database.Isam;
 
     /// <summary>
@@ -50,7 +51,7 @@
             this.systemTableCursor.MoveToFirst();
 
             // Load attributes from the hiddentable:
-            this.NTDSSettingsDNT = this.systemTableCursor.RetrieveColumnAsInt(ntdsSettingsCol).Value;
+            this.NTDSSettingsDNT = this.systemTableCursor.RetrieveColumnAsDNTag(ntdsSettingsCol).Value;
 
             // Some databases like the initial adamntds.dit or ntds.dit on Windows Server 2003 do not contain the OS Version
             if (this.systemTableCursor.TableDefinition.Columns.Contains(osVersionMajorCol))
@@ -95,13 +96,13 @@
             {
                 // Goto NTDS Settings object:
                 DirectorySchema schema = context.Schema;
-                dataTableCursor.CurrentIndex = schema.FindIndexName(CommonDirectoryAttributes.DNTag);
+                dataTableCursor.CurrentIndex = DirectorySchema.DistinguishedNameTagIndex;
                 bool ntdsFound = dataTableCursor.GotoKey(Key.Compose(this.NTDSSettingsDNT));
 
                 // Load data from the NTDS Settings object
                 this.NTDSSettingsObjectDN = context.DistinguishedNameResolver.Resolve(this.NTDSSettingsDNT);
                 this.InvocationId = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.InvocationId)).Value;
-                this.DsaGuid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGUID)).Value;
+                this.DsaGuid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGuid)).Value;
                 this.Options = dataTableCursor.RetrieveColumnAsDomainControllerOptions(schema.FindColumnId(CommonDirectoryAttributes.Options));
                 string ntdsName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.CommonName));
 
@@ -109,18 +110,18 @@
                 if (this.OSVersion >= new Version(6,0))
                 {
                     // Check if this is a RODC
-                    int? ntdsSettingsObjectCategory = dataTableCursor.RetrieveColumnAsInt(schema.FindColumnId(CommonDirectoryAttributes.ObjectCategory));
-                    int rodcNtdsSettingsClass = schema.FindClassId(CommonDirectoryClasses.NtdsSettingsRO);
+                    DNTag? ntdsSettingsObjectCategory = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.ObjectCategory));
+                    DNTag? rodcObjectCategory = schema.FindObjectCategory(ClassType.NtdsSettingsRO);
 
                     // The objectCategory should be either nTDSDSA or nTDSDSARO
-                    if (ntdsSettingsObjectCategory == rodcNtdsSettingsClass)
+                    if (ntdsSettingsObjectCategory == rodcObjectCategory)
                     {
                         this.IsReadOnly = true;
                     }
                 }
 
                 // Retrieve Configuration Naming Context
-                this.ConfigurationNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.NamingContextDNTag)).Value;
+                this.ConfigurationNamingContextDNT = dataTableCursor.RetrieveColumnAsDNTag(schema.NamingContextDistinguishedNameTagColumnId).Value;
                 this.ConfigurationNamingContext = context.DistinguishedNameResolver.Resolve(this.ConfigurationNamingContextDNT);
 
                 // Forest Root Domain NC should be the parent of the Configuration NC
@@ -142,10 +143,10 @@
                 this.Name = dcName ?? ntdsName;
 
                 // Load DNS Host Name
-                this.DNSHostName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.DNSHostName));
+                this.DNSHostName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.DnsHostName));
 
                 // Load server reference to domain partition:
-                int dcDNTag = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.DNTag)).Value;
+                DNTag dcDNTag = dataTableCursor.RetrieveColumnAsDNTag(schema.DistinguishedNameTagColumnId).Value;
                 this.ServerReferenceDNT = context.LinkResolver.GetLinkedDNTag(dcDNTag, CommonDirectoryAttributes.ServerReference);
 
                 // Load the DSA object DN
@@ -165,8 +166,8 @@
 
                 // Load partitions (linked multivalue attribute)
                 // TODO: Does not return PAS partitions on RODCs
-                IEnumerable<int> partitionDNTags = context.LinkResolver.GetLinkedDNTags(this.NTDSSettingsDNT, CommonDirectoryAttributes.MasterNamingContexts);
-                this.WritablePartitions = context.DistinguishedNameResolver.Resolve(partitionDNTags).Select(dn => dn.ToString()).ToArray();
+                IEnumerable<DNTag> partitionDNTags = context.LinkResolver.GetLinkedDNTags(this.NTDSSettingsDNT, CommonDirectoryAttributes.MasterNamingContexts);
+                this.WritablePartitions = [.. partitionDNTags.Select(dnTag => context.DistinguishedNameResolver.Resolve(dnTag).ToString())];
 
                 // Load domain (linked multivalue attribute)
                 // TODO: Test this against a GC and RODC:
@@ -180,7 +181,7 @@
                     this.DomainSid = dataTableCursor.RetrieveColumnAsSid(schema.FindColumnId(CommonDirectoryAttributes.ObjectSid));
 
                     // Load domain GUID
-                    this.DomainGuid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGUID));
+                    this.DomainGuid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGuid));
 
                     // Load domain naming context:
                     this.DomainNamingContext = context.DistinguishedNameResolver.Resolve(this.DomainNamingContextDNT.Value);
@@ -198,7 +199,7 @@
                     this.OSName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.OperatingSystemName));
 
                     // Load DC GUID
-                    this.Guid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGUID));
+                    this.Guid = dataTableCursor.RetrieveColumnAsGuid(schema.FindColumnId(CommonDirectoryAttributes.ObjectGuid));
 
                     // Load DC SID
                     this.Sid = dataTableCursor.RetrieveColumnAsSid(schema.FindColumnId(CommonDirectoryAttributes.ObjectSid));
@@ -239,26 +240,26 @@
                         if (partitionNCNameDNT == this.ConfigurationNamingContextDNT)
                         {
                             // This must be the configuration partition's crossRef object, so we can retrieve the forest DNS name.
-                            this.ForestName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.DNSRoot));
+                            this.ForestName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.DnsRoot));
                         }
                     }
                 }
             }
         }
 
-        public int NTDSSettingsDNT
+        public DNTag NTDSSettingsDNT
         {
             get;
             private set;
         }
 
-        public int SchemaNamingContextDNT
+        public DNTag SchemaNamingContextDNT
         {
             get;
             private set;
         }
 
-        public int ConfigurationNamingContextDNT
+        public DNTag ConfigurationNamingContextDNT
         {
             get;
             private set;
@@ -554,7 +555,7 @@
             GC.SuppressFinalize(this);
         }
 
-        public int? DomainNamingContextDNT
+        public DNTag? DomainNamingContextDNT
         {
             get;
             private set;
@@ -590,7 +591,7 @@
             private set;
         }
 
-        public int? ServerReferenceDNT
+        public DNTag? ServerReferenceDNT
         {
             get;
             private set;

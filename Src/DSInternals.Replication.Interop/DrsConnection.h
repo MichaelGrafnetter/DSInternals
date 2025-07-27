@@ -12,6 +12,7 @@ namespace DSInternals
 		namespace Interop
 		{
 			using namespace DSInternals::Common::Data;
+			using namespace DSInternals::Common::Schema;
 			using namespace DSInternals::Replication::Model;
 			using namespace System::Security::Principal;
 			using namespace Microsoft::Win32::SafeHandles;
@@ -32,6 +33,7 @@ namespace DSInternals
 				static initonly cli::array<byte>^ DefaultSessionKey = gcnew cli::array<byte> { 0xb8, 0x42, 0x90, 0xb0, 0x0c, 0x3e, 0x45, 0x42, 0xb4, 0x09, 0xa9, 0x6d, 0xf8, 0xde, 0x3d, 0x93 };
 
 				cli::array<byte>^ _sessionKey;
+				BaseSchema^ _schema;
 				Guid _clientDsa;
 				Guid _serverSiteObjectGuid;
 				Guid _configurationObjectGuid;
@@ -39,7 +41,7 @@ namespace DSInternals
 				DWORD _serverReplEpoch;
 				SecurityCallback^ _securityCallback;
 			public:
-				DrsConnection(IntPtr rpcHandle, Guid clientDsa);
+				DrsConnection(IntPtr rpcHandle, Guid clientDsa, BaseSchema^ schema);
 				DrsConnection(IntPtr preexistingDrssHandle, bool ownsHandle);
 				property cli::array<byte>^ SessionKey
 				{
@@ -106,9 +108,10 @@ namespace DSInternals
 				static ReplicaAttribute^ ReadAttribute(const ATTR& attribute);
 				static ReplicaAttribute^ ReadAttribute(const REPLVALINF_V3& attribute);
 				static ReplicaAttributeCollection^ ReadAttributes(const ATTRBLOCK& attributes);
-				static ReplicaObject^ ReadObject(const ENTINF& object);
-				static ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount);
+				static ReplicaObject^ ReadObject(const ENTINF& object, BaseSchema^ schema);
+				static ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount, BaseSchema^ schema);
 				static DS_NAME_FORMAT GetAccountNameFormat(NTAccount^ accountName);
+				static void LoadPrefixTable(SCHEMA_PREFIX_TABLE nativePrefixTable, PrefixTable^ managedPrefixTable);
 			};
 		}
 	}

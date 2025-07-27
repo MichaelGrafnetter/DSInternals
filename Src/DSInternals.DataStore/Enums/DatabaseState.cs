@@ -1,37 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DSInternals.DataStore
+﻿namespace DSInternals.DataStore
 {
     public enum DatabaseState
     {
         /// <summary>
         /// The initial DIT is being created.
         /// </summary>
-        Initial,        
+        Initial,
         /// <summary>
         /// The initial DIT has been created.
         /// </summary>
-        Boot,        
+        Boot,
         /// <summary>
         /// DcPromo completed. Used in Windows Server 2000.
         /// </summary>
-        Installed,        
+        Installed,
         /// <summary>
         /// DCPromo completed. Used since Windows Server 2003.
         /// </summary>
-        Running,        
+        Running,
         /// <summary>
         /// Snapshot is being created.
         /// </summary>
-        BackedUp,        
+        BackedUp,
         /// <summary>
         /// DcPromo has failed.
         /// </summary>
-        Error,        
+        Error,
         /// <summary>
         /// The first phase of restore is done.
         /// </summary>
@@ -39,11 +33,11 @@ namespace DSInternals.DataStore
         /// <summary>
         /// DcPromo completed.
         /// </summary>
-        RealInstalled,        
+        RealInstalled,
         /// <summary>
         /// DcPromo is performing IFM
         /// </summary>
-        Ifm,    
+        Ifm,
         /// <summary>
         /// Demotion has begun.
         /// </summary>

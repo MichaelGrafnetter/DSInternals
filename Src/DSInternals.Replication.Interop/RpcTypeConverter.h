@@ -27,6 +27,7 @@ namespace DSInternals
 				static midl_ptr<PARTIAL_ATTR_VECTOR_V1_EXT> CreateNativePas(cli::array<ATTRTYP>^ partialAttributeSet);
 				static String^ ToString(const DSNAME* dsName);
 				static SecurityIdentifier^ ToSid(const DSNAME* dsName);
+				static cli::array<byte>^ ToByteArray(const OID_t& prefix);
 			};
 		}
 	}

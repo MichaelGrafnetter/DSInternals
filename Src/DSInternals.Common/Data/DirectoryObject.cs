@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Security.AccessControl;
     using System.Security.Principal;
+    using DSInternals.Common.Schema;
 
     public abstract class DirectoryObject
     {

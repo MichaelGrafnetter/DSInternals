@@ -1,6 +1,7 @@
 ﻿namespace DSInternals.Common.Exceptions
 {
     using DSInternals.Common.Properties;
+    using DSInternals.Common.Schema;
     using System;
 
     [Serializable]
@@ -15,7 +16,7 @@
         {
             this.AttributeIdentifier = attributeName;
         }
-        public SchemaAttributeNotFoundException(int attributeId)
+        public SchemaAttributeNotFoundException(AttributeType attributeId)
             : base(null)
         {
             this.AttributeIdentifier = attributeId;

@@ -1,23 +1,22 @@
-﻿
-using System.Collections.Generic;
+﻿using DSInternals.Common.Schema;
 namespace DSInternals.Replication.Model
 {
     public class ReplicaAttribute
     {
-        public ReplicaAttribute(int id, byte[][] values)
+        public ReplicaAttribute(AttributeType id, byte[][] values)
         {
             this.Id = id;
             this.Values = values;
         }
 
-        public ReplicaAttribute(int id, byte[] value)
+        public ReplicaAttribute(AttributeType id, byte[] value)
         {
             this.Id = id;
             this.Values = new byte[1][];
             this.Values[0] = value;
         }
 
-        public int Id
+        public AttributeType Id
         {
             get;
             private set;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DSInternals.Common.Data;
+using DSInternals.Common.Schema;
 using Microsoft.Database.Isam;
 
 namespace DSInternals.DataStore
@@ -18,7 +19,7 @@ namespace DSInternals.DataStore
             }
 
             // The schema must contain the ms-Kds-Prov-RootKey class.
-            bool inSchema = context.Schema.ContainsClass(CommonDirectoryClasses.KdsRootKey);
+            bool inSchema = context.Schema.FindClass(CommonDirectoryClasses.KdsRootKey).HasValue;
 
             // None of the KDS root key attributes are present on RODCs
             bool writableDC = !context.DomainController.IsReadOnly;
@@ -42,9 +43,9 @@ namespace DSInternals.DataStore
             {
                 // Query: (&(objectCategory=ms-Kds-Prov-RootKey)(isDeleted=false))
                 string objectCategoryIndex = _context.Schema.FindIndexName(CommonDirectoryAttributes.ObjectCategory);
+                DNTag? kdsRootKeyCategory = _context.Schema.FindObjectCategory(ClassType.KdsRootKey);
                 cursor.CurrentIndex = objectCategoryIndex;
-                int rootKeyClassId = _context.Schema.FindClassId(CommonDirectoryClasses.KdsRootKey);
-                cursor.FindRecords(MatchCriteria.EqualTo, Key.Compose(rootKeyClassId));
+                cursor.FindRecords(MatchCriteria.EqualTo, Key.Compose(kdsRootKeyCategory));
 
                 while (cursor.MoveNext())
                 {
@@ -68,7 +69,7 @@ namespace DSInternals.DataStore
                 return null;
             }
 
-            int rootKeyClassId = _context.Schema.FindClassId(CommonDirectoryClasses.KdsRootKey);
+            DNTag? kdsRootKeyObjectCategory = _context.Schema.FindObjectCategory(ClassType.KdsRootKey);
 
             using (var cursor = _context.OpenDataTable())
             {
@@ -87,9 +88,9 @@ namespace DSInternals.DataStore
                         continue;
                     }
 
-                    candidateObject.ReadAttribute(CommonDirectoryAttributes.ObjectCategory, out int? objectCagegory);
+                    candidateObject.ReadAttribute(CommonDirectoryAttributes.ObjectCategory, out DNTag? objectCagegory);
 
-                    if (objectCagegory == rootKeyClassId)
+                    if (objectCagegory == kdsRootKeyObjectCategory)
                     {
                         // This is the KDS root key we are looking for.
                         return new KdsRootKey(candidateObject);

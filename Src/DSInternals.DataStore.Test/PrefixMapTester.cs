@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DSInternals.Common;
+using DSInternals.Common.Schema;
 
 namespace DSInternals.DataStore.Test
 {
@@ -16,27 +17,27 @@ namespace DSInternals.DataStore.Test
         [TestMethod]
         public void PrefixMap_Vector1()
         {
-            var map = new PrefixMap(ExchangeBinaryPrefixMap);
+            var map = new PrefixTable(ExchangeBinaryPrefixMap);
 
             // Should contain 39 builtin prefixes + 6 new
             Assert.AreEqual(45, map.Count);
 
             // Test one of the decoded prefixes
-            bool contains1 = map.ContainsPrefix(18467);
-            Assert.AreEqual(true, contains1);
+            string oid1 = map.Translate((AttributeType)18467);
+            Assert.IsNotNull(oid1);
             
             string prefix = map[18467];
             Assert.AreEqual("1.2.840.113556.1.4.7000.102", prefix);
 
             // Test non-existing prefix
-            bool contains2 = map.ContainsPrefix(1234);
-            Assert.AreEqual(false, contains2);
+            string oid2 = map.Translate(1234);
+            Assert.IsNull(oid2);
         }
 
         [TestMethod]
         public void PrefixMap_Vector2()
         {
-            var map = new PrefixMap(SamplePrefixMap);
+            var map = new PrefixTable(SamplePrefixMap);
 
             // Should contain 39 builtin refixes + 14 additional
             Assert.AreEqual(53, map.Count);
@@ -45,7 +46,7 @@ namespace DSInternals.DataStore.Test
         [TestMethod]
         public void PrefixMap_TranstaleBuiltin()
         {
-            var map = new PrefixMap();
+            var map = new PrefixTable();
 
             // givenName
             string oid = map.Translate(42);
@@ -67,7 +68,7 @@ namespace DSInternals.DataStore.Test
         [TestMethod]
         public void PrefixMap_TranstaleUser()
         {
-            var map = new PrefixMap(ExchangeBinaryPrefixMap);
+            var map = new PrefixTable(ExchangeBinaryPrefixMap);
 
             // ms-Exch-Admins
             string oid = map.Translate(827294608);
@@ -83,7 +84,7 @@ namespace DSInternals.DataStore.Test
         public void PrefixMap_NullInput()
         {
             byte[] binaryPrefixMap = null;
-            var map = new PrefixMap(binaryPrefixMap);
+            var map = new PrefixTable(binaryPrefixMap);
             
             // Should only contain 39 builtin prefixes
             Assert.AreEqual(39, map.Count);
@@ -94,7 +95,7 @@ namespace DSInternals.DataStore.Test
         public void PrefixMap_EmptyInput()
         {
             byte[] binaryPrefixMap = new byte[0];
-            var map = new PrefixMap(binaryPrefixMap);
+            var map = new PrefixTable(binaryPrefixMap);
         }
         
         [TestMethod]
@@ -102,7 +103,7 @@ namespace DSInternals.DataStore.Test
         public void PrefixMap_InvalidInput1()
         {
             byte[] binaryPrefixMap = { 1, 2, 3, 4, 5 };
-            var map = new PrefixMap(binaryPrefixMap);
+            var map = new PrefixTable(binaryPrefixMap);
         }
 
         [TestMethod]
@@ -110,7 +111,7 @@ namespace DSInternals.DataStore.Test
         public void PrefixMap_InvalidInput2()
         {
             byte[] binaryPrefixMap = { 1, 2, 3, 4, 5, 6, 7, 8 };
-            var map = new PrefixMap(binaryPrefixMap);
+            var map = new PrefixTable(binaryPrefixMap);
         }
     }
 }

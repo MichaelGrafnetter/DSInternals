@@ -84,6 +84,7 @@
     <Compile Include="Commands\Datastore\GetADDBBackupKeyCommand.cs" />
     <Compile Include="Commands\Encryption\SaveDPAPIBlobCommand.cs" />
     <Compile Include="Commands\Replication\AddADReplNgcKeyCommand.cs" />
+    <Compile Include="Commands\Replication\GetADReplKdsRootKey.cs" />
     <Compile Include="Commands\Replication\GetADReplBackupKeyCommand.cs" />
     <Compile Include="Commands\Replication\GetADReplAccountCommand.cs" />
     <Compile Include="Commands\Datastore\GetBootKeyCommand.cs" />
@@ -110,7 +111,6 @@
     <Compile Include="Types\DomainController.cs" />
     <Compile Include="Types\LsaPolicyInformation.cs" />
     <Compile Include="Types\PasswordQualityTestResult.cs" />
-    <Compile Include="Types\SchemaAttribute.cs" />
     <Compile Include="Types\SupplementalCredentialsDeserializer.cs" />
     <Compile Include="Utils\AcceptHexStringAttribute.cs" />
     <Compile Include="Utils\ValidatePasswordLengthAttribute.cs" />
@@ -152,9 +152,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">

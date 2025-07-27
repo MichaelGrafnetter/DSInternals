@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Net;
     using DSInternals.Common.Data;
+    using DSInternals.Common.Schema;
 
     public class AdsiClient : IDisposable
     {
@@ -95,9 +96,9 @@
             // Always frtch these attributes:
             accountPropertiesToLoad.AddRange([
                 CommonDirectoryAttributes.ServicePrincipalName,
-                CommonDirectoryAttributes.ObjectGUID,
+                CommonDirectoryAttributes.ObjectGuid,
                 CommonDirectoryAttributes.ObjectSid,
-                CommonDirectoryAttributes.SAMAccountName,
+                CommonDirectoryAttributes.SamAccountName,
                 CommonDirectoryAttributes.SamAccountType,
                 CommonDirectoryAttributes.UserAccountControl,
                 CommonDirectoryAttributes.AdminCount,
@@ -107,7 +108,7 @@
 
             if (propertySets.HasFlag(AccountPropertySets.DistinguishedName) || propertySets.HasFlag(AccountPropertySets.KeyCredentials))
             {
-                accountPropertiesToLoad.Add(CommonDirectoryAttributes.DN);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.DistinguishedName);
             }
 
             if (propertySets.HasFlag(AccountPropertySets.WindowsLAPS))
@@ -127,7 +128,7 @@
             {
                 accountPropertiesToLoad.AddRange([
                     CommonDirectoryAttributes.UserPrincipalName,
-                    CommonDirectoryAttributes.SIDHistory,
+                    CommonDirectoryAttributes.SidHistory,
                     CommonDirectoryAttributes.LastLogon,
                     CommonDirectoryAttributes.LastLogonTimestamp,
                     CommonDirectoryAttributes.Description,
@@ -142,9 +143,9 @@
                     CommonDirectoryAttributes.GivenName,
                     CommonDirectoryAttributes.Surname,
                     CommonDirectoryAttributes.Initials,
-                    CommonDirectoryAttributes.EmployeeID,
+                    CommonDirectoryAttributes.EmployeeId,
                     CommonDirectoryAttributes.EmployeeNumber,
-                    CommonDirectoryAttributes.Email,
+                    CommonDirectoryAttributes.EmailAddress,
                     CommonDirectoryAttributes.Street,
                     CommonDirectoryAttributes.City,
                     CommonDirectoryAttributes.State,
@@ -177,7 +178,7 @@
                 accountPropertiesToLoad.Add(CommonDirectoryAttributes.OperatingSystemVersion);
                 accountPropertiesToLoad.Add(CommonDirectoryAttributes.OperatingSystemHotfix);
                 accountPropertiesToLoad.Add(CommonDirectoryAttributes.OperatingSystemServicePack);
-                accountPropertiesToLoad.Add(CommonDirectoryAttributes.DNSHostName);
+                accountPropertiesToLoad.Add(CommonDirectoryAttributes.DnsHostName);
             }
 
             if (propertySets.HasFlag(AccountPropertySets.KeyCredentials))

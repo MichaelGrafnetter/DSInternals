@@ -89,6 +89,13 @@ namespace DSInternals.Common
             return bytes == null ? null : ToHex(bytes.AsSpan(), caps);
         }
 
+        public static string ToHex(this Span<byte> bytes, bool caps = false)
+        {
+            // TODO: Migrate to .AsReadOnlySpan()
+            ReadOnlySpan<byte> readOnly = bytes;
+            return readOnly.ToHex(caps);
+        }
+
         public static string ToHex(this ReadOnlySpan<byte> bytes, bool caps = false)
         {
             if (bytes == null)

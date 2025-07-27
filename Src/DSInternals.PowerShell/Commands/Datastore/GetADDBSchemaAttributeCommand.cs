@@ -1,13 +1,13 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
     using System.Management.Automation;
-    using AutoMapper;
+    using DSInternals.Common.Exceptions;
+    using DSInternals.Common.Schema;
 
     [Cmdlet(VerbsCommon.Get, "ADDBSchemaAttribute")]
-    [OutputType(typeof(DSInternals.PowerShell.SchemaAttribute))]
+    [OutputType(typeof(AttributeSchema))]
     public class GetADDBSchemaAttributeCommand : ADDBCommandBase
     {
-        private IMapper mapper;
 
         [Parameter(Position = 0, ValueFromPipeline = true)]
         [Alias("LdapDisplayName,AttributeName,AttrName,Attr")]
@@ -18,11 +18,6 @@
             set;
         }
 
-        protected override void BeginProcessing()
-        {
-            base.BeginProcessing();
-            this.mapper = new MapperConfiguration(cfg => cfg.CreateMap<DSInternals.DataStore.SchemaAttribute, DSInternals.PowerShell.SchemaAttribute>()).CreateMapper();
-        }
         protected override void ProcessRecord()
         {
             if (this.Name == null)
@@ -31,8 +26,7 @@
                 var attributes = this.DirectoryContext.Schema.FindAllAttributes();
                 foreach (var attribute in attributes)
                 {
-                    var attributeTransfer = this.mapper.Map<DSInternals.PowerShell.SchemaAttribute>(attribute);
-                    this.WriteObject(attributeTransfer);
+                    this.WriteObject(attribute);
                 }
             }
             else
@@ -41,8 +35,19 @@
                 foreach(string attributeName in this.Name)
                 {
                     var attribute = this.DirectoryContext.Schema.FindAttribute(attributeName);
-                    var attributeTransfer = this.mapper.Map<DSInternals.PowerShell.SchemaAttribute>(attribute);
-                    this.WriteObject(attributeTransfer);
+
+                    if (attribute != null)
+                    {
+                        this.WriteObject(attribute);
+                        
+                    }
+                    else
+                    {
+                        // Write non-terminating error.
+                        var exception = new SchemaAttributeNotFoundException(attributeName);
+                        var error = new ErrorRecord(exception, "ADDBSchemaAttribute_NotFound", ErrorCategory.ObjectNotFound, attributeName);
+                        this.WriteError(error);
+                    }
                 }
             }
         }

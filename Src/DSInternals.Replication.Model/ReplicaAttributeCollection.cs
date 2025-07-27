@@ -1,10 +1,11 @@
 ﻿using DSInternals.Common;
+using DSInternals.Common.Schema;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace DSInternals.Replication.Model
 {
-    public class ReplicaAttributeCollection : Dictionary<int, ReplicaAttribute>
+    public class ReplicaAttributeCollection : Dictionary<AttributeType, ReplicaAttribute>
     {
         // TODO: Move parent as member.
         public ReplicaAttributeCollection() : base()

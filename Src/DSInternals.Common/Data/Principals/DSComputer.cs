@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DSInternals.Common.Cryptography;
 using DSInternals.Common.Properties;
+using DSInternals.Common.Schema;
 
 namespace DSInternals.Common.Data
 {
@@ -99,7 +100,7 @@ namespace DSInternals.Common.Data
         protected void LoadGenericComputerAccountInfo(DirectoryObject dsObject)
         {
             // dNSHostName:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.DNSHostName, out string dnshostname);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.DnsHostName, out string dnshostname);
             this.DNSHostName = dnshostname;
 
             // location:

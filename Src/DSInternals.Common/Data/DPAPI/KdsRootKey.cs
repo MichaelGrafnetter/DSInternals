@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using DSInternals.Common.Interop;
+using DSInternals.Common.Schema;
 using Windows.Win32;
 
 namespace DSInternals.Common.Data
@@ -20,6 +22,7 @@ namespace DSInternals.Common.Data
         internal const int L1KeyModulus = 32;
         internal const int L2KeyModulus = 32;
         internal const long KdsKeyCycleDuration = 360000000000; // 10 hrs in FileTime
+        private const string RootKeyDistinguishedNameFormat = "CN={0},CN=Master Root Keys,CN=Group Key Distribution Service,CN=Services,{1}";
         private const string GkdsKdfLabel = "KDS service";
         private const string GkdsPublicKeyLabel = "KDS public key";
         private const int ExpectedRootKeyVersion = 1;
@@ -29,7 +32,8 @@ namespace DSInternals.Common.Data
         internal const int DefaultPublicKeyLength = 2048;
         internal const int DefaultPrivateKeyLength = 512;
 
-        private IDictionary<int, byte[]> L0KeyCache = new Dictionary<int, byte[]>();
+        // The cache is intentionally thread-safe
+        private IDictionary<int, byte[]> L0KeyCache = new ConcurrentDictionary<int, byte[]>();
 
         /// <summary>
         /// Gets the unique identifier of this root key.
@@ -157,7 +161,7 @@ namespace DSInternals.Common.Data
             this.DomainController = dcDN?.ToString();
             
             // Private key
-            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsPrivateKey, out byte[] key);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsRootKeyData, out byte[] key);
             this.KeyValue = key;
 
             // Creation time
@@ -173,7 +177,7 @@ namespace DSInternals.Common.Data
             this.KeyId = Guid.Parse(cn);
 
             // KDF algorithm
-            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsKdfAlgorithm, out string kdfAlgorithmName);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsKdfAlgorithmId, out string kdfAlgorithmName);
             this.KdfAlgorithm = kdfAlgorithmName ?? DefaultKdfAlgorithm;
 
             // KDF algorithm parameters (only 1 in current implementation)
@@ -181,7 +185,7 @@ namespace DSInternals.Common.Data
             this.RawKdfParameters = kdfParameters ?? DefaultKdfParameters;
 
             // Secret agreement algorithm
-            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsSecretAgreementAlgorithm, out string secretAgreementAlgorithmName);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.KdsSecretAgreementAlgorithmId, out string secretAgreementAlgorithmName);
             this.SecretAgreementAlgorithm = secretAgreementAlgorithmName ?? DefaultSecretAgreementAlgorithm;
 
             // Secret agreement algorithm parameters
@@ -493,6 +497,13 @@ namespace DSInternals.Common.Data
                     return (p, g);
                 }
             }
+        }
+
+        public static string GetDistinguishedName(Guid rootKeyId, string configurationNamingContext)
+        {
+            if (configurationNamingContext == null) throw new ArgumentNullException(nameof(configurationNamingContext));
+
+            return string.Format(RootKeyDistinguishedNameFormat, rootKeyId, configurationNamingContext);
         }
 
         private static byte[] DeriveKey(Guid kdsRootKeyId, string kdfAlgorithm, byte[] kdfParameters, byte[] secret, string label, GroupKeyLevel level, int l0KeyId, int l1KeyId, int l2KeyId, int iteration, int desiredKeyLength)

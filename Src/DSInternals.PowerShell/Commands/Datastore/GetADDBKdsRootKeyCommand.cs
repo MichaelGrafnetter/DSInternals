@@ -13,7 +13,7 @@
         private const string AllKeysParameterSet = "All";
         private const string ByGuidParameterSet = "ByGuid";
 
-        [Parameter(Mandatory = true, ParameterSetName = ByGuidParameterSet, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, Position = 0)]
+        [Parameter(Mandatory = true, ParameterSetName = ByGuidParameterSet, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, Position = 1)]
         [Alias("Id", "KeyId")]
         public Guid RootKeyId { get; set; }
 
@@ -39,7 +39,7 @@
                 {
                     // No key with the given ID has been found. Write non-terminating error.
                     var exception = new DirectoryObjectNotFoundException(this.RootKeyId);
-                    var error = new ErrorRecord(exception, "KdsRootKeyIdNotFound", ErrorCategory.ObjectNotFound, this.RootKeyId);
+                    var error = new ErrorRecord(exception, "Database_KdsRootKeyIdNotFound", ErrorCategory.ObjectNotFound, this.RootKeyId);
                     this.WriteError(error);
                 }
             }

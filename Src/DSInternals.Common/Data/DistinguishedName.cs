@@ -1,6 +1,7 @@
 ﻿namespace DSInternals.Common.Data
 {
     using DSInternals.Common.Properties;
+    using DSInternals.Common.Schema;
     using System;
     using System.Collections.Generic;
     using System.Linq;

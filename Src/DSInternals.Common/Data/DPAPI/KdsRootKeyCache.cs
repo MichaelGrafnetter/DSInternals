@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +15,10 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// List of root keys that were not found in AD.
         /// </summary>
-        private ISet<Guid>? _negativeCache;
+        /// <remarks>
+        /// There is no concurrent HashSet, so we use ConcurrentDictionary with dummy byte values.
+        /// </remarks>
+        private IDictionary<Guid, byte>? _negativeCache;
 
         private IKdsRootKeyResolver _innerResolver;
 
@@ -41,8 +45,8 @@ namespace DSInternals.Common.Data
             }
             else
             {
-                _rootKeyCache = new Dictionary<Guid, KdsRootKey>();
-                _negativeCache = new HashSet<Guid>();
+                _rootKeyCache = new ConcurrentDictionary<Guid, KdsRootKey>();
+                _negativeCache = new ConcurrentDictionary<Guid, byte>();
             }
         }
 
@@ -58,7 +62,7 @@ namespace DSInternals.Common.Data
                 return cachedRootKey;
             }
 
-            if (_negativeCache?.Contains(id) ?? true)
+            if (_negativeCache?.ContainsKey(id) ?? true)
             {
                 // This root key was previously not found in AD, so there is no need to search for it again.
                 // OR the negative cache is not even created, which means that eager loading must have already happened.
@@ -76,7 +80,7 @@ namespace DSInternals.Common.Data
             else
             {
                 // Not found. Add to negative cache.
-                _negativeCache.Add(id);
+                _negativeCache.Add(id, byte.MinValue);
             }
 
             return result;
@@ -143,15 +147,15 @@ namespace DSInternals.Common.Data
             }
             else
             {
-                // There might be some keys already pre-cached from previous lookups.
-                // TODO Merge collections instead, because of possible L0 key caches
-                _rootKeyCache.Clear();
-
                 // Perform an active lookup
                 foreach (var rootKey in _innerResolver.GetKdsRootKeys())
                 {
-                    // Allow the key to be found by ID in the future
-                    _rootKeyCache.Add(rootKey.KeyId, rootKey);
+                    // There might be some keys already pre-cached from previous lookups, possibly holding pre-calculated L0 key.
+                    if (!_rootKeyCache.ContainsKey(rootKey.KeyId))
+                    {
+                        // Allow the key to be found by ID in the future
+                        _rootKeyCache[rootKey.KeyId] = rootKey;
+                    }
 
                     // Pass-through the value
                     yield return rootKey;

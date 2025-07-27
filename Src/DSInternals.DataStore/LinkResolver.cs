@@ -1,128 +1,117 @@
 ﻿namespace DSInternals.DataStore
 {
+    using DSInternals.Common.Exceptions;
+    using DSInternals.Common.Schema;
     using Microsoft.Database.Isam;
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    public class LinkResolver : IDisposable
+    public class LinkResolver
     {
         // Column names:
-        private const string linkDNCol = "link_DNT";
-        private const string backlinkDNCol = "backlink_DNT";
-        private const string linkBaseCol = "link_base";
-        private const string linkDataCol = "link_data";
-        private const string linkMetadataCol = "link_metadata";
-        private const string linkDeletedTimeCol = "link_deltime";
-        private const string linkDeactivatedTimeCol = "link_deactivetime";
+        private const string LinkDNTColumn = "link_DNT";
+        private const string BacklinkDNTColumn = "backlink_DNT";
+        private const string LinkBaseColumn = "link_base";
+        private const string LinkDataColumn = "link_data";
+        private const string LinkMetadataColumn = "link_metadata";
+        private const string LinkDeletedTimeColumn = "link_deltime";
+        private const string LinkDeactivatedTimeColumn = "link_deactivetime";
         // Index of valid links post Recycle Bin feature
-        private const string linkIndex2008 = "link_present_active_index";
+        private const string LinkIndex2008 = "link_present_active_index";
         // Index of valid links before the Recycle Bin feature
-        private const string linkIndex2003 = "link_present_index";
+        private const string LinkIndex2003 = "link_present_index";
 
-        private Cursor cursor;
-        private DirectorySchema schema;
+        private IsamDatabase _database;
+        private DirectorySchema _schema;
+        private Columnid _backlinkDNTColumnId;
+        private Columnid _linkDataColumnId;
+        private string _linkIndex;
 
         public LinkResolver(IsamDatabase database, DirectorySchema schema)
         {
-            this.schema = schema;
-            this.cursor = database.OpenCursor(ADConstants.LinkTableName);
-            if (this.cursor.TableDefinition.Indices.Contains(linkIndex2008))
+            if (database == null)
             {
-                this.cursor.SetCurrentIndex(linkIndex2008);
-            }
-            else
-            {
-                // Fallback to the old index if the newer one does not exist
-                cursor.SetCurrentIndex(linkIndex2003);
+                throw new ArgumentNullException(nameof(database));
             }
 
-            // TODO: Load column ids instead of names
+            if (schema == null)
+            {
+                throw new ArgumentNullException(nameof(schema));
+            }
+
+            _database = database;
+            _schema = schema;
+
+            var linkTable = database.Tables[ADConstants.LinkTableName];
+
+            // Cache column IDs for faster lookups
+            _backlinkDNTColumnId = linkTable.Columns[BacklinkDNTColumn].Columnid;
+            _linkDataColumnId = linkTable.Columns[LinkDataColumn].Columnid;
+
+            // Fallback to the old index if the newer one does not exist
+            bool contains2008Index = linkTable.Indices.Contains(LinkIndex2008);
+            _linkIndex = contains2008Index ? LinkIndex2008 : LinkIndex2003;
         }
 
-        public int? GetLinkedDNTag(int dnTag, string attributeName)
+        public DNTag? GetLinkedDNTag(DNTag dnTag, string attributeName)
         {
-            try
-            {
-                // Cast int to int? to force null as default value instead of 0
-                return this.GetLinkedDNTags(dnTag, attributeName).Cast<int?>().SingleOrDefault();
-            }
-            catch(InvalidOperationException)
-            {
-                // TODO: Make this a special exception type. Move message to resources.
-                throw new Exception("More than 1 objects have been found.");
-            }
+            // Ignore the data and any additional links
+            (DNTag backlink, _) = this.GetLinkedValues(dnTag, attributeName).FirstOrDefault();
+            return backlink > DNTag.NotAnObject ? backlink : null;
         }
 
-        public IEnumerable<int> GetLinkedDNTags(int dnTag, string attributeName)
+        public IEnumerable<DNTag> GetLinkedDNTags(DNTag dnTag, string attributeName)
         {
-            if (!this.schema.ContainsAttribute(attributeName))
+            // Ignore the data
+            return this.GetLinkedValues(dnTag, attributeName).Select(link => link.Backlink);
+        }
+
+        public IEnumerable<(DNTag Backlink, byte[] LinkData)> GetLinkedValues(DNTag dnTag, string attributeName)
+        {
+            AttributeSchema? attribute = this._schema.FindAttribute(attributeName);
+
+            if (attribute == null)
             {
-                // If the schema does not contain this attribute at all, we pretend it to have an empty value.
+                // If the schema does not contain this attribute at all, we pretend it has an empty value.
                 yield break;
             }
 
-            // TODO: Check that the attribute type is DN
-            this.FindLinkedRecords(dnTag, attributeName);
-
-            // The cursor is now before the first record in the link_table
-            while (cursor.MoveNext())
+            // Check that the attribute is DN or DN-Binary.
+            if (!attribute.LinkId.HasValue)
             {
-                // TODO: Not deactivated?
-                int foundTag = (int)cursor.IndexRecord[backlinkDNCol];
-                yield return foundTag;
-            }
-        }
-
-        public IEnumerable<byte[]> GetLinkedValues(int dnTag, string attributeName)
-        {
-            if(!this.schema.ContainsAttribute(attributeName))
-            {
-                // If the schema does not contain this attribute at all, we pretend it to have an empty value.
-                yield break;
+                throw new DirectoryObjectOperationException("This is not a linked value attribute.", attributeName);
             }
 
-            // TODO: Check that the attribute is DN-Binary.
-            this.FindLinkedRecords(dnTag, attributeName);
-
-            // The cursor is now before the first record in the link_table
-            while (cursor.MoveNext())
+            using (var cursor = _database.OpenCursor(ADConstants.LinkTableName))
             {
-                // TODO: Not deactivated?
-                byte[] foundValue = cursor.RetrieveColumnAsByteArray(linkDataCol);
-                yield return foundValue;
+                int linkBase = attribute.LinkBase.Value;
+                cursor.CurrentIndex = _linkIndex;
+                // Columns order in index: link_DNT, link_base, backlink_DNT, link_data
+                cursor.FindRecords(MatchCriteria.EqualTo, Key.ComposeWildcard(dnTag, linkBase));
+
+                // The cursor is now before the first record in the link_table
+                while (cursor.MoveNext())
+                {
+                    // TODO: Check if the link is deleted or expired.
+                    int rawBacklinkDNT = (int)cursor.IndexRecord[_backlinkDNTColumnId];
+                    DNTag backlinkDNT = unchecked((DNTag)rawBacklinkDNT);
+                    byte[] linkData = null;
+
+                    if (attribute.Syntax == AttributeSyntax.DNWithBinary)
+                    {
+                        // Try to fetch the data as well
+                        object foundValue = cursor.IndexRecord[_linkDataColumnId];
+                        if (foundValue != DBNull.Value)
+                        {
+                            linkData = (byte[])foundValue;
+                        }
+                    }
+
+                    // Return DN with binary
+                    yield return (backlinkDNT, linkData);
+                }
             }
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing && cursor != null)
-            {
-                cursor.Dispose();
-                cursor = null;
-            }
-        }
-
-        private void FindLinkedRecords(int dnTag, string attributeName)
-        {
-            SchemaAttribute attr = this.schema.FindAttribute(attributeName);
-            if (!attr.LinkId.HasValue)
-            {
-                //TODO: Throw a proper exception
-                throw new Exception("This is not a linked multivalue attribute.");
-            }
-
-            int linkBase = attr.LinkBase.Value;
-            // Columns order in index: link_DNT, link_base, backlink_DNT
-            Key key = Key.Compose(dnTag, linkBase);
-            key.AddWildcard();
-            this.cursor.FindRecords(MatchCriteria.EqualTo, key);
         }
     }
 }

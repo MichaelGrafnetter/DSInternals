@@ -1,6 +1,7 @@
 ﻿namespace DSInternals.Common.ADSI
 {
     using DSInternals.Common.Data;
+    using DSInternals.Common.Schema;
     using System;
     using System.DirectoryServices;
     using System.Linq;
@@ -20,7 +21,7 @@
         {
             get
             {
-                return this.ReadAttributeSingle<string>(CommonDirectoryAttributes.DN);
+                return this.ReadAttributeSingle<string>(CommonDirectoryAttributes.DistinguishedName);
             }
         }
 
@@ -29,7 +30,7 @@
             get
             {
                 Guid? guid;
-                this.ReadAttribute(CommonDirectoryAttributes.ObjectGUID, out guid);
+                this.ReadAttribute(CommonDirectoryAttributes.ObjectGuid, out guid);
                 return guid.Value;
             }
         }

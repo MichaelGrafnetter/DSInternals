@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using DSInternals.Common.Schema;
 
 namespace DSInternals.Common.Data
 {

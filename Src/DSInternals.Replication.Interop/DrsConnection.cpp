@@ -5,6 +5,7 @@
 using namespace DSInternals::Common;
 using namespace DSInternals::Common::Exceptions;
 using namespace DSInternals::Common::Interop;
+using namespace DSInternals::Common::Schema;
 using namespace DSInternals::Replication::Model;
 
 using namespace System;
@@ -21,11 +22,12 @@ namespace DSInternals
 	{
 		namespace Interop
 		{
-			DrsConnection::DrsConnection(IntPtr rpcHandle, Guid clientDsa)
+			DrsConnection::DrsConnection(IntPtr rpcHandle, Guid clientDsa, BaseSchema^ schema)
 				: SafeHandleZeroOrMinusOneIsInvalid(true)
 			{
 				this->_clientDsa = clientDsa;
 				this->_serverReplEpoch = DrsConnection::DefaultReplEpoch;
+				this->_schema = schema;
 
 				// Register the RetrieveSessionKey as RCP security callback. Mind the delegate lifecycle.
 				this->_securityCallback = gcnew SecurityCallback(this, &DrsConnection::RetrieveSessionKey);
@@ -43,6 +45,7 @@ namespace DSInternals
 			DrsConnection::DrsConnection(IntPtr preexistingDrssHandle, bool ownsHandle)
 				: SafeHandleZeroOrMinusOneIsInvalid(ownsHandle)
 			{
+				// This constructor is not supported
 				this->SetHandle(preexistingDrssHandle);
 			}
 
@@ -223,7 +226,8 @@ namespace DSInternals
 
 				auto request = CreateReplicateAllRequest(cookie, partialAttributeSet, maxBytes, maxObjects);
 				auto reply = GetNCChanges(move(request));
-				auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues);
+				LoadPrefixTable(reply->PrefixTableSrc, this->_schema->PrefixTable);
+				auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues, this->_schema);
 				USN_VECTOR usnTo = reply->usnvecTo;
 				Guid invocationId = RpcTypeConverter::ToManaged(reply->uuidInvocIdSrc);
 				auto newCookie = gcnew ReplicationCookie(cookie->NamingContext, invocationId, usnTo.usnHighObjUpdate, usnTo.usnHighPropUpdate, usnTo.usnReserved);
@@ -244,7 +248,8 @@ namespace DSInternals
 				{
 					auto request = CreateReplicateSingleRequest(distinguishedName, partialAttributeSet);
 					auto reply = GetNCChanges(move(request));
-					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues);
+					LoadPrefixTable(reply->PrefixTableSrc, this->_schema->PrefixTable);
+					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues, this->_schema);
 					return objects[0];
 				}
 				catch (DirectoryObjectNotFoundException^)
@@ -273,7 +278,8 @@ namespace DSInternals
 				{
 					auto request = CreateReplicateSingleRequest(objectGuid, partialAttributeSet);
 					auto reply = GetNCChanges(move(request));
-					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues);
+					LoadPrefixTable(reply->PrefixTableSrc, this->_schema->PrefixTable);
+					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues, this->_schema);
 
 					// There should be only one object in the results.
 					return objects[0];
@@ -620,14 +626,14 @@ namespace DSInternals
 			ReplicaAttribute^ DrsConnection::ReadAttribute(const ATTR& attribute)
 			{
 				auto values = ReadValues(attribute.AttrVal);
-				auto managedAttribute = gcnew ReplicaAttribute(attribute.attrTyp, values);
+				auto managedAttribute = gcnew ReplicaAttribute((AttributeType)attribute.attrTyp, values);
 				return managedAttribute;
 			}
 
 			ReplicaAttribute^ DrsConnection::ReadAttribute(const REPLVALINF_V3& attribute)
 			{
 				auto value = ReadValue(attribute.Aval);
-				auto managedAttribute = gcnew ReplicaAttribute(attribute.attrTyp, value);
+				auto managedAttribute = gcnew ReplicaAttribute((AttributeType)attribute.attrTyp, value);
 				return managedAttribute;
 			}
 
@@ -648,16 +654,16 @@ namespace DSInternals
 				return managedAttributes;
 			}
 
-			ReplicaObject^ DrsConnection::ReadObject(const ENTINF& object)
+			ReplicaObject^ DrsConnection::ReadObject(const ENTINF& object, BaseSchema^ schema)
 			{
 				auto attributes = ReadAttributes(object.AttrBlock);
 				auto guid = RpcTypeConverter::ToManaged(object.pName->Guid);
 				auto sid = RpcTypeConverter::ToSid(object.pName);
 				auto dn = RpcTypeConverter::ToString(object.pName);
-				return gcnew ReplicaObject(dn, guid, sid, attributes);
+				return gcnew ReplicaObject(dn, guid, sid, attributes, schema);
 			}
 
-			ReplicaObjectCollection^ DrsConnection::ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount)
+			ReplicaObjectCollection^ DrsConnection::ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount, BaseSchema^ schema)
 			{
 				// Read linked values first
 				// TODO: Handle the case when linked attributes of an object are split between several responses.
@@ -678,7 +684,7 @@ namespace DSInternals
 				auto currentObject = objects;
 				while (currentObject != nullptr)
 				{
-					auto managedObject = ReadObject(currentObject->Entinf);
+					auto managedObject = ReadObject(currentObject->Entinf, schema);
 					managedObject->LoadLinkedValues(linkedValueCollection);
 					managedObjects->Add(managedObject);
 					currentObject = currentObject->pNextEntInf;
@@ -691,7 +697,7 @@ namespace DSInternals
 			{
 				// Retrieve RPC Security Context
 				PSecHandle securityContext = nullptr;
-				RPC_STATUS rpcStatus = I_RpcBindingInqSecurityContext(rpcContext, (void**)& securityContext);
+				RPC_STATUS rpcStatus = I_RpcBindingInqSecurityContext(rpcContext, (void**)&securityContext);
 				if (rpcStatus != RPC_S_OK)
 				{
 					// We could not acquire the security context, so do not continue with session key retrieval
@@ -736,6 +742,17 @@ namespace DSInternals
 				auto stringAccountName = accountName->Value;
 				bool isUPN = stringAccountName->Contains(DrsConnection::UpnSeparator);
 				return isUPN ? DS_NAME_FORMAT::DS_USER_PRINCIPAL_NAME : DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME;
+			}
+
+			void DrsConnection::LoadPrefixTable(SCHEMA_PREFIX_TABLE nativePrefixTable, PrefixTable^ managedPrefixTable)
+			{
+				for (DWORD i = 0; i < nativePrefixTable.PrefixCount; i++)
+				{
+					unsigned long prefixIndex = nativePrefixTable.pPrefixEntry[i].ndx;
+					OID_t nativePrefix = nativePrefixTable.pPrefixEntry[i].prefix;
+					auto managedPrefix = RpcTypeConverter::ToByteArray(nativePrefix);
+					managedPrefixTable->Add(prefixIndex, managedPrefix);
+				}
 			}
 		}
 	}

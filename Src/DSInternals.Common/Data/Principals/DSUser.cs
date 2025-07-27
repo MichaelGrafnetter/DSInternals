@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using DSInternals.Common.Cryptography;
     using DSInternals.Common.Properties;
+    using DSInternals.Common.Schema;
 
     public class DSUser : DSAccount
     {
@@ -312,7 +313,7 @@
             this.Initials = initials;
 
             // EmployeeID:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.EmployeeID, out string employeeID);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.EmployeeId, out string employeeID);
             this.EmployeeID = employeeID;
 
             // EmployeeNumber:
@@ -320,7 +321,7 @@
             this.EmployeeNumber = employeeNumber;
 
             // Email:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.Email, out string email);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.EmailAddress, out string email);
             this.Email = email;
 
             // StreetAddress:

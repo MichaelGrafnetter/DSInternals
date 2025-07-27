@@ -82,7 +82,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Set-ADDBDomainController', 'Get-ADDBSchemaAttribute',
                   'Remove-ADDBObject', 'Get-ADDBAccount', 'Get-BootKey',
                   'Get-ADReplAccount', 'ConvertTo-Hex', 'ConvertTo-KerberosKey',
-                  'ConvertFrom-ADManagedPasswordBlob',
+                  'ConvertFrom-ADManagedPasswordBlob', 'Get-ADReplKdsRootKey',
                   'Get-ADDBBackupKey', 'Get-ADReplBackupKey', 'Save-DPAPIBlob',
                   'Set-ADDBBootKey', 'Test-PasswordQuality', 'Get-ADDBServiceAccount','Get-ADDBBitLockerRecoveryInformation',
                   'Get-ADDBKdsRootKey', 'Get-SamPasswordPolicy', 'Get-ADSIAccount',
@@ -115,8 +115,7 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
 RequiredAssemblies = @('DSInternals.Common.dll')
 
 # List of all files packaged with this module
-FileList = 'AutoMapper.dll',
-           'CBOR.dll',
+FileList = 'CBOR.dll',
            'DSInternals.DataStore.dll',
            'DSInternals.Replication.dll',
            'DSInternals.Replication.Model.dll',

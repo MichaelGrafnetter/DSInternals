@@ -1,39 +1,54 @@
 ﻿namespace DSInternals.DataStore
 {
+    using System;
+    using System.Security;
+    using System.Security.Cryptography;
+    using System.Security.Principal;
     using DSInternals.Common;
     using DSInternals.Common.Cryptography;
     using DSInternals.Common.Data;
     using DSInternals.Common.Exceptions;
     using DSInternals.Common.Properties;
-    using System;
-    using System.Security;
-    using System.Security.Principal;
+    using DSInternals.Common.Schema;
+    using Microsoft.Database.Isam;
 
     public partial class DirectoryAgent : IDisposable
     {
         #region SetAccountPassword
         public bool SetAccountPassword(DistinguishedName dn, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
-            var obj = this.FindObject(dn);
-            return this.SetAccountPassword(obj, dn, newPassword, bootKey, skipMetaUpdate);
+            lock (this.dataTableCursor)
+            {
+                var obj = this.FindObject(dn);
+                return this.SetAccountPassword(obj, dn, newPassword, bootKey, skipMetaUpdate);
+            }
         }
 
         public bool SetAccountPassword(SecurityIdentifier objectSid, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
-            var obj = this.FindObject(objectSid);
-            return this.SetAccountPassword(obj, objectSid, newPassword, bootKey, skipMetaUpdate);
+            lock (this.dataTableCursor)
+            {
+                var obj = this.FindObject(objectSid);
+                return this.SetAccountPassword(obj, objectSid, newPassword, bootKey, skipMetaUpdate);
+            }
         }
 
         public bool SetAccountPassword(string samAccountName, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
-            var obj = this.FindObject(samAccountName);
-            return this.SetAccountPassword(obj, samAccountName, newPassword, bootKey, skipMetaUpdate);
+            lock (this.dataTableCursor)
+            {
+                var obj = this.FindObject(samAccountName);
+                return this.SetAccountPassword(obj, samAccountName, newPassword, bootKey, skipMetaUpdate);
+            }
         }
 
         public bool SetAccountPassword(Guid objectGuid, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
-            var obj = this.FindObject(objectGuid);
-            return this.SetAccountPassword(obj, objectGuid, newPassword, bootKey, skipMetaUpdate);
+            lock (this.dataTableCursor)
+            {
+                var obj = this.FindObject(objectGuid);
+                return this.SetAccountPassword(obj, objectGuid, newPassword, bootKey, skipMetaUpdate);
+            }
         }
 
         protected bool SetAccountPassword(DatastoreObject targetObject, object targetObjectIdentifier, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
@@ -46,7 +61,7 @@
 
             // We need to read sAMAccountName and userPrincipalName to be able to generate the supplementalCredentials.
             string samAccountName;
-            targetObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out samAccountName);
+            targetObject.ReadAttribute(CommonDirectoryAttributes.SamAccountName, out samAccountName);
 
             string userPrincipalName;
             targetObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out userPrincipalName);
@@ -187,6 +202,12 @@
         /// <param name="newBootKey">New boot key using which to encrypt the PEK list.</param>
         public void ChangeBootKey(byte[] oldBootKey, byte[] newBootKey)
         {
+            if (this.context.DomainController.IsADAM)
+            {
+                // Only AD DBs are supported for this operation
+                throw new InvalidOperationException("AD LDS databases are not encrypted using external keys.");
+            }
+
             // Validate
             Validator.AssertLength(oldBootKey, BootKeyRetriever.BootKeyLength, "oldBootKey");
             
@@ -215,15 +236,37 @@
                 var domain = this.FindObject(this.context.DomainController.DomainNamingContextDNT.Value);
                 byte[] encryptedPEK;
                 domain.ReadAttribute(CommonDirectoryAttributes.PEKList, out encryptedPEK);
-                var pekList = new DataStoreSecretDecryptor(encryptedPEK, oldBootKey);
 
-                // Encrypt with the new boot key (if blank, plain encoding is done instead)
-                byte[] binaryPekList = pekList.ToByteArray(newBootKey);
+                try
+                {
+                    // This can throw a cryptographic exception if oldBootKey is invalid.
+                    var pekList = new DataStoreSecretDecryptor(encryptedPEK, oldBootKey);
 
-                // Save the new value
-                this.dataTableCursor.BeginEditForUpdate();
-                bool hasChanged = domain.SetAttribute(CommonDirectoryAttributes.PEKList, binaryPekList);
-                this.CommitAttributeUpdate(domain, CommonDirectoryAttributes.PEKList, transaction, hasChanged, true);
+                    // Encrypt with the new boot key (if blank, plain encoding is done instead)
+                    byte[] binaryPekList = pekList.ToByteArray(newBootKey);
+
+                    // Save the new PEK value
+                    this.dataTableCursor.BeginEditForUpdate();
+                    bool hasChanged = domain.SetAttribute(CommonDirectoryAttributes.PEKList, binaryPekList);
+                    this.CommitAttributeUpdate(domain, CommonDirectoryAttributes.PEKList, transaction, hasChanged, true);
+                }
+                catch (CryptographicException cryptoException)
+                {
+                    // Cancel any changes
+                    transaction.Rollback();
+
+                    try
+                    {
+                        // For the call to be re-entrant, check if the new boot key is the right one.
+                        var pekList = new DataStoreSecretDecryptor(encryptedPEK, newBootKey);
+                        // OK, nothing to change
+                    }
+                    catch (CryptographicException)
+                    {
+                        // Neither oldBootKey nor newBootKey are correct, so throw the original exception.
+                        throw cryptoException;
+                    }
+                }
             }
         }
 
@@ -260,23 +303,39 @@
                 return null;
             }
 
-            // HACK: Save the current cursor position, because it is shared.
-            var originalLocation = this.dataTableCursor.SaveLocation();
-            try
+            // Do not use the shared cursor, which might already be pointing to a different location
+            using (var cursor = this.context.OpenDataTable())
             {
-                int pekListDNT;
+                // We will be searching AD objects by the Distinguished Name Tag (DNT)
+                cursor.CurrentIndex = DirectorySchema.DistinguishedNameTagIndex;
+
+                // Locate the object holding the password encryption key
+                DNTag pekListDNT;
+
                 if (this.context.DomainController.IsADAM)
                 {
                     // This is a AD LDS DB, so the BootKey is stored directly in the DB.
                     // Retrieve the pekList attribute of the root object:
-                    byte[] rootPekList;
-                    var rootObject = this.FindObject(ADConstants.RootDNTag);
-                    rootObject.ReadAttribute(CommonDirectoryAttributes.PEKList, out rootPekList);
+                    bool rootObjectFound = cursor.GotoKey(Key.Compose(DNTag.RootObject));
+
+                    if (!rootObjectFound)
+                    {
+                        throw new DirectoryObjectNotFoundException(DNTag.RootObject);
+                    }
+
+                    var rootObject = new DatastoreObject(cursor, this.context);
+                    rootObject.ReadAttribute(CommonDirectoryAttributes.PEKList, out byte[] rootPekList);
 
                     // Retrieve the pekList attribute of the schema object:
-                    byte[] schemaPekList;
-                    var schemaObject = this.FindObject(this.context.DomainController.SchemaNamingContextDNT);
-                    schemaObject.ReadAttribute(CommonDirectoryAttributes.PEKList, out schemaPekList);
+                    bool schemaNamingContextFound = cursor.GotoKey(Key.Compose(this.context.DomainController.SchemaNamingContextDNT));
+
+                    if (!schemaNamingContextFound)
+                    {
+                        throw new DirectoryObjectNotFoundException(this.context.DomainController.SchemaNamingContextDNT);
+                    }
+
+                    var schemaObject = new DatastoreObject(cursor, this.context);
+                    schemaObject.ReadAttribute(CommonDirectoryAttributes.PEKList, out byte[] schemaPekList);
 
                     // Combine these things together into the BootKey/SysKey
                     bootKey = BootKeyRetriever.GetBootKey(rootPekList, schemaPekList);
@@ -291,14 +350,16 @@
                 }
 
                 // Load the PEK List attribute from the holding object and decrypt it using Boot Key.
-                var pekListHolder = this.FindObject(pekListDNT);
-                byte[] encryptedPEK;
-                pekListHolder.ReadAttribute(CommonDirectoryAttributes.PEKList, out encryptedPEK);
+                bool pekListHolderFound = cursor.GotoKey(Key.Compose(pekListDNT));
+
+                if (!pekListHolderFound)
+                {
+                    throw new DirectoryObjectNotFoundException(pekListDNT);
+                }
+
+                var pekListHolder = new DatastoreObject(cursor, this.context);
+                pekListHolder.ReadAttribute(CommonDirectoryAttributes.PEKList, out byte[] encryptedPEK);
                 return new DataStoreSecretDecryptor(encryptedPEK, bootKey);
-            }
-            finally
-            {
-                this.dataTableCursor.RestoreLocation(originalLocation);
             }
         }
         #endregion BootKey

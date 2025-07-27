@@ -16,9 +16,9 @@ namespace DSInternals.DataStore
         private const int ShowInABArrayRebuildOffset = 5;
         private const int UpdateNCTypeRequiredOffset = 6;
         private const int LinkQuotaUSNOffset = 7;
-        private const int oldStructureSize = 200;
-        private const int newStructureSize = 192;
-        private const int DatabaseGUIDOffset = newStructureSize - 16;
+        private const int OldStructureSize = 200;
+        private const int NewStructureSize = 192;
+        private const int DatabaseGUIDOffset = NewStructureSize - 16;
 
         private byte[] binaryFlags;
 

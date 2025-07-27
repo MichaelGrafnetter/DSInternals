@@ -1,16 +1,26 @@
 ﻿using System;
 using DSInternals.Common.Data;
 using System.Collections.Generic;
+using DSInternals.Common.Schema;
 
 namespace DSInternals.DataStore
 {
     public partial class DirectoryAgent : IDisposable
     {
         private const string RootHintsZoneName = "RootDNSServers";
+        private const string TrustAnchorsZoneName = "..TrustAnchors";
 
-        public IEnumerable<DnsResourceRecord> GetDnsRecords(bool skipRootHints = true, bool skipTombstoned = true)
+        public IEnumerable<DnsResourceRecord> GetDnsRecords(bool skipRootHints = true, bool skipTombstoned = true, bool skipTrustAnchors = true)
         {
-            foreach (var node in this.FindObjectsByCategory(CommonDirectoryClasses.DnsNode))
+            DNTag? dnsNodeCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsNode);
+
+            if (!dnsNodeCategory.HasValue)
+            {
+                // This must be some initial AD schema or ADAM schema, which does not support DNS records.
+                yield break;
+            }
+
+            foreach (var node in this.FindObjectsByCategory(dnsNodeCategory.Value))
             {
                 if (skipTombstoned)
                 {
@@ -30,13 +40,14 @@ namespace DSInternals.DataStore
                     continue;
                 }
 
-                node.ReadAttribute(CommonDirectoryAttributes.DNTag, out DistinguishedName dn);
+                string dn = node.DistinguishedName;
+                var parsedDN = new DistinguishedName(dn);
 
                 // Record host name is the first RDN in the node distinguished name.
-                string name = dn.Components[0].Value;
+                string name = parsedDN.Components[0].Value;
 
                 // Parent DNS zone is the second RDN in the node distinguished name.
-                string zone = dn.Components[1].Value;
+                string zone = parsedDN.Components[1].Value;
 
                 foreach (var binaryRecord in records)
                 {
@@ -48,6 +59,12 @@ namespace DSInternals.DataStore
                         continue;
                     }
 
+                    if (record.Zone == TrustAnchorsZoneName && skipTrustAnchors)
+                    {
+                        // Skip DNSSEC trust anchors
+                        continue;
+                    }
+
                     yield return record;
                 }
             }
@@ -55,11 +72,19 @@ namespace DSInternals.DataStore
 
         public IEnumerable<string> GetDnsZone()
         {
-            foreach (var zone in this.FindObjectsByCategory(CommonDirectoryClasses.DnsZone))
+            DNTag? dnsZoneCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsZone);
+
+            if (!dnsZoneCategory.HasValue)
+            {
+                // This must be some initial AD schema or ADAM schema, which does not support DNS records.
+                yield break;
+            }
+
+            foreach (var zone in this.FindObjectsByCategory(dnsZoneCategory.Value))
             {
                 zone.ReadAttribute(CommonDirectoryAttributes.DomainComponent, out string fqdn);
 
-                if (fqdn != RootHintsZoneName)
+                if (fqdn != RootHintsZoneName && fqdn != TrustAnchorsZoneName)
                 {
                     yield return fqdn;
                 }

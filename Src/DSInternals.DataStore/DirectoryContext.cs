@@ -132,7 +132,7 @@
                 this.session.AttachDatabase(this.DSADatabaseFile);
                 this.isDBAttached = true;
                 this.database = this.session.OpenDatabase(this.DSADatabaseFile);
-                this.Schema = new DirectorySchema(this.database);
+                this.Schema = DirectorySchema.Create(this.database);
                 this.SecurityDescriptorRersolver = new SecurityDescriptorRersolver(this.database);
                 this.DistinguishedNameResolver = new DistinguishedNameResolver(this.database, this.Schema);
                 this.LinkResolver = new LinkResolver(this.database, this.Schema);
@@ -255,22 +255,10 @@
                 return;
             }
 
-            if(this.LinkResolver != null)
-            {
-                this.LinkResolver.Dispose();
-                this.LinkResolver = null;
-            }
-
             if (this.SecurityDescriptorRersolver != null)
             {
                 this.SecurityDescriptorRersolver.Dispose();
                 this.SecurityDescriptorRersolver = null;
-            }
-
-            if (this.DistinguishedNameResolver != null)
-            {
-                this.DistinguishedNameResolver.Dispose();
-                this.DistinguishedNameResolver = null;
             }
 
             if (this.DomainController != null)

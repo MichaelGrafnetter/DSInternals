@@ -5,6 +5,7 @@
     using System.Linq;
     using DSInternals.Common;
     using DSInternals.Common.Data;
+    using DSInternals.Common.Schema;
 
     public partial class DirectoryAgent : IDisposable
     {
@@ -14,7 +15,15 @@
             Validator.AssertNotNull(bootKey, "bootKey");
             var pek = this.GetSecretDecryptor(bootKey);
 
-            foreach (var secret in this.FindObjectsByCategory(CommonDirectoryClasses.Secret))
+            DNTag? secretObjectCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.Secret);
+
+            if (!secretObjectCategory.HasValue)
+            {
+                // The schema does not even support secrets
+                yield break;
+            }
+
+            foreach (var secret in this.FindObjectsByCategory(secretObjectCategory.Value))
             {
                 // RODCs and partial replicas on GCs do not contain secrets
                 if (secret.IsWritable)
@@ -29,12 +38,12 @@
         public IEnumerable<GroupManagedServiceAccount> GetGroupManagedServiceAccounts(DateTime effectiveTime)
         {
             // Support for gMSAs has been added in Windows Server 2012
-            bool gMSASupported = this.context.Schema.ContainsClass(CommonDirectoryClasses.GroupManagedServiceAccount);
+            DNTag? gMSAcategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.GroupManagedServiceAccount);
 
             // Support for dMSAs has been added in Windows Server 2025
-            bool dMSASupported = this.context.Schema.ContainsClass(CommonDirectoryClasses.DelegatedManagedServiceAccount);
+            DNTag? dMSAcategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DelegatedManagedServiceAccount);
 
-            if (!gMSASupported)
+            if (!gMSAcategory.HasValue)
             {
                 // The AD schema does not support gMSAs, on which dMSAs depend as well.
                 yield break;
@@ -43,12 +52,12 @@
             var rootKeyResolver = new KdsRootKeyCache(new DatastoreRootKeyResolver(this.context), preloadCache: true);
             KdsRootKey? latestRootKey = rootKeyResolver.GetKdsRootKey(effectiveTime);
 
-            var gmsaObjects = this.FindObjectsByCategory(CommonDirectoryClasses.GroupManagedServiceAccount);
+            var gmsaObjects = this.FindObjectsByCategory(gMSAcategory.Value);
 
-            if (dMSASupported)
+            if (dMSAcategory.HasValue)
             {
                 // dMSAs are an extension of gMSAs, so we can treat them the same.
-                var dmsaObjects = this.FindObjectsByCategory(CommonDirectoryClasses.DelegatedManagedServiceAccount);
+                var dmsaObjects = this.FindObjectsByCategory(dMSAcategory.Value);
                 gmsaObjects = gmsaObjects.Concat(dmsaObjects);
             }
 

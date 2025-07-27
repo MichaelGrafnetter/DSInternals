@@ -5,6 +5,7 @@
     using System.Security.Principal;
     using DSInternals.Common.Cryptography;
     using DSInternals.Common.Properties;
+    using DSInternals.Common.Schema;
 
     public class DSAccount
     {
@@ -336,7 +337,7 @@
         protected void LoadAccountInfo(DirectoryObject dsObject, string netBIOSDomainName, AccountPropertySets propertySets)
         {
             // SamAccountName:
-            dsObject.ReadAttribute(CommonDirectoryAttributes.SAMAccountName, out string samAccountName);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.SamAccountName, out string samAccountName);
             this.SamAccountName = samAccountName;
 
             // LogonName (DOMAIN\SamAccountName):
@@ -392,7 +393,7 @@
             if(propertySets.HasFlag(AccountPropertySets.GenericAccountInfo))
             {
                 // SidHistory:
-                dsObject.ReadAttribute(CommonDirectoryAttributes.SIDHistory, out SecurityIdentifier[] sidHistory);
+                dsObject.ReadAttribute(CommonDirectoryAttributes.SidHistory, out SecurityIdentifier[] sidHistory);
                 this.SidHistory = sidHistory;
 
                 // UPN:

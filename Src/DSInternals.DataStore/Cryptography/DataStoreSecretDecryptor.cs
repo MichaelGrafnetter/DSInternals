@@ -68,6 +68,7 @@ namespace DSInternals.DataStore
             private set;
         }
 
+        /// <exception cref="System.Security.Cryptography.CryptographicException" />When the decryption fails for whatever reason.</exception>
         public DataStoreSecretDecryptor(byte[] encryptedPEKListBlob, byte[] bootKey)
         {
             try
@@ -80,8 +81,7 @@ namespace DSInternals.DataStore
             }
             catch(Exception originalException)
             {
-                // TODO: Extract as resource
-                var newException = new FormatException("Could not decrypt or parse the PEK list.", originalException);
+                var newException = new CryptographicException("Could not decrypt or parse the PEK list.", originalException);
                 newException.Data.Add(nameof(encryptedPEKListBlob), encryptedPEKListBlob.ToHex());
                 newException.Data.Add(nameof(bootKey), bootKey.ToHex());
                 throw newException;

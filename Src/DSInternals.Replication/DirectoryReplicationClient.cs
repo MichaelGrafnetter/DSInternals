@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Principal;
 using DSInternals.Common;
@@ -8,6 +9,7 @@ using DSInternals.Common.Data;
 using DSInternals.Common.Exceptions;
 using DSInternals.Common.Interop;
 using DSInternals.Common.Properties;
+using DSInternals.Common.Schema;
 using DSInternals.Replication.Interop;
 using DSInternals.Replication.Model;
 using NDceRpc;
@@ -16,13 +18,14 @@ using NDceRpc.Native;
 
 namespace DSInternals.Replication
 {
-    public class DirectoryReplicationClient : IDisposable
+    public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     {
         /// <summary>
         /// Service principal name (SPN) of the destination server.
         /// </summary>
         private const string ServicePrincipalNameFormat = "ldap/{0}";
         private const string DrsNamedPipeName = @"\pipe\lsass";
+        private const string ConfigurationNamingContextPrefix = "CN=Configuration,DC=";
 
         /// <summary>
         /// Identifier of Windows Server 2000 dcpromo.
@@ -39,23 +42,25 @@ namespace DSInternals.Replication
         /// </summary>
         private static readonly Guid NtdsApiClientGuid = new Guid("e24d201a-4fd6-11d1-a3da-0000f875ae0d");
 
-        private NativeClient rpcConnection;
-        private DrsConnection drsConnection;
-        private NamedPipeConnection npConnection;
-        private string domainNamingContext;
-        private string netBIOSDomainName;
+        private NativeClient _rpcConnection;
+        private DrsConnection _drsConnection;
+        private NamedPipeConnection _npConnection;
+        private IKdsRootKeyResolver _rootKeyResolver;
+        private string _domainNamingContext;
+        private string _netBIOSDomainName;
+        private string[] _namingContexts;
 
         public string DomainNamingContext
         {
             get
             {
-                if (this.domainNamingContext == null)
+                if (_domainNamingContext == null)
                 {
                     // Lazy loading
                     this.LoadDomainInfo();
                 }
 
-                return this.domainNamingContext;
+                return _domainNamingContext;
             }
         }
 
@@ -63,27 +68,54 @@ namespace DSInternals.Replication
         {
             get
             {
-                if (this.netBIOSDomainName == null)
+                if (_netBIOSDomainName == null)
                 {
                     // Lazy loading
                     this.LoadDomainInfo();
                 }
 
-                return this.netBIOSDomainName;
+                return _netBIOSDomainName;
             }
         }
 
-        public DirectoryReplicationClient(string server, RpcProtocol protocol, NetworkCredential credential = null)
+        public string[] NamingContexts
+        {
+            get
+            {
+                if (_namingContexts == null)
+                {
+                    // Lazy loading
+                    _namingContexts = this._drsConnection.ListNamingContexts();
+                }
+
+                return _namingContexts;
+            }
+        }
+
+        public string ConfigurationNamingContext
+        {
+            get
+            {
+                // TODO: It would be more elegant to load the ConfigNC based on its GUID.
+                return this.NamingContexts.
+                    Where(context => context.StartsWith(ConfigurationNamingContextPrefix, StringComparison.InvariantCultureIgnoreCase)).
+                    First();
+            }
+        }
+
+        public DirectoryReplicationClient(string server, RpcProtocol protocol = RpcProtocol.TCP, NetworkCredential credential = null)
         {
             Validator.AssertNotNullOrWhiteSpace(server, nameof(server));
+            var schema = BaseSchema.Create();
             this.CreateRpcConnection(server, protocol, credential);
-            this.drsConnection = new DrsConnection(this.rpcConnection.Binding, NtdsApiClientGuid);
+            this._drsConnection = new DrsConnection(this._rpcConnection.Binding, NtdsApiClientGuid, schema);
+            this._rootKeyResolver = new KdsRootKeyCache(this);
         }
 
         public ReplicationCursor[] GetReplicationCursors(string namingContext)
         {
             Validator.AssertNotNullOrWhiteSpace(namingContext, nameof(namingContext));
-            return this.drsConnection.GetReplicationCursors(namingContext);
+            return this._drsConnection.GetReplicationCursors(namingContext);
         }
 
         public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
@@ -99,8 +131,6 @@ namespace DSInternals.Replication
 
             propertySets = SkipUnsupportedProperties(propertySets);
 
-            // Create AD schema
-            var schema = BasicSchemaFactory.CreateSchema();
             var currentCookie = initialCookie;
             ReplicationResult result;
             int processedObjectCount = 0;
@@ -108,7 +138,7 @@ namespace DSInternals.Replication
             do
             {
                 // Perform one replication cycle
-                result = this.drsConnection.ReplicateAllObjects(currentCookie);
+                result = this._drsConnection.ReplicateAllObjects(currentCookie);
 
                 // Report replication progress
                 if (progressReporter != null)
@@ -120,9 +150,7 @@ namespace DSInternals.Replication
                 // Process the returned objects
                 foreach (var obj in result.Objects)
                 {
-                    obj.Schema = schema;
-                    // TODO: Add support for retrieving KDS Roos Keys through replication
-                    var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, rootKeyResolver: null, propertySets);
+                    var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets);
 
                     if (account != null)
                     {
@@ -140,11 +168,8 @@ namespace DSInternals.Replication
         {
             propertySets = SkipUnsupportedProperties(propertySets);
 
-            var obj = this.drsConnection.ReplicateSingleObject(objectGuid);
-            var schema = BasicSchemaFactory.CreateSchema();
-            obj.Schema = schema;
-            // TODO: Add support for KDS Root Keys
-            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, rootKeyResolver: null, propertySets);
+            var obj = this._drsConnection.ReplicateSingleObject(objectGuid);
+            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets);
 
             if (account == null)
             {
@@ -159,11 +184,8 @@ namespace DSInternals.Replication
         {
             propertySets = SkipUnsupportedProperties(propertySets);
 
-            var obj = this.drsConnection.ReplicateSingleObject(distinguishedName);
-            var schema = BasicSchemaFactory.CreateSchema();
-            obj.Schema = schema;
-            // TODO: Add support for KDS Root Keys
-            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, rootKeyResolver: null, propertySets);
+            var obj = this._drsConnection.ReplicateSingleObject(distinguishedName);
+            var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets);
 
             if (account == null)
             {
@@ -176,75 +198,72 @@ namespace DSInternals.Replication
 
         public DSAccount GetAccount(NTAccount accountName, AccountPropertySets propertySets = AccountPropertySets.All)
         {
-            Guid objectGuid = this.drsConnection.ResolveGuid(accountName);
+            Guid objectGuid = this._drsConnection.ResolveGuid(accountName);
             return this.GetAccount(objectGuid, propertySets);
         }
 
         public DSAccount GetAccount(SecurityIdentifier sid, AccountPropertySets propertySets = AccountPropertySets.All)
         {
-            Guid objectGuid = this.drsConnection.ResolveGuid(sid);
+            Guid objectGuid = this._drsConnection.ResolveGuid(sid);
             return this.GetAccount(objectGuid, propertySets);
         }
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(string domainNamingContext)
         {
-            // TODO: Move schema from constructor to property?
             // TODO: Split this function into RSA and Legacy Part so that exception in one of them does not crash the whole process
-            var schema = BasicSchemaFactory.CreateSchema();
 
             // Fetch the legacy pointer first, because there is a higher chance that it is present than the RSA one.
             string legacyPointerDN = DPAPIBackupKey.GetPreferredLegacyKeyPointerDN(domainNamingContext);
-            var legacyPointer = this.GetLSASecret(legacyPointerDN, schema);
+            var legacyPointer = this.GetLSASecret(legacyPointerDN);
             yield return legacyPointer;
 
             string legacyKeyDN = DPAPIBackupKey.GetKeyDN(legacyPointer.KeyId, domainNamingContext);
-            var legacyKey = this.GetLSASecret(legacyKeyDN, schema);
+            var legacyKey = this.GetLSASecret(legacyKeyDN);
             yield return legacyKey;
 
             string rsaPointerDN = DPAPIBackupKey.GetPreferredRSAKeyPointerDN(domainNamingContext);
-            var rsaPointer = this.GetLSASecret(rsaPointerDN, schema);
+            var rsaPointer = this.GetLSASecret(rsaPointerDN);
             yield return rsaPointer;
 
             string rsaKeyDN = DPAPIBackupKey.GetKeyDN(rsaPointer.KeyId, domainNamingContext);
-            var rsaKey = this.GetLSASecret(rsaKeyDN, schema);
+            var rsaKey = this.GetLSASecret(rsaKeyDN);
             yield return rsaKey;
         }
 
-        private DPAPIBackupKey GetLSASecret(string distinguishedName, BasicSchema schema)
+        private DPAPIBackupKey GetLSASecret(string distinguishedName)
         {
-            var secretObj = this.drsConnection.ReplicateSingleObject(distinguishedName);
-            secretObj.Schema = schema;
+            var secretObj = this._drsConnection.ReplicateSingleObject(distinguishedName);
             return new DPAPIBackupKey(secretObj, this.SecretDecryptor);
         }
 
         public void WriteNgcKey(Guid objectGuid, byte[] publicKey)
         {
-            string distinguishedName = this.drsConnection.ResolveDistinguishedName(objectGuid);
+            string distinguishedName = this._drsConnection.ResolveDistinguishedName(objectGuid);
             this.WriteNgcKey(distinguishedName, publicKey);
         }
 
         public void WriteNgcKey(NTAccount accountName, byte[] publicKey)
         {
-            string distinguishedName = this.drsConnection.ResolveDistinguishedName(accountName);
+            string distinguishedName = this._drsConnection.ResolveDistinguishedName(accountName);
             this.WriteNgcKey(distinguishedName, publicKey);
         }
 
         public void WriteNgcKey(SecurityIdentifier sid, byte[] publicKey)
         {
-            string distinguishedName = this.drsConnection.ResolveDistinguishedName(sid);
+            string distinguishedName = this._drsConnection.ResolveDistinguishedName(sid);
             this.WriteNgcKey(distinguishedName, publicKey);
         }
 
         public void WriteNgcKey(string accountDN, byte[] publicKey)
         {
-            this.drsConnection.WriteNgcKey(accountDN, publicKey);
+            this._drsConnection.WriteNgcKey(accountDN, publicKey);
         }
 
         private DirectorySecretDecryptor SecretDecryptor
         {
             get
             {
-                return new ReplicationSecretDecryptor(this.drsConnection.SessionKey);
+                return new ReplicationSecretDecryptor(this._drsConnection.SessionKey);
             }
         }
 
@@ -261,18 +280,18 @@ namespace DSInternals.Replication
                     if (credential != null)
                     {
                         // Connect named pipe
-                        this.npConnection = new NamedPipeConnection(server, credential);
+                        this._npConnection = new NamedPipeConnection(server, credential);
                     }
                     break;
                 default:
                     // TODO: Extract as string
                     throw new NotImplementedException("The requested RPC protocol is not supported.");
             }
-            this.rpcConnection = new NativeClient(binding);
+            this._rpcConnection = new NativeClient(binding);
 
             NetworkCredential rpcCredential = credential ?? Client.Self;
             string spn = String.Format(ServicePrincipalNameFormat, server);
-            this.rpcConnection.AuthenticateAs(spn, rpcCredential, RPC_C_AUTHN_LEVEL.RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN.RPC_C_AUTHN_GSS_NEGOTIATE);
+            this._rpcConnection.AuthenticateAs(spn, rpcCredential, RPC_C_AUTHN_LEVEL.RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN.RPC_C_AUTHN_GSS_NEGOTIATE);
         }
 
         public void Dispose()
@@ -288,22 +307,22 @@ namespace DSInternals.Replication
                 return;
             }
 
-            if (this.drsConnection != null)
+            if (this._drsConnection != null)
             {
-                this.drsConnection.Dispose();
-                this.drsConnection = null;
+                this._drsConnection.Dispose();
+                this._drsConnection = null;
             }
 
-            if (this.rpcConnection != null)
+            if (this._rpcConnection != null)
             {
-                this.rpcConnection.Dispose();
-                this.rpcConnection = null;
+                this._rpcConnection.Dispose();
+                this._rpcConnection = null;
             }
 
-            if (this.npConnection != null)
+            if (this._npConnection != null)
             {
-                this.npConnection.Dispose();
-                this.npConnection = null;
+                this._npConnection.Dispose();
+                this._npConnection = null;
             }
         }
 
@@ -312,21 +331,21 @@ namespace DSInternals.Replication
             // These is no direct way of retrieving current DC's domain info, so we are using a combination of 3 calls.
 
             // We first retrieve FSMO roles. The PDC emulator lies in the same domain as the current server.
-            var fsmoRoles = this.drsConnection.ListRoles();
+            var fsmoRoles = _drsConnection.ListRoles();
 
             // We need the DC object of the PDC Emulator. It is the parent of the NTDS Settings object.
             string pdcEmulator = new DistinguishedName(fsmoRoles.PdcEmulator).Parent.ToString();
 
             // Get the PDC account object from the domain partition.
-            var pdcInfo = this.drsConnection.ListInfoForServer(pdcEmulator);
+            var pdcInfo = _drsConnection.ListInfoForServer(pdcEmulator);
             string pdcAccountDN = pdcInfo.ServerReference;
 
             // Get the PDC Emulator's domain naming context.
-            this.domainNamingContext = new DistinguishedName(pdcAccountDN).RootNamingContext.ToString();
+            _domainNamingContext = new DistinguishedName(pdcAccountDN).RootNamingContext.ToString();
 
             // Get the PDC Emulator's NetBIOS account name and extract the domain part.
-            NTAccount pdcAccount = this.drsConnection.ResolveAccountName(pdcAccountDN);
-            this.netBIOSDomainName = pdcAccount.NetBIOSDomainName();
+            NTAccount pdcAccount = _drsConnection.ResolveAccountName(pdcAccountDN);
+            _netBIOSDomainName = pdcAccount.NetBIOSDomainName();
         }
 
         private static AccountPropertySets SkipUnsupportedProperties(AccountPropertySets propertySets)
@@ -335,10 +354,35 @@ namespace DSInternals.Replication
             propertySets &= ~AccountPropertySets.ManagedBy;
             propertySets &= ~AccountPropertySets.Manager;
 
-            // TODO: LAPS-related attribute schema loading is not yet implemented.
-            propertySets &= ~AccountPropertySets.LAPS;
-
             return propertySets;
         }
+
+        #region IKdsRootKeyResolver
+        public KdsRootKey? GetKdsRootKey(Guid rootKeyId)
+        {
+            // Derive the full path to the object
+            // Example: CN=4dd60361-9394-492a-b11d-51a955f02b06,CN=Master Root Keys,CN=Group Key Distribution Service,CN=Services,CN=Configuration,DC=contoso,DC=com
+            string rootKeyDN = KdsRootKey.GetDistinguishedName(rootKeyId, this.ConfigurationNamingContext);
+
+            try
+            {
+                var rootKeyObject = _drsConnection.ReplicateSingleObject(rootKeyDN);
+                return new KdsRootKey(rootKeyObject);
+            }
+            catch (DirectoryObjectNotFoundException)
+            {
+                // Suppress the exception.
+                return null;
+            }
+        }
+
+        bool IKdsRootKeyResolver.SupportsLookupAll => false;
+        bool IKdsRootKeyResolver.SupportsLookupByEffectiveTime => false;
+
+        KdsRootKey? IKdsRootKeyResolver.GetKdsRootKey(DateTime effectiveTime) => throw new NotSupportedException("Search by effective time is not supported by the MS-DRSR protocol.");
+
+        IEnumerable<KdsRootKey> IKdsRootKeyResolver.GetKdsRootKeys() => throw new NotSupportedException("Search by class type is not supported by the MS-DRSR protocol.");
+
+        #endregion IKdsRootKeyResolver
     }
 }
