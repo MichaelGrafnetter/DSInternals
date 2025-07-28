@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Management.Automation;
 using DSInternals.Common.Data;
-using DSInternals.Common.Exceptions;
 
 namespace DSInternals.PowerShell.Commands
 {
@@ -17,18 +16,17 @@ namespace DSInternals.PowerShell.Commands
         {
             base.ProcessRecord();
 
-            // Try to fetch the object
-            var rootKey = this.ReplicationClient.GetKdsRootKey(this.RootKeyId);
-
-            if (rootKey != null)
+            try
             {
+                // Try to fetch the object
+                var rootKey = this.ReplicationClient.GetKdsRootKey(this.RootKeyId, suppressNotFoundException: false);
                 this.WriteObject(rootKey);
             }
-            else
+            catch (Exception ex)
             {
-                // KDS Root Key not found
-                var exception = new DirectoryObjectNotFoundException(this.RootKeyId);
-                var error = new ErrorRecord(exception, "Replication_KdsRootKeyIdNotFound", ErrorCategory.ObjectNotFound, this.RootKeyId);
+                // This typically means that the object has not been found or that the user does not have sufficient permissions.
+                // TODO: Differentiate between exception types.
+                var error = new ErrorRecord(ex, "Replication_KdsRootKeyIdNotFound", ErrorCategory.ObjectNotFound, this.RootKeyId);
                 this.WriteError(error);
             }
         }

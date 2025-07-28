@@ -15,6 +15,7 @@ namespace DSInternals.Common.Schema
 
     public class PrefixTable
     {
+        public const int LastBuitlInPrefixIndex = 38;
         private const int MinBlobLength = 2 * sizeof(uint);
         private const long LongLimit = (long.MaxValue >> 7) - 0x7f;
         private const string AttributeSyntaxOidFormat = "2.5.5.{0}";
@@ -25,7 +26,7 @@ namespace DSInternals.Common.Schema
         public PrefixTable(byte[] blob = null)
         {
             _forwardMap = new SortedDictionary<PrefixIndex, string>();
-            _reverseMap = new SortedDictionary<string, PrefixIndex>();
+            _reverseMap = new SortedDictionary<string, PrefixIndex>(StringComparer.Ordinal);
 
             // Add hardcoded prefixes
             this.AddBuiltinPrefixes();
@@ -92,7 +93,7 @@ namespace DSInternals.Common.Schema
                 throw new ArgumentOutOfRangeException("The input is not an OID string.", nameof(oid));
             }
 
-            string prefix = oid.Substring(0, separatorIndex - 1);
+            string prefix = oid.Substring(0, separatorIndex);
 
             // Search the prefix table
             bool found = _reverseMap.TryGetValue(prefix, out PrefixIndex upperWord);
@@ -227,8 +228,8 @@ namespace DSInternals.Common.Schema
             this.Add(3, "1.2.840.113556.1.3"); // 0x2A864886F7140103
             this.Add(4, "2.16.840.1.101.2.2.1"); // 0x6086480165020201
             this.Add(5, "2.16.840.1.101.2.2.3"); // 0x6086480165020203
-            this.Add(6, "2.16.840.1.101.2.2.5"); // 0x6086480165020105
-            this.Add(7, "2.16.840.1.101.2.2.4"); // 0x6086480165020104
+            this.Add(6, "2.16.840.1.101.2.1.5"); // 0x6086480165020105
+            this.Add(7, "2.16.840.1.101.2.1.4"); // 0x6086480165020104
             this.Add(8, "2.5.5"); // 0x5505
             this.Add(9, "1.2.840.113556.1.4"); // 0x2A864886F7140104
             this.Add(10, "1.2.840.113556.1.5"); // 0x2A864886F7140105
@@ -239,10 +240,10 @@ namespace DSInternals.Common.Schema
             this.Add(15, "1.2.840.113556.1.4.263"); // 0x2A864886F71401048207
             this.Add(16, "1.2.840.113556.1.5.58"); // 0x2A864886F71401053A
             this.Add(17, "1.2.840.113556.1.5.73"); // 0x2A864886F714010549
-            this.Add(18, " 1.2.840.113556.1.4.305"); // 0x2A864886F71401048231
+            this.Add(18, "1.2.840.113556.1.4.305"); // 0x2A864886F71401048231
             this.Add(19, "0.9.2342.19200300.100"); // 0x0992268993F22C64
             this.Add(20, "2.16.840.1.113730.3"); // 0x6086480186F84203
-            this.Add(21, "0.9.234219200300.100.1"); // 0x0992268993F22C6401
+            this.Add(21, "0.9.2342.19200300.100.1"); // 0x0992268993F22C6401
             this.Add(22, "2.16.840.1.113730.3.1"); // 0x6086480186F8420301
             this.Add(23, "1.2.840.113556.1.5.7000"); // 0x2A864886F7140105B658
             this.Add(24, "2.5.21"); // 0x5515

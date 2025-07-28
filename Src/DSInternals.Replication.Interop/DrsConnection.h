@@ -111,7 +111,7 @@ namespace DSInternals
 				static ReplicaObject^ ReadObject(const ENTINF& object, BaseSchema^ schema);
 				static ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount, BaseSchema^ schema);
 				static DS_NAME_FORMAT GetAccountNameFormat(NTAccount^ accountName);
-				static void LoadPrefixTable(SCHEMA_PREFIX_TABLE nativePrefixTable, PrefixTable^ managedPrefixTable);
+				static void LoadPrefixTable(SCHEMA_PREFIX_TABLE nativePrefixTable, BaseSchema^ schema);
 			};
 		}
 	}

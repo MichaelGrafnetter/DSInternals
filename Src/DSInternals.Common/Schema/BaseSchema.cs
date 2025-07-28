@@ -10,8 +10,6 @@ namespace DSInternals.Common.Schema
         private IDictionary<string, AttributeSchema> _attributesByName;
         private IDictionary<AttributeType, AttributeSchema> _attributesById;
 
-        public PrefixTable PrefixTable => _prefixTable;
-
         public BaseSchema()
         {
             _attributesByName = new Dictionary<string, AttributeSchema>(InitialDictionaryCapacity, StringComparer.InvariantCultureIgnoreCase);
@@ -55,12 +53,23 @@ namespace DSInternals.Common.Schema
         public void LoadPrefixTable(byte[] blob)
         {
             _prefixTable.LoadFromBlob(blob);
+
+            // After extending the prefix table, we can add attributes that use non-default prefixes.
+            AddNonDefaultAttributes();
+        }
+
+        public void AddPrefix(ushort index, byte[] oidPrefix)
+        {
+            _prefixTable.Add(index, oidPrefix);
+
+            // After extending the prefix table, we can add attributes that use non-default prefixes.
+            AddNonDefaultAttributes();
         }
 
         /// <summary>
         /// Adds attributes with non-default prefixes to the schema.
         /// </summary>
-        public void AddNonDefaultAttributes()
+        private void AddNonDefaultAttributes()
         {
             // Legacy LAPS
             AttributeType? lapsPasswordId = _prefixTable.TranslateToAttributeType(CommonDirectoryAttributes.LAPSPasswordOid);
@@ -82,7 +91,7 @@ namespace DSInternals.Common.Schema
             }
 
             // Windows LAPS
-            AttributeType? windowsLapsPasswordId = (AttributeType?)_prefixTable.Translate(CommonDirectoryAttributes.WindowsLapsPasswordOid);
+            AttributeType? windowsLapsPasswordId = _prefixTable.TranslateToAttributeType(CommonDirectoryAttributes.WindowsLapsPasswordOid);
 
             if (windowsLapsPasswordId.HasValue)
             {
@@ -128,7 +137,7 @@ namespace DSInternals.Common.Schema
         public static BaseSchema Create()
         {
             var schema = new BaseSchema();
-            var prefixTable = schema.PrefixTable;
+            var prefixTable = schema._prefixTable;
 
             // Schema
             schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.CommonName, prefixTable));
@@ -226,6 +235,19 @@ namespace DSInternals.Common.Schema
             schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.OperatingSystemHotfix, prefixTable));
             schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.OperatingSystemServicePack, prefixTable));
             schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.DnsHostName, prefixTable));
+
+            // KDS Root Keys
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsVersion, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsDomainController, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsRootKeyData, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsCreationTime, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsEffectiveTime, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsKdfAlgorithmId, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsKdfParameters, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsSecretAgreementAlgorithmId, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsSecretAgreementParameters, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsSecretAgreementPrivateKeyLength, prefixTable));
+            schema.AddAttribute(AttributeSchema.Create(CommonDirectoryAttributes.KdsSecretAgreementPublicKeyLength, prefixTable));
 
             return schema;
         }

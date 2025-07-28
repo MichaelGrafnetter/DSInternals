@@ -144,8 +144,10 @@ namespace DSInternals.Common.Data
 
         public KdsRootKey(DirectoryObject dsObject)
         {
-            // Parameter validation
-            Validator.AssertNotNull(dsObject, "dsObject");
+            if (dsObject == null)
+            {
+                throw new ArgumentNullException(nameof(dsObject));
+            }    
             // TODO: Validate object type
 
             // Key format version
@@ -173,7 +175,13 @@ namespace DSInternals.Common.Data
             this.EffectiveTime = effectiveTime;
 
             // Guid
-            dsObject.ReadAttribute(CommonDirectoryAttributes.CommonName, out string cn);
+            dsObject.ReadAttribute(CommonDirectoryAttributes.RDN, out string cn);
+
+            if (cn == null)
+            {
+                throw new ArgumentException("Could not read the root key common name.", nameof(dsObject));    
+            }
+
             this.KeyId = Guid.Parse(cn);
 
             // KDF algorithm

@@ -226,7 +226,13 @@ namespace DSInternals
 
 				auto request = CreateReplicateAllRequest(cookie, partialAttributeSet, maxBytes, maxObjects);
 				auto reply = GetNCChanges(move(request));
-				LoadPrefixTable(reply->PrefixTableSrc, this->_schema->PrefixTable);
+
+				if (cookie->IsInitial)
+				{
+					// Only load the prefixes during the first replication cycle.
+					LoadPrefixTable(reply->PrefixTableSrc, this->_schema);
+				}
+
 				auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues, this->_schema);
 				USN_VECTOR usnTo = reply->usnvecTo;
 				Guid invocationId = RpcTypeConverter::ToManaged(reply->uuidInvocIdSrc);
@@ -248,7 +254,7 @@ namespace DSInternals
 				{
 					auto request = CreateReplicateSingleRequest(distinguishedName, partialAttributeSet);
 					auto reply = GetNCChanges(move(request));
-					LoadPrefixTable(reply->PrefixTableSrc, this->_schema->PrefixTable);
+					LoadPrefixTable(reply->PrefixTableSrc, this->_schema);
 					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues, this->_schema);
 					return objects[0];
 				}
@@ -278,7 +284,7 @@ namespace DSInternals
 				{
 					auto request = CreateReplicateSingleRequest(objectGuid, partialAttributeSet);
 					auto reply = GetNCChanges(move(request));
-					LoadPrefixTable(reply->PrefixTableSrc, this->_schema->PrefixTable);
+					LoadPrefixTable(reply->PrefixTableSrc, this->_schema);
 					auto objects = ReadObjects(reply->pObjects, reply->cNumObjects, reply->rgValues, reply->cNumValues, this->_schema);
 
 					// There should be only one object in the results.
@@ -744,14 +750,19 @@ namespace DSInternals
 				return isUPN ? DS_NAME_FORMAT::DS_USER_PRINCIPAL_NAME : DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME;
 			}
 
-			void DrsConnection::LoadPrefixTable(SCHEMA_PREFIX_TABLE nativePrefixTable, PrefixTable^ managedPrefixTable)
+			void DrsConnection::LoadPrefixTable(SCHEMA_PREFIX_TABLE nativePrefixTable, BaseSchema^ schema)
 			{
 				for (DWORD i = 0; i < nativePrefixTable.PrefixCount; i++)
 				{
 					unsigned long prefixIndex = nativePrefixTable.pPrefixEntry[i].ndx;
-					OID_t nativePrefix = nativePrefixTable.pPrefixEntry[i].prefix;
-					auto managedPrefix = RpcTypeConverter::ToByteArray(nativePrefix);
-					managedPrefixTable->Add(prefixIndex, managedPrefix);
+
+					// Do not re-add prefixes 0-38
+					if (prefixIndex > PrefixTable::LastBuitlInPrefixIndex)
+					{
+						OID_t nativePrefix = nativePrefixTable.pPrefixEntry[i].prefix;
+						auto managedPrefix = RpcTypeConverter::ToByteArray(nativePrefix);
+						schema->AddPrefix(prefixIndex, managedPrefix);
+					}
 				}
 			}
 		}

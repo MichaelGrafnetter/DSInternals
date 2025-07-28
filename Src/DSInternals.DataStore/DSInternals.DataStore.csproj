@@ -90,8 +90,8 @@
     <Compile Include="DirectoryAgent.DataProtection.cs">
       <DependentUpon>DirectoryAgent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Enums\DNTag.cs" />
     <Compile Include="Enums\FunctionalLevel.cs" />
-    <Compile Include="Enums\AttributeSystemFlags.cs" />
     <Compile Include="ADConstants.cs" />
     <Compile Include="Enums\DatabaseState.cs" />
     <Compile Include="Enums\PekListFlags.cs" />
@@ -99,22 +99,16 @@
     <Compile Include="Exceptions\InvalidDatabaseStateException.cs" />
     <Compile Include="Extensions\IsamInstanceExtensions.cs" />
     <Compile Include="Extensions\TableDefinitionExtentions.cs" />
-    <Compile Include="PrefixMap.cs" />
-    <Compile Include="SchemaAttribute.cs" />
     <Compile Include="Extensions\CursorExtensions.cs" />
     <Compile Include="Enums\DomainControllerOptions.cs" />
     <Compile Include="DirectoryContext.cs" />
     <Compile Include="DistinguishedNameResolver.cs" />
     <Compile Include="DomainController.cs" />
     <Compile Include="Interfaces\IDomainController.cs" />
-    <Compile Include="Interfaces\ISchemaAttributeExt.cs" />
     <Compile Include="SecurityDescriptorResolver.cs" />
     <Compile Include="LinkResolver.cs" />
-    <Compile Include="Enums\LinkType.cs" />
-    <Compile Include="Enums\AttributeOmSyntax.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DirectorySchema.cs" />
-    <Compile Include="Enums\SearchFlags.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj">

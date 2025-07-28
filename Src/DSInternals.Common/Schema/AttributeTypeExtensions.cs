@@ -1342,6 +1342,7 @@ namespace DSInternals.Common.Schema
             AttributeType.KdsVersion => AttributeSyntax.Int,
             AttributeType.KdsDomainController => AttributeSyntax.DN,
             AttributeType.KdsEffectiveTime => AttributeSyntax.Int64,
+            AttributeType.KdsCreationTime => AttributeSyntax.Int64,
             AttributeType.MSImagingThumbprintHash => AttributeSyntax.OctetString,
             AttributeType.MSImagingHashAlgorithm => AttributeSyntax.UnicodeString,
             AttributeType.MSDSAllowedToActOnBehalfOfOtherIdentity => AttributeSyntax.SecurityDescriptor,

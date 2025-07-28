@@ -60,6 +60,15 @@ namespace DSInternals.Replication.Model
             private set;
         }
 
+        public bool IsInitial
+        {
+            get
+            {
+                // An initial cookie is identified by the fact that all USNs are zero.
+                return this.HighObjUpdate == 0 && this.HighPropUpdate == 0 && this.Reserved == 0;
+            }
+        }
+
         public override int GetHashCode()
         {
             // We simply XOR the hash codes of all members

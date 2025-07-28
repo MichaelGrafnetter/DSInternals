@@ -15,11 +15,6 @@
                 <PropertyName>KeyId</PropertyName>
               </ExpressionBinding>
               <NewLine />
-              <Text>Version: </Text>
-              <ExpressionBinding>
-                <PropertyName>VersionNumber</PropertyName>
-              </ExpressionBinding>
-              <NewLine />
               <Text>Creation Time: </Text>
               <ExpressionBinding>
                 <PropertyName>CreationTime</PropertyName>

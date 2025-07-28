@@ -129,8 +129,6 @@ namespace DSInternals.Replication
         {
             Validator.AssertNotNull(initialCookie, nameof(initialCookie));
 
-            propertySets = SkipUnsupportedProperties(propertySets);
-
             var currentCookie = initialCookie;
             ReplicationResult result;
             int processedObjectCount = 0;
@@ -166,8 +164,6 @@ namespace DSInternals.Replication
 
         public DSAccount GetAccount(Guid objectGuid, AccountPropertySets propertySets = AccountPropertySets.All)
         {
-            propertySets = SkipUnsupportedProperties(propertySets);
-
             var obj = this._drsConnection.ReplicateSingleObject(objectGuid);
             var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets);
 
@@ -182,8 +178,6 @@ namespace DSInternals.Replication
 
         public DSAccount GetAccount(string distinguishedName, AccountPropertySets propertySets = AccountPropertySets.All)
         {
-            propertySets = SkipUnsupportedProperties(propertySets);
-
             var obj = this._drsConnection.ReplicateSingleObject(distinguishedName);
             var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets);
 
@@ -206,6 +200,30 @@ namespace DSInternals.Replication
         {
             Guid objectGuid = this._drsConnection.ResolveGuid(sid);
             return this.GetAccount(objectGuid, propertySets);
+        }
+
+        public KdsRootKey? GetKdsRootKey(Guid rootKeyId, bool suppressNotFoundException = false)
+        {
+            // Derive the full path to the object
+            // Example: CN=4dd60361-9394-492a-b11d-51a955f02b06,CN=Master Root Keys,CN=Group Key Distribution Service,CN=Services,CN=Configuration,DC=contoso,DC=com
+            string rootKeyDN = KdsRootKey.GetDistinguishedName(rootKeyId, this.ConfigurationNamingContext);
+
+            try
+            {
+                var rootKeyObject = _drsConnection.ReplicateSingleObject(rootKeyDN);
+                return new KdsRootKey(rootKeyObject);
+            }
+            catch (DirectoryObjectNotFoundException)
+            {
+                if (suppressNotFoundException)
+                {
+                    return null;
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(string domainNamingContext)
@@ -348,33 +366,8 @@ namespace DSInternals.Replication
             _netBIOSDomainName = pdcAccount.NetBIOSDomainName();
         }
 
-        private static AccountPropertySets SkipUnsupportedProperties(AccountPropertySets propertySets)
-        {
-            // TODO: Retrieval of linked objects is not yet implemented in the replication client.
-            propertySets &= ~AccountPropertySets.ManagedBy;
-            propertySets &= ~AccountPropertySets.Manager;
-
-            return propertySets;
-        }
-
         #region IKdsRootKeyResolver
-        public KdsRootKey? GetKdsRootKey(Guid rootKeyId)
-        {
-            // Derive the full path to the object
-            // Example: CN=4dd60361-9394-492a-b11d-51a955f02b06,CN=Master Root Keys,CN=Group Key Distribution Service,CN=Services,CN=Configuration,DC=contoso,DC=com
-            string rootKeyDN = KdsRootKey.GetDistinguishedName(rootKeyId, this.ConfigurationNamingContext);
-
-            try
-            {
-                var rootKeyObject = _drsConnection.ReplicateSingleObject(rootKeyDN);
-                return new KdsRootKey(rootKeyObject);
-            }
-            catch (DirectoryObjectNotFoundException)
-            {
-                // Suppress the exception.
-                return null;
-            }
-        }
+        KdsRootKey? IKdsRootKeyResolver.GetKdsRootKey(Guid id) => this.GetKdsRootKey(id, suppressNotFoundException: true);
 
         bool IKdsRootKeyResolver.SupportsLookupAll => false;
         bool IKdsRootKeyResolver.SupportsLookupByEffectiveTime => false;

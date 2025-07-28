@@ -140,11 +140,22 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        // TODO: Add support for multi-value and linked value attributes.
         protected void ReadAttribute(AttributeType attributeId, out DistinguishedName value)
         {
-            // TODO: Implement support for DS-DN syntax.
-            // Hint: https://github.com/MichaelGrafnetter/DSInternals/issues/49
-            throw new NotImplementedException();
+            value = null;
+            this.ReadAttribute(attributeId, out byte[] binaryValue);
+
+            if (binaryValue != null && binaryValue.Length > 0)
+            {
+                // The attribute uses the DS-DN syntax.
+                var dsName = DSName.Parse(binaryValue);
+
+                if (dsName.DistinguishedName != null)
+                {
+                    value = new DistinguishedName(dsName.DistinguishedName);
+                }
+            }
         }
 
         protected void ReadAttribute(AttributeType attributeId, out SecurityIdentifier value)
