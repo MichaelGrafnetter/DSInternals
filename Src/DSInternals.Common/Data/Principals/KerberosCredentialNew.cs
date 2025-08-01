@@ -68,6 +68,43 @@
             }
         }
 
+        public KerberosCredentialNew(ReadOnlyMemory<byte> password, string salt, bool includeDES = true)
+        {
+            if (password.IsEmpty)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            if (salt == null)
+            {
+                throw new ArgumentNullException(nameof(salt));
+            }
+
+            this.DefaultSalt = salt;
+            this.DefaultIterationCount = KerberosKeyDerivation.DefaultIterationCount;
+
+            // Generate AES SHA1 keys
+            byte[] aes128sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
+            var aes128sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, aes128sha1Key, this.DefaultIterationCount);
+
+            byte[] aes256sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
+            var aes256sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, aes256sha1Key, this.DefaultIterationCount);
+
+            if (includeDES)
+            {
+                // Generate DES key
+                byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
+                var desKeyData = new KerberosKeyDataNew(KerberosKeyType.DES_CBC_MD5, desKey, this.DefaultIterationCount);
+
+                this.Credentials = new KerberosKeyDataNew[] { /* aes256sha2KeyData, aes128sha2KeyData, */ aes256sha1KeyData, aes128sha1KeyData, desKeyData /*, rc4KeyData */ };
+            }
+            else
+            {
+                // AES keys only
+                this.Credentials = new KerberosKeyDataNew[] { /* aes256sha2KeyData, aes128sha2KeyData */ aes256sha1KeyData, aes128sha1KeyData /*, rc4KeyData*/ };
+            }
+        }
+
         public short Flags
         {
             get;
@@ -201,6 +238,21 @@
 
                 return stream.ToArray();
             }
+        }
+
+        public static KerberosCredentialNew Derive(ReadOnlyMemory<byte> currentPassword, ReadOnlyMemory<byte> previousPassword, string salt, bool includeDES = true)
+        {
+            var currentKeys = new KerberosCredentialNew(currentPassword, salt, includeDES);
+
+            if (previousPassword.Length > 0)
+            {
+                var previousKeys = new KerberosCredentialNew(previousPassword, salt, includeDES);
+
+                // Combine current and previous keys into a single credential
+                currentKeys.OldCredentials = previousKeys.Credentials;
+            }
+            
+            return currentKeys;
         }
 
         private void ReadCredentials(byte[] blob)

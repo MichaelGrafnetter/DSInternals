@@ -167,12 +167,18 @@
     <Compile Include="Data\Hello\KeyMaterialFido.cs" />
     <Compile Include="Data\Hello\VolumeType.cs" />
     <Compile Include="Data\Hello\KeyUsage.cs" />
+    <Compile Include="Kerberos\TrustAttributes.cs" />
+    <Compile Include="Kerberos\TrustAuthenticationInformation.cs" />
+    <Compile Include="Kerberos\TrustAuthenticationInformationType.cs" />
+    <Compile Include="Kerberos\TrustAuthInfos.cs" />
+    <Compile Include="Kerberos\TrustedDomain.cs" />
     <Compile Include="Data\Principals\GroupManagedServiceAccount.cs" />
     <Compile Include="Data\Principals\AccountFactory.cs" />
     <Compile Include="Data\Principals\AccountPropertySets.cs" />
     <Compile Include="Data\Principals\DSComputer.cs" />
     <Compile Include="Data\Principals\SupportedEncryptionTypes.cs" />
     <Compile Include="Data\Principals\DSUser.cs" />
+    <Compile Include="Kerberos\TrustType.cs" />
     <Compile Include="Exceptions\SchemaAttributeNotFoundException.cs" />
     <Compile Include="Schema\AttributeOmSyntax.cs" />
     <Compile Include="Schema\AttributeSystemFlags.cs" />
@@ -254,6 +260,7 @@
     <Compile Include="Schema\AttributeSearchFlags.cs" />
     <Compile Include="Schema\PrefixTable.cs" />
     <Compile Include="Schema\AttributeSchema.cs" />
+    <Compile Include="Kerberos\TrustDirection.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>

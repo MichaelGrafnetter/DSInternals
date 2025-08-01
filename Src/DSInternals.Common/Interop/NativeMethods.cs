@@ -4,6 +4,7 @@ using System.Security;
 using System.Text;
 using DSInternals.Common.Data;
 using Microsoft.Win32.SafeHandles;
+using Windows.Win32.Foundation;
 using Windows.Win32.Security.Cryptography;
 
 namespace DSInternals.Common.Interop
@@ -63,6 +64,37 @@ namespace DSInternals.Common.Interop
         /// <see>https://github.com/wine-mirror/wine/blob/master/dlls/advapi32/crypt_md4.c</see>
         [DllImport(Advapi, SetLastError = true, EntryPoint = NTOwfInternalName, CharSet = CharSet.Unicode)]
         private static extern NtStatus RtlCalculateNtOwfPassword([In] ref UnicodeString password, [MarshalAs(UnmanagedType.LPArray, SizeConst = NTHashNumBytes), In, Out] byte[] hash);
+
+        [DllImport(Advapi, SetLastError = true, EntryPoint = NTOwfInternalName, CharSet = CharSet.Unicode)]
+        private static extern NtStatus RtlCalculateNtOwfPassword([In] ref UNICODE_STRING password, [MarshalAs(UnmanagedType.LPArray, SizeConst = NTHashNumBytes), In, Out] byte[] hash);
+
+        unsafe internal static NtStatus RtlCalculateNtOwfPassword(ReadOnlyMemory<byte> password, out byte[] hash)
+        {
+            if (password.Length % 2 != 0)
+            {
+                throw new ArgumentException("Password length must be even (UTF-16 encoding).", nameof(password));
+            }
+
+            if (password.Length > ushort.MaxValue)
+            {
+                throw new ArgumentOutOfRangeException(nameof(password), "Password length exceeds maximum allowed length.");
+            }
+
+            // Allocate output buffer
+            hash = new byte[NTHashNumBytes];
+
+            using (var pinnedPassword = password.Pin())
+            {
+                UNICODE_STRING unicodeString = new UNICODE_STRING
+                {
+                    Length = (ushort)(password.Length), // The length, in bytes
+                    MaximumLength = (ushort)(password.Length), // Does not contain the trailing zero
+                    Buffer = new PWSTR((char*)pinnedPassword.Pointer)
+                };
+
+                return RtlCalculateNtOwfPassword(ref unicodeString, hash);
+            }
+        }
 
         internal static NtStatus RtlCalculateNtOwfPassword(SafeUnicodeSecureStringPointer password, out byte[] hash)
         {

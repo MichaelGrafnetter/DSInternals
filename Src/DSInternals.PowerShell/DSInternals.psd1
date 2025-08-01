@@ -65,7 +65,8 @@ FormatsToProcess = 'Views\DSInternals.AzureADUser.format.ps1xml',
                    'Views\DSInternals.KdsRootKey.format.ps1xml',
                    'Views\DSInternals.SamDomainPasswordInformation.format.ps1xml',
                    'Views\DSInternals.LsaPolicyInformation.format.ps1xml',
-                   'Views\DSInternals.DnsResourceRecord.format.ps1xml'
+                   'Views\DSInternals.DnsResourceRecord.format.ps1xml',
+                   'Views\DSInternals.TrustedDomain.format.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('DSInternals.PowerShell.dll')
@@ -90,7 +91,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
                   'Set-LSAPolicyInformation', 'New-ADDBRestoreFromMediaScript','Get-LsaBackupKey',
                   'Add-ADReplNgcKey', 'Get-AzureADUserEx', 'Set-AzureADUserEx','Unlock-ADDBAccount',
-                  'Get-ADDBDnsResourceRecord', 'Get-ADDBDnsZone','Set-ADDBAccountControl'
+                  'Get-ADDBDnsResourceRecord', 'Get-ADDBDnsZone','Set-ADDBAccountControl''Get-ADDBDnsZone','Get-ADDBTrust'
 
 # Variables to export from this module
 VariablesToExport = @()

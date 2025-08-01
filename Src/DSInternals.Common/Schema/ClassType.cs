@@ -99,6 +99,11 @@
         /// <summary>
         /// domain
         /// </summary>
-        Domain = 655426
+        Domain = 655426,
+
+        /// <summary>
+        /// trustedDomain
+        /// </summary>
+        TrustedDomain = 655394
     }
 }

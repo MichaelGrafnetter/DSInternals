@@ -1,8 +1,10 @@
-﻿namespace DSInternals.Common.Cryptography
+﻿using System;
+using System.Security;
+using System.Security.Cryptography;
+using DSInternals.Common.Interop;
+
+namespace DSInternals.Common.Cryptography
 {
-    using DSInternals.Common.Interop;
-    using System.Security;
-    using System.Security.Cryptography;
 
     // See http://msdn.microsoft.com/en-us/library/system.security.cryptography.hashalgorithm%28v=vs.110%29.aspx
     public static class NTHash
@@ -12,6 +14,7 @@
         /// </summary>
         public const int HashSize = NativeMethods.NTHashNumBytes;
         public const int MaxInputLength = NativeMethods.NTPasswordMaxChars;
+        public const int MaxBinaryLength = MaxInputLength * sizeof(char);
 
         /// <summary>
         /// Gets the NT hash of an empty password.
@@ -28,6 +31,14 @@
                 NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(passwordPtr, out hash);
                 Validator.AssertSuccess(result);
             }
+            return hash;
+        }
+
+        public static byte[] ComputeHash(ReadOnlyMemory<byte> password)
+        {
+            NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(password, out byte[] hash);
+            Validator.AssertSuccess(result);
+
             return hash;
         }
 

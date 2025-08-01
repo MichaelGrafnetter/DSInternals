@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Security.AccessControl;
     using System.Security.Principal;
+    using DSInternals.Common.Kerberos;
     using DSInternals.Common.Schema;
 
     public abstract class DirectoryObject
@@ -70,10 +71,9 @@
         public void ReadAttribute(string name, out SecurityIdentifier[] value)
         {
             value = null;
-            byte[][] binarySids;
             // TODO: Always big endian?
-            this.ReadAttribute(name, out binarySids);
-            if(binarySids != null)
+            this.ReadAttribute(name, out byte[][] binarySids);
+            if (binarySids != null)
             {
                 value = binarySids.Select(binarySid => binarySid.ToSecurityIdentifier(this.HasBigEndianRid)).ToArray();
             }
@@ -81,9 +81,26 @@
 
         public void ReadAttribute(string name, out SamAccountType? value)
         {
-            int? numericValue;
-            this.ReadAttribute(name, out numericValue);
+            this.ReadAttribute(name, out int? numericValue);
             value = (SamAccountType?)numericValue;
+        }
+
+        public void ReadAttribute(string name, out TrustDirection? value)
+        {
+            this.ReadAttribute(name, out int? numericValue);
+            value = (TrustDirection?)numericValue;
+        }
+
+        public void ReadAttribute(string name, out TrustAttributes? value)
+        {
+            this.ReadAttribute(name, out int? numericValue);
+            value = (TrustAttributes?)numericValue;
+        }
+
+        public void ReadAttribute(string name, out TrustType? value)
+        {
+            this.ReadAttribute(name, out int? numericValue);
+            value = (TrustType?)numericValue;
         }
 
         public void ReadAttribute(string name, out DateTime? value, bool asGeneralizedTime)

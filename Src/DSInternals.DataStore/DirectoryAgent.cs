@@ -6,6 +6,7 @@
     using DSInternals.Common;
     using DSInternals.Common.Data;
     using DSInternals.Common.Exceptions;
+    using DSInternals.Common.Kerberos;
     using DSInternals.Common.Properties;
     using DSInternals.Common.Schema;
     using Microsoft.Database.Isam;
@@ -229,7 +230,29 @@
             return account;
         }
 
-        public IEnumerable<DirectoryObject> FindObjectsByCategory(DNTag objectCategory, bool includeDeleted = false, bool includePhantoms = false)
+        public IEnumerable<TrustedDomain> GetTrusts(byte[]? bootKey)
+        {
+            var pek = this.GetSecretDecryptor(bootKey);
+
+            DNTag? trustObjectCategory = this.context.Schema.FindObjectCategory(ClassType.TrustedDomain);
+
+            if (trustObjectCategory == null)
+            {
+                // This must be initial or ADAM database.
+                yield break;
+            }
+
+            foreach (var trustObject in this.FindObjectsByCategory(trustObjectCategory.Value))
+            {
+                yield return new TrustedDomain(
+                    trustObject,
+                    this.context.DomainController.DomainName,
+                    this.context.DomainController.NetBIOSDomainName,
+                    pek);
+            }
+        }
+
+        public IEnumerable<DirectoryObject> FindObjectsByCategory(DNTag objectCategory, bool includeReadOnly = false, bool includeDeleted = false, bool includePhantoms = false)
         {
             using (var cursor = this.context.OpenDataTable())
             {
@@ -250,6 +273,12 @@
 
                     // Optionally skip phantom objects
                     if (!includePhantoms && databaseObject.IsPhantomObject)
+                    {
+                        continue;
+                    }
+
+                    // Optionally skip read-only objects
+                    if (!includeReadOnly && !databaseObject.IsWritable)
                     {
                         continue;
                     }

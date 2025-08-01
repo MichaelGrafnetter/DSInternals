@@ -79,6 +79,7 @@ namespace DSInternals.Common.Schema
         public const string SchemaLocation = "dMDLocation";
         public const string SearchFlags = "searchFlags";
         public const string SecurityDescriptor = "nTSecurityDescriptor";
+        public const string SecurityIdentifier = "securityIdentifier";
         public const string ServerReference = "serverReference";
         public const string SchemaIdGuid = "schemaIDGUID";
         public const string ServicePrincipalName = "servicePrincipalName";
@@ -129,6 +130,14 @@ namespace DSInternals.Common.Schema
         public const string OperatingSystemServicePack = "operatingSystemServicePack";
         public const string TPMOwnerInformation = "msTPM-OwnerInformation";
         public const string TPMInformationForComputer = "msTPM-TpmInformationForComputer";
+        public const string TrustAttributes = "trustAttributes";
+        public const string TrustAuthIncoming = "trustAuthIncoming";
+        public const string TrustAuthOutgoing = "trustAuthOutgoing";
+        public const string TrustDirection = "trustDirection";
+        public const string TrustPartner = "trustPartner";
+        public const string TrustPartnerFlatName = "flatName";
+        public const string TrustPosixOffset = "trustPosixOffset";
+        public const string TrustType = "trustType";
         public const string FVEKeyPackage = "msFVE-KeyPackage";
         public const string FVEVolumeGuid = "msFVE-VolumeGuid";
         public const string FVERecoveryGuid = "msFVE-RecoveryGuid";

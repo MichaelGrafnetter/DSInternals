@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+  <Controls>
+    <Control>
+      <Name>DSInternals.Common.Kerberos.TrustAuthInfos</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>CurrentPassword: </Text>
+              <ExpressionBinding>
+                <PropertyName>CurrentPassword</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>CurrentNTHash: </Text>
+              <ExpressionBinding>
+                <PropertyName>CurrentNTHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>PreviousPassword: </Text>
+              <ExpressionBinding>
+                <PropertyName>PreviousPassword</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>PreviousNTHash: </Text>
+              <ExpressionBinding>
+                <PropertyName>PreviousNTHash</PropertyName>
+                <CustomControlName>Hash</CustomControlName>
+              </ExpressionBinding>
+              <NewLine />
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+  </Controls>
+  <ViewDefinitions>
+    <View>
+      <Name>TrustedDomain</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Kerberos.TrustedDomain</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>DistinguishedName: </Text>
+              <ExpressionBinding>
+                <PropertyName>DistinguishedName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>TrustPartner: </Text>
+              <ExpressionBinding>
+                <PropertyName>TrustPartner</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>FlatName: </Text>
+              <ExpressionBinding>
+                <PropertyName>FlatName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Sid: </Text>
+              <ExpressionBinding>
+                <PropertyName>Sid</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Direction: </Text>
+              <ExpressionBinding>
+                <PropertyName>Direction</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Source: </Text>
+              <ExpressionBinding>
+                <PropertyName>Source</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>SourceFlatName: </Text>
+              <ExpressionBinding>
+                <PropertyName>SourceFlatName</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Type: </Text>
+              <ExpressionBinding>
+                <PropertyName>Type</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Attributes: </Text>
+              <ExpressionBinding>
+                <PropertyName>Attributes</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>SupportedEncryptionTypes: </Text>
+              <ExpressionBinding>
+                <PropertyName>SupportedEncryptionTypes</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Deleted: </Text>
+              <ExpressionBinding>
+                <PropertyName>Deleted</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>TrustAuthIncoming</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>TrustAuthIncoming</PropertyName>
+                    <CustomControlName>DSInternals.Common.Kerberos.TrustAuthInfos</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>IncomingTrustKeys</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>IncomingTrustKeys</PropertyName>
+                    <CustomControlName>KerberosCredentialNew</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>TrustAuthOutgoing</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>TrustAuthOutgoing</PropertyName>
+                    <CustomControlName>DSInternals.Common.Kerberos.TrustAuthInfos</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+              <Text>OutgoingTrustKeys</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>OutgoingTrustKeys</PropertyName>
+                    <CustomControlName>KerberosCredentialNew</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

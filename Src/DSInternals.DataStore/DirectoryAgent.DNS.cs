@@ -20,7 +20,7 @@ namespace DSInternals.DataStore
                 yield break;
             }
 
-            foreach (var node in this.FindObjectsByCategory(dnsNodeCategory.Value))
+            foreach (var node in this.FindObjectsByCategory(dnsNodeCategory.Value, includeReadOnly: true))
             {
                 if (skipTombstoned)
                 {
@@ -80,7 +80,7 @@ namespace DSInternals.DataStore
                 yield break;
             }
 
-            foreach (var zone in this.FindObjectsByCategory(dnsZoneCategory.Value))
+            foreach (var zone in this.FindObjectsByCategory(dnsZoneCategory.Value, includeReadOnly: true))
             {
                 zone.ReadAttribute(CommonDirectoryAttributes.DomainComponent, out string fqdn);
 

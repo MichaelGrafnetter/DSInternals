@@ -59,6 +59,7 @@
     <Compile Include="Commands\Base\LsaPolicyCommandBase.cs" />
     <Compile Include="Commands\Base\SamCommandBase.cs" />
     <Compile Include="Commands\Base\ADDBAccountStatusCommandBase.cs" />
+    <Compile Include="Commands\Datastore\GetADDBTrust.cs" />
     <Compile Include="Commands\Datastore\SetADDBAccountControlCommand.cs" />
     <Compile Include="Commands\Datastore\DisableADDBAccountCommand.cs" />
     <Compile Include="Commands\Datastore\GetADDBDnsZoneCommand.cs" />
@@ -282,6 +283,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\DSInternals.DnsResourceRecord.format.ps1xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\DSInternals.TrustedDomain.format.ps1xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
