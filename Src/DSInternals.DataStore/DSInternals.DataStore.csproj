@@ -41,11 +41,11 @@
     <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esent.Interop, Version=2.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Database.ManagedEsent.2.0.4\lib\netstandard2.0\Esent.Interop.dll</HintPath>
+    <Reference Include="Esent.Interop, Version=1.9.4.1, Culture=neutral, PublicKeyToken=0288101625d910d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DSInternals.ManagedEsent.Interop.2.0.4\lib\netstandard2.0\Esent.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="Esent.Isam, Version=2.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Database.Isam.2.0.4\lib\netstandard2.0\Esent.Isam.dll</HintPath>
+    <Reference Include="Esent.Isam, Version=1.9.4.1, Culture=neutral, PublicKeyToken=0288101625d910d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DSInternals.ManagedEsent.Isam.2.0.4\lib\netstandard2.0\Esent.Isam.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Windows.SDK.Win32Docs, Version=0.1.42.13748, Culture=neutral, PublicKeyToken=7c40c7c34b1fcfe1, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Windows.SDK.Win32Docs.0.1.42-alpha\lib\netstandard2.0\Microsoft.Windows.SDK.Win32Docs.dll</HintPath>
