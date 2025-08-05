@@ -27,8 +27,9 @@ KDS Root Keys are used to encrypt the following:
 
 - SID-protected private keys in PFX certificate files
 - BitLocker-enabled drives with SID protector
-- Passwords of Group Managed Service Accounts (GMSA)
-- DNSSEC signing keys
+- Passwords of Group Managed Service Accounts (gMSA) and Delegated Managed Service Accounts (dMSA)
+- DNSSEC key signing keys
+- Windows LAPS passwords
 
 ## EXAMPLES
 
@@ -125,7 +126,7 @@ Parameter Sets: ByGuid
 Aliases: Id, KeyId
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
@@ -147,3 +148,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Get-ADDBServiceAccount](Get-ADDBServiceAccount.md)
+[Get-ADReplKdsRootKey](Get-ADReplKdsRootKey.md)

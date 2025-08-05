@@ -42,7 +42,7 @@ PasswordLastSet: 9/9/2023 5:02:06 PM
 ManagedPasswordInterval: 30
 ManagedPasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=9/9/2023 10:00:00 AM (L0=361, L1=26, L2=24)
 ManagedPasswordPreviousId:
-KDS Derived Secrets
+KDS Derived Secrets (Calculated)
   EffectivePasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=6/25/2025 8:00:00 PM (L0=363, L1=11, L2=29)
   NTHash: 0b5fbfb646dd7bce4f160ad69edb86ba
   Kerberos Keys

@@ -1,12 +1,13 @@
 ﻿namespace DSInternals.SAM
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Security.Cryptography;
+    using System.Security.Principal;
     using DSInternals.Common;
     using DSInternals.Common.Data;
     using DSInternals.Common.Interop;
     using DSInternals.SAM.Interop;
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Security.Principal;
 
     public class LsaPolicy : IDisposable
     {
@@ -114,8 +115,22 @@
 
         public DPAPIBackupKey[] GetDPAPIBackupKeys()
         {
-            Guid rsaKeyId = new Guid(this.RetrievePrivateData(DPAPIBackupKey.PreferredRSAKeyName));
-            Guid legacyKeyId = new Guid(this.RetrievePrivateData(DPAPIBackupKey.PreferredLegacyKeyName));
+            byte[] rsaKeyIdBinary = this.RetrievePrivateData(DPAPIBackupKey.PreferredRSAKeyName);
+
+            if (rsaKeyIdBinary == null || rsaKeyIdBinary.Length != Marshal.SizeOf<Guid>())
+            {
+                throw new CryptographicException("Failed reading the preferred RSA key ID. This typically happens on RODCs.");
+            }
+
+            byte[] legacyKeyIdBinary = this.RetrievePrivateData(DPAPIBackupKey.PreferredLegacyKeyName);
+
+            if (legacyKeyIdBinary == null || legacyKeyIdBinary.Length != Marshal.SizeOf<Guid>())
+            {
+                throw new CryptographicException("Failed reading the preferred legacy key ID. This typically happens on RODCs.");
+            }
+
+            Guid rsaKeyId = new Guid(rsaKeyIdBinary);
+            Guid legacyKeyId = new Guid(legacyKeyIdBinary);
 
             byte[] rsaKeyData = this.RetrievePrivateData(DPAPIBackupKey.GetKeyName(rsaKeyId));
             byte[] legacyKeyData = this.RetrievePrivateData(DPAPIBackupKey.GetKeyName(legacyKeyId));

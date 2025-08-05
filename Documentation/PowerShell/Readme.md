@@ -58,6 +58,9 @@ Sets the password hash for a user, computer, or service account stored in a ntds
 ### [Set-ADDBPrimaryGroup](Set-ADDBPrimaryGroup.md#set-addbprimarygroup)
 Modifies the primaryGroupId attribute of an object in a ntds.dit file.
 
+### [Get-ADDBTrust](Get-ADDBTrust.md#get-addbtrust)
+Reads inter-domain trust objects from a ntds.dit and decrypts the trust passwords.
+
 ### [Get-ADDBBackupKey](Get-ADDBBackupKey.md#get-addbbackupkey)
 Reads the DPAPI backup keys from a ntds.dit file.
 
@@ -101,6 +104,9 @@ Reads one or more accounts through the MS-DRSR protocol, including secret attrib
 
 ### [Get-ADReplBackupKey](Get-ADReplBackupKey.md#get-adreplbackupkey)
 Reads the DPAPI backup keys from a domain controller through the MS-DRSR protocol.
+
+### [Get-ADReplKdsRootKey](Get-ADReplKdsRootKey.md#get-adreplkdsrootkey)
+Fetches the specified KDS Root Key through the MS-DRSR protocol.
 
 ### [Add-ADReplNgcKey](Add-ADReplNgcKey.md#add-adreplngckey)
 Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.

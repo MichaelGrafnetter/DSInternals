@@ -17,16 +17,28 @@ Get-ADDBSchemaAttribute [[-Name] <String[]>] -DatabasePath <String> [-LogPath <S
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Reads Active Directory schema from a ntds.dit file and returns the list of attributes, including their datatable column names and indices.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-ADDBSchemaAttribute -DatabasePath 'C:\ADBackup\ntds.dit' |
+	Select-Object -Property ColumnName,Name,AttributeOid,IndexName
+
+<# Sample Output:
+
+ColumnName Name           AttributeOid           IndexName
+---------- ----           ------------           ---------
+ATTm3      cn             2.5.4.3                INDEX_00000003
+ATTm590045 sAMAccountName 1.2.840.113556.1.4.221 INDEX_000900DD
+ATTj590126 sAMAccountType 1.2.840.113556.1.4.302 INDEX_0009012E
+...
+
+#>
 ```
 
-{{ Add example description here }}
+Analyzes the internal database schema of the specified ntds.dit file. The results are redacted.
 
 ## PARAMETERS
 
@@ -84,8 +96,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### DSInternals.PowerShell.SchemaAttribute
+### DSInternals.Common.Schema.AttributeSchema
 
 ## NOTES
 
 ## RELATED LINKS
+
+[Get-ADDBDomainController](Get-ADDBDomainController.md)
