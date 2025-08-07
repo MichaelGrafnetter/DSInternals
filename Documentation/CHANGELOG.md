@@ -7,6 +7,24 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Added
+
+- The new [Get-ADDBTrust](PowerShell/Get-ADDBTrust.md#get-addbtrust) cmdlet can read inter-domain trust objects from `ntds.dit` files, decrypt the trust passwords, and derive the Kerberos trust keys.
+- Added the [Get-ADReplKdsRootKey](PowerShell/Get-ADReplKdsRootKey.md#get-adreplkdsrootkey) cmdlet to enable reading specific KDS Root Keys over the MS-DRSR protocol.
+- Full support for `ntds.dit` files originating from RODCs.
+
+### Changed
+
+- The project now uses a [custom fork of the ManagedEsent library](https://github.com/MichaelGrafnetter/ManagedEsent). This is because the [official NuGet packages](https://www.nuget.org/profiles/nugetese) are delay-signed and cannot be loaded by production .NET Framework assemblies.
+- Improved the performance of schema loading and account retrieval from `ntds.dit` files.
+- A lot of refactoring has been done in the `DSInternals.Common` namespace, including breaking changes.
+
+### Fixed
+
+- The [Get-LsaBackupKey](PowerShell/Get-LsaBackupKey.md#get-lsabackupkey) produces a better error message when trying to read secrets from RODCs.
+- Improved parsing of managed passwords.
+- Switched to using concurrent atomic operations when working with KDS Root Key cache.
+
 ## [5.4.1] - 2025-07-09
 
 ### Added

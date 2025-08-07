@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '5.4.1'
+ModuleVersion = '5.5'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -91,7 +91,7 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
                   'Set-LSAPolicyInformation', 'New-ADDBRestoreFromMediaScript','Get-LsaBackupKey',
                   'Add-ADReplNgcKey', 'Get-AzureADUserEx', 'Set-AzureADUserEx','Unlock-ADDBAccount',
-                  'Get-ADDBDnsResourceRecord', 'Get-ADDBDnsZone','Set-ADDBAccountControl''Get-ADDBDnsZone','Get-ADDBTrust'
+                  'Get-ADDBDnsResourceRecord', 'Get-ADDBDnsZone','Set-ADDBAccountControl','Get-ADDBTrust'
 
 # Variables to export from this module
 VariablesToExport = @()
@@ -158,8 +158,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The Get-ADDBServiceAccount cmdlet now retrieves both msDS-GroupManagedServiceAccount and msDS-DelegatedManagedServiceAccount object types from ntds.dit files.
-- The Get-ADDBAccount cmdlet can now decrypt all Windows LAPS passwords in offline mode.
+- The new Get-ADDBTrust cmdlet can read inter-domain trust objects from ntds.dit files, decrypt the trust passwords, and derive the Kerberos trust keys.
+- Added the Get-ADReplKdsRootKey cmdlet to enable reading specific KDS Root Keys over the MS-DRSR protocol.
+- Implemented full support for ntds.dit files originating from RODCs.
+- Improved the performance of schema loading and account retrieval from ntds.dit files.
 "@
     } # End of PSData hashtable
 
