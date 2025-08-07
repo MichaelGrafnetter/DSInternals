@@ -10,7 +10,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Cached root keys from previous lookups.
         /// </summary>
-        private IDictionary<Guid, KdsRootKey> _rootKeyCache;
+        private ConcurrentDictionary<Guid, KdsRootKey> _rootKeyCache;
 
         /// <summary>
         /// List of root keys that were not found in AD.
@@ -18,7 +18,7 @@ namespace DSInternals.Common.Data
         /// <remarks>
         /// There is no concurrent HashSet, so we use ConcurrentDictionary with dummy byte values.
         /// </remarks>
-        private IDictionary<Guid, byte>? _negativeCache;
+        private ConcurrentDictionary<Guid, byte>? _negativeCache;
 
         private IKdsRootKeyResolver _innerResolver;
 
@@ -38,7 +38,7 @@ namespace DSInternals.Common.Data
                 }
 
                 // Populate the positive cache
-                _rootKeyCache = _innerResolver.GetKdsRootKeys().ToDictionary(item => item.KeyId);
+                _rootKeyCache = new(_innerResolver.GetKdsRootKeys().Select(item => new KeyValuePair<Guid, KdsRootKey>(item.KeyId, item)));
 
                 // Do not perform online lookups
                 _negativeCache = null;
@@ -75,15 +75,14 @@ namespace DSInternals.Common.Data
             if (result != null)
             {
                 // Found. Add to positive cache before returning it.
-                _rootKeyCache.Add(id, result);
+                return _rootKeyCache.GetOrAdd(id, result);
             }
             else
             {
                 // Not found. Add to negative cache.
-                _negativeCache.Add(id, byte.MinValue);
+                _negativeCache[id] = byte.MinValue;
+                return null;
             }
-
-            return result;
         }
 
         public KdsRootKey? GetKdsRootKey(DateTime effectiveTime)
@@ -93,7 +92,10 @@ namespace DSInternals.Common.Data
                 if (_innerResolver.SupportsLookupByEffectiveTime)
                 {
                     // Forward the query
-                    return _innerResolver.GetKdsRootKey(effectiveTime);
+                    KdsRootKey? effectiveKey = _innerResolver.GetKdsRootKey(effectiveTime);
+
+                    // Cache the result and return it
+                    return effectiveKey != null ? _rootKeyCache.GetOrAdd(effectiveKey.KeyId, effectiveKey) : null;
                 }
                 else
                 {
@@ -104,19 +106,9 @@ namespace DSInternals.Common.Data
             else
             {
                 // Lookup all is supported
-                if (_negativeCache != null)
-                {
-                    // Populate the positive cache
-                    // TODO Merge collections instead, because of possible L0 key caches
-                    _rootKeyCache = _innerResolver.GetKdsRootKeys().ToDictionary(item => item.KeyId);
-
-                    // Do not perform further online lookups
-                    _negativeCache = null;
-                }
-
                 KdsRootKey? latestEffectiveKey = null;
 
-                foreach (var candidateKey in _rootKeyCache.Values)
+                foreach (var candidateKey in this.GetKdsRootKeys())
                 {
                     // Check if this key is the newest found yet
                     if (candidateKey.EffectiveTime <= effectiveTime && (latestEffectiveKey == null || latestEffectiveKey.CreationTime < candidateKey.CreationTime))
@@ -151,14 +143,7 @@ namespace DSInternals.Common.Data
                 foreach (var rootKey in _innerResolver.GetKdsRootKeys())
                 {
                     // There might be some keys already pre-cached from previous lookups, possibly holding pre-calculated L0 key.
-                    if (!_rootKeyCache.ContainsKey(rootKey.KeyId))
-                    {
-                        // Allow the key to be found by ID in the future
-                        _rootKeyCache[rootKey.KeyId] = rootKey;
-                    }
-
-                    // Pass-through the value
-                    yield return rootKey;
+                    yield return _rootKeyCache.GetOrAdd(rootKey.KeyId, rootKey);
                 }
 
                 // Indicate that all keys are already in the cache.

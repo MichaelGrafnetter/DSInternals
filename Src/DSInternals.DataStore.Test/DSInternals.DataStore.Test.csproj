@@ -62,7 +62,6 @@
     <Compile Include="AttributeMetatadaCollectionTester.cs" />
     <Compile Include="BootKeyRetrieverTester.cs" />
     <Compile Include="DataStoreSecretDecryptorTester.cs" />
-    <Compile Include="PrefixMapTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DistinguishedNameResolverTester.cs" />
     <Compile Include="LinkResolverTester.cs" />

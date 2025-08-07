@@ -1,7 +1,5 @@
-﻿using System;
+﻿using DSInternals.Common.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DSInternals.Common.Data;
-using DSInternals.Common.Cryptography;
 
 namespace DSInternals.Common.Test
 {
@@ -16,9 +14,10 @@ namespace DSInternals.Common.Test
             // Its corresponding NT hash, also taken from AD
             string expectedHash = "1fe07f47bfa7f511d902ed5cfb79cc4d";
             // Try parsing the blob
-            ManagedPassword pwd = new ManagedPassword(blob);
-            string actualHash = NTHash.ComputeHash(pwd.CurrentPassword.ToSecureString()).ToHex(false);
+            ManagedPassword pwd = ManagedPassword.Parse(blob);
+            string actualHash = pwd.CurrentNTHash.ToHex(false);
             Assert.AreEqual(expectedHash, actualHash);
+            Assert.IsNull(pwd.PreviousNTHash);
         }
     }
 }

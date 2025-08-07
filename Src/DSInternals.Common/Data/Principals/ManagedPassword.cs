@@ -1,36 +1,18 @@
 ﻿namespace DSInternals.Common.Data
 {
     using System;
-    using System.IO;
+    using System.Buffers.Binary;
     using System.Security;
+    using DSInternals.Common.Cryptography;
 
     /// <summary>
     /// Represents a group-managed service account's password information.
     /// </summary>
-    /// <see>https://msdn.microsoft.com/en-us/library/hh881234.aspx</see>
+    /// <see>https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/a9019740-3d73-46ef-a9ae-3ea8eb86ac2e</see>
     public class ManagedPassword
     {
-        private const int MinimumBlobLength = 6 * sizeof(short) + sizeof(int);
-
-        /// <summary>
-        /// Gets the version of the msDS-ManagedPassword binary large object (BLOB).
-        /// </summary>
-        public short Version
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the current password.
-        /// </summary>
-        public string CurrentPassword
-        {
-            get
-            {
-                return this.SecureCurrentPassword.ToUnicodeString();
-            }
-        }
+        private const int StructureHeaderSize = 6 * sizeof(ushort) + sizeof(uint);
+        private const short ExpectedVersion = 1;
 
         /// <summary>
         /// Gets the current password.
@@ -42,24 +24,33 @@
         }
 
         /// <summary>
+        /// Gets the current password.
+        /// </summary>
+        public string CurrentPassword => SecureCurrentPassword.ToUnicodeString();
+
+        /// <summary>
+        /// Gets the NT hash of the current password.
+        /// </summary>
+        public byte[] CurrentNTHash => NTHash.ComputeHash(SecureCurrentPassword);
+
+        /// <summary>
         /// Gets the previous password.
         /// </summary>
-        public string PreviousPassword
+        public SecureString? SecurePreviousPassword
         {
-            get
-            {
-                return this.SecurePreviousPassword.ToUnicodeString();
-            }
+            get;
+            private set;
         }
 
         /// <summary>
         /// Gets the previous password.
         /// </summary>
-        public SecureString SecurePreviousPassword
-        {
-            get;
-            private set;
-        }
+        public string? PreviousPassword => SecurePreviousPassword?.ToUnicodeString();
+
+        /// <summary>
+        /// Gets the NT hash of the previous password.
+        /// </summary>
+        public byte[]? PreviousNTHash => SecurePreviousPassword != null ? NTHash.ComputeHash(SecurePreviousPassword) : null;
 
         /// <summary>
         /// Gets the length of time after which the receiver should requery the password.
@@ -82,51 +73,138 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedPassword"/> class.
         /// </summary>
+        public ManagedPassword(SecureString currentPassword, SecureString previousPassword, TimeSpan queryPasswordInterval, TimeSpan unchangedPasswordInterval)
+        {
+            if (currentPassword == null)
+            {
+                throw new ArgumentNullException(nameof(currentPassword), "The current password is mandatory.");
+            }
+
+            this.SecureCurrentPassword = currentPassword;
+            this.SecurePreviousPassword = previousPassword;
+            this.QueryPasswordInterval = queryPasswordInterval;
+            this.UnchangedPasswordInterval = unchangedPasswordInterval;
+        }
+
+        /// <summary>
+        /// Parses the MSDS-MANAGEDPASSWORD_BLOB binary structure and returns a new instance of the <see cref="ManagedPassword"/> class.
+        /// </summary>
         /// <param name="blob">
         /// The MSDS-MANAGEDPASSWORD_BLOB, which is a representation
         /// of a group-managed service account's password information.
         /// This structure is returned as the msDS-ManagedPassword constructed attribute.
         /// </param>
-        public ManagedPassword(byte[] blob)
+        public static ManagedPassword Parse(Memory<byte> blob)
         {
-            Validator.AssertMinLength(blob, MinimumBlobLength, "blob");
-            using (Stream stream = new MemoryStream(blob))
+            if (blob.Length < StructureHeaderSize)
             {
-                using (BinaryReader reader = new BinaryReader(stream))
+                throw new ArgumentException($"The provided blob is too short. Minimum length is {StructureHeaderSize} bytes.", nameof(blob));
+            }
+
+            // Parse the binary data structure
+            int currentOffset = 0;
+
+            // A 16-bit unsigned integer that defines the version of the msDS-ManagedPassword binary large object (BLOB).
+            ushort version = BinaryPrimitives.ReadUInt16LittleEndian(blob.Slice(currentOffset, sizeof(ushort)).Span);
+            currentOffset += sizeof(ushort);
+
+            // The Version field MUST be set to 0x0001.
+            if (version != 1)
+            {
+                throw new ArgumentException($"Invalid version number in the blob. Expected 1, but got {version}.", nameof(blob));
+            }
+
+            // A 16-bit unsigned integer that MUST be set to 0x0000.
+            ushort reserved = BinaryPrimitives.ReadUInt16LittleEndian(blob.Slice(currentOffset, sizeof(ushort)).Span);
+            currentOffset += sizeof(ushort);
+
+            // We will be benevolent and not test that reserved == 0, as the meaning of this field is not clear.
+
+            // A 32-bit unsigned integer that specifies the length, in bytes, of the msDS-ManagedPassword BLOB.
+            int length = BinaryPrimitives.ReadInt32LittleEndian(blob.Slice(currentOffset, sizeof(int)).Span);
+            currentOffset += sizeof(int);
+
+            if (blob.Length != length)
+            {
+                throw new ArgumentException($"Invalid blob length. Expected {length} bytes, but got {blob.Length} bytes.", nameof(blob));
+            }
+
+            // A 16-bit offset, in bytes, from the beginning of this structure to the CurrentPassword field.
+            ushort currentPasswordOffset = BinaryPrimitives.ReadUInt16LittleEndian(blob.Slice(currentOffset, sizeof(ushort)).Span);
+            currentOffset += sizeof(ushort);
+
+            // A 16-bit offset, in bytes, from the beginning of this structure to the PreviousPassword field.
+            ushort previousPasswordOffset = BinaryPrimitives.ReadUInt16LittleEndian(blob.Slice(currentOffset, sizeof(ushort)).Span);
+            currentOffset += sizeof(ushort);
+
+            // A 16-bit offset, in bytes, from the beginning of this structure to the QueryPasswordInterval field.
+            ushort queryPasswordIntervalOffset = BinaryPrimitives.ReadUInt16LittleEndian(blob.Slice(currentOffset, sizeof(ushort)).Span);
+            currentOffset += sizeof(ushort);
+
+            // A 16-bit offset, in bytes, from the beginning of this structure to the UnchangedPasswordInterval field.
+            ushort unchangedPasswordIntervalOffset = BinaryPrimitives.ReadUInt16LittleEndian(blob.Slice(currentOffset, sizeof(ushort)).Span);
+
+            bool offsetsValid =
+                currentPasswordOffset >= StructureHeaderSize &&
+                (previousPasswordOffset == 0 && currentPasswordOffset < queryPasswordIntervalOffset || currentPasswordOffset < previousPasswordOffset && previousPasswordOffset < queryPasswordIntervalOffset) &&
+                queryPasswordIntervalOffset + sizeof(long) <= unchangedPasswordIntervalOffset &&
+                unchangedPasswordIntervalOffset + sizeof(long) <= blob.Length;
+
+            if (!offsetsValid)
+            {
+                throw new ArgumentException("Offsets in the MSDS-MANAGEDPASSWORD_BLOB are invalid.", nameof(blob));
+            }
+
+            // Read CurrentPassword: A null-terminated WCHAR string containing the cleartext current password for the account.
+            int currentPasswordUpperBound = previousPasswordOffset > 0 ? previousPasswordOffset : queryPasswordIntervalOffset;
+            ReadOnlySpan<byte> currentPasswordSlice = blob.Slice(currentPasswordOffset, currentPasswordUpperBound - currentPasswordOffset).Span;
+            SecureString currentPassword = ReadSecureWString(currentPasswordSlice);
+
+            SecureString previousPassword = null;
+
+            if (previousPasswordOffset > 0)
+            {
+                // Read PreviousPassword (optional): A null-terminated WCHAR string containing the cleartext previous password for the account. 
+                ReadOnlySpan<byte> previousPasswordSlice = blob.Slice(previousPasswordOffset, queryPasswordIntervalOffset - previousPasswordOffset).Span;
+                previousPassword = ReadSecureWString(previousPasswordSlice);
+            }
+
+            // A 64-bit unsigned integer containing the length of time, in units of 10^(-7) seconds, after which the receiver MUST re-query the password.
+            long queryPasswordIntervalBinary = BinaryPrimitives.ReadInt64LittleEndian(blob.Slice(queryPasswordIntervalOffset, sizeof(long)).Span);
+            TimeSpan queryPasswordInterval = TimeSpan.FromTicks(queryPasswordIntervalBinary);
+
+            // A 64-bit unsigned integer containing the length of time, in units of 10^(-7) seconds, before which password queries will always return this password value.
+            long unchangedPasswordIntervalBinary = BinaryPrimitives.ReadInt64LittleEndian(blob.Slice(unchangedPasswordIntervalOffset, sizeof(long)).Span);
+            TimeSpan unchangedPasswordInterval = TimeSpan.FromTicks(unchangedPasswordIntervalBinary);
+
+            return new ManagedPassword(
+                currentPassword,
+                previousPassword,
+                queryPasswordInterval,
+                unchangedPasswordInterval);
+        }
+
+        /// <summary>
+        /// Reads a null-terminated Unicode string from the specified byte array.
+        /// </summary>
+        private unsafe static SecureString ReadSecureWString(ReadOnlySpan<byte> blob)
+        {
+            fixed (byte* blobPointer = blob)
+            {
+                // Temporarily cast the byte array to a char sequence to find the null terminator.
+                ReadOnlySpan<char> stringSlice = new ReadOnlySpan<char>(blobPointer, blob.Length);
+
+                // Find the null terminator in the string slice
+                int terminatorIndex = stringSlice.IndexOf(char.MinValue);
+
+                if (terminatorIndex < 0)
                 {
-                    // A 16-bit unsigned integer that defines the version of the msDS-ManagedPassword binary large object (BLOB). The Version field MUST be set to 0x0001.
-                    this.Version = reader.ReadInt16();
-                    // TODO: Test that version == 1
-
-                    // A 16-bit unsigned integer that MUST be set to 0x0000.
-                    short reserved = reader.ReadInt16();
-                    // TODO: Test that reserved == 0
-
-                    // A 32-bit unsigned integer that specifies the length, in bytes, of the msDS-ManagedPassword BLOB.
-                    int length = reader.ReadInt32();
-                    Validator.AssertLength(blob, length, "blob");
-
-                    // A 16-bit offset, in bytes, from the beginning of this structure to the CurrentPassword field. The CurrentPasswordOffset field MUST NOT be set to 0x0000.
-                    short currentPasswordOffset = reader.ReadInt16();
-                    this.SecureCurrentPassword = blob.ReadSecureWString(currentPasswordOffset);
-
-                    // A 16-bit offset, in bytes, from the beginning of this structure to the PreviousPassword field. If this field is set to 0x0000, then the account has no previous password.
-                    short previousPasswordOffset = reader.ReadInt16();
-                    if(previousPasswordOffset > 0)
-                    {
-                        this.SecurePreviousPassword = blob.ReadSecureWString(previousPasswordOffset);
-                    }
-
-                    // A 16-bit offset, in bytes, from the beginning of this structure to the QueryPasswordInterval field.
-                    short queryPasswordIntervalOffset = reader.ReadInt16();
-                    long queryPasswordIntervalBinary = BitConverter.ToInt64(blob, queryPasswordIntervalOffset);
-                    this.QueryPasswordInterval = TimeSpan.FromTicks(queryPasswordIntervalBinary);
-
-                    // A 16-bit offset, in bytes, from the beginning of this structure to the UnchangedPasswordInterval field.
-                    short unchangedPasswordIntervalOffset = reader.ReadInt16();
-                    long unchangedPasswordIntervalBinary = BitConverter.ToInt64(blob, unchangedPasswordIntervalOffset);
-                    this.UnchangedPasswordInterval = TimeSpan.FromTicks(unchangedPasswordIntervalBinary);
+                    // The string is not null-terminated.
+                    throw new ArgumentException("The field must be a null-terminated WCHAR string.", nameof(blob));
                 }
+
+                // Read the string, excluding the null character
+                return new SecureString((char*)blobPointer, terminatorIndex);
             }
         }
     }
