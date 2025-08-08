@@ -27,8 +27,9 @@ jobs:
         include:
         - language: actions
           build-mode: none
-        - language: c-cpp
-          build-mode: manual
+        # Temporarily disable C++
+        #- language: c-cpp
+        #  build-mode: manual
         - language: csharp
           build-mode: manual
 
