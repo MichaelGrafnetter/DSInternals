@@ -23,15 +23,19 @@ jobs:
       with:
         msbuild-architecture: x64 # default is x86
 
-    - name: Invoke MSBuild AMD64
+    - name: Restore NuGet Packages
       working-directory: Src
-      run: msbuild.exe -target:Build -restore:True -property:Configuration=Debug -property:Platform=x64 -noLogo
+      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true -noLogo
+      
+    - name: Build AMD64
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -noLogo
     
-    - name: Invoke MSBuild ARM64
+    - name: Build ARM64
       working-directory: Src
-      run: msbuild.exe -target:Build -restore:True -property:Configuration=Debug -property:Platform=ARM64 -noLogo
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -noLogo
 
-    - name: Invoke MSBuild x86
+    - name: Build x86
       working-directory: Src
-      run: msbuild.exe -target:Build -restore:True -property:Configuration=Debug -property:Platform=x86 -noLogo
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x86 -noLogo
               
