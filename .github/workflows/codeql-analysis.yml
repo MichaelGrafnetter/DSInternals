@@ -67,7 +67,7 @@ jobs:
     - name: Build CPP Projects
       if: matrix.build-mode == 'manual' && matrix.language == 'c-cpp'
       working-directory: Src/DSInternals.Replication.Interop
-      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -noLogo
+      run: msbuild.exe -target:Build -property:Configuration=Debug -noLogo
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
