@@ -27,7 +27,7 @@
 
         protected override void ProcessRecord()
         {
-            this.WriteObject(new ManagedPassword(this.Blob));
+            this.WriteObject(ManagedPassword.Parse(this.Blob));
         }
 
         #endregion Cmdlet Overrides

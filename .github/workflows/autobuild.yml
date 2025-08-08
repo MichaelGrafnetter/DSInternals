@@ -1,0 +1,41 @@
+name: CI Build
+
+on:
+  push:
+    paths:
+    - 'Src/**'
+    - '.github/workflows/autobuild.yml'            
+
+jobs:
+  build:
+    name: 'Build'
+    runs-on: windows-latest
+    timeout-minutes: 10
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: x64 # default is x86
+
+    - name: Restore NuGet Packages
+      working-directory: Src
+      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true -noLogo
+      
+    - name: Build AMD64
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -noLogo
+    
+    - name: Build ARM64
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -noLogo
+
+    - name: Build x86
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x86 -noLogo
+              
