@@ -55,19 +55,14 @@ jobs:
         msbuild-architecture: x64 # default is x86
 
     - name: Restore NuGet Packages
-      if: matrix.build-mode == 'manual' && ( matrix.language == 'c-cpp' || matrix.language == 'csharp' )
+      if: matrix.build-mode == 'manual'
       working-directory: Src
       run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true -noLogo
 
     - name: Build All Projects
-      if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
+      if: matrix.build-mode == 'manual'
       working-directory: Src
       run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -noLogo
-
-    - name: Build CPP Projects
-      if: matrix.build-mode == 'manual' && matrix.language == 'c-cpp'
-      working-directory: Src/DSInternals.Replication.Interop
-      run: msbuild.exe -target:Build -property:Configuration=Debug -noLogo
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
