@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "RpcTypeConverter.h"
 
 using namespace DSInternals::Common;

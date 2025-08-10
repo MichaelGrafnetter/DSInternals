@@ -1,12 +1,9 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.DirectoryServices.ActiveDirectory;
-using System.IO;
 using System.Security;
 using DSInternals.Common.Cryptography;
 using DSInternals.Common.Exceptions;
 using DSInternals.Common.Interop;
-using DSInternals.Common.Properties;
 
 namespace DSInternals.Common
 {
@@ -76,7 +73,7 @@ namespace DSInternals.Common
         {
             if(!String.Equals(expectedValue, actualValue, StringComparison.InvariantCulture))
             {
-                string message = String.Format(Resources.UnexpectedValueMessage, actualValue, expectedValue);
+                string message = String.Format("The input contains an unexpected value '{0}', while the expected value is '{1}'.", actualValue, expectedValue);
                 throw new ArgumentException(message, paramName);
             }
         }
@@ -85,7 +82,7 @@ namespace DSInternals.Common
         {
             if (expectedValue != actualValue)
             {
-                string message = String.Format(Resources.UnexpectedValueMessage, actualValue, expectedValue);
+                string message = String.Format("The input contains an unexpected value '{0}', while the expected value is '{1}'.", actualValue, expectedValue);
                 throw new ArgumentException(message, paramName);
             }
         }
@@ -94,7 +91,7 @@ namespace DSInternals.Common
         {
             if (expectedValue.CompareTo(actualValue) != 0)
             {
-                string message = String.Format(Resources.UnexpectedValueMessage, actualValue, expectedValue);
+                string message = String.Format("The input contains an unexpected value '{0}', while the expected value is '{1}'.", actualValue, expectedValue);
                 throw new ArgumentException(message, paramName);
             }
         }
@@ -128,7 +125,7 @@ namespace DSInternals.Common
             AssertNotNull(value, paramName);
             if(value.Length != length)
             {
-                throw new ArgumentOutOfRangeException(paramName, value.Length, Resources.UnexpectedLengthMessage);
+                throw new ArgumentOutOfRangeException(paramName, value.Length, "The length of the input is unexpected.");
             }
         }
 
@@ -137,7 +134,7 @@ namespace DSInternals.Common
             AssertNotNull(password, paramName);
             if (password.Length > maxLength)
             {
-                throw new ArgumentOutOfRangeException(paramName, password.Length, Resources.InputLongerThanMaxMessage);
+                throw new ArgumentOutOfRangeException(paramName, password.Length, "The input is longer than the maximum length.");
             }
         }
 
@@ -146,7 +143,7 @@ namespace DSInternals.Common
             AssertNotNull(input, paramName);
             if (input.Length > maxLength)
             {
-                throw new ArgumentOutOfRangeException(paramName, input.Length, Resources.InputLongerThanMaxMessage);
+                throw new ArgumentOutOfRangeException(paramName, input.Length, "The input is longer than the maximum length.");
             }
         }
 
@@ -155,7 +152,7 @@ namespace DSInternals.Common
             AssertNotNull(input, paramName);
             if (input.Length > maxLength)
             {
-                throw new ArgumentOutOfRangeException(paramName, input.Length, Resources.InputLongerThanMaxMessage);
+                throw new ArgumentOutOfRangeException(paramName, input.Length, "The input is longer than the maximum length.");
             }
         }
 
@@ -164,7 +161,7 @@ namespace DSInternals.Common
             AssertNotNull(data, paramName);
             if (data.Length < minLength)
             {
-                var exception = new ArgumentOutOfRangeException(paramName, data.Length, Resources.InputShorterThanMinMessage);
+                var exception = new ArgumentOutOfRangeException(paramName, data.Length, "The input is shorter than the minimum length.");
                 // DEBUG: exception.Data.Add("BinaryBlob", data.ToHex());
                 throw exception;
             }
@@ -175,7 +172,7 @@ namespace DSInternals.Common
             AssertNotNull(value, paramName);
             if (value.Length != length)
             {
-                throw new ArgumentOutOfRangeException(paramName, value.Length, Resources.UnexpectedLengthMessage);
+                throw new ArgumentOutOfRangeException(paramName, value.Length, "The length of the input is unexpected.");
             }
         }
 
@@ -184,7 +181,7 @@ namespace DSInternals.Common
             bool exists = File.Exists(filePath);
             if(!exists)
             {
-                throw new FileNotFoundException(Resources.PathNotFoundMessage, filePath);
+                throw new FileNotFoundException("Path not found.", filePath);
             }
         }
 
@@ -193,7 +190,7 @@ namespace DSInternals.Common
             bool exists = Directory.Exists(directoryPath);
             if (!exists)
             {
-                throw new DirectoryNotFoundException(Resources.PathNotFoundMessage);
+                throw new DirectoryNotFoundException("Path not found.");
             }
         }
 
@@ -202,7 +199,7 @@ namespace DSInternals.Common
             uint actualCrc = Crc32.Calculate(buffer);
             if(actualCrc != expectedCrc)
             {
-                throw new FormatException(Resources.InvalidCRCMessage);
+                throw new FormatException("CRC check failed.");
             }
         }
     }

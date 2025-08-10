@@ -1,13 +1,12 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common;
-    using DSInternals.Common.Interop;
-    using DSInternals.PowerShell.Properties;
-    using DSInternals.SAM;
-    using DSInternals.SAM.Interop;
     using System.ComponentModel;
     using System.Management.Automation;
     using System.Security.Principal;
+    using DSInternals.Common;
+    using DSInternals.Common.Interop;
+    using DSInternals.SAM;
+    using DSInternals.SAM.Interop;
 
     [Cmdlet(VerbsCommon.Set, "SamAccountPasswordHash")]
     [OutputType("None")]
@@ -129,7 +128,7 @@
                         break;
                     default:
                         // This should never happen:
-                        throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+                        throw new PSInvalidOperationException(InvalidParameterSetMessage);
                 }
                 /* Connect to the domain. */
                 using (SamDomain domain = this.SamServer.OpenDomain(domainSid, SamDomainAccessMask.Lookup))

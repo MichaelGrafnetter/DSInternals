@@ -1,11 +1,10 @@
 ﻿namespace DSInternals.Common.Data
 {
-    using DSInternals.Common.Cryptography;
-    using DSInternals.Common.Properties;
     using System;
     using System.Collections.Generic;
     using System.Security.AccessControl;
     using System.Security.Principal;
+    using DSInternals.Common.Cryptography;
 
     public class DSAccount
     {
@@ -17,7 +16,7 @@
 
             if (!dsObject.IsAccount)
             {
-                throw new ArgumentException(Resources.ObjectNotAccountMessage);
+                throw new ArgumentException("Object is not an account.");
             }
 
             // Common properties

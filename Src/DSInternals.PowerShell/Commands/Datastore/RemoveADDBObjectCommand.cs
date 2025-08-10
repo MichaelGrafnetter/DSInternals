@@ -1,11 +1,9 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common.Data;
-    using DSInternals.Common.Exceptions;
-    using DSInternals.DataStore;
-    using DSInternals.PowerShell.Properties;
     using System;
     using System.Management.Automation;
+    using DSInternals.Common.Data;
+    using DSInternals.Common.Exceptions;
 
     [Cmdlet(VerbsCommon.Remove, "ADDBObject",
         ConfirmImpact = ConfirmImpact.High,
@@ -77,7 +75,7 @@
 
                     default:
                         // This should never happen:
-                        throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+                        throw new PSInvalidOperationException(InvalidParameterSetMessage);
                 }
             }
             catch(DirectoryObjectNotFoundException ex)

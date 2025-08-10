@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DSInternals.Common.AzureAD
+﻿namespace DSInternals.Common.AzureAD
 {
     public class GraphApiException : Exception
     {

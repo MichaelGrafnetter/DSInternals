@@ -1,9 +1,7 @@
-﻿using DSInternals.Common.Data;
-using DSInternals.DataStore;
-using DSInternals.PowerShell.Properties;
-using System;
-using System.Management.Automation;
+﻿using System.Management.Automation;
 using System.Security;
+using DSInternals.Common.Data;
+using DSInternals.DataStore;
 
 namespace DSInternals.PowerShell.Commands
 {
@@ -60,7 +58,7 @@ namespace DSInternals.PowerShell.Commands
 
                 default:
                     // This should never happen:
-                    throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+                    throw new PSInvalidOperationException(InvalidParameterSetMessage);
             }
             this.WriteVerboseResult(hasChanged);
         }

@@ -1,13 +1,12 @@
 ﻿namespace DSInternals.DataStore
 {
+    using System;
+    using System.Security;
+    using System.Security.Principal;
     using DSInternals.Common;
     using DSInternals.Common.Cryptography;
     using DSInternals.Common.Data;
     using DSInternals.Common.Exceptions;
-    using DSInternals.Common.Properties;
-    using System;
-    using System.Security;
-    using System.Security.Principal;
 
     public partial class DirectoryAgent : IDisposable
     {
@@ -102,7 +101,7 @@
 
             if (!targetObject.IsAccount)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
+                throw new DirectoryObjectOperationException("Object is not a security principal.", targetObjectIdentifier);
             }
 
             if (newSupplementalCredentials == null)

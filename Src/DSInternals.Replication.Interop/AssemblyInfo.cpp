@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include "..\Configuration\CommonAssemblyInfo.h"
+#include "pch.h"
 
 using namespace System;
 using namespace System::Reflection;
@@ -13,8 +12,9 @@ using namespace System::Security::Permissions;
 // associated with an assembly.
 //
 [assembly:AssemblyTitleAttribute(L"DSInternals Replication Interop Library")];
-// Note: Do not forget to change the version in version.rc files.
-[assembly:AssemblyVersionAttribute("4.14")];
+[assembly:AssemblyVersionAttribute("5.5")];
+[assembly:AssemblyProductAttribute(L"DSInternals PowerShell Module")];
+[assembly:AssemblyCopyrightAttribute(L"Copyright (c) 2015-2025 Michael Grafnetter. All rights reserved.")];
 [assembly:AssemblyDescriptionAttribute(L"")];
 [assembly:AssemblyConfigurationAttribute(L"")];
 [assembly:AssemblyCompanyAttribute(L"")];

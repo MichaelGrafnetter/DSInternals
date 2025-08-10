@@ -3,7 +3,6 @@
     using System;
     using System.Management.Automation;
     using DSInternals.DataStore;
-    using DSInternals.PowerShell.Properties;
 
     [Cmdlet(VerbsCommon.Set, "ADDBBootKey")]
     [OutputType("None")]
@@ -43,7 +42,7 @@
             if (!Force.IsPresent)
             {
                 // Do not continue with operation until the user enforces it.
-                var exception = new ArgumentException(Resources.WarningMessage);
+                var exception = new ArgumentException(WarningMessage);
                 var error = new ErrorRecord(exception, "SetADDBBootKey_ForceRequired", ErrorCategory.InvalidArgument, null);
                 this.ThrowTerminatingError(error);
             }

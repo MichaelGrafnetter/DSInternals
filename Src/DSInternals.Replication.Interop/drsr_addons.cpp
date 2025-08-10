@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "drsr_addons.h"
 
 #define SuppressRpcException(Function,...)								\

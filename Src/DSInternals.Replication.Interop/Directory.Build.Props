@@ -1,0 +1,59 @@
+<Project>
+  <!-- Configure common C++ project properties -->
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup>
+    <PlatformToolset>v143</PlatformToolset>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>7.0</WindowsTargetPlatformMinVersion>
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <RootNamespace>DSInternals.Replication.Interop</RootNamespace>
+    <TargetName>DSInternals.Replication.Interop</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Rpcrt4.lib;Secur32.lib</AdditionalDependencies>
+    </Link>
+    <!-- Override the MIDL compiler settings -->
+    <Midl>
+      <OutputDirectory>$(MSBuildThisFileDirectory)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <ClientStubFile>%(Filename).cpp</ClientStubFile>
+      <GenerateClientFiles>Stub</GenerateClientFiles>
+      <GenerateServerFiles>None</GenerateServerFiles>
+      <GenerateTypeLibrary>false</GenerateTypeLibrary>
+      <EnableErrorChecks>All</EnableErrorChecks>
+    </Midl>
+  </ItemDefinitionGroup>
+    <PropertyGroup Condition="'$(Configuration)' =='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' =='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <Optimization>Disabled</Optimization>
+      <ExceptionHandling>false</ExceptionHandling>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

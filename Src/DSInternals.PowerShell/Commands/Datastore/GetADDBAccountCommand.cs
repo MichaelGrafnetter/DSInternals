@@ -1,10 +1,6 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Cryptography;
+﻿using System.Management.Automation;
 using DSInternals.Common.Data;
 using DSInternals.DataStore;
-using DSInternals.PowerShell.Properties;
-using System;
-using System.Management.Automation;
 
 namespace DSInternals.PowerShell.Commands
 {
@@ -101,7 +97,7 @@ namespace DSInternals.PowerShell.Commands
 
                 default:
                     // This should never happen:
-                    throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+                    throw new PSInvalidOperationException(InvalidParameterSetMessage);
             }
             this.WriteObject(account);
         }

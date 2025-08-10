@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '4.16'
+ModuleVersion = '6.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = 'Desktop'
@@ -33,19 +33,16 @@ DISCLAIMER: Features exposed through this module are not supported by Microsoft 
 "@
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '3.0'
+PowerShellVersion = '5.0'
 
-# Minimum version of Microsoft .NET Framework required by this module
-DotNetFrameworkVersion = '4.7.2' # This requirement is not enforced by older versions of PS.
-
-# Minimum version of the common language runtime (CLR) required by this module
-CLRVersion = '4.0.30319.42000' # Corresponds to .NET Framework 4.6 and later
+# Compatible PowerShell Editions
+CompatiblePSEditions = @('Core', 'Desktop')
 
 # Processor architecture (None, X86, Amd64, ARM64) required by this module
 ProcessorArchitecture = 'None'
 
 # Type files (.ps1xml) to be loaded when importing this module
-TypesToProcess = @('DSInternals.types.ps1xml')
+TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
 FormatsToProcess = 'Views\DSInternals.AzureADUser.format.ps1xml',
@@ -63,7 +60,7 @@ FormatsToProcess = 'Views\DSInternals.AzureADUser.format.ps1xml',
                    'Views\DSInternals.LsaPolicyInformation.format.ps1xml'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('DSInternals.PowerShell.dll')
+NestedModules = @()
 
 # Functions to export from this module
 FunctionsToExport = @()
@@ -103,24 +100,36 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'New-ADNgcKey','Get-ADDBGroupManagedServiceAccount'
 
 # List of assemblies that must be loaded prior to importing this module
-RequiredAssemblies = @('DSInternals.Common.dll')
+RequiredAssemblies = @()
 
 # List of all files packaged with this module
-FileList = 'AutoMapper.dll',
-           'CBOR.dll',
-           'DSInternals.DataStore.dll',
-           'DSInternals.Replication.dll',
-           'DSInternals.Replication.Model.dll',
-           'DSInternals.SAM.dll',
-           'Esent.Interop.dll',
-           'Esent.Isam.dll',
+FileList = 'net48\AutoMapper.dll',
+           'net48\CBOR.dll',
+           'net48\DSInternals.DataStore.dll',
+           'net48\DSInternals.Replication.dll',
+           'net48\DSInternals.Replication.Model.dll',
+           'net48\DSInternals.SAM.dll',
+           'net48\Esent.Interop.dll',
+           'net48\Esent.Isam.dll',
+           'net48\Newtonsoft.Json.dll',
+           'net48\Numbers.dll',
+           'net48\amd64\DSInternals.Replication.Interop.dll',
+           'net48\arm64\DSInternals.Replication.Interop.dll',
+           'net48\x86\DSInternals.Replication.Interop.dll',
+           'net8.0-windows\AutoMapper.dll',
+           'net8.0-windows\CBOR.dll',
+           'net8.0-windows\DSInternals.DataStore.dll',
+           'net8.0-windows\DSInternals.Replication.dll',
+           'net8.0-windows\DSInternals.Replication.Model.dll',
+           'net8.0-windows\DSInternals.SAM.dll',
+           'net8.0-windows\Esent.Interop.dll',
+           'net8.0-windows\Esent.Isam.dll',
+           'net8.0-windows\Newtonsoft.Json.dll',
+           'net8.0-windows\Numbers.dll',
+           'net8.0-windows\amd64\DSInternals.Replication.Interop.dll',
+           'net8.0-windows\arm64\DSInternals.Replication.Interop.dll',
+           'net8.0-windows\x86\DSInternals.Replication.Interop.dll',
            'License.txt',
-           'NDceRpc.Microsoft.dll',
-           'Newtonsoft.Json.dll',
-           'Numbers.dll',
-           'amd64\DSInternals.Replication.Interop.dll',
-           'arm64\DSInternals.Replication.Interop.dll',
-           'x86\DSInternals.Replication.Interop.dll',
            'en-US\about_DSInternals.help.txt',
            'en-US\DSInternals.PowerShell.dll-Help.xml'
 

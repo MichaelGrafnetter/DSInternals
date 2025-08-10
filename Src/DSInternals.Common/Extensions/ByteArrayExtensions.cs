@@ -5,7 +5,6 @@
     using System.Security;
     using System.Security.Principal;
     using System.Text;
-    using DSInternals.Common.Properties;
 
     public static class ByteArrayExtensions
     {
@@ -25,7 +24,7 @@
             if (length % 2 != 0)
             {
                 // Each byte in a HEX string must be encoded using 2 characters.
-                var exception = new ArgumentException(Resources.NotHexStringMessage, nameof(hex));
+                var exception = new ArgumentException("Parameter is not a hexadecimal string.", nameof(hex));
                 exception.Data.Add("Value", hex);
                 throw exception;
             }
@@ -63,7 +62,7 @@
                 else
                 {
                     // Invalid digit
-                    var exception = new ArgumentException(Resources.NotHexStringMessage, nameof(hex));
+                    var exception = new ArgumentException("Parameter is not a hexadecimal string.", nameof(hex));
                     exception.Data.Add("Value", hex);
                     throw exception;
                 }

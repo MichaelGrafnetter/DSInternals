@@ -1,108 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="..\Configuration\Common.csproj.props" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- NuGet package metadata -->
   <PropertyGroup>
-    <ProjectGuid>{8A857B97-1BE0-4BAE-A4E8-DEE870858BFD}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DSInternals.DataStore</RootNamespace>
-    <AssemblyName>DSInternals.DataStore</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile />
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <IsPackable>true</IsPackable>
+    <Version>5.5</Version>
+    <AssemblyTitle>DSInternals DataStore Library</AssemblyTitle>
+    <Title>$(AssemblyTitle)</Title>
+    <Description>DSInternals DataStore is an advanced framework for offline ntds.dit file manipulation. It can be used to extract password hashes from Active Directory backups or to modify the sIDHistory and primaryGroupId attributes.</Description>
+    <PackageReleaseNotes>- The `DomainController` class exposes more DC properties, including `ServerObjectDN`, `NTDSSettingsObjectDN`, and `ForestRootNamingContext`.</PackageReleaseNotes>
+    <PackageTags>ActiveDirectory Security NTDS AD Identity Active Directory</PackageTags>
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <!-- Override the default configuration for this assembly and emit PDB-->
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>pdbonly</DebugType>
-    <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Numerics" />
+    <PackageReference Include="DSInternals.ManagedEsent.Interop" Version="2.0.4.1" />
+    <PackageReference Include="DSInternals.ManagedEsent.Isam" Version="2.0.4.1" />
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="AttributeMetadata.cs" />
-    <Compile Include="AttributeMetadataCollection.cs" />
-    <Compile Include="Cryptography\BootKeyRetriever.cs" />
-    <Compile Include="Cryptography\DataStoreSecretDecryptor.cs" />
-    <Compile Include="DatabaseFlags.cs" />
-    <Compile Include="DatastoreObject.cs" />
-    <Compile Include="DirectoryAgent.cs" />
-    <Compile Include="DirectoryAgent.PasswordManagement.cs">
-      <DependentUpon>DirectoryAgent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Enums\FunctionalLevel.cs" />
-    <Compile Include="Enums\AttributeSystemFlags.cs" />
-    <Compile Include="ADConstants.cs" />
-    <Compile Include="Enums\DatabaseState.cs" />
-    <Compile Include="Enums\PekListFlags.cs" />
-    <Compile Include="Enums\PekListVersion.cs" />
-    <Compile Include="Exceptions\InvalidDatabaseStateException.cs" />
-    <Compile Include="PrefixMap.cs" />
-    <Compile Include="SchemaAttribute.cs" />
-    <Compile Include="Extensions\CursorExtensions.cs" />
-    <Compile Include="Enums\DomainControllerOptions.cs" />
-    <Compile Include="DirectoryContext.cs" />
-    <Compile Include="DistinguishedNameResolver.cs" />
-    <Compile Include="DomainController.cs" />
-    <Compile Include="Interfaces\IDomainController.cs" />
-    <Compile Include="Interfaces\ISchemaAttributeExt.cs" />
-    <Compile Include="SecurityDescriptorResolver.cs" />
-    <Compile Include="LinkResolver.cs" />
-    <Compile Include="Enums\LinkType.cs" />
-    <Compile Include="Enums\AttributeOmSyntax.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DirectorySchema.cs" />
-    <Compile Include="Enums\SearchFlags.cs" />
+    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj">
-      <Project>{7d47f040-d3a9-43ca-9f69-ef91faf2c23a}</Project>
-      <Name>DSInternals.Common</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Microsoft.Database.Isam\Microsoft.Database.Isam.csproj">
-      <Project>{21cc632c-b09a-4db7-bd6e-7f7d2716f58f}</Project>
-      <Name>Microsoft.Database.Isam</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Microsoft.Isam.Esent.Interop\Microsoft.Isam.Esent.Interop.csproj">
-      <Project>{e929e163-52a0-4aac-917b-6d7faf70c45e}</Project>
-      <Name>Microsoft.Isam.Esent.Interop</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DSInternals.DataStore.nuspec" />
-    <None Include="package\install.ps1" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

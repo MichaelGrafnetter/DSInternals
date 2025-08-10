@@ -1,8 +1,6 @@
 ﻿namespace DSInternals.Common.Exceptions
 {
-    using DSInternals.Common.Properties;
     using System;
-    using System.Security.Principal;
 
     [Serializable]
     public sealed class DirectoryObjectNotFoundException : DirectoryObjectException
@@ -17,8 +15,8 @@
             get
             {
                 return this.ObjectIdentifier != null ?
-                    String.Format(Resources.ObjectWithIdentityNotFoundMessageFormat, this.ObjectIdentifier) :
-                    Resources.ObjectNotFoundMessage;
+                    String.Format("Object with identity '{0}' has not been found.", this.ObjectIdentifier) :
+                    "Could not find the requested object.";
             }
         }
     }

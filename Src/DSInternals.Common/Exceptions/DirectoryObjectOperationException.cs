@@ -1,8 +1,4 @@
-﻿using DSInternals.Common.Properties;
-using System;
-using System.Security.Principal;
-
-namespace DSInternals.Common.Exceptions
+﻿namespace DSInternals.Common.Exceptions
 {
     [Serializable]
     public class DirectoryObjectOperationException : DirectoryObjectException
@@ -22,7 +18,7 @@ namespace DSInternals.Common.Exceptions
         {
             get
             {
-                return String.Format(Resources.OperationExceptionMessageFormat, this.Reason, this.ObjectIdentifier);
+                return $"{this.Reason} (Object identity: '{this.ObjectIdentifier}')";
             }
         }
     }

@@ -1,13 +1,12 @@
 ﻿namespace DSInternals.DataStore
 {
-    using DSInternals.Common;
-    using DSInternals.Common.Data;
-    using DSInternals.Common.Exceptions;
-    using DSInternals.Common.Properties;
-    using Microsoft.Database.Isam;
     using System;
     using System.Collections.Generic;
     using System.Security.Principal;
+    using DSInternals.Common;
+    using DSInternals.Common.Data;
+    using DSInternals.Common.Exceptions;
+    using Microsoft.Database.Isam;
 
     public partial class DirectoryAgent : IDisposable
     {
@@ -104,7 +103,7 @@
         {
             if (!foundObject.IsAccount)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, objectIdentifier);
+                throw new DirectoryObjectOperationException("Object is not a security principal.", objectIdentifier);
             }
 
             var pek = GetSecretDecryptor(bootKey);
@@ -429,7 +428,7 @@
         {
             if (!targetObject.IsSecurityPrincipal)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
+                throw new DirectoryObjectOperationException("Object is not a security principal.", targetObjectIdentifier);
             }
             using (var transaction = this.context.BeginTransaction())
             {
@@ -496,7 +495,7 @@
                 if (!numericUac.HasValue)
                 {
                     // This object does not have the userAccountControl attribute, so it probably is not an account.
-                    throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
+                    throw new DirectoryObjectOperationException("Object is not an account.", targetObjectIdentifier);
                 }
 
                 var uac = (UserAccountControl)numericUac.Value;
@@ -522,7 +521,7 @@
         {
             if (!targetObject.IsAccount)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
+                throw new DirectoryObjectOperationException("Object is not an account.", targetObjectIdentifier);
             }
 
             using (var transaction = this.context.BeginTransaction())
@@ -543,7 +542,7 @@
         {
             if (!targetObject.IsAccount)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
+                throw new DirectoryObjectOperationException("Object is not an account.", targetObjectIdentifier);
             }
             // TODO: Validator.ValidateRid
             // TODO: Test if the rid exists?

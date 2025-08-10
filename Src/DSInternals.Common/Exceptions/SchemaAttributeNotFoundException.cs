@@ -1,6 +1,5 @@
 ﻿namespace DSInternals.Common.Exceptions
 {
-    using DSInternals.Common.Properties;
     using System;
 
     [Serializable]
@@ -24,7 +23,7 @@
         {
             get
             {
-                return string.Format(Resources.AttributeNotFoundMessageFormat, this.AttributeIdentifier);
+                return string.Format("Directory schema does not contain attribute '{0}'.", this.AttributeIdentifier);
             }
         }
     }
