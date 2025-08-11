@@ -21,7 +21,7 @@
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
-            this.mapper = new MapperConfiguration(cfg => cfg.CreateMap<DSInternals.DataStore.SchemaAttribute, DSInternals.PowerShell.SchemaAttribute>(), null).CreateMapper();
+            this.mapper = new MapperConfiguration(cfg => cfg.CreateMap<DSInternals.DataStore.SchemaAttribute, DSInternals.PowerShell.SchemaAttribute>()).CreateMapper();
         }
         protected override void ProcessRecord()
         {

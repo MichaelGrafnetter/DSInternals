@@ -746,7 +746,7 @@
           "System.ValueTuple": "[4.6.1, )"
         }
       },
-      "dsinternals.replication.interop.netcore": {
+      "DSInternals.Replication.Interop": {
         "type": "Project",
         "dependencies": {
           "DSInternals.Common": "[5.5.0, )",

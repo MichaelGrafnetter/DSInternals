@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Do not use packages for assemblies that are part of .NET Framework -->
     <Reference Include="System.DirectoryServices" Condition="'$(TargetFramework)' == 'net48'" />
     <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net48'" />
   </ItemGroup>
