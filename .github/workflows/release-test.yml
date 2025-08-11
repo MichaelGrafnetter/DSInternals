@@ -50,7 +50,7 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         cache: true
-        cache-dependency-path: '*/packages.lock.json'
+        cache-dependency-path: 'Src/*/packages.lock.json'
 
     # - name: Cache DotNet Global Tools
     #  id: cache-dotnet-globaltools
