@@ -43,11 +43,6 @@
   <ImportGroup Label="Shared">
     <Import Project="..\DSInternals.Replication.Interop.Shared.vcxitems" Label="Shared" />
   </ImportGroup>
-  <!-- Configure strong name signing if the private key exists -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Release' AND Exists('$(MSBuildThisFileDirectory)..\..\..\Keys\DSInternals.Private.snk')">
-    <LinkKeyFile>$(MSBuildThisFileDirectory)..\..\..\Keys\DSInternals.Private.snk</LinkKeyFile>
-    <LinkDelaySign>false</LinkDelaySign>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

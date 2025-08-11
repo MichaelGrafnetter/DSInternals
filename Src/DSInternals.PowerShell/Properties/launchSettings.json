@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "PowerShell Desktop": {
+      "commandName": "Executable",
+      "executablePath": "$(WINDIR)\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "commandLineArgs": "-NoExit -NoLogo -NoProfile -ExecutionPolicy Bypass -File \"..\\..\\..\\..\\..\\..\\Src\\DSInternals.PowerShell\\Run-Cmdlets.ps1\"",
+      "nativeDebugging": true
+    },
+    "PowerShell Core": {
+      "commandName": "Executable",
+      "executablePath": "$(PROGRAMFILES)\\PowerShell\\7\\pwsh.exe",
+      "commandLineArgs": "-NoExit -NoLogo -NoProfile -ExecutionPolicy Bypass -File \"..\\..\\..\\..\\..\\..\\Src\\DSInternals.PowerShell\\Run-Cmdlets.ps1\"",
+      "nativeDebugging": true
+    }
+  }
+}

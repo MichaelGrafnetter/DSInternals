@@ -56,4 +56,9 @@
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
   </ItemDefinitionGroup>
+  <!-- Configure strong name signing if the private key exists -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release' AND Exists('$(MSBuildThisFileDirectory)..\..\Keys\DSInternals.Private.snk')">
+    <LinkKeyFile>$(MSBuildThisFileDirectory)..\..\Keys\DSInternals.Private.snk</LinkKeyFile>
+    <LinkDelaySign>false</LinkDelaySign>
+  </PropertyGroup>
 </Project>
