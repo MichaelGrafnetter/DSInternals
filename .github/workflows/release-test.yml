@@ -1,0 +1,196 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - dotnet_sdk
+
+# TODO: Add inputs for strong name signing, certificate signing, etc.
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  build:
+    name: 'Build and Sign'
+    runs-on: windows-latest
+    timeout-minutes: 10
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Restore Strong Name Key
+      # if: ${{ inputs.strong_name_sign }}
+      working-directory: Keys
+      shell: powershell
+      env:
+        STRONG_NAME_KEY: ${{ secrets.STRONG_NAME_KEY }}
+      run: |
+        if($null -ne $env:STRONG_NAME_KEY)
+        {
+            Write-Host 'Creating file Keys/DSInternals.Private.snk...'
+            [byte[]] $privateKey = [System.Convert]::FromBase64String($env:STRONG_NAME_KEY)
+            [System.IO.File]::WriteAllBytes('DSInternals.Private.snk', $privateKey)
+        }
+        else
+        {
+            Write-Warning 'The STRONG_NAME_KEY secret is not available. Skipping SNK file creation.'
+        }
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: x64 # default is x86
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        cache: true
+        cache-dependency-path: '*/packages.lock.json'
+
+    # - name: Cache DotNet Global Tools
+    #  id: cache-dotnet-globaltools
+    #  uses: actions/cache@v4
+    #  if: ${{ inputs.certificate_sign }}
+    #  with:
+    #    path: ~/.dotnet/tools
+    #    # Heuristics: The current list of required global tools is defined in this workflow file.
+    #    key: ${{ runner.os }}-DotNET-GlobalTools-Release-${{ hashFiles('.github/workflows/release.yml') }}
+
+    - name: Install Code Signing Tools
+      # if: ${{ inputs.certificate_sign && steps.cache-dotnet-globaltools.outputs.cache-hit != 'true' }}
+      run: |
+        dotnet tool install --global --prerelease sign
+
+    - name: Restore NuGet Packages
+      working-directory: Src
+      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true
+
+    - name: Build x86
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=Win32 -property:RestorePackages=false
+
+    - name: Build AMD64
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=x64 -property:RestorePackages=false
+    
+    # TODO: Build ARM64
+    # - name: Build ARM64
+    #  working-directory: Src
+    #  run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=ARM64 -property:RestorePackages=false
+
+    # TODO: Tests
+    # TODO: Create and Sign Catalog
+
+    - name: Azure Login
+      uses: azure/login@v2
+      # if: ${{ inputs.certificate_sign }}
+      with:
+        client-id: ${{ secrets.SIGNING_CLIENT_ID }}
+        tenant-id: ${{ secrets.SIGNING_TENANT_ID }}
+        allow-no-subscriptions: true
+    
+    - name: Sign Binaries and Scripts
+      shell: cmd
+      working-directory: Build/bin
+      # if: ${{ inputs.certificate_sign }}
+      run: >
+        sign code azure-key-vault
+        "DSInternals.Common/release_net48/DSInternals.Common.dll"
+        "DSInternals.Common/release_net8.0-windows/DSInternals.Common.dll"
+        "DSInternals.DataStore/release_net48/DSInternals.DataStore.dll"
+        "DSInternals.DataStore/release_net8.0-windows/DSInternals.DataStore.dll"
+        "DSInternals.Replication/release_net48/DSInternals.Replication.dll"
+        "DSInternals.Replication/release_net8.0-windows/DSInternals.Replication.dll"
+        "DSInternals.Replication.Model/release_net48/DSInternals.Replication.Model.dll"
+        "DSInternals.Replication.Model/release_net8.0-windows/DSInternals.Replication.Model.dll"
+        "DSInternals.Replication.Interop/Release_net4.8-Win32/DSInternals.Replication.Interop.dll"
+        "DSInternals.Replication.Interop/Release_net4.8-x64/DSInternals.Replication.Interop.dll"
+        "DSInternals.Replication.Interop/Release_net8.0-Win32/DSInternals.Replication.Interop.dll"
+        "DSInternals.Replication.Interop/Release_net8.0-x64/DSInternals.Replication.Interop.dll"
+        "DSInternals.SAM/release_net48/DSInternals.SAM.dll"
+        "DSInternals.SAM/release_net8.0-windows/DSInternals.SAM.dll"
+        "DSInternals.PowerShell/Release/DSInternals/net48/DSInternals.PowerShell.dll"
+        "DSInternals.PowerShell/Release/DSInternals/net8.0-windows/DSInternals.PowerShell.dll"
+        "DSInternals.PowerShell/Release/DSInternals/DSInternals.Bootstrap.psm1"
+        "DSInternals.PowerShell/Release/DSInternals/DSInternals.psd1"
+        "DSInternals.PowerShell/Release/DSInternals/DSInternals.types.ps1xml"
+        "DSInternals.PowerShell/Release/DSInternals/Views/*.ps1xml"
+        --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
+        --azure-credential-type azure-cli
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+        --verbosity Information
+
+    - name: Copy Signed Binaries to PowerShell Module
+      shell: cmd
+      working-directory: Build/bin
+      # if: ${{ inputs.certificate_sign }}
+      timeout-minutes: 1
+      run: |
+        copy /Y "DSInternals.Common\release_net48\DSInternals.Common.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
+        copy /Y "DSInternals.Common\release_net8.0-windows\DSInternals.Common.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
+        copy /Y "DSInternals.DataStore\release_net48\DSInternals.DataStore.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
+        copy /Y "DSInternals.DataStore\release_net8.0-windows\DSInternals.DataStore.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
+        copy /Y "DSInternals.Replication\release_net48\DSInternals.Replication.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
+        copy /Y "DSInternals.Replication\release_net8.0-windows\DSInternals.Replication.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
+        copy /Y "DSInternals.Replication.Model\release_net48\DSInternals.Replication.Model.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
+        copy /Y "DSInternals.Replication.Model\release_net8.0-windows\DSInternals.Replication.Model.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
+        copy /Y "DSInternals.Replication.Interop\Release_net4.8-Win32\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\x86\"
+        copy /Y "DSInternals.Replication.Interop\Release_net4.8-x64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\amd64\"
+        copy /Y "DSInternals.Replication.Interop\Release_net8.0-Win32\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\x86\"
+        copy /Y "DSInternals.Replication.Interop\Release_net8.0-x64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\amd64\"
+        copy /Y "DSInternals.SAM\release_net48\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
+        copy /Y "DSInternals.SAM\release_net8.0-windows\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
+
+    # TODO: Smoke Tests
+
+    - name: Upload PowerShell Module as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PowerShell
+        path: Build/bin/DSInternals.PowerShell/Release
+    
+    - name: Create Managed NuGet Packages
+      working-directory: Src
+      run: |
+        dotnet pack DSInternals.Common --configuration Release --no-build
+        dotnet pack DSInternals.DataStore --configuration Release --no-build
+        dotnet pack DSInternals.SAM --configuration Release --no-build
+    
+    - name: Create Mixed NuGet Package
+      working-directory: Src
+      run: |
+        msbuild.exe -target:Pack -property:Configuration=Release
+
+    - name: Sign NuGet Packages
+      shell: cmd
+      # if: ${{ inputs.certificate_sign }}
+      run: >
+        sign code azure-key-vault
+        *.*nupkg
+        --base-directory "${{ github.workspace }}/packages"
+        --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
+        --azure-credential-type azure-cli
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+        --verbosity Information
+    
+    - name: Upload NuGet Packages as Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: NuGet
+        path: packages/*nupkg
+    
+    # TODO: Publish NuGet packages
+    # TODO: Create GitHub release
+    # TODO: Publish to PowerShell Gallery
+    # TODO: Publish to Chocolatey

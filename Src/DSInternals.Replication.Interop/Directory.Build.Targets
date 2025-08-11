@@ -26,4 +26,6 @@
     <!-- Include the debug symbols -->
     <Copy SourceFiles="$(OutDir)$(TargetName).pdb" DestinationFolder="$(PowerShellModulePath)" />
   </Target>
+  <!-- This is a dummy NuGet pack target to avoid error MSB4057: The target "Pack" does not exist in the project. -->
+  <Target Name="Pack" />
 </Project>

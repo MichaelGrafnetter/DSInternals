@@ -48,8 +48,6 @@
     <!-- TODO: This requires more testing. -->
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
     <PackageReference Include="System.DirectoryServices" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
-    <PackageReference Include="System.Formats.Asn1" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
 
     <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Desktop -->
     <!-- TODO: This requires more testing, even on downlevel versions of Windows. -->
