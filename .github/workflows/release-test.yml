@@ -96,7 +96,6 @@ jobs:
     
     - name: Sign Binaries and Scripts
       shell: cmd
-      working-directory: Build/bin
       # if: ${{ inputs.certificate_sign }}
       run: >
         sign code azure-key-vault
@@ -120,6 +119,7 @@ jobs:
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.psd1"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.types.ps1xml"
         "DSInternals.PowerShell/Release/DSInternals/Views/*.ps1xml"
+        --base-directory "${{ github.workspace }}/Build/bin"
         --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
         --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
         --azure-credential-type azure-cli
@@ -175,7 +175,7 @@ jobs:
       run: >
         sign code azure-key-vault
         *.*nupkg
-        --base-directory "${{ github.workspace }}/packages"
+        --base-directory "${{ github.workspace }}/Build/package/release"
         --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
         --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
         --azure-credential-type azure-cli
@@ -188,7 +188,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: NuGet
-        path: packages/*nupkg
+        path: Build/package/release/*nupkg
     
     # TODO: Publish NuGet packages
     # TODO: Create GitHub release
