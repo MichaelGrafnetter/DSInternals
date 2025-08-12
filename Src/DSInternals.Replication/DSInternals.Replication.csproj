@@ -2,11 +2,12 @@
   <!-- NuGet package metadata -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Version>5.5</Version>
+    <Version>6.0</Version>
     <AssemblyTitle>DSInternals Replication Library</AssemblyTitle>
     <Title>$(AssemblyTitle)</Title>
     <Description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</Description>
-    <PackageReleaseNotes>- Added support for retrieving KDS Root Keys.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Migrated to .NET SDK.
+- Added support for retrieving KDS Root Keys.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security Replication RPC DRSR DCSync</PackageTags>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyPrivateProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>

@@ -13,7 +13,7 @@ using namespace System::Security::Permissions;
 //
 [assembly:AssemblyTitleAttribute(L"DSInternals Replication Interop Library")];
 // Note: Do not forget to change the version in version.rc files.
-[assembly:AssemblyVersionAttribute("5.5")];
+[assembly:AssemblyVersionAttribute("6.0")];
 [assembly:AssemblyProductAttribute(L"DSInternals PowerShell Module")];
 [assembly:AssemblyCopyrightAttribute(L"Copyright (c) 2015-2025 Michael Grafnetter. All rights reserved.")];
 [assembly:AssemblyDescriptionAttribute(L"")];

@@ -19,12 +19,12 @@ The DSInternals project consists of these two parts:
   - [Active Directory password auditing](../Documentation/PowerShell/Test-PasswordQuality.md#test-passwordquality) that discovers accounts sharing the same passwords or having passwords in a public database like [HaveIBeenPwned](https://haveibeenpwned.com) or in a custom dictionary.
   - [Key credential auditing and generation](../Documentation/PowerShell/Get-ADKeyCredential.md#get-adkeycredential), including support for NGC, FIDO2 and STK keys. Keys can also be tested against the [ROCA vulnerability](https://portal.msrc.microsoft.com/en-us/security-guidance/advisory/ADV190026). New NGC keys can also be [registered through the MS-DRSR protocol](../Documentation/PowerShell/Add-ADReplNgcKey.md#add-adreplngckey).
   - [Bare-metal recovery of domain controllers](../Documentation/PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) from just IFM backups (ntds.dit + SYSVOL).
-  - Offline ntds.dit file manipulation, including [hash dumping](../Documentation/PowerShell/Get-ADDBAccount.md#get-addbaccount), [password resets](../Documentation/PowerShell/Set-ADDBAccountPassword.md#set-addbaccountpassword), [group membership changes](../Documentation/PowerShell/Set-ADDBPrimaryGroup.md#set-addbprimarygroup), [SID History injection](../Documentation/PowerShell/Add-ADDBSidHistory.md#add-addbsidhistory) and [enabling](../Documentation/PowerShell/Enable-ADDBAccount.md#enable-addbaccount)/[disabling](../Documentation/PowerShell/Disable-ADDBAccount.md#disable-addbaccount) accounts.
+  - Offline ntds.dit file manipulation, including [hash dumping](../Documentation/PowerShell/Get-ADDBAccount.md#get-addbaccount), [password resets](../Documentation/PowerShell/Set-ADDBAccountPassword.md#set-addbaccountpassword), [group membership changes](../Documentation/PowerShell/Set-ADDBPrimaryGroup.md#set-addbprimarygroup), [trust password extraction](../Documentation/PowerShell/Get-ADDBTrust.md#get-addbtrust), [Golden gMSA and dMSA attacks](../Documentation/PowerShell/Get-ADDBServiceAccount.md#get-addbserviceaccount), [enabling](../Documentation/PowerShell/Enable-ADDBAccount.md#enable-addbaccount)/[disabling](../Documentation/PowerShell/Disable-ADDBAccount.md#disable-addbaccount) accounts, [LAPS password decryption](../Documentation/PowerShell/Get-ADDBAccount.md#example-9), and [DNS zone data export](../Documentation/PowerShell/Get-ADDBDnsResourceRecord.md#get-addbdnsresourcerecord).
   - [Online password hash dumping](../Documentation/PowerShell/Get-ADReplAccount.md#get-adreplaccount) through the Directory Replication Service (DRS) Remote Protocol (MS-DRSR). This feature is commonly called DCSync.
   - [Domain or local account password hash injection](../Documentation/PowerShell/Set-SamAccountPasswordHash.md#set-samaccountpasswordhash) through the Security Account Manager (SAM) Remote Protocol (MS-SAMR) or [directly into the database](../Documentation/PowerShell/Set-ADDBAccountPasswordHash.md#set-addbaccountpasswordhash).
   - [LSA Policy modification](../Documentation/PowerShell/Set-LsaPolicyInformation.md#set-lsapolicyinformation) through the Local Security Authority (Domain Policy) Remote Protocol (MS-LSAD / LSARPC).
-  - [Extracting credential roaming data](../Documentation/PowerShell/Save-DPAPIBlob.md#save-dpapiblob) and DPAPI domain backup keys, either online through [directory replication](../Documentation/PowerShell/Get-ADReplBackupKey.md#get-adreplbackupkey), [LSARPC](../Documentation/PowerShell/Get-LsaBackupKey.md#get-lsabackupkey) and [offline from ntds.dit](../Documentation/PowerShell/Get-ADDBBackupKey.md#get-addbbackupkey).
-  - Password hash calculation, including [NT hash](../Documentation/PowerShell/ConvertTo-NTHash.md#convertto-nthash), [LM hash](../Documentation/PowerShell/ConvertTo-LMHash.md#convertto-lmhash) and [kerberos keys](../Documentation/PowerShell/ConvertTo-KerberosKey.md#convertto-kerberoskey).
+  - [Extracting credential roaming data](../Documentation/PowerShell/Save-DPAPIBlob.md#save-dpapiblob) and DPAPI domain backup keys, either online through [directory replication](../Documentation/PowerShell/Get-ADReplBackupKey.md#get-adreplbackupkey), [LSARPC](../Documentation/PowerShell/Get-LsaBackupKey.md#get-lsabackupkey), and [offline from ntds.dit](../Documentation/PowerShell/Get-ADDBBackupKey.md#get-addbbackupkey).
+  - Password hash calculation, including [NT hash](../Documentation/PowerShell/ConvertTo-NTHash.md#convertto-nthash), [LM hash](../Documentation/PowerShell/ConvertTo-LMHash.md#convertto-lmhash), and [kerberos keys](../Documentation/PowerShell/ConvertTo-KerberosKey.md#convertto-kerberoskey).
 
 > DISCLAIMER: Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
 
@@ -32,7 +32,7 @@ The DSInternals project consists of these two parts:
 
 ### Michael Grafnetter
 
-[![Twitter](https://img.shields.io/twitter/follow/MGrafnetter.svg?label=Twitter%20@MGrafnetter&style=social)](https://twitter.com/MGrafnetter)
+[![Twitter](https://img.shields.io/twitter/follow/MGrafnetter.svg?label=Twitter%20@MGrafnetter&style=social)](https://x.com/MGrafnetter)
 [![Blog](https://img.shields.io/badge/Blog-www.dsinternals.com-2A6496.svg)](https://www.dsinternals.com/en)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-grafnetter-0077B5.svg)](https://www.linkedin.com/in/grafnetter)
 
@@ -47,9 +47,9 @@ I would like to thank all people who have contributed to the project by [sending
 [![GitHub Downloads](https://img.shields.io/github/downloads/MichaelGrafnetter/DSInternals/total.svg?label=GitHub%20Downloads&logo=GitHub)](https://github.com/MichaelGrafnetter/DSInternals/releases)
 [![NuGet Gallery Downloads](https://img.shields.io/nuget/dt/DSInternals.Common.svg?label=NuGet%20Gallery%20Downloads&logo=NuGet)](https://www.nuget.org/profiles/DSInternals)
 
-### PowerShell Gallery (PowerShell 5+)
+### PowerShell Gallery
 
-Since PowerShell 5, you can install the DSInternals module directly from the official [PowerShell Gallery](https://www.powershellgallery.com/packages/DSInternals/) by running the following command:
+You can install the DSInternals module directly from the official [PowerShell Gallery](https://www.powershellgallery.com/packages/DSInternals/) by running the following command:
 
 ```powershell
 Install-Module DSInternals -Force
@@ -86,7 +86,7 @@ This package is self-contained and it will also install all dependencies. Note t
 
 ### WAPT Package
 
-The DSInternals PowerShell Module can also be installed using the [WAPT package](https://wapt.tranquil.it/store/tis-dsinternals/).
+The DSInternals PowerShell Module can also be installed using the [WAPT package](https://wapt.tranquil.it/store/en/tis-dsinternals).
 
 The package can be installed by the [WAPT console](https://www.wapt.fr/en/doc/wapt-console-usage.html) or by the [WAPT Command-line interface](https://www.wapt.fr/en/doc/wapt-command-line-interface.html) like so:
 
@@ -96,7 +96,7 @@ wapt-get install dsinternals
 
 This package is self-contained and it will also install all dependencies.
 
-### Offline Module Distribution (PowerShell 3+)
+### Offline Module Distribution
 
 1. Download the [current release](https://github.com/MichaelGrafnetter/DSInternals/releases) from GitHub.
 2. *Unblock* the ZIP file, using either the *Properties dialog* or the `Unblock-File` cmdlet. If you fail to do so, all the extracted DLLs will inherit this attribute and PowerShell will refuse to load them.
@@ -118,8 +118,8 @@ The easiest way of integrating the DSInternals functionality into .NET applicati
 
 ### Building from Source Code
 
-[![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-383278.svg?logo=Visual-Studio-Code)](CONTRIBUTING.md#building-from-source-code)
-[![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/DSInternals?branchName=master)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2&branchName=master)
+[![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-383278.svg)](CONTRIBUTING.md#building-from-source-code)
+[![CI Build](https://github.com/MichaelGrafnetter/DSInternals/actions/workflows/autobuild.yml/badge.svg)](https://github.com/MichaelGrafnetter/DSInternals/actions/workflows/autobuild.yml)
 
 You can of course download the [source code](https://github.com/MichaelGrafnetter/DSInternals/archive/master.zip), perform a review and compile the Module/Framework yourself. See the [CONTRIBUTING](CONTRIBUTING.md#building-from-source-code) guide for more info.
 
@@ -147,6 +147,7 @@ I have also published a series of articles about the DSInternals module on [my b
 - [Impersonating Office 365 Users With Mimikatz](https://www.dsinternals.com/en/impersonating-office-365-users-mimikatz/)
 
 ### Slide Decks
+
 - [Black Hat Europe 2019: DSInternals PowerShell Module](https://www.dsinternals.com/wp-content/uploads/eu-19-Grafnetter-DSInternals-PowerShell-Module.pdf)
 - [Black Hat Europe 2019: Exploiting Windows Hello for Business](https://www.dsinternals.com/wp-content/uploads/eu-19-Grafnetter-Exploiting-Windows-Hello-for-Business.pdf)
 - [HipConf New York 2018: Offline Attacks on Active Directory](https://www.dsinternals.com/wp-content/uploads/HIP_AD_Offline_Attacks.pdf)

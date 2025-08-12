@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
 online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBTrust.md

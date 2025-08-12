@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>5.5</Version>
+    <Version>6.0</Version>
     <AssemblyTitle>DSInternals Replication Data Model</AssemblyTitle>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>

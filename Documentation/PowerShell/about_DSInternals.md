@@ -1,4 +1,4 @@
-﻿# DSInternals
+# DSInternals
 ## about_DSInternals
 
 # SHORT DESCRIPTION

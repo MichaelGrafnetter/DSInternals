@@ -5,10 +5,13 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [6.0] - 2025-08-14
 
 ### Added
 
+- PowerShell Core 7 and .NET SDK are now supported on the Windows platform.
+- The PowerShell module, NuGet packages, binaries, and scripts are digitally signed.
+- All pure CLR assemblies are built deterministically.
 - The new [Get-ADDBTrust](PowerShell/Get-ADDBTrust.md#get-addbtrust) cmdlet can read inter-domain trust objects from `ntds.dit` files, decrypt the trust passwords, and derive the Kerberos trust keys.
 - Added the [Get-ADReplKdsRootKey](PowerShell/Get-ADReplKdsRootKey.md#get-adreplkdsrootkey) cmdlet to enable reading specific KDS Root Keys over the MS-DRSR protocol.
 - Full support for `ntds.dit` files originating from RODCs.
@@ -625,7 +628,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.4.1...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0...HEAD
+[6.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.4.1...v6.0
 [5.4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.3...v5.4.1
 [5.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.2...v5.3
 [5.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.1...v5.2

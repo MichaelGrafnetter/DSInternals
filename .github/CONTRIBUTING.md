@@ -1,5 +1,5 @@
-![DSInternals Logo](DSInternals-Dark.png#gh-light-mode-only)
-![DSInternals Logo](DSInternals-Light.png#gh-dark-mode-only)
+![DSInternals Logo](/.github/DSInternals-Dark.png#gh-light-mode-only)
+![DSInternals Logo](/.github/DSInternals-Light.png#gh-dark-mode-only)
 
 # Contributing to the Project
 
@@ -49,18 +49,16 @@ $PSVersion
 ### Development Environment
 
 If you want to build the module from source code yourself, you need to install these programs first:
-- [Microsoft Visual Studio Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx) 2022 with these features installed:
+- [Microsoft Visual Studio Community](https://visualstudio.microsoft.com/vs/community/) 2022 with these features installed:
    * .NET Framework 4.8 targeting pack
    * C++ 2022 Redistributable Update
    * C++/CLI support for v143 build tools (Latest)
    * MSVC v143 - VS 2022 C++ x64/x86 build tools (Latest)
    * MSVC v143 - VS 2022 C++ ARM64/ARM64EC build tools (Latest)
-   * Windows Universal C Runtime
-   * Windows 11 SDK (you might have to retarget the [DSInternals.Replication.Interop](../Src/DSInternals.Replication.Interop/DSInternals.Replication.Interop.vcxproj) project to the version you have)
+   * Windows 11 SDK (you might have to retarget the `DSInternals.Replication.Interop` projects to the version you have)
    * PowerShell Tools for Visual Studio (optional)
    * Git for Windows (optional)
    * GitHub Extension for Visual Studio (optional)
-- [Windows Management Framework 5](https://www.microsoft.com/en-us/download/details.aspx?id=50395).
 
 To make IntelliSense work with *.psm1 files, the following code needs to be added to the `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Xml\Schemas\catalog.xml` file:
 
@@ -69,20 +67,18 @@ To make IntelliSense work with *.psm1 files, the following code needs to be adde
 <Association extension="ps1xml" schema="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Types.xsd" enableValidation="true"/>
 ```
 
-### Build Steps
+### Build and Debug Steps
+
 1. Install the prerequisities.
 2. Checkout or download the source codes.
-3. Run the [Scripts\Make.ps1](../Scripts/Make.ps1) script from PowerShell.
-4. The resulting module will appear in the *Build\bin\Release* folder.
-
-### Debugging
-
-1. Open the [Src\DSInternals.sln](../Src/DSInternals.sln) file in Visual Studio.
-2. Put any cmdlets you wish to debug into the [Src\DSInternals.PowerShell\Run-Cmdlets.ps1](../Src/DSInternals.PowerShell/Run-Cmdlets.ps1) script.
-3. Set the [DSInternals.PowerShell](../Src/DSInternals.PowerShell/DSInternals.PowerShell.csproj) project as StartUp Project.
+3. Open the [Src\DSInternals.sln](/Src/DSInternals.sln) file in Visual Studio.
+2. Put any cmdlets you wish to debug into the [Src\DSInternals.PowerShell\Run-Cmdlets.ps1](/Src/DSInternals.PowerShell/Run-Cmdlets.ps1) script.
+3. Set the [DSInternals.PowerShell](/Src/DSInternals.PowerShell/DSInternals.PowerShell.csproj) project as StartUp Project.
 4. Switch to the _Debug_ configuration.
 5. Start debugging (F5).
 
 ### Continuous Integration
+
+[![CI Build](https://github.com/MichaelGrafnetter/DSInternals/actions/workflows/autobuild.yml/badge.svg)](https://github.com/MichaelGrafnetter/DSInternals/actions/workflows/autobuild.yml)
 
 GitHub Actions are used for CI builds.

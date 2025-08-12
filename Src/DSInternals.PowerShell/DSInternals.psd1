@@ -228,6 +228,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
+- Implemented support for PowerShell Core 7 on Windows.
 - The new Get-ADDBTrust cmdlet can read inter-domain trust objects from ntds.dit files, decrypt the trust passwords, and derive the Kerberos trust keys.
 - Added the Get-ADReplKdsRootKey cmdlet to enable reading specific KDS Root Keys over the MS-DRSR protocol.
 - Implemented full support for ntds.dit files originating from RODCs.
