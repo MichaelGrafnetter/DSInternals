@@ -4,10 +4,11 @@
 # Directory Services Internals<br/>PowerShell Module and Framework
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
-[![PowerShell 3 | 4 | 5](https://img.shields.io/badge/PowerShell-3%20|%204%20|%205-0000FF.svg?logo=PowerShell)](#)
-[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019 | 2022 | 2025](https://img.shields.io/badge/Windows%20Server-2008%20R2%20|%202012%20R2%20|%202016%20|%202019%20|%202022|%202025-007bb8.svg?logo=Windows%2011)](#)
-[![.NET Framework 4.7.2+](https://img.shields.io/badge/Framework-4.7.2%2B-007FFF.svg?logo=.net)](#)
-[![Architecture x64 | x86 | arm64](https://img.shields.io/badge/Architecture-x64%20|%20x86%20|%20ARM64-0071c5.svg?logo=Amazon%20EC2)](#)
+[![PowerShell 5.1 | 7](https://badgen.net/badge/icon/5.1%20|%207?icon=terminal&label=PowerShell)](#) 
+[![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019 | 2022 | 2025](https://badgen.net/badge/icon/2008%20R2%20|%202012%20R2%20|%202016%20|%202019%20|%202022%20|%202025?icon=windows&label=Windows%20Server)](#)
+[![.NET Framework 4.8+](https://img.shields.io/badge/Framework-4.8%2B-007FFF.svg?logo=.net)](#)
+[![.NET 8.0+](https://img.shields.io/badge/Runtime-8.0%2B-007FFF.svg?logo=.net)](#)
+[![Architecture x64 | x86 | arm64](https://img.shields.io/badge/Architecture-x64%20|%20x86%20|%20ARM64-0071c5.svg?logo=cplusplus)](#)
 
 ## Introduction
 
@@ -33,7 +34,7 @@ The DSInternals project consists of these two parts:
 
 [![Twitter](https://img.shields.io/twitter/follow/MGrafnetter.svg?label=Twitter%20@MGrafnetter&style=social)](https://twitter.com/MGrafnetter)
 [![Blog](https://img.shields.io/badge/Blog-www.dsinternals.com-2A6496.svg)](https://www.dsinternals.com/en)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-grafnetter-0077B5.svg?logo=LinkedIn)](https://www.linkedin.com/in/grafnetter)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-grafnetter-0077B5.svg)](https://www.linkedin.com/in/grafnetter)
 
 I have created these tools in my spare time and I am using them while performing AD security audits and also in my lectures to demonstrate how Active Directory works internally.
 
@@ -41,7 +42,7 @@ I would like to thank all people who have contributed to the project by [sending
 
 ## Downloads
 
-[![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/DSInternals.svg?label=PowerShell%20Gallery%20Downloads&logo=PowerShell)](https://www.powershellgallery.com/packages/DSInternals/)
+[![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/DSInternals.svg?label=PowerShell%20Gallery%20Downloads&logo=NuGet)](https://www.powershellgallery.com/packages/DSInternals/)
 [![Chocolatey Downloads](https://img.shields.io/chocolatey/dt/dsinternals-psmodule.svg?label=Chocolatey%20Downloads&logo=NuGet)](https://chocolatey.org/packages/dsinternals-psmodule)
 [![GitHub Downloads](https://img.shields.io/github/downloads/MichaelGrafnetter/DSInternals/total.svg?label=GitHub%20Downloads&logo=GitHub)](https://github.com/MichaelGrafnetter/DSInternals/releases)
 [![NuGet Gallery Downloads](https://img.shields.io/nuget/dt/DSInternals.Common.svg?label=NuGet%20Gallery%20Downloads&logo=NuGet)](https://www.nuget.org/profiles/DSInternals)
@@ -119,7 +120,6 @@ The easiest way of integrating the DSInternals functionality into .NET applicati
 
 [![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-383278.svg?logo=Visual-Studio-Code)](CONTRIBUTING.md#building-from-source-code)
 [![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/DSInternals?branchName=master)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2&branchName=master)
-[![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results&logo=Azure-DevOps)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2&branchName=master)
 
 You can of course download the [source code](https://github.com/MichaelGrafnetter/DSInternals/archive/master.zip), perform a review and compile the Module/Framework yourself. See the [CONTRIBUTING](CONTRIBUTING.md#building-from-source-code) guide for more info.
 
@@ -156,7 +156,6 @@ I have also published a series of articles about the DSInternals module on [my b
 This project utilizes the following 3<sup>rd</sup> party copyrighted material:
 
 - [ManagedEsent](https://github.com/Microsoft/ManagedEsent) - Provides managed access to esent.dll, the embeddable database engine native to Windows.
-- [AutoMapper](https://github.com/AutoMapper/AutoMapper) - A convention-based object-object mapper in .NET.
 - [NDceRpc](https://github.com/OpenSharp/NDceRpc) - Integration of WCF and .NET with MS-RPC and binary serialization.
 - [PBKDF2.NET](https://github.com/therealmagicmike/PBKDF2.NET) - Provides PBKDF2 for .NET Framework.
 - [Bouncy Castle](https://www.bouncycastle.org/csharp/index.html) - A lightweight cryptography API for Java and C#. 
@@ -168,5 +167,4 @@ This project utilizes the following 3<sup>rd</sup> party copyrighted material:
 - [Mimikatz](https://github.com/gentilkiwi/mimikatz) - The No.1 tool for pass-the-hash attacks. Can use the credentials extracted by the DSInternals module to do some nasty stuff.
 - [NTDSXtract](https://github.com/csababarta/ntdsxtract) - A framework for ntds.dit parsing written in Python.
 - [Impacket](https://github.com/SecureAuthCorp/impacket) - Various MSRPC-based protocols implemented in Python.
-- [DIT Snapshot Viewer](https://github.com/yosqueoy/ditsnap) - A graphical inspection tool for Active Directory databases.
-- [Esent Workbench](https://bitbucket.org/orthoprog/esentworkbench/wiki/Home) - Great tool for displaying the structure of ntds.dit files.
+- [DIT Explorer](https://github.com/trustedsec/DitExplorer) - A graphical inspection tool for Active Directory databases.
