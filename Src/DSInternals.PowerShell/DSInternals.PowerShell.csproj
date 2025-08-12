@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <!-- Include platform-independent module files in the module root directory -->
-    <Content Include="*.psd1;*.psm1;**\*.ps1xml;*\*.txt;*\*.dll-Help.xml">
+    <Content Include="*.psd1;*.psm1;**\*.ps1xml;License.txt;*\*.txt;*\*.*Help.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>../%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
     </Content>
@@ -49,17 +49,14 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
     <PackageReference Include="System.DirectoryServices" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
 
-    <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Desktop -->
-    <!-- TODO: This requires more testing, even on downlevel versions of Windows. -->
-    <PackageReference Include="System.Memory" Version="4.5.5" Condition="'$(TargetFramework)' == 'net48'" IncludeAssets="compile" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" Condition="'$(TargetFramework)' == 'net48'" IncludeAssets="compile" />
-    <PackageReference Include="System.Buffers" Version="4.5.1" Condition="'$(TargetFramework)' == 'net48'" IncludeAssets="compile" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.3" Condition="'$(TargetFramework)' == 'net48'" IncludeAssets="compile" />
+    <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Desktop on Windows Server 2025, but are absent on Windows Server 2008 R2: -->
+    <!-- System.Memory, System.Numerics.Vectors, System.Buffers, System.Runtime.CompilerServices.Unsafe -->
   </ItemGroup>
   <Target Name="RemoveRootInteropDll" AfterTargets="Build">
     <!-- TODO: Find a more elegant way of not including these 2 files. -->
     <!-- Remove DSInternals.Replication.Interop DLL and PDB from module root. Only keep it in the architecture-specific subdirectory. -->
     <Delete Files="$(OutDir)DSInternals.Replication.Interop.dll" />
     <Delete Files="$(OutDir)DSInternals.Replication.Interop.pdb" />
+    <!-- TODO: Is the Ijwhost.dll file needed? -->
   </Target>
 </Project>

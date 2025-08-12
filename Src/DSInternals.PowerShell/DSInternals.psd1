@@ -11,7 +11,7 @@ RootModule = 'DSInternals.Bootstrap.psm1'
 ModuleVersion = '6.0'
 
 # Supported PSEditions
-# CompatiblePSEditions = 'Desktop'
+CompatiblePSEditions = @('Desktop', 'Core')
 
 # ID used to uniquely identify this module
 GUID = '766b3ad8-eb78-48e6-84bd-61b31d96b53e'
@@ -33,10 +33,7 @@ DISCLAIMER: Features exposed through this module are not supported by Microsoft 
 "@
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '5.0'
-
-# Compatible PowerShell Editions
-CompatiblePSEditions = @('Core', 'Desktop')
+PowerShellVersion = '5.1'
 
 # Processor architecture (None, X86, Amd64, ARM64) required by this module
 ProcessorArchitecture = 'None'
@@ -45,19 +42,21 @@ ProcessorArchitecture = 'None'
 TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = 'Views\DSInternals.AzureADUser.format.ps1xml',
-                   'Views\DSInternals.Hash.format.ps1xml',
-                   'Views\DSInternals.RoamedCredential.format.ps1xml',
-                   'Views\DSInternals.Kerberos.format.ps1xml',
-                   'Views\DSInternals.KeyCredential.format.ps1xml',
-                   'Views\DSInternals.FidoKeyMaterial.format.ps1xml',
-                   'Views\DSInternals.DSAccount.format.ps1xml',
-                   'Views\DSInternals.DSAccount.ExportViews.format.ps1xml',
-                   'Views\DSInternals.GroupManagedServiceAccount.format.ps1xml',
-                   'Views\DSInternals.PasswordQualityTestResult.format.ps1xml',
-                   'Views\DSInternals.KdsRootKey.format.ps1xml',
-                   'Views\DSInternals.SamDomainPasswordInformation.format.ps1xml',
-                   'Views\DSInternals.LsaPolicyInformation.format.ps1xml'
+FormatsToProcess = @(
+    'Views\DSInternals.AzureADUser.format.ps1xml',
+    'Views\DSInternals.Hash.format.ps1xml',
+    'Views\DSInternals.RoamedCredential.format.ps1xml',
+    'Views\DSInternals.Kerberos.format.ps1xml',
+    'Views\DSInternals.KeyCredential.format.ps1xml',
+    'Views\DSInternals.FidoKeyMaterial.format.ps1xml',
+    'Views\DSInternals.DSAccount.format.ps1xml',
+    'Views\DSInternals.DSAccount.ExportViews.format.ps1xml',
+    'Views\DSInternals.GroupManagedServiceAccount.format.ps1xml',
+    'Views\DSInternals.PasswordQualityTestResult.format.ps1xml',
+    'Views\DSInternals.KdsRootKey.format.ps1xml',
+    'Views\DSInternals.SamDomainPasswordInformation.format.ps1xml',
+    'Views\DSInternals.LsaPolicyInformation.format.ps1xml'
+)
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @()
@@ -66,7 +65,7 @@ NestedModules = @()
 FunctionsToExport = @()
 
 # Cmdlets to export from this module
-CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswordHash',
+CmdletsToExport = @('ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswordHash',
                   'ConvertFrom-UnicodePassword', 'ConvertTo-UnicodePassword',
                   'ConvertTo-OrgIdHash', 'ConvertFrom-GPPrefPassword',
                   'ConvertTo-GPPrefPassword', # 'Add-ADDBSidHistory',
@@ -81,13 +80,13 @@ CmdletsToExport = 'ConvertTo-NTHash', 'ConvertTo-LMHash', 'Set-SamAccountPasswor
                   'Enable-ADDBAccount', 'Disable-ADDBAccount', 'Get-ADKeyCredential',
                   'Set-ADDBAccountPassword', 'Set-ADDBAccountPasswordHash', 'Get-LsaPolicyInformation',
                   'Set-LSAPolicyInformation', 'New-ADDBRestoreFromMediaScript','Get-LsaBackupKey',
-                  'Add-ADReplNgcKey', 'Get-AzureADUserEx', 'Set-AzureADUserEx','Unlock-ADDBAccount'
+                  'Add-ADReplNgcKey', 'Get-AzureADUserEx', 'Set-AzureADUserEx','Unlock-ADDBAccount')
 
 # Variables to export from this module
 VariablesToExport = @()
 
 # Aliases to export from this module
-AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
+AliasesToExport = @('Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'ConvertFrom-UnattendXmlPassword', 'ConvertTo-AADHash',
                   'ConvertTo-MsoPasswordHash', 'Get-ADReplicationAccount',
                   'ConvertFrom-ManagedPasswordBlob', 'Get-SysKey', 'Set-ADDBSysKey',
@@ -97,41 +96,50 @@ AliasesToExport = 'Set-WinUserPasswordHash', 'Set-ADAccountPasswordHash',
                   'Get-KeyCredentialLink', 'Get-ADKeyCredentialLink', 'Get-LsaPolicy',
                   'Set-LsaPolicy', 'Get-SystemKey', 'Write-ADReplNgcKey', 'Write-ADNgcKey',
                   'Add-ADNgcKey', 'New-ADKeyCredential', 'New-ADKeyCredentialLink',
-                  'New-ADNgcKey','Get-ADDBGroupManagedServiceAccount'
+                  'New-ADNgcKey','Get-ADDBGroupManagedServiceAccount')
 
 # List of assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @()
 
 # List of all files packaged with this module
-FileList = 'net48\AutoMapper.dll',
-           'net48\CBOR.dll',
-           'net48\DSInternals.DataStore.dll',
-           'net48\DSInternals.Replication.dll',
-           'net48\DSInternals.Replication.Model.dll',
-           'net48\DSInternals.SAM.dll',
-           'net48\Esent.Interop.dll',
-           'net48\Esent.Isam.dll',
-           'net48\Newtonsoft.Json.dll',
-           'net48\Numbers.dll',
-           'net48\amd64\DSInternals.Replication.Interop.dll',
-           'net48\arm64\DSInternals.Replication.Interop.dll',
-           'net48\x86\DSInternals.Replication.Interop.dll',
-           'net8.0-windows\AutoMapper.dll',
-           'net8.0-windows\CBOR.dll',
-           'net8.0-windows\DSInternals.DataStore.dll',
-           'net8.0-windows\DSInternals.Replication.dll',
-           'net8.0-windows\DSInternals.Replication.Model.dll',
-           'net8.0-windows\DSInternals.SAM.dll',
-           'net8.0-windows\Esent.Interop.dll',
-           'net8.0-windows\Esent.Isam.dll',
-           'net8.0-windows\Newtonsoft.Json.dll',
-           'net8.0-windows\Numbers.dll',
-           'net8.0-windows\amd64\DSInternals.Replication.Interop.dll',
-           'net8.0-windows\arm64\DSInternals.Replication.Interop.dll',
-           'net8.0-windows\x86\DSInternals.Replication.Interop.dll',
-           'License.txt',
-           'en-US\about_DSInternals.help.txt',
-           'en-US\DSInternals.PowerShell.dll-Help.xml'
+FileList = @(
+    'DSInternals.types.ps1xml',
+    'License.txt',
+    'en-US\about_DSInternals.help.txt',
+    'en-US\DSInternals.PowerShell.dll-Help.xml'
+    'net48\DSInternals.DataStore.dll',
+    'net48\DSInternals.Replication.dll',
+    'net48\DSInternals.Replication.Model.dll',
+    'net48\DSInternals.SAM.dll',
+    'net48\amd64\DSInternals.Replication.Interop.dll',
+    'net48\arm64\DSInternals.Replication.Interop.dll',
+    'net48\x86\DSInternals.Replication.Interop.dll',
+    'net48\Esent.Interop.dll',
+    'net48\Esent.Isam.dll',
+    'net48\AutoMapper.dll',
+    'net48\Newtonsoft.Json.dll',
+    'net48\CBOR.dll',
+    'net48\Numbers.dll',
+    'net48\URIUtility.dll',
+    'net48\System.Formats.Asn1.dll',
+    'net48\System.Buffers.dll',
+    'net48\System.Memory.dll',
+    'net48\System.Numerics.Vectors.dll',
+    'net48\System.Runtime.CompilerServices.Unsafe.dll',
+    'net8.0-windows\DSInternals.DataStore.dll',
+    'net8.0-windows\DSInternals.Replication.dll',
+    'net8.0-windows\DSInternals.Replication.Model.dll',
+    'net8.0-windows\DSInternals.SAM.dll',
+    'net8.0-windows\amd64\DSInternals.Replication.Interop.dll',
+    'net8.0-windows\arm64\DSInternals.Replication.Interop.dll',
+    'net8.0-windows\x86\DSInternals.Replication.Interop.dll',
+    'net8.0-windows\Esent.Interop.dll',
+    'net8.0-windows\Esent.Isam.dll',
+    'net8.0-windows\AutoMapper.dll',
+    'net8.0-windows\CBOR.dll',
+    'net8.0-windows\Numbers.dll',
+    'net8.0-windows\URIUtility.dll'
+)
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
@@ -139,7 +147,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'PSModule', 'Windows', 'FIDO', 'NTDS'
+        Tags = 'ActiveDirectory', 'AzureAD', 'Security', 'SAM', 'LSA', 'FIDO', 'NTDS', 'PSModule', 'Windows', 'PSEdition_Desktop', 'PSEdition_Core'
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/License.txt'

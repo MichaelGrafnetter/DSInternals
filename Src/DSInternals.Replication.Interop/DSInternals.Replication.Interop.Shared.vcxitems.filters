@@ -85,9 +85,4 @@
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Directory.Build.props" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\Keys\DSInternals.Public.snk" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\Keys\DSInternals.Private.snk" />
-  </ItemGroup>
 </Project>

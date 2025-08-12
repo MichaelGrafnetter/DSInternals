@@ -54,7 +54,4 @@
   <ItemGroup>
     <ResourceCompile Include="$(MSBuildThisFileDirectory)version.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Directory.Build.props" />
-  </ItemGroup>
 </Project>

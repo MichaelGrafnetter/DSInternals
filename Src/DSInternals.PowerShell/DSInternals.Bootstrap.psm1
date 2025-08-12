@@ -111,11 +111,6 @@ if([System.Security.Cryptography.CryptoConfig]::AllowOnlyFipsAlgorithms)
 
 Update-TypeData -PrependPath $typesFilePath
 
-# TODO: Move the serializer to the type data file.
-Update-TypeData -TypeName 'DSInternals.Common.Data.SupplementalCredentials' `
-                -TypeConverter ([DSInternals.PowerShell.SupplementalCredentialsDeserializer]) `
-                -Force
-
 #
 # Cmdlet aliases
 #

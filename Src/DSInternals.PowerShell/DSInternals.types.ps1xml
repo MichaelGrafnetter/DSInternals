@@ -41,6 +41,9 @@
         </Members>
       </MemberSet>
     </Members>
+    <TypeConverter>
+      <TypeName>DSInternals.PowerShell.SupplementalCredentialsDeserializer</TypeName>
+    </TypeConverter>
   </Type>
   <Type>
     <Name>Deserialized.DSInternals.Common.Data.SupplementalCredentials</Name>

@@ -74,17 +74,13 @@ jobs:
       working-directory: Src
       run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=Win32 -property:RestorePackages=false
 
+    - name: Build ARM64
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=ARM64 -property:RestorePackages=false
+
     - name: Build AMD64
       working-directory: Src
       run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=x64 -property:RestorePackages=false
-    
-    # TODO: Build ARM64
-    # - name: Build ARM64
-    #  working-directory: Src
-    #  run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=ARM64 -property:RestorePackages=false
-
-    # TODO: Tests
-    # TODO: Create and Sign Catalog
 
     - name: Azure Login
       uses: azure/login@v2
@@ -149,13 +145,10 @@ jobs:
         copy /Y "DSInternals.SAM\release_net48\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
         copy /Y "DSInternals.SAM\release_net8.0-windows\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
 
-    # TODO: Smoke Tests
-
-    - name: Upload PowerShell Module as Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: PowerShell
-        path: Build/bin/DSInternals.PowerShell/Release
+    - name: Create Module Catalog
+      shell: powershell
+      working-directory: Build/bin/DSInternals.PowerShell/Release
+      run: New-FileCatalog -CatalogVersion 2 -Path DSInternals -CatalogFilePath .\DSInternals\DSInternals.cat
     
     - name: Create Managed NuGet Packages
       working-directory: Src
@@ -170,13 +163,14 @@ jobs:
       run: |
         msbuild.exe DSInternals.Replication -target:Pack -property:Configuration=Release -property:Platform=x64 -property:RestorePackages=false
 
-    - name: Sign NuGet Packages
+    - name: Sign NuGet Packages and PowerShell Catalog
       shell: cmd
       # if: ${{ inputs.certificate_sign }}
       run: >
         sign code azure-key-vault
-        *.*nupkg
-        --base-directory "${{ github.workspace }}/Build/package/release"
+        package/release/*.*nupkg
+        bin/DSInternals.PowerShell/Release/DSInternals/DSInternals.cat
+        --base-directory "${{ github.workspace }}/Build"
         --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
         --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
         --azure-credential-type azure-cli
@@ -184,13 +178,20 @@ jobs:
         --timestamp-digest SHA256
         --timestamp-url "http://timestamp.acs.microsoft.com"
         --verbosity Information
-    
+
+    - name: Upload PowerShell Module as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PowerShell
+        path: Build/bin/DSInternals.PowerShell/Release
+        
     - name: Upload NuGet Packages as Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: NuGet
         path: Build/package/release/*nupkg
     
+    # TODO: Smoke Tests
     # TODO: Publish NuGet packages
     # TODO: Create GitHub release
     # TODO: Publish to PowerShell Gallery
