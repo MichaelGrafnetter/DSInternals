@@ -6,6 +6,9 @@
 
     public abstract class PSCmdletEx : PSCmdlet
     {
+        protected const string InvalidParameterSetMessage = "Invalid parameter set.";
+        protected const string WarningMessage = "This command performs very advanced and unsupported operations that may cause irreversible damage to your domain controller. Never use it on production databases. To suppress this warning, reissue the command specifying the Force parameter.";
+
         protected string ResolveDirectoryPath(string path)
         {
             if (path == null)

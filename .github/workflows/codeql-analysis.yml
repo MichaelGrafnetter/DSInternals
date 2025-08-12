@@ -2,8 +2,6 @@ name: "CodeQL Advanced"
 
 on:
   push:
-    branches: [ "master","gh-actions" ]
-  pull_request:
     branches: [ "master" ]
   # schedule:
   #  - cron: '36 5 * * 4'
@@ -58,12 +56,12 @@ jobs:
     - name: Restore NuGet Packages
       if: matrix.build-mode == 'manual'
       working-directory: Src
-      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true -noLogo
+      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true
 
     - name: Build All Projects
       if: matrix.build-mode == 'manual'
       working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -noLogo
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -property:RestorePackages=false
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

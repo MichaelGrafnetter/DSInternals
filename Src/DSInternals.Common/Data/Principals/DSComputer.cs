@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using DSInternals.Common.Cryptography;
-using DSInternals.Common.Properties;
 using DSInternals.Common.Schema;
 
 namespace DSInternals.Common.Data
@@ -15,7 +12,7 @@ namespace DSInternals.Common.Data
         {
             if (this.SamAccountType != SamAccountType.Computer)
             {
-                throw new ArgumentException(Resources.ObjectNotAccountMessage);
+                throw new ArgumentException("The object is not a computer.");
             }
 
             if (propertySets.HasFlag(AccountPropertySets.GenericComputerInfo))

@@ -1,13 +1,12 @@
 ﻿namespace DSInternals.Common.Data
 {
-    using DSInternals.Common.Cryptography;
-    using DSInternals.Common.Properties;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Security;
     using System.Text;
+    using DSInternals.Common.Cryptography;
 
     /// <summary>
     /// Stored credentials for use in authenticating.
@@ -102,7 +101,7 @@
                     int expectedLength = blob.Length - (PrefixSize + FooterSize);
                     if(length != expectedLength)
                     {
-                        throw new ArgumentOutOfRangeException("blob", length, Resources.UnexpectedSupplementalCredsLengthMessage);
+                        throw new ArgumentOutOfRangeException("blob", length, "Unexpected length of the supplemental credentials structure.");
                     }
 
                     // This value MUST be set to zero and MUST be ignored by the recipient.
@@ -118,7 +117,7 @@
                     short propertySignature = reader.ReadInt16();
                     if (propertySignature != Signature)
                     {
-                        throw new ArgumentOutOfRangeException(Resources.UnexpectedSupplementalCredsSignatureMessage, propertySignature, "blob");
+                        throw new ArgumentOutOfRangeException("Supplemental credentials do not have a valid signature.", propertySignature, "blob");
                     }
 
                     // Parse properties

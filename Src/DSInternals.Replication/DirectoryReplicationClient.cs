@@ -8,7 +8,6 @@ using DSInternals.Common.Cryptography;
 using DSInternals.Common.Data;
 using DSInternals.Common.Exceptions;
 using DSInternals.Common.Interop;
-using DSInternals.Common.Properties;
 using DSInternals.Common.Schema;
 using DSInternals.Replication.Interop;
 using DSInternals.Replication.Model;
@@ -170,7 +169,7 @@ namespace DSInternals.Replication
             if (account == null)
             {
                 // If the target object is not an account, CreateAccount returns null
-                throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, objectGuid);
+                throw new DirectoryObjectOperationException("The object is not an account.", objectGuid);
             }
 
             return account;
@@ -184,7 +183,7 @@ namespace DSInternals.Replication
             if (account == null)
             {
                 // If the target object is not an account, CreateAccount returns null
-                throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, distinguishedName);
+                throw new DirectoryObjectOperationException("The object is not an account.", distinguishedName);
             }
 
             return account;

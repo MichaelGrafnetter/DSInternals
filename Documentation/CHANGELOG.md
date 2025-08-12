@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file. The format 
 - The project now uses a [custom fork of the ManagedEsent library](https://github.com/MichaelGrafnetter/ManagedEsent). This is because the [official NuGet packages](https://www.nuget.org/profiles/nugetese) are delay-signed and cannot be loaded by production .NET Framework assemblies.
 - Improved the performance of schema loading and account retrieval from `ntds.dit` files.
 - A lot of refactoring has been done in the `DSInternals.Common` namespace, including breaking changes.
+- Removed the `AutoMapper` dependency.
 
 ### Fixed
 

@@ -8,7 +8,6 @@
     using DSInternals.Common.Cryptography;
     using DSInternals.Common.Data;
     using DSInternals.Common.Exceptions;
-    using DSInternals.Common.Properties;
     using DSInternals.Common.Schema;
     using Microsoft.Database.Isam;
 
@@ -125,12 +124,12 @@
                 case SamAccountType.Trust:
                     break;
                 default:
-                    throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
+                    throw new DirectoryObjectOperationException("The object is not a security principal.", targetObjectIdentifier);
             }
 
             if (newSupplementalCredentials == null)
             {
-                // Create empty supplemental credentials structure, beca
+                // Create empty supplemental credentials structure
                 newSupplementalCredentials = new SupplementalCredentials();
             }
 

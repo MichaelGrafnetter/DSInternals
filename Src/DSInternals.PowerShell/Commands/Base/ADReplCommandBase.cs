@@ -5,7 +5,7 @@ using DSInternals.Replication;
 
 namespace DSInternals.PowerShell.Commands
 {
-    public abstract class ADReplCommandBase : PSCmdlet, IDisposable
+    public abstract class ADReplCommandBase : PSCmdletEx, IDisposable
     {
 
         #region Parameters

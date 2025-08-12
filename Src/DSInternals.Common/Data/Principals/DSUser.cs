@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using DSInternals.Common.Cryptography;
-    using DSInternals.Common.Properties;
     using DSInternals.Common.Schema;
 
     public class DSUser : DSAccount
@@ -12,7 +11,7 @@
         {
             if (this.SamAccountType != SamAccountType.User)
             {
-                throw new ArgumentException(Resources.ObjectNotAccountMessage);
+                throw new ArgumentException("The object is not a user.");
             }
 
             if (propertySets.HasFlag(AccountPropertySets.RoamedCredentials))

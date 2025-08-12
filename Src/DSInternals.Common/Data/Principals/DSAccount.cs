@@ -4,7 +4,6 @@
     using System.Security.AccessControl;
     using System.Security.Principal;
     using DSInternals.Common.Cryptography;
-    using DSInternals.Common.Properties;
     using DSInternals.Common.Schema;
 
     public class DSAccount
@@ -32,7 +31,7 @@
                     this.SamAccountType = accountType.Value;
                     break;
                 default:
-                    throw new ArgumentException(Resources.ObjectNotAccountMessage);
+                    throw new ArgumentException("The object is not an account.");
             }
 
             // Common properties

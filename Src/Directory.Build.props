@@ -1,0 +1,79 @@
+<Project>
+  <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+    <!-- Configure C# language properties -->
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>Library</OutputType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <AnalysisLevel>6.0-recommended</AnalysisLevel>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <DebugType>portable</DebugType>
+    
+    <!-- Redirect output directories -->
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)../Build</ArtifactsPath>
+    <VSTestResultsDirectory>$(MSBuildThisFileDirectory)../Build/TestResults</VSTestResultsDirectory>
+
+    <!-- Only selected projects will generate a NuGet package -->
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+
+    <!-- We need to sign the binaries before generating the NuGet packages -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+
+    <!-- Configure NuGet package properties -->
+    <Authors>Michael Grafnetter</Authors>
+    <Product>DSInternals PowerShell Module</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Copyright © 2015-2025 Michael Grafnetter. All rights reserved.</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/MichaelGrafnetter/DSInternals</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MichaelGrafnetter/DSInternals</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>icon.png</PackageIcon>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <IncludeSymbols>true</IncludeSymbols>
+    <!-- Use lock files to enable NuGet package caching at GitHub -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <EnablePackageValidation>true</EnablePackageValidation>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+    <!-- Additional files to include in NuGet packages -->
+    <!-- Note: Without the condition, these files would always be visible in C++ projects. -->
+    <None Include="$(MSBuildThisFileDirectory)Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)../LICENSE.md" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net48'">
+    <!-- Some crypto API functions are not available in WoW64.-->
+    <Prefer32Bit>false</Prefer32Bit>
+    <PreferNativeArm64>True</PreferNativeArm64>
+  </PropertyGroup>
+
+  <!-- Configure strong name signing for C# projects if the private key exists -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release' AND Exists('$(MSBuildThisFileDirectory)..\Keys\DSInternals.Private.snk')">
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)..\Keys\DSInternals.Private.snk</AssemblyOriginatorKeyFile>
+    <StrongNamePublicKey>002400000480000094000000060200000024000052534131000400000100010077154b93d8084f0f30c52174d6c93d25ffdc65e11ba1b125383e55c6095061df3c2f765401c21434aa413aa264b6eb3039d95c5f33a9d4eb7deb695b55e434d8dd9b42e0e86f3287498732d3a30d0ee22d8d58b2361f033351d5c1a64a16324ac6c42b5a4b14c12483b52a98a43f7e934df86b92cc8a9c4ee0f408d7b6d987e3</StrongNamePublicKey>
+    <DelaySign>false</DelaySign>
+   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Enable source-link -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release' AND '$(GITHUB_ACTIONS)' == 'true'">
+    <!-- Enable continuous integration build metadata for GitHub Actions -->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <!-- Enable deterministic builds -->
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+</Project>

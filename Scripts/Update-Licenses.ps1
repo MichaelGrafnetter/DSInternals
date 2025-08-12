@@ -11,9 +11,6 @@ $products = @(
         Name = 'ESENT Managed Interop';
         LicenseUrl = 'https://raw.githubusercontent.com/microsoft/ManagedEsent/master/LICENSE.md'
      }, @{
-        Name = 'AutoMapper';
-        LicenseUrl = 'https://raw.githubusercontent.com/AutoMapper/AutoMapper/master/LICENSE.txt'
-     }, @{
         Name = 'NDceRpc (.NET Distributed Computing Environment Remote Procedure Call)';
         LicenseUrl = 'https://raw.githubusercontent.com/OpenSharp/NDceRpc/master/license.txt'
      }, @{

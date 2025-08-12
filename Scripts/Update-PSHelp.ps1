@@ -5,26 +5,27 @@ Refreshes MD documentation files and builds MAML files.
 .AUTHOR
 Przemysław Kłys (@PrzemyslawKlys)
 #>
+
 #Requires -Version 5 -Module platyPS
 
 # Set directory paths
-$rootDir = Split-Path $PSScriptRoot -Parent
-$locale = 'en-US'
-$dsInternalsModulePath = Join-Path $rootDir 'Build\bin\Release\DSInternals'
-$mdHelpPath = Join-Path $rootDir 'Documentation\PowerShell'
-$modulePagePath = Join-Path $mdHelpPath 'Readme.md'
-$xmlHelpSrcPath = Join-Path $rootDir "Src\DSInternals.PowerShell\$locale"
-$xmlHelpBuildPath = Join-Path $dsInternalsModulePath $locale
-$aboutPagePath = Join-Path $xmlHelpSrcPath 'about_DSInternals.help.txt'
+[string] $rootDir = Split-Path $PSScriptRoot -Parent
+[string] $locale = 'en-US'
+[string] $dsInternalsModulePath = Join-Path $rootDir 'Build\bin\DSInternals.PowerShell\Release\DSInternals'
+[string] $mdHelpPath = Join-Path $rootDir 'Documentation\PowerShell'
+[string] $modulePagePath = Join-Path $mdHelpPath 'Readme.md'
+[string] $xmlHelpSrcPath = Join-Path $rootDir "Src\DSInternals.PowerShell\$locale"
+[string] $xmlHelpBuildPath = Join-Path $dsInternalsModulePath $locale
+[string] $aboutPagePath = Join-Path $xmlHelpSrcPath 'about_DSInternals.help.txt'
 
 # Import dependencies
-Import-Module -Name platyPS
+Import-Module -Name platyPS -ErrorAction Stop
 
 # Remove any pre-existing XML help
 Remove-Item $xmlHelpBuildPath -Recurse -ErrorAction SilentlyContinue
 
 # Load the freshly compiled module to generate the help for
-Import-Module -Name $dsInternalsModulePath
+Import-Module -Name $dsInternalsModulePath -ErrorAction Stop
 
 <#
 Note: This code has been used to create the initial version of the help files:

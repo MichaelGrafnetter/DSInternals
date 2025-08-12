@@ -3,9 +3,7 @@
     using System;
     using System.Management.Automation;
     using System.Security.Principal;
-    using DSInternals.DataStore;
     using DSInternals.Common.Data;
-    using DSInternals.PowerShell.Properties;
 
     [Cmdlet(VerbsCommon.Add, "ADDBSidHistory")]
     [OutputType("None")]
@@ -50,7 +48,7 @@
 
                 default:
                     // This should never happen:
-                    throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+                    throw new PSInvalidOperationException(InvalidParameterSetMessage);
             }
             this.WriteVerboseResult(hasChanged);
         }

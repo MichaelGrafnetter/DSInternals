@@ -1,11 +1,10 @@
 ﻿namespace DSInternals.Common.Data
 {
-    using DSInternals.Common.Properties;
-    using DSInternals.Common.Schema;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using DSInternals.Common.Schema;
 
     public class DistinguishedName
     {
@@ -48,7 +47,7 @@
                 string[] rdnSegments = SplitDN(segment, true);
                 if (rdnSegments.Length != 2)
                 {
-                    throw new ArgumentException(Resources.DNParsingErrorMessage, "dn");
+                    throw new ArgumentException("Error parsing distinguished name.", "dn");
                 }
                 try
                 {
@@ -57,7 +56,7 @@
                 }
                 catch (ArgumentNullException)
                 {
-                    throw new ArgumentException(Resources.DNParsingErrorMessage, "dn");
+                    throw new ArgumentException("Error parsing distinguished name.", "dn");
                 }
             }
         }

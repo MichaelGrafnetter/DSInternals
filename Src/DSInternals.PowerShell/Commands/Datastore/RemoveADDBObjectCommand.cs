@@ -3,7 +3,6 @@
     using DSInternals.Common.Data;
     using DSInternals.Common.Exceptions;
     using DSInternals.DataStore;
-    using DSInternals.PowerShell.Properties;
     using System;
     using System.Management.Automation;
 
@@ -77,7 +76,7 @@
 
                     default:
                         // This should never happen:
-                        throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+                        throw new PSInvalidOperationException(InvalidParameterSetMessage);
                 }
             }
             catch(DirectoryObjectNotFoundException ex)

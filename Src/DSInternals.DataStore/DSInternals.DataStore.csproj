@@ -1,153 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props" Condition="Exists('..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props')" />
-  <Import Project="..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props" Condition="Exists('..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props')" />
-  <Import Project="..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props" Condition="Exists('..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="..\Configuration\Common.csproj.props" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- NuGet package metadata -->
   <PropertyGroup>
-    <ProjectGuid>{8A857B97-1BE0-4BAE-A4E8-DEE870858BFD}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DSInternals.DataStore</RootNamespace>
-    <AssemblyName>DSInternals.DataStore</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <LangVersion>13.0</LangVersion>
-    <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile />
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <IsPackable>true</IsPackable>
+    <Version>5.5</Version>
+    <AssemblyTitle>DSInternals DataStore Library</AssemblyTitle>
+    <Title>$(AssemblyTitle)</Title>
+    <Description>DSInternals DataStore is an advanced framework for offline ntds.dit file manipulation. It can be used to extract password hashes from Active Directory backups or to modify the sIDHistory and primaryGroupId attributes.</Description>
+    <PackageReleaseNotes>- Added support for AD trusts.
+- Switched to using custom NuGet packages.</PackageReleaseNotes>
+    <PackageTags>ActiveDirectory Security NTDS AD Identity Active Directory</PackageTags>
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <!-- Override the default configuration for this assembly and emit PDB-->
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>pdbonly</DebugType>
-    <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Esent.Interop, Version=2.0.4.0, Culture=neutral, PublicKeyToken=0288101625d910d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\DSInternals.ManagedEsent.Interop.2.0.4.1\lib\netstandard2.0\Esent.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="Esent.Isam, Version=2.0.4.0, Culture=neutral, PublicKeyToken=0288101625d910d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\DSInternals.ManagedEsent.Isam.2.0.4.1\lib\netstandard2.0\Esent.Isam.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Windows.SDK.Win32Docs, Version=0.1.42.13748, Culture=neutral, PublicKeyToken=7c40c7c34b1fcfe1, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Windows.SDK.Win32Docs.0.1.42-alpha\lib\netstandard2.0\Microsoft.Windows.SDK.Win32Docs.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
+    <PackageReference Include="DSInternals.ManagedEsent.Interop" Version="2.0.4.1" />
+    <PackageReference Include="DSInternals.ManagedEsent.Isam" Version="2.0.4.1" />
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="AttributeMetadata.cs" />
-    <Compile Include="AttributeMetadataCollection.cs" />
-    <Compile Include="Cryptography\BootKeyRetriever.cs" />
-    <Compile Include="Cryptography\DataStoreSecretDecryptor.cs" />
-    <Compile Include="DatabaseFlags.cs" />
-    <Compile Include="DatastoreObject.cs" />
-    <Compile Include="DatastoreRootKeyResolver.cs" />
-    <Compile Include="DirectoryAgent.cs" />
-    <Compile Include="DirectoryAgent.BitLocker.cs">
-      <DependentUpon>DirectoryAgent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DirectoryAgent.DNS.cs">
-      <DependentUpon>DirectoryAgent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DirectoryAgent.PasswordManagement.cs">
-      <DependentUpon>DirectoryAgent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DirectoryAgent.DataProtection.cs">
-      <DependentUpon>DirectoryAgent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Enums\DNTag.cs" />
-    <Compile Include="Enums\FunctionalLevel.cs" />
-    <Compile Include="ADConstants.cs" />
-    <Compile Include="Enums\DatabaseState.cs" />
-    <Compile Include="Enums\PekListFlags.cs" />
-    <Compile Include="Enums\PekListVersion.cs" />
-    <Compile Include="Exceptions\InvalidDatabaseStateException.cs" />
-    <Compile Include="Extensions\IsamInstanceExtensions.cs" />
-    <Compile Include="Extensions\TableDefinitionExtentions.cs" />
-    <Compile Include="Extensions\CursorExtensions.cs" />
-    <Compile Include="Enums\DomainControllerOptions.cs" />
-    <Compile Include="DirectoryContext.cs" />
-    <Compile Include="DistinguishedNameResolver.cs" />
-    <Compile Include="DomainController.cs" />
-    <Compile Include="Interfaces\IDomainController.cs" />
-    <Compile Include="SecurityDescriptorResolver.cs" />
-    <Compile Include="LinkResolver.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DirectorySchema.cs" />
+    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj">
-      <Project>{7d47f040-d3a9-43ca-9f69-ef91faf2c23a}</Project>
-      <Name>DSInternals.Common</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DSInternals.DataStore.nuspec" />
-    <None Include="packages.config" />
-    <None Include="package\install.ps1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\MessagePack.Annotations.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\MessagePack.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\Microsoft.Bcl.AsyncInterfaces.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\Microsoft.Windows.CsWin32.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\Microsoft.Windows.SDK.Win32Docs.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\System.Text.Encodings.Web.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\System.Text.Json.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="NativeMethods.txt" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -1,313 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props" Condition="Exists('..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props')" />
-  <Import Project="..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props" Condition="Exists('..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props')" />
-  <Import Project="..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props" Condition="Exists('..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="..\Configuration\Common.csproj.props" />
-  <Import Project="Cryptography\Asn1\AsnXml.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- NuGet package metadata -->
   <PropertyGroup>
-    <ProjectGuid>{7D47F040-D3A9-43CA-9F69-EF91FAF2C23A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DSInternals.Common</RootNamespace>
-    <AssemblyName>DSInternals.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <LangVersion>13.0</LangVersion>
-    <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
+    <IsPackable>true</IsPackable>
+    <Version>5.5</Version>
+    <AssemblyTitle>DSInternals Common Library</AssemblyTitle>
+    <Title>$(AssemblyTitle)</Title>
+    <Description>This package is shared between all other DSInternals packages. Its main features are Azure AD Graph API and ADSI clients for for retrieval of cryptographic material. It contains implementations of common hash functions used by Windows, including NT hash, LM hash and OrgId hash. It also contains methods for SysKey/BootKey retrieval.</Description>
+    <PackageReleaseNotes>- Added support for AD trusts.</PackageReleaseNotes>
+    <PackageTags>ActiveDirectory Security Entra AD AAD Identity Active Directory</PackageTags>
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="CBOR, Version=4.5.5.0, Culture=neutral, PublicKeyToken=9cd62db60ea5554c, processorArchitecture=MSIL">
-      <HintPath>..\packages\PeterO.Cbor.4.5.5\lib\net40\CBOR.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Windows.SDK.Win32Docs, Version=0.1.42.13748, Culture=neutral, PublicKeyToken=7c40c7c34b1fcfe1, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Windows.SDK.Win32Docs.0.1.42-alpha\lib\netstandard2.0\Microsoft.Windows.SDK.Win32Docs.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Numbers, Version=1.8.2.0, Culture=neutral, PublicKeyToken=9cd62db60ea5554c, processorArchitecture=MSIL">
-      <HintPath>..\packages\PeterO.Numbers.1.8.2\lib\net40\Numbers.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.Formats.Asn1, Version=9.0.0.6, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Formats.Asn1.9.0.6\lib\net462\System.Formats.Asn1.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.6.1\lib\net47\System.ValueTuple.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="PeterO.Cbor" Version="4.5.5" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" Condition="'$(TargetFramework)' == 'net48'" />
+    <PackageReference Include="System.DirectoryServices" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+    <PackageReference Include="System.Formats.Asn1" Version="9.0.8" Condition="'$(TargetFramework)' == 'net48'" />
+    <PackageReference Include="System.Memory" Version="4.5.5" Condition="'$(TargetFramework)' == 'net48'" />
+    <PackageReference Include="System.ValueTuple" Version="4.6.1" Condition="'$(TargetFramework)' == 'net48'" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="ADSI\AdsiClient.cs" />
-    <Compile Include="ADSI\AdsiObjectAdapter.cs" />
-    <Compile Include="AzureAD\AzureADUser.cs" />
-    <Compile Include="AzureAD\AzureADClient.cs" />
-    <Compile Include="AzureAD\GraphApiException.cs" />
-    <Compile Include="AzureAD\ODataError.cs" />
-    <Compile Include="AzureAD\ODataErrorMessage.cs" />
-    <Compile Include="AzureAD\OdataErrorResponse.cs" />
-    <Compile Include="AzureAD\OdataPagedResponse.cs" />
-    <Compile Include="Cryptography\Asn1\DpapiNg\ProtectionKeyDescriptor.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs12\CertBag.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs12\MacData.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs12\Pfx.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs12\SafeBag.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs12\SecretBag.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs1\DigestInfo.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\Attribute.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\CertificateChoice.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\ContentInfo.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\EncapsulatedContentInfo.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\EncryptedContentInfo.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\EnvelopedData.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\IssuerAndSerialNumber.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\KEKIdentifier.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\KEKRecipientInfo.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\KeyAgreeRecipientIdentifier.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\KeyAgreeRecipientInfo.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\KeyTransRecipientInfo.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\OriginatorIdentifierOrKey.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\OriginatorInfo.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\OriginatorPublicKey.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\OtherCertificateFormat.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\OtherKeyAttribute.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\OtherKeyAttribute.manual.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\RecipientEncryptedKey.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\RecipientIdentifier.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\RecipientInfo.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\RecipientKeyIdentifier.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\SignedData.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\SignerIdentifier.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\Pkcs7\SignerInfo.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\Asn1\X509\AlgorithmIdentifier.asn1.xml.generated.cs" />
-    <Compile Include="Cryptography\HashEqualityComparer.cs" />
-    <Compile Include="Cryptography\KerberosKeyDerivation.cs" />
-    <Compile Include="Cryptography\SortedFileSearcher.cs" />
-    <Compile Include="Cryptography\WDigestHash.cs" />
-    <Compile Include="Cryptography\Pbkdf2.cs" />
-    <Compile Include="Cryptography\PrivateKeyEncryptionType.cs" />
-    <Compile Include="Data\DNS\DnsResourceRecord.cs" />
-    <Compile Include="Data\DNS\ResourceRecordFlags.cs" />
-    <Compile Include="Data\DNS\ResourceRecordRank.cs" />
-    <Compile Include="Data\DNS\ResourceRecordType.cs" />
-    <Compile Include="Cryptography\Asn1\DpapiNg\CngProtectedDataBlob.cs" />
-    <Compile Include="Data\DPAPI\GroupKeyEnvelope.cs" />
-    <Compile Include="Data\DPAPI\GroupKeyEnvelopeFlags.cs" />
-    <Compile Include="Data\DPAPI\IKdsRootKeyResolver.cs" />
-    <Compile Include="Data\DPAPI\KdsRootKeyCache.cs" />
-    <Compile Include="Data\DPAPI\StaticKdsRootKeyResolver.cs" />
-    <Compile Include="Data\LAPS\LapsDecryptionStatus.cs" />
-    <Compile Include="Data\LAPS\LapsClearTextPassword.cs" />
-    <Compile Include="Data\LAPS\LapsEncryptedPassword.cs" />
-    <Compile Include="Data\LAPS\LapsPasswordInformation.cs" />
-    <Compile Include="Data\LAPS\LapsPasswordSource.cs" />
-    <Compile Include="Data\Principals\BitLockerRecoveryInformation.cs" />
-    <Compile Include="Data\DNWithBinary.cs" />
-    <Compile Include="Data\DPAPI\ProtectionKeyIdentifier.cs" />
-    <Compile Include="Data\DPAPI\DPAPIObject.cs" />
-    <Compile Include="Data\DPAPI\KdsRootKey.cs" />
-    <Compile Include="Data\DPAPI\RoamedCredential.cs" />
-    <Compile Include="Data\DPAPI\RoamedCredentialFlags.cs" />
-    <Compile Include="Data\DPAPI\RoamedCredentialType.cs" />
-    <Compile Include="Cryptography\CngSoftwareProviderTransportBlob.cs" />
-    <Compile Include="Data\Hello\CustomKeyInformation.cs" />
-    <Compile Include="Data\Hello\CustomKeyInformationConverter.cs" />
-    <Compile Include="Data\Hello\FidoAttestedCredentialData.cs" />
-    <Compile Include="Data\Hello\FidoAuthenticatorData.cs" />
-    <Compile Include="Data\Hello\FidoAuthenticatorFlags.cs" />
-    <Compile Include="Data\Hello\FidoCose.cs" />
-    <Compile Include="Data\Hello\FidoCredentialPublicKey.cs" />
-    <Compile Include="Data\Hello\KeyCredential.cs" />
-    <Compile Include="Data\Hello\KeyCredentialVersion.cs" />
-    <Compile Include="Data\Hello\KeyCredentialEntryType.cs" />
-    <Compile Include="Data\Hello\KeySource.cs" />
-    <Compile Include="Data\Hello\KeyStrength.cs" />
-    <Compile Include="Data\Hello\KeyFlags.cs" />
-    <Compile Include="Data\Hello\KeyMaterialFido.cs" />
-    <Compile Include="Data\Hello\VolumeType.cs" />
-    <Compile Include="Data\Hello\KeyUsage.cs" />
-    <Compile Include="Kerberos\TrustAttributes.cs" />
-    <Compile Include="Kerberos\TrustAuthenticationInformation.cs" />
-    <Compile Include="Kerberos\TrustAuthenticationInformationType.cs" />
-    <Compile Include="Kerberos\TrustAuthInfos.cs" />
-    <Compile Include="Kerberos\TrustedDomain.cs" />
-    <Compile Include="Data\Principals\GroupManagedServiceAccount.cs" />
-    <Compile Include="Data\Principals\AccountFactory.cs" />
-    <Compile Include="Data\Principals\AccountPropertySets.cs" />
-    <Compile Include="Data\Principals\DSComputer.cs" />
-    <Compile Include="Data\Principals\SupportedEncryptionTypes.cs" />
-    <Compile Include="Data\Principals\DSUser.cs" />
-    <Compile Include="Kerberos\TrustType.cs" />
-    <Compile Include="Exceptions\SchemaAttributeNotFoundException.cs" />
-    <Compile Include="Schema\AttributeOmSyntax.cs" />
-    <Compile Include="Schema\AttributeSystemFlags.cs" />
-    <Compile Include="Schema\AttributeType.cs" />
-    <Compile Include="Schema\AttributeTypeExtensions.cs" />
-    <Compile Include="Schema\ClassType.cs" />
-    <Compile Include="Extensions\ByteArrayExtensions.cs" />
-    <Compile Include="Cryptography\Crc32.cs" />
-    <Compile Include="Cryptography\GPPrefPwdObfuscator.cs" />
-    <Compile Include="Cryptography\DirectorySecretDecryptor.cs" />
-    <Compile Include="Cryptography\SecretEncryptionType.cs" />
-    <Compile Include="Cryptography\LMHash.cs" />
-    <Compile Include="Cryptography\NTHash.cs" />
-    <Compile Include="Cryptography\OrgIdHash.cs" />
-    <Compile Include="Data\DistinguishedName.cs" />
-    <Compile Include="Data\DistinguishedNameComponent.cs" />
-    <Compile Include="Data\InstanceType.cs" />
-    <Compile Include="Data\DPAPI\DPAPIBackupKey.cs" />
-    <Compile Include="Data\DPAPI\DPAPIBackupKeyType.cs" />
-    <Compile Include="Data\Principals\ManagedPassword.cs" />
-    <Compile Include="Data\Principals\UserAccountControl.cs" />
-    <Compile Include="Schema\AttributeSyntax.cs" />
-    <Compile Include="Schema\BaseSchema.cs" />
-    <Compile Include="Schema\CommonDirectoryClasses.cs" />
-    <Compile Include="Schema\CommonDirectoryAttributes.cs" />
-    <Compile Include="Data\Principals\DSAccount.cs" />
-    <Compile Include="Data\DirectoryObject.cs" />
-    <Compile Include="Data\Principals\KerberosCredential.cs" />
-    <Compile Include="Data\Principals\KerberosCredentialNew.cs" />
-    <Compile Include="Data\Principals\KerberosKeyData.cs" />
-    <Compile Include="Data\Principals\KerberosKeyDataNew.cs" />
-    <Compile Include="Data\Principals\KerberosKeyType.cs" />
-    <Compile Include="Data\Principals\SupplementalCredentials.cs" />
-    <Compile Include="Exceptions\DirectoryException.cs" />
-    <Compile Include="Exceptions\DirectoryObjectException.cs" />
-    <Compile Include="Exceptions\DirectoryObjectNotFoundException.cs" />
-    <Compile Include="Exceptions\DirectoryObjectOperationException.cs" />
-    <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Extensions\NetworkCredentialExtensions.cs" />
-    <Compile Include="Extensions\NTAccountExtensions.cs" />
-    <Compile Include="Extensions\RSAExtensions.cs" />
-    <Compile Include="Interop\CryptoBuffer.cs" />
-    <Compile Include="Interop\Enums\GroupKeyLevel.cs" />
-    <Compile Include="Interop\Enums\NetCancelOptions.cs" />
-    <Compile Include="Interop\Enums\NetConnectOptions.cs" />
-    <Compile Include="Interop\Enums\NetResourceDisplayType.cs" />
-    <Compile Include="Interop\Enums\NetResourceScope.cs" />
-    <Compile Include="Interop\Enums\NetResourceType.cs" />
-    <Compile Include="Interop\Enums\NetResourceUsage.cs" />
-    <Compile Include="Interop\KerberosCryptoSystem.cs" />
-    <Compile Include="Interop\NamedPipeConnection.cs" />
-    <Compile Include="Interop\NativeMethods.cs" />
-    <Compile Include="Interop\NetResource.cs" />
-    <Compile Include="Interop\RegistryHiveFileMapping.cs" />
-    <Compile Include="Interop\Enums\RegistryKeyRights.cs" />
-    <Compile Include="Interop\SafeOemStringPointer.cs" />
-    <Compile Include="Interop\Enums\Win32ErrorCode.cs" />
-    <Compile Include="Interop\Enums\NtStatus.cs" />
-    <Compile Include="Interop\SafeSidKeyProviderHandle.cs" />
-    <Compile Include="Interop\SafeUnicodeSecureStringPointer.cs" />
-    <Compile Include="Interop\OemString.cs" />
-    <Compile Include="Interop\SecureUnicodeString.cs" />
-    <Compile Include="Interop\UnicodeString.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Data\Principals\SamAccountType.cs" />
-    <Compile Include="Cryptography\SecureStringExtensions.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\RegistryKeyExtensions.cs" />
-    <Compile Include="Extensions\SecurityIdentifierExtensions.cs" />
-    <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Schema\LinkType.cs" />
-    <Compile Include="Schema\AttributeSearchFlags.cs" />
-    <Compile Include="Schema\PrefixTable.cs" />
-    <Compile Include="Schema\AttributeSchema.cs" />
-    <Compile Include="Kerberos\TrustDirection.cs" />
-    <Compile Include="Validator.cs" />
+    <!-- Do not use packages for assemblies that are part of .NET Framework -->
+    <Reference Include="System.DirectoryServices" Condition="'$(TargetFramework)' == 'net48'" />
+    <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net48'" />
   </ItemGroup>
+
+  <!-- Compile ASN.1 XML definitions to C# -->
+  <Import Project="Cryptography\Asn1\AsnXml.targets" />
   <ItemGroup>
-    <None Include="Cryptography\Asn1\asn.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Cryptography\Asn1\AsnXml.targets" />
-    <None Include="Cryptography\Asn1\README.md" />
-    <None Include="Data\DSDataRepresentation.cd" />
-    <None Include="DSInternals.Common.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\FIDO2\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Cryptography\Asn1\asn.xslt" />
     <AsnXml Include="**\*.asn1.xml" />
-    <None Include="NativeMethods.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\MessagePack.Annotations.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\MessagePack.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\Microsoft.Bcl.AsyncInterfaces.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\Microsoft.Windows.CsWin32.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\Microsoft.Windows.SDK.Win32Docs.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\System.Text.Encodings.Web.dll" />
-    <Analyzer Include="..\packages\Microsoft.Windows.CsWin32.0.3.183\analyzers\cs\System.Text.Json.dll" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.SDK.Win32Metadata.63.0.31-preview\build\net20\Microsoft.Windows.SDK.Win32Metadata.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.WDK.Win32Metadata.0.13.25-experimental\build\net20\Microsoft.Windows.WDK.Win32Metadata.props'))" />
-    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CsWin32.0.3.183\build\net20\Microsoft.Windows.CsWin32.props'))" />
-  </Target>
-  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
 </Project>

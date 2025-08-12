@@ -5,12 +5,45 @@
 #
 
 #
+# Check if the current OS is Windows.
+#
+
+if ($env:OS -ne 'Windows_NT')
+{
+    Write-Error -Message 'The DSInternals PowerShell module is only supported on Windows.' `
+                -Category ([System.Management.Automation.ErrorCategory]::NotImplemented)
+}
+
+#
 # Load the platform-specific libraries.
 # Note: This operation cannot be done in the module manifest,
 #       as it only supports restricted language mode.
 #
 
-[string] $interopAssemblyPath = Join-Path $PSScriptRoot "$env:PROCESSOR_ARCHITECTURE\DSInternals.Replication.Interop.dll"
+# Default to PowerShell 5.1 Desktop and earlier
+[string] $basePath = Join-Path -Path $PSScriptRoot -ChildPath 'net48'
+
+if ($PSVersionTable.PSVersion.Major -ge 6) {
+    # PowerShell Core
+    $basePath = Join-Path -Path $PSScriptRoot -ChildPath 'net8.0-windows'
+}
+
+# Import the main module file.
+[string] $modulePath = Join-Path -Path $basePath -ChildPath 'DSInternals.PowerShell.dll'
+Import-Module -Name $modulePath -ErrorAction Stop
+
+[string] $architectureSpecificPath = Join-Path -Path $basePath -ChildPath $env:PROCESSOR_ARCHITECTURE
+
+# Try to locate the interop assembly for the current architecture.
+[string] $interopAssemblyName = 'DSInternals.Replication.Interop.dll'
+[string] $interopAssemblyPath = Join-Path -Path $architectureSpecificPath -ChildPath $interopAssemblyName
+
+if(-not (Test-Path -Path $interopAssemblyPath -PathType Leaf))
+{
+    # Fallback to the parent directory
+    $interopAssemblyPath = Join-Path -Path $basePath -ChildPath $interopAssemblyName
+}
+
 try
 {
     Add-Type -Path $interopAssemblyPath -ErrorAction Stop
@@ -38,7 +71,7 @@ catch [System.IO.IOException]
     # Check if the interop assembly is blocked
     [object] $zoneIdentifier = Get-Item -Path $interopAssemblyPath -Stream 'Zone.Identifier' -ErrorAction SilentlyContinue
 
-    if($zoneIdentifier -ne $null)
+    if($null -ne $zoneIdentifier)
     {
         # This usually happens to users of the ZIP distribution who forget to unblock it before extracting the files.
         $message += ' Unblock the assembly using either the Properties dialog or the Unblock-File cmdlet and reload the DSInternals module afterwards.'
@@ -70,23 +103,13 @@ if([System.Security.Cryptography.CryptoConfig]::AllowOnlyFipsAlgorithms)
 }
 
 #
-# Check if the current OS is Windows.
-#
-
-if($env:OS -ne 'Windows_NT')
-{
-    Write-Error -Message 'The DSInternals PowerShell module is only supported on Windows.' `
-                -Category ([System.Management.Automation.ErrorCategory]::NotImplemented)
-}
-
-#
 # Type Data
-# Note: *.types.ps1xml cannot be used for the following configuration, because it is processed before *.psm1 and would thus fail loading platform-specific assemblies. 
+# Note: *.types.ps1xml cannot be processed before the platform-specific assemblies are loaded.
 #
 
-Update-TypeData -TypeName 'DSInternals.Common.Data.SupplementalCredentials' `
-                -TypeConverter ([DSInternals.PowerShell.SupplementalCredentialsDeserializer]) `
-                -Force
+[string] $typesFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'DSInternals.types.ps1xml'
+
+Update-TypeData -PrependPath $typesFilePath
 
 #
 # Cmdlet aliases

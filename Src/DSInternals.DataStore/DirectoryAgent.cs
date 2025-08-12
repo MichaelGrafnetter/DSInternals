@@ -7,7 +7,6 @@
     using DSInternals.Common.Data;
     using DSInternals.Common.Exceptions;
     using DSInternals.Common.Kerberos;
-    using DSInternals.Common.Properties;
     using DSInternals.Common.Schema;
     using Microsoft.Database.Isam;
 
@@ -224,7 +223,7 @@
 
             if (account == null)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, objectIdentifier);
+                throw new DirectoryObjectOperationException("The object is not a security principal.", objectIdentifier);
             }
 
             return account;
@@ -587,7 +586,7 @@
                     // OK, continue
                     break;
                 default:
-                    throw new DirectoryObjectOperationException(Resources.ObjectNotSecurityPrincipalMessage, targetObjectIdentifier);
+                    throw new DirectoryObjectOperationException("The object is not a security principal.", targetObjectIdentifier);
             }
 
             using (var transaction = this.context.BeginTransaction())
@@ -658,7 +657,7 @@
                 if (!numericUac.HasValue)
                 {
                     // This object does not have the userAccountControl attribute, so it probably is not an account.
-                    throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
+                    throw new DirectoryObjectOperationException("The object is not an account.", targetObjectIdentifier);
                 }
 
                 var uac = (UserAccountControl)numericUac.Value;
@@ -687,7 +686,7 @@
 
             if (accountType != SamAccountType.User && accountType != SamAccountType.Computer)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
+                throw new DirectoryObjectOperationException("The object is not an account.", targetObjectIdentifier);
             }
 
             using (var transaction = this.context.BeginTransaction())
@@ -711,7 +710,7 @@
 
             if (accountType != SamAccountType.User && accountType != SamAccountType.Computer)
             {
-                throw new DirectoryObjectOperationException(Resources.ObjectNotAccountMessage, targetObjectIdentifier);
+                throw new DirectoryObjectOperationException("The object is not an account.", targetObjectIdentifier);
             }
 
             // TODO: Validator.ValidateRid

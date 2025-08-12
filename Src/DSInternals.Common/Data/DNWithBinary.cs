@@ -1,7 +1,6 @@
 ﻿namespace DSInternals.Common.Data
 {
     using System;
-    using DSInternals.Common.Properties;
 
     /// <summary>
     /// The DNWithBinary class represents the DN-Binary LDAP attribute syntax, which contains a binary value and a distinguished name (DN).
@@ -46,7 +45,7 @@
             if (!hasCorrectPrefix || !has4Parts)
             {
                 // We do not need to perform a more thorough validation.
-                throw new ArgumentException(Resources.NotDNWithBinaryMessage, nameof(dnWithBinary));
+                throw new ArgumentException("Parameter is not in the DN-Binary format.", nameof(dnWithBinary));
             }
 
             string dn = dnWithBinary.Substring(valueTrailingColonIndex + 1);

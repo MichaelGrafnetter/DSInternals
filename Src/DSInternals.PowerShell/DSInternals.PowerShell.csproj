@@ -1,328 +1,70 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="..\Configuration\Common.csproj.props" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{C7EECC1F-1F9C-400B-A981-A8106E2A75F7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DSInternals.PowerShell</RootNamespace>
-    <AssemblyName>DSInternals.PowerShell</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <LangVersion>13.0</LangVersion>
-    <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <!-- Target both Windows PowerShell 5 and PowerShell 7 -->
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <!-- Redirect the build directory so that it includes the module name -->
+    <ArtifactsPivots>$(Configuration)/DSInternals/$(TargetFramework)</ArtifactsPivots>
+    <IncludeSymbols>False</IncludeSymbols>
+    <Version>6.0</Version>
+    <AssemblyTitle>DSInternals PowerShell Commands</AssemblyTitle>
+    <!-- Copy all dependency DLLs to the binary module -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <!-- XML documentation files are not needed for PowerShell binary modules -->
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <!-- Do not generate the *.deps.json file, which is not needed by PowerShell Core -->
+    <GenerateDependencyFile>False</GenerateDependencyFile>
+    <!-- Skip copying XML files from the referenced projects -->
+    <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
-  <PropertyGroup>
-    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-      None
-    </ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>
-    </NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <DefineConstants>CODE_ANALYSIS;CODE_ANALYSIS;TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>
-    </NoWarn>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Commands\ADSI\GetADSIAccountCommand.cs" />
-    <Compile Include="Commands\AzureAD\GetAzureADUserExCommand.cs" />
-    <Compile Include="Commands\AzureAD\SetAzureADUserExCommand.cs" />
-    <Compile Include="Commands\Base\ADReplPrincipalCommandBase.cs" />
-    <Compile Include="Commands\Base\ADSICommandBase.cs" />
-    <Compile Include="Commands\Base\ADReplObjectCommandBase.cs" />
-    <Compile Include="Commands\Base\ADReplCommandBase.cs" />
-    <Compile Include="Commands\Base\AzureADCommandBase.cs" />
-    <Compile Include="Commands\Base\PSCmdletEx.cs" />
-    <Compile Include="Commands\Base\LsaPolicyCommandBase.cs" />
-    <Compile Include="Commands\Base\SamCommandBase.cs" />
-    <Compile Include="Commands\Base\ADDBAccountStatusCommandBase.cs" />
-    <Compile Include="Commands\Datastore\GetADDBTrust.cs" />
-    <Compile Include="Commands\Datastore\SetADDBAccountControlCommand.cs" />
-    <Compile Include="Commands\Datastore\DisableADDBAccountCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBDnsZoneCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBDnsResourceRecordCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBServiceAccountCommand.cs" />
-    <Compile Include="Commands\Datastore\UnlockADDBAccountCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBBitlockerRecoveryInformationCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBKdsRootKeyCommand.cs" />
-    <Compile Include="Commands\Datastore\EnableADDBAccountCommand.cs" />
-    <Compile Include="Commands\Datastore\NewADDBRestoreFromMediaScriptCommand.cs" />
-    <Compile Include="Commands\Hash\ConvertToKerberosKeyCommand.cs" />
-    <Compile Include="Commands\Datastore\SetADDBAccountPasswordHashCommand.cs" />
-    <Compile Include="Commands\Datastore\SetADDBAccountPasswordCommand.cs" />
-    <Compile Include="Commands\LSA\GetLsaBackupKeyCommand.cs" />
-    <Compile Include="Commands\Misc\ConvertFromADManagedPasswordBlobCommand.cs" />
-    <Compile Include="Commands\Misc\GetADKeyCredential.cs" />
-    <Compile Include="Commands\LSA\SetLsaPolicyInformationCommand.cs" />
-    <Compile Include="Commands\LSA\GetLsaPolicyInformationCommand.cs" />
-    <Compile Include="Commands\LSA\GetSamPasswordPolicyCommand.cs" />
-    <Compile Include="Commands\Misc\TestPasswordQualityCommand.cs" />
-    <Compile Include="Commands\Misc\ConvertToHexCommand.cs" />
-    <Compile Include="Commands\Datastore\SetADDBBootKeyCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBBackupKeyCommand.cs" />
-    <Compile Include="Commands\Encryption\SaveDPAPIBlobCommand.cs" />
-    <Compile Include="Commands\Replication\AddADReplNgcKeyCommand.cs" />
-    <Compile Include="Commands\Replication\GetADReplKdsRootKey.cs" />
-    <Compile Include="Commands\Replication\GetADReplBackupKeyCommand.cs" />
-    <Compile Include="Commands\Replication\GetADReplAccountCommand.cs" />
-    <Compile Include="Commands\Datastore\GetBootKeyCommand.cs" />
-    <Compile Include="Commands\Datastore\SetADDBDomainControllerCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBSchemaAttributeCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBIndexCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBAccountCommand.cs" />
-    <Compile Include="Commands\Datastore\RemoveADDBObjectCommand.cs" />
-    <Compile Include="Commands\Datastore\RestoreADDBAttributeCommand.cs" />
-    <Compile Include="Commands\Datastore\GetADDBDomainControllerCommand.cs" />
-    <Compile Include="Commands\Datastore\SetADDBPrimaryGroupCommand.cs" />
-    <Compile Include="Commands\Base\ADDBModifyPrincipalCommandBase.cs" />
-    <Compile Include="Commands\Base\ADDBPrincipalCommandBase.cs" />
-    <Compile Include="Commands\Encryption\ConvertToGPPrefPasswordCommand.cs" />
-    <Compile Include="Commands\Base\ADDBCommandBase.cs" />
-    <Compile Include="Commands\Base\ADDBObjectCommandBase.cs" />
-    <Compile Include="Commands\Datastore\AddADDBSidHistoryCommand.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Types\AccountExportFormat.cs" />
-    <Compile Include="Types\DomainController.cs" />
-    <Compile Include="Types\LsaPolicyInformation.cs" />
-    <Compile Include="Types\PasswordQualityTestResult.cs" />
-    <Compile Include="Types\SupplementalCredentialsDeserializer.cs" />
-    <Compile Include="Utils\AcceptHexStringAttribute.cs" />
-    <Compile Include="Utils\ValidatePasswordLengthAttribute.cs" />
-    <Compile Include="Commands\Encryption\ConvertFromGPPrefPasswordCommand.cs" />
-    <Compile Include="Commands\Hash\ConvertToOrgIdHashCommand.cs" />
-    <Compile Include="Commands\Encryption\ConvertToUnicodePasswordCommand.cs" />
-    <Compile Include="Commands\Encryption\ConvertFromUnicodePasswordCommand.cs" />
-    <Compile Include="Commands\Hash\ConvertToLMHashCommand.cs" />
-    <Compile Include="Commands\Hash\ConvertToNTHashCommand.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Commands\Hash\SetSamAccountPasswordHashCommand.cs" />
-    <Compile Include="Utils\Win32ErrorCodeExtensions.cs" />
+    <!-- Include platform-independent module files in the module root directory -->
+    <Content Include="*.psd1;*.psm1;**\*.ps1xml;License.txt;*\*.txt;*\*.*Help.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>../%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+    </Content>
+    <!-- Show MarkDown documentation files -->
+    <None Include="$(MSBuildThisFileDirectory)../../Documentation/PowerShell/*.md">
+      <Link>Documentation/Commands/%(Filename)%(Extension)</Link>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)../../Documentation/*.md">
+      <Link>Documentation/%(Filename)%(Extension)</Link>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)../../.github/*.md">
+      <Link>Documentation/%(Filename)%(Extension)</Link>
+    </None>
+    <!-- Display the build scripts as part of the PowerShell project -->
+    <None Include="$(MSBuildThisFileDirectory)../../Scripts/*.*">
+      <Link>Scripts/%(Filename)%(Extension)</Link>
+    </None>
+    <!-- Pack the script template as an embedded resource -->
+    <None Remove="ADDBRestoreFromMediaScriptTemplate.ps1" />
+    <Resource Include="ADDBRestoreFromMediaScriptTemplate.ps1" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj">
-      <Project>{7d47f040-d3a9-43ca-9f69-ef91faf2c23a}</Project>
-      <Name>DSInternals.Common</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\DSInternals.DataStore\DSInternals.DataStore.csproj">
-      <Project>{8a857b97-1be0-4bae-a4e8-dee870858bfd}</Project>
-      <Name>DSInternals.DataStore</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\DSInternals.Replication.Model\DSInternals.Replication.Model.csproj">
-      <Project>{0bca513c-5f12-48b6-8288-d3a95ec2994a}</Project>
-      <Name>DSInternals.Replication.Model</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\DSInternals.Replication\DSInternals.Replication.csproj">
-      <Project>{2ee0d48f-65ba-4d4f-a8e1-fc01349ba786}</Project>
-      <Name>DSInternals.Replication</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\DSInternals.SAM\DSInternals.SAM.csproj">
-      <Project>{924f67c0-8fff-4714-891a-fc0799f46727}</Project>
-      <Name>DSInternals.SAM</Name>
-      <Private>False</Private>
-    </ProjectReference>
+    <!-- Reference assemblies that are bundled with PowerShell -->
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.1" IncludeAssets="compile" />
+
+    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj" />
+    <ProjectReference Include="..\DSInternals.Datastore\DSInternals.Datastore.csproj" />
+    <ProjectReference Include="..\DSInternals.Replication.Model\DSInternals.Replication.Model.csproj" />
+    <ProjectReference Include="..\DSInternals.Replication\DSInternals.Replication.csproj" />
+    <ProjectReference Include="..\DSInternals.SAM\DSInternals.SAM.csproj" />
+
+    <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Core -->
+    <!-- TODO: This requires more testing. -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
+    <PackageReference Include="System.DirectoryServices" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
+
+    <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Desktop on Windows Server 2025, but are absent on Windows Server 2008 R2: -->
+    <!-- System.Memory, System.Numerics.Vectors, System.Buffers, System.Runtime.CompilerServices.Unsafe -->
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.PowerShell.3.ReferenceAssemblies.1.0.0\lib\net4\System.Management.Automation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Chocolatey\tools\VERIFICATION.txt" />
-    <Content Include="DSInternals.Bootstrap.psm1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="en-US\about_DSInternals.help.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <EmbeddedResource Include="ADDBRestoreFromMediaScriptTemplate.ps1" />
-    <None Include="Chocolatey\dsinternals-psmodule.nuspec" />
-    <None Include="Chocolatey\tools\chocolateyinstall.ps1" />
-    <None Include="Chocolatey\tools\chocolateyuninstall.ps1" />
-    <None Include="Commands\ADDBCommandHierarchy.cd" />
-    <Content Include="en-US\DSInternals.PowerShell.dll-Help.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="License.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.Hash.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.KdsRootKey.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.PasswordQualityTestResult.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DSInternals.psd1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.SamDomainPasswordInformation.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.RoamedCredential.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.KeyCredential.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.DSAccount.ExportViews.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.Kerberos.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Commands\ADReplCommandHierarchy.cd" />
-    <None Include="Commands\ADSICommandHierarchy.cd" />
-    <Content Include="DSInternals.types.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Commands\AzureADCommandHierarchy.cd" />
-    <None Include="packages.config" />
-    <None Include="Run-Cmdlets.ps1" />
-    <Content Include="Views\DSInternals.DSAccount.format.ps1xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
-    <None Include="Tests\ConvertTo-OrgIdHashNative.ps1" />
-    <None Include="Tests\DSInternals.Smoke.Tests.ps1" />
-    <None Include="Tests\Set-SamAccountPasswordHash.Tests.ps1" />
-    <None Include="Tests\ConvertFrom-UnicodePassword.Tests.ps1" />
-    <None Include="Tests\ConvertTo-UnicodePassword.Tests.ps1" />
-    <None Include="Tests\ConvertTo-AADHash.Tests.ps1" />
-    <None Include="Tests\ConvertTo-Hex.Tests.ps1" />
-    <None Include="Tests\ConvertTo-LMHash.Tests.ps1" />
-    <None Include="Tests\ConvertTo-NTHash.Tests.ps1" />
-    <Content Include="Views\DSInternals.LsaPolicyInformation.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.FidoKeyMaterial.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.AzureADUser.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.GroupManagedServiceAccount.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.BitLockerRecoveryInformation.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.LapsPasswordInformation.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.DSComputer.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.DSUser.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.DnsResourceRecord.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\DSInternals.TrustedDomain.format.ps1xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <Target Name="RemoveRootInteropDll" AfterTargets="Build">
+    <!-- TODO: Find a more elegant way of not including these 2 files. -->
+    <!-- Remove DSInternals.Replication.Interop DLL and PDB from module root. Only keep it in the architecture-specific subdirectory. -->
+    <Delete Files="$(OutDir)DSInternals.Replication.Interop.dll" />
+    <Delete Files="$(OutDir)DSInternals.Replication.Interop.pdb" />
+    <!-- TODO: Is the Ijwhost.dll file needed? -->
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <PropertyGroup>
-    <StartProgram>$(SystemRoot)\System32\WindowsPowerShell\v1.0\powershell.exe</StartProgram>
-    <StartArguments>-NoLogo -NoProfile -ExecutionPolicy Bypass -NoExit -File "$(ProjectDir)\Run-Cmdlets.ps1"</StartArguments>
-    <StartAction>Program</StartAction>
-    <StartWorkingDirectory>$(OutputPath)\</StartWorkingDirectory>
-    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-  </PropertyGroup>
 </Project>

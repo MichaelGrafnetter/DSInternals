@@ -4,7 +4,6 @@
     using System.Management.Automation;
     using DSInternals.Common.Data;
     using DSInternals.DataStore;
-    using DSInternals.PowerShell.Properties;
 
     [Cmdlet(VerbsCommon.Get, "ADDBBitLockerRecoveryInformation")]
     [OutputType(typeof(DSInternals.Common.Data.BitLockerRecoveryInformation))]
@@ -87,7 +86,7 @@
 
                 default:
                     // This should never happen:
-                    throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+                    throw new PSInvalidOperationException(InvalidParameterSetMessage);
             }
 
             this.WriteObject(info);

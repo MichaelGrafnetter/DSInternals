@@ -2,7 +2,6 @@
 {
     using DSInternals.Common;
     using DSInternals.Common.Interop;
-    using DSInternals.PowerShell.Properties;
     using DSInternals.SAM;
     using DSInternals.SAM.Interop;
     using System.ComponentModel;
@@ -129,7 +128,7 @@
                         break;
                     default:
                         // This should never happen:
-                        throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+                        throw new PSInvalidOperationException(InvalidParameterSetMessage);
                 }
                 /* Connect to the domain. */
                 using (SamDomain domain = this.SamServer.OpenDomain(domainSid, SamDomainAccessMask.Lookup))

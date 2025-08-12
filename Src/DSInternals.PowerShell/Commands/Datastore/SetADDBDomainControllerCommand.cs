@@ -1,7 +1,6 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
     using DSInternals.DataStore;
-    using DSInternals.PowerShell.Properties;
     using System;
     using System.Management.Automation;
 
@@ -54,7 +53,7 @@
             if (!Force.IsPresent)
             {
                 // Do not continue with operation until the user enforces it.
-                var exception = new ArgumentException(Resources.WarningMessage);
+                var exception = new ArgumentException(WarningMessage);
                 var error = new ErrorRecord(exception, "SetADDBDomainController_ForceRequired", ErrorCategory.InvalidArgument, null);
                 this.ThrowTerminatingError(error);
             }
@@ -94,7 +93,7 @@
 
                     default:
                         // This should never happen:
-                        throw new PSInvalidOperationException(Resources.InvalidParameterSetMessage);
+                        throw new PSInvalidOperationException(InvalidParameterSetMessage);
                 }
             }
             catch (Exception ex)

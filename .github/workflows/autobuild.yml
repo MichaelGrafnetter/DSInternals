@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'Src/**'
-    - '.github/workflows/autobuild.yml'            
+    - '.github/workflows/autobuild.yml'
 
 jobs:
   build:
@@ -23,19 +23,24 @@ jobs:
       with:
         msbuild-architecture: x64 # default is x86
 
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        cache: true
+        cache-dependency-path: 'Src/*/packages.lock.json'
+
     - name: Restore NuGet Packages
       working-directory: Src
-      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true -noLogo
-      
-    - name: Build AMD64
-      working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -noLogo
-    
-    - name: Build ARM64
-      working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -noLogo
+      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true
 
     - name: Build x86
       working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x86 -noLogo
-              
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=Win32 -property:RestorePackages=false
+
+    - name: Build ARM64
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -property:RestorePackages=false
+
+    - name: Build AMD64
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -property:RestorePackages=false

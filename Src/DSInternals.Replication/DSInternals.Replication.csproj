@@ -1,95 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="..\Configuration\Common.csproj.props" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- NuGet package metadata -->
   <PropertyGroup>
-    <ProjectGuid>{2EE0D48F-65BA-4D4F-A8E1-FC01349BA786}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DSInternals.Replication</RootNamespace>
-    <AssemblyName>DSInternals.Replication</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <LangVersion>13.0</LangVersion>
-    <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile />
+    <IsPackable>true</IsPackable>
+    <Version>5.5</Version>
+    <AssemblyTitle>DSInternals Replication Library</AssemblyTitle>
+    <Title>$(AssemblyTitle)</Title>
+    <Description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</Description>
+    <PackageReleaseNotes>- Added support for retrieving KDS Root Keys.</PackageReleaseNotes>
+    <PackageTags>ActiveDirectory Security Replication RPC DRSR DCSync</PackageTags>
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyPrivateProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
   </PropertyGroup>
-  <PropertyGroup>
-    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-      None
-    </ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="NDceRpc.Microsoft, Version=0.2.1.0, Culture=neutral, PublicKeyToken=7ef76aa0ad6f5cef, processorArchitecture=MSIL">
-      <HintPath>..\packages\NDceRpc.0.2.1.0\lib\NET40\NDceRpc.Microsoft.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\Configuration\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="DirectoryReplicationClient.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReplicationProgressHandler.cs" />
-    <Compile Include="RpcProtocol.cs" />
-    <Compile Include="ReplicationSecretDecryptor.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj">
-      <Project>{7d47f040-d3a9-43ca-9f69-ef91faf2c23a}</Project>
-      <Name>DSInternals.Common</Name>
-      <Private>False</Private>
+    <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj" />
+    <ProjectReference Include="..\DSInternals.Replication.Interop\NetCore\DSInternals.Replication.Interop.NetCore.vcxproj" Condition="'$(TargetFramework)' == 'net8.0-windows'">
+      <!-- Do not include a reference to this project in the NuGet package -->
+      <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
-    <ProjectReference Include="..\DSInternals.Replication.Interop\DSInternals.Replication.Interop.vcxproj">
-      <Project>{a70a6658-dd67-4c73-ab9a-581465137c6b}</Project>
-      <Name>DSInternals.Replication.Interop</Name>
-      <Private>False</Private>
+    <ProjectReference Include="..\DSInternals.Replication.Interop\NetFramework\DSInternals.Replication.Interop.NetFramework.vcxproj" Condition="'$(TargetFramework)' == 'net48'">
+      <!-- Do not include a reference to this project in the NuGet package -->
+      <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
     <ProjectReference Include="..\DSInternals.Replication.Model\DSInternals.Replication.Model.csproj">
-      <Project>{0bca513c-5f12-48b6-8288-d3a95ec2994a}</Project>
-      <Name>DSInternals.Replication.Model</Name>
-      <Private>False</Private>
+      <!-- Do not include a reference to this project in the NuGet package -->
+      <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="DSInternals.Replication.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
-    <None Include="package\install.ps1" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+    <!-- Include the files in the NuGet package directly -->
+    <Target DependsOnTargets="BuildOnlySettings;ResolveReferences" Name="CopyPrivateProjectReferencesToPackage">
+      <ItemGroup>
+        <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('PrivateAssets', 'all'))" />
+      </ItemGroup>
+    </Target>
 </Project>

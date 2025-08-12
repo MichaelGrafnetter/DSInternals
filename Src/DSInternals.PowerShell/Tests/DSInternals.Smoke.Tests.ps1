@@ -368,18 +368,6 @@ Describe 'Powershell Cmdlets' {
                 Set-ItResult -Inconclusive -Because 'The initial DB is not present in client SKUs.'
             }
         }
-
-        It 'Get-ADDBDomainController works repeatedly' {
-            if (Test-Path TestDrive:\ntds.dit)
-            {
-                # This actually checks proper Automapper initialization in the powershell.exe process.
-                Get-ADDBDomainController -DatabasePath TestDrive:\ntds.dit | Should -Not -BeNull
-            }
-            else
-            {
-                Set-ItResult -Inconclusive -Because 'The initial DB is not present in client SKUs.'
-            }
-        }
     }
 
     Context 'Replication' {

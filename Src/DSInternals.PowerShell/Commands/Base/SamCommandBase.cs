@@ -7,7 +7,7 @@ using System.Management.Automation;
 using System.Net;
 namespace DSInternals.PowerShell.Commands
 {
-    public abstract class SamCommandBase : PSCmdlet, IDisposable
+    public abstract class SamCommandBase : PSCmdletEx, IDisposable
     {
         // TODO: Safe Critical everywhere?
         private const string DefaultServer = "localhost";
