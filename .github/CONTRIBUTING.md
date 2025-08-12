@@ -16,7 +16,7 @@ Any contributions to this project are warmly welcome. These are the most importa
     * Bug fixes
     * New features
     * Test cases
-    * Code cleanup (StyleCop, FXCop, String to Resource extraction,...)
+    * Code cleanup (StyleCop, FXCop,...)
 
 ## Submitting Bug Reports
 
@@ -50,7 +50,7 @@ $PSVersion
 
 If you want to build the module from source code yourself, you need to install these programs first:
 - [Microsoft Visual Studio Community](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx) 2022 with these features installed:
-   * .NET Framework 4.7.2 targeting pack
+   * .NET Framework 4.8 targeting pack
    * C++ 2022 Redistributable Update
    * C++/CLI support for v143 build tools (Latest)
    * MSVC v143 - VS 2022 C++ x64/x86 build tools (Latest)
@@ -85,7 +85,4 @@ To make IntelliSense work with *.psm1 files, the following code needs to be adde
 
 ### Continuous Integration
 
-[![Build Status](https://dev.azure.com/DSInternals/DSInternals%20CI/_apis/build/status/MichaelGrafnetter.DSInternals?branchName=master&jobName=Release)](https://dev.azure.com/DSInternals/DSInternals%20CI/_build/latest?definitionId=2?branchName=master)
-![Test Results](https://img.shields.io/azure-devops/tests/DSInternals/DSInternals%20CI/2.svg?label=Test%20Results&logo=azuredevops)
-
-Automatic build configuration is in the [azure-pipelines.yml](../azure-pipelines.yml) file.
+GitHub Actions are used for CI builds.
