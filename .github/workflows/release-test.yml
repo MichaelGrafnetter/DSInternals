@@ -159,9 +159,8 @@ jobs:
     
     - name: Create Mixed NuGet Package
       working-directory: Src
-      # TODO: Skip the Build task and do Pack exclusively.
       run: |
-        msbuild.exe DSInternals.Replication -target:Pack -property:Configuration=Release -property:Platform=x64 -property:RestorePackages=false
+        msbuild.exe DSInternals.Replication -target:Pack -property:Configuration=Release -property:Platform=x64 -property:RestorePackages=false -property:NoBuild=true -property:BuildProjectReferences=false
 
     - name: Sign NuGet Packages and PowerShell Catalog
       shell: cmd
