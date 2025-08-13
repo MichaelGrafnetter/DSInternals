@@ -53,6 +53,13 @@ jobs:
       with:
         msbuild-architecture: x64 # default is x86
 
+    - name: Setup .NET
+      if: matrix.build-mode == 'manual' && ( matrix.language == 'c-cpp' || matrix.language == 'csharp' )
+      uses: actions/setup-dotnet@v4
+      with:
+        cache: true
+        cache-dependency-path: 'Src/*/packages.lock.json'
+
     - name: Restore NuGet Packages
       if: matrix.build-mode == 'manual'
       working-directory: Src
