@@ -29,7 +29,7 @@
         string NetBIOSDomainName { get; }
         DomainControllerOptions Options { get; }
         string OSName { get; }
-        Version OSVersion { get; }
+        Version? OSVersion { get; }
         DistinguishedName SchemaNamingContext { get; }
         DistinguishedName ServerReference { get; }
         SecurityIdentifier Sid { get; }

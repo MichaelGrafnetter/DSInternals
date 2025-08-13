@@ -1,5 +1,8 @@
 name: CI Build
 
+permissions:
+  contents: read
+
 on:
   push:
     paths:
@@ -9,7 +12,7 @@ on:
 jobs:
   build:
     name: 'Build'
-    runs-on: windows-latest
+    runs-on: windows-2025
     timeout-minutes: 10
     env:
       DOTNET_NOLOGO: true
@@ -37,11 +40,46 @@ jobs:
       working-directory: Src
       run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=Win32 -property:RestorePackages=false
 
-    # TODO: Fix and enable ARM64 builds
-    # - name: Build ARM64
-    #   working-directory: Src
-    #   run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -property:RestorePackages=false
+    - name: Build ARM64
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -property:RestorePackages=false
 
     - name: Build AMD64
       working-directory: Src
       run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -property:RestorePackages=false
+
+    - name: Create Module Catalog
+      shell: powershell
+      working-directory: Build/bin/DSInternals.PowerShell/Debug
+      run: New-FileCatalog -CatalogVersion 2 -Path DSInternals -CatalogFilePath .\DSInternals\DSInternals.cat
+    
+    - name: Create Managed NuGet Packages
+      working-directory: Src
+      run: |
+        dotnet pack DSInternals.Common --configuration Debug --no-build
+        dotnet pack DSInternals.DataStore --configuration Debug --no-build
+        dotnet pack DSInternals.SAM --configuration Debug --no-build
+    
+    - name: Create Mixed NuGet Package
+      working-directory: Src
+      run: |
+        msbuild.exe DSInternals.Replication -target:Pack -property:Configuration=Debug -property:Platform=x64 -property:RestorePackages=false -property:NoBuild=true -property:BuildProjectReferences=false
+
+    - name: Get PowerShell Module Version
+      shell: pwsh
+      id: get-module-version
+      run: |
+        $version = Import-PowerShellDataFile -Path ./Src/DSInternals.PowerShell/DSInternals.psd1 | Select-Object -ExpandProperty ModuleVersion
+        echo "version=$version" >> $env:GITHUB_OUTPUT
+
+    - name: Upload PowerShell Module as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: DSInternals_v${{ steps.get-module-version.outputs.version }}_debug
+        path: Build/bin/DSInternals.PowerShell/Debug
+        
+    - name: Upload NuGet Packages as Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: NuGet_v${{ steps.get-module-version.outputs.version }}_debug
+        path: Build/package/debug/*nupkg
