@@ -40,9 +40,9 @@ jobs:
       working-directory: Src
       run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=Win32 -property:RestorePackages=false
 
-    - name: Build ARM64
-      working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -property:RestorePackages=false
+    #- name: Build ARM64
+    #  working-directory: Src
+    #  run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -property:RestorePackages=false
 
     - name: Build AMD64
       working-directory: Src

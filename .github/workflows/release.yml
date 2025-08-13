@@ -107,9 +107,9 @@ jobs:
       working-directory: Src
       run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=Win32 -property:RestorePackages=false
 
-    - name: Build ARM64
-      working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=ARM64 -property:RestorePackages=false
+    #- name: Build ARM64
+    #  working-directory: Src
+    #  run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=ARM64 -property:RestorePackages=false
 
     - name: Build AMD64
       working-directory: Src
@@ -164,10 +164,10 @@ jobs:
         copy /Y "DSInternals.Replication.Model\release_net8.0-windows\DSInternals.Replication.Model.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
         copy /Y "DSInternals.Replication.Interop\Release_net4.8-Win32\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\x86\"
         copy /Y "DSInternals.Replication.Interop\Release_net4.8-x64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\amd64\"
-        copy /Y "DSInternals.Replication.Interop\Release_net4.8-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\arm64\"
+        REM copy /Y "DSInternals.Replication.Interop\Release_net4.8-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\arm64\"
         copy /Y "DSInternals.Replication.Interop\Release_net8.0-Win32\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\x86\"
         copy /Y "DSInternals.Replication.Interop\Release_net8.0-x64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\amd64\"
-        copy /Y "DSInternals.Replication.Interop\Release_net8.0-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\arm64\"
+        REM copy /Y "DSInternals.Replication.Interop\Release_net8.0-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\arm64\"
         copy /Y "DSInternals.SAM\release_net48\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
         copy /Y "DSInternals.SAM\release_net8.0-windows\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
 
