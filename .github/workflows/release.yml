@@ -13,39 +13,45 @@ on:
         required: true
         type: boolean
         default: false
-#      create_github_release:
-#        description: 'Create a GitHub Release?'
-#        required: true
-#        type: boolean
-#        default: false
-#      publish_nuget:
-#        description: 'Publish packages to NuGet Gallery?'
-#        required: true
-#        type: boolean
-#        default: false
-#      publish_powershell:
-#        description: 'Publish module to PowerShell Gallery?'
-#        required: true
-#        type: boolean
-#        default: false
-#      publish_chocolatey:
-#        description: 'Publish module to Chocolatey Community repository?'
-#        required: true
-#        type: boolean
-#        default: false
+      create_github_release:
+        description: 'Create a GitHub Release?'
+        required: true
+        type: boolean
+        default: false
+      publish_nuget:
+        description: 'Publish packages to NuGet Gallery?'
+        required: true
+        type: boolean
+        default: false
+      publish_powershell:
+        description: 'Publish module to PowerShell Gallery?'
+        required: true
+        type: boolean
+        default: false
+      publish_chocolatey:
+        description: 'Publish module to Chocolatey Community repository?'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   id-token: write
   contents: write
 
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
 jobs:
   build:
     name: 'Build and Sign'
-    runs-on: windows-latest
+    runs-on: windows-2025
     timeout-minutes: 10
-    env:
-      DOTNET_NOLOGO: true
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    outputs:
+      nuget-artifact-id: ${{ steps.upload-nuget.outputs.artifact-id }}
+      powershell-artifact-id: ${{ steps.upload-powershell.outputs.artifact-id }}
+      powershell-module-version: ${{ steps.get-module-info.outputs.version }}
+      powershell-module-release-notes: ${{ steps.get-module-info.outputs.release-notes }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -101,9 +107,9 @@ jobs:
       working-directory: Src
       run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=Win32 -property:RestorePackages=false
 
-    - name: Build ARM64
-      working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=ARM64 -property:RestorePackages=false
+    #- name: Build ARM64
+    #  working-directory: Src
+    #  run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=ARM64 -property:RestorePackages=false
 
     - name: Build AMD64
       working-directory: Src
@@ -122,22 +128,13 @@ jobs:
       if: ${{ inputs.certificate_sign }}
       run: >
         sign code azure-key-vault
-        "DSInternals.Common/release_net48/DSInternals.Common.dll"
-        "DSInternals.Common/release_net8.0-windows/DSInternals.Common.dll"
-        "DSInternals.DataStore/release_net48/DSInternals.DataStore.dll"
-        "DSInternals.DataStore/release_net8.0-windows/DSInternals.DataStore.dll"
-        "DSInternals.Replication/release_net48/DSInternals.Replication.dll"
-        "DSInternals.Replication/release_net8.0-windows/DSInternals.Replication.dll"
-        "DSInternals.Replication.Model/release_net48/DSInternals.Replication.Model.dll"
-        "DSInternals.Replication.Model/release_net8.0-windows/DSInternals.Replication.Model.dll"
-        "DSInternals.Replication.Interop/Release_net4.8-Win32/DSInternals.Replication.Interop.dll"
-        "DSInternals.Replication.Interop/Release_net4.8-x64/DSInternals.Replication.Interop.dll"
-        "DSInternals.Replication.Interop/Release_net8.0-Win32/DSInternals.Replication.Interop.dll"
-        "DSInternals.Replication.Interop/Release_net8.0-x64/DSInternals.Replication.Interop.dll"
-        "DSInternals.SAM/release_net48/DSInternals.SAM.dll"
-        "DSInternals.SAM/release_net8.0-windows/DSInternals.SAM.dll"
-        "DSInternals.PowerShell/Release/DSInternals/net48/DSInternals.PowerShell.dll"
-        "DSInternals.PowerShell/Release/DSInternals/net8.0-windows/DSInternals.PowerShell.dll"
+        "DSInternals.Common/release_*/DSInternals.Common.dll"
+        "DSInternals.DataStore/release_*/DSInternals.DataStore.dll"
+        "DSInternals.Replication/release_*/DSInternals.Replication.dll"
+        "DSInternals.Replication.Model/release_*/DSInternals.Replication.Model.dll"
+        "DSInternals.Replication.Interop/Release_*/DSInternals.Replication.Interop.dll"
+        "DSInternals.SAM/release_*/DSInternals.SAM.dll"
+        "DSInternals.PowerShell/Release/DSInternals/*/DSInternals.PowerShell.dll"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.Bootstrap.psm1"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.psd1"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.types.ps1xml"
@@ -167,8 +164,10 @@ jobs:
         copy /Y "DSInternals.Replication.Model\release_net8.0-windows\DSInternals.Replication.Model.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
         copy /Y "DSInternals.Replication.Interop\Release_net4.8-Win32\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\x86\"
         copy /Y "DSInternals.Replication.Interop\Release_net4.8-x64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\amd64\"
+        REM copy /Y "DSInternals.Replication.Interop\Release_net4.8-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\arm64\"
         copy /Y "DSInternals.Replication.Interop\Release_net8.0-Win32\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\x86\"
         copy /Y "DSInternals.Replication.Interop\Release_net8.0-x64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\amd64\"
+        REM copy /Y "DSInternals.Replication.Interop\Release_net8.0-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\arm64\"
         copy /Y "DSInternals.SAM\release_net48\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
         copy /Y "DSInternals.SAM\release_net8.0-windows\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
 
@@ -205,27 +204,112 @@ jobs:
         --timestamp-url "http://timestamp.acs.microsoft.com"
         --verbosity Information
 
-    - name: Get PowerShell Module Version
+    - name: Get PowerShell Module Info
       shell: pwsh
-      id: get-module-version
+      id: get-module-info
       run: |
-        $version = Import-PowerShellDataFile -Path ./Src/DSInternals.PowerShell/DSInternals.psd1 | Select-Object -ExpandProperty ModuleVersion
+        [hashtable] $manifest = Import-PowerShellDataFile -Path ./Src/DSInternals.PowerShell/DSInternals.psd1
+        [string] $version = $manifest.ModuleVersion
+        [string] $releaseNotes = $manifest.PrivateData.PSData.ReleaseNotes
+        
         echo "version=$version" >> $env:GITHUB_OUTPUT
+
+        echo 'release-notes<<EOF' >> $env:GITHUB_OUTPUT
+        echo $releaseNotes >> $env:GITHUB_OUTPUT
+        echo 'EOF' >> $env:GITHUB_OUTPUT
 
     - name: Upload PowerShell Module as Artifact
       uses: actions/upload-artifact@v4
+      id: upload-powershell
       with:
-        name: DSInternals_v${{ steps.get-module-version.outputs.version }}
+        name: DSInternals_v${{ steps.get-module-info.outputs.version }}
         path: Build/bin/DSInternals.PowerShell/Release
         
     - name: Upload NuGet Packages as Artifacts
       uses: actions/upload-artifact@v4
+      id: upload-nuget
       with:
-        name: NuGet_v${{ steps.get-module-version.outputs.version }}
+        name: NuGet_v${{ steps.get-module-info.outputs.version }}
         path: Build/package/release/*nupkg
     
     # TODO: Smoke Tests
-    # TODO: Publish NuGet packages
-    # TODO: Create GitHub release
-    # TODO: Publish to PowerShell Gallery
-    # TODO: Publish to Chocolatey
+
+  nuget:
+    name: 'Publish to NuGet Gallery'
+    if: ${{ inputs.publish_nuget }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download NuGet Packages
+        uses: actions/download-artifact@v5
+        with:
+          artifact-ids: ${{ needs.build.outputs.nuget-artifact-id }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+
+      - name: Publish NuGet Packages
+        run: |
+          dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_GALLERY_APIKEY }} --skip-duplicate
+
+  psgallery:
+    name: 'Publish to PowerShell Gallery'
+    if: ${{ inputs.publish_powershell }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download PowerShell Module
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.build.outputs.powershell-artifact-id }}
+
+      - name: Publish PowerShell Module
+        shell: pwsh
+        run: |
+          Publish-Module -Path .\DSInternals -NuGetApiKey ${{ secrets.POWERSHELL_GALLERY_APIKEY }} -Repository PSGallery -Force
+
+  release:
+    name: 'Create GitHub Release Draft'
+    if: ${{ inputs.create_github_release }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Download PowerShell Module
+      uses: actions/download-artifact@v4
+      with:
+        artifact-ids: ${{ needs.build.outputs.powershell-artifact-id }}
+        path: GitHub/Module
+
+    - name: Create Module ZIP for GitHub Release
+      shell: pwsh
+      working-directory: GitHub
+      run: Compress-Archive -Path ./Module/* -DestinationPath ./DSInternals_v${{ needs.build.outputs.powershell-module-version }}.zip -CompressionLevel Optimal -Force
+
+    - name: Create GitHub Release
+      shell: pwsh
+      working-directory: GitHub
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        @'
+        ### Notable Changes
+        
+        ${{ needs.build.outputs.powershell-module-release-notes }}
+
+        See the [Changelog](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/CHANGELOG.md) for a more detailed list of new features.
+
+        ### DSInternals PowerShell Module
+
+        - The module is available in the [PowerShell Gallery](https://www.powershellgallery.com/packages/DSInternals).
+        - As an alternative, the attached `DSInternals_v${{ needs.build.outputs.powershell-module-version }}.zip` file can be used for [offline module installation](https://github.com/MichaelGrafnetter/DSInternals#offline-module-distribution).
+        
+        ### NuGet Packages
+
+        Official binary packages are available in the [NuGet Gallery](https://www.nuget.org/profiles/DSInternals).
+        '@ > release-notes.md
+        gh release create v${{ needs.build.outputs.powershell-module-version }} ./*.zip --draft --latest --title "DSInternals PowerShell Module ${{ needs.build.outputs.powershell-module-version }}" --notes-file release-notes.md
+
+  # TODO: chocolatey

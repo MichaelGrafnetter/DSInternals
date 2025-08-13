@@ -6,9 +6,10 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
 [![PowerShell 5.1 | 7](https://badgen.net/badge/icon/5.1%20|%207?icon=terminal&label=PowerShell)](#) 
 [![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019 | 2022 | 2025](https://badgen.net/badge/icon/2008%20R2%20|%202012%20R2%20|%202016%20|%202019%20|%202022%20|%202025?icon=windows&label=Windows%20Server)](#)
+
 [![.NET Framework 4.8+](https://img.shields.io/badge/Framework-4.8%2B-007FFF.svg?logo=.net)](#)
 [![.NET 8.0+](https://img.shields.io/badge/Runtime-8.0%2B-007FFF.svg?logo=.net)](#)
-[![Architecture x64 | x86 | arm64](https://img.shields.io/badge/Architecture-x64%20|%20x86%20|%20ARM64-0071c5.svg?logo=cplusplus)](#)
+[![Architecture x64 | x86](https://img.shields.io/badge/Architecture-x64%20|%20x86-0071c5.svg?logo=cplusplus)](#)
 
 ## Introduction
 

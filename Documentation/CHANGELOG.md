@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file. The format 
 - Improved the performance of schema loading and account retrieval from `ntds.dit` files.
 - A lot of refactoring has been done in the `DSInternals.Common` namespace, including breaking changes.
 - Removed the `AutoMapper` dependency.
+- Temporarily disabled ARM64 support due to bugs in the SDK.
 
 ### Fixed
 

@@ -127,7 +127,7 @@
             set;
         }
 
-        public Version OSVersion
+        public Version? OSVersion
         {
             get;
             set;
