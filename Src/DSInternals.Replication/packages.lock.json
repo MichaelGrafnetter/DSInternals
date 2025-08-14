@@ -98,16 +98,12 @@
         }
       },
       "dsinternals.replication.interop.netframework": {
-        "type": "Project",
-        "dependencies": {
-          "DSInternals.Common": "[1.0.0, )",
-          "DSInternals.Replication.Model": "[1.0.0, )"
-        }
+        "type": "Project"
       },
       "dsinternals.replication.model": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[5.5.0, )"
+          "DSInternals.Common": "[6.0.0, )"
         }
       }
     },
@@ -172,14 +168,14 @@
       "dsinternals.replication.interop.netcore": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[5.5.0, )",
-          "DSInternals.Replication.Model": "[5.5.0, )"
+          "DSInternals.Common": "[6.0.0, )",
+          "DSInternals.Replication.Model": "[6.0.0, )"
         }
       },
       "dsinternals.replication.model": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[5.5.0, )"
+          "DSInternals.Common": "[6.0.0, )"
         }
       }
     }

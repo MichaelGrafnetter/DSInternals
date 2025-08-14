@@ -40,9 +40,9 @@ jobs:
       working-directory: Src
       run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=Win32 -property:RestorePackages=false
 
-    #- name: Build ARM64
-    #  working-directory: Src
-    #  run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -property:RestorePackages=false
+    - name: Build ARM64
+      working-directory: Src
+      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=ARM64 -property:RestorePackages=false
 
     - name: Build AMD64
       working-directory: Src
@@ -56,10 +56,8 @@ jobs:
     - name: Create Managed NuGet Packages
       working-directory: Src
       run: |
-        dotnet pack DSInternals.Common --configuration Debug --no-build
-        dotnet pack DSInternals.DataStore --configuration Debug --no-build
-        dotnet pack DSInternals.SAM --configuration Debug --no-build
-    
+        dotnet pack DSInternals.DotNetSdk.slnf --configuration Debug --no-build
+
     - name: Create Mixed NuGet Package
       working-directory: Src
       run: |

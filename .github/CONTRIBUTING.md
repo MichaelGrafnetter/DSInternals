@@ -71,7 +71,7 @@ To make IntelliSense work with *.psm1 files, the following code needs to be adde
 
 1. Install the prerequisities.
 2. Checkout or download the source codes.
-3. Open the [Src\DSInternals.sln](/Src/DSInternals.sln) file in Visual Studio.
+3. Open the [Src\DSInternals.slnx](/Src/DSInternals.slnx) file in Visual Studio.
 2. Put any cmdlets you wish to debug into the [Src\DSInternals.PowerShell\Run-Cmdlets.ps1](/Src/DSInternals.PowerShell/Run-Cmdlets.ps1) script.
 3. Set the [DSInternals.PowerShell](/Src/DSInternals.PowerShell/DSInternals.PowerShell.csproj) project as StartUp Project.
 4. Switch to the _Debug_ configuration.
