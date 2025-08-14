@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
+using DSInternals.Common.Serialization;
 
 namespace DSInternals.Common.Data
 {
@@ -49,7 +49,7 @@ namespace DSInternals.Common.Data
         public static LapsClearTextPassword Parse(string json)
         {
             Validator.AssertNotNull(json, nameof(json));
-            return JsonSerializer.Deserialize<LapsClearTextPassword>(json);
+            return DsiJson.DeserializeLenient<LapsClearTextPassword>(json);
         }
 
         public static unsafe LapsClearTextPassword Parse(ReadOnlySpan<byte> binaryJson, bool utf16 = false)

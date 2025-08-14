@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using DSInternals.Common.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text.Json;
 
 namespace DSInternals.Common.Test
 {
@@ -51,6 +52,22 @@ namespace DSInternals.Common.Test
             KeyCredential result = KeyCredential.ParseJson(jsonWithComment);
             Assert.IsNotNull(result);
             Assert.AreEqual(key.DeviceId, result.DeviceId);
+        }
+
+        [TestMethod]
+        public void Parse_SingleQuoted_WithEscapedApostrophe_Works()
+        {
+            var jsonSingleQuoted = "{ 'OwnerDN':'CN=O\\'Connor,DC=contoso,DC=com', 'IsComputerKey': false }";
+            var obj = KeyCredential.ParseJson(jsonSingleQuoted);
+            Assert.IsNotNull(obj);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(JsonException))]
+        public void Parse_BadJson_StillThrows()
+        {
+            var bad = "{ \"OwnerDN\": \"CN=User,DC=contoso,DC=com\" ";
+            _ = KeyCredential.ParseJson(bad);
         }
 
         [TestMethod]

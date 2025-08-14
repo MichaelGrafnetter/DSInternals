@@ -1,12 +1,13 @@
+using System;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace DSInternals.Common.Serialization
 {
-    using System;
-    using System.Text;
-    using System.Text.Json;
-    using System.Text.Json.Serialization;
-
     internal static class DsiJson
     {
+        // One place to set behavior for all JSON in DSInternals
         internal static readonly JsonSerializerOptions Options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
@@ -15,7 +16,10 @@ namespace DSInternals.Common.Serialization
             DefaultIgnoreCondition = JsonIgnoreCondition.Never
         };
 
-        internal static T DeserializeLenient<T>(string json)
+        /// <summary>
+        /// Try deserialize; if it looks like single-quoted JSON (Newtonsoft-style), normalize and retry.
+        /// </summary>
+        internal static T? DeserializeLenient<T>(string json)
         {
             if (string.IsNullOrWhiteSpace(json))
             {
@@ -30,7 +34,7 @@ namespace DSInternals.Common.Serialization
             {
                 if (LooksLikeSingleQuotedJson(json))
                 {
-                    string normalized = NormalizeSingleQuotedJson(json);
+                    var normalized = NormalizeSingleQuotedJson(json);
                     return JsonSerializer.Deserialize<T>(normalized, Options);
                 }
 
@@ -45,32 +49,28 @@ namespace DSInternals.Common.Serialization
                 return false;
             }
 
-            ReadOnlySpan<char> t = s.AsSpan().TrimStart();
-            return (t.Length > 0 && (t[0] == '{' || t[0] == '[')) &&
-                   s.IndexOf('"') < 0 &&
-                   s.IndexOf('\'') >= 0;
+            var t = s.AsSpan().TrimStart();
+            return (t.Length > 0 && (t[0] == '{' || t[0] == '['))
+                   && s.IndexOf('"') < 0
+                   && s.IndexOf('\'') >= 0;
         }
 
+        // Hardened: converts '…' to "…" and collapses \' -> ' inside single-quoted strings
         private static string NormalizeSingleQuotedJson(string input)
         {
             var sb = new StringBuilder(input.Length);
             bool inString = false;
             char quote = '\0';
-            bool escaped = false;
 
-            foreach (char ch in input)
+            for (int i = 0; i < input.Length; i++)
             {
-                if (escaped)
-                {
-                    sb.Append(ch);
-                    escaped = false;
-                    continue;
-                }
+                char ch = input[i];
 
-                if (ch == '\\')
+                // Inside a single-quoted string, turn \' into a literal apostrophe
+                if (inString && quote == '\'' && ch == '\\' && i + 1 < input.Length && input[i + 1] == '\'')
                 {
-                    sb.Append(ch);
-                    escaped = true;
+                    sb.Append('\'');
+                    i++;
                     continue;
                 }
 

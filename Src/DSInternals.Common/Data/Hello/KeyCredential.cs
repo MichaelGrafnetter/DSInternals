@@ -118,7 +118,7 @@
                 {
                     // The raw value has not yet been parsed
                     var fidoCredString = System.Text.Encoding.UTF8.GetString(this.RawKeyMaterial, 0, this.RawKeyMaterial.Length);
-                    this._cachedFidoKeyMaterial = JsonSerializer.Deserialize<KeyMaterialFido>(fidoCredString);
+                    this._cachedFidoKeyMaterial = JsonSerializer.Deserialize<KeyMaterialFido>(fidoCredString, DsiJson.Options);
                 }
 
                 // Returned the parsed object from cache or NULL if no FIDO key is present.
