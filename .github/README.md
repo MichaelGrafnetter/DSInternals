@@ -4,7 +4,7 @@
 # Directory Services Internals<br/>PowerShell Module and Framework
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE.md)
-[![PowerShell 5.1 | 7](https://badgen.net/badge/icon/5.1%20|%207?icon=terminal&label=PowerShell)](#) 
+[![PowerShell 5.1 | 7](https://badgen.net/badge/icon/5.1%20|%207?icon=terminal&label=PowerShell)](#)
 [![Windows Server 2008 R2 | 2012 R2 | 2016 | 2019 | 2022 | 2025](https://badgen.net/badge/icon/2008%20R2%20|%202012%20R2%20|%202016%20|%202019%20|%202022%20|%202025?icon=windows&label=Windows%20Server)](#)
 
 [![.NET Framework 4.8+](https://img.shields.io/badge/Framework-4.8%2B-007FFF.svg?logo=.net)](#)
@@ -160,8 +160,7 @@ This project utilizes the following 3<sup>rd</sup> party copyrighted material:
 - [ManagedEsent](https://github.com/Microsoft/ManagedEsent) - Provides managed access to esent.dll, the embeddable database engine native to Windows.
 - [NDceRpc](https://github.com/OpenSharp/NDceRpc) - Integration of WCF and .NET with MS-RPC and binary serialization.
 - [PBKDF2.NET](https://github.com/therealmagicmike/PBKDF2.NET) - Provides PBKDF2 for .NET Framework.
-- [Bouncy Castle](https://www.bouncycastle.org/csharp/index.html) - A lightweight cryptography API for Java and C#. 
-- [Json.NET](https://github.com/JamesNK/Newtonsoft.Json) - Popular high-performance JSON framework for .NET.
+- [Bouncy Castle](https://www.bouncycastle.org/csharp/index.html) - A lightweight cryptography API for Java and C#.
 - [Peter O. CBOR](https://github.com/peteroupc/CBOR) - A C# implementation of Concise Binary Object Representation (RFC 7049).
 
 ## Related Projects
