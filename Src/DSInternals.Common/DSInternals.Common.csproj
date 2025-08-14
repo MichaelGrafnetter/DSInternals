@@ -30,6 +30,10 @@
     <PackageReference Include="System.ValueTuple" Version="4.6.1" Condition="'$(TargetFramework)' == 'net48'" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="DSInternals.Common.Test" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <PackageReference Include="System.Text.Json" Version="9.0.8" />
   </ItemGroup>
