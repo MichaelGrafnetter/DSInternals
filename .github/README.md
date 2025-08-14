@@ -9,7 +9,7 @@
 
 [![.NET Framework 4.8+](https://img.shields.io/badge/Framework-4.8%2B-007FFF.svg?logo=.net)](#)
 [![.NET 8.0+](https://img.shields.io/badge/Runtime-8.0%2B-007FFF.svg?logo=.net)](#)
-[![Architecture x64 | x86](https://img.shields.io/badge/Architecture-x64%20|%20x86-0071c5.svg?logo=cplusplus)](#)
+[![Architecture x64 | x86 | ARM64](https://img.shields.io/badge/Architecture-x64%20|%20x86%20|%20ARM64-0071c5.svg?logo=cplusplus)](#)
 
 ## Introduction
 

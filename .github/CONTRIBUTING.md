@@ -60,7 +60,7 @@ If you want to build the module from source code yourself, you need to install t
    * Git for Windows (optional)
    * GitHub Extension for Visual Studio (optional)
 
-To make IntelliSense work with *.psm1 files, the following code needs to be added to the `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Xml\Schemas\catalog.xml` file:
+To make IntelliSense work with `*.ps1xml` files, the following code needs to be added to the `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Xml\Schemas\catalog.xml` file:
 
 ```xml
 <Association extension="ps1xml" schema="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" enableValidation="true"/>

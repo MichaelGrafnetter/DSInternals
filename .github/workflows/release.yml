@@ -82,6 +82,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
+        # .NET SDK 9 is used for build. Platform-specific IJW hosts from .NET SDK 8 are used when building C++/CLI projects. 
+        dotnet-version: | 
+          8.0.x
+          9.0.x
         cache: true
         cache-dependency-path: 'Src/*/packages.lock.json'
 
@@ -101,19 +105,19 @@ jobs:
 
     - name: Restore NuGet Packages
       working-directory: Src
-      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true
+      run: msbuild.exe DSInternals.SkipTests.slnf -target:Restore -property:RestorePackagesConfig=true -property:Configuration=Release -property:Platform=x64
 
     - name: Build x86
       working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=Win32 -property:RestorePackages=false
+      run: msbuild.exe DSInternals.ArchitectureSpecific.slnf -target:Build -property:Configuration=Release -property:Platform=Win32 -property:RestorePackages=false
 
-    #- name: Build ARM64
-    #  working-directory: Src
-    #  run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=ARM64 -property:RestorePackages=false
+    - name: Build ARM64
+      working-directory: Src
+      run: msbuild.exe DSInternals.ArchitectureSpecific.slnf -target:Build -property:Configuration=Release -property:Platform=ARM64 -property:RestorePackages=false
 
     - name: Build AMD64
       working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Release -property:Platform=x64 -property:RestorePackages=false
+      run: msbuild.exe DSInternals.SkipTests.slnf -target:Build -property:Configuration=Release -property:Platform=x64 -property:RestorePackages=false
 
     - name: Azure Login
       uses: azure/login@v2
@@ -164,10 +168,10 @@ jobs:
         copy /Y "DSInternals.Replication.Model\release_net8.0-windows\DSInternals.Replication.Model.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
         copy /Y "DSInternals.Replication.Interop\Release_net4.8-Win32\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\x86\"
         copy /Y "DSInternals.Replication.Interop\Release_net4.8-x64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\amd64\"
-        REM copy /Y "DSInternals.Replication.Interop\Release_net4.8-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\arm64\"
+        copy /Y "DSInternals.Replication.Interop\Release_net4.8-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net48\arm64\"
         copy /Y "DSInternals.Replication.Interop\Release_net8.0-Win32\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\x86\"
         copy /Y "DSInternals.Replication.Interop\Release_net8.0-x64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\amd64\"
-        REM copy /Y "DSInternals.Replication.Interop\Release_net8.0-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\arm64\"
+        copy /Y "DSInternals.Replication.Interop\Release_net8.0-ARM64\DSInternals.Replication.Interop.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\arm64\"
         copy /Y "DSInternals.SAM\release_net48\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
         copy /Y "DSInternals.SAM\release_net8.0-windows\DSInternals.SAM.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
 
@@ -179,9 +183,7 @@ jobs:
     - name: Create Managed NuGet Packages
       working-directory: Src
       run: |
-        dotnet pack DSInternals.Common --configuration Release --no-build
-        dotnet pack DSInternals.DataStore --configuration Release --no-build
-        dotnet pack DSInternals.SAM --configuration Release --no-build
+        dotnet pack DSInternals.DotNetSdk.slnf --configuration Release --no-build
     
     - name: Create Mixed NuGet Package
       working-directory: Src

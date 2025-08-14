@@ -63,7 +63,7 @@ jobs:
     - name: Restore NuGet Packages
       if: matrix.build-mode == 'manual'
       working-directory: Src
-      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true
+      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true -property:Configuration=Debug -property:Platform=x64
 
     - name: Build All Projects
       if: matrix.build-mode == 'manual'
