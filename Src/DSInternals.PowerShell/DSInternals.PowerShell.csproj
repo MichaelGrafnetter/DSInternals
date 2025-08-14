@@ -54,7 +54,7 @@
 
     <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Core -->
     <!-- TODO: This requires more testing. -->
-    <PackageReference Include="System.Text.Json" Version="9.0.0" Condition="'$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'net472'" IncludeAssets="compile" />
+    <PackageReference Include="System.Text.Json" Version="9.0.8" Condition="'$(TargetFramework)' == 'net48'" IncludeAssets="compile" />
     <PackageReference Include="System.DirectoryServices" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
 
     <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Desktop on Windows Server 2025, but are absent on Windows Server 2008 R2: -->
