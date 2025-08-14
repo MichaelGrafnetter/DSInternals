@@ -16,6 +16,7 @@ namespace DSInternals.Common.Serialization
             ReadCommentHandling = JsonCommentHandling.Skip,
             DefaultIgnoreCondition = JsonIgnoreCondition.Never,
             IncludeFields = true, // LAPS uses fields (n/t/p)
+            NumberHandling = JsonNumberHandling.AllowReadingFromString, // Newtonsoft parity for quoted numbers
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
 
