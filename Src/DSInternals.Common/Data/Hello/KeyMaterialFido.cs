@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.Data
 {
-    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class KeyMaterialFido
     {
         // All PEM certificates that are less than 16,383B long start with MII.
@@ -13,7 +12,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Version is an integer that specifies the version of the structure.
         /// </summary>
-        [JsonProperty("version")]
+        [JsonPropertyName("version")]
         public int Version
         {
             get;
@@ -24,7 +23,7 @@ namespace DSInternals.Common.Data
         /// AuthData is a WebAuthn authenticator data structure.
         /// <see>https://www.w3.org/TR/webauthn/#sec-authenticator-data</see>
         /// </summary>
-        [JsonProperty("authData")]
+        [JsonPropertyName("authData")]
         public string AuthenticatorDataRaw
         {
             get;
@@ -34,7 +33,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// X5c is an array of attestation certificates associated with the authenticator.
         /// </summary>
-        [JsonProperty("x5c")]
+        [JsonPropertyName("x5c")]
         public string[] AttestationCertificatesRaw
         {
             get;
@@ -44,7 +43,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Display name is a user provided string which can help the user differentiate between multiple registered authenticators.
         /// </summary>
-        [JsonProperty("displayName")]
+        [JsonPropertyName("displayName")]
         public string DisplayName
         {
             get;
@@ -54,6 +53,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Attestation certificates can be helpful for establishing a chain of trust.
         /// </summary>
+        [JsonIgnore]
         public X509Certificate2Collection AttestationCertificates
         {
             get
@@ -74,6 +74,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Authenticator data contains information about the registered authenticator device.
         /// </summary>
+        [JsonIgnore]
         public Fido.AuthenticatorData AuthenticatorData
         {
             get

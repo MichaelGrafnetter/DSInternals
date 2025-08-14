@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.AzureAD
 {
-    [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
     public class OdataPagedResponse<T>
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public List<T> Items
         {
             get;
             private set;
         }
 
-        [JsonProperty("odata.nextlink")]
+        [JsonPropertyName("odata.nextlink")]
         public string NextLink
         {
             get;

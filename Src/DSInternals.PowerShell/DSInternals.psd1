@@ -186,7 +186,7 @@ FileList = @(
     'net48\x86\DSInternals.Replication.Interop.dll',
     'net48\Esent.Interop.dll',
     'net48\Esent.Isam.dll',
-    'net48\Newtonsoft.Json.dll',
+    'net48\System.Text.Json.dll',
     'net48\CBOR.dll',
     'net48\Numbers.dll',
     'net48\URIUtility.dll',

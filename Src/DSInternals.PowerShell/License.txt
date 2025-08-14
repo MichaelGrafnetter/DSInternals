@@ -4,7 +4,7 @@ The binary distribution of the DSInternals PowerShell Module contains the follow
 DSInternals PowerShell Module and Framework
 -------------------------------------------
 
-(License updated on 8/12/2025 from https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/LICENSE.md.)
+(License updated on 08/14/2025 from https://raw.githubusercontent.com/MichaelGrafnetter/DSInternals/master/LICENSE.md.)
 
 The MIT License (MIT)
 
@@ -33,7 +33,7 @@ SOFTWARE.
 ESENT Managed Interop
 ---------------------
 
-(License updated on 8/12/2025 from https://raw.githubusercontent.com/microsoft/ManagedEsent/master/LICENSE.md.)
+(License updated on 08/14/2025 from https://raw.githubusercontent.com/microsoft/ManagedEsent/master/LICENSE.md.)
 
 The MIT License (MIT)
 
@@ -61,18 +61,35 @@ SOFTWARE.
 NDceRpc (.NET Distributed Computing Environment Remote Procedure Call)
 ----------------------------------------------------------------------
 
-(License updated on 7/7/2019 from https://raw.githubusercontent.com/OpenSharp/NDceRpc/master/license.txt.)
+(License updated on 08/14/2025 from https://raw.githubusercontent.com/OpenSharp/NDceRpc/master/license.txt.)
 
-CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
-http://creativecommons.org/publicdomain/zero/1.0/
+The MIT License (MIT)
 
-Other codes, if any used, are under MIT, CPOL, BSD, Apache, MS-PL.
+Copyright (c) Microsoft Corporation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 ----------
 PBKDF2.NET
 ----------
 
-(License updated on 8/12/2025 from https://raw.githubusercontent.com/therealmagicmike/PBKDF2.NET/master/License.txt.)
+(License updated on 08/14/2025 from https://raw.githubusercontent.com/therealmagicmike/PBKDF2.NET/master/License.txt.)
 
 Copyright (c) 2013 Michael Johnson
 
@@ -99,7 +116,7 @@ THE SOFTWARE.
 Bouncy Castle
 -------------
 
-(License updated on 8/12/2025 from https://raw.githubusercontent.com/bcgit/bc-csharp/master/crypto/License.html.)
+(License updated on 08/14/2025 from https://raw.githubusercontent.com/bcgit/bc-csharp/master/crypto/License.html.)
 
 License
 
@@ -128,39 +145,11 @@ OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
---------
-Json.NET
---------
-
-(License updated on 8/12/2025 from https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/master/LICENSE.md.)
-
-The MIT License (MIT)
-
-Copyright (c) 2007 James Newton-King
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
 ---------------------
 Peter O. CBOR Library
 ---------------------
 
-(License updated on 8/12/2025 from https://raw.githubusercontent.com/peteroupc/CBOR/master/LICENSE.md.)
+(License updated on 08/14/2025 from https://raw.githubusercontent.com/peteroupc/CBOR/master/LICENSE.md.)
 
 This is free and unencumbered software released into the public domain.
 
@@ -168,5 +157,5 @@ Anyone is free to copy, modify, publish, use, compile, sell, or distribute this 
 
 In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED ???AS IS???, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 

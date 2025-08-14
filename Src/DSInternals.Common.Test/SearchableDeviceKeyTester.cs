@@ -1,8 +1,7 @@
 ﻿using System;
 using DSInternals.Common.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace DSInternals.Common.Test
 {
@@ -38,7 +37,8 @@ namespace DSInternals.Common.Test
             Assert.AreEqual("cb69481e-8ff7-4039-93ec-0a2729a154a8", keyCredential.FidoKeyMaterial.AuthenticatorData.AttestedCredentialData.AaGuid.ToString());
 
             // Serialize the object again and compare with the original
-            Assert.AreEqual(JToken.Parse(jsonData).ToString(Formatting.None), keyCredential.ToJson());
+            string normalized = JsonSerializer.Serialize(JsonSerializer.Deserialize<JsonElement>(jsonData.Replace('\'', '"')));
+            Assert.AreEqual(normalized, keyCredential.ToJson());
         }
 
         [TestMethod]
@@ -91,7 +91,8 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(2, keyCredential.FidoKeyMaterial.AttestationCertificates.Count);
 
             // Serialize the object again and compare with the original
-            Assert.AreEqual(JToken.Parse(jsonData).ToString(Formatting.None), keyCredential.ToJson());
+            string normalized = JsonSerializer.Serialize(JsonSerializer.Deserialize<JsonElement>(jsonData.Replace('\'', '"')));
+            Assert.AreEqual(normalized, keyCredential.ToJson());
         }
 
         [TestMethod]
@@ -119,7 +120,8 @@ namespace DSInternals.Common.Test
             Assert.AreEqual("cbad3c94-b480-4fa6-9187-ff1ed42c4479", parsedKey.DeviceId.Value.ToString().ToLowerInvariant());
 
             // Serialize the object again and compare with the original
-            Assert.AreEqual(JToken.Parse(jsonData).ToString(Formatting.None), parsedKey.ToJson());
+            string normalized = JsonSerializer.Serialize(JsonSerializer.Deserialize<JsonElement>(jsonData.Replace('\'', '"')));
+            Assert.AreEqual(normalized, parsedKey.ToJson());
 
             // Re-generate the identifier and check that it matches the value in AAD.
             var generatedKey = new KeyCredential(
@@ -131,7 +133,7 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(parsedKey.Identifier, generatedKey.Identifier);
 
             // Serialize the generated object and compare with the original
-            Assert.AreEqual(JToken.Parse(jsonData).ToString(Formatting.None), generatedKey.ToJson());
+            Assert.AreEqual(normalized, generatedKey.ToJson());
         }
 
         [TestMethod]

@@ -1,11 +1,12 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.AzureAD
 {
     public class OdataErrorResponse
     {
-        [JsonProperty("odata.error", Required = Required.Always)]
+        [JsonPropertyName("odata.error")]
+        [JsonRequired]
         public ODataError Error
         {
             get;

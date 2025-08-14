@@ -1,7 +1,8 @@
 ﻿using System.Globalization;
 using System;
 using System.Text;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.Data
 {
@@ -11,16 +12,16 @@ namespace DSInternals.Common.Data
     /// <seealso>https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-technical-reference</seealso>
     public class LapsClearTextPassword
     {
-        [JsonProperty("n")]
+        [JsonPropertyName("n")]
         public string AccountName;
 
-        [JsonProperty("t")]
+        [JsonPropertyName("t")]
         public string UpdateTimestampString;
 
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public string Password;
 
-        [JsonIgnore()]
+        [JsonIgnore]
         public DateTime? UpdateTimestamp
         {
             get
@@ -48,7 +49,7 @@ namespace DSInternals.Common.Data
         public static LapsClearTextPassword Parse(string json)
         {
             Validator.AssertNotNull(json, nameof(json));
-            return JsonConvert.DeserializeObject<LapsClearTextPassword>(json);
+            return JsonSerializer.Deserialize<LapsClearTextPassword>(json);
         }
 
         public static unsafe LapsClearTextPassword Parse(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
