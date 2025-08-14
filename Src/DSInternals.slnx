@@ -1,0 +1,30 @@
+
+<Solution xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/microsoft/vs-solutionpersistence/refs/heads/main/src/Microsoft.VisualStudio.SolutionPersistence/Serializer/Xml/Slnx.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="Win32" />
+    <Platform Name="x64" />
+  </Configurations>
+
+  <!-- Binary PowerShell module -->
+  <Project Path="DSInternals.PowerShell/DSInternals.PowerShell.csproj" />
+
+  <!-- C# libraries / NuGet packages -->
+  <Project Path="DSInternals.Common/DSInternals.Common.csproj" />
+  <Project Path="DSInternals.Replication/DSInternals.Replication.csproj" />
+  <Project Path="DSInternals.Replication.Model/DSInternals.Replication.Model.csproj" />
+  <Project Path="DSInternals.DataStore/DSInternals.DataStore.csproj" />
+  <Project Path="DSInternals.SAM/DSInternals.SAM.csproj" />
+
+  <!-- C++ libraries -->
+  <Project Path="DSInternals.Replication.Interop/DSInternals.Replication.Interop.Shared.vcxitems" Id="6db099b7-3be2-4365-abc3-3c857b8fe640" />
+  <Project Path="DSInternals.Replication.Interop/NetCore/DSInternals.Replication.Interop.NetCore.vcxproj" Id="44bb40bb-adf9-8979-002b-bd149fdbbea0" />
+  <Project Path="DSInternals.Replication.Interop/NetFramework/DSInternals.Replication.Interop.NetFramework.vcxproj" Id="a70a6658-dd67-4c73-ab9a-581465137c6b" />
+
+  <!-- MSTest projects -->
+  <Project Path="DSInternals.Common.Test/DSInternals.Common.Test.csproj" />
+  <Project Path="DSInternals.DataStore.Test/DSInternals.DataStore.Test.csproj" />
+  <Project Path="DSInternals.Replication.Model.Test/DSInternals.Replication.Model.Test.csproj" />
+  <Project Path="DSInternals.Replication.Test/DSInternals.Replication.Test.csproj" />
+  <Project Path="DSInternals.SAM.Test/DSInternals.SAM.Test.csproj" />
+</Solution>

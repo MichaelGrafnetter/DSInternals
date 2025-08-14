@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "JSON Schema for MSBuild solution filter files (*.slnf)",
+    "properties": {
+        "solution": {
+            "type": "object",
+            "description": "Solution filter description",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "Path to the filtered solution. Should be relative to the current .slnf file."
+                },
+                "projects": {
+                    "description": "List of projects that will be included in the filtered solution. Paths should be relative to the solution rather than to the .slnf file.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

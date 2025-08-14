@@ -1,0 +1,12 @@
+{
+  "$schema": "Schema/SolutionFilter.schema.json",
+  "$comment": "This file is a MSBuild solution filter, which only targets architecture-specific binaries and their dependencies.",
+  "solution": {
+    "path": "DSInternals.slnx",
+    "projects": [
+      "DSInternals.Common\\DSInternals.Common.csproj",
+      "DSInternals.Replication.Interop\\NetCore\\DSInternals.Replication.Interop.NetCore.vcxproj",
+      "DSInternals.Replication.Interop\\NetFramework\\DSInternals.Replication.Interop.NetFramework.vcxproj"
+    ]
+  }
+}

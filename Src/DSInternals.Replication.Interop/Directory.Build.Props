@@ -5,10 +5,15 @@
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>7.0</WindowsTargetPlatformMinVersion>
     <VCProjectVersion>17.0</VCProjectVersion>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <RootNamespace>DSInternals.Replication.Interop</RootNamespace>
     <TargetName>DSInternals.Replication.Interop</TargetName>
+    <!-- Incremental linking is not supported for mixed native and managed code projects. -->
+    <LinkIncremental>false</LinkIncremental>
+    <!-- Copy C and C++ runtimes to the output directory, from which they will be copied to PowerShell. -->
+    <CopyCppRuntimeToOutputDir>true</CopyCppRuntimeToOutputDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -17,9 +22,12 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions Condition="'$(Platform)'=='Win32'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Rpcrt4.lib;Secur32.lib</AdditionalDependencies>
+      <!-- Include RPC support -->
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);Rpcrt4.lib;Secur32.lib</AdditionalDependencies>
+      <TargetMachine Condition="'$(Platform)'=='ARM64'">MachineARM64</TargetMachine>
     </Link>
     <!-- Override the MIDL compiler settings -->
     <Midl>
@@ -32,10 +40,13 @@
       <EnableErrorChecks>All</EnableErrorChecks>
     </Midl>
   </ItemDefinitionGroup>
-    <PropertyGroup Condition="'$(Configuration)' =='Debug'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)' =='Debug'">
     <UseDebugLibraries>true</UseDebugLibraries>
+    <!-- Enable code analysis for Debug configuration -->
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' =='Release'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)' =='Release'">
     <UseDebugLibraries>false</UseDebugLibraries>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -43,6 +54,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
       <ExceptionHandling>false</ExceptionHandling>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
@@ -53,6 +65,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <ExceptionHandling>Async</ExceptionHandling>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <!-- Configure strong name signing if the private key exists -->

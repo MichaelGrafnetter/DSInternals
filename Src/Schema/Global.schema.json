@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JSON schema for the .NET global.json configuration file",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "sdk": {
+      "type": "object",
+      "description": "Specifies information about the .NET SDK to select.",
+      "properties": {
+        "version": {
+          "type": "string",
+          "examples": [
+            "9.0.304",
+            "8.0.316"
+          ],
+          "pattern": "^(?<major>0|[1-9]\\d*)\\.(?<minor>0|[1-9]\\d*)\\.(?<patch>0|[1-9]\\d*)(?:-(?<prerelease>(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+          "description": "The version of the .NET SDK to use."
+        },
+        "allowPrerelease": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates whether the SDK resolver should consider prerelease versions when selecting the SDK version to use."
+        },
+        "rollForward": {
+          "type": "string",
+          "enum": [
+            "patch",
+            "feature",
+            "minor",
+            "major",
+            "latestPatch",
+            "latestFeature",
+            "latestMinor",
+            "latestMajor",
+            "disable"
+          ],
+          "default": "disable",
+          "description": "The roll-forward policy to use when selecting an SDK version, either as a fallback when a specific SDK version is missing or as a directive to use a later version."
+        }
+      }
+    },
+    "msbuild-sdks": {
+      "type": "object",
+      "description": "Lets you control the project SDK version in one place rather than in each individual project.",
+      "additionalProperties": true,
+      "properties": {
+        "MSTest.Sdk": {
+          "type": "string",
+          "description": "Specifies the version of the MSTest SDK to use for unit testing."
+        }
+      }
+    }
+  }
+}

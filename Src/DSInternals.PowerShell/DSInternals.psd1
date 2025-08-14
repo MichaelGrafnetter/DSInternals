@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '6.0.1'
+ModuleVersion = '6.0.2'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -182,7 +182,7 @@ FileList = @(
     'net48\DSInternals.Replication.Model.dll',
     'net48\DSInternals.SAM.dll',
     'net48\amd64\DSInternals.Replication.Interop.dll',
-    # 'net48\arm64\DSInternals.Replication.Interop.dll',
+    'net48\arm64\DSInternals.Replication.Interop.dll',
     'net48\x86\DSInternals.Replication.Interop.dll',
     'net48\Esent.Interop.dll',
     'net48\Esent.Isam.dll',
@@ -200,7 +200,7 @@ FileList = @(
     'net8.0-windows\DSInternals.Replication.Model.dll',
     'net8.0-windows\DSInternals.SAM.dll',
     'net8.0-windows\amd64\DSInternals.Replication.Interop.dll',
-    # 'net8.0-windows\arm64\DSInternals.Replication.Interop.dll',
+    'net8.0-windows\arm64\DSInternals.Replication.Interop.dll',
     'net8.0-windows\x86\DSInternals.Replication.Interop.dll',
     'net8.0-windows\Esent.Interop.dll',
     'net8.0-windows\Esent.Isam.dll',
@@ -234,6 +234,7 @@ PrivateData = @{
 - Implemented full support for ntds.dit files originating from RODCs.
 - Improved the performance of schema loading and account retrieval from ntds.dit files.
 - Version 6.0.1 fixes a bug with misplaced .NET IJW host files in the PowerShell module directory structure.
+- Version 6.0.2 re-adds native ARM64 support.
 "@
     } # End of PSData hashtable
 

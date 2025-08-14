@@ -60,7 +60,7 @@ If you want to build the module from source code yourself, you need to install t
    * Git for Windows (optional)
    * GitHub Extension for Visual Studio (optional)
 
-To make IntelliSense work with *.psm1 files, the following code needs to be added to the `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Xml\Schemas\catalog.xml` file:
+To make IntelliSense work with `*.ps1xml` files, the following code needs to be added to the `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Xml\Schemas\catalog.xml` file:
 
 ```xml
 <Association extension="ps1xml" schema="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" enableValidation="true"/>
@@ -71,7 +71,7 @@ To make IntelliSense work with *.psm1 files, the following code needs to be adde
 
 1. Install the prerequisities.
 2. Checkout or download the source codes.
-3. Open the [Src\DSInternals.sln](/Src/DSInternals.sln) file in Visual Studio.
+3. Open the [Src\DSInternals.slnx](/Src/DSInternals.slnx) file in Visual Studio.
 2. Put any cmdlets you wish to debug into the [Src\DSInternals.PowerShell\Run-Cmdlets.ps1](/Src/DSInternals.PowerShell/Run-Cmdlets.ps1) script.
 3. Set the [DSInternals.PowerShell](/Src/DSInternals.PowerShell/DSInternals.PowerShell.csproj) project as StartUp Project.
 4. Switch to the _Debug_ configuration.
