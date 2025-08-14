@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "defaultMode": "acceptEdits",
-    "allow": [
-      "Bash(dotnet test:*)"
-    ]
-  }
-}
