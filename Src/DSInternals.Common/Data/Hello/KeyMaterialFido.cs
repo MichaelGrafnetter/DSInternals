@@ -12,6 +12,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Version is an integer that specifies the version of the structure.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("version")]
         public int Version
         {
@@ -23,6 +24,7 @@ namespace DSInternals.Common.Data
         /// AuthData is a WebAuthn authenticator data structure.
         /// <see>https://www.w3.org/TR/webauthn/#sec-authenticator-data</see>
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("authData")]
         public string AuthenticatorDataRaw
         {
@@ -33,6 +35,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// X5c is an array of attestation certificates associated with the authenticator.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("x5c")]
         public string[] AttestationCertificatesRaw
         {
@@ -43,6 +46,7 @@ namespace DSInternals.Common.Data
         /// <summary>
         /// Display name is a user provided string which can help the user differentiate between multiple registered authenticators.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("displayName")]
         public string DisplayName
         {

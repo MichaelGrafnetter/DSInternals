@@ -57,6 +57,7 @@
         /// <remarks>
         /// Version 1 keys had a guid in this field instead if a hash.
         /// </remarks>
+        [JsonInclude]
         [JsonPropertyName("keyIdentifier")]
         [JsonPropertyOrder(2)]
         public string Identifier
@@ -75,6 +76,7 @@
             }
         }
 
+        [JsonInclude]
         [JsonPropertyName("usage")]
         [JsonPropertyOrder(1)]
         [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -101,6 +103,7 @@
         /// <summary>
         /// Key material of the credential.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("keyMaterial")]
         [JsonPropertyOrder(3)]
         public byte[] RawKeyMaterial
@@ -197,6 +200,7 @@
             }
         }
 
+        [JsonInclude]
         [JsonPropertyName("customKeyInformation")]
         [JsonPropertyOrder(6)]
         [JsonConverter(typeof(CustomKeyInformationConverter))]
@@ -206,6 +210,7 @@
             private set;
         }
 
+        [JsonInclude]
         [JsonPropertyName("deviceId")]
         [JsonPropertyOrder(5)]
         public Guid? DeviceId
@@ -217,6 +222,7 @@
         /// <summary>
         /// The approximate time this key was created.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("creationTime")]
         [JsonPropertyOrder(4)]
         public DateTime CreationTime
