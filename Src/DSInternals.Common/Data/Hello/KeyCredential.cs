@@ -553,8 +553,13 @@
             return new KeyCredential(parsed.Binary, parsed.DistinguishedName);
         }
 
-        public static KeyCredential ParseJson(string jsonData) =>
-            DsiJson.DeserializeLenient<KeyCredential>(jsonData);
+        public static KeyCredential ParseJson(string jsonData)
+        {
+            if (string.IsNullOrWhiteSpace(jsonData))
+                return null;
+
+            return DsiJson.DeserializeLenient<KeyCredential>(jsonData);
+        }
 
         private static DateTime ConvertFromBinaryTime(byte[] binaryTime, KeySource source, KeyCredentialVersion version)
         {
