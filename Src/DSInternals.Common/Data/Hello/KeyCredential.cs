@@ -353,7 +353,7 @@
             Validator.AssertNotNull(blob, nameof(blob));
             Validator.AssertMinLength(blob, MinLength, nameof(blob));
             Validator.AssertNotNullOrEmpty(owner, nameof(owner));
-            
+
             // Init
             this.Owner = owner;
 
@@ -549,8 +549,7 @@
             return new DNWithBinary(this.Owner, this.ToByteArray()).ToString();
         }
 
-        public string ToJson() =>
-            JsonSerializer.Serialize(this, DsiJson.Options);
+        public string ToJson() => JsonSerializer.Serialize(this, DsiJson.Options);
 
         public static KeyCredential ParseDNBinary(string dnWithBinary)
         {
