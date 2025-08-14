@@ -6,6 +6,7 @@
     using System.Security.Cryptography;
     using System.Security.Cryptography.X509Certificates;
     using DSInternals.Common.Data.Fido;
+    using DSInternals.Common.Serialization;
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
@@ -56,6 +57,7 @@
         /// <remarks>
         /// Version 1 keys had a guid in this field instead if a hash.
         /// </remarks>
+        [JsonInclude]
         [JsonPropertyName("keyIdentifier")]
         [JsonPropertyOrder(2)]
         public string Identifier
@@ -74,6 +76,7 @@
             }
         }
 
+        [JsonInclude]
         [JsonPropertyName("usage")]
         [JsonPropertyOrder(1)]
         [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -100,6 +103,7 @@
         /// <summary>
         /// Key material of the credential.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("keyMaterial")]
         [JsonPropertyOrder(3)]
         public byte[] RawKeyMaterial
@@ -117,7 +121,7 @@
                 {
                     // The raw value has not yet been parsed
                     var fidoCredString = System.Text.Encoding.UTF8.GetString(this.RawKeyMaterial, 0, this.RawKeyMaterial.Length);
-                    this._cachedFidoKeyMaterial = JsonSerializer.Deserialize<KeyMaterialFido>(fidoCredString);
+                    this._cachedFidoKeyMaterial = JsonSerializer.Deserialize<KeyMaterialFido>(fidoCredString, DsiJson.Options);
                 }
 
                 // Returned the parsed object from cache or NULL if no FIDO key is present.
@@ -196,6 +200,7 @@
             }
         }
 
+        [JsonInclude]
         [JsonPropertyName("customKeyInformation")]
         [JsonPropertyOrder(6)]
         [JsonConverter(typeof(CustomKeyInformationConverter))]
@@ -205,6 +210,7 @@
             private set;
         }
 
+        [JsonInclude]
         [JsonPropertyName("deviceId")]
         [JsonPropertyOrder(5)]
         public Guid? DeviceId
@@ -216,6 +222,7 @@
         /// <summary>
         /// The approximate time this key was created.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("creationTime")]
         [JsonPropertyOrder(4)]
         public DateTime CreationTime
@@ -542,10 +549,8 @@
             return new DNWithBinary(this.Owner, this.ToByteArray()).ToString();
         }
 
-        public string ToJson()
-        {
-            return JsonSerializer.Serialize(this);
-        }
+        public string ToJson() =>
+            JsonSerializer.Serialize(this, DsiJson.Options);
 
         public static KeyCredential ParseDNBinary(string dnWithBinary)
         {
@@ -556,15 +561,10 @@
 
         public static KeyCredential ParseJson(string jsonData)
         {
-            if(String.IsNullOrEmpty(jsonData))
-            {
+            if (string.IsNullOrWhiteSpace(jsonData))
                 return null;
-            }
-            else
-            {
-                jsonData = jsonData.Replace('\'', '"');
-                return JsonSerializer.Deserialize<KeyCredential>(jsonData);
-            }
+
+            return DsiJson.DeserializeLenient<KeyCredential>(jsonData);
         }
 
         private static DateTime ConvertFromBinaryTime(byte[] binaryTime, KeySource source, KeyCredentialVersion version)

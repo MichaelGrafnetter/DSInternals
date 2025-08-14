@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using DSInternals.Common.Data;
 using DSInternals.Common.Exceptions;
+using DSInternals.Common.Serialization;
 
 namespace DSInternals.Common.AzureAD
 {
@@ -31,7 +32,6 @@ namespace DSInternals.Common.AzureAD
         private string _tenantId;
         private HttpClient _httpClient;
         private readonly string _batchSizeParameter;
-        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         public AzureADClient(string accessToken, Guid? tenantId = null, int batchSize = MaxBatchSize)
         {
@@ -137,7 +137,7 @@ namespace DSInternals.Common.AzureAD
             // TODO: Switch to HttpMethod.Patch after migrating to .NET Standard 2.1 / .NET 5
             using (var request = new HttpRequestMessage(new HttpMethod("PATCH"), url.ToString()))
             {
-                request.Content = new StringContent(JsonSerializer.Serialize(properties, _jsonOptions), Encoding.UTF8, JsonContentType);
+                request.Content = new StringContent(JsonSerializer.Serialize(properties, DsiJson.Options), Encoding.UTF8, JsonContentType);
                 await SendODataRequest<object>(request).ConfigureAwait(false);
             }
         }
@@ -160,11 +160,11 @@ namespace DSInternals.Common.AzureAD
                         {
                             if (response.StatusCode == HttpStatusCode.OK)
                             {
-                                return await JsonSerializer.DeserializeAsync<T>(responseStream, _jsonOptions).ConfigureAwait(false);
+                                return await JsonSerializer.DeserializeAsync<T>(responseStream, DsiJson.Options).ConfigureAwait(false);
                             }
                             else
                             {
-                                var error = await JsonSerializer.DeserializeAsync<OdataErrorResponse>(responseStream, _jsonOptions).ConfigureAwait(false);
+                                var error = await JsonSerializer.DeserializeAsync<OdataErrorResponse>(responseStream, DsiJson.Options).ConfigureAwait(false);
                                 throw error.GetException();
                             }
                         }

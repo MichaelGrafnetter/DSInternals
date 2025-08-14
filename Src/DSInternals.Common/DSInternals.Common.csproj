@@ -10,6 +10,7 @@
 - Added support for AD trusts.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security Entra AD AAD Identity Active Directory</PackageTags>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -21,13 +22,20 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Text.Json" Version="9.0.8" Condition="'$(TargetFramework)' == 'net48'" />
     <PackageReference Include="PeterO.Cbor" Version="4.5.5" />
     <PackageReference Include="System.Buffers" Version="4.5.1" Condition="'$(TargetFramework)' == 'net48'" />
     <PackageReference Include="System.DirectoryServices" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
     <PackageReference Include="System.Formats.Asn1" Version="9.0.8" Condition="'$(TargetFramework)' == 'net48'" />
     <PackageReference Include="System.Memory" Version="4.5.5" Condition="'$(TargetFramework)' == 'net48'" />
     <PackageReference Include="System.ValueTuple" Version="4.6.1" Condition="'$(TargetFramework)' == 'net48'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="DSInternals.Common.Test" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="System.Text.Json" Version="9.0.8" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using DSInternals.Common.Data;
+using DSInternals.Common.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.Json;
 
@@ -37,7 +38,9 @@ namespace DSInternals.Common.Test
             Assert.AreEqual("cb69481e-8ff7-4039-93ec-0a2729a154a8", keyCredential.FidoKeyMaterial.AuthenticatorData.AttestedCredentialData.AaGuid.ToString());
 
             // Serialize the object again and compare with the original
-            string normalized = JsonSerializer.Serialize(JsonSerializer.Deserialize<JsonElement>(jsonData.Replace('\'', '"')));
+            string normalized = JsonSerializer.Serialize(
+                DsiJson.DeserializeLenient<JsonElement>(jsonData),
+                DsiJson.Options);
             Assert.AreEqual(normalized, keyCredential.ToJson());
         }
 
@@ -91,7 +94,9 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(2, keyCredential.FidoKeyMaterial.AttestationCertificates.Count);
 
             // Serialize the object again and compare with the original
-            string normalized = JsonSerializer.Serialize(JsonSerializer.Deserialize<JsonElement>(jsonData.Replace('\'', '"')));
+            string normalized = JsonSerializer.Serialize(
+                DsiJson.DeserializeLenient<JsonElement>(jsonData),
+                DsiJson.Options);
             Assert.AreEqual(normalized, keyCredential.ToJson());
         }
 
@@ -120,7 +125,9 @@ namespace DSInternals.Common.Test
             Assert.AreEqual("cbad3c94-b480-4fa6-9187-ff1ed42c4479", parsedKey.DeviceId.Value.ToString().ToLowerInvariant());
 
             // Serialize the object again and compare with the original
-            string normalized = JsonSerializer.Serialize(JsonSerializer.Deserialize<JsonElement>(jsonData.Replace('\'', '"')));
+            string normalized = JsonSerializer.Serialize(
+                DsiJson.DeserializeLenient<JsonElement>(jsonData),
+                DsiJson.Options);
             Assert.AreEqual(normalized, parsedKey.ToJson());
 
             // Re-generate the identifier and check that it matches the value in AAD.
