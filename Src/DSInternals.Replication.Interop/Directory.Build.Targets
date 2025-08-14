@@ -20,6 +20,8 @@
     </ItemGroup>
     <!-- Copy the C++ runtime files to the PowerShell module. -->
     <Copy SourceFiles="@(CppRuntimeBinaries)" DestinationFolder="$(PowerShellModulePath)" />
+    <!-- Copy the .NET IJW host to the PowerShell module. -->
+    <Copy SourceFiles="$(OutDir)Ijwhost.dll" DestinationFolder="$(PowerShellModulePath)" Condition="'$(CLRSupport)' == 'NetCore'" />
     <!-- Copy the compiled DLLs to the PowerShell module. -->
     <Copy SourceFiles="$(OutDir)$(TargetFileName)" DestinationFolder="$(PowerShellModulePath)" />
     <!-- Include the debug symbols -->

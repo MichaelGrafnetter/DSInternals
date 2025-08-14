@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '6.0'
+ModuleVersion = '6.0.1'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -233,6 +233,7 @@ PrivateData = @{
 - Added the Get-ADReplKdsRootKey cmdlet to enable reading specific KDS Root Keys over the MS-DRSR protocol.
 - Implemented full support for ntds.dit files originating from RODCs.
 - Improved the performance of schema loading and account retrieval from ntds.dit files.
+- Version 6.0.1 fixes a bug with misplaced .NET IJW host files in the PowerShell module directory structure.
 "@
     } # End of PSData hashtable
 

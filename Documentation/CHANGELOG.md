@@ -5,6 +5,12 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [6.0.1] - 2025-08-14
+
+### Fixed
+
+- Resolved a bug with misplaced .NET IJW host files (Ijwhost.dll) in the PowerShell module directory structure.
+
 ## [6.0] - 2025-08-14
 
 ### Added
@@ -629,7 +635,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0.1...HEAD
+[6.0.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0...v6.0.1
 [6.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.4.1...v6.0
 [5.4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.3...v5.4.1
 [5.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.2...v5.3

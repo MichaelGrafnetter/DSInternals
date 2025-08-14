@@ -61,10 +61,11 @@
     <!-- System.Memory, System.Numerics.Vectors, System.Buffers, System.Runtime.CompilerServices.Unsafe -->
   </ItemGroup>
   <Target Name="RemoveRootInteropDll" AfterTargets="Build">
-    <!-- TODO: Find a more elegant way of not including these 2 files. -->
+    <!-- TODO: Find a more elegant way of not including these 3 files. -->
     <!-- Remove DSInternals.Replication.Interop DLL and PDB from module root. Only keep it in the architecture-specific subdirectory. -->
     <Delete Files="$(OutDir)DSInternals.Replication.Interop.dll" />
     <Delete Files="$(OutDir)DSInternals.Replication.Interop.pdb" />
-    <!-- TODO: Is the Ijwhost.dll file needed? -->
+    <!-- Remove the .NET IJW host from module root. Only keep it in the architecture-specific subdirectory. -->
+    <Delete Files="$(OutDir)Ijwhost.dll" />
   </Target>
 </Project>

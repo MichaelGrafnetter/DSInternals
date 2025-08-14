@@ -2,12 +2,13 @@
   <!-- NuGet package metadata -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Version>6.0</Version>
+    <Version>6.0.1</Version>
+    <AssemblyVersion>6.0</AssemblyVersion>
+    <FileVersion>6.0</FileVersion>
     <AssemblyTitle>DSInternals Replication Library</AssemblyTitle>
     <Title>$(AssemblyTitle)</Title>
     <Description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</Description>
-    <PackageReleaseNotes>- Migrated to .NET SDK.
-- Added support for retrieving KDS Root Keys.</PackageReleaseNotes>
+    <PackageReleaseNotes>- The .NET IJW host is now included.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security Replication RPC DRSR DCSync</PackageTags>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyPrivateProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
@@ -36,7 +37,10 @@
     <!-- Include the files in the NuGet package directly -->
     <Target DependsOnTargets="BuildOnlySettings;ResolveReferences" Name="CopyPrivateProjectReferencesToPackage">
       <ItemGroup>
+        <!-- DSInternals.Replication.Interop and DSInternals.Replication.Model dll+xml+pdb -->
         <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('PrivateAssets', 'all'))" />
+        <!-- .NET IJW host -->
+        <BuildOutputInPackage Include="$(OutputPath)Ijwhost.dll" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
       </ItemGroup>
     </Target>
 </Project>
