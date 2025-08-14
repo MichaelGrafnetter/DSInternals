@@ -1,4 +1,5 @@
-<Solution>
+
+<Solution xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/microsoft/vs-solutionpersistence/refs/heads/main/src/Microsoft.VisualStudio.SolutionPersistence/Serializer/Xml/Slnx.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Configurations>
     <Platform Name="ARM64" />
     <Platform Name="Win32" />
