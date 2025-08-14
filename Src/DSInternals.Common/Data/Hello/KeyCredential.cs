@@ -6,6 +6,7 @@
     using System.Security.Cryptography;
     using System.Security.Cryptography.X509Certificates;
     using DSInternals.Common.Data.Fido;
+    using DSInternals.Common.Serialization;
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
@@ -542,10 +543,8 @@
             return new DNWithBinary(this.Owner, this.ToByteArray()).ToString();
         }
 
-        public string ToJson()
-        {
-            return JsonSerializer.Serialize(this);
-        }
+        public string ToJson() =>
+            JsonSerializer.Serialize(this, DsiJson.Options);
 
         public static KeyCredential ParseDNBinary(string dnWithBinary)
         {
@@ -554,18 +553,8 @@
             return new KeyCredential(parsed.Binary, parsed.DistinguishedName);
         }
 
-        public static KeyCredential ParseJson(string jsonData)
-        {
-            if(String.IsNullOrEmpty(jsonData))
-            {
-                return null;
-            }
-            else
-            {
-                jsonData = jsonData.Replace('\'', '"');
-                return JsonSerializer.Deserialize<KeyCredential>(jsonData);
-            }
-        }
+        public static KeyCredential ParseJson(string jsonData) =>
+            DsiJson.DeserializeLenient<KeyCredential>(jsonData);
 
         private static DateTime ConvertFromBinaryTime(byte[] binaryTime, KeySource source, KeyCredentialVersion version)
         {
