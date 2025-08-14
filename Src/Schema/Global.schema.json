@@ -39,17 +39,17 @@
           "description": "The roll-forward policy to use when selecting an SDK version, either as a fallback when a specific SDK version is missing or as a directive to use a later version."
         }
       }
-    }
-  },
-  "msbuild-sdks": {
-        "type": "object",
-        "description": "Lets you control the project SDK version in one place rather than in each individual project.",
-        "additionalProperties": true,
-        "properties": {
-          "MSTest.Sdk": {
-            "type": "string",
-            "description": "Specifies the version of the MSTest SDK to use for unit testing."
-          }
+    },
+    "msbuild-sdks": {
+      "type": "object",
+      "description": "Lets you control the project SDK version in one place rather than in each individual project.",
+      "additionalProperties": true,
+      "properties": {
+        "MSTest.Sdk": {
+          "type": "string",
+          "description": "Specifies the version of the MSTest SDK to use for unit testing."
         }
       }
+    }
+  }
 }
