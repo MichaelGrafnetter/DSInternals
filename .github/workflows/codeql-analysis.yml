@@ -48,13 +48,13 @@ jobs:
         # queries: security-extended,security-and-quality
 
     - name: Setup MSBuild
-      if: matrix.build-mode == 'manual' && ( matrix.language == 'c-cpp' || matrix.language == 'csharp' )
+      if: matrix.build-mode == 'manual'
       uses: microsoft/setup-msbuild@v2
       with:
         msbuild-architecture: x64 # default is x86
 
     - name: Setup .NET
-      if: matrix.build-mode == 'manual' && ( matrix.language == 'c-cpp' || matrix.language == 'csharp' )
+      if: matrix.build-mode == 'manual'
       uses: actions/setup-dotnet@v4
       with:
         cache: true

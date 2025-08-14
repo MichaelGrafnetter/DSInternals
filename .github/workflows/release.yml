@@ -249,8 +249,11 @@ jobs:
         uses: actions/setup-dotnet@v4
 
       - name: Publish NuGet Packages
+        shell: pwsh
+        env:
+          NUGET_GALLERY_APIKEY: ${{ secrets.NUGET_GALLERY_APIKEY }}
         run: |
-          dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_GALLERY_APIKEY }} --skip-duplicate
+          dotnet nuget push *.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key $env:NUGET_GALLERY_APIKEY --skip-duplicate
 
   psgallery:
     name: 'Publish to PowerShell Gallery'
@@ -262,11 +265,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           artifact-ids: ${{ needs.build.outputs.powershell-artifact-id }}
+          path: Module
 
       - name: Publish PowerShell Module
         shell: pwsh
+        env:
+          POWERSHELL_GALLERY_APIKEY: ${{ secrets.POWERSHELL_GALLERY_APIKEY }}
         run: |
-          Publish-Module -Path .\DSInternals -NuGetApiKey ${{ secrets.POWERSHELL_GALLERY_APIKEY }} -Repository PSGallery -Force
+          Publish-Module -Path ./Module/DSInternals -NuGetApiKey $env:POWERSHELL_GALLERY_APIKEY -Repository PSGallery -Force
 
   release:
     name: 'Create GitHub Release Draft'
