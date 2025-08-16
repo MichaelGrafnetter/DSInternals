@@ -6,8 +6,9 @@
     using System.Security.Cryptography;
     using System.Security.Cryptography.X509Certificates;
     using DSInternals.Common.Data.Fido;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
+    using DSInternals.Common.Serialization;
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
 
     /// <summary>
     ///  This class represents a single AD/AAD key credential.
@@ -18,7 +19,6 @@
     /// The Azure Active Directory Graph API represents this structure in JSON format.
     /// </remarks>
     /// <see>https://msdn.microsoft.com/en-us/library/mt220505.aspx</see>
-    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class KeyCredential
     {
         /// <summary>
@@ -44,6 +44,7 @@
         /// <summary>
         /// Defines the version of the structure.
         /// </summary>
+        [JsonIgnore]
         public KeyCredentialVersion Version
         {
             get;
@@ -56,13 +57,16 @@
         /// <remarks>
         /// Version 1 keys had a guid in this field instead if a hash.
         /// </remarks>
-        [JsonProperty("keyIdentifier", Order = 2)]
+        [JsonInclude]
+        [JsonPropertyName("keyIdentifier")]
+        [JsonPropertyOrder(2)]
         public string Identifier
         {
             get;
             private set;
         }
 
+        [JsonIgnore]
         public bool IsWeak
         {
             get
@@ -72,20 +76,24 @@
             }
         }
 
-        [JsonProperty("usage", Order = 1)]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonInclude]
+        [JsonPropertyName("usage")]
+        [JsonPropertyOrder(1)]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public KeyUsage Usage
         {
             get;
             private set;
         }
 
+        [JsonIgnore]
         public string LegacyUsage
         {
             get;
             private set;
         }
 
+        [JsonIgnore]
         public KeySource Source
         {
             get;
@@ -95,13 +103,16 @@
         /// <summary>
         /// Key material of the credential.
         /// </summary>
-        [JsonProperty("keyMaterial", Order = 3)]
+        [JsonInclude]
+        [JsonPropertyName("keyMaterial")]
+        [JsonPropertyOrder(3)]
         public byte[] RawKeyMaterial
         {
             get;
             private set;
         }
 
+        [JsonIgnore]
         public KeyMaterialFido FidoKeyMaterial
         {
             get
@@ -110,7 +121,7 @@
                 {
                     // The raw value has not yet been parsed
                     var fidoCredString = System.Text.Encoding.UTF8.GetString(this.RawKeyMaterial, 0, this.RawKeyMaterial.Length);
-                    this._cachedFidoKeyMaterial = JsonConvert.DeserializeObject<KeyMaterialFido>(fidoCredString);
+                    this._cachedFidoKeyMaterial = JsonSerializer.Deserialize<KeyMaterialFido>(fidoCredString, DsiJson.Options);
                 }
 
                 // Returned the parsed object from cache or NULL if no FIDO key is present.
@@ -118,6 +129,7 @@
             }
         }
 
+        [JsonIgnore]
         public ECParameters? ECPublicKey
         {
             get
@@ -134,6 +146,7 @@
             }
         }
 
+        [JsonIgnore]
         public RSAParameters? RSAPublicKey
         {
             get
@@ -177,6 +190,7 @@
             }
         }
 
+        [JsonIgnore]
         public string RSAModulus
         {
             get
@@ -186,7 +200,9 @@
             }
         }
 
-        [JsonProperty("customKeyInformation", Order = 6)]
+        [JsonInclude]
+        [JsonPropertyName("customKeyInformation")]
+        [JsonPropertyOrder(6)]
         [JsonConverter(typeof(CustomKeyInformationConverter))]
         public CustomKeyInformation CustomKeyInfo
         {
@@ -194,7 +210,9 @@
             private set;
         }
 
-        [JsonProperty("deviceId", Order = 5)]
+        [JsonInclude]
+        [JsonPropertyName("deviceId")]
+        [JsonPropertyOrder(5)]
         public Guid? DeviceId
         {
             get;
@@ -204,7 +222,9 @@
         /// <summary>
         /// The approximate time this key was created.
         /// </summary>
-        [JsonProperty("creationTime", Order = 4)]
+        [JsonInclude]
+        [JsonPropertyName("creationTime")]
+        [JsonPropertyOrder(4)]
         public DateTime CreationTime
         {
             get;
@@ -214,6 +234,7 @@
         /// <summary>
         /// The approximate time this key was last used.
         /// </summary>
+        [JsonIgnore]
         public DateTime? LastLogonTime
         {
             get;
@@ -223,6 +244,7 @@
         /// <summary>
         /// Distinguished name of the AD object (UPN in case of AAD objects) that holds this key credential.
         /// </summary>
+        [JsonIgnore]
         public string Owner
         {
             get;
@@ -233,8 +255,9 @@
         /// <summary>
         /// Gets the FIDO AAGUID. For JSON deserialization only.
         /// </summary>
-        [JsonProperty("fidoAaGuid", Order = 7, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        private Guid? FidoAaGuid
+        [JsonPropertyName("fidoAaGuid")]
+        [JsonPropertyOrder(7)]
+        public Guid? FidoAaGuid
         {
             get
             {
@@ -253,8 +276,9 @@
         /// <summary>
         /// Gets the FIDO authenticator version. For JSON deserialization only.
         /// </summary>
-        [JsonProperty("fidoAuthenticatorVersion", Order = 8, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        private string FidoAuthenticatorVersion
+        [JsonPropertyName("fidoAuthenticatorVersion")]
+        [JsonPropertyOrder(8)]
+        public string FidoAuthenticatorVersion
         {
             get
             {
@@ -265,8 +289,9 @@
         /// <summary>
         /// Gets a list of thumbprints of FIDO Attestation Certificates. For JSON deserialization only.
         /// </summary>
-        [JsonProperty("fidoAttestationCertificates", Order = 9, ObjectCreationHandling = ObjectCreationHandling.Replace)]
-        private string[] FidoAttestationCertificates
+        [JsonPropertyName("fidoAttestationCertificates")]
+        [JsonPropertyOrder(9)]
+        public string[] FidoAttestationCertificates
         {
             get
             {
@@ -277,7 +302,7 @@
                 }
                 else
                 {
-                    return new string[0];
+                    return Array.Empty<string>();
                 }
             }
         }
@@ -328,7 +353,7 @@
             Validator.AssertNotNull(blob, nameof(blob));
             Validator.AssertMinLength(blob, MinLength, nameof(blob));
             Validator.AssertNotNullOrEmpty(owner, nameof(owner));
-            
+
             // Init
             this.Owner = owner;
 
@@ -524,10 +549,7 @@
             return new DNWithBinary(this.Owner, this.ToByteArray()).ToString();
         }
 
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
+        public string ToJson() => JsonSerializer.Serialize(this, DsiJson.Options);
 
         public static KeyCredential ParseDNBinary(string dnWithBinary)
         {
@@ -538,14 +560,10 @@
 
         public static KeyCredential ParseJson(string jsonData)
         {
-            if(String.IsNullOrEmpty(jsonData))
-            {
+            if (string.IsNullOrWhiteSpace(jsonData))
                 return null;
-            }
-            else
-            {
-                return JsonConvert.DeserializeObject<KeyCredential>(jsonData);
-            }
+
+            return DsiJson.DeserializeLenient<KeyCredential>(jsonData);
         }
 
         private static DateTime ConvertFromBinaryTime(byte[] binaryTime, KeySource source, KeyCredentialVersion version)

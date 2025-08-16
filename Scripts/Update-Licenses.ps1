@@ -20,9 +20,6 @@ $products = @(
         Name = 'Bouncy Castle';
         LicenseUrl = 'https://raw.githubusercontent.com/bcgit/bc-csharp/master/crypto/License.html'
      }, @{
-        Name = 'Json.NET';
-        LicenseUrl = 'https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/master/LICENSE.md'
-     }, @{
         Name = 'Peter O. CBOR Library';
         LicenseUrl = 'https://raw.githubusercontent.com/peteroupc/CBOR/master/LICENSE.md'
      }

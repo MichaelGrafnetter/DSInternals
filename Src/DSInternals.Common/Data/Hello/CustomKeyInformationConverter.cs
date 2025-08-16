@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.Data
 {
@@ -9,40 +10,38 @@ namespace DSInternals.Common.Data
     /// </summary>
     public class CustomKeyInformationConverter : JsonConverter<CustomKeyInformation>
     {
-        public override CustomKeyInformation ReadJson(JsonReader reader, Type objectType, CustomKeyInformation existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override CustomKeyInformation Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonToken.Null)
+            if (reader.TokenType == JsonTokenType.Null)
             {
                 return null;
             }
 
-            if(reader.TokenType == JsonToken.String)
+            if(reader.TokenType == JsonTokenType.String)
             {
                 try
                 {
-                    byte[] blob = Convert.FromBase64String((string)reader.Value);
+                    byte[] blob = Convert.FromBase64String(reader.GetString());
                     return new CustomKeyInformation(blob);
                 }
                 catch(Exception e)
                 {
-                    throw new JsonSerializationException("Cannot convert invalid value to CustomKeyInformation.", e);
+                    throw new JsonException("Cannot convert invalid value to CustomKeyInformation.", e);
                 }
             }
-            else
-            {
-                throw new JsonSerializationException("Unexpected token parsing CustomKeyInformation.");
-            }
+
+            throw new JsonException("Unexpected token parsing CustomKeyInformation.");
         }
 
-        public override void WriteJson(JsonWriter writer, CustomKeyInformation value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, CustomKeyInformation value, JsonSerializerOptions options)
         {
             if(value != null)
             {
-                writer.WriteValue(value.ToByteArray());
+                writer.WriteStringValue(Convert.ToBase64String(value.ToByteArray()));
             }
             else
             {
-                writer.WriteNull();
+                writer.WriteNullValue();
             }
         }
     }

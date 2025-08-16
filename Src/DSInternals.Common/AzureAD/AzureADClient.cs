@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using DSInternals.Common.Data;
 using DSInternals.Common.Exceptions;
-using Newtonsoft.Json;
+using DSInternals.Common.Serialization;
 
 namespace DSInternals.Common.AzureAD
 {
@@ -31,7 +32,6 @@ namespace DSInternals.Common.AzureAD
         private string _tenantId;
         private HttpClient _httpClient;
         private readonly string _batchSizeParameter;
-        private JsonSerializer _jsonSerializer = JsonSerializer.CreateDefault();
 
         public AzureADClient(string accessToken, Guid? tenantId = null, int batchSize = MaxBatchSize)
         {
@@ -117,17 +117,17 @@ namespace DSInternals.Common.AzureAD
             // Vaidate the input
             Validator.AssertNotNullOrEmpty(userPrincipalName, nameof(userPrincipalName));
 
-            var properties = new Hashtable() { { KeyCredentialAttributeName, keyCredentials } };
+            var properties = new Dictionary<string, object> { { KeyCredentialAttributeName, keyCredentials } };
             await SetUserAsync(userPrincipalName, properties).ConfigureAwait(false);
         }
 
         public async Task SetUserAsync(Guid objectId, KeyCredential[] keyCredentials)
         {
-            var properties = new Hashtable() { { KeyCredentialAttributeName, keyCredentials } };
+            var properties = new Dictionary<string, object> { { KeyCredentialAttributeName, keyCredentials } };
             await SetUserAsync(objectId.ToString(), properties).ConfigureAwait(false);
         }
 
-        private async Task SetUserAsync(string userIdentifier, Hashtable properties)
+        private async Task SetUserAsync(string userIdentifier, Dictionary<string, object> properties)
         {
             // Build the request uri
             var url = new StringBuilder();
@@ -137,7 +137,7 @@ namespace DSInternals.Common.AzureAD
             // TODO: Switch to HttpMethod.Patch after migrating to .NET Standard 2.1 / .NET 5
             using (var request = new HttpRequestMessage(new HttpMethod("PATCH"), url.ToString()))
             {
-                request.Content = new StringContent(JsonConvert.SerializeObject(properties), Encoding.UTF8, JsonContentType);
+                request.Content = new StringContent(JsonSerializer.Serialize(properties, DsiJson.Options), Encoding.UTF8, JsonContentType);
                 await SendODataRequest<object>(request).ConfigureAwait(false);
             }
         }
@@ -155,30 +155,26 @@ namespace DSInternals.Common.AzureAD
                     }
 
                     using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                    using (var streamReader = new StreamReader(responseStream))
                     {
                         if (s_odataContentType.MediaType.Equals(response.Content.Headers.ContentType.MediaType, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            // The response is a JSON document
-                            using (var jsonTextReader = new JsonTextReader(streamReader))
+                            if (response.StatusCode == HttpStatusCode.OK)
                             {
-                                if (response.StatusCode == HttpStatusCode.OK)
-                                {
-                                    return _jsonSerializer.Deserialize<T>(jsonTextReader);
-                                }
-                                else
-                                {
-                                    // Translate OData response to an exception
-                                    var error = _jsonSerializer.Deserialize<OdataErrorResponse>(jsonTextReader);
-                                    throw error.GetException();
-                                }
+                                return await JsonSerializer.DeserializeAsync<T>(responseStream, DsiJson.Options).ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                var error = await JsonSerializer.DeserializeAsync<OdataErrorResponse>(responseStream, DsiJson.Options).ConfigureAwait(false);
+                                throw error.GetException();
                             }
                         }
                         else
                         {
-                            // The response is not a JSON document, so we parse its first line as message text
-                            string message = await streamReader.ReadLineAsync().ConfigureAwait(false);
-                            throw new GraphApiException(message, response.StatusCode.ToString());
+                            using (var streamReader = new StreamReader(responseStream))
+                            {
+                                string message = await streamReader.ReadLineAsync().ConfigureAwait(false);
+                                throw new GraphApiException(message, response.StatusCode.ToString());
+                            }
                         }
                     }
                 }

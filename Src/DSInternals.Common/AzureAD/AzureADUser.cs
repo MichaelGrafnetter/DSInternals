@@ -1,42 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using DSInternals.Common.Data;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.AzureAD
 {
-    [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
     public class AzureADUser
     {
-        [JsonProperty("objectId", Required = Required.Always)]
+        [JsonPropertyName("objectId")]
+        [JsonRequired]
         public Guid ObjectId
         {
             get;
             private set;
         }
 
-        [JsonProperty("userPrincipalName", Required = Required.Always)]
+        [JsonPropertyName("userPrincipalName")]
+        [JsonRequired]
         public string UserPrincipalName
         {
             get;
             private set;
         }
 
-        [JsonProperty("accountEnabled")]
+        [JsonPropertyName("accountEnabled")]
         public bool Enabled
         {
             get;
             private set;
         }
 
-        [JsonProperty("displayName")]
+        [JsonPropertyName("displayName")]
         public string DisplayName
         {
             get;
             private set;
         }
 
-        [JsonProperty("searchableDeviceKey")]
+        [JsonPropertyName("searchableDeviceKey")]
         public List<KeyCredential> KeyCredentials
         {
             get;

@@ -1,17 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.AzureAD
 {
     public class ODataErrorMessage
     {
-        [JsonProperty("lang")]
+        [JsonPropertyName("lang")]
         public string Language
         {
             get;
             private set;
         }
 
-        [JsonProperty("value", Required = Required.Always)]
+        [JsonPropertyName("value")]
+        [JsonRequired]
         public string Value
         {
             get;
