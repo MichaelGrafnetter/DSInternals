@@ -2,6 +2,8 @@ name: CI Build
 
 permissions:
   contents: read
+  actions: read
+  checks: write
 
 on:
   push:
@@ -66,6 +68,22 @@ jobs:
       working-directory: Src
       run: |
         msbuild.exe DSInternals.Replication -target:Pack -property:Configuration=Debug -property:Platform=x64 -property:RestorePackages=false -property:NoBuild=true -property:BuildProjectReferences=false
+
+    - name: Run Unit Tests
+      working-directory: Src
+      run: |
+        dotnet test DSInternals.TestsOnly.slnf --configuration Debug --no-build -- --report-trx --results-directory "${{ github.workspace }}/TestResults"
+
+    - name: Generate Unit Test Report
+      uses: dorny/test-reporter@v2
+      if: ${{ !cancelled() }}
+      with:
+        artifact: TestResults
+        name: MSTest
+        reporter: dotnet-trx
+        path: TestResults/*.trx
+        use-actions-summary: true
+        badge-title: Unit Tests
 
     - name: Get PowerShell Module Version
       shell: pwsh

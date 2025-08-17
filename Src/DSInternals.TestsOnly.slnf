@@ -1,0 +1,14 @@
+{
+  "$schema": "Schema/SolutionFilter.schema.json",
+  "$comment": "This file is a MSBuild solution filter, which only includes MSTest projects. It can be targeted using the dotnet test tool.",
+  "solution": {
+    "path": "DSInternals.slnx",
+    "projects": [
+      "DSInternals.Common.Test\\DSInternals.Common.Test.csproj",
+      "DSInternals.DataStore.Test\\DSInternals.DataStore.Test.csproj",
+      "DSInternals.Replication.Model.Test\\DSInternals.Replication.Model.Test.csproj",
+      "DSInternals.Replication.Test\\DSInternals.Replication.Test.csproj",
+      "DSInternals.SAM.Test\\DSInternals.SAM.Test.csproj"
+    ]
+  }
+}
