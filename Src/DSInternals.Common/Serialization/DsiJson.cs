@@ -25,8 +25,8 @@ namespace DSInternals.Common.Serialization
             Options.Converters.Add(new JsonStringEnumConverter());
         }
 
-        // ---------- String input ----------
-        internal static T DeserializeLenient<T>(string json)
+        // ---------- STRING INPUT ----------
+        internal static T? DeserializeLenient<T>(string json)
         {
             if (string.IsNullOrWhiteSpace(json)) return default;
 
@@ -49,51 +49,67 @@ namespace DSInternals.Common.Serialization
             }
         }
 
-        // ---------- Binary input ----------
-        internal static T DeserializeLenient<T>(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
+        // ---------- BINARY INPUT ----------
+        internal static T? DeserializeLenient<T>(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {
-            var json = DecodeJson(binaryJson, utf16);
-            return DeserializeLenient<T>(json);
-        }
+            if (binaryJson.Length == 0) return default;
 
-        internal static string DecodeJson(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
-        {
-            // Trim terminators/padding on BYTES BEFORE decoding.
             var trimmed = TrimZeroTerminator(binaryJson, utf16);
 
-#if NET8_0_OR_GREATER
-            string json = (utf16 ? Encoding.Unicode : Encoding.UTF8).GetString(trimmed);
-#else
-            // .NET Framework: no span GetString; copy to array explicitly.
-            byte[] buf = trimmed.Length == 0 ? Array.Empty<byte>() : new byte[trimmed.Length];
-            if (buf.Length != 0) 
+            if (!utf16)
             {
-                for (int i = 0; i < trimmed.Length; i++)
-                {
-                    buf[i] = trimmed[i];
-                }
-            }
-            string json = (utf16 ? Encoding.Unicode : Encoding.UTF8).GetString(buf);
-#endif
-            // Strip BOM if present
-            if (json.Length > 0 && json[0] == '\uFEFF')
-                json = json.Substring(1);
+                // UTF-8 path
+                trimmed = TrimUtf8Bom(trimmed);
 
-            return json;
+#if NET8_0_OR_GREATER
+                // Fast-path: no string allocation if it already looks like proper JSON
+                if (!LooksLikeSingleQuotedJsonUtf8(trimmed))
+                    return JsonSerializer.Deserialize<T>(trimmed, Options);
+
+                string s = Encoding.UTF8.GetString(trimmed);
+                return DeserializeLenient<T>(s);
+#else
+                // .NET Framework: decode to string and reuse string path
+                byte[] buf = new byte[trimmed.Length];
+                for (int i = 0; i < trimmed.Length; i++) buf[i] = trimmed[i];
+                string s = Encoding.UTF8.GetString(buf);
+                return DeserializeLenient<T>(s);
+#endif
+            }
+            else
+            {
+                // UTF-16LE path
+                // Copy span to array (net48-safe), then transcode to UTF-8 using Encoding.Convert
+                byte[] utf16le = new byte[trimmed.Length];
+                for (int i = 0; i < trimmed.Length; i++) utf16le[i] = trimmed[i];
+
+                byte[] utf8 = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, utf16le, 0, utf16le.Length);
+
+#if NET8_0_OR_GREATER
+                ReadOnlySpan<byte> utf8Span = utf8;
+                utf8Span = TrimUtf8Bom(utf8Span);
+                if (!LooksLikeSingleQuotedJsonUtf8(utf8Span))
+                    return JsonSerializer.Deserialize<T>(utf8Span, Options);
+#endif
+                // Fallback: go through string to apply single-quote normalization if needed
+                string s = Encoding.UTF8.GetString(utf8);
+                return DeserializeLenient<T>(s);
+            }
         }
 
+        // ---------- Helpers ----------
         private static ReadOnlySpan<byte> TrimZeroTerminator(ReadOnlySpan<byte> input, bool utf16)
         {
             if (input.Length == 0) return input;
 
             if (utf16)
             {
-                // Remove any number of trailing 0x00 0x00 pairs.
                 int len = input.Length;
+                // remove trailing 0x00 0x00 pairs
                 while (len >= 2 && input[len - 1] == 0 && input[len - 2] == 0)
                     len -= 2;
 
-                // Safety: ensure even byte count for UTF-16
+                // ensure even count for UTF-16
                 if ((len & 1) == 1) len -= 1;
 
                 return input.Slice(0, len);
@@ -107,13 +123,56 @@ namespace DSInternals.Common.Serialization
             }
         }
 
+        private static ReadOnlySpan<byte> TrimUtf8Bom(ReadOnlySpan<byte> data)
+        {
+            if (data.Length >= 3 && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF)
+                return data.Slice(3);
+            return data;
+        }
+
         private static bool LooksLikeSingleQuotedJson(string s)
         {
             if (string.IsNullOrEmpty(s)) return false;
-            var t = s.TrimStart();
-            return (t.Length > 0 && (t[0] == '{' || t[0] == '['))
-                   && s.IndexOf('"') < 0
-                   && s.IndexOf('\'') >= 0;
+
+            // manual trim-start (no allocation)
+            int i = 0;
+            while (i < s.Length)
+            {
+                char c = s[i];
+                if (c == ' ' || c == '\t' || c == '\r' || c == '\n') { i++; continue; }
+                break;
+            }
+            if (i >= s.Length) return false;
+
+            char first = s[i];
+            if (first != '{' && first != '[') return false;
+
+            // heuristic: has at least one ' and no "
+            return s.IndexOf('"', i) < 0 && s.IndexOf('\'', i) >= 0;
+        }
+
+        private static bool LooksLikeSingleQuotedJsonUtf8(ReadOnlySpan<byte> s)
+        {
+            int i = 0;
+            while (i < s.Length)
+            {
+                byte b = s[i];
+                if (b == (byte)' ' || b == (byte)'\t' || b == (byte)'\r' || b == (byte)'\n') { i++; continue; }
+                break;
+            }
+            if (i >= s.Length) return false;
+
+            byte first = s[i];
+            if (first != (byte)'{' && first != (byte)'[') return false;
+
+            bool hasDouble = false, hasSingle = false;
+            for (int j = i; j < s.Length; j++)
+            {
+                byte b = s[j];
+                if (b == (byte)'"') { hasDouble = true; break; }
+                if (b == (byte)'\'') { hasSingle = true; }
+            }
+            return !hasDouble && hasSingle;
         }
 
         // Converts '…' to "…" and preserves apostrophes inside strings (\' -> ')
