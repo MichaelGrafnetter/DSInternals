@@ -207,7 +207,7 @@ namespace DSInternals.DataStore
                 // Load the prefix table from the Schema NC
                 byte[] binaryPrefixMap = cursor.RetrieveColumnAsByteArray(prefixMapColumn);
 
-                if (binaryPrefixMap != null || binaryPrefixMap.Length > 0)
+                if (binaryPrefixMap != null && binaryPrefixMap.Length > 0)
                 {
                     // Clean older ADs might not contain any prefix table
                     schema.PrefixTable.LoadFromBlob(binaryPrefixMap);
