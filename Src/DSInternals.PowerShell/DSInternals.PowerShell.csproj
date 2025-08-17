@@ -40,6 +40,12 @@
     <!-- Pack the script template as an embedded resource -->
     <None Remove="ADDBRestoreFromMediaScriptTemplate.ps1" />
     <Resource Include="ADDBRestoreFromMediaScriptTemplate.ps1" />
+    <!-- Distribute basic integrity checks with the module -->
+    <None Remove="Integrity.Tests.ps1" />
+    <Content Include="Integrity.Tests.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>../Integrity.Tests.ps1</TargetPath>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
