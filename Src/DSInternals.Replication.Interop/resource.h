@@ -12,3 +12,6 @@
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
+
+// Include the assembly version information header file
+#include "version.h"

@@ -7,14 +7,11 @@
 # Misc
 ###############################################################################
 *.psd1 text
-*.rc text eol=crlf
+*.rc text eol=crlf encoding=utf-16le
 *.zip filter=lfs diff=lfs merge=lfs -text
 
 ###############################################################################
 # Fix GitHub repo statistics
 ###############################################################################
 *.h linguist-language=C++
-Src/Microsoft.Database.Isam/* linguist-vendored
-Src/Microsoft.Isam.Esent.Interop/* linguist-vendored
-Scripts/Modules/* linguist-vendored
 drsr.* linguist-vendored
