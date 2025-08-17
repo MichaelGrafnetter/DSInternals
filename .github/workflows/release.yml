@@ -141,6 +141,7 @@ jobs:
         "DSInternals.PowerShell/Release/DSInternals/*/DSInternals.PowerShell.dll"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.Bootstrap.psm1"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.psd1"
+        "DSInternals.PowerShell/Release/DSInternals/Integrity.Tests.ps1"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.types.ps1xml"
         "DSInternals.PowerShell/Release/DSInternals/Views/*.ps1xml"
         --base-directory "${{ github.workspace }}/Build/bin"

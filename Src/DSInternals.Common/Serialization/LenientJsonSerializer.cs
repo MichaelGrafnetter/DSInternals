@@ -6,10 +6,11 @@ using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.Serialization
 {
-    internal static class DsiJson
+    // TODO: This class needs refactoring and cleanup.
+    public static class LenientJsonSerializer
     {
         // One place to set behavior for all JSON in DSInternals
-        internal static readonly JsonSerializerOptions Options = new JsonSerializerOptions
+        public static readonly JsonSerializerOptions Options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             AllowTrailingCommas = true,
@@ -20,13 +21,13 @@ namespace DSInternals.Common.Serialization
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
 
-        static DsiJson()
+        static LenientJsonSerializer()
         {
             Options.Converters.Add(new JsonStringEnumConverter());
         }
 
         // ---------- String input ----------
-        internal static T DeserializeLenient<T>(string json)
+        public static T DeserializeLenient<T>(string json)
         {
             if (string.IsNullOrWhiteSpace(json)) return default;
 
@@ -50,13 +51,13 @@ namespace DSInternals.Common.Serialization
         }
 
         // ---------- Binary input ----------
-        internal static T DeserializeLenient<T>(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
+        public static T DeserializeLenient<T>(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {
             var json = DecodeJson(binaryJson, utf16);
             return DeserializeLenient<T>(json);
         }
 
-        internal static string DecodeJson(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
+        public static string DecodeJson(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {
             // Trim terminators/padding on BYTES BEFORE decoding.
             var trimmed = TrimZeroTerminator(binaryJson, utf16);
@@ -82,7 +83,7 @@ namespace DSInternals.Common.Serialization
             return json;
         }
 
-        private static ReadOnlySpan<byte> TrimZeroTerminator(ReadOnlySpan<byte> input, bool utf16)
+        public static ReadOnlySpan<byte> TrimZeroTerminator(ReadOnlySpan<byte> input, bool utf16)
         {
             if (input.Length == 0) return input;
 
@@ -107,7 +108,7 @@ namespace DSInternals.Common.Serialization
             }
         }
 
-        private static bool LooksLikeSingleQuotedJson(string s)
+        public static bool LooksLikeSingleQuotedJson(string s)
         {
             if (string.IsNullOrEmpty(s)) return false;
             var t = s.TrimStart();
@@ -117,7 +118,7 @@ namespace DSInternals.Common.Serialization
         }
 
         // Converts '…' to "…" and preserves apostrophes inside strings (\' -> ')
-        private static string NormalizeSingleQuotedJson(string input)
+        public static string NormalizeSingleQuotedJson(string input)
         {
             var sb = new StringBuilder(input.Length);
             bool inString = false;

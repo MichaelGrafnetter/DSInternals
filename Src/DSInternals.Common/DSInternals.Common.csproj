@@ -10,7 +10,6 @@
 - Added support for AD trusts.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security Entra AD AAD Identity Active Directory</PackageTags>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -28,14 +27,7 @@
     <PackageReference Include="System.Formats.Asn1" Version="9.0.8" Condition="'$(TargetFramework)' == 'net48'" />
     <PackageReference Include="System.Memory" Version="4.5.5" Condition="'$(TargetFramework)' == 'net48'" />
     <PackageReference Include="System.ValueTuple" Version="4.6.1" Condition="'$(TargetFramework)' == 'net48'" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <InternalsVisibleTo Include="DSInternals.Common.Test" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <PackageReference Include="System.Text.Json" Version="9.0.8" />
+    <PackageReference Include="System.Text.Json" Version="9.0.8" Condition="'$(TargetFramework)' == 'net48'" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,5 +40,9 @@
   <Import Project="Cryptography\Asn1\AsnXml.targets" />
   <ItemGroup>
     <AsnXml Include="**\*.asn1.xml" />
+    <!-- Mark the generated C# files as dependent on the corresponding XML files -->
+    <Compile Update="**\*.asn1.xml.generated.cs">
+      <DependentUpon>$([System.IO.Path]::GetFileName('%(Identity)').Replace('.asn1.xml.generated.cs', '.asn1.xml'))</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

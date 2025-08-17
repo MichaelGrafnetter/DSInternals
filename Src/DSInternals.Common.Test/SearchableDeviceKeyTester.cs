@@ -39,8 +39,8 @@ namespace DSInternals.Common.Test
 
             // Serialize the object again and compare with the original
             string normalized = JsonSerializer.Serialize(
-                DsiJson.DeserializeLenient<JsonElement>(jsonData),
-                DsiJson.Options);
+                LenientJsonSerializer.DeserializeLenient<JsonElement>(jsonData),
+                LenientJsonSerializer.Options);
             Assert.AreEqual(normalized, keyCredential.ToJson());
         }
 
@@ -95,8 +95,8 @@ namespace DSInternals.Common.Test
 
             // Serialize the object again and compare with the original
             string normalized = JsonSerializer.Serialize(
-                DsiJson.DeserializeLenient<JsonElement>(jsonData),
-                DsiJson.Options);
+                LenientJsonSerializer.DeserializeLenient<JsonElement>(jsonData),
+                LenientJsonSerializer.Options);
             Assert.AreEqual(normalized, keyCredential.ToJson());
         }
 
@@ -126,8 +126,8 @@ namespace DSInternals.Common.Test
 
             // Serialize the object again and compare with the original
             string normalized = JsonSerializer.Serialize(
-                DsiJson.DeserializeLenient<JsonElement>(jsonData),
-                DsiJson.Options);
+                LenientJsonSerializer.DeserializeLenient<JsonElement>(jsonData),
+                LenientJsonSerializer.Options);
             Assert.AreEqual(normalized, parsedKey.ToJson());
 
             // Re-generate the identifier and check that it matches the value in AAD.

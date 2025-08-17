@@ -137,7 +137,7 @@ namespace DSInternals.Common.AzureAD
             // TODO: Switch to HttpMethod.Patch after migrating to .NET Standard 2.1 / .NET 5
             using (var request = new HttpRequestMessage(new HttpMethod("PATCH"), url.ToString()))
             {
-                request.Content = new StringContent(JsonSerializer.Serialize(properties, DsiJson.Options), Encoding.UTF8, JsonContentType);
+                request.Content = new StringContent(JsonSerializer.Serialize(properties, LenientJsonSerializer.Options), Encoding.UTF8, JsonContentType);
                 await SendODataRequest<object>(request).ConfigureAwait(false);
             }
         }
@@ -160,11 +160,11 @@ namespace DSInternals.Common.AzureAD
                         {
                             if (response.StatusCode == HttpStatusCode.OK)
                             {
-                                return await JsonSerializer.DeserializeAsync<T>(responseStream, DsiJson.Options).ConfigureAwait(false);
+                                return await JsonSerializer.DeserializeAsync<T>(responseStream, LenientJsonSerializer.Options).ConfigureAwait(false);
                             }
                             else
                             {
-                                var error = await JsonSerializer.DeserializeAsync<OdataErrorResponse>(responseStream, DsiJson.Options).ConfigureAwait(false);
+                                var error = await JsonSerializer.DeserializeAsync<OdataErrorResponse>(responseStream, LenientJsonSerializer.Options).ConfigureAwait(false);
                                 throw error.GetException();
                             }
                         }

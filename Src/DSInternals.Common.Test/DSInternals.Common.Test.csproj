@@ -1,7 +1,6 @@
 ﻿<Project Sdk="MSTest.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj" />

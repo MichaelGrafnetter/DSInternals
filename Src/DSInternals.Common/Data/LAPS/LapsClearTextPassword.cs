@@ -49,12 +49,12 @@ namespace DSInternals.Common.Data
         public static LapsClearTextPassword Parse(string json)
         {
             Validator.AssertNotNull(json, nameof(json));
-            return DsiJson.DeserializeLenient<LapsClearTextPassword>(json);
+            return LenientJsonSerializer.DeserializeLenient<LapsClearTextPassword>(json);
         }
 
         public static LapsClearTextPassword Parse(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {
-            return DsiJson.DeserializeLenient<LapsClearTextPassword>(binaryJson, utf16);
+            return LenientJsonSerializer.DeserializeLenient<LapsClearTextPassword>(binaryJson, utf16);
         }
     }
 }

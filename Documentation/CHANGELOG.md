@@ -7,6 +7,14 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Added
+
+- The PowerShell module now comes with a script called `Integrity.Tests.ps1`, which can be used to verify the integrity of the module contents.
+
+### Changed
+
+- Migrated from `Newtonsoft.Json` to `System.Text.Json` (Thx @PrzemyslawKlys).
+
 ### Fixed
 
 - Fixed a bug in prefix table parsing from `ntds.dit` files.

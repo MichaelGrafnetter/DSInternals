@@ -17,6 +17,10 @@
     <ArtifactsPath>$(MSBuildThisFileDirectory)../Build</ArtifactsPath>
     <VSTestResultsDirectory>$(MSBuildThisFileDirectory)../Build/TestResults</VSTestResultsDirectory>
 
+    <!-- Do not copy dependencies to the output directory. -->
+    <!-- Note: This is already disabled in .NET by default, but not in .NET Framework. -->
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+
     <!-- Only selected projects will generate a NuGet package -->
     <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
@@ -75,5 +79,14 @@
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <!-- Enable deterministic builds -->
     <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <!-- Configure C# test projects -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Test')) AND '$(MSBuildProjectExtension)' == '.csproj'">
+    <!-- For .NET Framework, copy all dependencies to the output directory. -->
+    <CopyLocalLockFileAssemblies Condition="'$(TargetFramework)'=='net48'">true</CopyLocalLockFileAssemblies>
+
+    <!-- For .NET 8, generate runtimeconfig.dev.json with dependencies instead. -->
+    <GenerateRuntimeConfigDevFile Condition="'$(TargetFramework)' == 'net8.0-windows'">true</GenerateRuntimeConfigDevFile>
   </PropertyGroup>
 </Project>
