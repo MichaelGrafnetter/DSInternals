@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed a bug in prefix table parsing from `ntds.dit` files.
 - Re-enabled native ARM64 support in the PowerShell module.
+- Ported RSA public key operations from .NET Framework to .NET 6+.
 
 ## [6.0.1] - 2025-08-14
 

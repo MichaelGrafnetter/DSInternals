@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
@@ -119,13 +120,31 @@ namespace DSInternals.Common
         {
             Validator.AssertNotNull(certificate, nameof(certificate));
 
+#if NETFRAMEWORK
             using (var rsa = (RSACng)certificate.GetRSAPublicKey())
             {
-                using(var key = rsa.Key)
+                using (var key = rsa.Key)
                 {
                     return key.Export(BCryptRSAPublicKeyFormat);
                 }
             }
+#else
+            // In .NET, the public key must be converted from RSABcrypt to RSACng before exporting.
+            using (var bcryptKey = certificate.GetRSAPublicKey())
+            {
+                var publicKeyParameters = bcryptKey.ExportParameters(false);
+
+                using (var rsa = new RSACng())
+                {
+                    rsa.ImportParameters(publicKeyParameters);
+
+                    using (var key = rsa.Key)
+                    {
+                        return key.Export(BCryptRSAPublicKeyFormat);
+                    }
+                }
+            }
+#endif
         }
 
         /// <summary>
@@ -163,10 +182,20 @@ namespace DSInternals.Common
 
             var asn1Key = new AsnEncodedData(blob);
             var publicKey = new PublicKey(RsaOid, Asn1Null, asn1Key);
-            using (var rsaKey = (RSACryptoServiceProvider)publicKey.Key)
+
+#if NETFRAMEWORK
+            // In .NET, publicKey.Key would be of type System.Security.Cryptography.RSABCrypt instead of System.Security.Cryptography.RSACryptoServiceProvider
+            using (var rsaKey = (RSA)publicKey.Key)
             {
                 return rsaKey.ExportParameters(false);
             }
+#else
+            // .NET 6+ has a built-in method to get the RSAParameters from PublicKey
+            using (var rsa = publicKey.GetRSAPublicKey())
+            {
+                return rsa.ExportParameters(false);
+            }
+#endif
         }
 
         /// <summary>
