@@ -1,46 +1,33 @@
-Describe "ConvertTo-LMHash" {
-	Context "When the input is a unicode string" {
-        $testInput = ConvertTo-SecureString 'ûluùouËk˝ k˘Ú' -AsPlainText -Force 
-        $expected = "AAD3B435B51404EEAAD3B435B51404EE"
-        $actual = ConvertTo-LMHash $testInput
-			 
-        It "should return the correct hash" {
-            $actual | Should Be $expected
-        }
-    }
-	Context "When the input is an ASCII string" {
-        $testInput = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force 
-        $expected = "727E3576618FA1754A3B108F3FA6CB6D"
-        $actual = ConvertTo-LMHash $testInput
-			 
-        It "should return the correct hash" {
-            $actual | Should Be $expected
-        }
-    }
-	Context "When the input comes from the pipeline" {
-        $testInput1 = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force
-		$testInput2 = ConvertTo-SecureString 'test' -AsPlainText -Force
-        $expected = "727E3576618FA1754A3B108F3FA6CB6D","01FC5A6BE7BC6929AAD3B435B51404EE" 
-        $actual = $testInput1,$testInput2 | ConvertTo-LMHash
-			 
-        It "should return multiple hashes" {
-            $actual | Should Be $expected
-        }
-    }
-	Context "When the input is an empty string" {
-        $testInput = New-Object SecureString
-        $expected = "AAD3B435B51404EEAAD3B435B51404EE"
-        $actual = ConvertTo-LMHash $testInput
-			 
-        It "should return the correct hash" {
-            $actual | Should Be $expected
-        }
-    }
-	Context "When the input is a long string" {
-        $testInput = ConvertTo-SecureString 'EHB3xUAY2NZIp9wI7khNWGWyOiuhyK' -AsPlainText -Force
+<#
+.SYNOPSIS
+    This script contains Pester tests for the ConvertTo-LMHash cmdlet in the DSInternals PowerShell module.
+#>
+#Requires -Version 5.1
+#Requires -Modules DSInternals,@{ ModuleName = 'Pester'; ModuleVersion = '5.0' }
 
-        It "should throw an exception" {
-            { ConvertTo-LMHash $testInput } | Should Throw
-        }
+Describe 'ConvertTo-LMHash' {
+    It 'should return the correct hash when the input is a unicode string' {
+        [securestring] $testInput = ConvertTo-SecureString '≈ælu≈•ouƒçk√Ω k≈Ø≈à' -AsPlainText -Force
+        ConvertTo-LMHash -Password $testInput | Should -Be 'AAD3B435B51404EEAAD3B435B51404EE'
+    }
+
+    It 'should return the correct hash when the input is an ASCII string' {
+        [securestring] $testInput = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force
+        ConvertTo-LMHash $testInput | Should -Be '727E3576618FA1754A3B108F3FA6CB6D'
+    }
+
+    It 'should return multiple hashes when the input comes from the pipeline' {
+        [securestring] $testInput1 = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force
+        [securestring] $testInput2 = ConvertTo-SecureString 'test' -AsPlainText -Force
+        $testInput1,$testInput2 | ConvertTo-LMHash | Should -Be '727E3576618FA1754A3B108F3FA6CB6D','01FC5A6BE7BC6929AAD3B435B51404EE'
+    }
+
+    It 'should return the correct hash when the input is an empty string' {
+        ConvertTo-LMHash -Password (New-Object SecureString) | Should -Be 'AAD3B435B51404EEAAD3B435B51404EE'
+    }
+    
+    It 'should throw an exception when the input is a long string' {
+        [securestring] $testInput = ConvertTo-SecureString 'EHB3xUAY2NZIp9wI7khNWGWyOiuhyK' -AsPlainText -Force
+        { ConvertTo-LMHash $testInput } | Should -Throw
     }
 }

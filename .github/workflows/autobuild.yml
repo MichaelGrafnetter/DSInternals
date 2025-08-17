@@ -74,11 +74,16 @@ jobs:
       run: |
         dotnet test DSInternals.TestsOnly.slnf --configuration Debug --no-build -- --report-trx --results-directory "${{ github.workspace }}/TestResults"
 
+    - name: Upload Test Results as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: TestResults
+        path: TestResults/*.trx
+
     - name: Generate Unit Test Report
       uses: dorny/test-reporter@v2
       if: ${{ !cancelled() }}
       with:
-        artifact: TestResults
         name: MSTest
         reporter: dotnet-trx
         path: TestResults/*.trx
