@@ -2,13 +2,11 @@
   <!-- NuGet package metadata -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Version>6.0.1</Version>
-    <AssemblyVersion>6.0</AssemblyVersion>
-    <FileVersion>6.0</FileVersion>
+    <Version>6.1</Version>
     <AssemblyTitle>DSInternals Replication Library</AssemblyTitle>
     <Title>$(AssemblyTitle)</Title>
     <Description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</Description>
-    <PackageReleaseNotes>- The .NET IJW host is now included.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Updated dependencies.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security Replication RPC DRSR DCSync</PackageTags>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyPrivateProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>

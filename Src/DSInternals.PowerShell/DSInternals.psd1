@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '6.0.2'
+ModuleVersion = '6.1'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -186,7 +186,6 @@ FileList = @(
     'net48\x86\DSInternals.Replication.Interop.dll',
     'net48\Esent.Interop.dll',
     'net48\Esent.Isam.dll',
-    'net48\System.Text.Json.dll',
     'net48\CBOR.dll',
     'net48\Numbers.dll',
     'net48\URIUtility.dll',
@@ -195,6 +194,11 @@ FileList = @(
     'net48\System.Memory.dll',
     'net48\System.Numerics.Vectors.dll',
     'net48\System.Runtime.CompilerServices.Unsafe.dll',
+    'net48\System.Text.Json.dll',
+    'net48\System.Text.Encodings.Web.dll',
+    'net48\System.IO.Pipelines.dll',
+    'net48\System.Threading.Tasks.Extensions.dll',
+    'net48\Microsoft.Bcl.AsyncInterfaces.dll',
     'net8.0-windows\DSInternals.DataStore.dll',
     'net8.0-windows\DSInternals.Replication.dll',
     'net8.0-windows\DSInternals.Replication.Model.dll',
@@ -228,13 +232,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Implemented support for PowerShell Core 7 on Windows.
-- The new Get-ADDBTrust cmdlet can read inter-domain trust objects from ntds.dit files, decrypt the trust passwords, and derive the Kerberos trust keys.
-- Added the Get-ADReplKdsRootKey cmdlet to enable reading specific KDS Root Keys over the MS-DRSR protocol.
-- Implemented full support for ntds.dit files originating from RODCs.
-- Improved the performance of schema loading and account retrieval from ntds.dit files.
-- Version 6.0.1 fixes a bug with misplaced .NET IJW host files in the PowerShell module directory structure.
-- Version 6.0.2 re-adds native ARM64 support.
+- Fixed a bug in ntds.dit prefix table parsing.
+- Re-enabled native ARM64 support.
+- Fixed RSA public key operation issues in PowerShell Core.
+- Added the Integrity.Tests.ps1 script for checking module integrity.
 "@
     } # End of PSData hashtable
 

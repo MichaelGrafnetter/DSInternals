@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [6.1] - 2025-08-17
+
 ### Added
 
 - The PowerShell module now comes with a script called `Integrity.Tests.ps1`, which can be used to verify the integrity of the module contents.
@@ -651,8 +653,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0.2...HEAD
-[6.0.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0.1...v6.0.2
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.1...HEAD
+[6.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0.1...v6.1
 [6.0.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0...v6.0.1
 [6.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.4.1...v6.0
 [5.4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.3...v5.4.1

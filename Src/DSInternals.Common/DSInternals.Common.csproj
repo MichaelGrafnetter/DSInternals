@@ -2,12 +2,12 @@
   <!-- NuGet package metadata -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Version>6.0</Version>
+    <Version>6.1</Version>
     <AssemblyTitle>DSInternals Common Library</AssemblyTitle>
     <Title>$(AssemblyTitle)</Title>
     <Description>This package is shared between all other DSInternals packages. Its main features are Azure AD Graph API and ADSI clients for for retrieval of cryptographic material. It contains implementations of common hash functions used by Windows, including NT hash, LM hash and OrgId hash. It also contains methods for SysKey/BootKey retrieval.</Description>
-    <PackageReleaseNotes>- Migrated to .NET SDK.
-- Added support for AD trusts.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Migrated from Newtonsoft.Json to System.Text.Json.
+- Ported RSA public key operations from .NET Framework to .NET.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security Entra AD AAD Identity Active Directory</PackageTags>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
   </PropertyGroup>
