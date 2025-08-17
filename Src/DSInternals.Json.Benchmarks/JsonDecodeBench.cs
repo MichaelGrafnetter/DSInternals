@@ -33,13 +33,13 @@ namespace DSInternals.Json.Benchmarks
             return sb.ToString();
         }
 
-        [Benchmark] public object STJ_String_Small()  => JsonSerializer.Deserialize<JsonElement>(_utf8SmallString, DsiJson.Options);
+        [Benchmark] public object STJ_String_Small()  => DsiJson.DeserializeLenient<JsonElement>(_utf8SmallString)!;
         [Benchmark] public object STJ_Bytes_Small()   => DsiJson.DeserializeLenient<JsonElement>(_utf8Small, utf16: false)!;
 
-        [Benchmark] public object STJ_String_Medium() => JsonSerializer.Deserialize<JsonElement>(_utf8MediumString, DsiJson.Options);
+        [Benchmark] public object STJ_String_Medium() => DsiJson.DeserializeLenient<JsonElement>(_utf8MediumString)!;
         [Benchmark] public object STJ_Bytes_Medium()  => DsiJson.DeserializeLenient<JsonElement>(_utf8Medium, utf16: false)!;
 
-        [Benchmark] public object STJ_String_Large()  => JsonSerializer.Deserialize<JsonElement>(_utf8LargeString, DsiJson.Options);
+        [Benchmark] public object STJ_String_Large()  => DsiJson.DeserializeLenient<JsonElement>(_utf8LargeString)!;
         [Benchmark] public object STJ_Bytes_Large()   => DsiJson.DeserializeLenient<JsonElement>(_utf8Large, utf16: false)!;
     }
 }

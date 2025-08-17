@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>DSInternals.Json.Benchmarks.JsonDecodeBench-20250817-091732</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.15.2, Windows 11 (10.0.26100.4652/24H2/2024Update/HudsonValley)
+Unknown processor
+.NET SDK 9.0.304
+  [Host]     : .NET 8.0.19 (8.0.1925.36514), X64 RyuJIT AVX-512F+CD+BW+DQ+VL+VBMI
+  DefaultJob : .NET 8.0.19 (8.0.1925.36514), X64 RyuJIT AVX-512F+CD+BW+DQ+VL+VBMI
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method     </th><th>Mean</th><th>Error</th><th>StdDev</th><th>Gen0</th><th>Gen1</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>STJ_String_Small</td><td>283.3 ns</td><td>3.32 ns</td><td>3.10 ns</td><td>0.0448</td><td>-</td><td>752 B</td>
+</tr><tr><td>STJ_Bytes_Small</td><td>243.5 ns</td><td>2.57 ns</td><td>2.15 ns</td><td>0.0448</td><td>-</td><td>752 B</td>
+</tr><tr><td>STJ_String_Medium</td><td>503.9 ns</td><td>4.85 ns</td><td>4.05 ns</td><td>0.2584</td><td>0.0038</td><td>4336 B</td>
+</tr><tr><td>STJ_Bytes_Medium</td><td>410.1 ns</td><td>7.92 ns</td><td>8.13 ns</td><td>0.2589</td><td>0.0038</td><td>4336 B</td>
+</tr><tr><td>STJ_String_Large</td><td>3,994.9 ns</td><td>38.03 ns</td><td>35.57 ns</td><td>3.9215</td><td>0.7782</td><td>65776 B</td>
+</tr><tr><td>STJ_Bytes_Large</td><td>2,881.5 ns</td><td>9.88 ns</td><td>7.71 ns</td><td>3.9215</td><td>0.7820</td><td>65776 B</td>
+</tr></tbody></table>
+</body>
+</html>
