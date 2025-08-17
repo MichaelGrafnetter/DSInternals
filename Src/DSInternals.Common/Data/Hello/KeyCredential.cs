@@ -121,7 +121,7 @@
                 {
                     // The raw value has not yet been parsed
                     var fidoCredString = System.Text.Encoding.UTF8.GetString(this.RawKeyMaterial, 0, this.RawKeyMaterial.Length);
-                    this._cachedFidoKeyMaterial = JsonSerializer.Deserialize<KeyMaterialFido>(fidoCredString, DsiJson.Options);
+                    this._cachedFidoKeyMaterial = JsonSerializer.Deserialize<KeyMaterialFido>(fidoCredString, DsiJson.ReaderOptions);
                 }
 
                 // Returned the parsed object from cache or NULL if no FIDO key is present.
@@ -549,7 +549,7 @@
             return new DNWithBinary(this.Owner, this.ToByteArray()).ToString();
         }
 
-        public string ToJson() => JsonSerializer.Serialize(this, DsiJson.Options);
+        public string ToJson() => DSInternals.Common.Serialization.DsiJson.Serialize(this);
 
         public static KeyCredential ParseDNBinary(string dnWithBinary)
         {
