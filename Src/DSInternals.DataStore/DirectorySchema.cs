@@ -206,8 +206,13 @@ namespace DSInternals.DataStore
 
                 // Load the prefix table from the Schema NC
                 byte[] binaryPrefixMap = cursor.RetrieveColumnAsByteArray(prefixMapColumn);
-                schema.PrefixTable.LoadFromBlob(binaryPrefixMap);
 
+                if (binaryPrefixMap != null || binaryPrefixMap.Length > 0)
+                {
+                    // Clean older ADs might not contain any prefix table
+                    schema.PrefixTable.LoadFromBlob(binaryPrefixMap);
+                }
+                
                 // Load the list of attributes and classes.
                 // Corresponding LDAP filter: (lDAPDisplayName=*)
                 cursor.CurrentIndex = baseSchema.FindAttribute(AttributeType.LdapDisplayName).DerivedIndexName;

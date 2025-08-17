@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 
+- Fixed a bug in prefix table parsing from `ntds.dit` files.
 - Re-enabled native ARM64 support in the PowerShell module.
 
 ## [6.0.1] - 2025-08-14
@@ -641,7 +642,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0.1...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0.2...HEAD
+[6.0.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0.1...v6.0.2
 [6.0.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0...v6.0.1
 [6.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.4.1...v6.0
 [5.4.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v5.3...v5.4.1
