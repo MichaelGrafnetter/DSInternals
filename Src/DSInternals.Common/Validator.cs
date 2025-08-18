@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using System.DirectoryServices.ActiveDirectory;
-using System.IO;
+﻿using System.ComponentModel;
+using System.Net.Sockets;
 using System.Security;
 using DSInternals.Common.Cryptography;
 using DSInternals.Common.Exceptions;
@@ -20,7 +18,7 @@ namespace DSInternals.Common
 
         internal static void AssertSuccess(NTSTATUS status)
         {
-            if(status.SeverityCode == NTSTATUS.Severity.Success)
+            if (status.SeverityCode == NTSTATUS.Severity.Success)
             {
                 // No error has occured
                 return;
@@ -38,7 +36,7 @@ namespace DSInternals.Common
 
         public static void AssertSuccess(Win32ErrorCode code)
         {
-            switch(code)
+            switch (code)
             {
                 case Win32ErrorCode.Success:
                 case Win32ErrorCode.MORE_DATA:
@@ -49,7 +47,7 @@ namespace DSInternals.Common
             var genericException = new Win32Exception((int)code);
             Exception exceptionToThrow;
             // We will try to translate the generic Win32 exception to a more specific built-in exception.
-            switch(code)
+            switch (code)
             {
                 case Win32ErrorCode.DS_INVALID_DN_SYNTAX:
                 case Win32ErrorCode.INVALID_PARAMETER:
@@ -74,7 +72,7 @@ namespace DSInternals.Common
                 case Win32ErrorCode.NO_SUCH_DOMAIN:
                 case Win32ErrorCode.RPC_S_SERVER_UNAVAILABLE:
                 case Win32ErrorCode.RPC_S_CALL_FAILED:
-                    exceptionToThrow = new ActiveDirectoryServerDownException(genericException.Message, genericException);
+                    exceptionToThrow = new SocketException((int)code);
                     break;
                 case Win32ErrorCode.DS_OBJ_NOT_FOUND:
                 // This error code means either a non-existing DN or Access Denied.
@@ -92,9 +90,9 @@ namespace DSInternals.Common
 
         public static void AssertEquals(string expectedValue, string actualValue, string paramName)
         {
-            if(!String.Equals(expectedValue, actualValue, StringComparison.InvariantCulture))
+            if (!String.Equals(expectedValue, actualValue, StringComparison.InvariantCulture))
             {
-string message = String.Format("The input contains an unexpected value '{0}', while the expected value is '{1}'.", actualValue, expectedValue);
+                string message = String.Format("The input contains an unexpected value '{0}', while the expected value is '{1}'.", actualValue, expectedValue);
                 throw new ArgumentException(message, paramName);
             }
         }
@@ -119,7 +117,7 @@ string message = String.Format("The input contains an unexpected value '{0}', wh
 
         public static void AssertNotNull(object value, string paramName)
         {
-            if(value == null)
+            if (value == null)
             {
                 throw new ArgumentNullException(paramName);
             }
@@ -135,7 +133,7 @@ string message = String.Format("The input contains an unexpected value '{0}', wh
 
         public static void AssertNotNullOrWhiteSpace(string value, string paramName)
         {
-            if(string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
             {
                 throw new ArgumentNullException(paramName);
             }
@@ -144,7 +142,7 @@ string message = String.Format("The input contains an unexpected value '{0}', wh
         public static void AssertLength(string value, int length, string paramName)
         {
             AssertNotNull(value, paramName);
-            if(value.Length != length)
+            if (value.Length != length)
             {
                 throw new ArgumentOutOfRangeException(paramName, value.Length, "The length of the input is unexpected.");
             }
@@ -218,7 +216,7 @@ string message = String.Format("The input contains an unexpected value '{0}', wh
         public static void AssertFileExists(string filePath)
         {
             bool exists = File.Exists(filePath);
-            if(!exists)
+            if (!exists)
             {
                 throw new FileNotFoundException("Path not found.", filePath);
             }
@@ -236,7 +234,7 @@ string message = String.Format("The input contains an unexpected value '{0}', wh
         public static void AssertCrcMatches(byte[] buffer, uint expectedCrc)
         {
             uint actualCrc = Crc32.Calculate(buffer);
-            if(actualCrc != expectedCrc)
+            if (actualCrc != expectedCrc)
             {
                 throw new FormatException("CRC check failed.");
             }
