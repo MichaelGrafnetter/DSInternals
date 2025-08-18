@@ -33,7 +33,7 @@ Describe 'DSInternals PowerShell Module' {
             
             # Get the list of files bundled with the module.
             [hashtable[]] $bundledFiles =
-                Get-ChildItem -Path $modulePath -Recurse -File -Exclude *.pdb,*.psd1,msvcp*.dll,msvcr*.dll,vcruntime*.dll,Ijwhost.dll |
+                Get-ChildItem -Path $modulePath -Recurse -File -Exclude *.pdb,*.psd1,msvcp*.dll,msvcr*.dll,vcruntime*.dll,Ijwhost.dll,ucrtbased.dll,DSInternals.cat |
                 ForEach-Object { @{ FileName = $PSItem.Name } }
         }
 
@@ -103,13 +103,13 @@ Describe 'DSInternals PowerShell Module' {
         It 'contains Visual C++ Runtime (<Runtime>)' -TestCases @{ Runtime = 'net48\x86' },@{ Runtime = 'net48\amd64' },@{ Runtime = 'net48\arm64' },@{ Runtime = 'net8.0-windows\x86' },@{ Runtime = 'net8.0-windows\amd64' },@{ Runtime = 'net8.0-windows\arm64' } -Test {
             param([string] $Runtime)
 
-            # Regardless of the runtime version, we expect 3-4 additional DLLs to be present in the x86/amd64/arm64 directory
+            # Regardless of the runtime version, we expect 2-5 additional DLLs to be present in the x86/amd64/arm64 directory
             [string] $runtimeSpecificPath = Join-Path -Path $modulePath -ChildPath $Runtime
 
-            Get-ChildItem -Path $runtimeSpecificPath -Recurse -Include msvc*,vcruntime*,Ijw* -ErrorAction Stop |
+            Get-ChildItem -Path $runtimeSpecificPath -Recurse -Include msvc*,vcruntime*,Ijwhost.dll,ucrtbased.dll -ErrorAction Stop |
                 Measure-Object |
                 Select-Object -ExpandProperty Count |
-                Should -BeIn @(3,4,5)
+                Should -BeIn @(2, 3, 4, 5)
         }
 
         It 'does not contain unit tests' {
