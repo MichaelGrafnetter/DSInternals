@@ -206,12 +206,6 @@
         "resolved": "5.1.1",
         "contentHash": "e31xJjG+Kjbv6YF3Yq6D4Dl3or8v7LrNF41k3CXrWozW6hR1zcOe5KYuZJaGSiAgLnwP8wcW+I3+IWEzMPZKXQ=="
       },
-      "System.DirectoryServices": {
-        "type": "Direct",
-        "requested": "[9.0.8, )",
-        "resolved": "9.0.8",
-        "contentHash": "xN2JrOfhcOyswOflVZG27XlFJDPPqU7AQtAAStWcnKoC8W9XCLOLdAYIrrwiZMfeRhavVErI8HkSO/c2TQ+z2g=="
-      },
       "DSInternals.ManagedEsent.Interop": {
         "type": "Transitive",
         "resolved": "2.0.4.1",
@@ -253,6 +247,11 @@
         "type": "Transitive",
         "resolved": "1.0.0",
         "contentHash": "fpRTBsYACMp7NvTECauYRomubWTC3vUNw4hMXdIedP8ctBGK6tea9HOJwE+qVzis6MZYkL3LIs8qeY3rc6Jdlw=="
+      },
+      "System.DirectoryServices": {
+        "type": "Transitive",
+        "resolved": "9.0.8",
+        "contentHash": "xN2JrOfhcOyswOflVZG27XlFJDPPqU7AQtAAStWcnKoC8W9XCLOLdAYIrrwiZMfeRhavVErI8HkSO/c2TQ+z2g=="
       },
       "dsinternals.common": {
         "type": "Project",

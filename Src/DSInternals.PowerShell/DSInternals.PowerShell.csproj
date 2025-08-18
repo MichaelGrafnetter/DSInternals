@@ -57,12 +57,6 @@
     <ProjectReference Include="..\DSInternals.Replication.Model\DSInternals.Replication.Model.csproj" />
     <ProjectReference Include="..\DSInternals.Replication\DSInternals.Replication.csproj" />
     <ProjectReference Include="..\DSInternals.SAM\DSInternals.SAM.csproj" />
-
-    <!-- The following dependency from DSInternals.Common is already bundled with PowerShell Core -->
-    <PackageReference Include="System.DirectoryServices" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
-
-    <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Desktop on Windows Server 2025, but are absent on Windows Server 2008 R2: -->
-    <!-- System.Memory, System.Numerics.Vectors, System.Buffers, System.Runtime.CompilerServices.Unsafe -->
   </ItemGroup>
   <Target Name="RemoveRootInteropDll" AfterTargets="Build">
     <!-- TODO: Find a more elegant way of not including these 3 files. -->

@@ -212,7 +212,9 @@ FileList = @(
     'net8.0-windows\Esent.Isam.dll',
     'net8.0-windows\CBOR.dll',
     'net8.0-windows\Numbers.dll',
-    'net8.0-windows\URIUtility.dll'
+    'net8.0-windows\URIUtility.dll',
+    'net8.0-windows\System.DirectoryServices.dll',
+    'net8.0-windows\runtimes\win\lib\net8.0\System.DirectoryServices.dll'
 )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
