@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    This script contains Pester tests for the ConvertTo-OrgIdHash cmdlet in the DSInternals PowerShell module.
+    This script contains Pester tests for the ConvertTo-OrgIdHash cmdlet from the DSInternals PowerShell module.
 #>
 #Requires -Version 5.1
 #Requires -Modules DSInternals,@{ ModuleName = 'Pester'; ModuleVersion = '5.0' }

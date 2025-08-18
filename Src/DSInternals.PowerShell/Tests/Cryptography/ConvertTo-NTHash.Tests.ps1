@@ -1,6 +1,6 @@
-<#
+﻿<#
 .SYNOPSIS
-    This script contains Pester tests for the ConvertTo-NTHash cmdlet in the DSInternals PowerShell module.
+    This script contains Pester tests for the ConvertTo-NTHash cmdlet from the DSInternals PowerShell module.
 #>
 #Requires -Version 5.1
 #Requires -Modules DSInternals,@{ ModuleName = 'Pester'; ModuleVersion = '5.0' }
@@ -25,7 +25,7 @@ Describe 'ConvertTo-NTHash' {
     It 'should return the correct hash when the input is an empty string' {
         ConvertTo-NTHash -Password (New-Object SecureString) | Should -Be '31D6CFE0D16AE931B73C59D7E0C089C0'
     }
-    
+
     It 'should throw an exception when the input is a long string' {
         [securestring] $testInput = ConvertTo-SecureString '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789' -AsPlainText -Force
         { ConvertTo-NTHash $testInput } | Should -Throw

@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>6.0</version>
+    <version>6.1</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -37,11 +37,10 @@ The DSInternals PowerShell Module has these main features:
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* Implemented support for PowerShell Core 7 on Windows.
-* The new Get-ADDBTrust cmdlet can read inter-domain trust objects from ntds.dit files, decrypt the trust passwords, and derive the Kerberos trust keys.
-* Added the Get-ADReplKdsRootKey cmdlet to enable reading specific KDS Root Keys over the MS-DRSR protocol.
-* Implemented full support for ntds.dit files originating from RODCs.
-* Improved the performance of schema loading and account retrieval from ntds.dit files.
+* Fixed a bug in `ntds.dit` prefix table parsing.
+* Re-enabled native ARM64 support.
+* Fixed RSA public key operation issues in PowerShell Core.
+* Added the `Integrity.Tests.ps1` script for checking module integrity.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->

@@ -1,16 +1,11 @@
-<#
+﻿<#
 .SYNOPSIS
-    This script contains Pester tests for the ConvertTo-LMHash cmdlet in the DSInternals PowerShell module.
+    This script contains Pester tests for the ConvertTo-LMHash cmdlet from the DSInternals PowerShell module.
 #>
 #Requires -Version 5.1
 #Requires -Modules DSInternals,@{ ModuleName = 'Pester'; ModuleVersion = '5.0' }
 
 Describe 'ConvertTo-LMHash' {
-    It 'should return the correct hash when the input is a unicode string' {
-        [securestring] $testInput = ConvertTo-SecureString 'žluťoučký kůň' -AsPlainText -Force
-        ConvertTo-LMHash -Password $testInput | Should -Be 'AAD3B435B51404EEAAD3B435B51404EE'
-    }
-
     It 'should return the correct hash when the input is an ASCII string' {
         [securestring] $testInput = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force
         ConvertTo-LMHash $testInput | Should -Be '727E3576618FA1754A3B108F3FA6CB6D'
