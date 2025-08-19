@@ -74,12 +74,12 @@ jobs:
       run: |
         dotnet test DSInternals.TestsOnly.slnf --configuration Debug --no-build -- --report-trx --results-directory "${{ github.workspace }}/TestResults"
 
-    - name: Run Pester Tests - Desktop
+    - name: Run PowerShell Desktop Tests
       working-directory: Scripts
       shell: powershell
       run: ./Invoke-SmokeTests.ps1 -Configuration 'Debug'
-    
-    - name: Run Pester Tests - Core
+
+    - name: Run PowerShell Core Tests
       working-directory: Scripts
       shell: pwsh
       run: ./Invoke-SmokeTests.ps1 -Configuration 'Debug'
