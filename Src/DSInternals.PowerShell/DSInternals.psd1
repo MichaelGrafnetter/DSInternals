@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '6.1'
+ModuleVersion = '6.1.1'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -234,10 +234,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed a bug in ntds.dit prefix table parsing.
-- Re-enabled native ARM64 support.
-- Fixed RSA public key operation issues in PowerShell Core.
-- Added the Integrity.Tests.ps1 script for checking module integrity.
+- Resolved issues with parsing LAPS passwords and key credentials.
 "@
     } # End of PSData hashtable
 
