@@ -15,7 +15,6 @@
     <!-- Redirect output directories -->
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <ArtifactsPath>$(MSBuildThisFileDirectory)../Build</ArtifactsPath>
-    <VSTestResultsDirectory>$(MSBuildThisFileDirectory)../Build/TestResults</VSTestResultsDirectory>
 
     <!-- Do not copy dependencies to the output directory. -->
     <!-- Note: This is already disabled in .NET by default, but not in .NET Framework. -->

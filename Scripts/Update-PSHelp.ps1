@@ -6,7 +6,8 @@ Refreshes MD documentation files and builds MAML files.
 Przemysław Kłys (@PrzemyslawKlys)
 #>
 
-#Requires -Version 5 -Module platyPS
+#Requires -Version 5.1
+#Requires -Modules platyPS
 
 # Set directory paths
 [string] $rootDir = Split-Path $PSScriptRoot -Parent

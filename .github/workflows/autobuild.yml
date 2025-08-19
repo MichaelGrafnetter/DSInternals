@@ -2,6 +2,8 @@ name: CI Build
 
 permissions:
   contents: read
+  actions: read
+  checks: write
 
 on:
   push:
@@ -66,6 +68,38 @@ jobs:
       working-directory: Src
       run: |
         msbuild.exe DSInternals.Replication -target:Pack -property:Configuration=Debug -property:Platform=x64 -property:RestorePackages=false -property:NoBuild=true -property:BuildProjectReferences=false
+
+    - name: Run Unit Tests
+      working-directory: Src
+      run: |
+        dotnet test DSInternals.TestsOnly.slnf --configuration Debug --no-build -- --report-trx --results-directory "${{ github.workspace }}/TestResults"
+
+    - name: Run PowerShell Desktop Tests
+      working-directory: Scripts
+      shell: powershell
+      run: ./Invoke-SmokeTests.ps1 -Configuration 'Debug'
+
+    - name: Run PowerShell Core Tests
+      working-directory: Scripts
+      shell: pwsh
+      run: ./Invoke-SmokeTests.ps1 -Configuration 'Debug'
+
+    - name: Upload Test Results as Artifact
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: TestResults
+        path: TestResults/*
+
+    - name: Generate Unit Test Report
+      uses: dorny/test-reporter@v2
+      if: ${{ !cancelled() }}
+      with:
+        name: MSTest
+        reporter: dotnet-trx
+        path: TestResults/*.trx
+        use-actions-summary: true
+        badge-title: Unit Tests
 
     - name: Get PowerShell Module Version
       shell: pwsh

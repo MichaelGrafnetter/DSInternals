@@ -18,9 +18,10 @@
        The msvcr140.dll / msvcr140d.dll files have been replaced by vcruntime140.dll / vcruntime140d.dll since Visual Studio 2017.
        The vcruntime140_1.dll / vcruntime140_1d.dll file is also required when not statically linked.
        Moreover, $(PlatformToolsetVersion) equals to 150 instead of 140 and thus does not match the names of the runtime files.
+       For Debug builds, the ucrtbased.dll file is also required.
        -->
       <CppRuntimeBinaries Include="$(OutDir)msvc????.dll;$(OutDir)vcruntime???.dll;$(OutDir)vcruntime???_?.dll" Condition="'$(Configuration)' == 'Release'" />
-      <CppRuntimeBinaries Include="$(OutDir)msvc????d.dll;$(OutDir)vcruntime???d.dll;$(OutDir)vcruntime???_?d.dll" Condition="'$(Configuration)' == 'Debug'" />
+      <CppRuntimeBinaries Include="$(OutDir)msvc????d.dll;$(OutDir)vcruntime???d.dll;$(OutDir)vcruntime???_?d.dll;$(OutDir)ucrtbased.dll" Condition="'$(Configuration)' == 'Debug'" />
     </ItemGroup>
     <!-- Copy the C and C++ runtime files to the PowerShell module. -->
     <Copy SourceFiles="@(CppRuntimeBinaries)" DestinationFolder="$(PowerShellModulePath)" />

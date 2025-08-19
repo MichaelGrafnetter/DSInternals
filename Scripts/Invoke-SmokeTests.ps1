@@ -1,37 +1,47 @@
 <#
 .SYNOPSIS
-The purpose of this script is to check the Release build for any obvious flaws without running all unit tests.
+The purpose of this script is to check the PowerShell module for any obvious flaws.
 #>
 
-#Requires -Version 5
+#Requires -Version 5.1
 #Requires -Modules @{ ModuleName = 'Pester'; ModuleVersion = '5.0.0' }
 
+param(
+    [Parameter(Mandatory = $false)]
+    [ValidateSet('Release', 'Debug')]
+    [string] $Configuration = 'Release'
+)
+
 [string] $root = Split-Path -Path $PSScriptRoot -Parent
-[string] $dsInternalsModulePath = Join-Path -Path $root -ChildPath 'Build\bin\DSInternals.PowerShell\Release\DSInternals'
+[string] $dsInternalsModulePath = Join-Path -Path $root -ChildPath "Build\bin\DSInternals.PowerShell\$Configuration\DSInternals"
 
 [string] $testsPath = Join-Path -Path $root -ChildPath 'Src\DSInternals.PowerShell\Tests\'
 [string] $resultsPath = Join-Path -Path $root -ChildPath 'TestResults'
-[string] $docPath = Join-Path -Path $root -ChildPath 'Documentation'
-[string] $nuspecPath = Join-Path -Path $root -ChildPath 'Src\DSInternals.PowerShell\Chocolatey\*.nuspec' -Resolve
 
 # Create output dir if it does not exist
 New-Item -Path $resultsPath -ItemType Directory -Force | Out-Null
 
-Import-Module -Name Pester
+# Re-import the compiled DSInternals module
+Remove-Module -Name DSInternals -ErrorAction SilentlyContinue
+Import-Module -Name $dsInternalsModulePath -Force -ErrorAction Stop
+
+# Import the Pester module to make the PesterConfiguration type available.
+Import-Module -Name Pester -ErrorAction Stop
+
+# Example: Pester-Smoke-Release-Desktop.xml
+[string] $resultsFileName = 'Pester-Smoke-{0}-{1}.xml' -f $Configuration,$PSVersionTable.PSEdition
+[string] $resultsFilePath = Join-Path -Path $resultsPath -ChildPath $resultsFileName
 
 # Prepare test options
-[Pester.ContainerInfo] $testParams = New-PesterContainer -Path "$testsPath\*.Smoke.Tests.ps1" -Data @{
-    ModulePath = $dsInternalsModulePath;
-    MarkdownDocumentationPath = $docPath;
-    ChocolateySpecPath = $nuspecPath
-}
-
 [PesterConfiguration] $testConfig = New-PesterConfiguration
-$testConfig.Run.Container = $testParams
+$testConfig.Run.Path = $testsPath
+$testConfig.Run.Container = New-PesterContainer -Path $testsPath -Data @{
+    Configuration = $Configuration
+}
 $testConfig.Output.Verbosity = 'Detailed'
 $testConfig.TestResult.Enabled = $true
 $testConfig.TestResult.OutputFormat = 'NUnitXml'
-$testConfig.TestResult.OutputPath = "$resultsPath\SmokeTests.xml"
+$testConfig.TestResult.OutputPath = $resultsFilePath
 $testConfig.Run.Exit = $true
 $testConfig.Run.PassThru = $false
 

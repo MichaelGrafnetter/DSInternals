@@ -103,7 +103,7 @@ Describe 'DSInternals PowerShell Module Integrity' {
             catch [System.BadImageFormatException] {
                 # This DLL file is not a .NET assembly, so the test is not applicable.
                 # Such files include the Microsoft C++ runtime libraries.
-                Set-ItResult -Skipped -Because 'File is not a .NET assembly.'
+                Set-ItResult -Skipped -Because 'this file is not a .NET assembly.'
             }
         }
 
@@ -118,7 +118,7 @@ Describe 'DSInternals PowerShell Module Integrity' {
             )
 
             if ($FileName -in $unsignedFiles) {
-                Set-ItResult -Skipped -Because 'File is not signed by its vendor.'
+                Set-ItResult -Skipped -Because 'this file is not signed by its vendor.'
                 return
             }
 

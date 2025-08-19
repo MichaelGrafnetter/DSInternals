@@ -234,8 +234,20 @@ jobs:
       with:
         name: NuGet_v${{ steps.get-module-info.outputs.version }}
         path: Build/package/release/*nupkg
-    
-    # TODO: Smoke Tests
+
+    - name: Run PowerShell Desktop Tests
+      working-directory: Scripts
+      shell: powershell
+      run: ./Invoke-SmokeTests.ps1 -Configuration 'Release'
+
+    - name: Run PowerShell Core Tests
+      working-directory: Scripts
+      shell: pwsh
+      run: ./Invoke-SmokeTests.ps1 -Configuration 'Release'
+
+    - name: Test Module Digital Signatures
+      shell: powershell
+      run: ./Build/bin/DSInternals.PowerShell/Release/DSInternals/Integrity.Tests.ps1
 
   nuget:
     name: 'Publish to NuGet Gallery'

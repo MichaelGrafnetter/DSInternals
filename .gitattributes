@@ -7,7 +7,7 @@
 # Misc
 ###############################################################################
 *.psd1 text
-*.rc text eol=crlf encoding=utf-16le
+*.rc text eol=crlf encoding=UTF-8
 *.zip filter=lfs diff=lfs merge=lfs -text
 
 ###############################################################################

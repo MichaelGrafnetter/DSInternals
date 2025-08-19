@@ -176,7 +176,8 @@ FileList = @(
     'DSInternals.types.ps1xml',
     'License.txt',
     'en-US\about_DSInternals.help.txt',
-    'en-US\DSInternals.PowerShell.dll-Help.xml'
+    'en-US\DSInternals.PowerShell.dll-Help.xml',
+    'net48\DSInternals.Common.dll',
     'net48\DSInternals.DataStore.dll',
     'net48\DSInternals.Replication.dll',
     'net48\DSInternals.Replication.Model.dll',
@@ -202,6 +203,7 @@ FileList = @(
     'net8.0-windows\DSInternals.DataStore.dll',
     'net8.0-windows\DSInternals.Replication.dll',
     'net8.0-windows\DSInternals.Replication.Model.dll',
+    'net8.0-windows\DSInternals.Common.dll',
     'net8.0-windows\DSInternals.SAM.dll',
     'net8.0-windows\amd64\DSInternals.Replication.Interop.dll',
     'net8.0-windows\arm64\DSInternals.Replication.Interop.dll',
