@@ -175,6 +175,7 @@ RequiredAssemblies = @()
 FileList = @(
     'DSInternals.types.ps1xml',
     'License.txt',
+    'Integrity.Tests.ps1',
     'en-US\about_DSInternals.help.txt',
     'en-US\DSInternals.PowerShell.dll-Help.xml',
     'net48\DSInternals.Common.dll',
