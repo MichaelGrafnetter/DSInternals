@@ -120,31 +120,31 @@ namespace DSInternals.Common
         {
             Validator.AssertNotNull(certificate, nameof(certificate));
 
-#if NETFRAMEWORK
-            using (var rsa = (RSACng)certificate.GetRSAPublicKey())
+            using (var rsa = certificate.GetRSAPublicKey())
             {
-                using (var key = rsa.Key)
+                if (rsa is RSACng rsaCng)
                 {
-                    return key.Export(BCryptRSAPublicKeyFormat);
-                }
-            }
-#else
-            // In .NET, the public key must be converted from RSABcrypt to RSACng before exporting.
-            using (var bcryptKey = certificate.GetRSAPublicKey())
-            {
-                var publicKeyParameters = bcryptKey.ExportParameters(false);
-
-                using (var rsa = new RSACng())
-                {
-                    rsa.ImportParameters(publicKeyParameters);
-
-                    using (var key = rsa.Key)
+                    // This is typically the case of .NET Framework
+                    using (var key = rsaCng.Key)
                     {
                         return key.Export(BCryptRSAPublicKeyFormat);
                     }
                 }
+                else
+                {
+                    // In .NET, the public key must be converted from RSABcrypt to RSACng before exporting.
+                    // .NET Framework, the public key must rarely be converted from RSACryptoServiceProvider to RSACng before exporting.
+                    var publicKeyParameters = rsa.ExportParameters(false);
+                    using (var rsaCngNew = new RSACng())
+                    {
+                        rsaCngNew.ImportParameters(publicKeyParameters);
+                        using (var key = rsaCngNew.Key)
+                        {
+                            return key.Export(BCryptRSAPublicKeyFormat);
+                        }
+                    }
+                }
             }
-#endif
         }
 
         /// <summary>
