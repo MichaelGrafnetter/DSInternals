@@ -1,21 +1,24 @@
 {
   "profiles": {
-    "PowerShell Desktop 64-bit": {
+    "Debug in PowerShell Desktop 64-bit": {
       "commandName": "Executable",
       "executablePath": "$(WINDIR)\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-      "commandLineArgs": "-NoExit -NoLogo -NoProfile -ExecutionPolicy Bypass -File \"..\\..\\..\\..\\..\\..\\Src\\DSInternals.PowerShell\\Run-Cmdlets.ps1\"",
+      "commandLineArgs": "-NoExit -NoLogo -NoProfile -ExecutionPolicy Bypass -File Debug.ps1 -ModulePath \"$(TargetDir)..\\DSInternals.psd1\"",
+      "workingDirectory": "$(MSBuildProjectDirectory)",
       "nativeDebugging": true
     },
-    "PowerShell Desktop 32-bit": {
+    "Debug in PowerShell Desktop 32-bit": {
       "commandName": "Executable",
       "executablePath": "$(WINDIR)\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe",
-      "commandLineArgs": "-NoExit -NoLogo -NoProfile -ExecutionPolicy Bypass -File \"..\\..\\..\\..\\..\\..\\Src\\DSInternals.PowerShell\\Run-Cmdlets.ps1\"",
+      "commandLineArgs": "-NoExit -NoLogo -NoProfile -ExecutionPolicy Bypass -File Debug.ps1 -ModulePath \"$(TargetDir)..\\DSInternals.psd1\"",
+      "workingDirectory": "$(MSBuildProjectDirectory)",
       "nativeDebugging": true
     },
-    "PowerShell Core 7": {
+    "Debug in PowerShell Core 7": {
       "commandName": "Executable",
       "executablePath": "$(PROGRAMFILES)\\PowerShell\\7\\pwsh.exe",
-      "commandLineArgs": "-NoExit -NoLogo -NoProfile -ExecutionPolicy Bypass -File \"..\\..\\..\\..\\..\\..\\Src\\DSInternals.PowerShell\\Run-Cmdlets.ps1\"",
+      "commandLineArgs": "-NoExit -NoLogo -NoProfile -ExecutionPolicy Bypass -File Debug.ps1 -ModulePath \"$(TargetDir)..\\DSInternals.psd1\"",
+      "workingDirectory": "$(MSBuildProjectDirectory)",
       "nativeDebugging": true
     }
   }

@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-dotnettools.csharp",
+    "ms-vscode.PowerShell",
+    "GitHub.vscode-pull-request-github",
+    "GitHub.vscode-github-actions",
+    "EditorConfig.EditorConfig",
+    "DavidAnson.vscode-markdownlint"
+  ]
+}
