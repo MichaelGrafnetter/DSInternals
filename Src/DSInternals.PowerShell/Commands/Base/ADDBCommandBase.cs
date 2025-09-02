@@ -4,6 +4,9 @@
     using System.Management.Automation;
     using DSInternals.DataStore;
 
+    /// <summary>
+    /// Provides a base class for PowerShell cmdlets that operate on Active Directory database files.
+    /// </summary>
     public abstract class ADDBCommandBase : PSCmdletEx, IDisposable
     {
         /// <summary>
@@ -39,6 +42,10 @@
             set;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the database should be opened in read-only mode.
+        /// </summary>
+        /// <value>true if the database should be opened read-only; otherwise, false. Default is true.</value>
         protected virtual bool ReadOnly
         {
             get
@@ -47,12 +54,19 @@
             }
         }
 
+        /// <summary>
+        /// Gets the Active Directory database context.
+        /// </summary>
+        /// <value>The DirectoryContext object representing the opened database.</value>
         protected DirectoryContext DirectoryContext
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Initializes the cmdlet by opening the Active Directory database.
+        /// </summary>
         protected override void BeginProcessing()
         {
             // TODO: Debug output
@@ -78,12 +92,20 @@
                 this.ThrowTerminatingError(error);
             }
         }
+        
+        /// <summary>
+        /// Releases all resources used by the ADDBCommandBase.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Releases the unmanaged resources used by the ADDBCommandBase and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && this.DirectoryContext != null)

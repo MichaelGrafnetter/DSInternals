@@ -17,11 +17,18 @@ namespace NDceRpc
         private readonly string _binding;
         protected readonly RpcHandle _handle;
 
+        /// <summary>
+        /// Gets the native handle for the RPC client.
+        /// </summary>
 		public IntPtr Handle
 		{
 			get { return _handle.Handle; }
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the Client class with the specified endpoint binding information.
+        /// </summary>
+        /// <param name="endpointBindingInfo">The endpoint binding information for the RPC client.</param>
         public Client(EndpointBindingInfo endpointBindingInfo)
         {
             _handle = new RpcClientHandle();
@@ -136,6 +143,9 @@ namespace NDceRpc
             AuthenticateAs(serverPrincipalName, credentials, protect, types);
         }
 
+        /// <summary>
+        /// Authenticates the client using no authentication (anonymous).
+        /// </summary>
         public void AuthenticateAsNone()
         {
             _authenticated = true;

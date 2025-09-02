@@ -2,6 +2,15 @@
   "version": 1,
   "dependencies": {
     ".NETFramework,Version=v4.8": {
+      "Microsoft.NETFramework.ReferenceAssemblies": {
+        "type": "Direct",
+        "requested": "[1.0.3, )",
+        "resolved": "1.0.3",
+        "contentHash": "vUc9Npcs14QsyOD01tnv/m8sQUnGTGOw1BCmKcv77LBJY7OxhJ+zJF7UD/sCL3lYNFuqmQEVlkfS4Quif6FyYg==",
+        "dependencies": {
+          "Microsoft.NETFramework.ReferenceAssemblies.net48": "1.0.3"
+        }
+      },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
         "requested": "[8.0.0, )",
@@ -18,19 +27,6 @@
         "resolved": "5.1.1",
         "contentHash": "e31xJjG+Kjbv6YF3Yq6D4Dl3or8v7LrNF41k3CXrWozW6hR1zcOe5KYuZJaGSiAgLnwP8wcW+I3+IWEzMPZKXQ=="
       },
-      "DSInternals.ManagedEsent.Interop": {
-        "type": "Transitive",
-        "resolved": "2.0.4.1",
-        "contentHash": "WTcjhN/4l6C802QCBHctCZJZAGrVlI5TzVccS+P7s4axvfi0COjMEqHwhQJ4RdzsmblmemHAq4AQay/kc1e75Q=="
-      },
-      "DSInternals.ManagedEsent.Isam": {
-        "type": "Transitive",
-        "resolved": "2.0.4.1",
-        "contentHash": "ttkkBm6GIEylpxSAepD5u9pR8uP1Kf87Fmr0G4f5pgFW5oXRBGWPr8UCitWkx4hdg6hqTV12+IGOTU0oVSaDRA==",
-        "dependencies": {
-          "DSInternals.ManagedEsent.Interop": "2.0.4.1"
-        }
-      },
       "Microsoft.Bcl.AsyncInterfaces": {
         "type": "Transitive",
         "resolved": "9.0.8",
@@ -43,6 +39,11 @@
         "type": "Transitive",
         "resolved": "8.0.0",
         "contentHash": "bZKfSIKJRXLTuSzLudMFte/8CempWjVamNUR5eHJizsy+iuOuO/k2gnh7W0dHJmYY0tBf+gUErfluCv5mySAOQ=="
+      },
+      "Microsoft.NETFramework.ReferenceAssemblies.net48": {
+        "type": "Transitive",
+        "resolved": "1.0.3",
+        "contentHash": "zMk4D+9zyiEWByyQ7oPImPN/Jhpj166Ky0Nlla4eXlNL8hI/BtSJsgR8Inldd4NNpIAH3oh8yym0W2DrhXdSLQ=="
       },
       "Microsoft.SourceLink.Common": {
         "type": "Transitive",
@@ -162,14 +163,6 @@
           "System.ValueTuple": "[4.6.1, )"
         }
       },
-      "dsinternals.datastore": {
-        "type": "Project",
-        "dependencies": {
-          "DSInternals.Common": "[6.1.0, )",
-          "DSInternals.ManagedEsent.Interop": "[2.0.4.1, )",
-          "DSInternals.ManagedEsent.Isam": "[2.0.4.1, )"
-        }
-      },
       "dsinternals.replication": {
         "type": "Project",
         "dependencies": {
@@ -212,19 +205,6 @@
         "resolved": "9.0.8",
         "contentHash": "xN2JrOfhcOyswOflVZG27XlFJDPPqU7AQtAAStWcnKoC8W9XCLOLdAYIrrwiZMfeRhavVErI8HkSO/c2TQ+z2g=="
       },
-      "DSInternals.ManagedEsent.Interop": {
-        "type": "Transitive",
-        "resolved": "2.0.4.1",
-        "contentHash": "WTcjhN/4l6C802QCBHctCZJZAGrVlI5TzVccS+P7s4axvfi0COjMEqHwhQJ4RdzsmblmemHAq4AQay/kc1e75Q=="
-      },
-      "DSInternals.ManagedEsent.Isam": {
-        "type": "Transitive",
-        "resolved": "2.0.4.1",
-        "contentHash": "ttkkBm6GIEylpxSAepD5u9pR8uP1Kf87Fmr0G4f5pgFW5oXRBGWPr8UCitWkx4hdg6hqTV12+IGOTU0oVSaDRA==",
-        "dependencies": {
-          "DSInternals.ManagedEsent.Interop": "2.0.4.1"
-        }
-      },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",
         "resolved": "8.0.0",
@@ -259,14 +239,6 @@
         "dependencies": {
           "PeterO.Cbor": "[4.5.5, )",
           "System.DirectoryServices": "[9.0.8, )"
-        }
-      },
-      "dsinternals.datastore": {
-        "type": "Project",
-        "dependencies": {
-          "DSInternals.Common": "[6.1.0, )",
-          "DSInternals.ManagedEsent.Interop": "[2.0.4.1, )",
-          "DSInternals.ManagedEsent.Isam": "[2.0.4.1, )"
         }
       },
       "dsinternals.replication": {
