@@ -1,7 +1,7 @@
 {
   "$schema": "Schema/Global.schema.json",
   "sdk": {
-    "version": "9.0.304",
+    "version": "8.0.119",
     "rollForward": "latestFeature"
   },
   "msbuild-sdks": {
