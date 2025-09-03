@@ -7,9 +7,6 @@
     /// Used by various Local Security Authority (LSA) functions to specify a Unicode string.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    /// <summary>
-    /// Represents a LsaBuffer structure.
-    /// </summary>
     public struct LsaBuffer
     {
         /// <summary>

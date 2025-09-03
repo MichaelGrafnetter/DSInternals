@@ -18,7 +18,7 @@ namespace DSInternals.SAM
         }
 
         /// <summary>
-        /// ReleaseHandle implementation.
+        /// Releases the underlying SAM handle and frees associated resources.
         /// </summary>
         public void ReleaseHandle()
         {

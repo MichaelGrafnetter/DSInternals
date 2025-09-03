@@ -39,8 +39,11 @@ namespace DSInternals.Common.Cryptography
         }
 
         /// <summary>
-        /// DecryptHash implementation.
+        /// Decrypts a password hash that is encrypted using both secret encryption and RID-based DES encryption.
         /// </summary>
+        /// <param name="blob">The encrypted hash blob.</param>
+        /// <param name="rid">The relative identifier (RID) used for the DES decryption layer.</param>
+        /// <returns>The decrypted password hash.</returns>
         public byte[] DecryptHash(byte[] blob, int rid)
         {
             // Decrypt layer 1:
@@ -52,8 +55,11 @@ namespace DSInternals.Common.Cryptography
         }
 
         /// <summary>
-        /// EncryptHash implementation.
+        /// Encrypts a password hash using both RID-based DES encryption and secret encryption.
         /// </summary>
+        /// <param name="hash">The password hash to encrypt.</param>
+        /// <param name="rid">The relative identifier (RID) used for the DES encryption layer.</param>
+        /// <returns>The encrypted hash blob.</returns>
         public byte[] EncryptHash(byte[] hash, int rid)
         {
             // Encryption layer 1
@@ -64,8 +70,11 @@ namespace DSInternals.Common.Cryptography
         }
 
         /// <summary>
-        /// DecryptHashHistory implementation.
+        /// Decrypts a password hash history that contains multiple historical password hashes.
         /// </summary>
+        /// <param name="blob">The encrypted hash history blob.</param>
+        /// <param name="rid">The relative identifier (RID) used for the DES decryption layer.</param>
+        /// <returns>An array of decrypted password hashes from the history.</returns>
         public byte[][] DecryptHashHistory(byte[] blob, int rid)
         {
             // Decrypt layer 1:
@@ -86,8 +95,11 @@ namespace DSInternals.Common.Cryptography
         }
 
         /// <summary>
-        /// EncryptHashHistory implementation.
+        /// Encrypts an array of password hashes to create an encrypted hash history blob.
         /// </summary>
+        /// <param name="hashHistory">The array of password hashes to encrypt.</param>
+        /// <param name="rid">The relative identifier (RID) used for the DES encryption layer.</param>
+        /// <returns>The encrypted hash history blob.</returns>
         public byte[] EncryptHashHistory(byte[][] hashHistory, int rid)
         {
             Validator.AssertNotNull(hashHistory, "hashHistory");

@@ -1,7 +1,7 @@
 ﻿namespace DSInternals.Common.Cryptography
 {
     /// <summary>
-    /// Defines values for PrivateKeyEncryptionType.
+    /// Specifies the encryption method used to protect private keys in the Active Directory database.
     /// </summary>
     public enum PrivateKeyEncryptionType : int
     {

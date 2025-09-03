@@ -33,24 +33,30 @@
         }
 
         /// <summary>
-        /// base implementation.
+        /// Initializes a new instance of the SamServer class and connects to the specified server using the provided credentials.
         /// </summary>
+        /// <param name="serverName">The name of the server to connect to.</param>
+        /// <param name="credential">The network credentials to use for authentication.</param>
+        /// <param name="accessMask">The access rights to request on the SAM server.</param>
         public SamServer(string serverName, NetworkCredential credential, SamServerAccessMask accessMask) : base(null)
         {
             this.Connect(serverName, accessMask, credential);
         }
 
         /// <summary>
-        /// base implementation.
+        /// Initializes a new instance of the SamServer class and connects to the specified server using the current user's credentials.
         /// </summary>
+        /// <param name="serverName">The name of the server to connect to.</param>
+        /// <param name="accessMask">The access rights to request on the SAM server.</param>
         public SamServer(string serverName, SamServerAccessMask accessMask) : base(null)
         {
             this.Connect(serverName, accessMask);
         }
 
         /// <summary>
-        /// EnumerateDomains implementation.
+        /// Enumerates all domains managed by this SAM server.
         /// </summary>
+        /// <returns>An array of domain names.</returns>
         public string[] EnumerateDomains()
         {
             uint enumerationContext = InitialEnumerationContext;
@@ -70,8 +76,10 @@
         }
 
         /// <summary>
-        /// LookupDomain implementation.
+        /// Looks up the security identifier (SID) for the specified domain name.
         /// </summary>
+        /// <param name="domainName">The name of the domain to look up.</param>
+        /// <returns>The security identifier (SID) of the domain.</returns>
         public SecurityIdentifier LookupDomain(string domainName)
         {
             SecurityIdentifier domainSid;
@@ -81,8 +89,11 @@
         }
 
         /// <summary>
-        /// OpenDomain implementation.
+        /// Opens a domain by name for the specified access rights.
         /// </summary>
+        /// <param name="domainName">The name of the domain to open.</param>
+        /// <param name="accessMask">The access rights to request on the domain.</param>
+        /// <returns>A SamDomain object representing the opened domain.</returns>
         public SamDomain OpenDomain(string domainName, SamDomainAccessMask accessMask)
         {
             SecurityIdentifier domainSid = this.LookupDomain(domainName);
@@ -90,8 +101,11 @@
         }
 
         /// <summary>
-        /// OpenDomain implementation.
+        /// Opens a domain by security identifier (SID) for the specified access rights.
         /// </summary>
+        /// <param name="domainSid">The security identifier (SID) of the domain to open.</param>
+        /// <param name="accessMask">The access rights to request on the domain.</param>
+        /// <returns>A SamDomain object representing the opened domain.</returns>
         public SamDomain OpenDomain(SecurityIdentifier domainSid, SamDomainAccessMask accessMask)
         {
             SafeSamHandle domainHandle;

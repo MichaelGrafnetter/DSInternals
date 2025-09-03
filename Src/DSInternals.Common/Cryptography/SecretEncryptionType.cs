@@ -1,7 +1,7 @@
 ﻿namespace DSInternals.Common.Cryptography
 {
     /// <summary>
-    /// Defines values for SecretEncryptionType.
+    /// Specifies the encryption algorithm and method used to protect secrets in the Active Directory database and during replication.
     /// </summary>
     public enum SecretEncryptionType : ushort
     {

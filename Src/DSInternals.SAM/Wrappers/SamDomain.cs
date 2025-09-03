@@ -8,7 +8,7 @@ using System.Security.Principal;
 namespace DSInternals.SAM
 {
     /// <summary>
-    /// Represents a SamDomain.
+    /// Represents a domain in the Windows Security Account Manager (SAM) database.
     /// </summary>
     public class SamDomain : SamObject
     {
@@ -17,8 +17,10 @@ namespace DSInternals.SAM
         }
 
         /// <summary>
-        /// LookupUser implementation.
+        /// Looks up a user account by name and returns the relative identifier (RID).
         /// </summary>
+        /// <param name="name">The name of the user to look up.</param>
+        /// <returns>The relative identifier (RID) of the user account.</returns>
         public int LookupUser(string name)
         {
             int rid;
@@ -45,8 +47,11 @@ namespace DSInternals.SAM
             return rid;
         }
         /// <summary>
-        /// OpenUser implementation.
+        /// Opens a user account by name for the specified access rights.
         /// </summary>
+        /// <param name="name">The name of the user to open.</param>
+        /// <param name="desiredAccess">The access rights to request on the user account.</param>
+        /// <returns>A SamUser object representing the opened user account.</returns>
         public SamUser OpenUser(string name, SamUserAccessMask desiredAccess)
         {
             int rid = this.LookupUser(name);
@@ -54,8 +59,11 @@ namespace DSInternals.SAM
         }
 
         /// <summary>
-        /// OpenUser implementation.
+        /// Opens a user account by security identifier (SID) for the specified access rights.
         /// </summary>
+        /// <param name="sid">The security identifier (SID) of the user to open.</param>
+        /// <param name="desiredAccess">The access rights to request on the user account.</param>
+        /// <returns>A SamUser object representing the opened user account.</returns>
         public  SamUser OpenUser(SecurityIdentifier sid, SamUserAccessMask desiredAccess)
         {
             int rid = sid.GetRid();
@@ -63,8 +71,11 @@ namespace DSInternals.SAM
         }
 
         /// <summary>
-        /// OpenUser implementation.
+        /// Opens a user account by relative identifier (RID) for the specified access rights.
         /// </summary>
+        /// <param name="rid">The relative identifier (RID) of the user to open.</param>
+        /// <param name="desiredAccess">The access rights to request on the user account.</param>
+        /// <returns>A SamUser object representing the opened user account.</returns>
         public SamUser OpenUser(int rid, SamUserAccessMask desiredAccess)
         {
             SafeSamHandle userHandle;
@@ -74,8 +85,9 @@ namespace DSInternals.SAM
         }
 
         /// <summary>
-        /// GetPasswordPolicy implementation.
+        /// Retrieves the password policy settings for this domain.
         /// </summary>
+        /// <returns>A SamDomainPasswordInformation structure containing the domain's password policy.</returns>
         public SamDomainPasswordInformation GetPasswordPolicy()
         {
             SamDomainPasswordInformation passwordInfo;

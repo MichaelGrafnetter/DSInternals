@@ -124,8 +124,10 @@
         }
 
         /// <summary>
-        /// ReadLinkedValues implementation.
+        /// Reads linked attribute values that contain DN with binary data.
         /// </summary>
+        /// <param name="attributeName">The name of the linked attribute to read.</param>
+        /// <param name="values">When this method returns, contains the binary values from the linked attribute, or null if the attribute is not present.</param>
         public override void ReadLinkedValues(string attributeName, out byte[][] values)
         {
             // Parse the DN with binary value

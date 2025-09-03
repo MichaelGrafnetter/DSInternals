@@ -8,9 +8,6 @@ namespace DSInternals.SAM.Interop
     /// The SAMPR_RID_ENUMERATION structure holds the name and RID information about an account.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    /// <summary>
-    /// Represents a SamRidEnumeration structure.
-    /// </summary>
     public struct SamRidEnumeration
     {
         /// <summary>

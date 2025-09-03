@@ -7,7 +7,7 @@ using System;
 namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
 {
     /// <summary>
-    /// Represents a ProtectionKeyDescriptor structure.
+    /// Represents a DPAPI-NG protection key descriptor that contains information about how data is protected, including security identifiers and protection methods.
     /// </summary>
     public struct ProtectionKeyDescriptor
     {
@@ -27,8 +27,10 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
         }
 
         /// <summary>
-        /// Decodes the specified input.
+        /// Decodes a protection key descriptor from the specified ASN.1 encoded binary data.
         /// </summary>
+        /// <param name="encoded">The ASN.1 encoded binary data containing the protection key descriptor.</param>
+        /// <returns>A decoded ProtectionKeyDescriptor structure.</returns>
         public static ProtectionKeyDescriptor Decode(ReadOnlyMemory<byte> encoded)
         {
             var reader = new AsnReader(encoded, AsnEncodingRules.DER);
@@ -38,8 +40,10 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
         }
 
         /// <summary>
-        /// Decodes the specified input.
+        /// Decodes a protection key descriptor from the specified ASN.1 reader.
         /// </summary>
+        /// <param name="reader">The ASN.1 reader positioned at the protection key descriptor data.</param>
+        /// <returns>A decoded ProtectionKeyDescriptor structure.</returns>
         public static ProtectionKeyDescriptor Decode(AsnReader reader)
         {
             /*

@@ -74,8 +74,10 @@ namespace DSInternals.Common.Cryptography
         };
         
         /// <summary>
-        /// Calculate implementation.
+        /// Calculates the CRC32 checksum for the specified byte array.
         /// </summary>
+        /// <param name="buffer">The byte array to calculate the checksum for.</param>
+        /// <returns>The CRC32 checksum as an unsigned 32-bit integer.</returns>
         public static uint Calculate(byte[] buffer)
         {
             Validator.AssertNotNull(buffer, "buffer");

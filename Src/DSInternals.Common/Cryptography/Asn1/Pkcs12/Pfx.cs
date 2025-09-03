@@ -49,8 +49,10 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
         }
 */
         /// <summary>
-        /// Decodes the specified input.
+        /// Decodes a PFX structure from the specified ASN.1 encoded binary data.
         /// </summary>
+        /// <param name="encoded">The ASN.1 encoded binary data containing the PFX structure.</param>
+        /// <returns>A decoded Pfx structure containing the AuthSafe content and optional MAC data.</returns>
         public static Pfx Decode(ReadOnlyMemory<byte> encoded)
         {
             AsnReader reader = new AsnReader(encoded, AsnEncodingRules.DER);
@@ -60,8 +62,10 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
         }
 
         /// <summary>
-        /// Decodes the specified input.
+        /// Decodes a PFX structure from the specified ASN.1 reader.
         /// </summary>
+        /// <param name="reader">The ASN.1 reader positioned at the PFX structure data.</param>
+        /// <returns>A decoded Pfx structure containing the AuthSafe content and optional MAC data.</returns>
         public static Pfx Decode(AsnReader reader)
         {
             /*

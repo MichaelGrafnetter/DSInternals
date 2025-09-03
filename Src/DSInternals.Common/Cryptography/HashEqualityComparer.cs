@@ -6,7 +6,7 @@
 
     // TODO: Rename HashEqualityComparer to ByteArrayEqualityComparer
     /// <summary>
-    /// Represents a HashEqualityComparer.
+    /// Provides equality comparison for byte arrays (such as password hashes) that compares their contents rather than reference equality.
     /// </summary>
     public class HashEqualityComparer : IEqualityComparer<byte[]>
     {
@@ -14,8 +14,9 @@
         private static HashEqualityComparer instance;
 
         /// <summary>
-        /// GetInstance implementation.
+        /// Gets the singleton instance of the HashEqualityComparer.
         /// </summary>
+        /// <returns>The singleton HashEqualityComparer instance.</returns>
         public static HashEqualityComparer GetInstance()
         {
             if(instance == null)

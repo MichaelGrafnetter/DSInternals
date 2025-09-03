@@ -5,7 +5,7 @@
     using System.Text;
 
     /// <summary>
-    /// Represents a SortedFileSearcher.
+    /// Provides efficient binary search functionality for text files with sorted content, such as wordlists or dictionary files.
     /// </summary>
     public class SortedFileSearcher : IDisposable
     {
@@ -31,8 +31,10 @@
         }
 
         /// <summary>
-        /// FindString implementation.
+        /// Searches for a string in the sorted file using binary search algorithm.
         /// </summary>
+        /// <param name="query">The string to search for in the file.</param>
+        /// <returns>true if the string is found; otherwise, false.</returns>
         public bool FindString(string query)
         {
             Validator.AssertNotNullOrWhiteSpace(query, nameof(query));

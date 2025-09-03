@@ -10,15 +10,16 @@
     using DSInternals.SAM.Interop;
 
     /// <summary>
-    /// Represents a LsaPolicy.
+    /// Represents a Local Security Authority (LSA) policy handle used for querying system security information.
     /// </summary>
     public class LsaPolicy : IDisposable
     {
         private SafeLsaPolicyHandle policyHandle;
 
         /// <summary>
-        /// this implementation.
+        /// Initializes a new instance of the LsaPolicy class on the local system with the specified access rights.
         /// </summary>
+        /// <param name="accessMask">The access rights to request on the LSA policy.</param>
         public LsaPolicy(LsaPolicyAccessMask accessMask) : this(null, accessMask) { }
 
         public LsaPolicy(string systemName, LsaPolicyAccessMask accessMask)
@@ -28,8 +29,9 @@
         }
 
         /// <summary>
-        /// QueryDnsDomainInformation implementation.
+        /// Queries DNS domain information from the Local Security Authority.
         /// </summary>
+        /// <returns>A LsaDnsDomainInformation object containing the DNS domain information.</returns>
         public LsaDnsDomainInformation QueryDnsDomainInformation()
         {
             IntPtr buffer;
@@ -50,8 +52,9 @@
         }
 
         /// <summary>
-        /// QueryMachineAccountInformation implementation.
+        /// Queries machine account information from the Local Security Authority.
         /// </summary>
+        /// <returns>The security identifier (SID) of the machine account, or null if not available.</returns>
         public SecurityIdentifier QueryMachineAccountInformation()
         {
             IntPtr buffer;

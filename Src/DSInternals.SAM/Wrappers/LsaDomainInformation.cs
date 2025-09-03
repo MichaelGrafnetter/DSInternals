@@ -5,7 +5,7 @@
     using System.Security.Principal;
 
     /// <summary>
-    /// Represents a LsaDomainInformation.
+    /// Represents domain information retrieved from the Local Security Authority (LSA) containing domain name and security identifier.
     /// </summary>
     public class LsaDomainInformation
     {
