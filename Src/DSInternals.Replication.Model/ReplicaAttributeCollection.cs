@@ -6,13 +6,13 @@ using System.Linq;
 namespace DSInternals.Replication.Model
 {
     /// <summary>
-    /// Represents a ReplicaAttributeCollection.
+    /// A collection of replica attributes indexed by attribute type for Active Directory objects.
     /// </summary>
     public class ReplicaAttributeCollection : Dictionary<AttributeType, ReplicaAttribute>
     {
         // TODO: Move parent as member.
         /// <summary>
-        /// base implementation.
+        /// Initializes a new instance of the ReplicaAttributeCollection class.
         /// </summary>
         public ReplicaAttributeCollection() : base()
         {

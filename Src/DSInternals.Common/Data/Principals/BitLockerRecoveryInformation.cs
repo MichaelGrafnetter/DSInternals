@@ -4,7 +4,7 @@ using DSInternals.Common.Schema;
 namespace DSInternals.Common.Data
 {
     /// <summary>
-    /// Represents a BitLockerRecoveryInformation.
+    /// Represents BitLocker recovery information stored in Active Directory for encrypted volumes.
     /// </summary>
     public class BitLockerRecoveryInformation
     {

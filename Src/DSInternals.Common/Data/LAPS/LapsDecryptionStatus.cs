@@ -1,7 +1,7 @@
 ﻿namespace DSInternals.Common.Data
 {
     /// <summary>
-    /// Defines values for LapsDecryptionStatus.
+    /// Specifies the status of LAPS password decryption operations.
     /// </summary>
     public enum LapsDecryptionStatus
     {

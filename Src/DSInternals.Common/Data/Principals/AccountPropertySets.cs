@@ -4,7 +4,7 @@ namespace DSInternals.Common.Data
 {
     [Flags]
     /// <summary>
-    /// Defines values for AccountPropertySets.
+    /// Specifies which property sets to load when creating account objects from directory data.
     /// </summary>
     public enum AccountPropertySets : int
     {

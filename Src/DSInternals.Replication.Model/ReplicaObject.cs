@@ -9,7 +9,7 @@ using System.Text;
 namespace DSInternals.Replication.Model
 {
     /// <summary>
-    /// Represents a ReplicaObject.
+    /// Represents a replicated Active Directory object with its attributes, GUID, and distinguished name.
     /// </summary>
     public class ReplicaObject : DirectoryObject
     {

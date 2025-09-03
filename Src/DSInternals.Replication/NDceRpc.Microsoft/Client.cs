@@ -6,12 +6,9 @@ using NDceRpc.Microsoft.Interop;
 namespace NDceRpc
 {
     /// <summary>
-    /// Provides a connection-based wrapper around the RPC client
+    /// Provides a connection-based wrapper around the RPC client for remote procedure calls.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{_handle} @{_binding}")]
-    /// <summary>
-    /// Represents a Client.
-    /// </summary>
     public class Client : IDisposable//TODO: make is serializabl to propagate throug app domains (use only ptr and methods to get all data from ptr)
     {
 

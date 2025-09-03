@@ -6,6 +6,9 @@ using DSInternals.Common.Serialization;
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents a LAPS (Local Administrator Password Solution) clear text password with account name, timestamp, and password value.
+    /// </summary>
     /// <example>
     /// {"n":"Administrator","t":"1d8161b41c41cde","p":"A6a3#7%eb!57be4a4B95Z43394ba956de69e5d8975#$8a6d)4f82da6ad500HGx"}
     /// </example>
@@ -14,19 +17,19 @@ namespace DSInternals.Common.Data
     {
         [JsonPropertyName("n")]
         /// <summary>
-        /// The AccountName.
+        /// Gets or sets the name of the account whose password is stored.
         /// </summary>
         public string AccountName;
 
         [JsonPropertyName("t")]
         /// <summary>
-        /// The UpdateTimestampString.
+        /// Gets or sets the update timestamp as a hexadecimal string representation of file time.
         /// </summary>
         public string UpdateTimestampString;
 
         [JsonPropertyName("p")]
         /// <summary>
-        /// The Password.
+        /// Gets or sets the clear text password value.
         /// </summary>
         public string Password;
 
@@ -56,8 +59,10 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Parses the specified input.
+        /// Parses LAPS password data from a JSON string.
         /// </summary>
+        /// <param name="json">The JSON string containing LAPS password data.</param>
+        /// <returns>A LapsClearTextPassword object parsed from the JSON.</returns>
         public static LapsClearTextPassword Parse(string json)
         {
             Validator.AssertNotNull(json, nameof(json));
@@ -65,8 +70,11 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Parses the specified input.
+        /// Parses LAPS password data from binary JSON data.
         /// </summary>
+        /// <param name="binaryJson">The binary JSON data containing LAPS password information.</param>
+        /// <param name="utf16">True if the binary data is UTF-16 encoded; otherwise, false for UTF-8.</param>
+        /// <returns>A LapsClearTextPassword object parsed from the binary JSON.</returns>
         public static LapsClearTextPassword Parse(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {
             return LenientJsonSerializer.DeserializeLenient<LapsClearTextPassword>(binaryJson, utf16);

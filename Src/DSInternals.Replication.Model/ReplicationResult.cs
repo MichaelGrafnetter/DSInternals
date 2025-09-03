@@ -6,7 +6,7 @@ using System.Text;
 namespace DSInternals.Replication.Model
 {
     /// <summary>
-    /// Represents a ReplicationResult.
+    /// Contains the results of an Active Directory replication operation, including replicated objects and metadata.
     /// </summary>
     public class ReplicationResult
     {

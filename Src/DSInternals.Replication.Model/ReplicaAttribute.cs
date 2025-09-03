@@ -2,7 +2,7 @@
 namespace DSInternals.Replication.Model
 {
     /// <summary>
-    /// Represents a ReplicaAttribute.
+    /// Represents a replicated Active Directory attribute with its type and values.
     /// </summary>
     public class ReplicaAttribute
     {

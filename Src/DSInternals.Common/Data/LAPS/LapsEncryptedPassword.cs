@@ -5,7 +5,7 @@ using DSInternals.Common.Cryptography.Asn1.DpapiNg;
 namespace DSInternals.Common.Data
 {
     /// <summary>
-    /// Represents a LapsEncryptedPassword.
+    /// Represents an encrypted LAPS password stored in Active Directory with encryption metadata.
     /// </summary>
     public class LapsEncryptedPassword
     {
