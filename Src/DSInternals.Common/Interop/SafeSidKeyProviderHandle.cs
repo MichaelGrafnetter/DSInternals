@@ -15,11 +15,17 @@ namespace DSInternals.Common.Interop
         {
         }
 
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public SafeSidKeyProviderHandle(IntPtr preexistingHandle, bool ownsHandle) : base(ownsHandle)
         {
             this.SetHandle(preexistingHandle);
         }
 
+        /// <summary>
+        /// ToArray implementation.
+        /// </summary>
         public byte[] ToArray(int size)
         {
             if(this.IsInvalid)

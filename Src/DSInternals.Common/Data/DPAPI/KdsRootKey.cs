@@ -249,6 +249,9 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// GetL0Key implementation.
+        /// </summary>
         public byte[] GetL0Key(int l0KeyId)
         {
             if (l0KeyId < 0)
@@ -268,6 +271,9 @@ namespace DSInternals.Common.Data
             return l0Key;
         }
 
+        /// <summary>
+        /// GenerateL1Key implementation.
+        /// </summary>
         public static (byte[] l1KeyCurrent, byte[] l1KeyPrevious) GenerateL1Key(
             Guid kdsRootKeyId,
             string kdfAlgorithm,
@@ -357,6 +363,9 @@ namespace DSInternals.Common.Data
             return (l1KeyCurrent, l1KeyPrevious);
         }
 
+        /// <summary>
+        /// ClientComputeL2Key implementation.
+        /// </summary>
         public static (byte[] nextL1Key, byte[] nextL2Key) ClientComputeL2Key(
             Guid kdsRootKeyId,
             string kdfAlgorithm,
@@ -391,6 +400,9 @@ namespace DSInternals.Common.Data
             return (nextL1Key, nextL2Key);
         }
 
+        /// <summary>
+        /// GetKeyStartTime implementation.
+        /// </summary>
         public static DateTime GetKeyStartTime(int l0KeyId, int l1KeyId, int l2KeyId)
         {
             if(l0KeyId < 0)
@@ -413,6 +425,9 @@ namespace DSInternals.Common.Data
             return DateTime.FromFileTime(effectiveTimestamp * KdsKeyCycleDuration);
         }
 
+        /// <summary>
+        /// GetKeyId implementation.
+        /// </summary>
         public static (int l0KeyId, int l1KeyId, int l2KeyId) GetKeyId(DateTime effectiveTime)
         {
             long effectiveTimeNumeric = effectiveTime.ToFileTimeUtc();
@@ -425,6 +440,9 @@ namespace DSInternals.Common.Data
             return (l0KeyId, l1KeyId, l2KeyId);
         }
 
+        /// <summary>
+        /// ParseKdfParameters implementation.
+        /// </summary>
         public static Dictionary<int,string> ParseKdfParameters(byte[] blob)
         {
             if(blob == null || blob.Length == 0)
@@ -472,6 +490,9 @@ namespace DSInternals.Common.Data
             return result;
         }
 
+        /// <summary>
+        /// ParseSecretAgreementParameters implementation.
+        /// </summary>
         public static (byte[] p, byte[] g) ParseSecretAgreementParameters(byte[] blob)
         {
             if (blob == null || blob.Length == 0)
@@ -507,6 +528,9 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// GetDistinguishedName implementation.
+        /// </summary>
         public static string GetDistinguishedName(Guid rootKeyId, string configurationNamingContext)
         {
             if (configurationNamingContext == null) throw new ArgumentNullException(nameof(configurationNamingContext));

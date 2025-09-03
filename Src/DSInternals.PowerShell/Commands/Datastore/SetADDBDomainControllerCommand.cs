@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsCommon.Set, "ADDBDomainController", ConfirmImpact = ConfirmImpact.High)]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a SetADDBDomainControllerCommand.
+    /// </summary>
     public class SetADDBDomainControllerCommand : ADDBCommandBase
     {
         private const string EpochParameterSet = "Epoch";
@@ -15,15 +18,24 @@
         [ValidateRange(DSInternals.DataStore.DomainController.UsnMinValue, DSInternals.DataStore.DomainController.UsnMaxValue)]
         [Parameter(Mandatory = true, ParameterSetName = UsnParameterSet)]
         [Alias("USN")]
+        /// <summary>
+        /// The HighestCommittedUsn.
+        /// </summary>
         public long HighestCommittedUsn;
 
         [ValidateRange(DSInternals.DataStore.DomainController.EpochMinValue, DSInternals.DataStore.DomainController.EpochMaxValue)]
         [Parameter(Mandatory = true, ParameterSetName = EpochParameterSet)]
         [Alias("DSAEpoch")]
+        /// <summary>
+        /// The Epoch.
+        /// </summary>
         public int Epoch;
 
         [Parameter(Mandatory = true, ParameterSetName = ExpirationParameterSet)]
         [Alias("Expiration", "Expire")]
+        /// <summary>
+        /// The BackupExpiration.
+        /// </summary>
         public DateTime BackupExpiration;
 
         [Parameter]

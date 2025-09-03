@@ -7,6 +7,9 @@ namespace DSInternals.Common.Interop
     using System.Runtime.ConstrainedExecution;
     using System.Security;
 
+    /// <summary>
+    /// Represents a NamedPipeConnection.
+    /// </summary>
     public class NamedPipeConnection : CriticalFinalizerObject, IDisposable
     {
         private const string IPCShareFormat = @"\\{0}\IPC$";
@@ -54,6 +57,9 @@ namespace DSInternals.Common.Interop
         }
 
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

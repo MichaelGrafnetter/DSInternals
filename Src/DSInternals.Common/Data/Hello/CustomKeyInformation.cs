@@ -76,6 +76,9 @@
             private set;
         }
 
+        /// <summary>
+        /// this implementation.
+        /// </summary>
         public CustomKeyInformation() : this(KeyFlags.None)
         {
         }
@@ -142,6 +145,9 @@
             }
         }
 
+        /// <summary>
+        /// ToByteArray implementation.
+        /// </summary>
         public byte[] ToByteArray()
         {
             using(var stream = new MemoryStream())

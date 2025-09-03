@@ -7,6 +7,9 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, "AzureADUserEx", DefaultParameterSetName = ParamSetAllUsers)]
     [OutputType(typeof(AzureADUser))]
+    /// <summary>
+    /// Represents a GetAzureADUserExCommand.
+    /// </summary>
     public class GetAzureADUserExCommand : AzureADCommandBase
     {
         private const string ParamSetAllUsers = "Multiple";

@@ -5,6 +5,9 @@ using System.Security;
 namespace DSInternals.Common
 {    public static class SecureStringExtensions
     {
+        /// <summary>
+        /// ToUnicodeString implementation.
+        /// </summary>
         public static string ToUnicodeString(this SecureString input)
         {
             IntPtr ptr = Marshal.SecureStringToBSTR(input);
@@ -17,6 +20,9 @@ namespace DSInternals.Common
                 Marshal.ZeroFreeBSTR(ptr);
             }
         }
+        /// <summary>
+        /// ToByteArray implementation.
+        /// </summary>
         public static byte[] ToByteArray(this SecureString input)
         {
             int numBytes = input.Length * 2;
@@ -32,6 +38,9 @@ namespace DSInternals.Common
             }
             return byteArray;
         }
+        /// <summary>
+        /// Append implementation.
+        /// </summary>
         public static void Append(this SecureString input, string suffix)
         {
             if(suffix != null)

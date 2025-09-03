@@ -10,6 +10,9 @@
 
     [Cmdlet(VerbsCommon.Set, "SamAccountPasswordHash")]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a SetSamAccountPasswordHashCommand.
+    /// </summary>
     public class SetSamAccountPasswordHashCommand : SamCommandBase
     {
         private const string ParameterSetBySid = "BySid";

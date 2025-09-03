@@ -19,17 +19,53 @@ namespace DSInternals.DataStore
         private const int InitialClassDictionaryCapacity = 500;
         private const string AttributeColumnPrefix = "ATT";
         private const string AttributeIndexPrefix = "INDEX_";
+        /// <summary>
+        /// The DistinguishedNameTagColumn.
+        /// </summary>
         public const string DistinguishedNameTagColumn = "DNT_col";
+        /// <summary>
+        /// The DistinguishedNameTagIndex.
+        /// </summary>
         public const string DistinguishedNameTagIndex = "DNT_index";
+        /// <summary>
+        /// The ParentDistinguishedNameTagColumn.
+        /// </summary>
         public const string ParentDistinguishedNameTagColumn = "PDNT_col";
+        /// <summary>
+        /// The ParentDistinguishedNameTagIndex.
+        /// </summary>
         public const string ParentDistinguishedNameTagIndex = "PDNT_index";
+        /// <summary>
+        /// The NamingContextDistinguishedNameTagColumn.
+        /// </summary>
         public const string NamingContextDistinguishedNameTagColumn = "NCDNT_col";
+        /// <summary>
+        /// The RelativeDistinguishedNameTypeColumn.
+        /// </summary>
         public const string RelativeDistinguishedNameTypeColumn = "RDNtyp_col";
+        /// <summary>
+        /// The ObjectColumn.
+        /// </summary>
         public const string ObjectColumn = "OBJ_col";
+        /// <summary>
+        /// The PartitionedAccountNameIndex.
+        /// </summary>
         public const string PartitionedAccountNameIndex = "NC_Acc_Type_Name";
+        /// <summary>
+        /// The PartitionedAccountSidIndex.
+        /// </summary>
         public const string PartitionedAccountSidIndex = "NC_Acc_Type_Sid";
+        /// <summary>
+        /// The PartitionedGuidIndex.
+        /// </summary>
         public const string PartitionedGuidIndex = "nc_guid_Index";
+        /// <summary>
+        /// The AncestorsColumn.
+        /// </summary>
         public const string AncestorsColumn = "Ancestors_col";
+        /// <summary>
+        /// The AncestorsIndex.
+        /// </summary>
         public const string AncestorsIndex = "Ancestors_index";
 
         private IDictionary<AttributeType, AttributeSchema> _attributesById;
@@ -98,11 +134,17 @@ namespace DSInternals.DataStore
             this.PrefixTable = new PrefixTable();
         }
 
+        /// <summary>
+        /// FindAllAttributes implementation.
+        /// </summary>
         public ICollection<AttributeSchema> FindAllAttributes()
         {
             return _attributesByName.Values;
         }
 
+        /// <summary>
+        /// FindAttribute implementation.
+        /// </summary>
         public AttributeSchema? FindAttribute(string attributeName)
         {
             Validator.AssertNotNullOrWhiteSpace(attributeName, nameof(attributeName));
@@ -110,6 +152,9 @@ namespace DSInternals.DataStore
             return found ? attribute : null;
         }
 
+        /// <summary>
+        /// FindAttribute implementation.
+        /// </summary>
         public AttributeSchema? FindAttribute(AttributeType attributeId)
         {
             // Try to find the attribute either by attributeID or msDS-IntId.
@@ -118,35 +163,53 @@ namespace DSInternals.DataStore
             return attributeFound ? attribute : null;
         }
 
+        /// <summary>
+        /// FindColumnId implementation.
+        /// </summary>
         public Columnid? FindColumnId(string attributeName)
         {
             bool found = _columnsByAttributeName.TryGetValue(attributeName, out Columnid column);
             return found ? column : null;
         }
 
+        /// <summary>
+        /// FindIndexName implementation.
+        /// </summary>
         public string? FindIndexName(string attributeName)
         {
             return this.FindAttribute(attributeName)?.IndexName;
         }
 
+        /// <summary>
+        /// FindClass implementation.
+        /// </summary>
         public ClassType? FindClass(string className)
         {
             bool found = _classesByName.TryGetValue(className, out ClassType classType);
             return found ? classType : null;
         }
 
+        /// <summary>
+        /// FindObjectCategory implementation.
+        /// </summary>
         public DNTag? FindObjectCategory(string className)
         {
             bool found = _objectCategoriesByName.TryGetValue(className, out DNTag objectCategory);
             return found ? objectCategory : null;
         }
 
+        /// <summary>
+        /// FindObjectCategory implementation.
+        /// </summary>
         public DNTag? FindObjectCategory(ClassType governsId)
         {
             bool found = _objectCategoriesByGovernsId.TryGetValue(governsId, out DNTag objectCategory);
             return found ? objectCategory : null;
         }
 
+        /// <summary>
+        /// Create implementation.
+        /// </summary>
         public static DirectorySchema Create(IsamDatabase database)
         {
             // Create a hardcoded schema with base attribute set.

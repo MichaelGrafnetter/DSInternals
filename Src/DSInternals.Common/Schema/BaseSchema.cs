@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace DSInternals.Common.Schema
 {
+    /// <summary>
+    /// Represents a BaseSchema.
+    /// </summary>
     public class BaseSchema
     {
         private const int InitialDictionaryCapacity = 150;
@@ -17,6 +20,9 @@ namespace DSInternals.Common.Schema
             _prefixTable = new PrefixTable();
         }
 
+        /// <summary>
+        /// AddAttribute implementation.
+        /// </summary>
         public void AddAttribute(AttributeSchema attribute)
         {
             if (attribute == null) throw new ArgumentNullException(nameof(attribute));
@@ -26,30 +32,45 @@ namespace DSInternals.Common.Schema
             _attributesById[attribute.AttributeId] = attribute;
         }
 
+        /// <summary>
+        /// FindAttribute implementation.
+        /// </summary>
         public AttributeSchema? FindAttribute(string attributeName)
         {
             _ = _attributesByName.TryGetValue(attributeName, out AttributeSchema attribute);
             return attribute;
         }
 
+        /// <summary>
+        /// FindAttributeId implementation.
+        /// </summary>
         public AttributeType? FindAttributeId(string attributeName)
         {
             _ = _attributesByName.TryGetValue(attributeName, out AttributeSchema attribute);
             return attribute?.AttributeId;
         }
 
+        /// <summary>
+        /// FindAttributeInternalId implementation.
+        /// </summary>
         public AttributeType? FindAttributeInternalId(string attributeName)
         {
             _ = _attributesByName.TryGetValue(attributeName, out AttributeSchema attribute);
             return attribute?.InternalId;
         }
 
+        /// <summary>
+        /// FindAttribute implementation.
+        /// </summary>
         public AttributeSchema? FindAttribute(AttributeType attributeId)
         {
             _ = _attributesById.TryGetValue(attributeId, out AttributeSchema attribute);
             return attribute;
         }
 
+        /// <summary>
+        /// LoadPrefixTable implementation.
+        /// </summary>
         public void LoadPrefixTable(byte[] blob)
         {
             _prefixTable.LoadFromBlob(blob);
@@ -58,6 +79,9 @@ namespace DSInternals.Common.Schema
             AddNonDefaultAttributes();
         }
 
+        /// <summary>
+        /// AddPrefix implementation.
+        /// </summary>
         public void AddPrefix(ushort index, byte[] oidPrefix)
         {
             _prefixTable.Add(index, oidPrefix);
@@ -134,6 +158,9 @@ namespace DSInternals.Common.Schema
             }
         }
 
+        /// <summary>
+        /// Create implementation.
+        /// </summary>
         public static BaseSchema Create()
         {
             var schema = new BaseSchema();

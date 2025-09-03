@@ -8,6 +8,9 @@ namespace DSInternals.DataStore
 {
     public static class BootKeyRetriever
     {
+        /// <summary>
+        /// The 16.
+        /// </summary>
         public const int BootKeyLength = 16;
         // AD DS Constants:
         private const string CurrentControlSetKey = "Select";

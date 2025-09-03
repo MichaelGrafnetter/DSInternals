@@ -53,6 +53,9 @@ namespace DSInternals.Common.Schema
         /// </summary>
         public readonly int? RangeUpper;
 
+        /// <summary>
+        /// The IsDefunct.
+        /// </summary>
         public readonly bool IsDefunct;
 
         /// <summary>
@@ -86,22 +89,49 @@ namespace DSInternals.Common.Schema
         public readonly Guid SchemaGuid;
 
 
+        /// <summary>
+        /// The OmSyntax.
+        /// </summary>
         public readonly AttributeOmSyntax OmSyntax;
 
+        /// <summary>
+        /// The ColumnName.
+        /// </summary>
         public string? ColumnName;
 
+        /// <summary>
+        /// The IndexName.
+        /// </summary>
         public string? IndexName;
 
+        /// <summary>
+        /// The ContainerizedIndexName.
+        /// </summary>
         public string? ContainerizedIndexName;
 
+        /// <summary>
+        /// The TupleIndexName.
+        /// </summary>
         public string? TupleIndexName;
 
+        /// <summary>
+        /// The null.
+        /// </summary>
         public string? DerivedColumnName => (!IsConstructed && LinkType == LinkType.None) ? (InternalId ?? AttributeId).DeriveColumnName(Syntax) : null;
 
+        /// <summary>
+        /// The null.
+        /// </summary>
         public string? DerivedIndexName => (IsIndexed && LinkType == LinkType.None) ? (InternalId ?? AttributeId).DeriveIndexName() : null;
 
+        /// <summary>
+        /// The null.
+        /// </summary>
         public string? DerivedContainerizedIndexName => IsIndexedOverContainer ? (InternalId ?? AttributeId).DeriveContainerizedIndexName() : null;
 
+        /// <summary>
+        /// The null.
+        /// </summary>
         public string? DerivedTupleIndexName => IsTupleIndexed ? (InternalId ?? AttributeId).DeriveTupleIndexName() : null;
 
         /// <summary>
@@ -170,6 +200,9 @@ namespace DSInternals.Common.Schema
         /// </summary>
         public bool IsIndexed => SearchFlags.HasFlag(AttributeSearchFlags.AttributeIndex);
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             return String.Format("Att: {0}, Col: {1}", Name, ColumnName);
@@ -252,6 +285,9 @@ namespace DSInternals.Common.Schema
             this.IsDefunct = isDefunct;
         }
 
+        /// <summary>
+        /// Create implementation.
+        /// </summary>
         public static AttributeSchema Create(string ldapDisplayName, PrefixTable prefixTable)
         {
             if (prefixTable == null)
@@ -279,6 +315,9 @@ namespace DSInternals.Common.Schema
                 searchFlags);
         }
 
+        /// <summary>
+        /// Create implementation.
+        /// </summary>
         public static AttributeSchema Create(
             string ldapDisplayName,
             string attributeOid,

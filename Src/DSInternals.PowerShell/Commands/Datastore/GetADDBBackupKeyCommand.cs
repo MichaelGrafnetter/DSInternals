@@ -8,6 +8,9 @@
 
     [Cmdlet(VerbsCommon.Get, "ADDBBackupKey")]
     [OutputType(typeof(DSInternals.Common.Data.DPAPIBackupKey))]
+    /// <summary>
+    /// Represents a GetADDBBackupKeyCommand.
+    /// </summary>
     public class GetADDBBackupKeyCommand : ADDBCommandBase
     {
         [Parameter(Mandatory = true)]

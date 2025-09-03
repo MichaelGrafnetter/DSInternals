@@ -21,6 +21,9 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
         public ReadOnlyMemory<byte> Nonce { get; private set; }
 
 
+        /// <summary>
+        /// Decrypt implementation.
+        /// </summary>
         public ReadOnlySpan<byte> Decrypt()
         {
             if (this.RawData.Length == 0)
@@ -34,6 +37,9 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
             return decryptedData;
         }
 
+        /// <summary>
+        /// TryDecrypt implementation.
+        /// </summary>
         public bool TryDecrypt(out ReadOnlySpan<byte> cleartext)
         {
             if (this.RawData.Length == 0)
@@ -49,6 +55,9 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
             return resultCode == Win32ErrorCode.Success;
         }
 
+        /// <summary>
+        /// Decode implementation.
+        /// </summary>
         public static CngProtectedDataBlob Decode(ReadOnlyMemory<byte> blob)
         {
             var cms = Cryptography.Asn1.Pkcs7.ContentInfo.Decode(blob);

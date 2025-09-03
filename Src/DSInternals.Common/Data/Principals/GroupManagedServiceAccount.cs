@@ -282,6 +282,9 @@ namespace DSInternals.Common.Data
             this.WhenCreated = whenCreated ?? DateTime.MinValue;
         }
 
+        /// <summary>
+        /// CalculatePassword implementation.
+        /// </summary>
         public void CalculatePassword(KdsRootKey kdsRootKey, DateTime effectiveTime)
         {
             if (kdsRootKey == null)
@@ -310,6 +313,9 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// CalculateManagedPassword implementation.
+        /// </summary>
         public static byte[] CalculateManagedPassword(SecurityIdentifier gMsaSid, ProtectionKeyIdentifier keyIdentifier, KdsRootKey kdsRootKey)
         {
             if (gMsaSid == null)
@@ -366,6 +372,9 @@ namespace DSInternals.Common.Data
             return generatedPassword;
         }
 
+        /// <summary>
+        /// GetIntervalId implementation.
+        /// </summary>
         public static (int l0KeyId, int l1KeyId, int l2KeyId) GetIntervalId(
             DateTime previousPasswordChange,
             DateTime effectiveTime,

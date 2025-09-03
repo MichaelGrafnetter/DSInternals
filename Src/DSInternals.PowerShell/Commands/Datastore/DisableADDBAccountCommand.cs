@@ -5,6 +5,9 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsLifecycle.Disable, "ADDBAccount")]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a DisableADDBAccountCommand.
+    /// </summary>
     public class DisableADDBAccountCommand : ADDBAccountStatusCommandBase
     {
         protected override bool Enabled

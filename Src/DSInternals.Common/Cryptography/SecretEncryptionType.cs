@@ -1,5 +1,8 @@
 ﻿namespace DSInternals.Common.Cryptography
 {
+    /// <summary>
+    /// Defines values for SecretEncryptionType.
+    /// </summary>
     public enum SecretEncryptionType : ushort
     {
         // TODO: Add support for SAM encryption types

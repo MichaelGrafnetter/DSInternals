@@ -13,7 +13,13 @@ namespace DSInternals.Common.Cryptography
         /// The size, in bytes, of the computed hash code.
         /// </summary>
         public const int HashSize = NativeMethods.NTHashNumBytes;
+        /// <summary>
+        /// The MaxInputLength.
+        /// </summary>
         public const int MaxInputLength = NativeMethods.NTPasswordMaxChars;
+        /// <summary>
+        /// sizeof implementation.
+        /// </summary>
         public const int MaxBinaryLength = MaxInputLength * sizeof(char);
 
         /// <summary>
@@ -21,6 +27,9 @@ namespace DSInternals.Common.Cryptography
         /// </summary>
         public static readonly byte[] Empty = ComputeHash(string.Empty);
 
+        /// <summary>
+        /// ComputeHash implementation.
+        /// </summary>
         public static byte[] ComputeHash(SecureString password)
         {
             Validator.AssertMaxLength(password, MaxInputLength, nameof(password));
@@ -34,6 +43,9 @@ namespace DSInternals.Common.Cryptography
             return hash;
         }
 
+        /// <summary>
+        /// ComputeHash implementation.
+        /// </summary>
         public static byte[] ComputeHash(ReadOnlyMemory<byte> password)
         {
             NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(password, out byte[] hash);
@@ -42,6 +54,9 @@ namespace DSInternals.Common.Cryptography
             return hash;
         }
 
+        /// <summary>
+        /// ComputeHash implementation.
+        /// </summary>
         public static byte[] ComputeHash(byte[] password)
         {
             Validator.AssertMaxLength(password, MaxInputLength*sizeof(char), nameof(password));
@@ -55,6 +70,9 @@ namespace DSInternals.Common.Cryptography
             return hash;
         }
 
+        /// <summary>
+        /// ComputeHash implementation.
+        /// </summary>
         public static byte[] ComputeHash(string password)
         {
             Validator.AssertMaxLength(password, MaxInputLength, nameof(password));
@@ -65,6 +83,9 @@ namespace DSInternals.Common.Cryptography
             return hash;
         }
 
+        /// <summary>
+        /// GetRandom implementation.
+        /// </summary>
         public static byte[] GetRandom()
         {
             using (var rng = RandomNumberGenerator.Create())

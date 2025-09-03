@@ -2,6 +2,9 @@
 
 namespace DSInternals.Common.AzureAD
 {
+    /// <summary>
+    /// Represents an OData error message with language and value information.
+    /// </summary>
     public class ODataErrorMessage
     {
         [JsonPropertyName("lang")]

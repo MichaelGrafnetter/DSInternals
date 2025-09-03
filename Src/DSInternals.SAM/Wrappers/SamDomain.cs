@@ -7,12 +7,18 @@ using System.Security.Principal;
 
 namespace DSInternals.SAM
 {
+    /// <summary>
+    /// Represents a SamDomain.
+    /// </summary>
     public class SamDomain : SamObject
     {
         internal SamDomain(SafeSamHandle handle) : base(handle)
         {
         }
 
+        /// <summary>
+        /// LookupUser implementation.
+        /// </summary>
         public int LookupUser(string name)
         {
             int rid;
@@ -38,18 +44,27 @@ namespace DSInternals.SAM
             }
             return rid;
         }
+        /// <summary>
+        /// OpenUser implementation.
+        /// </summary>
         public SamUser OpenUser(string name, SamUserAccessMask desiredAccess)
         {
             int rid = this.LookupUser(name);
             return this.OpenUser(rid, desiredAccess);
         }
 
+        /// <summary>
+        /// OpenUser implementation.
+        /// </summary>
         public  SamUser OpenUser(SecurityIdentifier sid, SamUserAccessMask desiredAccess)
         {
             int rid = sid.GetRid();
             return this.OpenUser(rid, desiredAccess);
         }
 
+        /// <summary>
+        /// OpenUser implementation.
+        /// </summary>
         public SamUser OpenUser(int rid, SamUserAccessMask desiredAccess)
         {
             SafeSamHandle userHandle;
@@ -58,6 +73,9 @@ namespace DSInternals.SAM
             return new SamUser(userHandle);
         }
 
+        /// <summary>
+        /// GetPasswordPolicy implementation.
+        /// </summary>
         public SamDomainPasswordInformation GetPasswordPolicy()
         {
             SamDomainPasswordInformation passwordInfo;

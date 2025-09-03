@@ -14,6 +14,9 @@
     public partial class DirectoryAgent : IDisposable
     {
         #region SetAccountPassword
+        /// <summary>
+        /// SetAccountPassword implementation.
+        /// </summary>
         public bool SetAccountPassword(DistinguishedName dn, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -23,6 +26,9 @@
             }
         }
 
+        /// <summary>
+        /// SetAccountPassword implementation.
+        /// </summary>
         public bool SetAccountPassword(SecurityIdentifier objectSid, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -32,6 +38,9 @@
             }
         }
 
+        /// <summary>
+        /// SetAccountPassword implementation.
+        /// </summary>
         public bool SetAccountPassword(string samAccountName, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -41,6 +50,9 @@
             }
         }
 
+        /// <summary>
+        /// SetAccountPassword implementation.
+        /// </summary>
         public bool SetAccountPassword(Guid objectGuid, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -84,24 +96,36 @@
         #endregion SetAccountPassword
 
         #region SetAccountPasswordHash
+        /// <summary>
+        /// SetAccountPasswordHash implementation.
+        /// </summary>
         public bool SetAccountPasswordHash(DistinguishedName dn, byte[] newNtHash, SupplementalCredentials newSupplementalCredentials, byte[] bootKey, bool skipMetaUpdate)
         {
             var obj = this.FindObject(dn);
             return this.SetAccountPasswordHash(obj, dn, newNtHash, newSupplementalCredentials, bootKey, skipMetaUpdate);
         }
 
+        /// <summary>
+        /// SetAccountPasswordHash implementation.
+        /// </summary>
         public bool SetAccountPasswordHash(SecurityIdentifier objectSid, byte[] newNtHash, SupplementalCredentials newSupplementalCredentials, byte[] bootKey, bool skipMetaUpdate)
         {
             var obj = this.FindObject(objectSid);
             return this.SetAccountPasswordHash(obj, objectSid, newNtHash, newSupplementalCredentials, bootKey, skipMetaUpdate);
         }
 
+        /// <summary>
+        /// SetAccountPasswordHash implementation.
+        /// </summary>
         public bool SetAccountPasswordHash(string samAccountName, byte[] newNtHash, SupplementalCredentials newSupplementalCredentials, byte[] bootKey, bool skipMetaUpdate)
         {
             var obj = this.FindObject(samAccountName);
             return this.SetAccountPasswordHash(obj, samAccountName, newNtHash, newSupplementalCredentials, bootKey, skipMetaUpdate);
         }
 
+        /// <summary>
+        /// SetAccountPasswordHash implementation.
+        /// </summary>
         public bool SetAccountPasswordHash(Guid objectGuid, byte[] newNtHash, SupplementalCredentials newSupplementalCredentials, byte[] bootKey, bool skipMetaUpdate)
         {
             var obj = this.FindObject(objectGuid);
@@ -287,6 +311,9 @@
             }
         }
 
+        /// <summary>
+        /// GetSecretDecryptor implementation.
+        /// </summary>
         public DirectorySecretDecryptor GetSecretDecryptor(byte[] bootKey = null)
         {
             if (bootKey == null && !this.context.DomainController.IsADAM)

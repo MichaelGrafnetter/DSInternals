@@ -1,5 +1,8 @@
 ﻿namespace DSInternals.Common.Cryptography
 {
+    /// <summary>
+    /// Defines values for PrivateKeyEncryptionType.
+    /// </summary>
     public enum PrivateKeyEncryptionType : int
     {
         None = 0,

@@ -1,6 +1,9 @@
 ﻿using DSInternals.Common.Schema;
 namespace DSInternals.Replication.Model
 {
+    /// <summary>
+    /// Represents a ReplicaAttribute.
+    /// </summary>
     public class ReplicaAttribute
     {
         public ReplicaAttribute(AttributeType id, byte[][] values)

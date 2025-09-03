@@ -14,27 +14,57 @@
             get;
         }
 
+        /// <summary>
+        /// HasAttribute implementation.
+        /// </summary>
         public abstract bool HasAttribute(string name);
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public abstract void ReadAttribute(string name, out byte[] value);
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public abstract void ReadAttribute(string name, out byte[][] value);
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out Guid? value)
         {
             byte[] binaryValue;
             this.ReadAttribute(name, out binaryValue);
             value = (binaryValue != null) ? new Guid(binaryValue) : (Guid?)null;
         }
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out bool value)
         {
             int? numericValue;
             this.ReadAttribute(name, out numericValue);
             value = numericValue.HasValue ? (numericValue.Value != 0) : false;
         }
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public abstract void ReadAttribute(string name, out int? value);
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public abstract void ReadAttribute(string name, out long? value);
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public abstract void ReadAttribute(string name, out string value, bool unicode = true);
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public abstract void ReadAttribute(string name, out string[] values, bool unicode = true);
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public virtual void ReadAttribute(string name, out RawSecurityDescriptor value)
         {
             byte[] binarySecurityDescriptor;
@@ -42,6 +72,9 @@
             value = (binarySecurityDescriptor != null) ? new RawSecurityDescriptor(binarySecurityDescriptor, 0) : null;
         }
 
+        /// <summary>
+        /// ReadLinkedValues implementation.
+        /// </summary>
         public abstract void ReadLinkedValues(string attributeName, out byte[][] values);
 
         public abstract string DistinguishedName
@@ -59,6 +92,9 @@
             get;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out SecurityIdentifier value)
         {
             byte[] binarySid;
@@ -66,8 +102,14 @@
             value = binarySid.ToSecurityIdentifier(this.HasBigEndianRid);
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public abstract void ReadAttribute(string name, out DistinguishedName value);
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out SecurityIdentifier[] value)
         {
             value = null;
@@ -79,30 +121,45 @@
             }
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out SamAccountType? value)
         {
             this.ReadAttribute(name, out int? numericValue);
             value = (SamAccountType?)numericValue;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out TrustDirection? value)
         {
             this.ReadAttribute(name, out int? numericValue);
             value = (TrustDirection?)numericValue;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out TrustAttributes? value)
         {
             this.ReadAttribute(name, out int? numericValue);
             value = (TrustAttributes?)numericValue;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out TrustType? value)
         {
             this.ReadAttribute(name, out int? numericValue);
             value = (TrustType?)numericValue;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out DateTime? value, bool asGeneralizedTime)
         {
             value = null;

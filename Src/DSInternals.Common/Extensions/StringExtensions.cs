@@ -6,6 +6,9 @@
 
     public static class StringExtensions
     {
+        /// <summary>
+        /// TrimEnd implementation.
+        /// </summary>
         public static string TrimEnd(this string input, string suffix)
         {
             if(! string.IsNullOrEmpty(input) && ! string.IsNullOrEmpty(suffix) && input.EndsWith(suffix))
@@ -19,6 +22,9 @@
             }
         }
 
+        /// <summary>
+        /// ToSecureString implementation.
+        /// </summary>
         public static SecureString ToSecureString(this string input)
         {
             if (input == null)
@@ -34,6 +40,9 @@
             return output;
         }
 
+        /// <summary>
+        /// SddlToBinary implementation.
+        /// </summary>
         public static byte[] SddlToBinary(this string securityDescriptor)
         {
             Validator.AssertNotNullOrWhiteSpace(securityDescriptor, "securityDescriptor");

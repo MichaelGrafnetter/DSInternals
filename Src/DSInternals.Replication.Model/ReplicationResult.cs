@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DSInternals.Replication.Model
 {
+    /// <summary>
+    /// Represents a ReplicationResult.
+    /// </summary>
     public class ReplicationResult
     {
         // TODO: AsReadOnly

@@ -8,6 +8,9 @@
     using System.Security.Cryptography.X509Certificates;
     using System.Text.RegularExpressions;
 
+    /// <summary>
+    /// Represents a DPAPIBackupKey.
+    /// </summary>
     public class DPAPIBackupKey : DPAPIObject
     {
         private const int KeyVersionOffset = 0;
@@ -118,6 +121,9 @@
             private set;
         }
 
+        /// <summary>
+        /// Save implementation.
+        /// </summary>
         public override void Save(string directoryPath)
         {
             // The target directory must exist
@@ -220,21 +226,33 @@
             }
         }
 
+        /// <summary>
+        /// GetKeyDN implementation.
+        /// </summary>
         public static string GetKeyDN(Guid keyId, string domainDN)
         {
             return String.Format(BackupKeyDNFormat, keyId, domainDN);
         }
 
+        /// <summary>
+        /// GetKeyName implementation.
+        /// </summary>
         public static string GetKeyName(Guid keyId)
         {
             return String.Format(BackupKeyNameFormat, keyId);
         }
 
+        /// <summary>
+        /// GetPreferredRSAKeyPointerDN implementation.
+        /// </summary>
         public static string GetPreferredRSAKeyPointerDN(string domainDN)
         {
             return String.Format(BackupKeyDNFormat, PreferredRSAKeyPointerName, domainDN);
         }
 
+        /// <summary>
+        /// GetPreferredLegacyKeyPointerDN implementation.
+        /// </summary>
         public static string GetPreferredLegacyKeyPointerDN(string domainDN)
         {
             return String.Format(BackupKeyDNFormat, PreferredLegacyKeyPointerName, domainDN);

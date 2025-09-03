@@ -6,10 +6,16 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, "ADReplKdsRootKey")]
     [OutputType(typeof(KdsRootKey))]
+    /// <summary>
+    /// Represents a GetADReplKdsRootKeyCommand.
+    /// </summary>
     public class GetADReplKdsRootKeyCommand : ADReplCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, Position = 0)]
         [Alias("Id", "KeyId")]
+        /// <summary>
+        /// Gets or sets the RootKeyId.
+        /// </summary>
         public Guid RootKeyId { get; set; }
 
         protected override void ProcessRecord()

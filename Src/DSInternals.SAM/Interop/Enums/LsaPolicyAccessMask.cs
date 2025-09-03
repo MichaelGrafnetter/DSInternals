@@ -3,6 +3,9 @@
     using System;
 
     [Flags]
+    /// <summary>
+    /// Defines values for LsaPolicyAccessMask.
+    /// </summary>
     public enum LsaPolicyAccessMask : int
     {
         /// <summary>

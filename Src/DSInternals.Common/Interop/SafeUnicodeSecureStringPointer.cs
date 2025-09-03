@@ -88,6 +88,9 @@ namespace DSInternals.Common.Interop
             return true;
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             return Marshal.PtrToStringUni(this.handle);

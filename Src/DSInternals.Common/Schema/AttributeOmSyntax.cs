@@ -1,5 +1,8 @@
 ﻿namespace DSInternals.Common.Schema
 {
+    /// <summary>
+    /// Defines the OM-Syntax values for Active Directory attributes.
+    /// </summary>
     public enum AttributeOmSyntax : int
     {
         Undefined = 0,

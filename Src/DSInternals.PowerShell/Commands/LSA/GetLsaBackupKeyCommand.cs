@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsCommon.Get, "LsaBackupKey")]
     [OutputType(typeof(DPAPIBackupKey))]
+    /// <summary>
+    /// Represents a GetLsaBackupKeyCommand.
+    /// </summary>
     public class GetLsaBackupKeyCommand : LsaPolicyCommandBase
     {
         #region Cmdlet Overrides

@@ -8,6 +8,9 @@
     [Cmdlet(VerbsData.Save, "DPAPIBlob")]
     // TODO: Export None as resource.
     [OutputType("None")]
+    /// <summary>
+    /// Represents a SaveDPAPIBlobCmdlet.
+    /// </summary>
     public class SaveDPAPIBlobCmdlet : PSCmdletEx
     {
         private const string VerboseMessageFormat = "Creating DPAPI file {0}.";

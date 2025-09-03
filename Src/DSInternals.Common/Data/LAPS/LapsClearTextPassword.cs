@@ -13,12 +13,21 @@ namespace DSInternals.Common.Data
     public class LapsClearTextPassword
     {
         [JsonPropertyName("n")]
+        /// <summary>
+        /// The AccountName.
+        /// </summary>
         public string AccountName;
 
         [JsonPropertyName("t")]
+        /// <summary>
+        /// The UpdateTimestampString.
+        /// </summary>
         public string UpdateTimestampString;
 
         [JsonPropertyName("p")]
+        /// <summary>
+        /// The Password.
+        /// </summary>
         public string Password;
 
         [JsonIgnore]
@@ -46,12 +55,18 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// Parse implementation.
+        /// </summary>
         public static LapsClearTextPassword Parse(string json)
         {
             Validator.AssertNotNull(json, nameof(json));
             return LenientJsonSerializer.DeserializeLenient<LapsClearTextPassword>(json);
         }
 
+        /// <summary>
+        /// Parse implementation.
+        /// </summary>
         public static LapsClearTextPassword Parse(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {
             return LenientJsonSerializer.DeserializeLenient<LapsClearTextPassword>(binaryJson, utf16);

@@ -5,9 +5,15 @@ using System.Linq;
 
 namespace DSInternals.Replication.Model
 {
+    /// <summary>
+    /// Represents a ReplicaAttributeCollection.
+    /// </summary>
     public class ReplicaAttributeCollection : Dictionary<AttributeType, ReplicaAttribute>
     {
         // TODO: Move parent as member.
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public ReplicaAttributeCollection() : base()
         {
         }
@@ -16,6 +22,9 @@ namespace DSInternals.Replication.Model
         {
         }
 
+        /// <summary>
+        /// Add implementation.
+        /// </summary>
         public void Add(ReplicaAttribute attribute)
         {
             Validator.AssertNotNull(attribute, "attribute");

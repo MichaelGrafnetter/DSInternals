@@ -10,6 +10,9 @@ namespace DSInternals.Common.Data
     /// </summary>
     public class CustomKeyInformationConverter : JsonConverter<CustomKeyInformation>
     {
+        /// <summary>
+        /// Read implementation.
+        /// </summary>
         public override CustomKeyInformation Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType == JsonTokenType.Null)
@@ -33,6 +36,9 @@ namespace DSInternals.Common.Data
             throw new JsonException("Unexpected token parsing CustomKeyInformation.");
         }
 
+        /// <summary>
+        /// Write implementation.
+        /// </summary>
         public override void Write(Utf8JsonWriter writer, CustomKeyInformation value, JsonSerializerOptions options)
         {
             if(value != null)

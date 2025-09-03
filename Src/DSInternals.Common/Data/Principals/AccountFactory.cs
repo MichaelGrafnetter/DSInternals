@@ -5,6 +5,9 @@ namespace DSInternals.Common.Data
 {
     public static class AccountFactory
     {
+        /// <summary>
+        /// CreateAccount implementation.
+        /// </summary>
         public static DSAccount? CreateAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             // Validate the input.

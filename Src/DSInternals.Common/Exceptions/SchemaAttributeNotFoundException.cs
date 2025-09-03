@@ -11,6 +11,9 @@
             get;
             private set;
         }
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public SchemaAttributeNotFoundException(string attributeName) : base(null)
         {
             this.AttributeIdentifier = attributeName;

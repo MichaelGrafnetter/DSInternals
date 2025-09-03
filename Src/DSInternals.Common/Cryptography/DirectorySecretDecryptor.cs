@@ -38,6 +38,9 @@ namespace DSInternals.Common.Cryptography
             get;
         }
 
+        /// <summary>
+        /// DecryptHash implementation.
+        /// </summary>
         public byte[] DecryptHash(byte[] blob, int rid)
         {
             // Decrypt layer 1:
@@ -48,6 +51,9 @@ namespace DSInternals.Common.Cryptography
             return DecryptUsingDES(partiallyDecryptedHash, rid);
         }
 
+        /// <summary>
+        /// EncryptHash implementation.
+        /// </summary>
         public byte[] EncryptHash(byte[] hash, int rid)
         {
             // Encryption layer 1
@@ -57,6 +63,9 @@ namespace DSInternals.Common.Cryptography
             return this.EncryptSecret(partiallyEncryptedHash);
         }
 
+        /// <summary>
+        /// DecryptHashHistory implementation.
+        /// </summary>
         public byte[][] DecryptHashHistory(byte[] blob, int rid)
         {
             // Decrypt layer 1:
@@ -76,6 +85,9 @@ namespace DSInternals.Common.Cryptography
             return result;
         }
 
+        /// <summary>
+        /// EncryptHashHistory implementation.
+        /// </summary>
         public byte[] EncryptHashHistory(byte[][] hashHistory, int rid)
         {
             Validator.AssertNotNull(hashHistory, "hashHistory");

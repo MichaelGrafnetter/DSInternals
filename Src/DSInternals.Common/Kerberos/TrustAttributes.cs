@@ -8,6 +8,9 @@ namespace DSInternals.Common.Kerberos
     /// </summary>
     /// <remarks>https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/e9a2d23c-c31e-4a6f-88a0-6646fdb51a3c</remarks>
     [Flags]
+    /// <summary>
+    /// Defines values for TrustAttributes.
+    /// </summary>
     public enum TrustAttributes : uint
     {
         None = 0,

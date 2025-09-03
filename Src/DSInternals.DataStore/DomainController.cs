@@ -14,9 +14,21 @@
     public class DomainController : IDisposable, IDomainController
     {
         // TODO: Refactor properties and add more of them to the IDomainController interface.
+        /// <summary>
+        /// The 1.
+        /// </summary>
         public const long UsnMinValue = 1;
+        /// <summary>
+        /// The UsnMaxValue.
+        /// </summary>
         public const long UsnMaxValue = long.MaxValue;
+        /// <summary>
+        /// The 1.
+        /// </summary>
         public const long EpochMinValue = 1;
+        /// <summary>
+        /// The EpochMaxValue.
+        /// </summary>
         public const long EpochMaxValue = int.MaxValue;
         private const string CrossRefContainerRDN = "CN=Partitions";
         private const char DnsNameSeparator = '.';
@@ -549,6 +561,9 @@
             }
         }
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
@@ -603,6 +618,9 @@
             private set;
         }
 
+        /// <summary>
+        /// Gets or sets the IsADAM.
+        /// </summary>
         public bool IsADAM {
             get;
             private set;

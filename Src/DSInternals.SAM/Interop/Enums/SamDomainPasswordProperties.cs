@@ -6,6 +6,9 @@ namespace DSInternals.SAM.Interop
     /// Flags that describe the password properties.
     /// </summary>
     [Flags]
+    /// <summary>
+    /// Defines values for SamDomainPasswordProperties.
+    /// </summary>
     public enum SamDomainPasswordProperties : uint
     {
         /// <summary>

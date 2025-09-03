@@ -4,13 +4,22 @@ using System.Linq;
 
 namespace DSInternals.Replication.Model
 {
+    /// <summary>
+    /// Represents a ReplicatedLinkedValueCollection.
+    /// </summary>
     public class ReplicatedLinkedValueCollection : Dictionary<Guid, List<ReplicaAttribute>>
     {
         // TODO: Move parent as member.
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public ReplicatedLinkedValueCollection() : base()
         {
         }
 
+        /// <summary>
+        /// Add implementation.
+        /// </summary>
         public void Add(Guid objectId, ReplicaAttribute attribute)
         {
             if (this.ContainsKey(objectId))
@@ -25,6 +34,9 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// Get implementation.
+        /// </summary>
         public IEnumerable<ReplicaAttribute> Get(Guid objectId)
         {
             List<ReplicaAttribute> attributes;

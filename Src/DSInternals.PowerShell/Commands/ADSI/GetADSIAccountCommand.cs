@@ -5,6 +5,9 @@
 
     [Cmdlet(VerbsCommon.Get, "ADSIAccount")]
     [OutputType(typeof(DSAccount), typeof(DSUser), typeof(DSComputer))]
+    /// <summary>
+    /// Represents a GetADSIAccountCommand.
+    /// </summary>
     public class GetADSIAccountCommand : ADSICommandBase
     {
         [Parameter(Mandatory = false)]

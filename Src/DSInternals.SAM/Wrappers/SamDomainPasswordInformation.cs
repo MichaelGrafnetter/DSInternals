@@ -11,6 +11,9 @@
     /// </summary>
     /// <see>https://msdn.microsoft.com/en-us/library/windows/desktop/aa375371%28v=vs.85%29.aspx</see>
     [StructLayout(LayoutKind.Sequential)]
+    /// <summary>
+    /// Represents a SamDomainPasswordInformation structure.
+    /// </summary>
     public struct SamDomainPasswordInformation
     {
         /// <summary>

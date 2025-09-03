@@ -69,15 +69,45 @@
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct ProtectionKeyIdentifierHeader
         {
+            /// <summary>
+            /// The Version.
+            /// </summary>
             public int Version;
+            /// <summary>
+            /// The Magic.
+            /// </summary>
             public uint Magic;
+            /// <summary>
+            /// The Flags.
+            /// </summary>
             public GroupKeyEnvelopeFlags Flags;
+            /// <summary>
+            /// The L0KeyId.
+            /// </summary>
             public int L0KeyId;
+            /// <summary>
+            /// The L1KeyId.
+            /// </summary>
             public int L1KeyId;
+            /// <summary>
+            /// The L2KeyId.
+            /// </summary>
             public int L2KeyId;
+            /// <summary>
+            /// The RootKeyId.
+            /// </summary>
             public Guid RootKeyId;
+            /// <summary>
+            /// The PublicKeyLength.
+            /// </summary>
             public int PublicKeyLength;
+            /// <summary>
+            /// The DomainNameLength.
+            /// </summary>
             public int DomainNameLength;
+            /// <summary>
+            /// The ForestNameLength.
+            /// </summary>
             public int ForestNameLength;
 
             // Variable length strings follow
@@ -172,6 +202,9 @@
             this.ForestName = forest;
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             DateTime cycle = KdsRootKey.GetKeyStartTime(this.L0KeyId, this.L1KeyId, this.L2KeyId);

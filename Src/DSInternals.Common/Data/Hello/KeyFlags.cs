@@ -7,6 +7,9 @@ namespace DSInternals.Common.Data
     /// </summary>
     /// <see>https://msdn.microsoft.com/en-us/library/mt220496.aspx</see>
     [Flags]
+    /// <summary>
+    /// Defines values for KeyFlags.
+    /// </summary>
     public enum KeyFlags : byte
     {
         /// <summary>

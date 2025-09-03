@@ -1,6 +1,9 @@
 ﻿namespace DSInternals.Common.Exceptions
 {
     [Serializable]
+    /// <summary>
+    /// Represents a DirectoryObjectOperationException.
+    /// </summary>
     public class DirectoryObjectOperationException : DirectoryObjectException
     {
         public string Reason

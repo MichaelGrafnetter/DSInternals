@@ -8,6 +8,9 @@ namespace DSInternals.Common.Interop
     /// </summary>
     /// <see>https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_unicode_string</see>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    /// <summary>
+    /// Represents a UnicodeString structure.
+    /// </summary>
     public struct UnicodeString
     {
         private const ushort UnicodeCharLength = 2;
@@ -58,6 +61,9 @@ namespace DSInternals.Common.Interop
         /// Pointer to a buffer used to contain a string of wide characters.
         /// </summary>
         [MarshalAs(UnmanagedType.LPWStr)]
+        /// <summary>
+        /// The Buffer.
+        /// </summary>
         public string Buffer;
     }
 }

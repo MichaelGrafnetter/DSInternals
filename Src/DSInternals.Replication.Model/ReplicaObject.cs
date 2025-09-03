@@ -8,6 +8,9 @@ using System.Text;
 
 namespace DSInternals.Replication.Model
 {
+    /// <summary>
+    /// Represents a ReplicaObject.
+    /// </summary>
     public class ReplicaObject : DirectoryObject
     {
         private string distinguishedName;
@@ -59,6 +62,9 @@ namespace DSInternals.Replication.Model
             private set;
         }
 
+        /// <summary>
+        /// LoadLinkedValues implementation.
+        /// </summary>
         public void LoadLinkedValues(ReplicatedLinkedValueCollection linkedValueCollection)
         {
             var objectAttributes = linkedValueCollection.Get(this.Guid);
@@ -177,12 +183,18 @@ namespace DSInternals.Replication.Model
             value = numericValue.HasValue ? numericValue.Value != 0 : false;
         }
 
+        /// <summary>
+        /// HasAttribute implementation.
+        /// </summary>
         public override bool HasAttribute(string name)
         {
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
             return attributeId.HasValue && this.HasAttribute(attributeId.Value);
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out byte[] value)
         {
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
@@ -197,6 +209,9 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out byte[][] value)
         {
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
@@ -211,6 +226,9 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out int? value)
         {
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
@@ -225,6 +243,9 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out long? value)
         {
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
@@ -239,6 +260,9 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out string? value, bool unicode = true)
         {
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
@@ -253,6 +277,9 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out string[]? values, bool unicode = true)
         {
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
@@ -267,6 +294,9 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out DistinguishedName? value)
         {
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
@@ -281,6 +311,9 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// ReadLinkedValues implementation.
+        /// </summary>
         public override void ReadLinkedValues(string attributeName, out byte[][]? values)
         {
             // The linked values have already been merged with regular attributes using LoadLinkedValues

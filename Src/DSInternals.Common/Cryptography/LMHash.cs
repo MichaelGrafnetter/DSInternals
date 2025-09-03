@@ -14,8 +14,14 @@ namespace DSInternals.Common.Cryptography
         /// </summary>
         public const int HashSize = NativeMethods.LMHashNumBytes;
 
+        /// <summary>
+        /// The MaxChars.
+        /// </summary>
         public const int MaxChars = NativeMethods.LMPasswordMaxChars;
 
+        /// <summary>
+        /// ComputeHash implementation.
+        /// </summary>
         public static byte[] ComputeHash(SecureString password)
         {
             Validator.AssertNotNull(password, "password");

@@ -10,6 +10,9 @@ namespace DSInternals.Common.Interop
     /// Represents a wrapper class for...
     /// </summary>
     [SecurityCritical]
+    /// <summary>
+    /// Represents a SafeOemStringPointer.
+    /// </summary>
     public class SafeOemStringPointer : SafeHandleZeroOrMinusOneIsInvalid
     {
         public int Length
@@ -18,6 +21,9 @@ namespace DSInternals.Common.Interop
             private set;
         }
 
+        /// <summary>
+        /// Allocate implementation.
+        /// </summary>
         public static SafeOemStringPointer Allocate(int length)
         {
             IntPtr nativeMemory = Marshal.AllocHGlobal(length);
@@ -59,6 +65,9 @@ namespace DSInternals.Common.Interop
             }
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             return Marshal.PtrToStringAnsi(this.handle);

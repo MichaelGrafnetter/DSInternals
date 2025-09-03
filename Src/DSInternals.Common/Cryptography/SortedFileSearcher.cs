@@ -4,6 +4,9 @@
     using System.IO;
     using System.Text;
 
+    /// <summary>
+    /// Represents a SortedFileSearcher.
+    /// </summary>
     public class SortedFileSearcher : IDisposable
     {
         /// <summary>
@@ -27,6 +30,9 @@
             this.reader = new StreamReader(inputStream, Encoding.ASCII, true, BufferSize, true);
         }
 
+        /// <summary>
+        /// FindString implementation.
+        /// </summary>
         public bool FindString(string query)
         {
             Validator.AssertNotNullOrWhiteSpace(query, nameof(query));
@@ -111,6 +117,9 @@
             }
         }
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

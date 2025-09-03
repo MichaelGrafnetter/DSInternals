@@ -5,11 +5,17 @@
     using System.Linq;
 
     // TODO: Rename HashEqualityComparer to ByteArrayEqualityComparer
+    /// <summary>
+    /// Represents a HashEqualityComparer.
+    /// </summary>
     public class HashEqualityComparer : IEqualityComparer<byte[]>
     {
         // Singleton
         private static HashEqualityComparer instance;
 
+        /// <summary>
+        /// GetInstance implementation.
+        /// </summary>
         public static HashEqualityComparer GetInstance()
         {
             if(instance == null)
@@ -21,6 +27,9 @@
 
         private HashEqualityComparer() {}
 
+        /// <summary>
+        /// Equals implementation.
+        /// </summary>
         public bool Equals(byte[] x, byte[] y)
         {
             if (x == null || y == null)
@@ -34,6 +43,9 @@
             return x.SequenceEqual(y);
         }
 
+        /// <summary>
+        /// GetHashCode implementation.
+        /// </summary>
         public int GetHashCode(byte[] obj)
         {
             if(obj == null || obj.LongLength == 0)

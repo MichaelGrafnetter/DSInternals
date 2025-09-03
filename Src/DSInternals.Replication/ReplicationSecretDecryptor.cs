@@ -4,6 +4,9 @@ using System;
 
 namespace DSInternals.Replication
 {
+    /// <summary>
+    /// Represents a ReplicationSecretDecryptor.
+    /// </summary>
     public class ReplicationSecretDecryptor : DirectorySecretDecryptor
     {
         private const int SaltOffset = 0;
@@ -35,6 +38,9 @@ namespace DSInternals.Replication
             this.key = key;
         }
 
+        /// <summary>
+        /// DecryptSecret implementation.
+        /// </summary>
         public override byte[] DecryptSecret(byte[] blob)
         {
             // Blob structure: Salt (16B), Encrypted secret (rest)
@@ -56,6 +62,9 @@ namespace DSInternals.Replication
             return decryptedSecret;
         }
 
+        /// <summary>
+        /// EncryptSecret implementation.
+        /// </summary>
         public override byte[] EncryptSecret(byte[] secret)
         {
             throw new NotImplementedException("We will never act as a replication source so secret encryption is out of scope.");

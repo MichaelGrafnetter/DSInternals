@@ -11,6 +11,9 @@
         SupportsShouldProcess = true
         )]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a RemoveADDBObjectCommand.
+    /// </summary>
     public class RemoveADDBObjectCommand : ADDBObjectCommandBase
     {
         [Parameter]

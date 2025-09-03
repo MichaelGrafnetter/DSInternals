@@ -7,6 +7,9 @@
 
     [Cmdlet(VerbsCommon.Get, "ADDBBitLockerRecoveryInformation")]
     [OutputType(typeof(DSInternals.Common.Data.BitLockerRecoveryInformation))]
+    /// <summary>
+    /// Represents a GetADDBBitLockerRecoveryInformationCommand.
+    /// </summary>
     public class GetADDBBitLockerRecoveryInformationCommand : ADDBObjectCommandBase
     {
         #region Parameters

@@ -6,6 +6,9 @@ using System;
 
 namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
 {
+    /// <summary>
+    /// Represents a ProtectionKeyDescriptor structure.
+    /// </summary>
     public struct ProtectionKeyDescriptor
     {
         private const string ProtectionInfoOid = "1.3.6.1.4.1.311.74.1";
@@ -23,6 +26,9 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
             private set;
         }
 
+        /// <summary>
+        /// Decode implementation.
+        /// </summary>
         public static ProtectionKeyDescriptor Decode(ReadOnlyMemory<byte> encoded)
         {
             var reader = new AsnReader(encoded, AsnEncodingRules.DER);
@@ -31,6 +37,9 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
             return decoded;
         }
 
+        /// <summary>
+        /// Decode implementation.
+        /// </summary>
         public static ProtectionKeyDescriptor Decode(AsnReader reader)
         {
             /*

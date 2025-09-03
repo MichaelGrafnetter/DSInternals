@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsData.ConvertTo, "Hex")]
     [OutputType(new Type[] { typeof(string) })]
+    /// <summary>
+    /// Represents a ConvertToHexCommand.
+    /// </summary>
     public class ConvertToHexCommand : PSCmdlet
     {
         #region Parameters

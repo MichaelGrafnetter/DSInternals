@@ -8,6 +8,9 @@
     using System.Security;
     using System.Text;
 
+    /// <summary>
+    /// Represents a KerberosCredential.
+    /// </summary>
     public class KerberosCredential
     {
         private const short CurrentRevision = 3;
@@ -63,6 +66,9 @@
             private set;
         }
 
+        /// <summary>
+        /// ToByteArray implementation.
+        /// </summary>
         public byte[] ToByteArray()
         {
             using (var stream = new MemoryStream())

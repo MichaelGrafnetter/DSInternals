@@ -7,6 +7,9 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Set, "ADDBAccountPasswordHash")]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a SetADDBAccountPasswordHashCommand.
+    /// </summary>
     public class SetADDBAccountPasswordHashCommand : ADDBModifyPrincipalCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]

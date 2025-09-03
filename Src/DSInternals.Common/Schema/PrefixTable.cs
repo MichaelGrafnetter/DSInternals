@@ -18,6 +18,9 @@ namespace DSInternals.Common.Schema
     /// </summary>
     public class PrefixTable
     {
+        /// <summary>
+        /// The 38.
+        /// </summary>
         public const int LastBuitlInPrefixIndex = 38;
         private const int MinBlobLength = 2 * sizeof(uint);
         private const long LongLimit = (long.MaxValue >> 7) - 0x7f;
@@ -131,6 +134,9 @@ namespace DSInternals.Common.Schema
             return upperWord * 0x10000u + lowerWord; // 65536
         }
 
+        /// <summary>
+        /// Translate implementation.
+        /// </summary>
         public string? Translate(AttributeType encodedOid)
         {
             if (!encodedOid.IsCompressedOid())
@@ -141,11 +147,17 @@ namespace DSInternals.Common.Schema
             return Translate((ATTRTYP)encodedOid);
         }
 
+        /// <summary>
+        /// Translate implementation.
+        /// </summary>
         public string? Translate(ClassType encodedOid)
         {
             return Translate((ATTRTYP)encodedOid);
         }
 
+        /// <summary>
+        /// Translate implementation.
+        /// </summary>
         public string? Translate(ATTRTYP encodedOid)
         {
             // Decode Oid from attribute id (:= prefixIndex + suffix)

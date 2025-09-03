@@ -82,6 +82,9 @@ namespace DSInternals.PowerShell.Commands
         }
         #endregion Cmdlet Overrides
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

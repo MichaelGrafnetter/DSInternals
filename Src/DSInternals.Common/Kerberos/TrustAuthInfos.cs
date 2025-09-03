@@ -46,6 +46,9 @@ namespace DSInternals.Common.Kerberos
             this.PreviousNTHash = previousNTHash;
         }
 
+        /// <summary>
+        /// Parse implementation.
+        /// </summary>
         public static TrustAuthInfos Parse(ReadOnlyMemory<byte> blob)
         {
             if (blob.Length < StructHeaderSize)
@@ -154,6 +157,9 @@ namespace DSInternals.Common.Kerberos
             return new TrustAuthInfos(currentPasswordBytes, previousPasswordBytes, currentNTHash, previousNTHash);
         }
 
+        /// <summary>
+        /// DeriveKerberosKeys implementation.
+        /// </summary>
         public KerberosCredentialNew? DeriveKerberosKeys(string salt)
         {
             return this.CurrentPasswordBytes.IsEmpty ? null : KerberosCredentialNew.Derive(this.CurrentPasswordBytes, this.PreviousPasswordBytes, salt);

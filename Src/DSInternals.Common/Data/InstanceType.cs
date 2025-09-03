@@ -9,6 +9,9 @@ namespace DSInternals.Common.Data
     /// </summary>
     /// <see>https://msdn.microsoft.com/en-us/library/cc219986.aspx</see>
     [Flags]
+    /// <summary>
+    /// Defines values for InstanceType.
+    /// </summary>
     public enum InstanceType : uint
     {
         /// <summary>

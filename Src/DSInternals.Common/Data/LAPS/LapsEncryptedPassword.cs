@@ -4,6 +4,9 @@ using DSInternals.Common.Cryptography.Asn1.DpapiNg;
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents a LapsEncryptedPassword.
+    /// </summary>
     public class LapsEncryptedPassword
     {
         private static readonly int StructHeaderSize = Marshal.SizeOf<LapsEncryptedPasswordHeader>();
@@ -26,7 +29,13 @@ namespace DSInternals.Common.Data
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct LapsEncryptedPasswordHeader
         {
+            /// <summary>
+            /// The PasswordUpdateTimestampHigh.
+            /// </summary>
             public uint PasswordUpdateTimestampHigh;
+            /// <summary>
+            /// The PasswordUpdateTimestampLow.
+            /// </summary>
             public uint PasswordUpdateTimestampLow;
 
             /// <summary>
@@ -56,6 +65,9 @@ namespace DSInternals.Common.Data
             this.EncryptedBlob = CngProtectedDataBlob.Decode(encryptedPassword);
         }
 
+        /// <summary>
+        /// Decrypt implementation.
+        /// </summary>
         public LapsClearTextPassword Decrypt()
         {
             var binaryLapsPassword = EncryptedBlob.Decrypt();
@@ -69,6 +81,9 @@ namespace DSInternals.Common.Data
             return LapsClearTextPassword.Parse(binaryLapsPassword, utf16: true);
         }
 
+        /// <summary>
+        /// TryDecrypt implementation.
+        /// </summary>
         public bool TryDecrypt(out LapsClearTextPassword lapsPassword)
         {
             bool success = EncryptedBlob.TryDecrypt(out ReadOnlySpan<byte> binaryLapsPassword);

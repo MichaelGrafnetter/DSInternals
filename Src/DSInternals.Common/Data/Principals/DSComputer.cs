@@ -4,10 +4,16 @@ using DSInternals.Common.Schema;
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents a DSComputer.
+    /// </summary>
     public class DSComputer : DSAccount
     {
         private List<LapsPasswordInformation>? _lapsPasswords;
 
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
             if (this.SamAccountType != SamAccountType.Computer)

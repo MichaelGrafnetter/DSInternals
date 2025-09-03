@@ -7,6 +7,9 @@
     {
         private const int ridLength = 4;
 
+        /// <summary>
+        /// GetRid implementation.
+        /// </summary>
         public static int GetRid(this SecurityIdentifier sid)
         {
             Validator.AssertNotNull(sid, "sid");
@@ -19,6 +22,9 @@
             return BitConverter.ToInt32(binaryForm, domainSidLength);
         }
 
+        /// <summary>
+        /// GetBinaryForm implementation.
+        /// </summary>
         public static byte[] GetBinaryForm(this SecurityIdentifier sid, bool bigEndianRid = false)
         {
             Validator.AssertNotNull(sid, "sid");

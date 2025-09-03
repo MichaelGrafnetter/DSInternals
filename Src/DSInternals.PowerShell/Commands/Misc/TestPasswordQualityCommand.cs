@@ -12,6 +12,9 @@
 
     [Cmdlet(VerbsDiagnostic.Test, "PasswordQuality", DefaultParameterSetName = ParamSetSingleSortedFile)]
     [OutputType(new Type[] { typeof(PasswordQualityTestResult) })]
+    /// <summary>
+    /// Represents a TestPasswordQualityCommand.
+    /// </summary>
     public class TestPasswordQualityCommand : PSCmdletEx, IDisposable
     {
         #region Constants
@@ -550,6 +553,9 @@
         }
 
         // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.

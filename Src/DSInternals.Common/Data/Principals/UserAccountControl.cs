@@ -6,6 +6,9 @@
     /// Flags that control the behavior of the user account.
     /// </summary>
     [Flags]
+    /// <summary>
+    /// Defines values for UserAccountControl.
+    /// </summary>
     public enum UserAccountControl : int
     {
         /// <summary>
@@ -116,6 +119,9 @@
 
     public static class UserAccountControlExtensions
     {
+        /// <summary>
+        /// SetFlags implementation.
+        /// </summary>
         public static void SetFlags(ref this UserAccountControl uac, UserAccountControl flag, bool? status)
         {
             if(status == true)

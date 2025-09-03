@@ -11,6 +11,9 @@ namespace DSInternals.PowerShell
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
     public sealed class AcceptHexStringAttribute : ArgumentTransformationAttribute
     {
+        /// <summary>
+        /// Transform implementation.
+        /// </summary>
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
         {
             string hexString;

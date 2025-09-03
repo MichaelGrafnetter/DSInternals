@@ -9,6 +9,9 @@
 
     [Cmdlet(VerbsCommon.Get, "BootKey")]
     [OutputType(typeof(string))]
+    /// <summary>
+    /// Represents a GetBootKeyCommand.
+    /// </summary>
     public class GetBootKeyCommand : PSCmdletEx
     {
         private const string OnlineParameterSet = "Online";

@@ -2,6 +2,9 @@
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents a LapsPasswordInformation.
+    /// </summary>
     public class LapsPasswordInformation
     {
         /// <summary>

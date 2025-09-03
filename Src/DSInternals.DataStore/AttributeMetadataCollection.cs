@@ -7,6 +7,9 @@ using System.Text;
 
 namespace DSInternals.DataStore
 {
+    /// <summary>
+    /// Represents a AttributeMetadataCollection.
+    /// </summary>
     public class AttributeMetadataCollection
     {
         private const int guidSize = 16;
@@ -45,6 +48,9 @@ namespace DSInternals.DataStore
             private set;
         }
 
+        /// <summary>
+        /// this implementation.
+        /// </summary>
         public AttributeMetadataCollection() : this(null) { }
 
         public AttributeMetadataCollection(byte[] buffer)
@@ -94,6 +100,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// Update implementation.
+        /// </summary>
         public void Update(AttributeType attributeId, Guid invocationId, DateTime time, long usn)
         {
             this.InnerList.TryGetValue(attributeId, out AttributeMetadata entry);
@@ -111,6 +120,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// ToByteArray implementation.
+        /// </summary>
         public byte[] ToByteArray()
         {
             byte[] buffer = new byte[CalculateBinarySize(this.Count)];
@@ -137,6 +149,9 @@ namespace DSInternals.DataStore
             return buffer;
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             var text = new StringBuilder();

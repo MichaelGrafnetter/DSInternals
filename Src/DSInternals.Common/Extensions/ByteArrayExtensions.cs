@@ -11,11 +11,17 @@ namespace DSInternals.Common
         private const string HexDigitsUpper = "0123456789ABCDEF";
         private const string HexDigitsLower = "0123456789abcdef";
 
+        /// <summary>
+        /// ZeroFill implementation.
+        /// </summary>
         public static void ZeroFill(this byte[] array)
         {
             Array.Clear(array, 0, array.Length);
         }
 
+        /// <summary>
+        /// HexToBinary implementation.
+        /// </summary>
         public static byte[] HexToBinary(this string hex, int startIndex, int length)
         {
             // Input validation
@@ -71,6 +77,9 @@ namespace DSInternals.Common
             return bytes;
         }
 
+        /// <summary>
+        /// HexToBinary implementation.
+        /// </summary>
         public static byte[] HexToBinary(this string hex)
         {
             // Trivial case
@@ -83,11 +92,17 @@ namespace DSInternals.Common
         }
 
         [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
+        /// <summary>
+        /// ToHex implementation.
+        /// </summary>
         public static string ToHex(this byte[] bytes, bool caps = false)
         {
             return bytes == null ? null : ToHex(bytes.AsSpan(), caps);
         }
 
+        /// <summary>
+        /// ToHex implementation.
+        /// </summary>
         public static string ToHex(this Span<byte> bytes, bool caps = false)
         {
             // TODO: Migrate to .AsReadOnlySpan()
@@ -95,6 +110,9 @@ namespace DSInternals.Common
             return readOnly.ToHex(caps);
         }
 
+        /// <summary>
+        /// ToHex implementation.
+        /// </summary>
         public static string ToHex(this ReadOnlySpan<byte> bytes, bool caps = false)
         {
             if (bytes == null)
@@ -118,6 +136,9 @@ namespace DSInternals.Common
             return hex.ToString();
         }
 
+        /// <summary>
+        /// ReadSecureWString implementation.
+        /// </summary>
         public static SecureString ReadSecureWString(this byte[] buffer, int startIndex)
         {
             Validator.AssertNotNull(buffer, nameof(buffer));
@@ -145,6 +166,9 @@ namespace DSInternals.Common
             return result;
         }
 
+        /// <summary>
+        /// SwapBytes implementation.
+        /// </summary>
         public static void SwapBytes(this byte[] bytes, int index1, int index2)
         {
             byte temp = bytes[index1];
@@ -158,6 +182,9 @@ namespace DSInternals.Common
         /// <param name="number">The integer to encode.</param>
         /// <returns>Array of bytes, in big endian order.</returns>
         [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
+        /// <summary>
+        /// GetBigEndianBytes implementation.
+        /// </summary>
         public static byte[] GetBigEndianBytes(this uint number)
         {
             byte[] bytes = BitConverter.GetBytes(number);
@@ -169,6 +196,9 @@ namespace DSInternals.Common
         }
 
         [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
+        /// <summary>
+        /// ToUInt32BigEndian implementation.
+        /// </summary>
         public static uint ToUInt32BigEndian(this byte[] bytes, int startIndex = 0)
         {
             if(BitConverter.IsLittleEndian)
@@ -180,6 +210,9 @@ namespace DSInternals.Common
         }
 
         [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
+        /// <summary>
+        /// ToUInt16BigEndian implementation.
+        /// </summary>
         public static ushort ToUInt16BigEndian(this byte[] bytes, int startIndex = 0)
         {
             if (BitConverter.IsLittleEndian)
@@ -190,6 +223,9 @@ namespace DSInternals.Common
             return BitConverter.ToUInt16(bytes, startIndex);
         }
 
+        /// <summary>
+        /// ToGuidBigEndian implementation.
+        /// </summary>
         public static Guid ToGuidBigEndian(this byte[] bytes)
         {
             if (BitConverter.IsLittleEndian)
@@ -203,6 +239,9 @@ namespace DSInternals.Common
             return new Guid(bytes);
         }
 
+        /// <summary>
+        /// ToSecurityIdentifier implementation.
+        /// </summary>
         public static SecurityIdentifier ToSecurityIdentifier(this byte[] binarySid, bool bigEndianRid = false)
         {
             if(binarySid == null)
@@ -224,6 +263,9 @@ namespace DSInternals.Common
         }
 
         [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
+        /// <summary>
+        /// Cut implementation.
+        /// </summary>
         public static byte[] Cut(this byte[] blob, int offset)
         {
             Validator.AssertNotNull(blob, "blob");
@@ -231,6 +273,9 @@ namespace DSInternals.Common
         }
 
         [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
+        /// <summary>
+        /// Cut implementation.
+        /// </summary>
         public static byte[] Cut(this byte[] blob, int offset, int count)
         {
             Validator.AssertNotNull(blob, "blob");
@@ -241,6 +286,9 @@ namespace DSInternals.Common
             return result;
         }
 
+        /// <summary>
+        /// ReadToEnd implementation.
+        /// </summary>
         public static byte[] ReadToEnd(this MemoryStream stream)
         {
             long remainingBytes = stream.Length - stream.Position;

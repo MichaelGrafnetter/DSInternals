@@ -73,6 +73,9 @@ namespace DSInternals.Common.Cryptography
             0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
         };
         
+        /// <summary>
+        /// Calculate implementation.
+        /// </summary>
         public static uint Calculate(byte[] buffer)
         {
             Validator.AssertNotNull(buffer, "buffer");

@@ -7,6 +7,9 @@ namespace DSInternals.Common.Schema
     /// </summary>
     /// <remarks>https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/1e38247d-8234-4273-9de3-bbf313548631</remarks>
     [Flags]
+    /// <summary>
+    /// Defines values for AttributeSystemFlags.
+    /// </summary>
     public enum AttributeSystemFlags
     {
         None = 0,

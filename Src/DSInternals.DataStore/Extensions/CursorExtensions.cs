@@ -15,32 +15,50 @@ namespace DSInternals.DataStore
     {
         // TODO: Move some of these extensions to DirectoryObject
         // TODO: Convert return value to out or template
+        /// <summary>
+        /// RetrieveColumnAsSearchFlags implementation.
+        /// </summary>
         public static AttributeSearchFlags RetrieveColumnAsSearchFlags(this Cursor cursor, Columnid columnId)
         {
             return (AttributeSearchFlags)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsAttributeSyntax implementation.
+        /// </summary>
         public static AttributeSyntax RetrieveColumnAsAttributeSyntax(this Cursor cursor, Columnid columnId)
         {
             int? numericValue = cursor.RetrieveColumnAsInt(columnId);
             return numericValue.HasValue ? (AttributeSyntax)numericValue.Value : AttributeSyntax.Undefined;
         }
 
+        /// <summary>
+        /// RetrieveColumnAsAttributeSystemFlags implementation.
+        /// </summary>
         public static AttributeSystemFlags RetrieveColumnAsAttributeSystemFlags(this Cursor cursor, Columnid columnId)
         {
             return (AttributeSystemFlags)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsAttributeOmSyntax implementation.
+        /// </summary>
         public static AttributeOmSyntax RetrieveColumnAsAttributeOmSyntax(this Cursor cursor, Columnid columnId)
         {
             return (AttributeOmSyntax)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsFunctionalLevel implementation.
+        /// </summary>
         public static FunctionalLevel RetrieveColumnAsFunctionalLevel(this Cursor cursor, Columnid columnId)
         {
             return (FunctionalLevel)cursor.RetrieveColumnAsInt(columnId).GetValueOrDefault(0);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsString implementation.
+        /// </summary>
         public static string RetrieveColumnAsString(this Cursor cursor, Columnid columnId, bool unicode = true)
         {
             object value = cursor.Record[columnId];
@@ -67,6 +85,9 @@ namespace DSInternals.DataStore
             return null;
         }
 
+        /// <summary>
+        /// RetrieveColumnAsStringArray implementation.
+        /// </summary>
         public static string[] RetrieveColumnAsStringArray(this Cursor cursor, Columnid columnId, bool unicode = true)
         {
             var record = cursor.Record;
@@ -97,6 +118,9 @@ namespace DSInternals.DataStore
             return result.Count > 0 ? result.ToArray() : null;
         }
 
+        /// <summary>
+        /// RetrieveColumnAsSid implementation.
+        /// </summary>
         public static SecurityIdentifier RetrieveColumnAsSid(this Cursor cursor, Columnid columnId)
         {
             byte[] binarySid = cursor.RetrieveColumnAsByteArray(columnId);
@@ -110,6 +134,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// RetrieveColumnAsByteArray implementation.
+        /// </summary>
         public static byte[] RetrieveColumnAsByteArray(this Cursor cursor, Columnid columnId)
         {
             object value = cursor.Record[columnId];
@@ -123,12 +150,18 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// RetrieveColumnAsByteArray implementation.
+        /// </summary>
         public static byte[] RetrieveColumnAsByteArray(this Cursor cursor, string columnName)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
             return cursor.RetrieveColumnAsByteArray(columnId);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsMultiByteArray implementation.
+        /// </summary>
         public static byte[][] RetrieveColumnAsMultiByteArray(this Cursor cursor, Columnid columnId)
         {
             var record = cursor.Record;
@@ -145,26 +178,41 @@ namespace DSInternals.DataStore
             return result.Count > 0 ? result.ToArray() : null;
         }
 
+        /// <summary>
+        /// RetrieveColumnAsDNTag implementation.
+        /// </summary>
         public static DNTag? RetrieveColumnAsDNTag(this Cursor cursor, string columnName)
         {
             return (DNTag?)cursor.RetrieveColumnAsInt(columnName);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsDNTag implementation.
+        /// </summary>
         public static DNTag? RetrieveColumnAsDNTag(this Cursor cursor, Columnid columnId)
         {
             return (DNTag?)cursor.RetrieveColumnAsInt(columnId);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsAttributeType implementation.
+        /// </summary>
         public static AttributeType? RetrieveColumnAsAttributeType(this Cursor cursor, Columnid columnId)
         {
             return (AttributeType?)unchecked((uint?)cursor.RetrieveColumnAsInt(columnId));
         }
 
+        /// <summary>
+        /// RetrieveColumnAsObjectCategory implementation.
+        /// </summary>
         public static ClassType? RetrieveColumnAsObjectCategory(this Cursor cursor, Columnid columnId)
         {
             return (ClassType?)unchecked((uint?)cursor.RetrieveColumnAsInt(columnId));
         }
 
+        /// <summary>
+        /// RetrieveColumnAsInt implementation.
+        /// </summary>
         public static int? RetrieveColumnAsInt(this Cursor cursor, Columnid columnId)
         {
             object value = cursor.Record[columnId];
@@ -178,12 +226,18 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// RetrieveColumnAsInt implementation.
+        /// </summary>
         public static int? RetrieveColumnAsInt(this Cursor cursor, string columnName)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
             return cursor.RetrieveColumnAsInt(columnId);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsUInt implementation.
+        /// </summary>
         public static uint? RetrieveColumnAsUInt(this Cursor cursor, Columnid columnId)
         {
             object value = cursor.Record[columnId];
@@ -197,6 +251,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// RetrieveColumnAsUInt implementation.
+        /// </summary>
         public static uint? RetrieveColumnAsUInt(this Cursor cursor, string columnName)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
@@ -204,6 +261,9 @@ namespace DSInternals.DataStore
         }
 
 
+        /// <summary>
+        /// RetrieveColumnAsLong implementation.
+        /// </summary>
         public static long? RetrieveColumnAsLong(this Cursor cursor, Columnid columnId)
         {
             object value = cursor.Record[columnId];
@@ -217,12 +277,18 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// RetrieveColumnAsLong implementation.
+        /// </summary>
         public static long? RetrieveColumnAsLong(this Cursor cursor, string columnName)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
             return cursor.RetrieveColumnAsLong(columnId);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsBoolean implementation.
+        /// </summary>
         public static bool RetrieveColumnAsBoolean(this Cursor cursor, Columnid columnId)
         {
             object value = cursor.Record[columnId];
@@ -236,6 +302,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// RetrieveColumnAsGuid implementation.
+        /// </summary>
         public static Guid? RetrieveColumnAsGuid(this Cursor cursor, Columnid columnId)
         {
             object value = cursor.Record[columnId];
@@ -249,6 +318,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// RetrieveColumnAsTimestamp implementation.
+        /// </summary>
         public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, Columnid columnId, bool asGeneralizedTime)
         {
             long? timestamp = cursor.RetrieveColumnAsLong(columnId);
@@ -262,12 +334,18 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// RetrieveColumnAsTimestamp implementation.
+        /// </summary>
         public static DateTime? RetrieveColumnAsTimestamp(this Cursor cursor, string columnName, bool asGeneralizedTime)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
             return cursor.RetrieveColumnAsTimestamp(columnId, asGeneralizedTime);
         }
 
+        /// <summary>
+        /// RetrieveColumnAsDomainControllerOptions implementation.
+        /// </summary>
         public static DomainControllerOptions RetrieveColumnAsDomainControllerOptions(this Cursor cursor, Columnid columnId)
         {
             int? numeric = cursor.RetrieveColumnAsInt(columnId);
@@ -281,12 +359,18 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// ClearMultiValue implementation.
+        /// </summary>
         public static bool ClearMultiValue(this Cursor cursor, Columnid column)
         {
             // TODO: implement ClearMultiValue
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// AddMultiValue implementation.
+        /// </summary>
         public static bool AddMultiValue(this Cursor cursor, Columnid columnId, SecurityIdentifier[] valuesToAdd)
         {
             //NOTE: Must be in transaction and record must be in editing state.
@@ -389,34 +473,52 @@ namespace DSInternals.DataStore
             return hasChanged;
         }
 
+        /// <summary>
+        /// SetValue implementation.
+        /// </summary>
         public static bool SetValue(this Cursor cursor, string columnName, byte[] newValue)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
             return cursor.SetValue(columnId, newValue);
         }
 
+        /// <summary>
+        /// SetValue implementation.
+        /// </summary>
         public static bool SetValue(this Cursor cursor, Columnid columnId, byte[] newValue)
         {
             return cursor.SetValue(columnId, newValue, HashEqualityComparer.GetInstance());
         }
 
+        /// <summary>
+        /// SetValue implementation.
+        /// </summary>
         public static bool SetValue(this Cursor cursor, string columnName, string newValue)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
             return cursor.SetValue(columnId, newValue);
         }
 
+        /// <summary>
+        /// SetValue implementation.
+        /// </summary>
         public static bool SetValue(this Cursor cursor, Columnid columnId, string newValue)
         {
             return cursor.SetValue(columnId, newValue, StringComparer.InvariantCulture);
         }
 
+        /// <summary>
+        /// SetValue implementation.
+        /// </summary>
         public static bool SetValue(this Cursor cursor, string columnName, DateTime? newValue, bool asGeneralizedTime)
         {
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
             return cursor.SetValue(columnId, newValue, asGeneralizedTime);
         }
         
+        /// <summary>
+        /// SetValue implementation.
+        /// </summary>
         public static bool SetValue(this Cursor cursor, Columnid columnId, DateTime? newValue, bool asGeneralizedTime)
         {
             long? newTimeStamp = null;
@@ -431,6 +533,9 @@ namespace DSInternals.DataStore
             return cursor.SetValue(columnId, newTimeStamp);
         }
 
+        /// <summary>
+        /// GotoParentObject implementation.
+        /// </summary>
         public static bool GotoParentObject(this Cursor dataTableCursor, DirectorySchema schema)
         {
             // TODO: Check if we are really dealing with the datatable.
@@ -444,6 +549,9 @@ namespace DSInternals.DataStore
             return dataTableCursor.GotoKey(Key.Compose(parentDNTag));
         }
 
+        /// <summary>
+        /// FindChildren implementation.
+        /// </summary>
         public static void FindChildren(this Cursor dataTableCursor, DirectorySchema schema)
         {
             // TODO: Check if we are really dealing with the datatable.
@@ -457,6 +565,9 @@ namespace DSInternals.DataStore
             dataTableCursor.FindRecords(MatchCriteria.EqualTo, Key.ComposeWildcard(dnTag));
         }
 
+        /// <summary>
+        /// MoveToFirst implementation.
+        /// </summary>
         public static bool MoveToFirst(this Cursor cursor)
         {
             cursor.MoveBeforeFirst();
@@ -464,6 +575,9 @@ namespace DSInternals.DataStore
         }
 
         [Obsolete]
+        /// <summary>
+        /// SaveLocation implementation.
+        /// </summary>
         public static Location SaveLocation(this Cursor cursor)
         {
             Location location;
@@ -480,6 +594,9 @@ namespace DSInternals.DataStore
         }
 
         [Obsolete]
+        /// <summary>
+        /// RestoreLocation implementation.
+        /// </summary>
         public static void RestoreLocation(this Cursor cursor, Location location)
         {
             if (location != null)

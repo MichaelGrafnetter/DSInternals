@@ -42,6 +42,9 @@ namespace DSInternals.Replication
             // This constructor is only used by the static parse method.
         }
 
+        /// <summary>
+        /// Parse implementation.
+        /// </summary>
         public static DSName Parse(ReadOnlySpan<byte> buffer)
         {
             if (buffer.Length < DSNameHeaderSize)

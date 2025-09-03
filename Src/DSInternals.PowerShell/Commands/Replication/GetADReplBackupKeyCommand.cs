@@ -5,6 +5,9 @@
 
     [Cmdlet(VerbsCommon.Get, "ADReplBackupKey")]
     [OutputType(typeof(DPAPIBackupKey))]
+    /// <summary>
+    /// Represents a GetADReplBackupKeyCommand.
+    /// </summary>
     public class GetADReplBackupKeyCommand : ADReplCommandBase
     {
         [Parameter(Mandatory = false)]

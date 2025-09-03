@@ -2,6 +2,9 @@
 
 namespace DSInternals.PowerShell
 {
+    /// <summary>
+    /// Defines values for AccountExportFormat.
+    /// </summary>
     public enum AccountExportFormat : byte
     {
         JohnNT = 1,
@@ -23,6 +26,9 @@ namespace DSInternals.PowerShell
 
     public static class AccountExportFormatExtensions
     {
+        /// <summary>
+        /// GetRequiredProperties implementation.
+        /// </summary>
         public static AccountPropertySets GetRequiredProperties(this AccountExportFormat? format)
         {
             switch (format)

@@ -272,6 +272,9 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// Create implementation.
+        /// </summary>
         public static GroupKeyEnvelope Create(KdsRootKey rootKey, ProtectionKeyIdentifier keyIdentifier, SecurityIdentifier targetSID)
         {
             if (rootKey == null)
@@ -295,6 +298,9 @@ namespace DSInternals.Common.Data
             );
         }
 
+        /// <summary>
+        /// Create implementation.
+        /// </summary>
         public static GroupKeyEnvelope Create(KdsRootKey rootKey, int l0KeyId, int l1KeyId, int l2KeyId, SecurityIdentifier targetSID, string domain, string forest)
         {
             if (targetSID == null)
@@ -306,6 +312,9 @@ namespace DSInternals.Common.Data
             return Create(rootKey, l0KeyId, l1KeyId, l2KeyId, targetSecurityDescriptor, domain, forest);
         }
 
+        /// <summary>
+        /// Create implementation.
+        /// </summary>
         public static GroupKeyEnvelope Create(KdsRootKey rootKey, int l0KeyId, int l1KeyId, int l2KeyId, byte[] targetSecurityDescriptor, string domainName, string forestName)
         {
             if (rootKey == null)
@@ -338,6 +347,9 @@ namespace DSInternals.Common.Data
             return envelope;
         }
 
+        /// <summary>
+        /// WriteToCache implementation.
+        /// </summary>
         public void WriteToCache()
         {
             if (this.TargetSecurityDescriptor == null)
@@ -354,6 +366,9 @@ namespace DSInternals.Common.Data
             Validator.AssertSuccess(result);
         }
 
+        /// <summary>
+        /// ToByteArray implementation.
+        /// </summary>
         public byte[] ToByteArray()
         {
             int structSize = StructureHeaderLength +
@@ -435,6 +450,9 @@ namespace DSInternals.Common.Data
             return buffer;
         }
 
+        /// <summary>
+        /// DeleteAllCachedKeys implementation.
+        /// </summary>
         public static void DeleteAllCachedKeys()
         {
             Win32ErrorCode result = NativeMethods.DeleteAllCachedKeys();

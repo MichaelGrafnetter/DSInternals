@@ -6,6 +6,9 @@ namespace DSInternals.Common
     {
         private const int GeneralizedTimeCoefficient = 10000000;
 
+        /// <summary>
+        /// ToGeneralizedTime implementation.
+        /// </summary>
         public static long ToGeneralizedTime(this DateTime time)
         {
             return time.ToFileTime() / GeneralizedTimeCoefficient;

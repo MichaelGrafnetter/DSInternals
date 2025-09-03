@@ -3,6 +3,9 @@ using DSInternals.Common.Schema;
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents a BitLockerRecoveryInformation.
+    /// </summary>
     public class BitLockerRecoveryInformation
     {
         public BitLockerRecoveryInformation(DirectoryObject dsObject)
@@ -91,6 +94,9 @@ namespace DSInternals.Common.Data
             private set;
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             return String.Format("Recovery ID: {0}, Key: {1}, Date: {2}", this.RecoveryGuid, this.RecoveryPassword, this.WhenCreated);

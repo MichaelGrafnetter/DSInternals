@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsData.ConvertFrom, "ADManagedPasswordBlob")]
     [OutputType(typeof(ManagedPassword))]
+    /// <summary>
+    /// Represents a ConvertFromADManagedPasswordBlobCommand.
+    /// </summary>
     public class ConvertFromADManagedPasswordBlobCommand : PSCmdlet
     {
         #region Parameters

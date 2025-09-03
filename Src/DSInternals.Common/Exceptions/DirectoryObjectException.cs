@@ -13,6 +13,9 @@ namespace DSInternals.Common.Exceptions
             private set;
         }
 
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public DirectoryObjectException(object objectIdentifier, Exception innerException = null) : base(innerException)
         {
             this.ObjectIdentifier = objectIdentifier;

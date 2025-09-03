@@ -8,6 +8,9 @@
 
     [Cmdlet(VerbsCommon.Get, "ADDBKdsRootKey", DefaultParameterSetName = GetADDBKdsRootKeyCommand.AllKeysParameterSet)]
     [OutputType(typeof(DSInternals.Common.Data.KdsRootKey))]
+    /// <summary>
+    /// Represents a GetADDBKdsRootKeyCommand.
+    /// </summary>
     public class GetADDBKdsRootKeyCommand : ADDBCommandBase
     {
         private const string AllKeysParameterSet = "All";
@@ -15,9 +18,15 @@
 
         [Parameter(Mandatory = true, ParameterSetName = ByGuidParameterSet, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, Position = 1)]
         [Alias("Id", "KeyId")]
+        /// <summary>
+        /// Gets or sets the RootKeyId.
+        /// </summary>
         public Guid RootKeyId { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = AllKeysParameterSet)]
+        /// <summary>
+        /// Gets or sets the All.
+        /// </summary>
         public SwitchParameter All { get; set; }
 
         protected override void ProcessRecord()

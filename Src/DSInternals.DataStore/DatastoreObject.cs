@@ -75,6 +75,9 @@
             }
         }
 
+        /// <summary>
+        /// AddAttribute implementation.
+        /// </summary>
         public bool AddAttribute(string name, SecurityIdentifier[] valuesToAdd)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(CommonDirectoryAttributes.SidHistory);
@@ -87,6 +90,9 @@
             return false;
         }
 
+        /// <summary>
+        /// Delete implementation.
+        /// </summary>
         public void Delete()
         {
             // TODO: Check if we are in a transaction
@@ -98,6 +104,9 @@
             this.cursor = null;
         }
 
+        /// <summary>
+        /// HasAttribute implementation.
+        /// </summary>
         public override bool HasAttribute(string name)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
@@ -115,48 +124,72 @@
             }
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out byte[] value)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
             value = columnId != null ? this.cursor.RetrieveColumnAsByteArray(columnId) : null;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out byte[][] value)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
             value = columnId != null ? this.cursor.RetrieveColumnAsMultiByteArray(columnId) : null;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out int? value)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
             value = columnId != null ? this.cursor.RetrieveColumnAsInt(columnId) : null;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out DNTag? value)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
             value = columnId != null ? (DNTag?)this.cursor.RetrieveColumnAsInt(columnId) : null;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out string value, bool unicode = true)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
             value = columnId != null ? this.cursor.RetrieveColumnAsString(columnId, unicode) : null;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out string[] values, bool unicode = true)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
             values = columnId != null ? this.cursor.RetrieveColumnAsStringArray(columnId, unicode) : null;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out long? value)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
             value = columnId != null ? this.cursor.RetrieveColumnAsLong(columnId) : null;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out DistinguishedName? value)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
@@ -168,6 +201,9 @@
             value = dnt.HasValue ? this.context.DistinguishedNameResolver.Resolve(dnt.Value) : null;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out RawSecurityDescriptor value)
         {
             this.ReadAttribute(name, out byte[] binaryValue);
@@ -191,12 +227,18 @@
             }
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out ClassType? value)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
             value = columnId != null ? this.cursor.RetrieveColumnAsObjectCategory(columnId) : null;
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public void ReadAttribute(string name, out AttributeMetadataCollection value)
         {
             Columnid? columnId = this.context.Schema.FindColumnId(name);
@@ -212,6 +254,9 @@
             }
         }
 
+        /// <summary>
+        /// ReadLinkedValues implementation.
+        /// </summary>
         public override void ReadLinkedValues(string attributeName, out byte[][] values)
         {
             // Cut off the first 4 bytes, which is the length of the entire structure.
@@ -233,6 +278,9 @@
             return hasChanged;
         }
 
+        /// <summary>
+        /// SetAttribute implementation.
+        /// </summary>
         public bool SetAttribute(string name, DateTime newValue)
         {
             if(newValue != DateTime.MinValue)
@@ -246,6 +294,9 @@
             }
         }
 
+        /// <summary>
+        /// SetAttribute implementation.
+        /// </summary>
         public bool SetAttribute(string name, byte[] newValue)
         {
             Columnid columnId = this.context.Schema.FindColumnId(name);
@@ -253,12 +304,18 @@
             return hasChanged;
         }
 
+        /// <summary>
+        /// UpdateAttributeMeta implementation.
+        /// </summary>
         public void UpdateAttributeMeta(string attributeName, long usn, DateTime time)
         {
             Validator.AssertNotNull(attributeName, "attributeName");
             this.UpdateAttributeMeta(new string[] { attributeName }, usn, time);
         }
 
+        /// <summary>
+        /// UpdateAttributeMeta implementation.
+        /// </summary>
         public void UpdateAttributeMeta(string[] attributeNames, long usn, DateTime time)
         {
             Validator.AssertNotNull(attributeNames, nameof(attributeNames));

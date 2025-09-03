@@ -8,6 +8,9 @@ namespace DSInternals.Common.Cryptography
 {
     public static class OrgIdHash
     {
+        /// <summary>
+        /// The 10.
+        /// </summary>
         public const int SaltSize = 10;
         /// <summary>
         /// The size, in bytes, of the computed hash code.
@@ -17,6 +20,9 @@ namespace DSInternals.Common.Cryptography
         private const string HashFormat = "v1;PPH1_MD4,{0},{1},{2};";
         private const string InternalHashFunction = "HMACSHA256";
 
+        /// <summary>
+        /// GenerateSalt implementation.
+        /// </summary>
         public static byte[] GenerateSalt()
         {
             using(var rng = new RNGCryptoServiceProvider())
@@ -27,12 +33,18 @@ namespace DSInternals.Common.Cryptography
             }
         }
 
+        /// <summary>
+        /// ComputeHash implementation.
+        /// </summary>
         public static byte[] ComputeHash(SecureString password, byte[] salt)
         {
             byte[] ntHash = NTHash.ComputeHash(password);
             return ComputeHash(ntHash, salt);
 
         }
+        /// <summary>
+        /// ComputeHash implementation.
+        /// </summary>
         public static byte[] ComputeHash(byte[] ntHash, byte[] salt)
         {
             Validator.AssertLength(ntHash, NTHash.HashSize, "ntHash");
@@ -44,12 +56,18 @@ namespace DSInternals.Common.Cryptography
             return orgIdHashBytes;
         }
 
+        /// <summary>
+        /// ComputeFormattedHash implementation.
+        /// </summary>
         public static string ComputeFormattedHash(SecureString password, byte[] salt = null)
         {
             byte[] ntHash = NTHash.ComputeHash(password);
             return ComputeFormattedHash(ntHash, salt);
         }
 
+        /// <summary>
+        /// ComputeFormattedHash implementation.
+        /// </summary>
         public static string ComputeFormattedHash(byte[] ntHash, byte[] salt = null)
         {
             if (salt == null)

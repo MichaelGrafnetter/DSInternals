@@ -7,12 +7,18 @@ using System.Runtime.InteropServices;
 
 namespace DSInternals.SAM
 {
+    /// <summary>
+    /// Represents a SamUser.
+    /// </summary>
     public class SamUser : SamObject
     {
         internal SamUser(SafeSamHandle handle) : base(handle)
         {
         }
 
+        /// <summary>
+        /// SetPasswordHash implementation.
+        /// </summary>
         public void SetPasswordHash(string ntHash, string lmHash = null)
         {
             byte[] binaryNTHash = ntHash.HexToBinary();
@@ -20,6 +26,9 @@ namespace DSInternals.SAM
             this.SetPasswordHash(binaryNTHash, binaryLMHash);
         }
 
+        /// <summary>
+        /// SetPasswordHash implementation.
+        /// </summary>
         public void SetPasswordHash(byte[] ntHash, byte[] lmHash = null)
         {
             Validator.AssertNotNull(ntHash, "ntHash");

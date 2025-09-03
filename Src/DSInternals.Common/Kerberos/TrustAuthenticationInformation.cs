@@ -26,6 +26,9 @@ namespace DSInternals.Common.Kerberos
         /// </summary>
         public ReadOnlyMemory<byte> AuthInfo { get; private set; }
 
+        /// <summary>
+        /// Parse implementation.
+        /// </summary>
         public static (TrustAuthenticationInformation authInfo, int bytesRead) Parse(ReadOnlyMemory<byte> blob)
         {
             if (blob.Length < StructHeaderSize)

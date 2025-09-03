@@ -7,6 +7,9 @@
 
     using NATIVE_UNICODEINDEX = Windows.Win32.Storage.Jet.JET_UNICODEINDEX;
 
+    /// <summary>
+    /// Represents a DirectoryContext.
+    /// </summary>
     public class DirectoryContext : IDisposable
     {
         private const string JetInstanceNameFormat = "DSInternals-{0:D}";
@@ -221,26 +224,41 @@
             private set;
         }
 
+        /// <summary>
+        /// OpenDataTable implementation.
+        /// </summary>
         public Cursor OpenDataTable()
         {
             return this.database.OpenCursor(ADConstants.DataTableName);
         }
 
+        /// <summary>
+        /// OpenLinkTable implementation.
+        /// </summary>
         public Cursor OpenLinkTable()
         {
             return this.database.OpenCursor(ADConstants.LinkTableName);
         }
 
+        /// <summary>
+        /// OpenSystemTable implementation.
+        /// </summary>
         public Cursor OpenSystemTable()
         {
             return this.database.OpenCursor(ADConstants.SystemTableName);
         }
 
+        /// <summary>
+        /// BeginTransaction implementation.
+        /// </summary>
         public IsamTransaction BeginTransaction()
         {
             return new IsamTransaction(this.session);
         }
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

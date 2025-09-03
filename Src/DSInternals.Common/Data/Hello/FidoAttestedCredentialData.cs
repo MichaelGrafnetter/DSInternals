@@ -76,6 +76,9 @@ namespace DSInternals.Common.Data.Fido
             this.CredentialPublicKey = new CredentialPublicKey(cpk);
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             return string.Format("AAGUID: {0}, CredentialID: {1}, CredentialPublicKey: {2}",

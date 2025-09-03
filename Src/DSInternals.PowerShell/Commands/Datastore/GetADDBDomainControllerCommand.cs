@@ -4,6 +4,9 @@
 
     [Cmdlet(VerbsCommon.Get, "ADDBDomainController")]
     [OutputType(typeof(DSInternals.PowerShell.DomainController))]
+    /// <summary>
+    /// Represents a GetADDBDomainControllerCommand.
+    /// </summary>
     public class GetADDBDomainControllerCommand : ADDBCommandBase
     {
         protected override void BeginProcessing()

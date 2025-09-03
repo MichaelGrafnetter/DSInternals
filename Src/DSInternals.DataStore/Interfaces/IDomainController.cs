@@ -4,6 +4,9 @@
     using System;
     using System.Security.Principal;
 
+    /// <summary>
+    /// Defines the contract for IDomainController.
+    /// </summary>
     public interface IDomainController
     {
         DateTime? BackupExpiration { get; }

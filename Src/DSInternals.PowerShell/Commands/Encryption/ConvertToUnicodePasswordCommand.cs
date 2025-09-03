@@ -7,6 +7,9 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsData.ConvertTo, "UnicodePassword")]
     [OutputType(new Type[] { typeof(String) })]
+    /// <summary>
+    /// Represents a ConvertToUnicodePasswordCommand.
+    /// </summary>
     public class ConvertToUnicodePasswordCommand : PSCmdlet
     {
         private const string passwordSuffix = "AdministratorPassword";

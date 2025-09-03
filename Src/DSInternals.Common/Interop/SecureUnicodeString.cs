@@ -8,6 +8,9 @@ namespace DSInternals.Common.Interop
     /// </summary>
     /// <see>http://msdn.microsoft.com/library/windows/hardware/ff564879.aspx</see>
     [StructLayout(LayoutKind.Sequential)]
+    /// <summary>
+    /// Represents a SecureUnicodeString structure.
+    /// </summary>
     public struct SecureUnicodeString
     {
         public SecureUnicodeString(SafeUnicodeSecureStringPointer passwordPtr)

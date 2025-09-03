@@ -8,6 +8,9 @@
 
     [Cmdlet(VerbsCommon.Set, "LsaPolicyInformation")]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a SetLsaPolicyInformationCommand.
+    /// </summary>
     public class SetLsaPolicyInformationCommand : LsaPolicyCommandBase
     {
         #region Parameters

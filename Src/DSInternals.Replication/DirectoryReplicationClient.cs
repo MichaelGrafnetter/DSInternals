@@ -17,6 +17,9 @@ using NDceRpc.Native;
 
 namespace DSInternals.Replication
 {
+    /// <summary>
+    /// Represents a DirectoryReplicationClient.
+    /// </summary>
     public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     {
         /// <summary>
@@ -111,12 +114,18 @@ namespace DSInternals.Replication
             this._rootKeyResolver = new KdsRootKeyCache(this);
         }
 
+        /// <summary>
+        /// GetReplicationCursors implementation.
+        /// </summary>
         public ReplicationCursor[] GetReplicationCursors(string namingContext)
         {
             Validator.AssertNotNullOrWhiteSpace(namingContext, nameof(namingContext));
             return this._drsConnection.GetReplicationCursors(namingContext);
         }
 
+        /// <summary>
+        /// GetAccounts implementation.
+        /// </summary>
         public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
@@ -124,6 +133,9 @@ namespace DSInternals.Replication
             return GetAccounts(cookie, progressReporter, propertySets);
         }
 
+        /// <summary>
+        /// GetAccounts implementation.
+        /// </summary>
         public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             Validator.AssertNotNull(initialCookie, nameof(initialCookie));
@@ -161,6 +173,9 @@ namespace DSInternals.Replication
             } while (result.HasMoreData);
         }
 
+        /// <summary>
+        /// GetAccount implementation.
+        /// </summary>
         public DSAccount GetAccount(Guid objectGuid, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             var obj = this._drsConnection.ReplicateSingleObject(objectGuid);
@@ -175,6 +190,9 @@ namespace DSInternals.Replication
             return account;
         }
 
+        /// <summary>
+        /// GetAccount implementation.
+        /// </summary>
         public DSAccount GetAccount(string distinguishedName, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             var obj = this._drsConnection.ReplicateSingleObject(distinguishedName);
@@ -189,18 +207,27 @@ namespace DSInternals.Replication
             return account;
         }
 
+        /// <summary>
+        /// GetAccount implementation.
+        /// </summary>
         public DSAccount GetAccount(NTAccount accountName, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             Guid objectGuid = this._drsConnection.ResolveGuid(accountName);
             return this.GetAccount(objectGuid, propertySets);
         }
 
+        /// <summary>
+        /// GetAccount implementation.
+        /// </summary>
         public DSAccount GetAccount(SecurityIdentifier sid, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             Guid objectGuid = this._drsConnection.ResolveGuid(sid);
             return this.GetAccount(objectGuid, propertySets);
         }
 
+        /// <summary>
+        /// GetKdsRootKey implementation.
+        /// </summary>
         public KdsRootKey? GetKdsRootKey(Guid rootKeyId, bool suppressNotFoundException = false)
         {
             // Derive the full path to the object
@@ -225,6 +252,9 @@ namespace DSInternals.Replication
             }
         }
 
+        /// <summary>
+        /// GetDPAPIBackupKeys implementation.
+        /// </summary>
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(string domainNamingContext)
         {
             // TODO: Split this function into RSA and Legacy Part so that exception in one of them does not crash the whole process
@@ -253,24 +283,36 @@ namespace DSInternals.Replication
             return new DPAPIBackupKey(secretObj, this.SecretDecryptor);
         }
 
+        /// <summary>
+        /// WriteNgcKey implementation.
+        /// </summary>
         public void WriteNgcKey(Guid objectGuid, byte[] publicKey)
         {
             string distinguishedName = this._drsConnection.ResolveDistinguishedName(objectGuid);
             this.WriteNgcKey(distinguishedName, publicKey);
         }
 
+        /// <summary>
+        /// WriteNgcKey implementation.
+        /// </summary>
         public void WriteNgcKey(NTAccount accountName, byte[] publicKey)
         {
             string distinguishedName = this._drsConnection.ResolveDistinguishedName(accountName);
             this.WriteNgcKey(distinguishedName, publicKey);
         }
 
+        /// <summary>
+        /// WriteNgcKey implementation.
+        /// </summary>
         public void WriteNgcKey(SecurityIdentifier sid, byte[] publicKey)
         {
             string distinguishedName = this._drsConnection.ResolveDistinguishedName(sid);
             this.WriteNgcKey(distinguishedName, publicKey);
         }
 
+        /// <summary>
+        /// WriteNgcKey implementation.
+        /// </summary>
         public void WriteNgcKey(string accountDN, byte[] publicKey)
         {
             this._drsConnection.WriteNgcKey(accountDN, publicKey);
@@ -311,6 +353,9 @@ namespace DSInternals.Replication
             this._rpcConnection.AuthenticateAs(spn, rpcCredential, RPC_C_AUTHN_LEVEL.RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN.RPC_C_AUTHN_GSS_NEGOTIATE);
         }
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

@@ -9,6 +9,9 @@ namespace DSInternals.SAM.Interop
     /// Represents a wrapper class for buffers allocated by SAM RPC.
     /// </summary>
     [SecurityCritical]
+    /// <summary>
+    /// Represents a SafeSamPointer.
+    /// </summary>
     public class SafeSamPointer : SafeHandleZeroOrMinusOneIsInvalid
     {
         private SafeSamPointer() : base(true)

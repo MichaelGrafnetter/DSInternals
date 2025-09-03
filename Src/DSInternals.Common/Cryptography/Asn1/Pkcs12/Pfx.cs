@@ -15,7 +15,13 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
         /// </summary>
         private const int PfxVersionV3 = 3;
 
+        /// <summary>
+        /// The AuthSafe.
+        /// </summary>
         public DSInternals.Common.Cryptography.Asn1.Pkcs7.ContentInfo AuthSafe;
+        /// <summary>
+        /// The MacData.
+        /// </summary>
         public DSInternals.Common.Cryptography.Asn1.Pkcs12.MacData? MacData;
 
 /*
@@ -42,6 +48,9 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
             }
         }
 */
+        /// <summary>
+        /// Decode implementation.
+        /// </summary>
         public static Pfx Decode(ReadOnlyMemory<byte> encoded)
         {
             AsnReader reader = new AsnReader(encoded, AsnEncodingRules.DER);
@@ -50,6 +59,9 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
             return decoded;
         }
 
+        /// <summary>
+        /// Decode implementation.
+        /// </summary>
         public static Pfx Decode(AsnReader reader)
         {
             /*

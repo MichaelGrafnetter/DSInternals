@@ -7,6 +7,9 @@ using System.Security.Cryptography;
 
 namespace DSInternals.DataStore
 {
+    /// <summary>
+    /// Represents a DataStoreSecretDecryptor.
+    /// </summary>
     public class DataStoreSecretDecryptor : DirectorySecretDecryptor
     {
         private const int BootKeySaltHashRounds = 1000;
@@ -94,6 +97,9 @@ namespace DSInternals.DataStore
             this.ParsePekList(cleartextPEKListBlob);
         }
 
+        /// <summary>
+        /// DecryptSecret implementation.
+        /// </summary>
         public override byte[] DecryptSecret(byte[] blob)
         {
             // Blob structure Win2k:   Algorithm ID (2B), Flags (2B), PEK ID (4B), Salt (16B), Encrypted secret (rest)
@@ -152,6 +158,9 @@ namespace DSInternals.DataStore
             return decryptedSecret;
         }
 
+        /// <summary>
+        /// EncryptSecret implementation.
+        /// </summary>
         public override byte[] EncryptSecret(byte[] secret)
         {
             using (var buffer = new MemoryStream())

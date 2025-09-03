@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsData.ConvertFrom, "GPPrefPassword")]
     [OutputType(new Type[] { typeof(string) })]
+    /// <summary>
+    /// Represents a ConvertFromGPPrefPasswordCommand.
+    /// </summary>
     public class ConvertFromGPPrefPasswordCommand : PSCmdlet
     {
         #region Parameters

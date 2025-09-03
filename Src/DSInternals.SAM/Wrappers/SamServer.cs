@@ -13,6 +13,9 @@
 
     public sealed class SamServer : SamObject
     {
+        /// <summary>
+        /// The BuiltinDomainName.
+        /// </summary>
         public const string BuiltinDomainName = "Builtin";
         private const uint PreferedMaximumBufferLength = 1000;
         private const uint InitialEnumerationContext = 0;
@@ -29,16 +32,25 @@
             private set;
         }
 
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public SamServer(string serverName, NetworkCredential credential, SamServerAccessMask accessMask) : base(null)
         {
             this.Connect(serverName, accessMask, credential);
         }
 
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public SamServer(string serverName, SamServerAccessMask accessMask) : base(null)
         {
             this.Connect(serverName, accessMask);
         }
 
+        /// <summary>
+        /// EnumerateDomains implementation.
+        /// </summary>
         public string[] EnumerateDomains()
         {
             uint enumerationContext = InitialEnumerationContext;
@@ -57,6 +69,9 @@
             return domains.ToArray();
         }
 
+        /// <summary>
+        /// LookupDomain implementation.
+        /// </summary>
         public SecurityIdentifier LookupDomain(string domainName)
         {
             SecurityIdentifier domainSid;
@@ -65,12 +80,18 @@
             return domainSid;
         }
 
+        /// <summary>
+        /// OpenDomain implementation.
+        /// </summary>
         public SamDomain OpenDomain(string domainName, SamDomainAccessMask accessMask)
         {
             SecurityIdentifier domainSid = this.LookupDomain(domainName);
             return this.OpenDomain(domainSid, accessMask);
         }
 
+        /// <summary>
+        /// OpenDomain implementation.
+        /// </summary>
         public SamDomain OpenDomain(SecurityIdentifier domainSid, SamDomainAccessMask accessMask)
         {
             SafeSamHandle domainHandle;

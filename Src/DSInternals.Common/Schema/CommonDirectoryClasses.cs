@@ -70,6 +70,9 @@ namespace DSInternals.Common.Schema
         /// </summary>
         public const string NtdsSettingsRO = "nTDSDSARO";
 
+        /// <summary>
+        /// Translate implementation.
+        /// </summary>
         public static ClassType? Translate(string ldapDisplayName)
         {
             if (ldapDisplayName == null) throw new ArgumentNullException(nameof(ldapDisplayName));

@@ -6,6 +6,9 @@ using System.Text;
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents a DnsResourceRecord.
+    /// </summary>
     public class DnsResourceRecord
     {
         private const int StructVersion = 0x05;
@@ -210,22 +213,43 @@ namespace DSInternals.Common.Data
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct DnsResourceRecordHeader
         {
+            /// <summary>
+            /// The DataLength.
+            /// </summary>
             public ushort DataLength;
+            /// <summary>
+            /// The Type.
+            /// </summary>
             public ResourceRecordType Type;
+            /// <summary>
+            /// The Version.
+            /// </summary>
             public byte Version;
+            /// <summary>
+            /// The Rank.
+            /// </summary>
             public ResourceRecordRank Rank;
 
             /// <summary>
             /// Not used. The value MUST be 0x0000.
             /// </summary>
             public ResourceRecordFlags Flags;
+            /// <summary>
+            /// The Serial.
+            /// </summary>
             public uint Serial;
+            /// <summary>
+            /// The TtlSeconds.
+            /// </summary>
             public uint TtlSeconds;
 
             /// <summary>
             /// This field is reserved for future use. The value MUST be 0x00000000.
             /// </summary>
             public uint Reserved;
+            /// <summary>
+            /// The TimeStamp.
+            /// </summary>
             public uint TimeStamp;
         }
 
@@ -283,6 +307,9 @@ namespace DSInternals.Common.Data
             public uint MinimumTTL;
         }
 
+        /// <summary>
+        /// Create implementation.
+        /// </summary>
         public static DnsResourceRecord Create(string zone, string name, ReadOnlySpan<byte> binaryRecordData)
         {
             if (string.IsNullOrWhiteSpace(zone))

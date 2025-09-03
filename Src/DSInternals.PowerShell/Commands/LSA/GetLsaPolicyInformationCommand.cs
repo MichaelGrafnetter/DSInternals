@@ -5,6 +5,9 @@
 
     [Cmdlet(VerbsCommon.Get, "LsaPolicyInformation")]
     [OutputType(typeof(LsaPolicyInformation))]
+    /// <summary>
+    /// Represents a GetLsaPolicyInformationCommand.
+    /// </summary>
     public class GetLsaPolicyInformationCommand : LsaPolicyCommandBase
     {
         #region Cmdlet Overrides

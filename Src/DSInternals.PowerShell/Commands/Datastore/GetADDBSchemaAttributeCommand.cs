@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsCommon.Get, "ADDBSchemaAttribute")]
     [OutputType(typeof(AttributeSchema))]
+    /// <summary>
+    /// Represents a GetADDBSchemaAttributeCommand.
+    /// </summary>
     public class GetADDBSchemaAttributeCommand : ADDBCommandBase
     {
 

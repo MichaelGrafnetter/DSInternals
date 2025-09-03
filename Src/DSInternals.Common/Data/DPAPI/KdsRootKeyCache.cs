@@ -54,6 +54,9 @@ namespace DSInternals.Common.Data
 
         public bool SupportsLookupByEffectiveTime => _innerResolver.SupportsLookupAll || _innerResolver.SupportsLookupByEffectiveTime;
 
+        /// <summary>
+        /// GetKdsRootKey implementation.
+        /// </summary>
         public KdsRootKey? GetKdsRootKey(Guid id)
         {
             if (_rootKeyCache.TryGetValue(id, out KdsRootKey cachedRootKey))
@@ -85,6 +88,9 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// GetKdsRootKey implementation.
+        /// </summary>
         public KdsRootKey? GetKdsRootKey(DateTime effectiveTime)
         {
             if (!_innerResolver.SupportsLookupAll)
@@ -121,6 +127,9 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// GetKdsRootKeys implementation.
+        /// </summary>
         public IEnumerable<KdsRootKey> GetKdsRootKeys()
         {
             if (!this.SupportsLookupAll)

@@ -15,6 +15,9 @@ namespace DSInternals.Common.Cryptography
                                                     0xfa, 0xf4, 0x93, 0x10, 0x62, 0x0f, 0xfe, 0xe8,
                                                     0xf4, 0x96, 0xe8, 0x06, 0xcc, 0x05, 0x79, 0x90,
                                                     0x20, 0x9b, 0x09, 0xa4, 0x33, 0xb6, 0x6c, 0x1b };
+        /// <summary>
+        /// Decrypt implementation.
+        /// </summary>
         public static string Decrypt(string input)
         {
             Validator.AssertNotNullOrWhiteSpace(input, "input");
@@ -35,6 +38,9 @@ namespace DSInternals.Common.Cryptography
             return plainText;
         }
 
+        /// <summary>
+        /// Encrypt implementation.
+        /// </summary>
         public static string Encrypt(SecureString input)
         {
             Validator.AssertNotNull(input, "input");

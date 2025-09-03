@@ -2,6 +2,9 @@
 
 namespace DSInternals.Common.AzureAD
 {
+    /// <summary>
+    /// Represents an OData error from Azure AD Graph API responses.
+    /// </summary>
     public class ODataError
     {
         [JsonPropertyName("code")]

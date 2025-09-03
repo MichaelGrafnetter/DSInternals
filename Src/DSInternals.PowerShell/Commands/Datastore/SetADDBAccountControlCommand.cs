@@ -9,42 +9,63 @@ namespace DSInternals.PowerShell.Commands
     /// </summary>
     [Cmdlet(VerbsCommon.Set, "ADDBAccountControl")]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a SetADDBAccountControlCommand.
+    /// </summary>
     public class SetADDBAccountControlCommand : ADDBModifyPrincipalCommandBase
     {
         /// <summary>
         /// Indicates whether an account is enabled.
         /// </summary>
         [Parameter(Mandatory = false)]
+        /// <summary>
+        /// Gets or sets the Enabled.
+        /// </summary>
         public bool? Enabled { get; set; }
 
         /// <summary>
         /// Indicates whether an account can change its password.
         /// </summary>
         [Parameter(Mandatory = false)]
+        /// <summary>
+        /// Gets or sets the CannotChangePassword.
+        /// </summary>
         public bool? CannotChangePassword { get; set; }
 
         /// <summary>
         /// Indicates whether the password of an account can expire.
         /// </summary>
         [Parameter(Mandatory = false)]
+        /// <summary>
+        /// Gets or sets the PasswordNeverExpires.
+        /// </summary>
         public bool? PasswordNeverExpires { get; set; }
 
         /// <summary>
         /// Indicates whether a smart card is required to logon.
         /// </summary>
         [Parameter(Mandatory = false)]
+        /// <summary>
+        /// Gets or sets the SmartcardLogonRequired.
+        /// </summary>
         public bool? SmartcardLogonRequired { get; set; }
 
         /// <summary>
         /// Indicates whether the account is restricted to use only Data Encryption Standard encryption types for keys.
         /// </summary>
         [Parameter(Mandatory = false)]
+        /// <summary>
+        /// Gets or sets the UseDESKeyOnly.
+        /// </summary>
         public bool? UseDESKeyOnly { get; set; }
 
         /// <summary>
         /// Indicates whether a home directory is required for the account.
         /// </summary>
         [Parameter(Mandatory = false)]
+        /// <summary>
+        /// Gets or sets the HomedirRequired.
+        /// </summary>
         public bool? HomedirRequired { get; set; }
 
         protected override void BeginProcessing()

@@ -6,6 +6,9 @@
     using System.Reflection;
     using System.ComponentModel;
 
+    /// <summary>
+    /// Represents a RegistryHiveFileMapping.
+    /// </summary>
     public class RegistryHiveFileMapping : IDisposable
     {
         private const string SubKeyFormat = "DSInternals_{0}";
@@ -39,6 +42,9 @@
             private set;
         }
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

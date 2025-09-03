@@ -5,6 +5,9 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Add, "ADReplNgcKey")]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a AddADReplNgcKeyCommand.
+    /// </summary>
     public class AddADReplNgcKeyCommand : ADReplPrincipalCommandBase
     {
         // TODO: Change to X509Certificate2

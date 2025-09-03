@@ -9,10 +9,16 @@
     using DSInternals.Common.Interop;
     using DSInternals.SAM.Interop;
 
+    /// <summary>
+    /// Represents a LsaPolicy.
+    /// </summary>
     public class LsaPolicy : IDisposable
     {
         private SafeLsaPolicyHandle policyHandle;
 
+        /// <summary>
+        /// this implementation.
+        /// </summary>
         public LsaPolicy(LsaPolicyAccessMask accessMask) : this(null, accessMask) { }
 
         public LsaPolicy(string systemName, LsaPolicyAccessMask accessMask)
@@ -21,6 +27,9 @@
             Validator.AssertSuccess(status);
         }
 
+        /// <summary>
+        /// QueryDnsDomainInformation implementation.
+        /// </summary>
         public LsaDnsDomainInformation QueryDnsDomainInformation()
         {
             IntPtr buffer;
@@ -40,6 +49,9 @@
             }
         }
 
+        /// <summary>
+        /// QueryMachineAccountInformation implementation.
+        /// </summary>
         public SecurityIdentifier QueryMachineAccountInformation()
         {
             IntPtr buffer;
@@ -66,16 +78,25 @@
             }
         }
 
+        /// <summary>
+        /// QueryAccountDomainInformation implementation.
+        /// </summary>
         public LsaDomainInformation QueryAccountDomainInformation()
         {
             return this.QueryDomainInformation(LsaPolicyInformationClass.AccountDomainInformation);
         }
 
+        /// <summary>
+        /// QueryLocalAccountDomainInformation implementation.
+        /// </summary>
         public LsaDomainInformation QueryLocalAccountDomainInformation()
         {
             return this.QueryDomainInformation(LsaPolicyInformationClass.LocalAccountDomainInformation);
         }
 
+        /// <summary>
+        /// SetDnsDomainInformation implementation.
+        /// </summary>
         public void SetDnsDomainInformation(LsaDnsDomainInformation newDomainInfo)
         {
             // TODO: Validation
@@ -104,6 +125,9 @@
             }
         }
 
+        /// <summary>
+        /// RetrievePrivateData implementation.
+        /// </summary>
         public byte[] RetrievePrivateData(string keyName)
         {
             Validator.AssertNotNullOrWhiteSpace(keyName, "keyName");
@@ -113,6 +137,9 @@
             return privateData;
         }
 
+        /// <summary>
+        /// GetDPAPIBackupKeys implementation.
+        /// </summary>
         public DPAPIBackupKey[] GetDPAPIBackupKeys()
         {
             byte[] rsaKeyIdBinary = this.RetrievePrivateData(DPAPIBackupKey.PreferredRSAKeyName);
@@ -170,6 +197,9 @@
             }
         }
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

@@ -4,6 +4,9 @@
     using System;
     using System.Text;
 
+    /// <summary>
+    /// Represents a DistinguishedNameComponent.
+    /// </summary>
     public class DistinguishedNameComponent
     {
         public string Name
@@ -26,6 +29,9 @@
             this.Value = value;
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             return String.Format("{0}={1}", EscapeValue(this.Name), EscapeValue(this.Value));

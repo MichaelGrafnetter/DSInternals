@@ -13,10 +13,16 @@
     public partial class DirectoryAgent : IDisposable
     {
         // 2^30
+        /// <summary>
+        /// The 30.
+        /// </summary>
         public const int RidMax = 1 << 30;
 
         // TODO: SidCompatibilityVersion?
         // TODO: Add Rid range checks
+        /// <summary>
+        /// The 1.
+        /// </summary>
         public const int RidMin = 1;
 
         private DirectoryContext context;
@@ -30,6 +36,9 @@
             this.dataTableCursor = context.OpenDataTable();
         }
 
+        /// <summary>
+        /// SetDomainControllerEpoch implementation.
+        /// </summary>
         public void SetDomainControllerEpoch(int epoch)
         {
             using (var transaction = this.context.BeginTransaction())
@@ -39,6 +48,9 @@
             }
         }
 
+        /// <summary>
+        /// SetDomainControllerUsn implementation.
+        /// </summary>
         public void SetDomainControllerUsn(long highestCommittedUsn)
         {
             using (var transaction = this.context.BeginTransaction())
@@ -48,6 +60,9 @@
             }
         }
 
+        /// <summary>
+        /// SetDomainControllerBackupExpiration implementation.
+        /// </summary>
         public void SetDomainControllerBackupExpiration(DateTime expirationTime)
         {
             using (var transaction = this.context.BeginTransaction())
@@ -57,6 +72,9 @@
             }
         }
 
+        /// <summary>
+        /// GetAccounts implementation.
+        /// </summary>
         public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             DNTag? domainNC = this.context.DomainController.DomainNamingContextDNT;
@@ -95,6 +113,9 @@
             }
         }
 
+        /// <summary>
+        /// GetAccount implementation.
+        /// </summary>
         public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             // This throws exception if the DN does not get resolved to DNT:
@@ -118,6 +139,9 @@
             }
         }
 
+        /// <summary>
+        /// GetAccount implementation.
+        /// </summary>
         public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             if (objectSid == null)
@@ -151,6 +175,9 @@
             }
         }
 
+        /// <summary>
+        /// GetAccount implementation.
+        /// </summary>
         public DSAccount GetAccount(string samAccountName, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             if (samAccountName == null)
@@ -188,6 +215,9 @@
             throw new DirectoryObjectNotFoundException(samAccountName);
         }
 
+        /// <summary>
+        /// GetAccount implementation.
+        /// </summary>
         public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
             DNTag domainNC = this.context.DomainController.DomainNamingContextDNT ??
@@ -229,6 +259,9 @@
             return account;
         }
 
+        /// <summary>
+        /// GetTrusts implementation.
+        /// </summary>
         public IEnumerable<TrustedDomain> GetTrusts(byte[]? bootKey)
         {
             var pek = this.GetSecretDecryptor(bootKey);
@@ -251,6 +284,9 @@
             }
         }
 
+        /// <summary>
+        /// FindObjectsByCategory implementation.
+        /// </summary>
         public IEnumerable<DirectoryObject> FindObjectsByCategory(DNTag objectCategory, bool includeReadOnly = false, bool includeDeleted = false, bool includePhantoms = false)
         {
             using (var cursor = this.context.OpenDataTable())
@@ -287,6 +323,9 @@
             }
         }
 
+        /// <summary>
+        /// AddSidHistory implementation.
+        /// </summary>
         public bool AddSidHistory(DistinguishedName dn, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -296,6 +335,9 @@
             }
         }
 
+        /// <summary>
+        /// AddSidHistory implementation.
+        /// </summary>
         public bool AddSidHistory(string samAccountName, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -306,6 +348,9 @@
             }
         }
 
+        /// <summary>
+        /// AddSidHistory implementation.
+        /// </summary>
         public bool AddSidHistory(SecurityIdentifier objectSid, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -315,6 +360,9 @@
             }
         }
 
+        /// <summary>
+        /// AddSidHistory implementation.
+        /// </summary>
         public bool AddSidHistory(Guid objectGuid, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -324,6 +372,9 @@
             }
         }
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);
@@ -384,6 +435,9 @@
             return this.FindObject(dnTag);
         }
 
+        /// <summary>
+        /// FindObject implementation.
+        /// </summary>
         public DatastoreObject FindObject(DNTag dnTag)
         {
             string dntIndex = DirectorySchema.DistinguishedNameTagIndex;
@@ -426,6 +480,9 @@
             }
         }
 
+        /// <summary>
+        /// RemoveObject implementation.
+        /// </summary>
         public void RemoveObject(Guid objectGuid)
         {
             lock (this.dataTableCursor)
@@ -435,6 +492,9 @@
             }
         }
 
+        /// <summary>
+        /// RemoveObject implementation.
+        /// </summary>
         public void RemoveObject(DistinguishedName dn)
         {
             lock (this.dataTableCursor)
@@ -444,26 +504,41 @@
             }
         }
 
+        /// <summary>
+        /// SetAccountStatus implementation.
+        /// </summary>
         public bool SetAccountStatus(DistinguishedName dn, bool enabled, bool skipMetaUpdate)
         {
             return this.SetAccountControl(dn, enabled, null, null, null, null, null, skipMetaUpdate);
         }
 
+        /// <summary>
+        /// SetAccountStatus implementation.
+        /// </summary>
         public bool SetAccountStatus(string samAccountName, bool enabled, bool skipMetaUpdate)
         {
             return this.SetAccountControl(samAccountName, enabled, null, null, null, null, null, skipMetaUpdate);
         }
 
+        /// <summary>
+        /// SetAccountStatus implementation.
+        /// </summary>
         public bool SetAccountStatus(SecurityIdentifier objectSid, bool enabled, bool skipMetaUpdate)
         {
             return this.SetAccountControl(objectSid, enabled, null, null, null, null, null, skipMetaUpdate);
         }
 
+        /// <summary>
+        /// SetAccountStatus implementation.
+        /// </summary>
         public bool SetAccountStatus(Guid objectGuid, bool enabled, bool skipMetaUpdate)
         {
             return this.SetAccountControl(objectGuid, enabled, null, null, null, null, null, skipMetaUpdate);
         }
 
+        /// <summary>
+        /// SetAccountControl implementation.
+        /// </summary>
         public bool SetAccountControl(DistinguishedName dn, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -473,6 +548,9 @@
             }
         }
 
+        /// <summary>
+        /// SetAccountControl implementation.
+        /// </summary>
         public bool SetAccountControl(string samAccountName, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -482,6 +560,9 @@
             }
         }
 
+        /// <summary>
+        /// SetAccountControl implementation.
+        /// </summary>
         public bool SetAccountControl(SecurityIdentifier objectSid, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -491,6 +572,9 @@
             }
         }
 
+        /// <summary>
+        /// SetAccountControl implementation.
+        /// </summary>
         public bool SetAccountControl(Guid objectGuid, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -500,6 +584,9 @@
             }
         }
 
+        /// <summary>
+        /// UnlockAccount implementation.
+        /// </summary>
         public bool UnlockAccount(DistinguishedName dn, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -509,6 +596,9 @@
             }
         }
 
+        /// <summary>
+        /// UnlockAccount implementation.
+        /// </summary>
         public bool UnlockAccount(string samAccountName, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -518,6 +608,9 @@
             }
         }
 
+        /// <summary>
+        /// UnlockAccount implementation.
+        /// </summary>
         public bool UnlockAccount(SecurityIdentifier objectSid, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -527,6 +620,9 @@
             }
         }
 
+        /// <summary>
+        /// UnlockAccount implementation.
+        /// </summary>
         public bool UnlockAccount(Guid objectGuid, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -536,6 +632,9 @@
             }
         }
 
+        /// <summary>
+        /// SetPrimaryGroupId implementation.
+        /// </summary>
         public bool SetPrimaryGroupId(DistinguishedName dn, int groupId, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -545,6 +644,9 @@
             }
         }
 
+        /// <summary>
+        /// SetPrimaryGroupId implementation.
+        /// </summary>
         public bool SetPrimaryGroupId(string samAccountName, int groupId, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -554,6 +656,9 @@
             }
         }
 
+        /// <summary>
+        /// SetPrimaryGroupId implementation.
+        /// </summary>
         public bool SetPrimaryGroupId(SecurityIdentifier objectSid, int groupId, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)
@@ -564,6 +669,9 @@
             }
         }
 
+        /// <summary>
+        /// SetPrimaryGroupId implementation.
+        /// </summary>
         public bool SetPrimaryGroupId(Guid objectGuid, int groupId, bool skipMetaUpdate)
         {
             lock (this.dataTableCursor)

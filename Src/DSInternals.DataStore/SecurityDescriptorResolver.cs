@@ -9,6 +9,9 @@
 
     using SecurityDescriptorIdentifier = long;
 
+    /// <summary>
+    /// Represents a SecurityDescriptorRersolver.
+    /// </summary>
     public class SecurityDescriptorRersolver : IDisposable
     {
         private const string SecurityDescriptorIdentifierColumn = "sd_id";
@@ -44,6 +47,9 @@
             _hashFunction = MD5.Create();
         }
 
+        /// <summary>
+        /// GetDescriptor implementation.
+        /// </summary>
         public RawSecurityDescriptor? GetDescriptor(SecurityDescriptorIdentifier id)
         {
             RawSecurityDescriptor? result = null;
@@ -66,6 +72,9 @@
             return result;
         }
 
+        /// <summary>
+        /// FindDescriptor implementation.
+        /// </summary>
         public IEnumerable<SecurityDescriptorIdentifier> FindDescriptor(GenericSecurityDescriptor securityDescriptor)
         {
             byte[] sdHash = ComputeHash(_hashFunction, securityDescriptor);
@@ -73,6 +82,9 @@
             return this.FindDescriptorHash(sdHash);
         }
 
+        /// <summary>
+        /// FindDescriptor implementation.
+        /// </summary>
         public IEnumerable<SecurityDescriptorIdentifier> FindDescriptor(string securityDescriptor)
         {
             byte[] sdHash = ComputeHash(_hashFunction, securityDescriptor);
@@ -80,6 +92,9 @@
             return this.FindDescriptorHash(sdHash);
         }
 
+        /// <summary>
+        /// FindDescriptorHash implementation.
+        /// </summary>
         public IEnumerable<SecurityDescriptorIdentifier> FindDescriptorHash(byte[] sdHash)
         {
             if (sdHash == null)
@@ -99,6 +114,9 @@
             }
         }
 
+        /// <summary>
+        /// ComputeHash implementation.
+        /// </summary>
         public static byte[] ComputeHash(GenericSecurityDescriptor securityDescriptor)
         {
             if (securityDescriptor == null)
@@ -120,6 +138,9 @@
             return hashFunction.ComputeHash(binaryDescriptor);
         }
 
+        /// <summary>
+        /// ComputeHash implementation.
+        /// </summary>
         public static byte[] ComputeHash(string securityDescriptor)
         {
             if (securityDescriptor == null)
@@ -139,6 +160,9 @@
             return hashFunction.ComputeHash(binaryDescriptor);
         }
 
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

@@ -4,6 +4,9 @@
     using PeterO.Cbor;
     using System.Security.Cryptography;
 
+    /// <summary>
+    /// Represents a CredentialPublicKey.
+    /// </summary>
     public class CredentialPublicKey
     {
         public RSACng RSA
@@ -136,7 +139,13 @@
                 return null;
             }
         }
+        /// <summary>
+        /// The Type.
+        /// </summary>
         public COSE.KeyType Type;
+        /// <summary>
+        /// The Algorithm.
+        /// </summary>
         public COSE.Algorithm Algorithm;
         internal CBORObject _cpk;
 
@@ -147,11 +156,17 @@
             this.Algorithm = (COSE.Algorithm) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.Alg)].AsInt32();
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             return _cpk.ToString();
         }
 
+        /// <summary>
+        /// GetBytes implementation.
+        /// </summary>
         public byte[] GetBytes()
         {
             return _cpk.EncodeToBytes();

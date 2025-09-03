@@ -8,6 +8,9 @@
     using System.Security;
     using System.Text;
 
+    /// <summary>
+    /// Represents a KerberosCredentialNew.
+    /// </summary>
     public class KerberosCredentialNew
     {
         // Header: Revision (2 bytes) + Flags (2 bytes) + CredentialCount (2 bytes) + ServiceCredentialCount (2 bytes) + OldCredentialCount (2 bytes) + OlderCredentialCount (2 bytes) + DefaultSaltLength (2 bytes) + DefaultSaltMaximumLength (2 bytes) + DefaultSaltOffset (4 bytes) + DefaultIterationCount (4 bytes):
@@ -147,6 +150,9 @@
             private set;
         }
 
+        /// <summary>
+        /// ToByteArray implementation.
+        /// </summary>
         public byte[] ToByteArray()
         {
             using (var stream = new MemoryStream())
@@ -240,6 +246,9 @@
             }
         }
 
+        /// <summary>
+        /// Derive implementation.
+        /// </summary>
         public static KerberosCredentialNew Derive(ReadOnlyMemory<byte> currentPassword, ReadOnlyMemory<byte> previousPassword, string salt, bool includeDES = true)
         {
             var currentKeys = new KerberosCredentialNew(currentPassword, salt, includeDES);

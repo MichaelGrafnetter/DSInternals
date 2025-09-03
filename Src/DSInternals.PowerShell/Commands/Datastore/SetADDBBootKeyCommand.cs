@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsCommon.Set, "ADDBBootKey")]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a SetADDBBootKeyCommand.
+    /// </summary>
     public class SetADDBBootKeyCommand : ADDBCommandBase
     {
         [Parameter(Mandatory = true)]

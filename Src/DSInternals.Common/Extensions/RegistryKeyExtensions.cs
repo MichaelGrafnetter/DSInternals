@@ -6,6 +6,9 @@ namespace DSInternals.Common
 {
     public static class RegistryKeyExtensions
     {
+        /// <summary>
+        /// GetClass implementation.
+        /// </summary>
         public static string GetClass(this RegistryKey key)
         {
             string keyClass;

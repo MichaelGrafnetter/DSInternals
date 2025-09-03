@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 namespace DSInternals.Common.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
+    /// <summary>
+    /// Represents a OemString structure.
+    /// </summary>
     public struct OemString
     {
         public OemString(SafeOemStringPointer oemStringPtr)

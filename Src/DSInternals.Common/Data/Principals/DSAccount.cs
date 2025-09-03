@@ -6,6 +6,9 @@
     using DSInternals.Common.Cryptography;
     using DSInternals.Common.Schema;
 
+    /// <summary>
+    /// Represents a DSAccount.
+    /// </summary>
     public class DSAccount
     {
         public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.All)

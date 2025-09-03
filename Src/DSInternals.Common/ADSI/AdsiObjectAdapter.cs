@@ -7,6 +7,9 @@
     using System.Linq;
     using System.Security.Principal;
 
+    /// <summary>
+    /// Represents a AdsiObjectAdapter.
+    /// </summary>
     public class AdsiObjectAdapter : DirectoryObject
     {
         protected SearchResult directoryEntry;
@@ -53,49 +56,76 @@
             }
         }
 
+        /// <summary>
+        /// HasAttribute implementation.
+        /// </summary>
         public override bool HasAttribute(string name)
         {
             return this.directoryEntry.Properties.Contains(name);
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out byte[] value)
         {
             value = this.ReadAttributeSingle<byte[]>(name);
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out byte[][] value)
         {
             value = this.ReadAttributeMulti<byte[]>(name);
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out int? value)
         {
             value = this.ReadAttributeSingle<int?>(name);
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out long? value)
         {
             value = this.ReadAttributeSingle<long?>(name);
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out string value, bool unicode = true)
         {
             // Unicode vs. IA5 strings are handled by ADSI itself.
             value = this.ReadAttributeSingle<string>(name);
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out string[] values, bool unicode = true)
         {
             // Unicode vs. IA5 strings are handled by ADSI itself.
             values = this.ReadAttributeMulti<string>(name);
         }
 
+        /// <summary>
+        /// ReadAttribute implementation.
+        /// </summary>
         public override void ReadAttribute(string name, out DistinguishedName value)
         {
             string dnString = this.ReadAttributeSingle<string>(name);
             value = new DistinguishedName(dnString);
         }
 
+        /// <summary>
+        /// ReadLinkedValues implementation.
+        /// </summary>
         public override void ReadLinkedValues(string attributeName, out byte[][] values)
         {
             // Parse the DN with binary value

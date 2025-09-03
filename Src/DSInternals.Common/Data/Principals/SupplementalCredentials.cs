@@ -158,6 +158,9 @@
             // Note that we do not want to store the password in cleartext.
         }
 
+        /// <summary>
+        /// ToByteArray implementation.
+        /// </summary>
         public byte[] ToByteArray()
         {
             using (MemoryStream stream = new MemoryStream())

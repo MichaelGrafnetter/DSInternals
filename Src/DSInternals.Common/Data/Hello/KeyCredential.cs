@@ -442,6 +442,9 @@
             this.Version = KeyCredentialVersion.Version2;
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             return String.Format(
@@ -453,6 +456,9 @@
                 this.CreationTime);
         }
 
+        /// <summary>
+        /// ToByteArray implementation.
+        /// </summary>
         public byte[] ToByteArray()
         {
             // Note that we do not support the legacy V1 format.
@@ -543,14 +549,23 @@
             }
         }
 
+        /// <summary>
+        /// ToDNWithBinary implementation.
+        /// </summary>
         public string ToDNWithBinary()
         {
             // This method should only be used when the owner is in the form of a Distinguished Name.
             return new DNWithBinary(this.Owner, this.ToByteArray()).ToString();
         }
 
+        /// <summary>
+        /// ToJson implementation.
+        /// </summary>
         public string ToJson() => JsonSerializer.Serialize(this, LenientJsonSerializer.Options);
 
+        /// <summary>
+        /// ParseDNBinary implementation.
+        /// </summary>
         public static KeyCredential ParseDNBinary(string dnWithBinary)
         {
             Validator.AssertNotNullOrEmpty(dnWithBinary, nameof(dnWithBinary));
@@ -558,6 +573,9 @@
             return new KeyCredential(parsed.Binary, parsed.DistinguishedName);
         }
 
+        /// <summary>
+        /// ParseJson implementation.
+        /// </summary>
         public static KeyCredential ParseJson(string jsonData)
         {
             if (string.IsNullOrWhiteSpace(jsonData))

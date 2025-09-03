@@ -10,6 +10,9 @@
 
     [Cmdlet(VerbsData.ConvertTo, "LMHash")]
     [OutputType(new Type[] { typeof(string) })]
+    /// <summary>
+    /// Represents a ConvertToLMHashCommand.
+    /// </summary>
     public class ConvertToLMHashCommand : PSCmdlet
     {
         #region Parameters

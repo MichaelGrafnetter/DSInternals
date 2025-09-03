@@ -4,6 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents a KeyMaterialFido.
+    /// </summary>
     public class KeyMaterialFido
     {
         // All PEM certificates that are less than 16,383B long start with MII.

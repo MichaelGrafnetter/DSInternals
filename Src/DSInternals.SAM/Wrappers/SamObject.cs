@@ -17,6 +17,9 @@ namespace DSInternals.SAM
             this.Handle = handle;
         }
 
+        /// <summary>
+        /// ReleaseHandle implementation.
+        /// </summary>
         public void ReleaseHandle()
         {
             if (this.Handle != null)
@@ -25,6 +28,9 @@ namespace DSInternals.SAM
                 this.Handle = null;
             }
         }
+        /// <summary>
+        /// Dispose implementation.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

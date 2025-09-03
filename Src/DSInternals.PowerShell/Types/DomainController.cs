@@ -5,6 +5,9 @@
     using System.Security.Principal;
     using DSInternals.Common.Data;
     // Transport object
+    /// <summary>
+    /// Represents a DomainController.
+    /// </summary>
     public class DomainController : IDomainController
     {
         public string Name

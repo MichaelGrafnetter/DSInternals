@@ -4,6 +4,9 @@ using PeterO.Cbor;
 
 namespace DSInternals.Common.Data.Fido
 {
+    /// <summary>
+    /// Represents a AuthenticatorData.
+    /// </summary>
     public class AuthenticatorData
     {
         /// <summary>

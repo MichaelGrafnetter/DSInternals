@@ -90,6 +90,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// Update implementation.
+        /// </summary>
         public void Update(Guid invocationId, DateTime time, long usn)
         {
             this.LastOriginatingInvocationId = invocationId;
@@ -99,6 +102,9 @@ namespace DSInternals.DataStore
             this.Version++;
         }
 
+        /// <summary>
+        /// ToString implementation.
+        /// </summary>
         public override string ToString()
         {
             return String.Format("Ver: {0}, USN: {1}, Time: {2}, DSA: {3}", this.Version, this.OriginatingChangeUsn, this.LastOriginatingChangeTime, this.LastOriginatingInvocationId);

@@ -7,6 +7,9 @@ namespace DSInternals.Common
     {
         private static readonly char[] DomainNameSeparator = { '\\' };
 
+        /// <summary>
+        /// NetBIOSDomainName implementation.
+        /// </summary>
         public static string NetBIOSDomainName(this NTAccount account)
         {
             string[] parts = account.Value.Split(DomainNameSeparator, 2);

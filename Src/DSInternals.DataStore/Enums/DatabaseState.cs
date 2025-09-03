@@ -1,5 +1,8 @@
 ﻿namespace DSInternals.DataStore
 {
+    /// <summary>
+    /// Defines values for DatabaseState.
+    /// </summary>
     public enum DatabaseState
     {
         /// <summary>

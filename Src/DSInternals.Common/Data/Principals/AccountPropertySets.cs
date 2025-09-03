@@ -3,6 +3,9 @@
 namespace DSInternals.Common.Data
 {
     [Flags]
+    /// <summary>
+    /// Defines values for AccountPropertySets.
+    /// </summary>
     public enum AccountPropertySets : int
     {
         None = 0,

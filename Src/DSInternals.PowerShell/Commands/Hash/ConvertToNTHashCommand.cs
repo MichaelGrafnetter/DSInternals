@@ -10,6 +10,9 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsData.ConvertTo, "NTHash")]
     [OutputType(new Type[] { typeof(string) })]
+    /// <summary>
+    /// Represents a ConvertToNTHashCommand.
+    /// </summary>
     public class ConvertToNTHashCommand : PSCmdlet
     {
         #region Parameters

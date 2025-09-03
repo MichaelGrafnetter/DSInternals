@@ -4,6 +4,9 @@
     using System;
     using System.Security.Principal;
 
+    /// <summary>
+    /// Represents a LsaDnsDomainInformation.
+    /// </summary>
     public class LsaDnsDomainInformation
     {
         public LsaDnsDomainInformation() { }

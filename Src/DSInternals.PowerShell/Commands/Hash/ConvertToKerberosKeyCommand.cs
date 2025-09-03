@@ -8,6 +8,9 @@
 
     [Cmdlet(VerbsData.ConvertTo, "KerberosKey")]
     [OutputType(new Type[] { typeof(KerberosKeyDataNew) })]
+    /// <summary>
+    /// Represents a ConvertToKerberosKeyCommand.
+    /// </summary>
     public class ConvertToKerberosKeyCommand : PSCmdlet
     {
         #region Parameters

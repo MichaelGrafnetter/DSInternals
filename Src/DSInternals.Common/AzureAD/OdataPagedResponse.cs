@@ -3,6 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.AzureAD
 {
+    /// <summary>
+    /// Represents a paged response from OData-compliant Azure AD Graph API endpoints.
+    /// </summary>
+    /// <typeparam name="T">The type of items contained in the response.</typeparam>
     public class OdataPagedResponse<T>
     {
         [JsonPropertyName("value")]

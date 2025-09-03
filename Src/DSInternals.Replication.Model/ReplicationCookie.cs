@@ -69,6 +69,9 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// GetHashCode implementation.
+        /// </summary>
         public override int GetHashCode()
         {
             // We simply XOR the hash codes of all members
@@ -79,6 +82,9 @@ namespace DSInternals.Replication.Model
                    this.Reserved.GetHashCode();
         }
 
+        /// <summary>
+        /// Equals implementation.
+        /// </summary>
         public override bool Equals(object obj)
         {
             // If parameter is null return false.
@@ -98,6 +104,9 @@ namespace DSInternals.Replication.Model
             return MemberwiseEquals(this, cookie);
         }
 
+        /// <summary>
+        /// Equals implementation.
+        /// </summary>
         public bool Equals(ReplicationCookie cookie)
         {
             // If parameter is null return false:

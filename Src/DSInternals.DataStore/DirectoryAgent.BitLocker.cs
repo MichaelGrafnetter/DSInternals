@@ -12,6 +12,9 @@
     {
         private const string ComputerNameSuffix = "$";
 
+        /// <summary>
+        /// GetBitLockerRecoveryInformation implementation.
+        /// </summary>
         public IEnumerable<BitLockerRecoveryInformation> GetBitLockerRecoveryInformation()
         {
             var recoveryGuidAttribute = this.context.Schema.FindAttribute(AttributeType.FVERecoveryGuid);
@@ -35,6 +38,9 @@
             }
         }
 
+        /// <summary>
+        /// GetBitLockerRecoveryInformation implementation.
+        /// </summary>
         public BitLockerRecoveryInformation GetBitLockerRecoveryInformation(DistinguishedName dn)
         {
             // Validate the input
@@ -71,6 +77,9 @@
             throw new DirectoryObjectNotFoundException(dn);
         }
 
+        /// <summary>
+        /// GetBitLockerRecoveryInformation implementation.
+        /// </summary>
         public BitLockerRecoveryInformation GetBitLockerRecoveryInformation(Guid objectId)
         {
             Columnid? recoveryGuidColumn = this.context.Schema.FindColumnId(CommonDirectoryAttributes.FVERecoveryGuid);
@@ -106,6 +115,9 @@
             throw new DirectoryObjectNotFoundException(objectId);
         }
 
+        /// <summary>
+        /// GetBitLockerRecoveryInformationByRecoveryGuid implementation.
+        /// </summary>
         public BitLockerRecoveryInformation GetBitLockerRecoveryInformationByRecoveryGuid(Guid recoveryGuid)
         {
             var recoveryGuidAttribute = this.context.Schema.FindAttribute(CommonDirectoryAttributes.FVERecoveryGuid);
@@ -132,6 +144,9 @@
             throw new DirectoryObjectNotFoundException(recoveryGuid);
         }
 
+        /// <summary>
+        /// GetBitLockerRecoveryInformation implementation.
+        /// </summary>
         public IEnumerable<BitLockerRecoveryInformation> GetBitLockerRecoveryInformation(string computerName)
         {
             var recoveryGuidAttribute = this.context.Schema.FindAttribute(CommonDirectoryAttributes.FVERecoveryGuid);

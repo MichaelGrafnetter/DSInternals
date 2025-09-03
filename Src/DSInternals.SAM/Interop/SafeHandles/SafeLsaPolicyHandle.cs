@@ -6,10 +6,16 @@
 
     internal sealed class SafeLsaPolicyHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public SafeLsaPolicyHandle() : base(true)
         {
         }
 
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public SafeLsaPolicyHandle(IntPtr preexistingHandle, bool ownsHandle) : base(ownsHandle)
         {
             this.SetHandle(preexistingHandle);

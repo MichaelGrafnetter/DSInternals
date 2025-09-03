@@ -7,6 +7,9 @@
 
     [Cmdlet(VerbsCommon.Add, "ADDBSidHistory")]
     [OutputType("None")]
+    /// <summary>
+    /// Represents a AddADDBSidHistoryCommand.
+    /// </summary>
     public class AddADDBSidHistoryCommand : ADDBModifyPrincipalCommandBase
     {
         [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]
