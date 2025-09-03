@@ -12,16 +12,21 @@ namespace DSInternals.Common
         private const string HexDigitsLower = "0123456789abcdef";
 
         /// <summary>
-        /// ZeroFill implementation.
+        /// Fills the entire byte array with zeros to securely clear sensitive data.
         /// </summary>
+        /// <param name="array">The byte array to clear.</param>
         public static void ZeroFill(this byte[] array)
         {
             Array.Clear(array, 0, array.Length);
         }
 
         /// <summary>
-        /// HexToBinary implementation.
+        /// Converts a portion of a hexadecimal string to a byte array.
         /// </summary>
+        /// <param name="hex">The hexadecimal string to convert.</param>
+        /// <param name="startIndex">The starting position in the hexadecimal string.</param>
+        /// <param name="length">The number of characters to convert.</param>
+        /// <returns>A byte array containing the converted hexadecimal data.</returns>
         public static byte[] HexToBinary(this string hex, int startIndex, int length)
         {
             // Input validation
@@ -93,8 +98,11 @@ namespace DSInternals.Common
 
         [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
         /// <summary>
-        /// ToHex implementation.
+        /// Converts a byte array to its hexadecimal string representation.
         /// </summary>
+        /// <param name="bytes">The byte array to convert.</param>
+        /// <param name="caps">If true, uses uppercase hexadecimal digits; otherwise, uses lowercase.</param>
+        /// <returns>A hexadecimal string representation of the byte array.</returns>
         public static string ToHex(this byte[] bytes, bool caps = false)
         {
             return bytes == null ? null : ToHex(bytes.AsSpan(), caps);

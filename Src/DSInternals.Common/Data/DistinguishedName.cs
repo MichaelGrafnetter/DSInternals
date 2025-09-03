@@ -7,7 +7,7 @@
     using DSInternals.Common.Schema;
 
     /// <summary>
-    /// Represents a DistinguishedName.
+    /// Represents an LDAP distinguished name (DN) that uniquely identifies an object in a directory hierarchy.
     /// </summary>
     public class DistinguishedName
     {
@@ -65,8 +65,9 @@
         }
 
         /// <summary>
-        /// GetDnsName implementation.
+        /// Converts the distinguished name to a DNS hostname by extracting CN and DC components.
         /// </summary>
+        /// <returns>A DNS hostname representation of the distinguished name.</returns>
         public string GetDnsName()
         {
             if (Components.Count == 0)

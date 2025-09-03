@@ -37,8 +37,9 @@
         }
 
         /// <summary>
-        /// SetDomainControllerEpoch implementation.
+        /// Sets the domain controller epoch value for replication consistency tracking.
         /// </summary>
+        /// <param name="epoch">The epoch value to set for the domain controller.</param>
         public void SetDomainControllerEpoch(int epoch)
         {
             using (var transaction = this.context.BeginTransaction())

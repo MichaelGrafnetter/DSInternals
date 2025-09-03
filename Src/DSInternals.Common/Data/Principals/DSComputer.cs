@@ -5,15 +5,20 @@ using DSInternals.Common.Schema;
 namespace DSInternals.Common.Data
 {
     /// <summary>
-    /// Represents a DSComputer.
+    /// Represents a computer account object from Active Directory, extending DSAccount with computer-specific properties and functionality.
     /// </summary>
     public class DSComputer : DSAccount
     {
         private List<LapsPasswordInformation>? _lapsPasswords;
 
         /// <summary>
-        /// base implementation.
+        /// Initializes a new instance of the DSComputer class from a directory object with computer-specific functionality.
         /// </summary>
+        /// <param name="dsObject">The directory object containing the computer account data.</param>
+        /// <param name="netBIOSDomainName">The NetBIOS domain name for the computer account.</param>
+        /// <param name="pek">The password encryption key used to decrypt password hashes.</param>
+        /// <param name="rootKeyResolver">Optional resolver for KDS root keys used in group managed service accounts.</param>
+        /// <param name="propertySets">Specifies which property sets to load from the directory object.</param>
         public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
             if (this.SamAccountType != SamAccountType.Computer)

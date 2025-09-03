@@ -95,8 +95,9 @@ namespace DSInternals.Common.Cryptography
         }
 
         /// <summary>
-        /// GetRandom implementation.
+        /// Generates a random byte array with the same length as an NT hash.
         /// </summary>
+        /// <returns>A random byte array that can be used as a placeholder or test hash.</returns>
         public static byte[] GetRandom()
         {
             using (var rng = RandomNumberGenerator.Create())
