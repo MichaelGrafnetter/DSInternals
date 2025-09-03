@@ -2,15 +2,6 @@
   "version": 1,
   "dependencies": {
     ".NETFramework,Version=v4.8": {
-      "Microsoft.NETFramework.ReferenceAssemblies": {
-        "type": "Direct",
-        "requested": "[1.0.3, )",
-        "resolved": "1.0.3",
-        "contentHash": "vUc9Npcs14QsyOD01tnv/m8sQUnGTGOw1BCmKcv77LBJY7OxhJ+zJF7UD/sCL3lYNFuqmQEVlkfS4Quif6FyYg==",
-        "dependencies": {
-          "Microsoft.NETFramework.ReferenceAssemblies.net48": "1.0.3"
-        }
-      },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
         "requested": "[8.0.0, )",
@@ -33,11 +24,6 @@
         "type": "Transitive",
         "resolved": "8.0.0",
         "contentHash": "bZKfSIKJRXLTuSzLudMFte/8CempWjVamNUR5eHJizsy+iuOuO/k2gnh7W0dHJmYY0tBf+gUErfluCv5mySAOQ=="
-      },
-      "Microsoft.NETFramework.ReferenceAssemblies.net48": {
-        "type": "Transitive",
-        "resolved": "1.0.3",
-        "contentHash": "zMk4D+9zyiEWByyQ7oPImPN/Jhpj166Ky0Nlla4eXlNL8hI/BtSJsgR8Inldd4NNpIAH3oh8yym0W2DrhXdSLQ=="
       },
       "Microsoft.SourceLink.Common": {
         "type": "Transitive",
@@ -157,6 +143,9 @@
           "System.ValueTuple": "[4.6.1, )"
         }
       },
+      "dsinternals.replication.interop.netframework": {
+        "type": "Project"
+      },
       "dsinternals.replication.model": {
         "type": "Project",
         "dependencies": {
@@ -214,6 +203,13 @@
         "dependencies": {
           "PeterO.Cbor": "[4.5.5, )",
           "System.DirectoryServices": "[9.0.8, )"
+        }
+      },
+      "dsinternals.replication.interop.netcore": {
+        "type": "Project",
+        "dependencies": {
+          "DSInternals.Common": "[6.1.0, )",
+          "DSInternals.Replication.Model": "[6.1.0, )"
         }
       },
       "dsinternals.replication.model": {
