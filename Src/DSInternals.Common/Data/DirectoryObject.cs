@@ -7,6 +7,9 @@
     using DSInternals.Common.Kerberos;
     using DSInternals.Common.Schema;
 
+    /// <summary>
+    /// Represents an abstract base class for objects stored in a directory service.
+    /// </summary>
     public abstract class DirectoryObject
     {
         protected abstract bool HasBigEndianRid
@@ -15,21 +18,31 @@
         }
 
         /// <summary>
-        /// HasAttribute implementation.
+        /// Determines whether the directory object has the specified attribute.
         /// </summary>
+        /// <param name="name">The name of the attribute to check.</param>
+        /// <returns>true if the attribute exists; otherwise, false.</returns>
         public abstract bool HasAttribute(string name);
+        
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a byte array.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute value or null if the attribute does not exist.</param>
         public abstract void ReadAttribute(string name, out byte[] value);
+        
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the values of a multi-valued attribute as an array of byte arrays.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute values or null if the attribute does not exist.</param>
         public abstract void ReadAttribute(string name, out byte[][] value);
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a GUID.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute value as a GUID or null if the attribute does not exist.</param>
         public void ReadAttribute(string name, out Guid? value)
         {
             byte[] binaryValue;
@@ -37,8 +50,10 @@
             value = (binaryValue != null) ? new Guid(binaryValue) : (Guid?)null;
         }
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a boolean.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute value as a boolean.</param>
         public void ReadAttribute(string name, out bool value)
         {
             int? numericValue;
@@ -46,25 +61,39 @@
             value = numericValue.HasValue ? (numericValue.Value != 0) : false;
         }
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a nullable integer.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute value as an integer or null if the attribute does not exist.</param>
         public abstract void ReadAttribute(string name, out int? value);
+        
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a nullable long integer.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute value as a long integer or null if the attribute does not exist.</param>
         public abstract void ReadAttribute(string name, out long? value);
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a string.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute value as a string or null if the attribute does not exist.</param>
+        /// <param name="unicode">Indicates whether to use Unicode encoding for the string.</param>
         public abstract void ReadAttribute(string name, out string value, bool unicode = true);
+        
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the values of a multi-valued attribute as an array of strings.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="values">When this method returns, contains the attribute values as an array of strings or null if the attribute does not exist.</param>
+        /// <param name="unicode">Indicates whether to use Unicode encoding for the strings.</param>
         public abstract void ReadAttribute(string name, out string[] values, bool unicode = true);
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a security descriptor.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute value as a security descriptor or null if the attribute does not exist.</param>
         public virtual void ReadAttribute(string name, out RawSecurityDescriptor value)
         {
             byte[] binarySecurityDescriptor;
@@ -73,28 +102,41 @@
         }
 
         /// <summary>
-        /// ReadLinkedValues implementation.
+        /// Reads the linked values of an attribute.
         /// </summary>
+        /// <param name="attributeName">The name of the attribute to read.</param>
+        /// <param name="values">When this method returns, contains the linked values as an array of byte arrays.</param>
         public abstract void ReadLinkedValues(string attributeName, out byte[][] values);
 
+        /// <summary>
+        /// Gets the distinguished name of the directory object.
+        /// </summary>
         public abstract string DistinguishedName
         {
             get;
         }
 
+        /// <summary>
+        /// Gets the GUID of the directory object.
+        /// </summary>
         public abstract Guid Guid
         {
             get;
         }
 
+        /// <summary>
+        /// Gets the security identifier (SID) of the directory object.
+        /// </summary>
         public abstract SecurityIdentifier Sid
         {
             get;
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a security identifier.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute value as a security identifier.</param>
         public void ReadAttribute(string name, out SecurityIdentifier value)
         {
             byte[] binarySid;
@@ -103,13 +145,17 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a distinguished name.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute value as a distinguished name.</param>
         public abstract void ReadAttribute(string name, out DistinguishedName value);
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the values of a multi-valued attribute as an array of security identifiers.
         /// </summary>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <param name="value">When this method returns, contains the attribute values as an array of security identifiers.</param>
         public void ReadAttribute(string name, out SecurityIdentifier[] value)
         {
             value = null;
@@ -122,7 +168,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a SecurityIdentifier.
         /// </summary>
         public void ReadAttribute(string name, out SamAccountType? value)
         {
@@ -131,7 +177,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a SecurityIdentifier.
         /// </summary>
         public void ReadAttribute(string name, out TrustDirection? value)
         {
@@ -140,7 +186,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a SecurityIdentifier.
         /// </summary>
         public void ReadAttribute(string name, out TrustAttributes? value)
         {
@@ -149,7 +195,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a SecurityIdentifier.
         /// </summary>
         public void ReadAttribute(string name, out TrustType? value)
         {
@@ -158,7 +204,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of an attribute as a SecurityIdentifier.
         /// </summary>
         public void ReadAttribute(string name, out DateTime? value, bool asGeneralizedTime)
         {

@@ -10,7 +10,7 @@
     using DSInternals.Common.Schema;
 
     /// <summary>
-    /// Represents a AdsiClient.
+    /// Provides functionality for accessing Active Directory through ADSI (Active Directory Service Interfaces).
     /// </summary>
     public class AdsiClient : IDisposable
     {

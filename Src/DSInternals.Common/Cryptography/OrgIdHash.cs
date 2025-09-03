@@ -6,10 +6,13 @@ using System.Text;
 
 namespace DSInternals.Common.Cryptography
 {
+    /// <summary>
+    /// Provides methods for computing Microsoft Org ID password hashes used in cloud authentication.
+    /// </summary>
     public static class OrgIdHash
     {
         /// <summary>
-        /// The 10.
+        /// The size of the salt in bytes.
         /// </summary>
         public const int SaltSize = 10;
         /// <summary>
@@ -21,8 +24,9 @@ namespace DSInternals.Common.Cryptography
         private const string InternalHashFunction = "HMACSHA256";
 
         /// <summary>
-        /// GenerateSalt implementation.
+        /// Generates a random salt for password hashing.
         /// </summary>
+        /// <returns>A randomly generated salt.</returns>
         public static byte[] GenerateSalt()
         {
             using(var rng = new RNGCryptoServiceProvider())
@@ -34,8 +38,11 @@ namespace DSInternals.Common.Cryptography
         }
 
         /// <summary>
-        /// ComputeHash implementation.
+        /// Computes the Org ID hash of the specified password using the provided salt.
         /// </summary>
+        /// <param name="password">The password to hash.</param>
+        /// <param name="salt">The salt to use for hashing.</param>
+        /// <returns>The Org ID hash of the password.</returns>
         public static byte[] ComputeHash(SecureString password, byte[] salt)
         {
             byte[] ntHash = NTHash.ComputeHash(password);

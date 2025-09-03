@@ -7,21 +7,26 @@ using System.Text;
 
 namespace DSInternals.Common.Cryptography
 {
+    /// <summary>
+    /// Provides methods for computing LM (LAN Manager) password hashes used in legacy Windows authentication.
+    /// </summary>
     public static class LMHash
     {
         /// <summary>
-        /// The size, in bits, of the computed hash code.
+        /// The size, in bytes, of the computed hash code.
         /// </summary>
         public const int HashSize = NativeMethods.LMHashNumBytes;
 
         /// <summary>
-        /// The MaxChars.
+        /// The maximum number of characters that can be hashed.
         /// </summary>
         public const int MaxChars = NativeMethods.LMPasswordMaxChars;
 
         /// <summary>
-        /// ComputeHash implementation.
+        /// Computes the LM hash of the specified password.
         /// </summary>
+        /// <param name="password">The password to hash.</param>
+        /// <returns>The LM hash of the password.</returns>
         public static byte[] ComputeHash(SecureString password)
         {
             Validator.AssertNotNull(password, "password");
