@@ -9,7 +9,7 @@
     using System.Text;
 
     /// <summary>
-    /// Represents a KerberosCredential.
+    /// Represents Kerberos credentials containing encryption keys and salt information for authentication.
     /// </summary>
     public class KerberosCredential
     {

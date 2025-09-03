@@ -3,15 +3,10 @@
 namespace DSInternals.Common.Data
 {
     /// <summary>
-    /// A bit field that dictates how the object is instantiated on a particular domain controller.
-    /// The value of this attribute can differ on different replicas even if the replicas are in sync.
-    /// This attribute can be zero or a combination of one or more of the following bit flags.
+    /// Specifies how a directory object is instantiated on domain controllers and controls object behavior during replication.
     /// </summary>
     /// <see>https://msdn.microsoft.com/en-us/library/cc219986.aspx</see>
     [Flags]
-    /// <summary>
-    /// Defines values for InstanceType.
-    /// </summary>
     public enum InstanceType : uint
     {
         /// <summary>

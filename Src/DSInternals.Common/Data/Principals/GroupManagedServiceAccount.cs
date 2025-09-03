@@ -7,7 +7,7 @@ using DSInternals.Common.Schema;
 namespace DSInternals.Common.Data
 {
     /// <summary>
-    /// Group Managed Service Account.
+    /// Represents a Group Managed Service Account (gMSA) which provides automatic password management for service accounts.
     /// </summary>
     /// <see>https://learn.microsoft.com/en-us/windows/win32/adschema/c-msds-groupmanagedserviceaccount</see>
     public class GroupManagedServiceAccount

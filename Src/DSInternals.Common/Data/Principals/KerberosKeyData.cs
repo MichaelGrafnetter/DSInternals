@@ -5,7 +5,7 @@ namespace DSInternals.Common.Data
 {
     // https://msdn.microsoft.com/en-us/library/cc941809.aspx
     /// <summary>
-    /// Represents a KerberosKeyData.
+    /// Represents Kerberos encryption key data including key type, length, and the actual key bytes.
     /// </summary>
     public class KerberosKeyData
     {

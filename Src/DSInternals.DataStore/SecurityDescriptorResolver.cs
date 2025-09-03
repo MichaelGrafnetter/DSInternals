@@ -10,7 +10,7 @@
     using SecurityDescriptorIdentifier = long;
 
     /// <summary>
-    /// Represents a SecurityDescriptorRersolver.
+    /// Resolves and caches security descriptors from the Active Directory database to improve performance.
     /// </summary>
     public class SecurityDescriptorRersolver : IDisposable
     {

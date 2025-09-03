@@ -7,7 +7,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Get, "ADReplKdsRootKey")]
     [OutputType(typeof(KdsRootKey))]
     /// <summary>
-    /// Implements the GetADReplKdsRootKeyCommand PowerShell cmdlet.
+    /// Implements the Get-ADReplKdsRootKey PowerShell cmdlet for retrieving KDS root keys from Active Directory replication data.
     /// </summary>
     public class GetADReplKdsRootKeyCommand : ADReplCommandBase
     {

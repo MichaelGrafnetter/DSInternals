@@ -5,7 +5,7 @@
     using System.Text;
 
     /// <summary>
-    /// Represents a DistinguishedNameComponent.
+    /// Represents a single component (name-value pair) of an LDAP distinguished name.
     /// </summary>
     public class DistinguishedNameComponent
     {

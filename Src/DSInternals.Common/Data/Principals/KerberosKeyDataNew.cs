@@ -6,7 +6,7 @@
 
     // https://msdn.microsoft.com/en-us/library/cc941809.aspx
     /// <summary>
-    /// Represents a KerberosKeyDataNew.
+    /// Represents newer format Kerberos key data that includes iteration count for enhanced security.
     /// </summary>
     public class KerberosKeyDataNew : KerberosKeyData
     {

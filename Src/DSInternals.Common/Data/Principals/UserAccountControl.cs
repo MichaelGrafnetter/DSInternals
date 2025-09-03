@@ -3,12 +3,9 @@
     using System;
 
     /// <summary>
-    /// Flags that control the behavior of the user account.
+    /// Specifies flags that control the behavior and properties of user and computer accounts in Active Directory.
     /// </summary>
     [Flags]
-    /// <summary>
-    /// Defines values for UserAccountControl.
-    /// </summary>
     public enum UserAccountControl : int
     {
         /// <summary>

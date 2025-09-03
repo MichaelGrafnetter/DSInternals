@@ -9,7 +9,7 @@
     using System.Text;
 
     /// <summary>
-    /// Represents a KerberosCredentialNew.
+    /// Represents newer format Kerberos credentials with enhanced encryption key data structures.
     /// </summary>
     public class KerberosCredentialNew
     {
