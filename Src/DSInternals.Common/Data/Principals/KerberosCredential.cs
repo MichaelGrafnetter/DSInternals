@@ -67,7 +67,7 @@
         }
 
         /// <summary>
-        /// ToByteArray implementation.
+        /// Returns the byte array representation of the data.
         /// </summary>
         public byte[] ToByteArray()
         {

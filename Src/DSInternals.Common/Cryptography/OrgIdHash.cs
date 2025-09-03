@@ -50,7 +50,7 @@ namespace DSInternals.Common.Cryptography
 
         }
         /// <summary>
-        /// ComputeHash implementation.
+        /// Computes the hash of the specified input.
         /// </summary>
         public static byte[] ComputeHash(byte[] ntHash, byte[] salt)
         {

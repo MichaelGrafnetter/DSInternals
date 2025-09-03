@@ -8,7 +8,7 @@
     [Cmdlet(VerbsCommon.Get, "ADDBBitLockerRecoveryInformation")]
     [OutputType(typeof(DSInternals.Common.Data.BitLockerRecoveryInformation))]
     /// <summary>
-    /// Represents a GetADDBBitLockerRecoveryInformationCommand.
+    /// Implements the GetADDBBitLockerRecoveryInformationCommand PowerShell cmdlet.
     /// </summary>
     public class GetADDBBitLockerRecoveryInformationCommand : ADDBObjectCommandBase
     {

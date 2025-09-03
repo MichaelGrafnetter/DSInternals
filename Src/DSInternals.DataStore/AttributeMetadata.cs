@@ -103,7 +103,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// ToString implementation.
+        /// Returns a string representation of the object.
         /// </summary>
         public override string ToString()
         {

@@ -92,7 +92,7 @@
         }
 
         /// <summary>
-        /// GetAccounts implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public IEnumerable<DSAccount> GetAccounts(AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -248,7 +248,7 @@
 
         // This code added to correctly implement the disposable pattern.
         /// <summary>
-        /// Dispose implementation.
+        /// Releases all resources used by this instance.
         /// </summary>
         public void Dispose()
         {

@@ -9,7 +9,7 @@
     [Cmdlet(VerbsCommon.Set, "LsaPolicyInformation")]
     [OutputType("None")]
     /// <summary>
-    /// Represents a SetLsaPolicyInformationCommand.
+    /// Implements the SetLsaPolicyInformationCommand PowerShell cmdlet.
     /// </summary>
     public class SetLsaPolicyInformationCommand : LsaPolicyCommandBase
     {

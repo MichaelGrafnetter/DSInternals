@@ -14,7 +14,7 @@
     [Cmdlet(VerbsCommon.New, "ADDBRestoreFromMediaScript")]
     [OutputType(typeof(string))]
     /// <summary>
-    /// Represents a NewADDBRestoreFromMediaScriptCommand.
+    /// Implements the NewADDBRestoreFromMediaScriptCommand PowerShell cmdlet.
     /// </summary>
     public class NewADDBRestoreFromMediaScriptCommand : ADDBCommandBase
     {

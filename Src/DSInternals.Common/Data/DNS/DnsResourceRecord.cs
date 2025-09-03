@@ -308,7 +308,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Create implementation.
+        /// Creates a new instance.
         /// </summary>
         public static DnsResourceRecord Create(string zone, string name, ReadOnlySpan<byte> binaryRecordData)
         {

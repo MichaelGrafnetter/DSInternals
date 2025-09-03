@@ -15,7 +15,7 @@
     {
         #region SetAccountPassword
         /// <summary>
-        /// SetAccountPassword implementation.
+        /// Sets the password for the specified account.
         /// </summary>
         public bool SetAccountPassword(DistinguishedName dn, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
@@ -27,7 +27,7 @@
         }
 
         /// <summary>
-        /// SetAccountPassword implementation.
+        /// Sets the password for the specified account.
         /// </summary>
         public bool SetAccountPassword(SecurityIdentifier objectSid, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
@@ -39,7 +39,7 @@
         }
 
         /// <summary>
-        /// SetAccountPassword implementation.
+        /// Sets the password for the specified account.
         /// </summary>
         public bool SetAccountPassword(string samAccountName, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
@@ -51,7 +51,7 @@
         }
 
         /// <summary>
-        /// SetAccountPassword implementation.
+        /// Sets the password for the specified account.
         /// </summary>
         public bool SetAccountPassword(Guid objectGuid, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
@@ -97,7 +97,7 @@
 
         #region SetAccountPasswordHash
         /// <summary>
-        /// SetAccountPasswordHash implementation.
+        /// Sets the password hash for the specified account.
         /// </summary>
         public bool SetAccountPasswordHash(DistinguishedName dn, byte[] newNtHash, SupplementalCredentials newSupplementalCredentials, byte[] bootKey, bool skipMetaUpdate)
         {
@@ -106,7 +106,7 @@
         }
 
         /// <summary>
-        /// SetAccountPasswordHash implementation.
+        /// Sets the password hash for the specified account.
         /// </summary>
         public bool SetAccountPasswordHash(SecurityIdentifier objectSid, byte[] newNtHash, SupplementalCredentials newSupplementalCredentials, byte[] bootKey, bool skipMetaUpdate)
         {
@@ -115,7 +115,7 @@
         }
 
         /// <summary>
-        /// SetAccountPasswordHash implementation.
+        /// Sets the password hash for the specified account.
         /// </summary>
         public bool SetAccountPasswordHash(string samAccountName, byte[] newNtHash, SupplementalCredentials newSupplementalCredentials, byte[] bootKey, bool skipMetaUpdate)
         {
@@ -124,7 +124,7 @@
         }
 
         /// <summary>
-        /// SetAccountPasswordHash implementation.
+        /// Sets the password hash for the specified account.
         /// </summary>
         public bool SetAccountPasswordHash(Guid objectGuid, byte[] newNtHash, SupplementalCredentials newSupplementalCredentials, byte[] bootKey, bool skipMetaUpdate)
         {

@@ -141,7 +141,7 @@
         }
 
         /// <summary>
-        /// Save implementation.
+        /// Saves data to the specified destination.
         /// </summary>
         public override void Save(string directoryPath)
         {
@@ -231,7 +231,7 @@
         }
 
         /// <summary>
-        /// ToString implementation.
+        /// Returns a string representation of the object.
         /// </summary>
         public override string ToString()
         {

@@ -193,7 +193,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out byte[] value)
         {
@@ -210,7 +210,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out byte[][] value)
         {
@@ -227,7 +227,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out int? value)
         {
@@ -244,7 +244,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out long? value)
         {
@@ -261,7 +261,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out string? value, bool unicode = true)
         {
@@ -278,7 +278,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out string[]? values, bool unicode = true)
         {
@@ -295,7 +295,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out DistinguishedName? value)
         {

@@ -9,7 +9,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsData.ConvertTo, "OrgIdHash", DefaultParameterSetName = "FromHash")]
     [OutputType(new Type[] { typeof(string) })]
     /// <summary>
-    /// Represents a ConvertToOrgIdHashCommand.
+    /// Implements the ConvertToOrgIdHashCommand PowerShell cmdlet.
     /// </summary>
     public class ConvertToOrgIdHashCommand : PSCmdlet
     {

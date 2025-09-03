@@ -71,7 +71,7 @@ namespace DSInternals.Common.Schema
         public const string NtdsSettingsRO = "nTDSDSARO";
 
         /// <summary>
-        /// Translate implementation.
+        /// Translates the input to the target format.
         /// </summary>
         public static ClassType? Translate(string ldapDisplayName)
         {

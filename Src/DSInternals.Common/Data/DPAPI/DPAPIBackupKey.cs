@@ -122,7 +122,7 @@
         }
 
         /// <summary>
-        /// Save implementation.
+        /// Saves data to the specified destination.
         /// </summary>
         public override void Save(string directoryPath)
         {

@@ -5,7 +5,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsLifecycle.Enable, "ADDBAccount")]
     [OutputType("None")]
     /// <summary>
-    /// Represents a EnableADDBAccountCommand.
+    /// Implements the EnableADDBAccountCommand PowerShell cmdlet.
     /// </summary>
     public class EnableADDBAccountCommand : ADDBAccountStatusCommandBase
     {

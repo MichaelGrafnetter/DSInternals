@@ -37,7 +37,7 @@ namespace NDceRpc
         }
 
         /// <summary>
-        /// Clone implementation.
+        /// Creates a copy of this instance.
         /// </summary>
         public object Clone()
         {

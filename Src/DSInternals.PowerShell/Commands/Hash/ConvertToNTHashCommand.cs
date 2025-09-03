@@ -11,7 +11,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsData.ConvertTo, "NTHash")]
     [OutputType(new Type[] { typeof(string) })]
     /// <summary>
-    /// Represents a ConvertToNTHashCommand.
+    /// Converts a password to its NT hash representation.
     /// </summary>
     public class ConvertToNTHashCommand : PSCmdlet
     {

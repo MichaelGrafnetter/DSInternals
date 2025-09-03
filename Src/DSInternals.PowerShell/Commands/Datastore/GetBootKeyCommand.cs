@@ -10,7 +10,7 @@
     [Cmdlet(VerbsCommon.Get, "BootKey")]
     [OutputType(typeof(string))]
     /// <summary>
-    /// Represents a GetBootKeyCommand.
+    /// Implements the GetBootKeyCommand PowerShell cmdlet.
     /// </summary>
     public class GetBootKeyCommand : PSCmdletEx
     {

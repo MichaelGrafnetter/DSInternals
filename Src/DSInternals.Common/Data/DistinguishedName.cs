@@ -189,7 +189,7 @@
         }
 
         /// <summary>
-        /// ToString implementation.
+        /// Returns a string representation of the object.
         /// </summary>
         public override string ToString()
         {
@@ -302,7 +302,7 @@
         }
 
         /// <summary>
-        /// Equals implementation.
+        /// Determines whether the specified object is equal to this instance.
         /// </summary>
         public override bool Equals(object obj)
         {
@@ -315,7 +315,7 @@
         }
 
         /// <summary>
-        /// GetHashCode implementation.
+        /// Returns a hash code for this instance.
         /// </summary>
         public override int GetHashCode()
         {

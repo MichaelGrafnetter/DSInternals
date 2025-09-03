@@ -9,7 +9,7 @@
     [Cmdlet(VerbsCommon.Get, "ADDBKdsRootKey", DefaultParameterSetName = GetADDBKdsRootKeyCommand.AllKeysParameterSet)]
     [OutputType(typeof(DSInternals.Common.Data.KdsRootKey))]
     /// <summary>
-    /// Represents a GetADDBKdsRootKeyCommand.
+    /// Implements the GetADDBKdsRootKeyCommand PowerShell cmdlet.
     /// </summary>
     public class GetADDBKdsRootKeyCommand : ADDBCommandBase
     {

@@ -21,7 +21,7 @@ namespace DSInternals.Common
             }
         }
         /// <summary>
-        /// ToByteArray implementation.
+        /// Returns the byte array representation of the data.
         /// </summary>
         public static byte[] ToByteArray(this SecureString input)
         {

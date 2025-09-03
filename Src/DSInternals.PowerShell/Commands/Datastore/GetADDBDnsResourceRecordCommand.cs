@@ -6,7 +6,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Get, "ADDBDnsResourceRecord")]
     [OutputType(typeof(DSInternals.Common.Data.DnsResourceRecord))]
     /// <summary>
-    /// Represents a GetADDBDnsResourceRecordCommand.
+    /// Implements the GetADDBDnsResourceRecordCommand PowerShell cmdlet.
     /// </summary>
     public class GetADDBDnsResourceRecordCommand : ADDBCommandBase
     {

@@ -10,7 +10,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Set, "ADDBAccountControl")]
     [OutputType("None")]
     /// <summary>
-    /// Represents a SetADDBAccountControlCommand.
+    /// Implements the SetADDBAccountControlCommand PowerShell cmdlet.
     /// </summary>
     public class SetADDBAccountControlCommand : ADDBModifyPrincipalCommandBase
     {

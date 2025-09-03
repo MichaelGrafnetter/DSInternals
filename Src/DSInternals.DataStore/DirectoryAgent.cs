@@ -73,7 +73,7 @@
         }
 
         /// <summary>
-        /// GetAccounts implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public IEnumerable<DSAccount> GetAccounts(byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -114,7 +114,7 @@
         }
 
         /// <summary>
-        /// GetAccount implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public DSAccount GetAccount(DistinguishedName dn, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -140,7 +140,7 @@
         }
 
         /// <summary>
-        /// GetAccount implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public DSAccount GetAccount(SecurityIdentifier objectSid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -176,7 +176,7 @@
         }
 
         /// <summary>
-        /// GetAccount implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public DSAccount GetAccount(string samAccountName, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -216,7 +216,7 @@
         }
 
         /// <summary>
-        /// GetAccount implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public DSAccount GetAccount(Guid objectGuid, byte[] bootKey, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -324,7 +324,7 @@
         }
 
         /// <summary>
-        /// AddSidHistory implementation.
+        /// Adds a SID to the SID history of the specified account.
         /// </summary>
         public bool AddSidHistory(DistinguishedName dn, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
@@ -336,7 +336,7 @@
         }
 
         /// <summary>
-        /// AddSidHistory implementation.
+        /// Adds a SID to the SID history of the specified account.
         /// </summary>
         public bool AddSidHistory(string samAccountName, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
@@ -349,7 +349,7 @@
         }
 
         /// <summary>
-        /// AddSidHistory implementation.
+        /// Adds a SID to the SID history of the specified account.
         /// </summary>
         public bool AddSidHistory(SecurityIdentifier objectSid, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
@@ -361,7 +361,7 @@
         }
 
         /// <summary>
-        /// AddSidHistory implementation.
+        /// Adds a SID to the SID history of the specified account.
         /// </summary>
         public bool AddSidHistory(Guid objectGuid, SecurityIdentifier[] sidHistory, bool skipMetaUpdate)
         {
@@ -373,7 +373,7 @@
         }
 
         /// <summary>
-        /// Dispose implementation.
+        /// Releases all resources used by this instance.
         /// </summary>
         public void Dispose()
         {
@@ -505,7 +505,7 @@
         }
 
         /// <summary>
-        /// SetAccountStatus implementation.
+        /// Sets the status of the specified account.
         /// </summary>
         public bool SetAccountStatus(DistinguishedName dn, bool enabled, bool skipMetaUpdate)
         {
@@ -513,7 +513,7 @@
         }
 
         /// <summary>
-        /// SetAccountStatus implementation.
+        /// Sets the status of the specified account.
         /// </summary>
         public bool SetAccountStatus(string samAccountName, bool enabled, bool skipMetaUpdate)
         {
@@ -521,7 +521,7 @@
         }
 
         /// <summary>
-        /// SetAccountStatus implementation.
+        /// Sets the status of the specified account.
         /// </summary>
         public bool SetAccountStatus(SecurityIdentifier objectSid, bool enabled, bool skipMetaUpdate)
         {
@@ -529,7 +529,7 @@
         }
 
         /// <summary>
-        /// SetAccountStatus implementation.
+        /// Sets the status of the specified account.
         /// </summary>
         public bool SetAccountStatus(Guid objectGuid, bool enabled, bool skipMetaUpdate)
         {
@@ -537,7 +537,7 @@
         }
 
         /// <summary>
-        /// SetAccountControl implementation.
+        /// Sets the account control flags for the specified account.
         /// </summary>
         public bool SetAccountControl(DistinguishedName dn, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
         {
@@ -549,7 +549,7 @@
         }
 
         /// <summary>
-        /// SetAccountControl implementation.
+        /// Sets the account control flags for the specified account.
         /// </summary>
         public bool SetAccountControl(string samAccountName, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
         {
@@ -561,7 +561,7 @@
         }
 
         /// <summary>
-        /// SetAccountControl implementation.
+        /// Sets the account control flags for the specified account.
         /// </summary>
         public bool SetAccountControl(SecurityIdentifier objectSid, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
         {
@@ -573,7 +573,7 @@
         }
 
         /// <summary>
-        /// SetAccountControl implementation.
+        /// Sets the account control flags for the specified account.
         /// </summary>
         public bool SetAccountControl(Guid objectGuid, bool? enabled, bool? cannotChangePassword, bool? passwordNeverExpires, bool? smartcardLogonRequired, bool? useDESKeyOnly, bool? homedirRequired, bool skipMetaUpdate)
         {
@@ -585,7 +585,7 @@
         }
 
         /// <summary>
-        /// UnlockAccount implementation.
+        /// Unlocks the specified user account.
         /// </summary>
         public bool UnlockAccount(DistinguishedName dn, bool skipMetaUpdate)
         {
@@ -597,7 +597,7 @@
         }
 
         /// <summary>
-        /// UnlockAccount implementation.
+        /// Unlocks the specified user account.
         /// </summary>
         public bool UnlockAccount(string samAccountName, bool skipMetaUpdate)
         {
@@ -609,7 +609,7 @@
         }
 
         /// <summary>
-        /// UnlockAccount implementation.
+        /// Unlocks the specified user account.
         /// </summary>
         public bool UnlockAccount(SecurityIdentifier objectSid, bool skipMetaUpdate)
         {
@@ -621,7 +621,7 @@
         }
 
         /// <summary>
-        /// UnlockAccount implementation.
+        /// Unlocks the specified user account.
         /// </summary>
         public bool UnlockAccount(Guid objectGuid, bool skipMetaUpdate)
         {
@@ -633,7 +633,7 @@
         }
 
         /// <summary>
-        /// SetPrimaryGroupId implementation.
+        /// Sets the primary group ID for the specified account.
         /// </summary>
         public bool SetPrimaryGroupId(DistinguishedName dn, int groupId, bool skipMetaUpdate)
         {
@@ -645,7 +645,7 @@
         }
 
         /// <summary>
-        /// SetPrimaryGroupId implementation.
+        /// Sets the primary group ID for the specified account.
         /// </summary>
         public bool SetPrimaryGroupId(string samAccountName, int groupId, bool skipMetaUpdate)
         {
@@ -657,7 +657,7 @@
         }
 
         /// <summary>
-        /// SetPrimaryGroupId implementation.
+        /// Sets the primary group ID for the specified account.
         /// </summary>
         public bool SetPrimaryGroupId(SecurityIdentifier objectSid, int groupId, bool skipMetaUpdate)
         {
@@ -670,7 +670,7 @@
         }
 
         /// <summary>
-        /// SetPrimaryGroupId implementation.
+        /// Sets the primary group ID for the specified account.
         /// </summary>
         public bool SetPrimaryGroupId(Guid objectGuid, int groupId, bool skipMetaUpdate)
         {

@@ -28,7 +28,7 @@
         public IntPtr Buffer;
 
         /// <summary>
-        /// GetBytes implementation.
+        /// Gets the byte representation of the data.
         /// </summary>
         public byte[] GetBytes()
         {

@@ -83,7 +83,7 @@ namespace DSInternals.PowerShell.Commands
         #endregion Cmdlet Overrides
 
         /// <summary>
-        /// Dispose implementation.
+        /// Releases all resources used by this instance.
         /// </summary>
         public void Dispose()
         {

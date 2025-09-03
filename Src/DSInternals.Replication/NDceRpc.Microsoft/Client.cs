@@ -206,7 +206,7 @@ namespace NDceRpc
         }
 
         /// <summary>
-        /// Equals implementation.
+        /// Determines whether the specified object is equal to this instance.
         /// </summary>
         public override bool Equals(object obj)
         {
@@ -217,7 +217,7 @@ namespace NDceRpc
         }
 
         /// <summary>
-        /// GetHashCode implementation.
+        /// Returns a hash code for this instance.
         /// </summary>
         public override int GetHashCode()
         {

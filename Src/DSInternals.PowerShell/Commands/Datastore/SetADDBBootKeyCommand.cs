@@ -7,7 +7,7 @@
     [Cmdlet(VerbsCommon.Set, "ADDBBootKey")]
     [OutputType("None")]
     /// <summary>
-    /// Represents a SetADDBBootKeyCommand.
+    /// Implements the SetADDBBootKeyCommand PowerShell cmdlet.
     /// </summary>
     public class SetADDBBootKeyCommand : ADDBCommandBase
     {

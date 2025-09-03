@@ -11,7 +11,7 @@
     [Cmdlet(VerbsData.ConvertTo, "LMHash")]
     [OutputType(new Type[] { typeof(string) })]
     /// <summary>
-    /// Represents a ConvertToLMHashCommand.
+    /// Converts a password to its LM hash representation.
     /// </summary>
     public class ConvertToLMHashCommand : PSCmdlet
     {

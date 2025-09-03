@@ -7,7 +7,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Get, "ADReplKdsRootKey")]
     [OutputType(typeof(KdsRootKey))]
     /// <summary>
-    /// Represents a GetADReplKdsRootKeyCommand.
+    /// Implements the GetADReplKdsRootKeyCommand PowerShell cmdlet.
     /// </summary>
     public class GetADReplKdsRootKeyCommand : ADReplCommandBase
     {

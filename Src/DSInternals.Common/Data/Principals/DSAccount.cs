@@ -7,7 +7,7 @@
     using DSInternals.Common.Schema;
 
     /// <summary>
-    /// Represents a DSAccount.
+    /// Represents a user, computer, or trust account object from Active Directory.
     /// </summary>
     public class DSAccount
     {

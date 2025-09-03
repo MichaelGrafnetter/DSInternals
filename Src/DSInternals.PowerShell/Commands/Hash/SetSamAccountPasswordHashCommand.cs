@@ -11,7 +11,7 @@
     [Cmdlet(VerbsCommon.Set, "SamAccountPasswordHash")]
     [OutputType("None")]
     /// <summary>
-    /// Represents a SetSamAccountPasswordHashCommand.
+    /// Implements the SetSamAccountPasswordHashCommand PowerShell cmdlet.
     /// </summary>
     public class SetSamAccountPasswordHashCommand : SamCommandBase
     {

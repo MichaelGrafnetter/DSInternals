@@ -125,7 +125,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out byte[] value)
         {
@@ -134,7 +134,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out byte[][] value)
         {
@@ -143,7 +143,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out int? value)
         {
@@ -152,7 +152,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public void ReadAttribute(string name, out DNTag? value)
         {
@@ -161,7 +161,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out string value, bool unicode = true)
         {
@@ -170,7 +170,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out string[] values, bool unicode = true)
         {
@@ -179,7 +179,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out long? value)
         {
@@ -188,7 +188,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out DistinguishedName? value)
         {
@@ -202,7 +202,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out RawSecurityDescriptor value)
         {
@@ -228,7 +228,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public void ReadAttribute(string name, out ClassType? value)
         {
@@ -237,7 +237,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public void ReadAttribute(string name, out AttributeMetadataCollection value)
         {

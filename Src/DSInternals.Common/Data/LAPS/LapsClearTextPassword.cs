@@ -56,7 +56,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Parse implementation.
+        /// Parses the specified input.
         /// </summary>
         public static LapsClearTextPassword Parse(string json)
         {
@@ -65,7 +65,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Parse implementation.
+        /// Parses the specified input.
         /// </summary>
         public static LapsClearTextPassword Parse(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {

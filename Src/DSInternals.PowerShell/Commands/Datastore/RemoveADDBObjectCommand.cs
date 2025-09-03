@@ -12,7 +12,7 @@
         )]
     [OutputType("None")]
     /// <summary>
-    /// Represents a RemoveADDBObjectCommand.
+    /// Implements the RemoveADDBObjectCommand PowerShell cmdlet.
     /// </summary>
     public class RemoveADDBObjectCommand : ADDBObjectCommandBase
     {

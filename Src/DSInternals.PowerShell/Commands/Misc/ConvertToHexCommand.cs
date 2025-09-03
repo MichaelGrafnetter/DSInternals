@@ -7,7 +7,7 @@
     [Cmdlet(VerbsData.ConvertTo, "Hex")]
     [OutputType(new Type[] { typeof(string) })]
     /// <summary>
-    /// Represents a ConvertToHexCommand.
+    /// Implements the ConvertToHexCommand PowerShell cmdlet.
     /// </summary>
     public class ConvertToHexCommand : PSCmdlet
     {

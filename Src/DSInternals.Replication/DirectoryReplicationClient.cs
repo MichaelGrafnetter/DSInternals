@@ -124,7 +124,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// GetAccounts implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -134,7 +134,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// GetAccounts implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -174,7 +174,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// GetAccount implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public DSAccount GetAccount(Guid objectGuid, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -191,7 +191,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// GetAccount implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public DSAccount GetAccount(string distinguishedName, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -208,7 +208,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// GetAccount implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public DSAccount GetAccount(NTAccount accountName, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -217,7 +217,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// GetAccount implementation.
+        /// Gets account information from the data store.
         /// </summary>
         public DSAccount GetAccount(SecurityIdentifier sid, AccountPropertySets propertySets = AccountPropertySets.All)
         {
@@ -226,7 +226,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// GetKdsRootKey implementation.
+        /// Gets the KDS root key from the directory store.
         /// </summary>
         public KdsRootKey? GetKdsRootKey(Guid rootKeyId, bool suppressNotFoundException = false)
         {
@@ -284,7 +284,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// WriteNgcKey implementation.
+        /// Writes the NGC key to the specified location.
         /// </summary>
         public void WriteNgcKey(Guid objectGuid, byte[] publicKey)
         {
@@ -293,7 +293,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// WriteNgcKey implementation.
+        /// Writes the NGC key to the specified location.
         /// </summary>
         public void WriteNgcKey(NTAccount accountName, byte[] publicKey)
         {
@@ -302,7 +302,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// WriteNgcKey implementation.
+        /// Writes the NGC key to the specified location.
         /// </summary>
         public void WriteNgcKey(SecurityIdentifier sid, byte[] publicKey)
         {
@@ -311,7 +311,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// WriteNgcKey implementation.
+        /// Writes the NGC key to the specified location.
         /// </summary>
         public void WriteNgcKey(string accountDN, byte[] publicKey)
         {
@@ -354,7 +354,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// Dispose implementation.
+        /// Releases all resources used by this instance.
         /// </summary>
         public void Dispose()
         {

@@ -8,7 +8,7 @@
     using System.Security.Principal;
 
     /// <summary>
-    /// Represents a AdsiObjectAdapter.
+    /// Provides an adapter for accessing Active Directory objects through ADSI SearchResult objects.
     /// </summary>
     public class AdsiObjectAdapter : DirectoryObject
     {
@@ -65,7 +65,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out byte[] value)
         {
@@ -73,7 +73,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out byte[][] value)
         {
@@ -81,7 +81,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out int? value)
         {
@@ -89,7 +89,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out long? value)
         {
@@ -97,7 +97,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out string value, bool unicode = true)
         {
@@ -106,7 +106,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out string[] values, bool unicode = true)
         {
@@ -115,7 +115,7 @@
         }
 
         /// <summary>
-        /// ReadAttribute implementation.
+        /// Reads the value of the specified attribute.
         /// </summary>
         public override void ReadAttribute(string name, out DistinguishedName value)
         {

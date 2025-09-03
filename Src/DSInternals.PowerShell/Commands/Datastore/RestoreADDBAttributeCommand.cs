@@ -6,7 +6,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsData.Restore, "ADDBAttribute")]
     [OutputType("None")]
     /// <summary>
-    /// Represents a RestoreADDBAttributeCommand.
+    /// Implements the RestoreADDBAttributeCommand PowerShell cmdlet.
     /// </summary>
     public class RestoreADDBAttributeCommand : ADDBObjectCommandBase
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace DSInternals.Common.Schema
 {
     /// <summary>
-    /// Represents a BaseSchema.
+    /// Represents the base schema containing attribute definitions and prefix table mappings for Active Directory.
     /// </summary>
     public class BaseSchema
     {
@@ -21,8 +21,10 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// AddAttribute implementation.
+        /// Adds an attribute definition to the schema.
         /// </summary>
+        /// <param name="attribute">The attribute schema to add.</param>
+        /// <exception cref="ArgumentNullException">Thrown when attribute is null.</exception>
         public void AddAttribute(AttributeSchema attribute)
         {
             if (attribute == null) throw new ArgumentNullException(nameof(attribute));
@@ -33,7 +35,7 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// FindAttribute implementation.
+        /// Finds the specified attribute in the schema.
         /// </summary>
         public AttributeSchema? FindAttribute(string attributeName)
         {
@@ -60,7 +62,7 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// FindAttribute implementation.
+        /// Finds the specified attribute in the schema.
         /// </summary>
         public AttributeSchema? FindAttribute(AttributeType attributeId)
         {
@@ -159,7 +161,7 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// Create implementation.
+        /// Creates a new instance.
         /// </summary>
         public static BaseSchema Create()
         {

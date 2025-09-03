@@ -49,7 +49,7 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
         }
 */
         /// <summary>
-        /// Decode implementation.
+        /// Decodes the specified input.
         /// </summary>
         public static Pfx Decode(ReadOnlyMemory<byte> encoded)
         {
@@ -60,7 +60,7 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
         }
 
         /// <summary>
-        /// Decode implementation.
+        /// Decodes the specified input.
         /// </summary>
         public static Pfx Decode(AsnReader reader)
         {

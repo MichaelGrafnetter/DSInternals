@@ -47,7 +47,7 @@ namespace DSInternals.Common.Kerberos
         }
 
         /// <summary>
-        /// Parse implementation.
+        /// Parses the specified input.
         /// </summary>
         public static TrustAuthInfos Parse(ReadOnlyMemory<byte> blob)
         {

@@ -70,7 +70,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// GetHashCode implementation.
+        /// Returns a hash code for this instance.
         /// </summary>
         public override int GetHashCode()
         {
@@ -83,7 +83,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// Equals implementation.
+        /// Determines whether the specified object is equal to this instance.
         /// </summary>
         public override bool Equals(object obj)
         {
@@ -105,7 +105,7 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
-        /// Equals implementation.
+        /// Determines whether the specified object is equal to this instance.
         /// </summary>
         public bool Equals(ReplicationCookie cookie)
         {

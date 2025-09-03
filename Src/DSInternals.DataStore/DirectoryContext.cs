@@ -257,7 +257,7 @@
         }
 
         /// <summary>
-        /// Dispose implementation.
+        /// Releases all resources used by this instance.
         /// </summary>
         public void Dispose()
         {

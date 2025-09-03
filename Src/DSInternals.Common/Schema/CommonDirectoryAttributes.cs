@@ -638,7 +638,7 @@ namespace DSInternals.Common.Schema
         public const string DnsTombstoned = "dNSTombstoned";
 
         /// <summary>
-        /// Translate implementation.
+        /// Translates the input to the target format.
         /// </summary>
         public static AttributeType? Translate(string ldapDisplayName)
         {

@@ -16,7 +16,7 @@ namespace NDceRpc.Microsoft.Interop
         }
 
         /// <summary>
-        /// Dispose implementation.
+        /// Releases all resources used by this instance.
         /// </summary>
         public void Dispose()
         {
@@ -24,7 +24,7 @@ namespace NDceRpc.Microsoft.Interop
         }
 
         /// <summary>
-        /// Dispose implementation.
+        /// Releases all resources used by this instance.
         /// </summary>
         public void Dispose(bool disposing)
         {
@@ -55,7 +55,7 @@ namespace NDceRpc.Microsoft.Interop
         }
 
         /// <summary>
-        /// Equals implementation.
+        /// Determines whether the specified object is equal to this instance.
         /// </summary>
         public override bool Equals(object obj)
         {
@@ -67,7 +67,7 @@ namespace NDceRpc.Microsoft.Interop
         }
 
         /// <summary>
-        /// GetHashCode implementation.
+        /// Returns a hash code for this instance.
         /// </summary>
         public override int GetHashCode()
         {

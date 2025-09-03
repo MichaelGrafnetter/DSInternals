@@ -8,7 +8,7 @@
     [Cmdlet(VerbsCommon.Add, "ADDBSidHistory")]
     [OutputType("None")]
     /// <summary>
-    /// Represents a AddADDBSidHistoryCommand.
+    /// Implements the AddADDBSidHistoryCommand PowerShell cmdlet.
     /// </summary>
     public class AddADDBSidHistoryCommand : ADDBModifyPrincipalCommandBase
     {

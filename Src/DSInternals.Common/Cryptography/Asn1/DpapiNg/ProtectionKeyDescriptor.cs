@@ -27,7 +27,7 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
         }
 
         /// <summary>
-        /// Decode implementation.
+        /// Decodes the specified input.
         /// </summary>
         public static ProtectionKeyDescriptor Decode(ReadOnlyMemory<byte> encoded)
         {
@@ -38,7 +38,7 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
         }
 
         /// <summary>
-        /// Decode implementation.
+        /// Decodes the specified input.
         /// </summary>
         public static ProtectionKeyDescriptor Decode(AsnReader reader)
         {

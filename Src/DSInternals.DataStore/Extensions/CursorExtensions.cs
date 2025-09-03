@@ -474,7 +474,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// SetValue implementation.
+        /// Sets the value of the specified property.
         /// </summary>
         public static bool SetValue(this Cursor cursor, string columnName, byte[] newValue)
         {
@@ -483,7 +483,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// SetValue implementation.
+        /// Sets the value of the specified property.
         /// </summary>
         public static bool SetValue(this Cursor cursor, Columnid columnId, byte[] newValue)
         {
@@ -491,7 +491,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// SetValue implementation.
+        /// Sets the value of the specified property.
         /// </summary>
         public static bool SetValue(this Cursor cursor, string columnName, string newValue)
         {
@@ -500,7 +500,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// SetValue implementation.
+        /// Sets the value of the specified property.
         /// </summary>
         public static bool SetValue(this Cursor cursor, Columnid columnId, string newValue)
         {
@@ -508,7 +508,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// SetValue implementation.
+        /// Sets the value of the specified property.
         /// </summary>
         public static bool SetValue(this Cursor cursor, string columnName, DateTime? newValue, bool asGeneralizedTime)
         {
@@ -517,7 +517,7 @@ namespace DSInternals.DataStore
         }
         
         /// <summary>
-        /// SetValue implementation.
+        /// Sets the value of the specified property.
         /// </summary>
         public static bool SetValue(this Cursor cursor, Columnid columnId, DateTime? newValue, bool asGeneralizedTime)
         {

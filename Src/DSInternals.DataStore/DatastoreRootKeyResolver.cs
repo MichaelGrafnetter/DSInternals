@@ -33,7 +33,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// GetKdsRootKeys implementation.
+        /// Gets all KDS root keys from the directory store.
         /// </summary>
         public IEnumerable<KdsRootKey> GetKdsRootKeys()
         {
@@ -66,7 +66,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// GetKdsRootKey implementation.
+        /// Gets the KDS root key from the directory store.
         /// </summary>
         public KdsRootKey? GetKdsRootKey(Guid id)
         {
@@ -109,7 +109,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// GetKdsRootKey implementation.
+        /// Gets the KDS root key from the directory store.
         /// </summary>
         public KdsRootKey GetKdsRootKey(DateTime effectiveTime)
         {

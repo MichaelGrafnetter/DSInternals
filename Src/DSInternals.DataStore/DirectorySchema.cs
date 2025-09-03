@@ -143,7 +143,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// FindAttribute implementation.
+        /// Finds the specified attribute in the schema.
         /// </summary>
         public AttributeSchema? FindAttribute(string attributeName)
         {
@@ -153,7 +153,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// FindAttribute implementation.
+        /// Finds the specified attribute in the schema.
         /// </summary>
         public AttributeSchema? FindAttribute(AttributeType attributeId)
         {
@@ -208,7 +208,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// Create implementation.
+        /// Creates a new instance.
         /// </summary>
         public static DirectorySchema Create(IsamDatabase database)
         {

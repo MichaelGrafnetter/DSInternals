@@ -6,7 +6,7 @@
     [Cmdlet(VerbsCommon.Get, "ADSIAccount")]
     [OutputType(typeof(DSAccount), typeof(DSUser), typeof(DSComputer))]
     /// <summary>
-    /// Represents a GetADSIAccountCommand.
+    /// Implements the GetADSIAccountCommand PowerShell cmdlet.
     /// </summary>
     public class GetADSIAccountCommand : ADSICommandBase
     {

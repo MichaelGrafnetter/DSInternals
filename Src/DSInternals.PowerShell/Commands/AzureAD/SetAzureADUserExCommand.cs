@@ -6,7 +6,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Set, "AzureADUserEx", DefaultParameterSetName = ParamSetSingleUserUPN)]
     [OutputType("None")]
     /// <summary>
-    /// Represents a SetAzureADUserExCommand.
+    /// Implements the SetAzureADUserExCommand PowerShell cmdlet.
     /// </summary>
     public class SetAzureADUserExCommand : AzureADCommandBase
     {

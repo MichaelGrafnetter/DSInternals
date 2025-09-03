@@ -28,7 +28,7 @@
         private HashEqualityComparer() {}
 
         /// <summary>
-        /// Equals implementation.
+        /// Determines whether the specified object is equal to this instance.
         /// </summary>
         public bool Equals(byte[] x, byte[] y)
         {
@@ -44,7 +44,7 @@
         }
 
         /// <summary>
-        /// GetHashCode implementation.
+        /// Returns a hash code for this instance.
         /// </summary>
         public int GetHashCode(byte[] obj)
         {

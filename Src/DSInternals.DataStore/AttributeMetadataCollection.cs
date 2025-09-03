@@ -121,7 +121,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// ToByteArray implementation.
+        /// Returns the byte array representation of the data.
         /// </summary>
         public byte[] ToByteArray()
         {
@@ -150,7 +150,7 @@ namespace DSInternals.DataStore
         }
 
         /// <summary>
-        /// ToString implementation.
+        /// Returns a string representation of the object.
         /// </summary>
         public override string ToString()
         {

@@ -201,7 +201,7 @@ namespace DSInternals.Common.Schema
         public bool IsIndexed => SearchFlags.HasFlag(AttributeSearchFlags.AttributeIndex);
 
         /// <summary>
-        /// ToString implementation.
+        /// Returns a string representation of the object.
         /// </summary>
         public override string ToString()
         {
@@ -286,7 +286,7 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// Create implementation.
+        /// Creates a new instance.
         /// </summary>
         public static AttributeSchema Create(string ldapDisplayName, PrefixTable prefixTable)
         {
@@ -316,7 +316,7 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// Create implementation.
+        /// Creates a new instance.
         /// </summary>
         public static AttributeSchema Create(
             string ldapDisplayName,

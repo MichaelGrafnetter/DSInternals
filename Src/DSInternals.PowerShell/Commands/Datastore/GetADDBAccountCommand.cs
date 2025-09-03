@@ -8,7 +8,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Get, "ADDBAccount")]
     [OutputType(typeof(DSAccount), typeof(DSUser), typeof(DSComputer))]
     /// <summary>
-    /// Represents a GetADDBAccountCommand.
+    /// Implements the GetADDBAccountCommand PowerShell cmdlet.
     /// </summary>
     public class GetADDBAccountCommand : ADDBPrincipalCommandBase
     {

@@ -56,7 +56,7 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
         }
 
         /// <summary>
-        /// Decode implementation.
+        /// Decodes the specified input.
         /// </summary>
         public static CngProtectedDataBlob Decode(ReadOnlyMemory<byte> blob)
         {

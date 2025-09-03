@@ -9,7 +9,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Set, "ADDBAccountPassword")]
     [OutputType("None")]
     /// <summary>
-    /// Represents a SetADDBAccountPasswordCommand.
+    /// Implements the SetADDBAccountPasswordCommand PowerShell cmdlet.
     /// </summary>
     public class SetADDBAccountPasswordCommand : ADDBModifyPrincipalCommandBase
     {

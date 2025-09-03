@@ -7,7 +7,7 @@
     [Cmdlet(VerbsCommon.Get, "ADDBServiceAccount")]
     [OutputType(typeof(DSInternals.Common.Data.GroupManagedServiceAccount))]
     /// <summary>
-    /// Represents a GetADDBServiceAccountCommand.
+    /// Implements the GetADDBServiceAccountCommand PowerShell cmdlet.
     /// </summary>
     public class GetADDBServiceAccountCommand : ADDBCommandBase
     {

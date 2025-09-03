@@ -28,7 +28,7 @@ namespace DSInternals.Common.Data
         public bool SupportsLookupAll => true;
 
         /// <summary>
-        /// GetKdsRootKey implementation.
+        /// Gets the KDS root key from the directory store.
         /// </summary>
         public KdsRootKey? GetKdsRootKey(Guid id)
         {
@@ -36,7 +36,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// GetKdsRootKey implementation.
+        /// Gets the KDS root key from the directory store.
         /// </summary>
         public KdsRootKey? GetKdsRootKey(DateTime effectiveTime)
         {
@@ -44,7 +44,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// GetKdsRootKeys implementation.
+        /// Gets all KDS root keys from the directory store.
         /// </summary>
         public IEnumerable<KdsRootKey> GetKdsRootKeys()
         {

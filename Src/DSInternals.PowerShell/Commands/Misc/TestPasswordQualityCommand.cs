@@ -13,7 +13,7 @@
     [Cmdlet(VerbsDiagnostic.Test, "PasswordQuality", DefaultParameterSetName = ParamSetSingleSortedFile)]
     [OutputType(new Type[] { typeof(PasswordQualityTestResult) })]
     /// <summary>
-    /// Represents a TestPasswordQualityCommand.
+    /// Implements the TestPasswordQualityCommand PowerShell cmdlet.
     /// </summary>
     public class TestPasswordQualityCommand : PSCmdletEx, IDisposable
     {
@@ -554,7 +554,7 @@
 
         // This code added to correctly implement the disposable pattern.
         /// <summary>
-        /// Dispose implementation.
+        /// Releases all resources used by this instance.
         /// </summary>
         public void Dispose()
         {

@@ -9,7 +9,7 @@
     [Cmdlet(VerbsData.ConvertTo, "KerberosKey")]
     [OutputType(new Type[] { typeof(KerberosKeyDataNew) })]
     /// <summary>
-    /// Represents a ConvertToKerberosKeyCommand.
+    /// Implements the ConvertToKerberosKeyCommand PowerShell cmdlet.
     /// </summary>
     public class ConvertToKerberosKeyCommand : PSCmdlet
     {

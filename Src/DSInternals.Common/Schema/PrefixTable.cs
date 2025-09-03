@@ -135,7 +135,7 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// Translate implementation.
+        /// Translates the input to the target format.
         /// </summary>
         public string? Translate(AttributeType encodedOid)
         {
@@ -148,7 +148,7 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// Translate implementation.
+        /// Translates the input to the target format.
         /// </summary>
         public string? Translate(ClassType encodedOid)
         {
@@ -156,7 +156,7 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// Translate implementation.
+        /// Translates the input to the target format.
         /// </summary>
         public string? Translate(ATTRTYP encodedOid)
         {

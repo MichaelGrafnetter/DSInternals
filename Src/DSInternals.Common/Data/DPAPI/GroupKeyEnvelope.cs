@@ -273,7 +273,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Create implementation.
+        /// Creates a new instance.
         /// </summary>
         public static GroupKeyEnvelope Create(KdsRootKey rootKey, ProtectionKeyIdentifier keyIdentifier, SecurityIdentifier targetSID)
         {
@@ -299,7 +299,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Create implementation.
+        /// Creates a new instance.
         /// </summary>
         public static GroupKeyEnvelope Create(KdsRootKey rootKey, int l0KeyId, int l1KeyId, int l2KeyId, SecurityIdentifier targetSID, string domain, string forest)
         {
@@ -313,7 +313,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Create implementation.
+        /// Creates a new instance.
         /// </summary>
         public static GroupKeyEnvelope Create(KdsRootKey rootKey, int l0KeyId, int l1KeyId, int l2KeyId, byte[] targetSecurityDescriptor, string domainName, string forestName)
         {
@@ -367,7 +367,7 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// ToByteArray implementation.
+        /// Returns the byte array representation of the data.
         /// </summary>
         public byte[] ToByteArray()
         {

@@ -13,7 +13,7 @@
         private const string ComputerNameSuffix = "$";
 
         /// <summary>
-        /// GetBitLockerRecoveryInformation implementation.
+        /// Gets BitLocker recovery information from the directory.
         /// </summary>
         public IEnumerable<BitLockerRecoveryInformation> GetBitLockerRecoveryInformation()
         {
@@ -39,7 +39,7 @@
         }
 
         /// <summary>
-        /// GetBitLockerRecoveryInformation implementation.
+        /// Gets BitLocker recovery information from the directory.
         /// </summary>
         public BitLockerRecoveryInformation GetBitLockerRecoveryInformation(DistinguishedName dn)
         {
@@ -78,7 +78,7 @@
         }
 
         /// <summary>
-        /// GetBitLockerRecoveryInformation implementation.
+        /// Gets BitLocker recovery information from the directory.
         /// </summary>
         public BitLockerRecoveryInformation GetBitLockerRecoveryInformation(Guid objectId)
         {
@@ -145,7 +145,7 @@
         }
 
         /// <summary>
-        /// GetBitLockerRecoveryInformation implementation.
+        /// Gets BitLocker recovery information from the directory.
         /// </summary>
         public IEnumerable<BitLockerRecoveryInformation> GetBitLockerRecoveryInformation(string computerName)
         {

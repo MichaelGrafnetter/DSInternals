@@ -43,7 +43,7 @@ namespace DSInternals.Replication
         }
 
         /// <summary>
-        /// Parse implementation.
+        /// Parses the specified input.
         /// </summary>
         public static DSName Parse(ReadOnlySpan<byte> buffer)
         {

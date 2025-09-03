@@ -34,7 +34,7 @@
         }
 
         /// <summary>
-        /// Parse implementation.
+        /// Parses the specified input.
         /// </summary>
         public static DNWithBinary Parse(string dnWithBinary)
         {
@@ -57,7 +57,7 @@
         }
 
         /// <summary>
-        /// ToString implementation.
+        /// Returns a string representation of the object.
         /// </summary>
         public override string ToString()
         {

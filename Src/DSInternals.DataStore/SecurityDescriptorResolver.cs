@@ -115,7 +115,7 @@
         }
 
         /// <summary>
-        /// ComputeHash implementation.
+        /// Computes the hash of the specified input.
         /// </summary>
         public static byte[] ComputeHash(GenericSecurityDescriptor securityDescriptor)
         {
@@ -139,7 +139,7 @@
         }
 
         /// <summary>
-        /// ComputeHash implementation.
+        /// Computes the hash of the specified input.
         /// </summary>
         public static byte[] ComputeHash(string securityDescriptor)
         {
@@ -161,7 +161,7 @@
         }
 
         /// <summary>
-        /// Dispose implementation.
+        /// Releases all resources used by this instance.
         /// </summary>
         public void Dispose()
         {

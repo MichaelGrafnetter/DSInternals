@@ -7,7 +7,7 @@
     [Cmdlet(VerbsCommon.Get, "SamPasswordPolicy")]
     [OutputType(typeof(SamDomainPasswordInformation))]
     /// <summary>
-    /// Represents a GetSamPasswordPolicyCommand.
+    /// Implements the GetSamPasswordPolicyCommand PowerShell cmdlet.
     /// </summary>
     public class GetSamPasswordPolicyCommand : SamCommandBase
     {
