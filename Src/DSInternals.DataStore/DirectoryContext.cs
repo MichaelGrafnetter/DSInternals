@@ -8,7 +8,7 @@
     using NATIVE_UNICODEINDEX = Windows.Win32.Storage.Jet.JET_UNICODEINDEX;
 
     /// <summary>
-    /// Represents a DirectoryContext.
+    /// Provides a context for accessing and managing Active Directory database files and transactions.
     /// </summary>
     public class DirectoryContext : IDisposable
     {

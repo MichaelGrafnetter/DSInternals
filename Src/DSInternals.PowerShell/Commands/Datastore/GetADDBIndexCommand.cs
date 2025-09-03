@@ -7,7 +7,7 @@ namespace DSInternals.PowerShell.Commands
     // TODO: output type
     [OutputType("None")]
     /// <summary>
-    /// Implements the GetADDBIndexCommand PowerShell cmdlet.
+    /// Implements the Get-ADDBIndex PowerShell cmdlet.
     /// </summary>
     public class GetADDBIndexCommand : ADDBCommandBase
     {

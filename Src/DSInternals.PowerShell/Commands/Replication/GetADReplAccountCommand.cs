@@ -10,7 +10,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Get, "ADReplAccount")]
     [OutputType(typeof(DSAccount), typeof(DSUser), typeof(DSComputer))]
     /// <summary>
-    /// Implements the GetADReplAccountCommand PowerShell cmdlet.
+    /// Implements the Get-ADReplAccount PowerShell cmdlet.
     /// </summary>
     public class GetADReplAccountCommand : ADReplPrincipalCommandBase
     {

@@ -8,7 +8,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Set, "ADDBPrimaryGroup")]
     [OutputType("None")]
     /// <summary>
-    /// Implements the SetADDBPrimaryGroupCommand PowerShell cmdlet.
+    /// Implements the Set-ADDBPrimaryGroup PowerShell cmdlet.
     /// </summary>
     public class SetADDBPrimaryGroupCommand : ADDBModifyPrincipalCommandBase
     {

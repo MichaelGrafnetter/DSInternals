@@ -8,7 +8,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsData.ConvertTo, "UnicodePassword")]
     [OutputType(new Type[] { typeof(String) })]
     /// <summary>
-    /// Implements the ConvertToUnicodePasswordCommand PowerShell cmdlet.
+    /// Implements the ConvertTo-UnicodePassword PowerShell cmdlet.
     /// </summary>
     public class ConvertToUnicodePasswordCommand : PSCmdlet
     {

@@ -7,7 +7,7 @@
     [Cmdlet(VerbsData.ConvertFrom, "ADManagedPasswordBlob")]
     [OutputType(typeof(ManagedPassword))]
     /// <summary>
-    /// Implements the ConvertFromADManagedPasswordBlobCommand PowerShell cmdlet.
+    /// Implements the ConvertFrom-ADManagedPasswordBlob PowerShell cmdlet.
     /// </summary>
     public class ConvertFromADManagedPasswordBlobCommand : PSCmdlet
     {

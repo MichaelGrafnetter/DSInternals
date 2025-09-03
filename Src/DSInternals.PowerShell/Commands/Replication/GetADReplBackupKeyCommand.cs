@@ -6,7 +6,7 @@
     [Cmdlet(VerbsCommon.Get, "ADReplBackupKey")]
     [OutputType(typeof(DPAPIBackupKey))]
     /// <summary>
-    /// Implements the GetADReplBackupKeyCommand PowerShell cmdlet.
+    /// Implements the Get-ADReplBackupKey PowerShell cmdlet.
     /// </summary>
     public class GetADReplBackupKeyCommand : ADReplCommandBase
     {

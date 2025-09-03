@@ -5,13 +5,11 @@ using DSInternals.Common.Data;
 namespace DSInternals.PowerShell.Commands
 {
     /// <summary>
-    /// Modifies user account control (UAC) values for an Active Directory account.
+    /// <summary>
+    /// Implements the Set-ADDBAccountControl PowerShell cmdlet for modifying user account control (UAC) values for an Active Directory account.
     /// </summary>
     [Cmdlet(VerbsCommon.Set, "ADDBAccountControl")]
     [OutputType("None")]
-    /// <summary>
-    /// Implements the SetADDBAccountControlCommand PowerShell cmdlet.
-    /// </summary>
     public class SetADDBAccountControlCommand : ADDBModifyPrincipalCommandBase
     {
         /// <summary>

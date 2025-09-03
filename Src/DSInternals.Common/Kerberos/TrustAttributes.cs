@@ -4,13 +4,10 @@ using Windows.Win32;
 namespace DSInternals.Common.Kerberos
 {
     /// <summary>
-    /// Information about a trust relartnship between two domains or forests.
+    /// Specifies information about a trust relationship between two domains or forests.
     /// </summary>
     /// <remarks>https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/e9a2d23c-c31e-4a6f-88a0-6646fdb51a3c</remarks>
     [Flags]
-    /// <summary>
-    /// Defines values for TrustAttributes.
-    /// </summary>
     public enum TrustAttributes : uint
     {
         None = 0,

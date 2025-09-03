@@ -6,7 +6,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Add, "ADReplNgcKey")]
     [OutputType("None")]
     /// <summary>
-    /// Implements the AddADReplNgcKeyCommand PowerShell cmdlet.
+    /// Implements the Add-ADReplNgcKey PowerShell cmdlet.
     /// </summary>
     public class AddADReplNgcKeyCommand : ADReplPrincipalCommandBase
     {

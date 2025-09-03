@@ -7,7 +7,7 @@
     [Cmdlet(VerbsCommon.Set, "ADDBDomainController", ConfirmImpact = ConfirmImpact.High)]
     [OutputType("None")]
     /// <summary>
-    /// Implements the SetADDBDomainControllerCommand PowerShell cmdlet.
+    /// Implements the Set-ADDBDomainController PowerShell cmdlet.
     /// </summary>
     public class SetADDBDomainControllerCommand : ADDBCommandBase
     {

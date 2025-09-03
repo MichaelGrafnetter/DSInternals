@@ -6,7 +6,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Get, "ADDBDnsZone")]
     [OutputType(typeof(string))]
     /// <summary>
-    /// Implements the GetADDBDnsZoneCommand PowerShell cmdlet.
+    /// Implements the Get-ADDBDnsZone PowerShell cmdlet.
     /// </summary>
     public class GetADDBDnsZoneCommand : ADDBCommandBase
     {

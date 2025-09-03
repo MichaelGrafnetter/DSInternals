@@ -13,7 +13,7 @@
     [Cmdlet(VerbsDiagnostic.Test, "PasswordQuality", DefaultParameterSetName = ParamSetSingleSortedFile)]
     [OutputType(new Type[] { typeof(PasswordQualityTestResult) })]
     /// <summary>
-    /// Implements the TestPasswordQualityCommand PowerShell cmdlet.
+    /// Implements the Test-PasswordQuality PowerShell cmdlet.
     /// </summary>
     public class TestPasswordQualityCommand : PSCmdletEx, IDisposable
     {

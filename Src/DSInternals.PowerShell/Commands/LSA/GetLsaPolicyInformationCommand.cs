@@ -6,7 +6,7 @@
     [Cmdlet(VerbsCommon.Get, "LsaPolicyInformation")]
     [OutputType(typeof(LsaPolicyInformation))]
     /// <summary>
-    /// Implements the GetLsaPolicyInformationCommand PowerShell cmdlet.
+    /// Implements the Get-LsaPolicyInformation PowerShell cmdlet.
     /// </summary>
     public class GetLsaPolicyInformationCommand : LsaPolicyCommandBase
     {

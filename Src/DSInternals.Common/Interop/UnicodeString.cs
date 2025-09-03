@@ -4,13 +4,10 @@ using System.Runtime.InteropServices;
 namespace DSInternals.Common.Interop
 {
     /// <summary>
-    /// The UnicodeString structure is used to define Unicode strings.
+    /// Represents a Unicode string structure used in Windows API calls for efficient string handling.
     /// </summary>
     /// <see>https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_unicode_string</see>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    /// <summary>
-    /// Represents a UnicodeString structure.
-    /// </summary>
     public struct UnicodeString
     {
         private const ushort UnicodeCharLength = 2;

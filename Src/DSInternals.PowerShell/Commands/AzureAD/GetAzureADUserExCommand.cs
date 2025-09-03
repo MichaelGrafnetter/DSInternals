@@ -8,7 +8,7 @@ namespace DSInternals.PowerShell.Commands
     [Cmdlet(VerbsCommon.Get, "AzureADUserEx", DefaultParameterSetName = ParamSetAllUsers)]
     [OutputType(typeof(AzureADUser))]
     /// <summary>
-    /// Implements the GetAzureADUserExCommand PowerShell cmdlet.
+    /// Implements the Get-AzureADUserEx PowerShell cmdlet.
     /// </summary>
     public class GetAzureADUserExCommand : AzureADCommandBase
     {
