@@ -10,6 +10,9 @@
     using DSInternals.Common.Schema;
     using Microsoft.Database.Isam;
 
+    /// <summary>
+    /// Provides high-level operations for interacting with Active Directory database objects and managing directory services.
+    /// </summary>
     public partial class DirectoryAgent : IDisposable
     {
         // 2^30

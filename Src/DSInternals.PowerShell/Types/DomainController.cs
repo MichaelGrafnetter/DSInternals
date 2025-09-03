@@ -6,7 +6,7 @@
     using DSInternals.Common.Data;
     // Transport object
     /// <summary>
-    /// Represents a DomainController.
+    /// Represents information about an Active Directory domain controller including its name, capabilities, and system settings.
     /// </summary>
     public class DomainController : IDomainController
     {
