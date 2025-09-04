@@ -44,8 +44,10 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// FindAttributeId implementation.
+        /// Finds the attribute type identifier for the specified attribute name.
         /// </summary>
+        /// <param name="attributeName">The name of the attribute to find.</param>
+        /// <returns>The attribute type identifier, or null if not found.</returns>
         public AttributeType? FindAttributeId(string attributeName)
         {
             _ = _attributesByName.TryGetValue(attributeName, out AttributeSchema attribute);
@@ -53,8 +55,10 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// FindAttributeInternalId implementation.
+        /// Finds the internal attribute type identifier for the specified attribute name.
         /// </summary>
+        /// <param name="attributeName">The name of the attribute to find.</param>
+        /// <returns>The internal attribute type identifier, or null if not found.</returns>
         public AttributeType? FindAttributeInternalId(string attributeName)
         {
             _ = _attributesByName.TryGetValue(attributeName, out AttributeSchema attribute);
@@ -71,8 +75,9 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// LoadPrefixTable implementation.
+        /// Loads the OID prefix table from the specified binary blob.
         /// </summary>
+        /// <param name="blob">The binary data containing the prefix table.</param>
         public void LoadPrefixTable(byte[] blob)
         {
             _prefixTable.LoadFromBlob(blob);
@@ -82,8 +87,10 @@ namespace DSInternals.Common.Schema
         }
 
         /// <summary>
-        /// AddPrefix implementation.
+        /// Adds a new OID prefix to the prefix table with the specified index.
         /// </summary>
+        /// <param name="index">The index for the prefix.</param>
+        /// <param name="oidPrefix">The OID prefix bytes to add.</param>
         public void AddPrefix(ushort index, byte[] oidPrefix)
         {
             _prefixTable.Add(index, oidPrefix);

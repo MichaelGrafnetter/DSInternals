@@ -57,8 +57,10 @@
         }
 
         /// <summary>
-        /// HasAttribute implementation.
+        /// Determines whether the directory object has the specified attribute.
         /// </summary>
+        /// <param name="name">The name of the attribute to check for.</param>
+        /// <returns>True if the attribute exists; otherwise, false.</returns>
         public override bool HasAttribute(string name)
         {
             return this.directoryEntry.Properties.Contains(name);

@@ -7,9 +7,8 @@ using System.Text;
 namespace DSInternals.Common.Interop
 {
     /// <summary>
-    /// Represents a wrapper class for...
+    /// Provides a safe wrapper for Unicode secure string pointers with automatic memory management and zeroing.
     /// </summary>
-
     public sealed class SafeUnicodeSecureStringPointer : SafeHandleZeroOrMinusOneIsInvalid
     {
         private int numChars = 0;
