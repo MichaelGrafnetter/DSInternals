@@ -2,10 +2,10 @@
 
 namespace DSInternals.DataStore
 {
-    [Flags]
     /// <summary>
-    /// Defines values for DomainControllerOptions.
+    /// Specifies configuration options and capabilities for Active Directory domain controllers.
     /// </summary>
+    [Flags]
     public enum DomainControllerOptions : int
     {
         None = 0,

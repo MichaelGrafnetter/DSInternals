@@ -10,11 +10,19 @@
     using DSInternals.Common.Schema;
     using Microsoft.Database.Isam;
 
+    /// <summary>
+    /// Represents an Active Directory object stored in the database, providing access to attributes and metadata.
+    /// </summary>
     public sealed class DatastoreObject : DirectoryObject
     {
         private DirectoryContext context;
         private Cursor cursor;
 
+        /// <summary>
+        /// Initializes a new instance of the DatastoreObject class with the specified database cursor and context.
+        /// </summary>
+        /// <param name="datatableCursor">The database cursor positioned at the object's record.</param>
+        /// <param name="context">The directory context for database operations.</param>
         public DatastoreObject(Cursor datatableCursor, DirectoryContext context)
         {
             this.cursor = datatableCursor;

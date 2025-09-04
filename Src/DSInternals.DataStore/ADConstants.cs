@@ -7,31 +7,31 @@ namespace DSInternals.DataStore
     internal static class ADConstants
     {
         /// <summary>
-        /// The DataTableName.
+        /// Name of the main Active Directory database table containing object data.
         /// </summary>
         public const string DataTableName = "datatable";
         /// <summary>
-        /// The SystemTableName.
+        /// Name of the hidden system table containing internal Active Directory metadata.
         /// </summary>
         public const string SystemTableName = "hiddentable";
         /// <summary>
-        /// The LinkTableName.
+        /// Name of the table containing linked attribute references between Active Directory objects.
         /// </summary>
         public const string LinkTableName = "link_table";
         /// <summary>
-        /// The SecurityDescriptorTableName.
+        /// Name of the table containing security descriptors for Active Directory objects.
         /// </summary>
         public const string SecurityDescriptorTableName = "sd_table";
         /// <summary>
-        /// The EseBaseName.
+        /// Base filename prefix for ESE database files.
         /// </summary>
         public const string EseBaseName = "edb";
         /// <summary>
-        /// The EseTempDatabaseName.
+        /// Filename for the ESE temporary database used during operations.
         /// </summary>
         public const string EseTempDatabaseName = "temp.edb";
         /// <summary>
-        /// The 10240.
+        /// Size of ESE log files in kilobytes (10MB).
         /// </summary>
         public const int EseLogFileSize = 10240; // 10MB
         /// <summary>

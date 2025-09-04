@@ -17,7 +17,7 @@
     {
         // 2^30
         /// <summary>
-        /// The 30.
+        /// Maximum value for Relative Identifier (RID) in Active Directory (2^30).
         /// </summary>
         public const int RidMax = 1 << 30;
 

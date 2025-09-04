@@ -12,8 +12,11 @@ namespace DSInternals.PowerShell
     public sealed class AcceptHexStringAttribute : ArgumentTransformationAttribute
     {
         /// <summary>
-        /// Transform implementation.
+        /// Transforms hex string input data to byte arrays for PowerShell cmdlet parameters.
         /// </summary>
+        /// <param name="engineIntrinsics">The engine intrinsics for the current PowerShell session.</param>
+        /// <param name="inputData">The input data to transform (string or byte array).</param>
+        /// <returns>A byte array converted from the input hex string or the original byte array.</returns>
         public override object Transform(EngineIntrinsics engineIntrinsics, object inputData)
         {
             string hexString;
