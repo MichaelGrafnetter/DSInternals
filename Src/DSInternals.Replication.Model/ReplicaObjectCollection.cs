@@ -18,7 +18,7 @@ namespace DSInternals.Replication.Model
         /// Initializes a new instance of the ReplicaObjectCollection class with the specified capacity.
         /// </summary>
         /// <param name="numObjects">The number of objects that the collection can initially store.</param>
-            : base(numObjects)
+        public ReplicaObjectCollection(int numObjects) : base(numObjects)
         {
         }
     }
