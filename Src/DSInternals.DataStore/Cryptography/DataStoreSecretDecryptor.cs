@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 namespace DSInternals.DataStore
 {
     /// <summary>
-    /// Represents a DataStoreSecretDecryptor.
+    /// Provides decryption services for secrets stored in the Active Directory database using Password Encryption Keys (PEK).
     /// </summary>
     public class DataStoreSecretDecryptor : DirectorySecretDecryptor
     {
@@ -24,18 +24,27 @@ namespace DSInternals.DataStore
         /// </summary>
         private static readonly Guid ExpectedSignature = new Guid(0x4881d956, 0x91ec, 0x11d1, 0x90, 0x5a, 0x00, 0xc0, 0x4f, 0xc2, 0xd4, 0xcf);
 
+        /// <summary>
+        /// Gets the array of Password Encryption Keys (PEK) used for decrypting secrets.
+        /// </summary>
         public byte[][] Keys
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the index of the current encryption key in the Keys array.
+        /// </summary>
         public int CurrentKeyIndex
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the current encryption key used for decrypting secrets.
+        /// </summary>
         public override byte[] CurrentKey
         {
             get
@@ -44,6 +53,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// Gets the encryption type used for secret decryption based on the database version.
+        /// </summary>
         public override SecretEncryptionType EncryptionType
         {
             get
