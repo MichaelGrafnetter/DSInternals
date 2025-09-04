@@ -3,12 +3,16 @@ using System.Runtime.InteropServices;
 
 namespace DSInternals.Common.Interop
 {
-    [StructLayout(LayoutKind.Sequential)]
     /// <summary>
-    /// Represents a OemString structure.
+    /// Represents an OEM string structure used in Windows API calls for legacy character encoding.
     /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
     public struct OemString
     {
+        /// <summary>
+        /// Initializes a new instance of the OemString structure from a SafeOemStringPointer.
+        /// </summary>
+        /// <param name="oemStringPtr">The safe pointer containing the OEM string data.</param>
         public OemString(SafeOemStringPointer oemStringPtr)
         {
             this.Buffer = oemStringPtr;
