@@ -218,7 +218,7 @@
             {
                 // The binary value is a 64-bit foreign key
                 long securityDescriptorId = BitConverter.ToInt64(binaryValue, 0);
-                value = this.context.SecurityDescriptorRersolver.GetDescriptor(securityDescriptorId);
+                value = this.context.SecurityDescriptorResolver.GetDescriptor(securityDescriptorId);
             }
             else
             {

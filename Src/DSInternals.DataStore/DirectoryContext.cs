@@ -136,7 +136,7 @@
                 this.isDBAttached = true;
                 this.database = this.session.OpenDatabase(this.DSADatabaseFile);
                 this.Schema = DirectorySchema.Create(this.database);
-                this.SecurityDescriptorRersolver = new SecurityDescriptorRersolver(this.database);
+                this.SecurityDescriptorResolver = new SecurityDescriptorResolver(this.database);
                 this.DistinguishedNameResolver = new DistinguishedNameResolver(this.database, this.Schema);
                 this.LinkResolver = new LinkResolver(this.database, this.Schema);
                 this.DomainController = new DomainController(this);
@@ -218,7 +218,7 @@
             private set;
         }
 
-        public SecurityDescriptorRersolver SecurityDescriptorRersolver
+        public SecurityDescriptorResolver SecurityDescriptorResolver
         {
             get;
             private set;
@@ -273,10 +273,10 @@
                 return;
             }
 
-            if (this.SecurityDescriptorRersolver != null)
+            if (this.SecurityDescriptorResolver != null)
             {
-                this.SecurityDescriptorRersolver.Dispose();
-                this.SecurityDescriptorRersolver = null;
+                this.SecurityDescriptorResolver.Dispose();
+                this.SecurityDescriptorResolver = null;
             }
 
             if (this.DomainController != null)

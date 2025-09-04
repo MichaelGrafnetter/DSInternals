@@ -12,7 +12,7 @@
     /// <summary>
     /// Resolves and caches security descriptors from the Active Directory database to improve performance.
     /// </summary>
-    public class SecurityDescriptorRersolver : IDisposable
+    public class SecurityDescriptorResolver : IDisposable
     {
         private const string SecurityDescriptorIdentifierColumn = "sd_id";
         private const string SecurityDescriptorValueColumn = "sd_value";
@@ -28,7 +28,7 @@
         private Columnid _securityDescriptorIdentifierColumnId;
         private Columnid _securityDescriptorValueColumnId;
 
-        public SecurityDescriptorRersolver(IsamDatabase database)
+        public SecurityDescriptorResolver(IsamDatabase database)
         {
             if (database == null)
             {
