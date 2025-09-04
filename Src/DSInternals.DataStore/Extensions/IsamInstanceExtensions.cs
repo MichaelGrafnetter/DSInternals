@@ -14,6 +14,9 @@ namespace DSInternals.DataStore
 {
     public static class IsamInstanceExtensions
     {
+        /// <summary>
+        /// GetIsamSystemParametersExt implementation.
+        /// </summary>
         public static IsamSystemParametersExt GetIsamSystemParametersExt(this IsamInstance managedInstance)
         {
             if (managedInstance == null)

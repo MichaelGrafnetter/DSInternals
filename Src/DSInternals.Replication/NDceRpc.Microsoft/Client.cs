@@ -6,7 +6,7 @@ using NDceRpc.Microsoft.Interop;
 namespace NDceRpc
 {
     /// <summary>
-    /// Provides a connection-based wrapper around the RPC client
+    /// Provides a connection-based wrapper around the RPC client for remote procedure calls.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{_handle} @{_binding}")]
     public class Client : IDisposable//TODO: make is serializabl to propagate throug app domains (use only ptr and methods to get all data from ptr)
@@ -17,11 +17,18 @@ namespace NDceRpc
         private readonly string _binding;
         protected readonly RpcHandle _handle;
 
+        /// <summary>
+        /// Gets the native handle for the RPC client.
+        /// </summary>
 		public IntPtr Handle
 		{
 			get { return _handle.Handle; }
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the Client class with the specified endpoint binding information.
+        /// </summary>
+        /// <param name="endpointBindingInfo">The endpoint binding information for the RPC client.</param>
         public Client(EndpointBindingInfo endpointBindingInfo)
         {
             _handle = new RpcClientHandle();
@@ -136,6 +143,9 @@ namespace NDceRpc
             AuthenticateAs(serverPrincipalName, credentials, protect, types);
         }
 
+        /// <summary>
+        /// Authenticates the client using no authentication (anonymous).
+        /// </summary>
         public void AuthenticateAsNone()
         {
             _authenticated = true;
@@ -192,6 +202,9 @@ namespace NDceRpc
             return Equals(_handle, other._handle);
         }
 
+        /// <summary>
+        /// Determines whether the specified object is equal to this instance.
+        /// </summary>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -200,6 +213,9 @@ namespace NDceRpc
             return Equals((Client) obj);
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
         public override int GetHashCode()
         {
             return (_handle != null ? _handle.GetHashCode() : 0);

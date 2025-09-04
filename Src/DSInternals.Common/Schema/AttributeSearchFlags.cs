@@ -7,6 +7,9 @@ namespace DSInternals.Common.Schema
     /// </summary>
     /// <remarks>https://msdn.microsoft.com/en-us/library/cc223153.aspx</remarks>
     [Flags]
+    /// <summary>
+    /// Defines values for AttributeSearchFlags.
+    /// </summary>
     public enum AttributeSearchFlags : int
     {
         /// <summary>

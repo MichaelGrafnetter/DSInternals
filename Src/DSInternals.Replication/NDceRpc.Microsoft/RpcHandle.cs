@@ -15,11 +15,17 @@ namespace NDceRpc.Microsoft.Interop
             Dispose(false);
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose(bool disposing)
         {
             try
@@ -48,6 +54,9 @@ namespace NDceRpc.Microsoft.Interop
             return Handle.Equals(other.Handle);
         }
 
+        /// <summary>
+        /// Determines whether the specified object is equal to this instance.
+        /// </summary>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -57,6 +66,9 @@ namespace NDceRpc.Microsoft.Interop
             return Equals((RpcHandle) obj);
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
         public override int GetHashCode()
         {
             return Handle.GetHashCode();

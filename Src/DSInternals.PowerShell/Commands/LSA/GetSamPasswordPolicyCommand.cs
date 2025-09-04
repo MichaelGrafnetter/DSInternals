@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsCommon.Get, "SamPasswordPolicy")]
     [OutputType(typeof(SamDomainPasswordInformation))]
+    /// <summary>
+    /// Implements the Get-SamPasswordPolicy PowerShell cmdlet.
+    /// </summary>
     public class GetSamPasswordPolicyCommand : SamCommandBase
     {
         #region Parameters

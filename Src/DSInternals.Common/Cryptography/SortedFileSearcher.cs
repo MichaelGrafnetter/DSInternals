@@ -4,6 +4,9 @@
     using System.IO;
     using System.Text;
 
+    /// <summary>
+    /// Provides efficient binary search functionality for text files with sorted content, such as wordlists or dictionary files.
+    /// </summary>
     public class SortedFileSearcher : IDisposable
     {
         /// <summary>
@@ -27,6 +30,11 @@
             this.reader = new StreamReader(inputStream, Encoding.ASCII, true, BufferSize, true);
         }
 
+        /// <summary>
+        /// Searches for a string in the sorted file using binary search algorithm.
+        /// </summary>
+        /// <param name="query">The string to search for in the file.</param>
+        /// <returns>true if the string is found; otherwise, false.</returns>
         public bool FindString(string query)
         {
             Validator.AssertNotNullOrWhiteSpace(query, nameof(query));
@@ -111,6 +119,9 @@
             }
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

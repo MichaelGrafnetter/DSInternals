@@ -5,6 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.AzureAD
 {
+    /// <summary>
+    /// Represents an Azure Active Directory user object.
+    /// </summary>
     public class AzureADUser
     {
         [JsonPropertyName("objectId")]

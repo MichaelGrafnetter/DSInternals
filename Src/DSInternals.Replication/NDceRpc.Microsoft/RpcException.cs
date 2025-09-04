@@ -8,6 +8,9 @@ namespace NDceRpc
     /// Unspecified rpc error
     /// </summary>
     [Serializable()]
+    /// <summary>
+    /// Represents a RpcException.
+    /// </summary>
     public class RpcException : System.ComponentModel.Win32Exception
     {
         private const string DefaultError = "Unspecified RPC error";

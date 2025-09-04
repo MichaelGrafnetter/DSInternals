@@ -6,12 +6,19 @@
     using System.Reflection;
     using System.ComponentModel;
 
+    /// <summary>
+    /// Provides functionality for mapping registry hive files to temporary registry keys for read-only access.
+    /// </summary>
     public class RegistryHiveFileMapping : IDisposable
     {
         private const string SubKeyFormat = "DSInternals_{0}";
         private const char PathSeparator = '\\';
         private const string BackupPrivilege = "SeBackupPrivilege";
         private const string RestorePrivilege = "SeRestorePrivilege";
+        /// <summary>
+        /// Initializes a new instance of the RegistryHiveFileMapping class by loading the specified hive file.
+        /// </summary>
+        /// <param name="hiveFilePath">The path to the registry hive file to load.</param>
         public RegistryHiveFileMapping(string hiveFilePath)
         {
             Validator.AssertNotNullOrWhiteSpace(hiveFilePath, "hiveFilePath");
@@ -22,6 +29,9 @@
             Validator.AssertSuccess(result);
         }
 
+        /// <summary>
+        /// Gets the root registry key for accessing the loaded hive.
+        /// </summary>
         public RegistryKey RootKey
         {
             get
@@ -33,12 +43,18 @@
             }
         }
 
+        /// <summary>
+        /// Gets the temporary subkey name used to mount the hive under HKEY_USERS.
+        /// </summary>
         public string UsersSubKey
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

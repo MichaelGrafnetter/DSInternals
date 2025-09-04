@@ -64,6 +64,9 @@ namespace NDceRpc
         /// Asserts that the argument is set to RPC_STATUS.RPC_S_OK or throws a new exception.
         /// </summary>
         [System.Diagnostics.DebuggerNonUserCode]
+        /// <summary>
+        /// Assert implementation.
+        /// </summary>
         public static void Assert(RPC_STATUS errorsCode)
         {
             if (errorsCode != RPC_STATUS.RPC_S_OK)

@@ -12,6 +12,9 @@ namespace NDceRpc.Microsoft.Interop
         /// Creates a string binding handle
         /// </summary>
         [DllImport("Rpcrt4.dll", EntryPoint = "RpcStringBindingComposeW", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        /// <summary>
+        /// RpcStringBindingCompose implementation.
+        /// </summary>
         public static extern RPC_STATUS RpcStringBindingCompose(
             String ObjUuid,
             String ProtSeq,
@@ -24,12 +27,18 @@ namespace NDceRpc.Microsoft.Interop
         /// Returns a binding handle from a string representation of a binding handle
         /// </summary>
         [DllImport("Rpcrt4.dll", EntryPoint = "RpcBindingFromStringBindingW", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        /// <summary>
+        /// RpcBindingFromStringBinding implementation.
+        /// </summary>
         public static extern RPC_STATUS RpcBindingFromStringBinding(String bindingString, out IntPtr lpBinding);
 
         /// <summary>
         /// Sets authentication information for a binding handle
         /// </summary>
         [DllImport("Rpcrt4.dll", EntryPoint = "RpcBindingSetAuthInfoW", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        /// <summary>
+        /// RpcBindingSetAuthInfo implementation.
+        /// </summary>
         public static extern RPC_STATUS RpcBindingSetAuthInfo(IntPtr Binding, String ServerPrincName,
                                                              RPC_C_AUTHN_LEVEL AuthnLevel, RPC_C_AUTHN AuthnSvc,
                                                              [In] ref SEC_WINNT_AUTH_IDENTITY AuthIdentity,
@@ -39,6 +48,9 @@ namespace NDceRpc.Microsoft.Interop
         /// Sets authentication information for a binding handle (without identity)
         /// </summary>
         [DllImport("Rpcrt4.dll", EntryPoint = "RpcBindingSetAuthInfoW", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        /// <summary>
+        /// RpcBindingSetAuthInfo2 implementation.
+        /// </summary>
         public static extern RPC_STATUS RpcBindingSetAuthInfo2(IntPtr Binding, String ServerPrincName,
                                                               RPC_C_AUTHN_LEVEL AuthnLevel, RPC_C_AUTHN AuthnSvc,
                                                               IntPtr AuthIdentity,
@@ -48,12 +60,18 @@ namespace NDceRpc.Microsoft.Interop
         /// Frees a string allocated by RPC
         /// </summary>
         [DllImport("Rpcrt4.dll", EntryPoint = "RpcStringFreeW", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        /// <summary>
+        /// RpcStringFree implementation.
+        /// </summary>
         public static extern RPC_STATUS RpcStringFree(ref IntPtr lpString);
 
         /// <summary>
         /// Releases binding handle resources
         /// </summary>
         [DllImport("Rpcrt4.dll", EntryPoint = "RpcBindingFree", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, SetLastError = true)]
+        /// <summary>
+        /// RpcBindingFree implementation.
+        /// </summary>
         public static extern RPC_STATUS RpcBindingFree(ref IntPtr lpString);
     }
 }

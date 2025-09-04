@@ -41,6 +41,9 @@
             get;
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

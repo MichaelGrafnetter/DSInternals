@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace DSInternals.Common.Interop
 {
     /// <summary>
-    /// The UnicodeString structure is used to define Unicode strings.
+    /// Represents a secure Unicode string structure used for protecting sensitive text data in memory.
     /// </summary>
     /// <see>http://msdn.microsoft.com/library/windows/hardware/ff564879.aspx</see>
     [StructLayout(LayoutKind.Sequential)]

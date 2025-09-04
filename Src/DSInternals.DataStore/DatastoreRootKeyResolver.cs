@@ -32,6 +32,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// Gets all KDS root keys from the directory store.
+        /// </summary>
         public IEnumerable<KdsRootKey> GetKdsRootKeys()
         {
             if (!_featureSupported)
@@ -62,6 +65,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// Gets the KDS root key from the directory store.
+        /// </summary>
         public KdsRootKey? GetKdsRootKey(Guid id)
         {
             if (!_featureSupported)
@@ -102,13 +108,22 @@ namespace DSInternals.DataStore
             return null;
         }
 
+        /// <summary>
+        /// Gets the KDS root key from the directory store.
+        /// </summary>
         public KdsRootKey GetKdsRootKey(DateTime effectiveTime)
         {
             throw new NotSupportedException("Direct search by effective time is not supported in DB. Use the caching resolver instead.");
         }
 
+        /// <summary>
+        /// The true.
+        /// </summary>
         public bool SupportsLookupAll => true;
 
+        /// <summary>
+        /// The false.
+        /// </summary>
         public bool SupportsLookupByEffectiveTime => false;
     }
 }

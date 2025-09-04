@@ -17,6 +17,9 @@ namespace DSInternals.SAM
             this.Handle = handle;
         }
 
+        /// <summary>
+        /// Releases the underlying SAM handle and frees associated resources.
+        /// </summary>
         public void ReleaseHandle()
         {
             if (this.Handle != null)
@@ -25,6 +28,9 @@ namespace DSInternals.SAM
                 this.Handle = null;
             }
         }
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

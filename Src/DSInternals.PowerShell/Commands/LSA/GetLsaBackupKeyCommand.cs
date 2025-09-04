@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsCommon.Get, "LsaBackupKey")]
     [OutputType(typeof(DPAPIBackupKey))]
+    /// <summary>
+    /// Implements the Get-LsaBackupKey PowerShell cmdlet.
+    /// </summary>
     public class GetLsaBackupKeyCommand : LsaPolicyCommandBase
     {
         #region Cmdlet Overrides

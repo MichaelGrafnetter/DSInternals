@@ -6,8 +6,14 @@ using System.Globalization;
 
 namespace DSInternals.DataStore
 {
+    /// <summary>
+    /// Provides methods for retrieving boot keys from registry hives for database decryption.
+    /// </summary>
     public static class BootKeyRetriever
     {
+        /// <summary>
+        /// The standard length of boot keys in bytes (16 bytes / 128 bits).
+        /// </summary>
         public const int BootKeyLength = 16;
         // AD DS Constants:
         private const string CurrentControlSetKey = "Select";

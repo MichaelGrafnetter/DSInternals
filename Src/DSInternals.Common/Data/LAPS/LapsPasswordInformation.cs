@@ -2,6 +2,9 @@
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Contains comprehensive information about a LAPS password including decryption status, source, and metadata.
+    /// </summary>
     public class LapsPasswordInformation
     {
         /// <summary>

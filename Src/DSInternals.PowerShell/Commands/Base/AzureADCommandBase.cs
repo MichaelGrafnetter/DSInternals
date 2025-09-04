@@ -54,6 +54,9 @@ namespace DSInternals.PowerShell.Commands
         }
 
         #region IDisposable Support
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public virtual void Dispose()
         {
             if(Client != null)

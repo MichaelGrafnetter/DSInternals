@@ -7,6 +7,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// Represents a LinkResolver.
+    /// </summary>
     public class LinkResolver
     {
         // Column names:
@@ -54,6 +57,9 @@
             _linkIndex = contains2008Index ? LinkIndex2008 : LinkIndex2003;
         }
 
+        /// <summary>
+        /// GetLinkedDNTag implementation.
+        /// </summary>
         public DNTag? GetLinkedDNTag(DNTag dnTag, string attributeName)
         {
             // Ignore the data and any additional links
@@ -61,12 +67,18 @@
             return backlink > DNTag.NotAnObject ? backlink : null;
         }
 
+        /// <summary>
+        /// GetLinkedDNTags implementation.
+        /// </summary>
         public IEnumerable<DNTag> GetLinkedDNTags(DNTag dnTag, string attributeName)
         {
             // Ignore the data
             return this.GetLinkedValues(dnTag, attributeName).Select(link => link.Backlink);
         }
 
+        /// <summary>
+        /// GetLinkedValues implementation.
+        /// </summary>
         public IEnumerable<(DNTag Backlink, byte[] LinkData)> GetLinkedValues(DNTag dnTag, string attributeName)
         {
             AttributeSchema? attribute = this._schema.FindAttribute(attributeName);

@@ -7,6 +7,9 @@ using System.Security.Cryptography;
 
 namespace DSInternals.DataStore
 {
+    /// <summary>
+    /// Provides decryption services for secrets stored in the Active Directory database using Password Encryption Keys (PEK).
+    /// </summary>
     public class DataStoreSecretDecryptor : DirectorySecretDecryptor
     {
         private const int BootKeySaltHashRounds = 1000;
@@ -21,18 +24,27 @@ namespace DSInternals.DataStore
         /// </summary>
         private static readonly Guid ExpectedSignature = new Guid(0x4881d956, 0x91ec, 0x11d1, 0x90, 0x5a, 0x00, 0xc0, 0x4f, 0xc2, 0xd4, 0xcf);
 
+        /// <summary>
+        /// Gets the array of Password Encryption Keys (PEK) used for decrypting secrets.
+        /// </summary>
         public byte[][] Keys
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the index of the current encryption key in the Keys array.
+        /// </summary>
         public int CurrentKeyIndex
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the current encryption key used for decrypting secrets.
+        /// </summary>
         public override byte[] CurrentKey
         {
             get
@@ -41,6 +53,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// Gets the encryption type used for secret decryption based on the database version.
+        /// </summary>
         public override SecretEncryptionType EncryptionType
         {
             get
@@ -94,6 +109,9 @@ namespace DSInternals.DataStore
             this.ParsePekList(cleartextPEKListBlob);
         }
 
+        /// <summary>
+        /// DecryptSecret implementation.
+        /// </summary>
         public override byte[] DecryptSecret(byte[] blob)
         {
             // Blob structure Win2k:   Algorithm ID (2B), Flags (2B), PEK ID (4B), Salt (16B), Encrypted secret (rest)
@@ -152,6 +170,9 @@ namespace DSInternals.DataStore
             return decryptedSecret;
         }
 
+        /// <summary>
+        /// EncryptSecret implementation.
+        /// </summary>
         public override byte[] EncryptSecret(byte[] secret)
         {
             using (var buffer = new MemoryStream())

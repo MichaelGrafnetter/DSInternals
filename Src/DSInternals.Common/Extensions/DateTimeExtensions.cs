@@ -2,10 +2,18 @@
 
 namespace DSInternals.Common
 {
+    /// <summary>
+    /// Provides extension methods for DateTime objects to convert to and from Active Directory generalized time format.
+    /// </summary>
     public static class DateTimeExtensions
     {
         private const int GeneralizedTimeCoefficient = 10000000;
 
+        /// <summary>
+        /// Converts a DateTime to Active Directory generalized time format.
+        /// </summary>
+        /// <param name="time">The DateTime to convert.</param>
+        /// <returns>The generalized time representation as a long value.</returns>
         public static long ToGeneralizedTime(this DateTime time)
         {
             return time.ToFileTime() / GeneralizedTimeCoefficient;

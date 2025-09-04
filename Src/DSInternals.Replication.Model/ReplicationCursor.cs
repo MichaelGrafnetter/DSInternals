@@ -36,6 +36,9 @@ namespace DSInternals.Replication.Model
             protected set;
         }
 
+        /// <summary>
+        /// Returns a string representation of the object.
+        /// </summary>
         public override string ToString()
         {
             return String.Format("{0}: {1}", this.SourceInvocationId, this.UpToDatenessUsn);

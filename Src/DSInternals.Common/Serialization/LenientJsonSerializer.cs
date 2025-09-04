@@ -7,8 +7,14 @@ using System.Text.Json.Serialization;
 namespace DSInternals.Common.Serialization
 {
     // TODO: This class needs refactoring and cleanup.
+    /// <summary>
+    /// Provides lenient JSON serialization/deserialization with support for non-standard JSON formats and encodings.
+    /// </summary>
     public static class LenientJsonSerializer
     {
+        /// <summary>
+        /// Gets the default JSON serializer options configured for lenient parsing.
+        /// </summary>
         // One place to set behavior for all JSON in DSInternals
         public static readonly JsonSerializerOptions Options = new JsonSerializerOptions
         {
@@ -26,6 +32,12 @@ namespace DSInternals.Common.Serialization
             Options.Converters.Add(new JsonStringEnumConverter());
         }
 
+        /// <summary>
+        /// Deserializes a JSON string to the specified type with lenient parsing that handles non-standard formats.
+        /// </summary>
+        /// <typeparam name="T">The type to deserialize to.</typeparam>
+        /// <param name="json">The JSON string to deserialize.</param>
+        /// <returns>The deserialized object of type T, or default(T) if the input is null or whitespace.</returns>
         // ---------- String input ----------
         public static T DeserializeLenient<T>(string json)
         {
@@ -50,6 +62,13 @@ namespace DSInternals.Common.Serialization
             }
         }
 
+        /// <summary>
+        /// Deserializes binary JSON data to the specified type with support for UTF-8 and UTF-16 encodings.
+        /// </summary>
+        /// <typeparam name="T">The type to deserialize to.</typeparam>
+        /// <param name="binaryJson">The binary JSON data to deserialize.</param>
+        /// <param name="utf16">True to decode as UTF-16, false for UTF-8.</param>
+        /// <returns>The deserialized object of type T.</returns>
         // ---------- Binary input ----------
         public static T DeserializeLenient<T>(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {
@@ -57,6 +76,12 @@ namespace DSInternals.Common.Serialization
             return DeserializeLenient<T>(json);
         }
 
+        /// <summary>
+        /// Decodes binary JSON data to a string with support for UTF-8 and UTF-16 encodings.
+        /// </summary>
+        /// <param name="binaryJson">The binary JSON data to decode.</param>
+        /// <param name="utf16">True to decode as UTF-16, false for UTF-8.</param>
+        /// <returns>The decoded JSON string.</returns>
         public static string DecodeJson(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
         {
             // Trim terminators/padding on BYTES BEFORE decoding.
@@ -83,6 +108,12 @@ namespace DSInternals.Common.Serialization
             return json;
         }
 
+        /// <summary>
+        /// Trims null terminators from the end of a byte span, with support for UTF-16 encoding.
+        /// </summary>
+        /// <param name="input">The input byte span to trim.</param>
+        /// <param name="utf16">True if the data is UTF-16 encoded (trims 2-byte null terminators), false for UTF-8 (trims 1-byte null terminators).</param>
+        /// <returns>The trimmed byte span.</returns>
         public static ReadOnlySpan<byte> TrimZeroTerminator(ReadOnlySpan<byte> input, bool utf16)
         {
             if (input.Length == 0) return input;
@@ -108,6 +139,11 @@ namespace DSInternals.Common.Serialization
             }
         }
 
+        /// <summary>
+        /// Determines whether a string appears to be JSON that uses single quotes instead of double quotes.
+        /// </summary>
+        /// <param name="s">The string to examine.</param>
+        /// <returns>True if the string looks like single-quoted JSON, false otherwise.</returns>
         public static bool LooksLikeSingleQuotedJson(string s)
         {
             if (string.IsNullOrEmpty(s)) return false;
@@ -117,6 +153,11 @@ namespace DSInternals.Common.Serialization
                    && s.IndexOf('\'') >= 0;
         }
 
+        /// <summary>
+        /// Normalizes single-quoted JSON to standard double-quoted JSON format.
+        /// </summary>
+        /// <param name="input">The single-quoted JSON string to normalize.</param>
+        /// <returns>A normalized JSON string with double quotes.</returns>
         // Converts '…' to "…" and preserves apostrophes inside strings (\' -> ')
         public static string NormalizeSingleQuotedJson(string input)
         {

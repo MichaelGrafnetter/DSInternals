@@ -9,6 +9,9 @@
     using DSInternals.Common.Data;
     using DSInternals.Common.Schema;
 
+    /// <summary>
+    /// Provides functionality for accessing Active Directory through ADSI (Active Directory Service Interfaces).
+    /// </summary>
     public class AdsiClient : IDisposable
     {
         private const string ConfigurationContainerRDN = "CN=Configuration";
@@ -88,6 +91,9 @@
             private set;
         }
 
+        /// <summary>
+        /// Gets account information from the data store.
+        /// </summary>
         public IEnumerable<DSAccount> GetAccounts(AccountPropertySets propertySets = AccountPropertySets.All)
         {
             // Not all property sets work as secret attributes are never sent ove LDAP.
@@ -241,6 +247,9 @@
         }
 
         // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.

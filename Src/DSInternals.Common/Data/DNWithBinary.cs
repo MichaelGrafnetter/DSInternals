@@ -33,6 +33,9 @@
             this.Binary = binary;
         }
 
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
         public static DNWithBinary Parse(string dnWithBinary)
         {
             Validator.AssertNotNullOrEmpty(dnWithBinary, nameof(dnWithBinary));
@@ -53,6 +56,9 @@
             return new DNWithBinary(dn, binary);
         }
 
+        /// <summary>
+        /// Returns a string representation of the object.
+        /// </summary>
         public override string ToString()
         {
             return String.Format(StringFormat, this.Binary.Length * 2, this.Binary.ToHex(true), this.DistinguishedName);

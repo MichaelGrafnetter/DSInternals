@@ -9,10 +9,17 @@
     using DSInternals.Common.Interop;
     using DSInternals.SAM.Interop;
 
+    /// <summary>
+    /// Represents a Local Security Authority (LSA) policy handle used for querying system security information.
+    /// </summary>
     public class LsaPolicy : IDisposable
     {
         private SafeLsaPolicyHandle policyHandle;
 
+        /// <summary>
+        /// Initializes a new instance of the LsaPolicy class on the local system with the specified access rights.
+        /// </summary>
+        /// <param name="accessMask">The access rights to request on the LSA policy.</param>
         public LsaPolicy(LsaPolicyAccessMask accessMask) : this(null, accessMask) { }
 
         public LsaPolicy(string systemName, LsaPolicyAccessMask accessMask)
@@ -21,6 +28,10 @@
             Validator.AssertSuccess(status);
         }
 
+        /// <summary>
+        /// Queries DNS domain information from the Local Security Authority.
+        /// </summary>
+        /// <returns>A LsaDnsDomainInformation object containing the DNS domain information.</returns>
         public LsaDnsDomainInformation QueryDnsDomainInformation()
         {
             IntPtr buffer;
@@ -40,6 +51,10 @@
             }
         }
 
+        /// <summary>
+        /// Queries machine account information from the Local Security Authority.
+        /// </summary>
+        /// <returns>The security identifier (SID) of the machine account, or null if not available.</returns>
         public SecurityIdentifier QueryMachineAccountInformation()
         {
             IntPtr buffer;
@@ -66,16 +81,25 @@
             }
         }
 
+        /// <summary>
+        /// QueryAccountDomainInformation implementation.
+        /// </summary>
         public LsaDomainInformation QueryAccountDomainInformation()
         {
             return this.QueryDomainInformation(LsaPolicyInformationClass.AccountDomainInformation);
         }
 
+        /// <summary>
+        /// QueryLocalAccountDomainInformation implementation.
+        /// </summary>
         public LsaDomainInformation QueryLocalAccountDomainInformation()
         {
             return this.QueryDomainInformation(LsaPolicyInformationClass.LocalAccountDomainInformation);
         }
 
+        /// <summary>
+        /// SetDnsDomainInformation implementation.
+        /// </summary>
         public void SetDnsDomainInformation(LsaDnsDomainInformation newDomainInfo)
         {
             // TODO: Validation
@@ -104,6 +128,9 @@
             }
         }
 
+        /// <summary>
+        /// RetrievePrivateData implementation.
+        /// </summary>
         public byte[] RetrievePrivateData(string keyName)
         {
             Validator.AssertNotNullOrWhiteSpace(keyName, "keyName");
@@ -113,6 +140,9 @@
             return privateData;
         }
 
+        /// <summary>
+        /// GetDPAPIBackupKeys implementation.
+        /// </summary>
         public DPAPIBackupKey[] GetDPAPIBackupKeys()
         {
             byte[] rsaKeyIdBinary = this.RetrievePrivateData(DPAPIBackupKey.PreferredRSAKeyName);
@@ -170,6 +200,9 @@
             }
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

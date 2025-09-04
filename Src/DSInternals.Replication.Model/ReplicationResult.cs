@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DSInternals.Replication.Model
 {
+    /// <summary>
+    /// Contains the results of an Active Directory replication operation, including replicated objects and metadata.
+    /// </summary>
     public class ReplicationResult
     {
         // TODO: AsReadOnly

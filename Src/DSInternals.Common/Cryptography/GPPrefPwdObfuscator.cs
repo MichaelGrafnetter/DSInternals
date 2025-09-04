@@ -15,6 +15,11 @@ namespace DSInternals.Common.Cryptography
                                                     0xfa, 0xf4, 0x93, 0x10, 0x62, 0x0f, 0xfe, 0xe8,
                                                     0xf4, 0x96, 0xe8, 0x06, 0xcc, 0x05, 0x79, 0x90,
                                                     0x20, 0x9b, 0x09, 0xa4, 0x33, 0xb6, 0x6c, 0x1b };
+        /// <summary>
+        /// Decrypts a Group Policy Preferences password that was obfuscated using Microsoft's known AES key.
+        /// </summary>
+        /// <param name="input">The Base64-encoded encrypted password.</param>
+        /// <returns>The decrypted plaintext password.</returns>
         public static string Decrypt(string input)
         {
             Validator.AssertNotNullOrWhiteSpace(input, "input");
@@ -35,6 +40,11 @@ namespace DSInternals.Common.Cryptography
             return plainText;
         }
 
+        /// <summary>
+        /// Encrypts a password using the same AES key that Group Policy Preferences uses for password obfuscation.
+        /// </summary>
+        /// <param name="input">The secure string containing the password to encrypt.</param>
+        /// <returns>A Base64-encoded encrypted password that can be used in Group Policy Preferences.</returns>
         public static string Encrypt(SecureString input)
         {
             Validator.AssertNotNull(input, "input");

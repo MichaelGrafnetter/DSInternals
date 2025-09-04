@@ -5,8 +5,19 @@
     using DSInternals.Common.Cryptography;
     using DSInternals.Common.Schema;
 
+    /// <summary>
+    /// Represents a user account in Active Directory with extended properties and credential information.
+    /// </summary>
     public class DSUser : DSAccount
     {
+        /// <summary>
+        /// Initializes a new instance of the DSUser class.
+        /// </summary>
+        /// <param name="dsObject">The directory object containing the user data.</param>
+        /// <param name="netBIOSDomainName">The NetBIOS domain name.</param>
+        /// <param name="pek">The directory secret decryptor for handling encrypted data.</param>
+        /// <param name="propertySets">The set of properties to load from the directory object.</param>
+        /// <exception cref="ArgumentException">Thrown when the object is not a user account.</exception>
         public DSUser(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
             if (this.SamAccountType != SamAccountType.User)

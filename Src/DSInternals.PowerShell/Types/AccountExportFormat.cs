@@ -2,6 +2,9 @@
 
 namespace DSInternals.PowerShell
 {
+    /// <summary>
+    /// Specifies the format for exporting account password hashes and credentials for password cracking tools.
+    /// </summary>
     public enum AccountExportFormat : byte
     {
         JohnNT = 1,
@@ -21,8 +24,16 @@ namespace DSInternals.PowerShell
         PWDumpHistory
     }
 
+    /// <summary>
+    /// Provides extension methods for AccountExportFormat to determine required property sets for different export formats.
+    /// </summary>
     public static class AccountExportFormatExtensions
     {
+        /// <summary>
+        /// Determines the required account property sets for the specified export format.
+        /// </summary>
+        /// <param name="format">The account export format.</param>
+        /// <returns>The property sets required for the export format.</returns>
         public static AccountPropertySets GetRequiredProperties(this AccountExportFormat? format)
         {
             switch (format)

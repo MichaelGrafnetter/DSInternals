@@ -6,6 +6,9 @@
     using System.Text;
     using DSInternals.Common.Cryptography;
 
+    /// <summary>
+    /// Represents a RoamedCredential.
+    /// </summary>
     public class RoamedCredential : DPAPIObject
     {
         private const string MasterKeyCommandFormat = "dpapi::masterkey /in:\"{0}\" /sid:{1}";
@@ -137,6 +140,9 @@
             private set;
         }
 
+        /// <summary>
+        /// Saves data to the specified destination.
+        /// </summary>
         public override void Save(string directoryPath)
         {
             // The target directory must exist
@@ -224,6 +230,9 @@
             }
         }
 
+        /// <summary>
+        /// Returns a string representation of the object.
+        /// </summary>
         public override string ToString()
         {
             return String.Format("{0}: {1}", this.Type, this.FilePath);

@@ -7,6 +7,9 @@
 
     [Cmdlet(VerbsData.ConvertFrom, "UnicodePassword")]
     [OutputType(typeof(string))]
+    /// <summary>
+    /// Implements the ConvertFrom-UnicodePassword PowerShell cmdlet.
+    /// </summary>
     public class ConvertFromUnicodePasswordCommand : PSCmdlet
     {
         // TODO: Extract this routine as a class in DSInternals.Cryptography?

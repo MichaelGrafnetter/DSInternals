@@ -8,6 +8,9 @@ namespace DSInternals.SAM.Interop
     /// <see>http://msdn.microsoft.com/en-us/library/cc245521.aspx</see>
     /// </summary>
     [Flags]
+    /// <summary>
+    /// Defines values for SamServerAccessMask.
+    /// </summary>
     public enum SamServerAccessMask : uint
     {
         /// <summary>

@@ -3,7 +3,7 @@
     using System;
 
     /// <summary>
-    /// Flags that control the behavior of the user account.
+    /// Specifies flags that control the behavior and properties of user and computer accounts in Active Directory.
     /// </summary>
     [Flags]
     public enum UserAccountControl : int
@@ -116,6 +116,9 @@
 
     public static class UserAccountControlExtensions
     {
+        /// <summary>
+        /// SetFlags implementation.
+        /// </summary>
         public static void SetFlags(ref this UserAccountControl uac, UserAccountControl flag, bool? status)
         {
             if(status == true)

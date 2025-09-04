@@ -6,6 +6,9 @@ namespace DSInternals.Common.Data
     /// Specifies DNS record rank. 
     /// </summary>
     [Flags]
+    /// <summary>
+    /// Defines values for ResourceRecordRank.
+    /// </summary>
     public enum ResourceRecordRank : byte
     {
         /// <summary>

@@ -11,6 +11,9 @@
         SupportsShouldProcess = true
         )]
     [OutputType("None")]
+    /// <summary>
+    /// Implements the Remove-ADDBObject PowerShell cmdlet.
+    /// </summary>
     public class RemoveADDBObjectCommand : ADDBObjectCommandBase
     {
         [Parameter]
