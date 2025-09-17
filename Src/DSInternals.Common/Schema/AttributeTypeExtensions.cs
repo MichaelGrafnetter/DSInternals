@@ -3,8 +3,16 @@ using System.Buffers.Binary;
 
 namespace DSInternals.Common.Schema
 {
+    /// <summary>
+    /// Extension methods for the AttributeType enumeration to provide metadata lookups and utility operations.
+    /// </summary>
     public static class AttributeTypeExtensions
     {
+        /// <summary>
+        /// Gets the syntax type for the specified attribute type.
+        /// </summary>
+        /// <param name="attrtyp">The attribute type to get the syntax for.</param>
+        /// <returns>The corresponding attribute syntax, or null if not defined.</returns>
         public static AttributeSyntax? GetSyntax(this AttributeType attrtyp) => attrtyp switch
         {
             AttributeType.RDN => AttributeSyntax.UnicodeString,
@@ -1459,6 +1467,11 @@ namespace DSInternals.Common.Schema
             _ => null
         };
 
+        /// <summary>
+        /// Gets the search flags for the specified attribute type.
+        /// </summary>
+        /// <param name="attrtyp">The attribute type to get the search flags for.</param>
+        /// <returns>The corresponding search flags for the attribute.</returns>
         public static AttributeSearchFlags GetSearchFlags(this AttributeType attrtyp) => attrtyp switch
         {
             AttributeType.AccountExpires => AttributeSearchFlags.Copy,
@@ -1728,6 +1741,12 @@ namespace DSInternals.Common.Schema
             _ => AttributeSearchFlags.None
         };
 
+        /// <summary>
+        /// Derives a database column name for the specified attribute type and syntax.
+        /// </summary>
+        /// <param name="attrtyp">The attribute type.</param>
+        /// <param name="syntax">The attribute syntax.</param>
+        /// <returns>A formatted column name string.</returns>
         public static string DeriveColumnName(this AttributeType attrtyp, AttributeSyntax syntax)
         {
             char infix = syntax.GetCode();
@@ -1739,6 +1758,11 @@ namespace DSInternals.Common.Schema
             return $"ATT{infix}{suffix}";
         }
 
+        /// <summary>
+        /// Gets the character code representation for the specified attribute syntax.
+        /// </summary>
+        /// <param name="syntax">The attribute syntax.</param>
+        /// <returns>A single character code representing the syntax type.</returns>
         public static char GetCode(this AttributeSyntax syntax) => syntax switch
         {
             AttributeSyntax.DN => 'b',
@@ -1761,6 +1785,11 @@ namespace DSInternals.Common.Schema
             _ => throw new ArgumentOutOfRangeException("Unsupported attribute syntax", nameof(syntax))
         };
 
+        /// <summary>
+        /// Derives an index name for the specified attribute type.
+        /// </summary>
+        /// <param name="attrtyp">The attribute type.</param>
+        /// <returns>A formatted index name string.</returns>
         public static string DeriveIndexName(this AttributeType attrtyp)
         {
             string suffix = DeriveIndexSuffix(attrtyp);
@@ -1769,6 +1798,11 @@ namespace DSInternals.Common.Schema
             return $"INDEX_{suffix}";
         }
 
+        /// <summary>
+        /// Derives a containerized index name for the specified attribute type.
+        /// </summary>
+        /// <param name="attrtyp">The attribute type.</param>
+        /// <returns>A formatted containerized index name string.</returns>
         public static string DeriveContainerizedIndexName(this AttributeType attrtyp)
         {
             string suffix = DeriveIndexSuffix(attrtyp);
@@ -1776,6 +1810,11 @@ namespace DSInternals.Common.Schema
             return $"INDEX_P_{suffix}";
         }
 
+        /// <summary>
+        /// Derives a tuple index name for the specified attribute type.
+        /// </summary>
+        /// <param name="attrtyp">The attribute type.</param>
+        /// <returns>A formatted tuple index name string.</returns>
         public static string DeriveTupleIndexName(this AttributeType attrtyp)
         {
             string suffix = DeriveIndexSuffix(attrtyp);
@@ -1783,6 +1822,11 @@ namespace DSInternals.Common.Schema
             return $"INDEX_T_{suffix}";
         }
 
+        /// <summary>
+        /// Derives a subtree index name for the specified attribute type.
+        /// </summary>
+        /// <param name="attrtyp">The attribute type.</param>
+        /// <returns>A formatted subtree index name string.</returns>
         public static string DeriveSubtreeIndexName(this AttributeType attrtyp)
         {
             string suffix = attrtyp.DeriveIndexSuffix();
@@ -1800,11 +1844,15 @@ namespace DSInternals.Common.Schema
         /// <summary>
         /// Indicates if the ATTRTYP maps to an OID via the prefix table.
         /// </summary>
+        /// <param name="attrtyp">The attribute type to check.</param>
+        /// <returns>True if the attribute type is a compressed OID; otherwise, false.</returns>
         public static bool IsCompressedOid(this AttributeType attrtyp) => attrtyp <= AttributeType.LastCompressedOid;
 
         /// <summary>
         /// Indicates if the ATTRTYP is used as a value of the msDS-IntId attribute.
         /// </summary>
+        /// <param name="attrtyp">The attribute type to check.</param>
+        /// <returns>True if the attribute type is an internal ID; otherwise, false.</returns>
         public static bool IsInternalId(this AttributeType attrtyp) => attrtyp >= AttributeType.FirstInternalId && attrtyp <= AttributeType.LastInternalId;
     }
 }

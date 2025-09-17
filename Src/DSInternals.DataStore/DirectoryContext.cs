@@ -7,6 +7,9 @@
 
     using NATIVE_UNICODEINDEX = Windows.Win32.Storage.Jet.JET_UNICODEINDEX;
 
+    /// <summary>
+    /// Provides a context for accessing and managing Active Directory database files and transactions.
+    /// </summary>
     public class DirectoryContext : IDisposable
     {
         private const string JetInstanceNameFormat = "DSInternals-{0:D}";
@@ -133,7 +136,7 @@
                 this.isDBAttached = true;
                 this.database = this.session.OpenDatabase(this.DSADatabaseFile);
                 this.Schema = DirectorySchema.Create(this.database);
-                this.SecurityDescriptorRersolver = new SecurityDescriptorRersolver(this.database);
+                this.SecurityDescriptorResolver = new SecurityDescriptorResolver(this.database);
                 this.DistinguishedNameResolver = new DistinguishedNameResolver(this.database, this.Schema);
                 this.LinkResolver = new LinkResolver(this.database, this.Schema);
                 this.DomainController = new DomainController(this);
@@ -215,32 +218,47 @@
             private set;
         }
 
-        public SecurityDescriptorRersolver SecurityDescriptorRersolver
+        public SecurityDescriptorResolver SecurityDescriptorResolver
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// OpenDataTable implementation.
+        /// </summary>
         public Cursor OpenDataTable()
         {
             return this.database.OpenCursor(ADConstants.DataTableName);
         }
 
+        /// <summary>
+        /// OpenLinkTable implementation.
+        /// </summary>
         public Cursor OpenLinkTable()
         {
             return this.database.OpenCursor(ADConstants.LinkTableName);
         }
 
+        /// <summary>
+        /// OpenSystemTable implementation.
+        /// </summary>
         public Cursor OpenSystemTable()
         {
             return this.database.OpenCursor(ADConstants.SystemTableName);
         }
 
+        /// <summary>
+        /// BeginTransaction implementation.
+        /// </summary>
         public IsamTransaction BeginTransaction()
         {
             return new IsamTransaction(this.session);
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);
@@ -255,10 +273,10 @@
                 return;
             }
 
-            if (this.SecurityDescriptorRersolver != null)
+            if (this.SecurityDescriptorResolver != null)
             {
-                this.SecurityDescriptorRersolver.Dispose();
-                this.SecurityDescriptorRersolver = null;
+                this.SecurityDescriptorResolver.Dispose();
+                this.SecurityDescriptorResolver = null;
             }
 
             if (this.DomainController != null)

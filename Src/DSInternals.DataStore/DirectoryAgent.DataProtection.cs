@@ -10,6 +10,9 @@
     public partial class DirectoryAgent : IDisposable
     {
         #region Data Protection API (DPAPI)
+        /// <summary>
+        /// GetDPAPIBackupKeys implementation.
+        /// </summary>
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)
         {
             Validator.AssertNotNull(bootKey, "bootKey");
@@ -35,6 +38,9 @@
         #endregion Data Protection API (DPAPI)
 
         #region DPAPI NG / Group Key Distribution Service
+        /// <summary>
+        /// GetGroupManagedServiceAccounts implementation.
+        /// </summary>
         public IEnumerable<GroupManagedServiceAccount> GetGroupManagedServiceAccounts(DateTime effectiveTime)
         {
             // Support for gMSAs has been added in Windows Server 2012

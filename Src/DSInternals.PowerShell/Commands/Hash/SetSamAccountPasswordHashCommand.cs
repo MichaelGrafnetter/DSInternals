@@ -10,6 +10,9 @@
 
     [Cmdlet(VerbsCommon.Set, "SamAccountPasswordHash")]
     [OutputType("None")]
+    /// <summary>
+    /// Implements the Set-SamAccountPasswordHash PowerShell cmdlet.
+    /// </summary>
     public class SetSamAccountPasswordHashCommand : SamCommandBase
     {
         private const string ParameterSetBySid = "BySid";

@@ -9,6 +9,9 @@
     using DSInternals.Common.Data;
     using DSInternals.Common.Schema;
 
+    /// <summary>
+    /// Provides functionality for accessing Active Directory through ADSI (Active Directory Service Interfaces).
+    /// </summary>
     public class AdsiClient : IDisposable
     {
         private const string ConfigurationContainerRDN = "CN=Configuration";
@@ -41,6 +44,11 @@
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the AdsiClient class for accessing Active Directory through ADSI.
+        /// </summary>
+        /// <param name="server">The domain controller server name to connect to, or null to auto-discover.</param>
+        /// <param name="credential">The network credentials to use for authentication, or null for current user context.</param>
         public AdsiClient(string server = null, NetworkCredential credential = null)
         {
             DirectoryContext context;
@@ -82,12 +90,18 @@
             }
         }
 
+        /// <summary>
+        /// Gets the NetBIOS domain name for the connected Active Directory domain.
+        /// </summary>
         public string NetBIOSDomainName
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets account information from the data store.
+        /// </summary>
         public IEnumerable<DSAccount> GetAccounts(AccountPropertySets propertySets = AccountPropertySets.All)
         {
             // Not all property sets work as secret attributes are never sent ove LDAP.
@@ -228,6 +242,10 @@
 
         #region IDisposable Support
 
+        /// <summary>
+        /// Releases the managed resources used by this instance.
+        /// </summary>
+        /// <param name="disposing">True if called from Dispose(); false if called from finalizer.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -241,6 +259,9 @@
         }
 
         // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.

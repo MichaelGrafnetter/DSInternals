@@ -9,6 +9,9 @@ namespace NDceRpc.Microsoft.Interop
     /// </summary>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     [System.Diagnostics.DebuggerDisplay("{Domain}\\{User}")]
+    /// <summary>
+    /// Represents a SEC_WINNT_AUTH_IDENTITY structure.
+    /// </summary>
     public struct SEC_WINNT_AUTH_IDENTITY
     {
         public SEC_WINNT_AUTH_IDENTITY(NetworkCredential cred)

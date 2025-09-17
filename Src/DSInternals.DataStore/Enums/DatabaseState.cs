@@ -1,5 +1,8 @@
 ﻿namespace DSInternals.DataStore
 {
+    /// <summary>
+    /// Specifies the current state of the Active Directory database during installation and operations.
+    /// </summary>
     public enum DatabaseState
     {
         /// <summary>

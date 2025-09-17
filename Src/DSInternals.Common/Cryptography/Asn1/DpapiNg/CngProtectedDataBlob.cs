@@ -21,6 +21,10 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
         public ReadOnlyMemory<byte> Nonce { get; private set; }
 
 
+        /// <summary>
+        /// Decrypts the DPAPI-NG protected data using the Windows CNG API.
+        /// </summary>
+        /// <returns>A read-only span containing the decrypted data.</returns>
         public ReadOnlySpan<byte> Decrypt()
         {
             if (this.RawData.Length == 0)
@@ -34,6 +38,11 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
             return decryptedData;
         }
 
+        /// <summary>
+        /// Attempts to decrypt the DPAPI-NG protected data without throwing exceptions on failure.
+        /// </summary>
+        /// <param name="cleartext">When this method returns, contains the decrypted data if successful, or an empty span if decryption fails.</param>
+        /// <returns>true if decryption was successful; otherwise, false.</returns>
         public bool TryDecrypt(out ReadOnlySpan<byte> cleartext)
         {
             if (this.RawData.Length == 0)
@@ -49,6 +58,11 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
             return resultCode == Win32ErrorCode.Success;
         }
 
+        /// <summary>
+        /// Decodes a binary blob containing DPAPI-NG protected data in CMS enveloped format.
+        /// </summary>
+        /// <param name="blob">The binary data to decode.</param>
+        /// <returns>A CngProtectedDataBlob object containing the parsed protection metadata and encrypted content.</returns>
         public static CngProtectedDataBlob Decode(ReadOnlyMemory<byte> blob)
         {
             var cms = Cryptography.Asn1.Pkcs7.ContentInfo.Decode(blob);

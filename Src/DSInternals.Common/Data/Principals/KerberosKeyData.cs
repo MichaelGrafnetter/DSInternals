@@ -4,6 +4,9 @@ using System.Security;
 namespace DSInternals.Common.Data
 {
     // https://msdn.microsoft.com/en-us/library/cc941809.aspx
+    /// <summary>
+    /// Represents Kerberos encryption key data including key type, length, and the actual key bytes.
+    /// </summary>
     public class KerberosKeyData
     {
         // Size: Reserved1 (2 bytes) + Reserved2 (2 bytes) + Reserved3 (4 bytes) + KeyType (4 bytes) + KeyLength (4 bytes) + KeyOffset (4 bytes)
@@ -37,6 +40,9 @@ namespace DSInternals.Common.Data
             private set;
         }
 
+        /// <summary>
+        /// Returns a string representation of the object.
+        /// </summary>
         public override string ToString()
         {
             return string.Format("Type: {0}, Key: {1}", this.KeyType, this.Key.ToHex());

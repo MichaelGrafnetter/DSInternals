@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace DSInternals.Common.Schema
 {
+    /// <summary>
+    /// Represents the base schema containing attribute definitions and prefix table mappings for Active Directory.
+    /// </summary>
     public class BaseSchema
     {
         private const int InitialDictionaryCapacity = 150;
@@ -17,6 +20,11 @@ namespace DSInternals.Common.Schema
             _prefixTable = new PrefixTable();
         }
 
+        /// <summary>
+        /// Adds an attribute definition to the schema.
+        /// </summary>
+        /// <param name="attribute">The attribute schema to add.</param>
+        /// <exception cref="ArgumentNullException">Thrown when attribute is null.</exception>
         public void AddAttribute(AttributeSchema attribute)
         {
             if (attribute == null) throw new ArgumentNullException(nameof(attribute));
@@ -26,30 +34,50 @@ namespace DSInternals.Common.Schema
             _attributesById[attribute.AttributeId] = attribute;
         }
 
+        /// <summary>
+        /// Finds the specified attribute in the schema.
+        /// </summary>
         public AttributeSchema? FindAttribute(string attributeName)
         {
             _ = _attributesByName.TryGetValue(attributeName, out AttributeSchema attribute);
             return attribute;
         }
 
+        /// <summary>
+        /// Finds the attribute type identifier for the specified attribute name.
+        /// </summary>
+        /// <param name="attributeName">The name of the attribute to find.</param>
+        /// <returns>The attribute type identifier, or null if not found.</returns>
         public AttributeType? FindAttributeId(string attributeName)
         {
             _ = _attributesByName.TryGetValue(attributeName, out AttributeSchema attribute);
             return attribute?.AttributeId;
         }
 
+        /// <summary>
+        /// Finds the internal attribute type identifier for the specified attribute name.
+        /// </summary>
+        /// <param name="attributeName">The name of the attribute to find.</param>
+        /// <returns>The internal attribute type identifier, or null if not found.</returns>
         public AttributeType? FindAttributeInternalId(string attributeName)
         {
             _ = _attributesByName.TryGetValue(attributeName, out AttributeSchema attribute);
             return attribute?.InternalId;
         }
 
+        /// <summary>
+        /// Finds the specified attribute in the schema.
+        /// </summary>
         public AttributeSchema? FindAttribute(AttributeType attributeId)
         {
             _ = _attributesById.TryGetValue(attributeId, out AttributeSchema attribute);
             return attribute;
         }
 
+        /// <summary>
+        /// Loads the OID prefix table from the specified binary blob.
+        /// </summary>
+        /// <param name="blob">The binary data containing the prefix table.</param>
         public void LoadPrefixTable(byte[] blob)
         {
             _prefixTable.LoadFromBlob(blob);
@@ -58,6 +86,11 @@ namespace DSInternals.Common.Schema
             AddNonDefaultAttributes();
         }
 
+        /// <summary>
+        /// Adds a new OID prefix to the prefix table with the specified index.
+        /// </summary>
+        /// <param name="index">The index for the prefix.</param>
+        /// <param name="oidPrefix">The OID prefix bytes to add.</param>
         public void AddPrefix(ushort index, byte[] oidPrefix)
         {
             _prefixTable.Add(index, oidPrefix);
@@ -134,6 +167,9 @@ namespace DSInternals.Common.Schema
             }
         }
 
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
         public static BaseSchema Create()
         {
             var schema = new BaseSchema();

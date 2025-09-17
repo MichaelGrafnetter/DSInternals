@@ -6,8 +6,14 @@ using System.Text;
 
 namespace DSInternals.Common.Cryptography
 {
+    /// <summary>
+    /// Provides methods for computing Microsoft Org ID password hashes used in cloud authentication.
+    /// </summary>
     public static class OrgIdHash
     {
+        /// <summary>
+        /// The size of the salt in bytes.
+        /// </summary>
         public const int SaltSize = 10;
         /// <summary>
         /// The size, in bytes, of the computed hash code.
@@ -17,6 +23,10 @@ namespace DSInternals.Common.Cryptography
         private const string HashFormat = "v1;PPH1_MD4,{0},{1},{2};";
         private const string InternalHashFunction = "HMACSHA256";
 
+        /// <summary>
+        /// Generates a random salt for password hashing.
+        /// </summary>
+        /// <returns>A randomly generated salt.</returns>
         public static byte[] GenerateSalt()
         {
             using(var rng = new RNGCryptoServiceProvider())
@@ -27,12 +37,21 @@ namespace DSInternals.Common.Cryptography
             }
         }
 
+        /// <summary>
+        /// Computes the Org ID hash of the specified password using the provided salt.
+        /// </summary>
+        /// <param name="password">The password to hash.</param>
+        /// <param name="salt">The salt to use for hashing.</param>
+        /// <returns>The Org ID hash of the password.</returns>
         public static byte[] ComputeHash(SecureString password, byte[] salt)
         {
             byte[] ntHash = NTHash.ComputeHash(password);
             return ComputeHash(ntHash, salt);
 
         }
+        /// <summary>
+        /// Computes the hash of the specified input.
+        /// </summary>
         public static byte[] ComputeHash(byte[] ntHash, byte[] salt)
         {
             Validator.AssertLength(ntHash, NTHash.HashSize, "ntHash");
@@ -44,12 +63,18 @@ namespace DSInternals.Common.Cryptography
             return orgIdHashBytes;
         }
 
+        /// <summary>
+        /// ComputeFormattedHash implementation.
+        /// </summary>
         public static string ComputeFormattedHash(SecureString password, byte[] salt = null)
         {
             byte[] ntHash = NTHash.ComputeHash(password);
             return ComputeFormattedHash(ntHash, salt);
         }
 
+        /// <summary>
+        /// ComputeFormattedHash implementation.
+        /// </summary>
         public static string ComputeFormattedHash(byte[] ntHash, byte[] salt = null)
         {
             if (salt == null)

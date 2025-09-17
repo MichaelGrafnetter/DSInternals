@@ -73,6 +73,11 @@ namespace DSInternals.Common.Cryptography
             0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
         };
         
+        /// <summary>
+        /// Calculates the CRC32 checksum for the specified byte array.
+        /// </summary>
+        /// <param name="buffer">The byte array to calculate the checksum for.</param>
+        /// <returns>The CRC32 checksum as an unsigned 32-bit integer.</returns>
         public static uint Calculate(byte[] buffer)
         {
             Validator.AssertNotNull(buffer, "buffer");

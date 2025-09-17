@@ -10,6 +10,9 @@ namespace DSInternals.DataStore
         private const string RootHintsZoneName = "RootDNSServers";
         private const string TrustAnchorsZoneName = "..TrustAnchors";
 
+        /// <summary>
+        /// GetDnsRecords implementation.
+        /// </summary>
         public IEnumerable<DnsResourceRecord> GetDnsRecords(bool skipRootHints = true, bool skipTombstoned = true, bool skipTrustAnchors = true)
         {
             DNTag? dnsNodeCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsNode);
@@ -70,6 +73,9 @@ namespace DSInternals.DataStore
             }
         }
 
+        /// <summary>
+        /// GetDnsZone implementation.
+        /// </summary>
         public IEnumerable<string> GetDnsZone()
         {
             DNTag? dnsZoneCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsZone);

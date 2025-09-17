@@ -9,6 +9,9 @@
 
     [Cmdlet(VerbsCommon.Get, "BootKey")]
     [OutputType(typeof(string))]
+    /// <summary>
+    /// Implements the Get-BootKey PowerShell cmdlet.
+    /// </summary>
     public class GetBootKeyCommand : PSCmdletEx
     {
         private const string OnlineParameterSet = "Online";

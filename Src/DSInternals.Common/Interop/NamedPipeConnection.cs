@@ -7,10 +7,16 @@ namespace DSInternals.Common.Interop
     using System.Runtime.ConstrainedExecution;
     using System.Security;
 
+    /// <summary>
+    /// Provides connectivity to remote servers via named pipe connections for administrative operations.
+    /// </summary>
     public class NamedPipeConnection : CriticalFinalizerObject, IDisposable
     {
         private const string IPCShareFormat = @"\\{0}\IPC$";
 
+        /// <summary>
+        /// Gets the name of the server this connection is established to.
+        /// </summary>
         public string Server
         {
             get;
@@ -32,6 +38,11 @@ namespace DSInternals.Common.Interop
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the NamedPipeConnection class and establishes a connection to the specified server.
+        /// </summary>
+        /// <param name="server">The name of the server to connect to.</param>
+        /// <param name="credential">The network credentials to use for authentication.</param>
         public NamedPipeConnection(string server, NetworkCredential credential)
         {
             // Argument validation:
@@ -54,6 +65,9 @@ namespace DSInternals.Common.Interop
         }
 
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

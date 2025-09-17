@@ -3,6 +3,9 @@
     using System;
 
     [Flags]
+    /// <summary>
+    /// Defines values for RoamedCredentialFlags.
+    /// </summary>
     public enum RoamedCredentialFlags : short
     {
         Tombstone = 1,

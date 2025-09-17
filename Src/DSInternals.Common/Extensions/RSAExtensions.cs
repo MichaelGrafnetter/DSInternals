@@ -240,6 +240,11 @@ namespace DSInternals.Common
             return blob[0] == DERSequenceTag;
         }
 
+        /// <summary>
+        /// Determines whether an RSA public key is weak according to the ROCA vulnerability criteria.
+        /// </summary>
+        /// <param name="publicKey">The RSA public key parameters to analyze.</param>
+        /// <returns>true if the key is considered weak; otherwise, false.</returns>
         public static bool IsWeakKey(this RSAParameters publicKey)
         {
             // Convert the byte array modulus to unsigned BigInteger by changing it to little endian and appending 0 as sign bit:

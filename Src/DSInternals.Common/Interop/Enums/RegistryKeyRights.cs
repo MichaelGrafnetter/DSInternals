@@ -6,6 +6,9 @@
     /// Access rights for registry key objects.
     /// </summary>
     [Flags]
+    /// <summary>
+    /// Defines values for RegistryKeyRights.
+    /// </summary>
     public enum RegistryKeyRights : int
     {
         /// <summary>

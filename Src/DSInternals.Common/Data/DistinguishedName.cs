@@ -6,6 +6,9 @@
     using System.Text;
     using DSInternals.Common.Schema;
 
+    /// <summary>
+    /// Represents an LDAP distinguished name (DN) that uniquely identifies an object in a directory hierarchy.
+    /// </summary>
     public class DistinguishedName
     {
         private const char escapeChar = '\\';
@@ -61,6 +64,10 @@
             }
         }
 
+        /// <summary>
+        /// Converts the distinguished name to a DNS hostname by extracting CN and DC components.
+        /// </summary>
+        /// <returns>A DNS hostname representation of the distinguished name.</returns>
         public string GetDnsName()
         {
             if (Components.Count == 0)
@@ -106,6 +113,9 @@
             }
         }
 
+        /// <summary>
+        /// AddParent implementation.
+        /// </summary>
         public void AddParent(DistinguishedName dn)
         {
             if(dn == null)
@@ -120,6 +130,9 @@
             }
         }
 
+        /// <summary>
+        /// AddParent implementation.
+        /// </summary>
         public void AddParent(string name, string value)
         {
             // Validation will be done in the DistinguishedNameComponent constructor
@@ -127,6 +140,9 @@
             this.AddParent(component);
         }
 
+        /// <summary>
+        /// AddParent implementation.
+        /// </summary>
         public void AddParent(DistinguishedNameComponent component)
         {
             if (component != null)
@@ -135,6 +151,9 @@
             }
         }
 
+        /// <summary>
+        /// AddChild implementation.
+        /// </summary>
         public void AddChild(DistinguishedName dn)
         {
             if (dn == null)
@@ -149,6 +168,9 @@
             }
         }
 
+        /// <summary>
+        /// AddChild implementation.
+        /// </summary>
         public void AddChild(string name, string value)
         {
             // Validation will be performed by the DistinguishedNameComponent contructor.
@@ -156,6 +178,9 @@
             this.AddChild(component);
         }
 
+        /// <summary>
+        /// AddChild implementation.
+        /// </summary>
         public void AddChild(DistinguishedNameComponent component)
         {
             if (component != null)
@@ -164,6 +189,9 @@
             }
         }
 
+        /// <summary>
+        /// Returns a string representation of the object.
+        /// </summary>
         public override string ToString()
         {
             if (Components.Count == 0)
@@ -247,12 +275,18 @@
             return segments.ToArray();
         }
 
+        /// <summary>
+        /// GetDnsNameFromDN implementation.
+        /// </summary>
         public static string GetDnsNameFromDN(string dn)
         {
             var dnParsed = new DistinguishedName(dn);
             return dnParsed.GetDnsName();
         }
 
+        /// <summary>
+        /// GetDNFromDNSName implementation.
+        /// </summary>
         public static DistinguishedName GetDNFromDNSName(string domainName)
         {
             Validator.AssertNotNullOrWhiteSpace(domainName, "domainName");
@@ -268,6 +302,9 @@
             return dn;
         }
 
+        /// <summary>
+        /// Determines whether the specified object is equal to this instance.
+        /// </summary>
         public override bool Equals(object obj)
         {
             // Check for null values and compare run-time types.
@@ -278,6 +315,9 @@
             return this.ToString() == obj.ToString();
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
         public override int GetHashCode()
         {
             // This DN implementation is not immutable so we do not calculate the hash of the DN.

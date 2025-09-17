@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsData.ConvertFrom, "GPPrefPassword")]
     [OutputType(new Type[] { typeof(string) })]
+    /// <summary>
+    /// Implements the ConvertFrom-GPPrefPassword PowerShell cmdlet.
+    /// </summary>
     public class ConvertFromGPPrefPasswordCommand : PSCmdlet
     {
         #region Parameters

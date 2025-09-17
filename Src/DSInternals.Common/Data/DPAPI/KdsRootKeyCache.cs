@@ -54,6 +54,9 @@ namespace DSInternals.Common.Data
 
         public bool SupportsLookupByEffectiveTime => _innerResolver.SupportsLookupAll || _innerResolver.SupportsLookupByEffectiveTime;
 
+        /// <summary>
+        /// Gets the KDS root key from the directory store.
+        /// </summary>
         public KdsRootKey? GetKdsRootKey(Guid id)
         {
             if (_rootKeyCache.TryGetValue(id, out KdsRootKey cachedRootKey))
@@ -85,6 +88,9 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// Gets the KDS root key from the directory store.
+        /// </summary>
         public KdsRootKey? GetKdsRootKey(DateTime effectiveTime)
         {
             if (!_innerResolver.SupportsLookupAll)
@@ -121,6 +127,9 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// Gets all KDS root keys from the directory store.
+        /// </summary>
         public IEnumerable<KdsRootKey> GetKdsRootKeys()
         {
             if (!this.SupportsLookupAll)

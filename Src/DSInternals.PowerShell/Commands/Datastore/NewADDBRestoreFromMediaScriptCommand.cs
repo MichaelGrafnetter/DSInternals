@@ -13,6 +13,9 @@
 
     [Cmdlet(VerbsCommon.New, "ADDBRestoreFromMediaScript")]
     [OutputType(typeof(string))]
+    /// <summary>
+    /// Implements the New-ADDBRestoreFromMediaScript PowerShell cmdlet.
+    /// </summary>
     public class NewADDBRestoreFromMediaScriptCommand : ADDBCommandBase
     {
         private const int DSRMPasswordMinLength = 7;

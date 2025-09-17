@@ -13,8 +13,14 @@ namespace DSInternals.Common.Schema
 
     using PrefixIndex = ushort;
 
+    /// <summary>
+    /// Represents a table that maps prefix indices to OID (Object Identifier) strings for efficient OID encoding and decoding.
+    /// </summary>
     public class PrefixTable
     {
+        /// <summary>
+        /// The 38.
+        /// </summary>
         public const int LastBuitlInPrefixIndex = 38;
         private const int MinBlobLength = 2 * sizeof(uint);
         private const long LongLimit = (long.MaxValue >> 7) - 0x7f;
@@ -23,6 +29,10 @@ namespace DSInternals.Common.Schema
         private IDictionary<PrefixIndex, string> _forwardMap;
         private IDictionary<string, PrefixIndex> _reverseMap;
 
+        /// <summary>
+        /// Initializes a new instance of the PrefixTable class.
+        /// </summary>
+        /// <param name="blob">Optional byte array containing user-defined prefix mappings to load.</param>
         public PrefixTable(byte[] blob = null)
         {
             _forwardMap = new SortedDictionary<PrefixIndex, string>();
@@ -38,6 +48,11 @@ namespace DSInternals.Common.Schema
             }
         }
 
+        /// <summary>
+        /// Gets or sets the OID prefix string for the specified prefix index.
+        /// </summary>
+        /// <param name="prefixIndex">The prefix index to look up or set.</param>
+        /// <returns>The OID prefix string, or null if the index is not found.</returns>
         public string? this[PrefixIndex prefixIndex]
         {
             get
@@ -119,6 +134,9 @@ namespace DSInternals.Common.Schema
             return upperWord * 0x10000u + lowerWord; // 65536
         }
 
+        /// <summary>
+        /// Translates the input to the target format.
+        /// </summary>
         public string? Translate(AttributeType encodedOid)
         {
             if (!encodedOid.IsCompressedOid())
@@ -129,11 +147,17 @@ namespace DSInternals.Common.Schema
             return Translate((ATTRTYP)encodedOid);
         }
 
+        /// <summary>
+        /// Translates the input to the target format.
+        /// </summary>
         public string? Translate(ClassType encodedOid)
         {
             return Translate((ATTRTYP)encodedOid);
         }
 
+        /// <summary>
+        /// Translates the input to the target format.
+        /// </summary>
         public string? Translate(ATTRTYP encodedOid)
         {
             // Decode Oid from attribute id (:= prefixIndex + suffix)
@@ -163,7 +187,11 @@ namespace DSInternals.Common.Schema
             return $"{prefix}.{suffix}";
         }
 
-
+        /// <summary>
+        /// Translates an attribute syntax enumeration value to its corresponding OID string.
+        /// </summary>
+        /// <param name="encodedOid">The encoded attribute syntax value.</param>
+        /// <returns>The OID string representation of the attribute syntax.</returns>
         public static string Translate(AttributeSyntax encodedOid)
         {
             // This is a static mapping, because the prefix table might not be available, when this is first needed.
@@ -171,6 +199,12 @@ namespace DSInternals.Common.Schema
             return String.Format(AttributeSyntaxOidFormat, lastOctet);
         }
 
+        /// <summary>
+        /// Adds a prefix mapping with the specified index and OID prefix string.
+        /// </summary>
+        /// <param name="index">The prefix index.</param>
+        /// <param name="oidPrefix">The OID prefix string.</param>
+        /// <exception cref="ArgumentNullException">Thrown when oidPrefix is null.</exception>
         public void Add(PrefixIndex index, string oidPrefix)
         {
             if (oidPrefix == null) throw new ArgumentNullException(nameof(oidPrefix));
@@ -179,6 +213,12 @@ namespace DSInternals.Common.Schema
             _reverseMap[oidPrefix] = index;
         }
 
+        /// <summary>
+        /// Adds a prefix mapping with the specified index and OID prefix byte array.
+        /// </summary>
+        /// <param name="index">The prefix index.</param>
+        /// <param name="oidPrefix">The OID prefix as a byte array.</param>
+        /// <exception cref="ArgumentNullException">Thrown when oidPrefix is null.</exception>
         public void Add(PrefixIndex index, byte[] oidPrefix)
         {
             if (oidPrefix == null) throw new ArgumentNullException(nameof(oidPrefix));
@@ -188,6 +228,11 @@ namespace DSInternals.Common.Schema
             _reverseMap[oidString] = index;
         }
 
+        /// <summary>
+        /// Loads prefix mappings from a binary blob.
+        /// </summary>
+        /// <param name="blob">The binary data containing prefix mapping information.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the blob is too small.</exception>
         public void LoadFromBlob(byte[] blob)
         {
             Validator.AssertMinLength(blob, MinBlobLength, nameof(blob));

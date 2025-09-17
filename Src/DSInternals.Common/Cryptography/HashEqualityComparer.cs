@@ -5,11 +5,18 @@
     using System.Linq;
 
     // TODO: Rename HashEqualityComparer to ByteArrayEqualityComparer
+    /// <summary>
+    /// Provides equality comparison for byte arrays (such as password hashes) that compares their contents rather than reference equality.
+    /// </summary>
     public class HashEqualityComparer : IEqualityComparer<byte[]>
     {
         // Singleton
         private static HashEqualityComparer instance;
 
+        /// <summary>
+        /// Gets the singleton instance of the HashEqualityComparer.
+        /// </summary>
+        /// <returns>The singleton HashEqualityComparer instance.</returns>
         public static HashEqualityComparer GetInstance()
         {
             if(instance == null)
@@ -21,6 +28,9 @@
 
         private HashEqualityComparer() {}
 
+        /// <summary>
+        /// Determines whether the specified object is equal to this instance.
+        /// </summary>
         public bool Equals(byte[] x, byte[] y)
         {
             if (x == null || y == null)
@@ -34,6 +44,9 @@
             return x.SequenceEqual(y);
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
         public int GetHashCode(byte[] obj)
         {
             if(obj == null || obj.LongLength == 0)

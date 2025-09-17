@@ -1,6 +1,9 @@
 ﻿using DSInternals.Common.Schema;
 namespace DSInternals.Replication.Model
 {
+    /// <summary>
+    /// Represents a replicated Active Directory attribute with its type and values.
+    /// </summary>
     public class ReplicaAttribute
     {
         public ReplicaAttribute(AttributeType id, byte[][] values)

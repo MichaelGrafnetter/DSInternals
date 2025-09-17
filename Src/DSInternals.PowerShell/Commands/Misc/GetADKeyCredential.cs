@@ -7,6 +7,9 @@
 
     [Cmdlet(VerbsCommon.Get, "ADKeyCredential", DefaultParameterSetName = ParamSetFromUserCertificate)]
     [OutputType(new Type[] { typeof(KeyCredential) })]
+    /// <summary>
+    /// Implements the Get-ADKeyCredential PowerShell cmdlet.
+    /// </summary>
     public class GetADKeyCredentialCommand : PSCmdlet
     {
         #region Parameters

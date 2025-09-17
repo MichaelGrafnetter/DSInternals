@@ -6,6 +6,9 @@
 
     [Cmdlet(VerbsCommon.Get, "ADDBSchemaAttribute")]
     [OutputType(typeof(AttributeSchema))]
+    /// <summary>
+    /// Implements the Get-ADDBSchemaAttribute PowerShell cmdlet.
+    /// </summary>
     public class GetADDBSchemaAttributeCommand : ADDBCommandBase
     {
 

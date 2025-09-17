@@ -9,7 +9,10 @@
 
     using SecurityDescriptorIdentifier = long;
 
-    public class SecurityDescriptorRersolver : IDisposable
+    /// <summary>
+    /// Resolves and caches security descriptors from the Active Directory database to improve performance.
+    /// </summary>
+    public class SecurityDescriptorResolver : IDisposable
     {
         private const string SecurityDescriptorIdentifierColumn = "sd_id";
         private const string SecurityDescriptorValueColumn = "sd_value";
@@ -25,7 +28,7 @@
         private Columnid _securityDescriptorIdentifierColumnId;
         private Columnid _securityDescriptorValueColumnId;
 
-        public SecurityDescriptorRersolver(IsamDatabase database)
+        public SecurityDescriptorResolver(IsamDatabase database)
         {
             if (database == null)
             {
@@ -44,6 +47,9 @@
             _hashFunction = MD5.Create();
         }
 
+        /// <summary>
+        /// GetDescriptor implementation.
+        /// </summary>
         public RawSecurityDescriptor? GetDescriptor(SecurityDescriptorIdentifier id)
         {
             RawSecurityDescriptor? result = null;
@@ -66,6 +72,9 @@
             return result;
         }
 
+        /// <summary>
+        /// FindDescriptor implementation.
+        /// </summary>
         public IEnumerable<SecurityDescriptorIdentifier> FindDescriptor(GenericSecurityDescriptor securityDescriptor)
         {
             byte[] sdHash = ComputeHash(_hashFunction, securityDescriptor);
@@ -73,6 +82,9 @@
             return this.FindDescriptorHash(sdHash);
         }
 
+        /// <summary>
+        /// FindDescriptor implementation.
+        /// </summary>
         public IEnumerable<SecurityDescriptorIdentifier> FindDescriptor(string securityDescriptor)
         {
             byte[] sdHash = ComputeHash(_hashFunction, securityDescriptor);
@@ -80,6 +92,9 @@
             return this.FindDescriptorHash(sdHash);
         }
 
+        /// <summary>
+        /// FindDescriptorHash implementation.
+        /// </summary>
         public IEnumerable<SecurityDescriptorIdentifier> FindDescriptorHash(byte[] sdHash)
         {
             if (sdHash == null)
@@ -99,6 +114,9 @@
             }
         }
 
+        /// <summary>
+        /// Computes the hash of the specified input.
+        /// </summary>
         public static byte[] ComputeHash(GenericSecurityDescriptor securityDescriptor)
         {
             if (securityDescriptor == null)
@@ -120,6 +138,9 @@
             return hashFunction.ComputeHash(binaryDescriptor);
         }
 
+        /// <summary>
+        /// Computes the hash of the specified input.
+        /// </summary>
         public static byte[] ComputeHash(string securityDescriptor)
         {
             if (securityDescriptor == null)
@@ -139,6 +160,9 @@
             return hashFunction.ComputeHash(binaryDescriptor);
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);

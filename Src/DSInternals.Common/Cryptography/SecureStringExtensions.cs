@@ -5,6 +5,11 @@ using System.Security;
 namespace DSInternals.Common
 {    public static class SecureStringExtensions
     {
+        /// <summary>
+        /// Converts a SecureString to its Unicode string representation.
+        /// </summary>
+        /// <param name="input">The SecureString to convert.</param>
+        /// <returns>The Unicode string representation of the SecureString contents.</returns>
         public static string ToUnicodeString(this SecureString input)
         {
             IntPtr ptr = Marshal.SecureStringToBSTR(input);
@@ -17,6 +22,9 @@ namespace DSInternals.Common
                 Marshal.ZeroFreeBSTR(ptr);
             }
         }
+        /// <summary>
+        /// Returns the byte array representation of the data.
+        /// </summary>
         public static byte[] ToByteArray(this SecureString input)
         {
             int numBytes = input.Length * 2;
@@ -32,6 +40,11 @@ namespace DSInternals.Common
             }
             return byteArray;
         }
+        /// <summary>
+        /// Appends a string to the end of a SecureString.
+        /// </summary>
+        /// <param name="input">The SecureString to append to.</param>
+        /// <param name="suffix">The string to append to the SecureString.</param>
         public static void Append(this SecureString input, string suffix)
         {
             if(suffix != null)

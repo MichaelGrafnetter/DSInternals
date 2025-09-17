@@ -22,23 +22,38 @@ namespace DSInternals.Common.Data
             _kdsRootKey = rootKey;
         }
 
+        /// <summary>
+        /// The true.
+        /// </summary>
         public bool SupportsLookupAll => true;
 
+        /// <summary>
+        /// Gets the KDS root key from the directory store.
+        /// </summary>
         public KdsRootKey? GetKdsRootKey(Guid id)
         {
             return _kdsRootKey.KeyId == id ? _kdsRootKey : null;
         }
 
+        /// <summary>
+        /// Gets the KDS root key from the directory store.
+        /// </summary>
         public KdsRootKey? GetKdsRootKey(DateTime effectiveTime)
         {
             return _kdsRootKey.EffectiveTime <= effectiveTime ? _kdsRootKey : null;
         }
 
+        /// <summary>
+        /// Gets all KDS root keys from the directory store.
+        /// </summary>
         public IEnumerable<KdsRootKey> GetKdsRootKeys()
         {
             yield return _kdsRootKey;
         }
 
+        /// <summary>
+        /// The true.
+        /// </summary>
         public bool SupportsLookupByEffectiveTime => true;
     }
 }

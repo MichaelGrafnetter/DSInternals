@@ -9,11 +9,17 @@ namespace DSInternals.SAM.Interop
     /// Represents a wrapper class for a SAM object handle.
     /// </summary>
     [SecurityCritical]
+    /// <summary>
+    /// Represents a SafeSamHandle.
+    /// </summary>
     public class SafeSamHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         private SafeSamHandle() : base(true)
         {
         }
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public SafeSamHandle(IntPtr preexistingHandle, bool ownsHandle) : base(ownsHandle)
         {
             this.SetHandle(preexistingHandle);

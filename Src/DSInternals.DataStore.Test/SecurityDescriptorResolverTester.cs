@@ -15,7 +15,7 @@ namespace DSInternals.DataStore.Test
             byte[] expectedHash = Convert.FromBase64String("2FUDMNHg430Z3T4G9yu6Pg==");
 
             var securityDescriptor = new RawSecurityDescriptor(binarySecurityDescriptor, 0);
-            byte[] calculatedHash = SecurityDescriptorRersolver.ComputeHash(securityDescriptor);
+            byte[] calculatedHash = SecurityDescriptorResolver.ComputeHash(securityDescriptor);
             Assert.AreEqual(true, expectedHash.SequenceEqual(calculatedHash));
         }
     }

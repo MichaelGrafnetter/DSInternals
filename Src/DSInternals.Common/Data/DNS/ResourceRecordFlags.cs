@@ -6,6 +6,9 @@ namespace DSInternals.Common.Data
     /// Specifies DNS record flags. 
     /// </summary>
     [Flags]
+    /// <summary>
+    /// Defines values for ResourceRecordFlags.
+    /// </summary>
     public enum ResourceRecordFlags : ushort
     {
         /// <summary>

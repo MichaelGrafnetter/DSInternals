@@ -12,6 +12,9 @@ namespace DSInternals.Common.Cryptography
     /// </summary>
     public static class KerberosKeyDerivation
     {
+        /// <summary>
+        /// The 4096.
+        /// </summary>
         public const int DefaultIterationCount = 4096;
 
         /// <summary>

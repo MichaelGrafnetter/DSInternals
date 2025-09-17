@@ -8,6 +8,9 @@ namespace DSInternals.Common.Data.Fido
     /// <see cref="https://www.w3.org/TR/webauthn/#flags"/>
     /// </summary>
     [Flags]
+    /// <summary>
+    /// Defines values for AuthenticatorFlags.
+    /// </summary>
     public enum AuthenticatorFlags : byte
     {
         /// <summary>

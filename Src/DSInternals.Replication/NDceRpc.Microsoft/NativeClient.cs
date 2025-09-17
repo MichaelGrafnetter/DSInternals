@@ -5,8 +5,14 @@ using System.Text;
 
 namespace NDceRpc.Native
 {
+    /// <summary>
+    /// Represents a NativeClient.
+    /// </summary>
     public class NativeClient:Client
     {
+        /// <summary>
+        /// base implementation.
+        /// </summary>
         public NativeClient(EndpointBindingInfo info) : base(info)
         {
             //string szStringBinding = Client.StringBindingCompose(clientInfo, null);

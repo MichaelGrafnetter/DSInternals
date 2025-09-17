@@ -8,6 +8,9 @@
     using System.Security;
     using System.Text;
 
+    /// <summary>
+    /// Represents Kerberos credentials containing encryption keys and salt information for authentication.
+    /// </summary>
     public class KerberosCredential
     {
         private const short CurrentRevision = 3;
@@ -63,6 +66,9 @@
             private set;
         }
 
+        /// <summary>
+        /// Returns the byte array representation of the data.
+        /// </summary>
         public byte[] ToByteArray()
         {
             using (var stream = new MemoryStream())

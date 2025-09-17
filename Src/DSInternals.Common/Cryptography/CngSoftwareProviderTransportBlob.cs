@@ -14,18 +14,28 @@ namespace DSInternals.Common.Cryptography
         private const int BlobHeaderLength = (MasterKeyFileCount + 9) * sizeof(int);
         private const string Magic = "MIB1";
 
+        /// <summary>
+        /// Gets the name of the key container where the private key is stored.
+        /// </summary>
         public string KeyContainerName
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the private key data contained in the transport blob.
+        /// </summary>
         public byte[] KeyData
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the CngSoftwareProviderTransportBlob class by parsing the provided binary data.
+        /// </summary>
+        /// <param name="blob">The binary transport blob data to parse.</param>
         public CngSoftwareProviderTransportBlob(byte[] blob)
         {
             Validator.AssertNotNull(blob, nameof(blob));

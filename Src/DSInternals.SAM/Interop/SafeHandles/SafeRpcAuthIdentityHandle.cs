@@ -15,6 +15,9 @@ namespace DSInternals.SAM.Interop
     /// </summary>
     /// <see>https://msdn.microsoft.com/en-us/library/windows/desktop/aa378492(v=vs.85).aspx</see>
     [SecurityCritical]
+    /// <summary>
+    /// Represents a SafeRpcAuthIdentityHandle.
+    /// </summary>
     public class SafeRpcAuthIdentityHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         private SafeRpcAuthIdentityHandle()

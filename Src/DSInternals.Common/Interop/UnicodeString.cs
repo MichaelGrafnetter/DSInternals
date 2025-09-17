@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace DSInternals.Common.Interop
 {
     /// <summary>
-    /// The UnicodeString structure is used to define Unicode strings.
+    /// Represents a Unicode string structure used in Windows API calls for efficient string handling.
     /// </summary>
     /// <see>https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_unicode_string</see>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -58,6 +58,9 @@ namespace DSInternals.Common.Interop
         /// Pointer to a buffer used to contain a string of wide characters.
         /// </summary>
         [MarshalAs(UnmanagedType.LPWStr)]
+        /// <summary>
+        /// The Buffer.
+        /// </summary>
         public string Buffer;
     }
 }

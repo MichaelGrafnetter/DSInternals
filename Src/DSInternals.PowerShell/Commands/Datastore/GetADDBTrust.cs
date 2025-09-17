@@ -7,6 +7,9 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, "ADDBTrust")]
     [OutputType(typeof(TrustedDomain))]
+    /// <summary>
+    /// Implements the Get-ADDBTrust PowerShell cmdlet.
+    /// </summary>
     public class GetADDBTrustCommand : ADDBCommandBase
     {
         [Parameter(Mandatory = false)]

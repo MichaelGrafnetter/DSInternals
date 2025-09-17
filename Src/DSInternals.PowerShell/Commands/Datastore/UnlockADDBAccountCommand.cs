@@ -6,6 +6,9 @@ namespace DSInternals.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Unlock, "ADDBAccount")]
     [OutputType("None")]
+    /// <summary>
+    /// Implements the Unlock-ADDBAccount PowerShell cmdlet.
+    /// </summary>
     public class UnlockADDBAccountCommand : ADDBModifyPrincipalCommandBase
     {
         protected override void ProcessRecord()

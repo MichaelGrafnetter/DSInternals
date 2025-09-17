@@ -5,17 +5,31 @@ using System.Linq;
 
 namespace DSInternals.Replication.Model
 {
+    /// <summary>
+    /// A collection of replica attributes indexed by attribute type for Active Directory objects.
+    /// </summary>
     public class ReplicaAttributeCollection : Dictionary<AttributeType, ReplicaAttribute>
     {
         // TODO: Move parent as member.
+        /// <summary>
+        /// Initializes a new instance of the ReplicaAttributeCollection class.
+        /// </summary>
         public ReplicaAttributeCollection() : base()
         {
         }
+        /// <summary>
+        /// Initializes a new instance of the ReplicaAttributeCollection class with the specified initial capacity.
+        /// </summary>
+        /// <param name="numAttributes">The initial number of attributes the collection can store.</param>
         public ReplicaAttributeCollection(int numAttributes)
             : base(numAttributes)
         {
         }
 
+        /// <summary>
+        /// Adds a replica attribute to the collection, merging with existing attributes of the same type.
+        /// </summary>
+        /// <param name="attribute">The replica attribute to add to the collection.</param>
         public void Add(ReplicaAttribute attribute)
         {
             Validator.AssertNotNull(attribute, "attribute");

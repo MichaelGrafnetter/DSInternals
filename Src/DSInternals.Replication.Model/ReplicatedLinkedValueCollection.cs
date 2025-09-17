@@ -4,13 +4,24 @@ using System.Linq;
 
 namespace DSInternals.Replication.Model
 {
+    /// <summary>
+    /// A collection that stores replicated linked attributes grouped by object GUID for Active Directory replication.
+    /// </summary>
     public class ReplicatedLinkedValueCollection : Dictionary<Guid, List<ReplicaAttribute>>
     {
         // TODO: Move parent as member.
+        /// <summary>
+        /// Initializes a new instance of the ReplicatedLinkedValueCollection class.
+        /// </summary>
         public ReplicatedLinkedValueCollection() : base()
         {
         }
 
+        /// <summary>
+        /// Adds a replicated attribute to the collection for the specified object.
+        /// </summary>
+        /// <param name="objectId">The GUID of the object to add the attribute to.</param>
+        /// <param name="attribute">The replicated attribute to add.</param>
         public void Add(Guid objectId, ReplicaAttribute attribute)
         {
             if (this.ContainsKey(objectId))
@@ -25,6 +36,11 @@ namespace DSInternals.Replication.Model
             }
         }
 
+        /// <summary>
+        /// Retrieves and consolidates all replicated attributes for the specified object.
+        /// </summary>
+        /// <param name="objectId">The GUID of the object to retrieve attributes for.</param>
+        /// <returns>A collection of consolidated replica attributes, or null if the object is not found.</returns>
         public IEnumerable<ReplicaAttribute> Get(Guid objectId)
         {
             List<ReplicaAttribute> attributes;

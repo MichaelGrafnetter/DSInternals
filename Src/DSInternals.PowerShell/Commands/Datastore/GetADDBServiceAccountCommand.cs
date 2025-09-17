@@ -6,10 +6,16 @@
 
     [Cmdlet(VerbsCommon.Get, "ADDBServiceAccount")]
     [OutputType(typeof(DSInternals.Common.Data.GroupManagedServiceAccount))]
+    /// <summary>
+    /// Implements the Get-ADDBServiceAccount PowerShell cmdlet.
+    /// </summary>
     public class GetADDBServiceAccountCommand : ADDBCommandBase
     {
         [Parameter(Mandatory = false)]
         [Alias("EffectiveDate", "PasswordLastSet", "PwdLastSet", "Date", "Time", "d", "t")]
+        /// <summary>
+        /// Gets or sets the EffectiveTime.
+        /// </summary>
         public DateTime? EffectiveTime { get; set; }
 
         // TODO: Implement gMSA filtering

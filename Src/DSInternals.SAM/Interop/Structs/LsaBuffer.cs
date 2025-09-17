@@ -24,6 +24,9 @@
         /// </summary>
         public IntPtr Buffer;
 
+        /// <summary>
+        /// Gets the byte representation of the data.
+        /// </summary>
         public byte[] GetBytes()
         {
             byte[] binaryBuffer = new byte[this.Length];

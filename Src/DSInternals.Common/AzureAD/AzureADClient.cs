@@ -14,6 +14,9 @@ using DSInternals.Common.Serialization;
 
 namespace DSInternals.Common.AzureAD
 {
+    /// <summary>
+    /// Client for interacting with Azure Active Directory Graph API.
+    /// </summary>
     public class AzureADClient : IDisposable
     {
         private const string DefaultTenantId = "myorganization";
@@ -27,12 +30,22 @@ namespace DSInternals.Common.AzureAD
         private const string UsersUrlFormat = "https://graph.windows.net/{0}/users/{1}?";
         private const string JsonContentType = "application/json";
         private const string KeyCredentialAttributeName = "searchableDeviceKey";
+        
+        /// <summary>
+        /// The maximum number of users that can be retrieved in a single batch request.
+        /// </summary>
         public const int MaxBatchSize = 999;
         private static readonly MediaTypeWithQualityHeaderValue s_odataContentType = MediaTypeWithQualityHeaderValue.Parse("application/json;odata=nometadata;streaming=false");
         private string _tenantId;
         private HttpClient _httpClient;
         private readonly string _batchSizeParameter;
 
+        /// <summary>
+        /// Initializes a new instance of the AzureADClient class for interacting with Azure AD Graph API.
+        /// </summary>
+        /// <param name="accessToken">The OAuth 2.0 access token for authentication.</param>
+        /// <param name="tenantId">The tenant ID, or null to use the default organization.</param>
+        /// <param name="batchSize">The number of users to retrieve per batch request (maximum 999).</param>
         public AzureADClient(string accessToken, Guid? tenantId = null, int batchSize = MaxBatchSize)
         {
             // Validate inputs
@@ -46,6 +59,12 @@ namespace DSInternals.Common.AzureAD
             _httpClient.DefaultRequestHeaders.Accept.Add(s_odataContentType);
         }
 
+        /// <summary>
+        /// Retrieves a user from Azure AD by user principal name.
+        /// </summary>
+        /// <param name="userPrincipalName">The user principal name of the user to retrieve.</param>
+        /// <returns>The Azure AD user if found.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when userPrincipalName is null or empty.</exception>
         public async Task<AzureADUser> GetUserAsync(string userPrincipalName)
         {
             // Vaidate the input
@@ -55,6 +74,11 @@ namespace DSInternals.Common.AzureAD
             return await GetUserAsync(filter, userPrincipalName).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Retrieves a user from Azure AD by object ID.
+        /// </summary>
+        /// <param name="objectId">The object ID of the user to retrieve.</param>
+        /// <returns>The Azure AD user if found.</returns>
         public async Task<AzureADUser> GetUserAsync(Guid objectId)
         {
             var filter = string.Format(CultureInfo.InvariantCulture, IdFilterParameterFormat, objectId);
@@ -80,6 +104,11 @@ namespace DSInternals.Common.AzureAD
             return result.Items[0];
         }
 
+        /// <summary>
+        /// Retrieves a paged list of users from Azure AD.
+        /// </summary>
+        /// <param name="nextLink">Optional link to retrieve the next page of results.</param>
+        /// <returns>A paged response containing Azure AD users.</returns>
         public async Task<OdataPagedResponse<AzureADUser>> GetUsersAsync(string nextLink = null)
         {
             var url = new StringBuilder(nextLink);
@@ -112,6 +141,12 @@ namespace DSInternals.Common.AzureAD
             }
         }
 
+        /// <summary>
+        /// Updates a user's key credentials by user principal name.
+        /// </summary>
+        /// <param name="userPrincipalName">The user principal name of the user to update.</param>
+        /// <param name="keyCredentials">The key credentials to set for the user.</param>
+        /// <exception cref="ArgumentNullException">Thrown when userPrincipalName is null or empty.</exception>
         public async Task SetUserAsync(string userPrincipalName, KeyCredential[] keyCredentials)
         {
             // Vaidate the input
@@ -121,6 +156,11 @@ namespace DSInternals.Common.AzureAD
             await SetUserAsync(userPrincipalName, properties).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Updates a user's key credentials by object ID.
+        /// </summary>
+        /// <param name="objectId">The object ID of the user to update.</param>
+        /// <param name="keyCredentials">The key credentials to set for the user.</param>
         public async Task SetUserAsync(Guid objectId, KeyCredential[] keyCredentials)
         {
             var properties = new Dictionary<string, object> { { KeyCredentialAttributeName, keyCredentials } };
@@ -191,6 +231,9 @@ namespace DSInternals.Common.AzureAD
         }
 
         #region IDisposable Support
+        /// <summary>
+        /// Releases all resources used by the AzureADClient.
+        /// </summary>
         public virtual void Dispose()
         {
             _httpClient.Dispose();

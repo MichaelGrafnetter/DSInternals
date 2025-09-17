@@ -1,5 +1,8 @@
 ﻿namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Defines values for RoamedCredentialType.
+    /// </summary>
     public enum RoamedCredentialType : byte
     {
         /// <summary>

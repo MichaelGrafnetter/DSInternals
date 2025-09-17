@@ -3,6 +3,9 @@ using DSInternals.Common.Schema;
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents BitLocker recovery information stored in Active Directory for encrypted volumes.
+    /// </summary>
     public class BitLockerRecoveryInformation
     {
         public BitLockerRecoveryInformation(DirectoryObject dsObject)
@@ -91,6 +94,9 @@ namespace DSInternals.Common.Data
             private set;
         }
 
+        /// <summary>
+        /// Returns a string representation of the object.
+        /// </summary>
         public override string ToString()
         {
             return String.Format("Recovery ID: {0}, Key: {1}, Date: {2}", this.RecoveryGuid, this.RecoveryPassword, this.WhenCreated);
