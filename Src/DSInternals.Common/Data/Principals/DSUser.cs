@@ -43,18 +43,27 @@
             }
         }
 
+        /// <summary>
+        /// Gets the date and time when roamed credentials were created for this user.
+        /// </summary>
         public DateTime? RoamedCredentialsCreated
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the date and time when roamed credentials were last modified for this user.
+        /// </summary>
         public DateTime? RoamedCredentialsModified
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the roamed credentials for this user account, including certificates and private keys.
+        /// </summary>
         public RoamedCredential[] RoamedCredentials
         {
             get;
@@ -91,72 +100,108 @@
             private set;
         }
 
+        /// <summary>
+        /// Gets the initials of the user.
+        /// </summary>
         public string Initials
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the state or province where the user is located.
+        /// </summary>
         public string State
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the street address of the user.
+        /// </summary>
         public string StreetAddress
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the city where the user is located.
+        /// </summary>
         public string City
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the postal code (ZIP code) for the user's location.
+        /// </summary>
         public string PostalCode
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the country where the user is located.
+        /// </summary>
         public string Country
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the post office box number for the user's mailing address.
+        /// </summary>
         public string PostOfficeBox
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the employee ID for the user.
+        /// </summary>
         public string EmployeeID
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the employee number for the user.
+        /// </summary>
         public string EmployeeNumber
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the office location for the user.
+        /// </summary>
         public string Office
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the primary telephone number for the user.
+        /// </summary>
         public string TelephoneNumber
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Gets the email address for the user.
+        /// </summary>
         public string Email
         {
             get;
