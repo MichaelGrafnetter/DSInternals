@@ -40,6 +40,12 @@ namespace DSInternals.Common.AzureAD
         private HttpClient _httpClient;
         private readonly string _batchSizeParameter;
 
+        /// <summary>
+        /// Initializes a new instance of the AzureADClient class for interacting with Azure AD Graph API.
+        /// </summary>
+        /// <param name="accessToken">The OAuth 2.0 access token for authentication.</param>
+        /// <param name="tenantId">The tenant ID, or null to use the default organization.</param>
+        /// <param name="batchSize">The number of users to retrieve per batch request (maximum 999).</param>
         public AzureADClient(string accessToken, Guid? tenantId = null, int batchSize = MaxBatchSize)
         {
             // Validate inputs

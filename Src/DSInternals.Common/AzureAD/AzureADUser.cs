@@ -10,6 +10,9 @@ namespace DSInternals.Common.AzureAD
     /// </summary>
     public class AzureADUser
     {
+        /// <summary>
+        /// Gets the unique identifier (object ID) of the Azure AD user.
+        /// </summary>
         [JsonPropertyName("objectId")]
         [JsonRequired]
         public Guid ObjectId
@@ -18,6 +21,9 @@ namespace DSInternals.Common.AzureAD
             private set;
         }
 
+        /// <summary>
+        /// Gets the user principal name (UPN) of the Azure AD user.
+        /// </summary>
         [JsonPropertyName("userPrincipalName")]
         [JsonRequired]
         public string UserPrincipalName
@@ -26,6 +32,9 @@ namespace DSInternals.Common.AzureAD
             private set;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the Azure AD user account is enabled.
+        /// </summary>
         [JsonPropertyName("accountEnabled")]
         public bool Enabled
         {
@@ -33,6 +42,9 @@ namespace DSInternals.Common.AzureAD
             private set;
         }
 
+        /// <summary>
+        /// Gets the display name of the Azure AD user.
+        /// </summary>
         [JsonPropertyName("displayName")]
         public string DisplayName
         {
@@ -40,6 +52,9 @@ namespace DSInternals.Common.AzureAD
             private set;
         }
 
+        /// <summary>
+        /// Gets the collection of key credentials (device keys) associated with the Azure AD user.
+        /// </summary>
         [JsonPropertyName("searchableDeviceKey")]
         public List<KeyCredential> KeyCredentials
         {

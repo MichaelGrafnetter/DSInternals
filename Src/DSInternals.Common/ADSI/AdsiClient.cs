@@ -44,6 +44,11 @@
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the AdsiClient class for accessing Active Directory through ADSI.
+        /// </summary>
+        /// <param name="server">The domain controller server name to connect to, or null to auto-discover.</param>
+        /// <param name="credential">The network credentials to use for authentication, or null for current user context.</param>
         public AdsiClient(string server = null, NetworkCredential credential = null)
         {
             DirectoryContext context;
@@ -85,6 +90,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets the NetBIOS domain name for the connected Active Directory domain.
+        /// </summary>
         public string NetBIOSDomainName
         {
             get;
@@ -234,6 +242,10 @@
 
         #region IDisposable Support
 
+        /// <summary>
+        /// Releases the managed resources used by this instance.
+        /// </summary>
+        /// <param name="disposing">True if called from Dispose(); false if called from finalizer.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)

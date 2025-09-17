@@ -12,14 +12,24 @@
     /// </summary>
     public class AdsiObjectAdapter : DirectoryObject
     {
+        /// <summary>
+        /// The underlying SearchResult object from ADSI.
+        /// </summary>
         protected SearchResult directoryEntry;
 
+        /// <summary>
+        /// Initializes a new instance of the AdsiObjectAdapter class.
+        /// </summary>
+        /// <param name="directoryEntry">The SearchResult object to wrap.</param>
         public AdsiObjectAdapter(SearchResult directoryEntry)
         {
             Validator.AssertNotNull(directoryEntry, "directoryEntry");
             this.directoryEntry = directoryEntry;
         }
 
+        /// <summary>
+        /// Gets the distinguished name of the directory object.
+        /// </summary>
         public override string DistinguishedName
         {
             get
@@ -28,6 +38,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets the globally unique identifier (GUID) of the directory object.
+        /// </summary>
         public override Guid Guid
         {
             get
@@ -38,6 +51,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets the security identifier (SID) of the directory object.
+        /// </summary>
         public override SecurityIdentifier Sid
         {
             get
@@ -48,6 +64,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the directory object uses big-endian byte order for RID values.
+        /// </summary>
         protected override bool HasBigEndianRid
         {
             get
@@ -137,11 +156,23 @@
             values = textValues?.Select(textValue => DNWithBinary.Parse(textValue).Binary).ToArray();
         }
 
+        /// <summary>
+        /// Reads a single-valued attribute from the directory object.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the attribute value.</typeparam>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <returns>The attribute value, or the default value if not present.</returns>
         protected TResult ReadAttributeSingle<TResult>(string name)
         {
             return this.directoryEntry.Properties[name].Cast<TResult>().FirstOrDefault();
         }
 
+        /// <summary>
+        /// Reads a multi-valued attribute from the directory object.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the attribute values.</typeparam>
+        /// <param name="name">The name of the attribute to read.</param>
+        /// <returns>An array of attribute values, or null if not present or empty.</returns>
         protected TResult[] ReadAttributeMulti<TResult>(string name)
         {
             var result = this.directoryEntry.Properties[name].Cast<TResult>().ToArray();

@@ -11,8 +11,17 @@ namespace DSInternals.Common.Cryptography
     {
         private const int HashSize = NativeMethods.NTHashNumBytes;
         
+        /// <summary>
+        /// The size of encryption keys in bytes (16 bytes / 128 bits).
+        /// </summary>
         protected const int KeySize = 16;
+        /// <summary>
+        /// The size of salt values in bytes (16 bytes / 128 bits).
+        /// </summary>
         protected const int SaltSize = 16;
+        /// <summary>
+        /// The default number of hash rounds used for salt-based key derivation (1 round).
+        /// </summary>
         protected const int DefaultSaltHashRounds = 1;
         public abstract byte[] CurrentKey
         {

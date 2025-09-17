@@ -8,6 +8,9 @@ namespace DSInternals.Common.AzureAD
     /// </summary>
     public class OdataErrorResponse
     {
+        /// <summary>
+        /// Gets the OData error details from the Azure AD Graph API response.
+        /// </summary>
         [JsonPropertyName("odata.error")]
         [JsonRequired]
         public ODataError Error

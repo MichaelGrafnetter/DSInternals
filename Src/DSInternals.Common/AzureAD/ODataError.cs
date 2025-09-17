@@ -7,6 +7,9 @@ namespace DSInternals.Common.AzureAD
     /// </summary>
     public class ODataError
     {
+        /// <summary>
+        /// Gets the error code returned by the Azure AD Graph API.
+        /// </summary>
         [JsonPropertyName("code")]
         public string Code
         {
@@ -14,6 +17,9 @@ namespace DSInternals.Common.AzureAD
             private set;
         }
 
+        /// <summary>
+        /// Gets the detailed error message information returned by the Azure AD Graph API.
+        /// </summary>
         [JsonPropertyName("message")]
         [JsonRequired]
         public ODataErrorMessage Message
