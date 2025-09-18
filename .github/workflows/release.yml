@@ -382,4 +382,4 @@ jobs:
         env:
           CHOCOLATEY_APIKEY: ${{ secrets.CHOCOLATEY_APIKEY }}
         run: |
-          choco push *.nupkg --source='https://push.chocolatey.org/' --api-key=$env:CHOCOLATEY_APIKEY
+          choco push --source='https://push.chocolatey.org/' --api-key=$env:CHOCOLATEY_APIKEY
