@@ -15,6 +15,7 @@
   <Project Path="DSInternals.Replication.Model/DSInternals.Replication.Model.csproj" />
   <Project Path="DSInternals.DataStore/DSInternals.DataStore.csproj" />
   <Project Path="DSInternals.SAM/DSInternals.SAM.csproj" />
+  <Project Path="DSInternals.ADSI/DSInternals.ADSI.csproj" />
 
   <!-- C++ libraries -->
   <Project Path="DSInternals.Replication.Interop/DSInternals.Replication.Interop.Shared.vcxitems" Id="6db099b7-3be2-4365-abc3-3c857b8fe640" />

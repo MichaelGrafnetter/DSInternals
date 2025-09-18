@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "drsr_addons.h"
+#pragma unmanaged
 
 #define SuppressRpcException(Function,...)								\
 	RpcTryExcept										\

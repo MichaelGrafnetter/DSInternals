@@ -5,6 +5,7 @@
     "path": "DSInternals.slnx",
     "projects": [
       "DSInternals.Common\\DSInternals.Common.csproj",
+      "DSInternals.ADSI\\DSInternals.ADSI.csproj",
       "DSInternals.DataStore\\DSInternals.DataStore.csproj",
       "DSInternals.Replication.Model\\DSInternals.Replication.Model.csproj",
       "DSInternals.Replication.Interop\\NetCore\\DSInternals.Replication.Interop.NetCore.vcxproj",

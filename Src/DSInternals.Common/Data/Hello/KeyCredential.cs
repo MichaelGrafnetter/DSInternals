@@ -11,7 +11,7 @@
     using System.Text.Json.Serialization;
 
     /// <summary>
-    ///  This class represents a single AD/AAD key credential.
+    /// This class represents a single AD/AAD key credential.
     /// </summary>
     /// <remarks>
     /// In Active Directory, this structure is stored as the binary portion of the msDS-KeyCredentialLink DN-Binary attribute
@@ -135,9 +135,10 @@
             get
             {
                 var fidoKey = this.FidoKeyMaterial;
-                if(fidoKey != null && fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type == COSE.KeyType.EC2)
+                if (fidoKey != null && fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type == COSE.KeyType.EC2)
                 {
-                    return fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.ECDsa.ExportParameters(false);
+                    var eccPublicKey = fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.PublicKey as ECDsa;
+                    return eccPublicKey.ExportParameters(includePrivateParameters: false);
                 }
                 else
                 {
@@ -160,7 +161,8 @@
                 var fidoKey = this.FidoKeyMaterial;
                 if (fidoKey != null && fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.Type == COSE.KeyType.RSA)
                 {
-                    return fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.RSA.ExportParameters(false);
+                    var rsaPublicKey = fidoKey.AuthenticatorData.AttestedCredentialData.CredentialPublicKey.PublicKey as RSA;
+                    return rsaPublicKey.ExportParameters(includePrivateParameters: false);
                 }
 
                 if(this.Usage == KeyUsage.NGC || this.Usage == KeyUsage.STK)

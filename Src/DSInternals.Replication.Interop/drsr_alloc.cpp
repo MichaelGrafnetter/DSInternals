@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "drsr_alloc.h"
+#pragma unmanaged
 
 template<>
 midl_ptr<DRS_EXTENSIONS_INT> make_midl_ptr()

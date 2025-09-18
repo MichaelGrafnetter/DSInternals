@@ -1,160 +1,82 @@
-﻿namespace DSInternals.Common.Data.Fido
+﻿namespace DSInternals.Common.Data.Fido;
+
+using System;
+using System.Security.Cryptography;
+
+public class CredentialPublicKey
 {
-    using System;
-    using PeterO.Cbor;
-    using System.Security.Cryptography;
+    public COSE.KeyType Type { get; private set; }
+    public COSE.Algorithm Algorithm { get; private set; }
+    public AsymmetricAlgorithm PublicKey { get; private set; }
 
-    public class CredentialPublicKey
+    public CredentialPublicKey(COSE.KeyType type, COSE.Algorithm algorithm, AsymmetricAlgorithm publicKey)
     {
-        public RSACng RSA
+        if (publicKey == null)
         {
-            get
-            {
-                if (Type == COSE.KeyType.RSA)
-                {
-                    var rsa = new RSACng();
-                    rsa.ImportParameters(
-                        new RSAParameters()
-                        {
-                            Modulus = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.N)].GetByteString(),
-                            Exponent = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.E)].GetByteString()
-                        }
-                    );
-                    return rsa;
-                }
-                return null;
-            }
+            throw new ArgumentNullException(nameof(publicKey));
         }
 
-        public ECDsa ECDsa
-        {
-            get
-            {
-                if (Type == COSE.KeyType.EC2)
-                {
-                    var point = new ECPoint
-                    {
-                        X = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.X)].GetByteString(),
-                        Y = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.Y)].GetByteString(),
-                    };
-                    ECCurve curve;
-                    var crv = (COSE.EllipticCurve)_cpk[CBORObject.FromObject(COSE.KeyTypeParameter.Crv)].AsInt32();
-                    switch (Algorithm)
-                    {
-                        case COSE.Algorithm.ES256:
-                            switch (crv)
-                            {
-                                case COSE.EllipticCurve.P256:
-                                case COSE.EllipticCurve.P256K:
-                                    curve = ECCurve.NamedCurves.nistP256;
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException(string.Format("Missing or unknown crv {0}", crv.ToString()));
-                            }
-                            break;
-                        case COSE.Algorithm.ES384:
-                            switch (crv) // https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
-                            {
-                                case COSE.EllipticCurve.P384:
-                                    curve = ECCurve.NamedCurves.nistP384;
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException(string.Format("Missing or unknown crv {0}", crv.ToString()));
-                            }
-                            break;
-                        case COSE.Algorithm.ES512:
-                            switch (crv) // https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
-                            {
-                                case COSE.EllipticCurve.P521:
-                                    curve = ECCurve.NamedCurves.nistP521;
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException(string.Format("Missing or unknown crv {0}", crv.ToString()));
-                            }
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(string.Format("Missing or unknown alg {0}", Algorithm.ToString()));
-                    }
-                    return ECDsa.Create(new ECParameters
-                    {
-                        Q = point,
-                        Curve = curve
-                    });
-                }
-                return null;
-            }
-        }
-
-        public RSASignaturePadding Padding
-        {
-            get
-            {
-                if (Type == COSE.KeyType.RSA)
-                {
-                    switch (Algorithm) // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
-                    {
-                        case COSE.Algorithm.PS256:
-                        case COSE.Algorithm.PS384:
-                        case COSE.Algorithm.PS512:
-                            return RSASignaturePadding.Pss;
-
-                        case COSE.Algorithm.RS1:
-                        case COSE.Algorithm.RS256:
-                        case COSE.Algorithm.RS384:
-                        case COSE.Algorithm.RS512:
-                            return RSASignaturePadding.Pkcs1;
-                        default:
-                            throw new ArgumentOutOfRangeException(string.Format("Missing or unknown alg {0}", Algorithm.ToString()));
-                    }
-                }
-                return null;
-            }
-        }
-
-        public byte[] EdDSAPublicKey
-        {
-            get
-            {
-                if (Type == COSE.KeyType.OKP)
-                {
-                    switch (Algorithm) // https://www.iana.org/assignments/cose/cose.xhtml#algorithms
-                    {
-                        case COSE.Algorithm.EdDSA:
-                            var crv = (COSE.EllipticCurve)_cpk[CBORObject.FromObject(COSE.KeyTypeParameter.Crv)].AsInt32();
-                            switch (crv) // https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
-                            {
-                                case COSE.EllipticCurve.Ed25519:
-                                    var publicKey = _cpk[CBORObject.FromObject(COSE.KeyTypeParameter.X)].GetByteString();
-                                    return publicKey;
-                                default:
-                                    throw new ArgumentOutOfRangeException(string.Format("Missing or unknown crv {0}", crv.ToString()));
-                            }
-                        default:
-                            throw new ArgumentOutOfRangeException(string.Format("Missing or unknown alg {0}", Algorithm.ToString()));
-                    }
-                }
-                return null;
-            }
-        }
-        public COSE.KeyType Type;
-        public COSE.Algorithm Algorithm;
-        internal CBORObject _cpk;
-
-        public CredentialPublicKey(CBORObject cpk)
-        {
-            _cpk = cpk;
-            this.Type = (COSE.KeyType) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.KeyType)].AsInt32();
-            this.Algorithm = (COSE.Algorithm) cpk[CBORObject.FromObject(COSE.KeyCommonParameter.Alg)].AsInt32();
-        }
-
-        public override string ToString()
-        {
-            return _cpk.ToString();
-        }
-
-        public byte[] GetBytes()
-        {
-            return _cpk.EncodeToBytes();
-        }
+        Type = type;
+        Algorithm = algorithm;
+        PublicKey = publicKey;
     }
+
+    public static (CredentialPublicKey publicKey, int bytesRead) Parse(ReadOnlyMemory<byte> cpkData)
+    {
+        (CborMap map, int bytesRead) = CborMap.Parse(cpkData);
+
+        COSE.KeyType? kty = ReadKeyType(map);
+        COSE.Algorithm? alg = ReadAlgorithm(map);
+
+        if (alg == null)
+        {
+            throw new CryptographicException("Credential public key algorithm is not specified.");
+        }
+
+        AsymmetricAlgorithm publicKey;
+
+        switch (kty)
+        {
+            case COSE.KeyType.EC2:
+                COSE.EllipticCurve? crv = ReadCurve(map);
+                // TODO: Test that the algorithm matches the curve
+                ECCurve curve = crv switch
+                {
+                    COSE.EllipticCurve.P256 or COSE.EllipticCurve.P256K => ECCurve.NamedCurves.nistP256,
+                    COSE.EllipticCurve.P384 => ECCurve.NamedCurves.nistP384,
+                    COSE.EllipticCurve.P521 => ECCurve.NamedCurves.nistP521,
+                    _ => throw new CryptographicException($"Unsupported curve {crv}.")
+                };
+                var point = new ECPoint
+                {
+                    X = ReadKeyParameter(map, COSE.KeyTypeParameter.X),
+                    Y = ReadKeyParameter(map, COSE.KeyTypeParameter.Y),
+                };
+                var eccPublicKey = new ECParameters
+                {
+                    Q = point,
+                    Curve = curve
+                };
+                publicKey = ECDsa.Create(eccPublicKey);
+                break;
+            case COSE.KeyType.RSA:
+                var rsaPublicKey = new RSAParameters()
+                {
+                    Modulus = ReadKeyParameter(map, COSE.KeyTypeParameter.N),
+                    Exponent = ReadKeyParameter(map, COSE.KeyTypeParameter.E)
+                };
+                publicKey = RSA.Create(rsaPublicKey);
+                break;
+            default:
+                throw new CryptographicException($"Unsupported key type {kty}.");
+        }
+
+        var cpk = new CredentialPublicKey(kty.Value, alg.Value, publicKey);
+        return (cpk, bytesRead);
+    }
+
+    private static COSE.KeyType? ReadKeyType(CborMap map) => (COSE.KeyType?)(map[COSE.KeyCommonParameter.KeyType] as uint?);
+    private static COSE.Algorithm? ReadAlgorithm(CborMap map) => (COSE.Algorithm?)(map[COSE.KeyCommonParameter.Alg] as int?);
+    private static COSE.EllipticCurve? ReadCurve(CborMap map) => (COSE.EllipticCurve?)(map[COSE.KeyTypeParameter.Crv] as uint?);
+    private static byte[]? ReadKeyParameter(CborMap map, COSE.KeyTypeParameter parameter) => map[parameter] as byte[];
 }

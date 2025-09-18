@@ -1,6 +1,5 @@
-﻿using System;
-using System.IO;
-using PeterO.Cbor;
+﻿using System.Buffers.Binary;
+using System.Formats.Cbor;
 
 namespace DSInternals.Common.Data.Fido
 {
@@ -17,7 +16,7 @@ namespace DSInternals.Common.Data.Fido
         /// <summary>
         /// SHA-256 hash of the RP ID the credential is scoped to.
         /// </summary>
-        public byte[] RelyingPartyIdHash
+        public ReadOnlyMemory<byte> RelyingPartyIdHash
         {
             get;
             private set;
@@ -45,7 +44,7 @@ namespace DSInternals.Common.Data.Fido
         /// Attested credential data is a variable-length byte array added to the 
         /// authenticator data when generating an attestation object for a given credential.
         /// </summary>
-        public AttestedCredentialData AttestedCredentialData
+        public AttestedCredentialData? AttestedCredentialData
         {
             get;
             private set;
@@ -55,55 +54,54 @@ namespace DSInternals.Common.Data.Fido
         /// Optional extensions to suit particular use cases.
         /// </summary>
         /// <see cref="https://www.w3.org/TR/webauthn/#extensions"/>
-        public CBORObject Extensions
+        public string? Extensions
         {
             get;
             private set;
         }
 
-        public AuthenticatorData(byte[] authData)
+        public AuthenticatorData(ReadOnlyMemory<byte> authData)
         {
             // Input validation
             Validator.AssertNotNull(authData, nameof(authData));
             Validator.AssertMinLength(authData, MinLength, nameof(authData));
 
-            // Input parsing
-            using (var stream = new MemoryStream(authData, false))
+            // Read the authenticator data structure, as defined by W3C
+            int currentPosition = 0;
+            ReadOnlySpan<byte> authDataSpan = authData.Span;
+
+            // rpIdHash (32B)
+            this.RelyingPartyIdHash = authData.Slice(currentPosition, SHA256HashLenBytes);
+            currentPosition += SHA256HashLenBytes;
+
+            // flags (1B)
+            this.Flags = (AuthenticatorFlags)authDataSpan[currentPosition];
+            currentPosition += sizeof(byte);
+
+            // signCount (4B)
+            this.SignatureCount = BinaryPrimitives.ReadUInt32BigEndian(authDataSpan.Slice(currentPosition));
+            currentPosition += sizeof(uint);
+
+            // Attested credential data is only present if the AT flag is set
+            if (this.Flags.HasFlag(AuthenticatorFlags.AttestationData))
             {
-                using (var reader = new BinaryReader(stream))
-                {
-                    this.RelyingPartyIdHash = reader.ReadBytes(SHA256HashLenBytes);
+                // Decode attested credential data, which starts at the next byte past the minimum length of the structure.
+                (this.AttestedCredentialData, int bytesRead) = AttestedCredentialData.Parse(authData.Slice(currentPosition));
+                currentPosition += bytesRead;
+            }
 
-                    this.Flags = (AuthenticatorFlags)reader.ReadByte();
+            // Extensions data is only present if the ED flag is set
+            if (this.Flags.HasFlag(AuthenticatorFlags.ExtensionData))
+            {
+                (var map, int bytesRead) = CborMap.Parse(authData.Slice(currentPosition));
+                currentPosition += bytesRead;
+                this.Extensions = map.ToJson();
+            }
 
-                    // Sign count is provided by the authenticator as big endian, convert if we are on little endian system
-                    byte[] signCountBytes = reader.ReadBytes(sizeof(UInt32));
-                    this.SignatureCount = signCountBytes.ToUInt32BigEndian();
-
-                    // Attested credential data is only present if the AT flag is set
-                    if (this.Flags.HasFlag(AuthenticatorFlags.AttestationData))
-                    {
-                        // Decode attested credential data, which starts at the next byte past the minimum length of the structure.
-                        this.AttestedCredentialData = new AttestedCredentialData(reader);
-                    }
-
-                    // Extensions data is only present if the ED flag is set
-                    if (this.Flags.HasFlag(AuthenticatorFlags.ExtensionData))
-                    {
-
-                        // "CBORObject.Read: This method will read from the stream until the end 
-                        // of the CBOR object is reached or an error occurs, whichever happens first."
-                        //
-                        // Read the CBOR object from the stream
-                        this.Extensions = CBORObject.Read(reader.BaseStream);
-                    }
-
-                    if(stream.Position != stream.Length)
-                    {
-                        // There should be no bytes left over after decoding all data from the structure
-                        throw new ArgumentException("Unexpected FIDO authenticator data format.", nameof(authData));
-                    }
-                }
+            if (currentPosition != authData.Length)
+            {
+                // There should be no bytes left over after decoding all data from the structure
+                throw new ArgumentException("Unexpected FIDO authenticator data format.", nameof(authData));
             }
         }
     }

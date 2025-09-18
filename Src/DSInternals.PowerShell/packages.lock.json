@@ -39,6 +39,11 @@
           "System.Threading.Tasks.Extensions": "4.5.4"
         }
       },
+      "Microsoft.Bcl.HashCode": {
+        "type": "Transitive",
+        "resolved": "1.1.1",
+        "contentHash": "MalY0Y/uM/LjXtHfX/26l2VtN4LDNZ2OE3aumNOHDLsT4fNYy2hiHXI4CXCqKpNUNm7iJ2brrc4J89UdaL56FA=="
+      },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",
         "resolved": "8.0.0",
@@ -48,25 +53,6 @@
         "type": "Transitive",
         "resolved": "8.0.0",
         "contentHash": "dk9JPxTCIevS75HyEQ0E4OVAFhB2N+V9ShCXf8Q6FkUQZDkgLI12y679Nym1YqsiSysuQskT7Z+6nUf3yab6Vw=="
-      },
-      "PeterO.Cbor": {
-        "type": "Transitive",
-        "resolved": "4.5.5",
-        "contentHash": "9fMcLg2SUm9ri1j3gVPYxk6+Ev4l4wu93bYwFG1tvntg1Qy4m0rFDdxStG88XR/W4DggOtBXfPVkC3bLF10nqw==",
-        "dependencies": {
-          "PeterO.Numbers": "1.8.2",
-          "PeterO.URIUtility": "1.0.0"
-        }
-      },
-      "PeterO.Numbers": {
-        "type": "Transitive",
-        "resolved": "1.8.2",
-        "contentHash": "d+A5KLoWbwOTpvubPaGXLgCzANE00jXmsT+yneHwLe2OlobBBFLaIHyoDwmekuHM17z9hU++RF6mL+zZ2x69nA=="
-      },
-      "PeterO.URIUtility": {
-        "type": "Transitive",
-        "resolved": "1.0.0",
-        "contentHash": "fpRTBsYACMp7NvTECauYRomubWTC3vUNw4hMXdIedP8ctBGK6tea9HOJwE+qVzis6MZYkL3LIs8qeY3rc6Jdlw=="
       },
       "System.Buffers": {
         "type": "Transitive",
@@ -80,6 +66,18 @@
         "dependencies": {
           "System.Buffers": "4.5.1",
           "System.Memory": "4.5.5",
+          "System.ValueTuple": "4.5.0"
+        }
+      },
+      "System.Formats.Cbor": {
+        "type": "Transitive",
+        "resolved": "9.0.8",
+        "contentHash": "DelHsgpxWFqcmlDkqceKSZY0kqs0N/Rdg3isJDWtZP9atnxstPWwfsxZVtjf41wizxFVkmUpV4zxFL39lcR7MA==",
+        "dependencies": {
+          "Microsoft.Bcl.HashCode": "1.1.1",
+          "System.Buffers": "4.5.1",
+          "System.Memory": "4.5.5",
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0",
           "System.ValueTuple": "4.5.0"
         }
       },
@@ -151,12 +149,18 @@
         "resolved": "4.6.1",
         "contentHash": "+RJT4qaekpZ7DDLhf+LTjq+E48jieKiY9ulJ+BoxKmZblIJfIJT8Ufcaa/clQqnYvWs8jugfGSMu8ylS0caG0w=="
       },
+      "dsinternals.adsi": {
+        "type": "Project",
+        "dependencies": {
+          "DSInternals.Common": "[6.1.0, )"
+        }
+      },
       "dsinternals.common": {
         "type": "Project",
         "dependencies": {
-          "PeterO.Cbor": "[4.5.5, )",
           "System.Buffers": "[4.6.1, )",
           "System.Formats.Asn1": "[9.0.8, )",
+          "System.Formats.Cbor": "[9.0.8, )",
           "System.Memory": "[4.6.3, )",
           "System.Text.Json": "[9.0.8, )",
           "System.ValueTuple": "[4.6.1, )"
@@ -235,30 +239,22 @@
         "resolved": "8.0.0",
         "contentHash": "dk9JPxTCIevS75HyEQ0E4OVAFhB2N+V9ShCXf8Q6FkUQZDkgLI12y679Nym1YqsiSysuQskT7Z+6nUf3yab6Vw=="
       },
-      "PeterO.Cbor": {
+      "System.Formats.Cbor": {
         "type": "Transitive",
-        "resolved": "4.5.5",
-        "contentHash": "9fMcLg2SUm9ri1j3gVPYxk6+Ev4l4wu93bYwFG1tvntg1Qy4m0rFDdxStG88XR/W4DggOtBXfPVkC3bLF10nqw==",
+        "resolved": "9.0.8",
+        "contentHash": "DelHsgpxWFqcmlDkqceKSZY0kqs0N/Rdg3isJDWtZP9atnxstPWwfsxZVtjf41wizxFVkmUpV4zxFL39lcR7MA=="
+      },
+      "dsinternals.adsi": {
+        "type": "Project",
         "dependencies": {
-          "PeterO.Numbers": "1.8.2",
-          "PeterO.URIUtility": "1.0.0"
+          "DSInternals.Common": "[6.1.0, )",
+          "System.DirectoryServices": "[9.0.8, )"
         }
-      },
-      "PeterO.Numbers": {
-        "type": "Transitive",
-        "resolved": "1.8.2",
-        "contentHash": "d+A5KLoWbwOTpvubPaGXLgCzANE00jXmsT+yneHwLe2OlobBBFLaIHyoDwmekuHM17z9hU++RF6mL+zZ2x69nA=="
-      },
-      "PeterO.URIUtility": {
-        "type": "Transitive",
-        "resolved": "1.0.0",
-        "contentHash": "fpRTBsYACMp7NvTECauYRomubWTC3vUNw4hMXdIedP8ctBGK6tea9HOJwE+qVzis6MZYkL3LIs8qeY3rc6Jdlw=="
       },
       "dsinternals.common": {
         "type": "Project",
         "dependencies": {
-          "PeterO.Cbor": "[4.5.5, )",
-          "System.DirectoryServices": "[9.0.8, )"
+          "System.Formats.Cbor": "[9.0.8, )"
         }
       },
       "dsinternals.datastore": {

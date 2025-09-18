@@ -179,6 +179,7 @@ FileList = @(
     'en-US\about_DSInternals.help.txt',
     'en-US\DSInternals.PowerShell.dll-Help.xml',
     'net48\DSInternals.Common.dll',
+    'net48\DSInternals.ADSI.dll',
     'net48\DSInternals.DataStore.dll',
     'net48\DSInternals.Replication.dll',
     'net48\DSInternals.Replication.Model.dll',
@@ -188,9 +189,7 @@ FileList = @(
     'net48\x86\DSInternals.Replication.Interop.dll',
     'net48\Esent.Interop.dll',
     'net48\Esent.Isam.dll',
-    'net48\CBOR.dll',
-    'net48\Numbers.dll',
-    'net48\URIUtility.dll',
+    'net48\System.Formats.Cbor.dll',
     'net48\System.Formats.Asn1.dll',
     'net48\System.Buffers.dll',
     'net48\System.Memory.dll',
@@ -201,19 +200,19 @@ FileList = @(
     'net48\System.IO.Pipelines.dll',
     'net48\System.Threading.Tasks.Extensions.dll',
     'net48\Microsoft.Bcl.AsyncInterfaces.dll',
+    'net48\Microsoft.Bcl.HashCode.dll',
     'net8.0-windows\DSInternals.DataStore.dll',
     'net8.0-windows\DSInternals.Replication.dll',
     'net8.0-windows\DSInternals.Replication.Model.dll',
     'net8.0-windows\DSInternals.Common.dll',
+    'net8.0-windows\DSInternals.ADSI.dll',
     'net8.0-windows\DSInternals.SAM.dll',
     'net8.0-windows\amd64\DSInternals.Replication.Interop.dll',
     'net8.0-windows\arm64\DSInternals.Replication.Interop.dll',
     'net8.0-windows\x86\DSInternals.Replication.Interop.dll',
     'net8.0-windows\Esent.Interop.dll',
     'net8.0-windows\Esent.Isam.dll',
-    'net8.0-windows\CBOR.dll',
-    'net8.0-windows\Numbers.dll',
-    'net8.0-windows\URIUtility.dll'
+    'net8.0-windows\System.Formats.Cbor.dll'
 )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.

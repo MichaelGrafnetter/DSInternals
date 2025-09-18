@@ -2,6 +2,7 @@
   "recommendations": [
     "ms-dotnettools.csharp",
     "ms-vscode.PowerShell",
+    "ms-vscode.cpptools",
     "GitHub.vscode-pull-request-github",
     "GitHub.vscode-github-actions",
     "EditorConfig.EditorConfig",

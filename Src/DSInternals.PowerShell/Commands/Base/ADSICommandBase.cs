@@ -1,6 +1,6 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common.ADSI;
+    using DSInternals.ADSI;
     using System;
     using System.Management.Automation;
     using System.Net;

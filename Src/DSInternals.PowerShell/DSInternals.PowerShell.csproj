@@ -53,12 +53,13 @@
     <PackageReference Include="PowerShellStandard.Library" Version="5.1.1" IncludeAssets="compile" />
 
     <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj" />
+    <ProjectReference Include="..\DSInternals.ADSI\DSInternals.ADSI.csproj" />
     <ProjectReference Include="..\DSInternals.Datastore\DSInternals.Datastore.csproj" />
     <ProjectReference Include="..\DSInternals.Replication.Model\DSInternals.Replication.Model.csproj" />
     <ProjectReference Include="..\DSInternals.Replication\DSInternals.Replication.csproj" />
     <ProjectReference Include="..\DSInternals.SAM\DSInternals.SAM.csproj" />
 
-    <!-- The following dependency from DSInternals.Common is already bundled with PowerShell Core -->
+    <!-- The following dependency from DSInternals.ADSI is already bundled with PowerShell Core -->
     <PackageReference Include="System.DirectoryServices" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" IncludeAssets="compile" />
 
     <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Desktop on Windows Server 2025, but are absent on Windows Server 2008 R2: -->

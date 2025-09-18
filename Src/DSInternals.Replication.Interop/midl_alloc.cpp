@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "midl_alloc.h"
+#pragma unmanaged
 
 /// <summary>
 /// The midl_user_allocate function is a function that client and server applications provide to allocate memory.

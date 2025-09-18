@@ -59,7 +59,7 @@
         /// <summary>
         /// COSE Key Common Parameters https://www.iana.org/assignments/cose/cose.xhtml#key-common-parameters
         /// </summary>
-        public enum KeyCommonParameter
+        public enum KeyCommonParameter : uint
         {
             /// <summary> 
             /// This value is reserved
@@ -90,18 +90,18 @@
         /// <summary>
         /// COSE Key Type Parameters https://www.iana.org/assignments/cose/cose.xhtml#key-type-parameters
         /// </summary>
-        public enum KeyTypeParameter
+        public enum KeyTypeParameter : int
         {
             /// <summary> 
             /// EC identifier
             /// </summary>
             Crv = -1,
             /// <summary> 
-            /// Key Value	
+            /// Key Value
             /// </summary>
             K = -1,
             /// <summary> 
-            /// x-coordinate	
+            /// x-coordinate
             /// </summary>
             X = -2,
             /// <summary> 
@@ -121,9 +121,9 @@
         /// <summary>
         /// COSE Key Types https://www.iana.org/assignments/cose/cose.xhtml#key-type
         /// </summary>
-        public enum KeyType
+        public enum KeyType : uint
         {
-            /// <summary> 
+            /// <summary>
             /// This value is reserved
             /// </summary>
             Reserved = 0,
@@ -131,7 +131,7 @@
             /// Octet Key Pair
             /// </summary>
             OKP = 1,
-            /// <summary> 
+            /// <summary>
             /// Elliptic Curve Keys w/ x- and y-coordinate pair
             /// </summary>
             EC2 = 2,
@@ -148,7 +148,7 @@
         /// <summary>
         /// COSE Elliptic Curves https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
         /// </summary>
-        public enum EllipticCurve
+        public enum EllipticCurve : uint
         {
             /// <summary> 
             /// This value is reserved

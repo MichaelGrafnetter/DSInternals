@@ -134,6 +134,7 @@ jobs:
       run: >
         sign code azure-key-vault
         "DSInternals.Common/release_*/DSInternals.Common.dll"
+        "DSInternals.ADSI/release_*/DSInternals.ADSI.dll"
         "DSInternals.DataStore/release_*/DSInternals.DataStore.dll"
         "DSInternals.Replication/release_*/DSInternals.Replication.dll"
         "DSInternals.Replication.Model/release_*/DSInternals.Replication.Model.dll"
@@ -162,6 +163,8 @@ jobs:
       run: |
         copy /Y "DSInternals.Common\release_net48\DSInternals.Common.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
         copy /Y "DSInternals.Common\release_net8.0-windows\DSInternals.Common.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
+        copy /Y "DSInternals.ADSI\release_net48\DSInternals.ADSI.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
+        copy /Y "DSInternals.ADSI\release_net8.0-windows\DSInternals.ADSI.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
         copy /Y "DSInternals.DataStore\release_net48\DSInternals.DataStore.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"
         copy /Y "DSInternals.DataStore\release_net8.0-windows\DSInternals.DataStore.dll" "DSInternals.PowerShell\Release\DSInternals\net8.0-windows\"
         copy /Y "DSInternals.Replication\release_net48\DSInternals.Replication.dll" "DSInternals.PowerShell\Release\DSInternals\net48\"

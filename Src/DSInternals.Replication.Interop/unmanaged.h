@@ -5,4 +5,4 @@ Otherwise, we get "The Array Bounds Are Invalid" error from at least one RPC cal
 Strangely enough, this hack is not needed on the x64 platform.
 */
 #pragma once
-#pragma managed(push, off)
+#pragma unmanaged

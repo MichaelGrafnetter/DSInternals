@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Buffers.Binary;
 
 namespace DSInternals.Common.Data.Fido
 {
@@ -11,6 +9,8 @@ namespace DSInternals.Common.Data.Fido
     /// </summary>
     public class AttestedCredentialData
     {
+        private const int MinStructSize = 16 + sizeof(ushort) + 1;
+
         /// <summary>
         /// The AAGUID of the authenticator. Can be used to identify the make and model of the authenticator.
         /// <see cref="https://www.w3.org/TR/webauthn/#aaguid"/>
@@ -25,7 +25,7 @@ namespace DSInternals.Common.Data.Fido
         /// A probabilistically-unique byte sequence identifying a public key credential source and its authentication assertions.
         /// <see cref="https://www.w3.org/TR/webauthn/#credential-id"/>
         /// </summary>
-        public byte[] CredentialID
+        public ReadOnlyMemory<byte> CredentialID
         {
             get;
             private set;
@@ -42,46 +42,58 @@ namespace DSInternals.Common.Data.Fido
             private set;
         }
 
+        public AttestedCredentialData(Guid aaGuid, ReadOnlyMemory<byte> credentialId, CredentialPublicKey publicKey)
+        {
+            this.AaGuid = aaGuid;
+            this.CredentialID = credentialId;
+            this.CredentialPublicKey = publicKey;
+        }
+
         /// <summary>
         /// Decodes attested credential data.
         /// </summary>
-        public AttestedCredentialData(BinaryReader reader)
+        public static (AttestedCredentialData data, int bytesRead) Parse(ReadOnlyMemory<byte> attestedCredentialData)
         {
-            // First 16 bytes is AAGUID
-            byte[] aaguidBytes = reader.ReadBytes(Marshal.SizeOf(typeof(Guid)));
+            if (attestedCredentialData.Length < MinStructSize)
+            {
+                throw new ArgumentException("The attested credential data structure is too short.", nameof(attestedCredentialData));
+            }
 
-            // GUID from authenticator is big endian. If we are on a little endian system, convert.
-            this.AaGuid = aaguidBytes.ToGuidBigEndian();
+            int currentPosition = 0;
+            ReadOnlySpan<byte> attestedCredentialDataSpan = attestedCredentialData.Span;
 
-            // Byte length of Credential ID, 16-bit unsigned big-endian integer. 
-            byte[] credentialIDLenBytes = reader.ReadBytes(sizeof(UInt16));
+            // aaguid (16B big endian)
+            int guidA = BinaryPrimitives.ReadInt32BigEndian(attestedCredentialDataSpan);
+            currentPosition += sizeof(int);
 
-            // Credential ID length from authenticator is big endian.  If we are on little endian system, convert.
-            ushort credentialIDLen = credentialIDLenBytes.ToUInt16BigEndian();
+            short guidB = BinaryPrimitives.ReadInt16BigEndian(attestedCredentialDataSpan.Slice(currentPosition));
+            currentPosition += sizeof(short);
 
-            // Read the credential ID bytes
-            this.CredentialID = reader.ReadBytes(credentialIDLen);
+            short guidC = BinaryPrimitives.ReadInt16BigEndian(attestedCredentialDataSpan.Slice(currentPosition)); ;
+            currentPosition += sizeof(short);
 
-            // "Determining attested credential data's length, which is variable, involves determining 
-            // credentialPublicKey's beginning location given the preceding credentialId's length, and 
-            // then determining the credentialPublicKey's length"
+            byte[] guidD = attestedCredentialDataSpan.Slice(currentPosition, sizeof(long)).ToArray();
+            currentPosition += sizeof(long);
 
-            // "CBORObject.Read: This method will read from the stream until the end 
-            // of the CBOR object is reached or an error occurs, whichever happens first."
-            
-            // Read the CBOR object from the stream
-            var cpk = PeterO.Cbor.CBORObject.Read(reader.BaseStream);
+            Guid aaGuid = new Guid(guidA, guidB, guidC, guidD);
 
-            // Encode the CBOR object back to a byte array.
-            this.CredentialPublicKey = new CredentialPublicKey(cpk);
+            // credentialIdLength (2B)
+            ushort credentialIdLength = BinaryPrimitives.ReadUInt16BigEndian(attestedCredentialDataSpan.Slice(currentPosition));
+            currentPosition += sizeof(ushort);
+
+            // credentialId (credentialIdLength B)
+            ReadOnlyMemory<byte> credentialId = attestedCredentialData.Slice(currentPosition, credentialIdLength);
+            currentPosition += credentialIdLength;
+
+            // credentialPublicKey (variable)
+            ReadOnlyMemory<byte> remainingData = attestedCredentialData.Slice(currentPosition);
+            (var credentialPublicKey, int bytesRead) = CredentialPublicKey.Parse(remainingData);
+            currentPosition += bytesRead;
+
+            var result = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
+            return (result, currentPosition);
         }
 
-        public override string ToString()
-        {
-            return string.Format("AAGUID: {0}, CredentialID: {1}, CredentialPublicKey: {2}",
-                AaGuid.ToString(),
-                CredentialID.ToHex(true),
-                CredentialPublicKey.ToString());
-        }
+        public override string ToString() => $"AAGUID: {AaGuid}, CredentialID: {CredentialID.Span.ToHex(caps: true)}";
     }
 }
