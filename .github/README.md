@@ -134,6 +134,7 @@ The online version of [PowerShell Get-Help documentation](../Documentation/Power
 
 I have also published a series of articles about the DSInternals module on [my blog](https://www.dsinternals.com/en/). Here are a few of them:
 
+- [Juicing ntds.dit Files to the Last Drop](https://specterops.io/blog/2025/08/14/juicing-ntds-dit-files-last-drop-dsinternals-powershell-active-directory-offline-attacks/)
 - [New Offline Capabilities in DSInternals 4.11](https://www.dsinternals.com/en/dsinternals-v4.11/)
 - [Cross-Forest Duplicate Password Discovery](https://www.dsinternals.com/en/cross-forest-duplicate-password-discovery/)
 - [CQLabs – Extracting Roamed Private Keys from Active Directory](https://cqureacademy.com/blog/extracting-roamed-private-keys)

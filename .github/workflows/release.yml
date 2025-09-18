@@ -50,6 +50,7 @@ jobs:
     timeout-minutes: 10
     outputs:
       nuget-artifact-id: ${{ steps.upload-nuget.outputs.artifact-id }}
+      chocolatey-artifact-id: ${{ steps.upload-chocolatey.outputs.artifact-id }}
       powershell-artifact-id: ${{ steps.upload-powershell.outputs.artifact-id }}
       powershell-module-version: ${{ steps.get-module-info.outputs.version }}
       powershell-module-release-notes: ${{ steps.get-module-info.outputs.release-notes }}
@@ -79,12 +80,12 @@ jobs:
       uses: microsoft/setup-msbuild@v2
       with:
         msbuild-architecture: x64 # default is x86
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        # .NET SDK 9 is used for build. Platform-specific IJW hosts from .NET SDK 8 are used when building C++/CLI projects. 
-        dotnet-version: | 
+        # .NET SDK 9 is used for build. Platform-specific IJW hosts from .NET SDK 8 are used when building C++/CLI projects.
+        dotnet-version: |
           8.0.x
           9.0.x
         cache: true
@@ -127,7 +128,7 @@ jobs:
         client-id: ${{ secrets.SIGNING_CLIENT_ID }}
         tenant-id: ${{ secrets.SIGNING_TENANT_ID }}
         allow-no-subscriptions: true
-    
+
     - name: Sign Binaries and Scripts
       shell: cmd
       if: ${{ inputs.certificate_sign }}
@@ -184,12 +185,12 @@ jobs:
       shell: powershell
       working-directory: Build/bin/DSInternals.PowerShell/Release
       run: New-FileCatalog -CatalogVersion 2 -Path DSInternals -CatalogFilePath .\DSInternals\DSInternals.cat
-    
+
     - name: Create Managed NuGet Packages
       working-directory: Src
       run: |
         dotnet pack DSInternals.DotNetSdk.slnf --configuration Release --no-build
-    
+
     - name: Create Mixed NuGet Package
       working-directory: Src
       run: |
@@ -218,12 +219,32 @@ jobs:
         [hashtable] $manifest = Import-PowerShellDataFile -Path ./Src/DSInternals.PowerShell/DSInternals.psd1
         [string] $version = $manifest.ModuleVersion
         [string] $releaseNotes = $manifest.PrivateData.PSData.ReleaseNotes
-        
+
         echo "version=$version" >> $env:GITHUB_OUTPUT
 
         echo 'release-notes<<EOF' >> $env:GITHUB_OUTPUT
         echo $releaseNotes >> $env:GITHUB_OUTPUT
         echo 'EOF' >> $env:GITHUB_OUTPUT
+
+    - name: Create Chocolatey Package
+      shell: pwsh
+      run: |
+        choco pack Src/DSInternals.PowerShell/Chocolatey/dsinternals-psmodule.nuspec --version=${{ steps.get-module-info.outputs.version }} --output-directory=Build/package/Chocolatey --execution-timeout=60 --confirm configuration=Release
+
+    - name: Sign Chocolatey Package
+      shell: cmd
+      if: ${{ inputs.certificate_sign }}
+      run: >
+        sign code azure-key-vault
+        *.nupkg
+        --base-directory "${{ github.workspace }}/Build/package/Chocolatey"
+        --azure-key-vault-url "${{ secrets.SIGNING_KEY_VAULT_URL }}"
+        --azure-key-vault-certificate "${{ secrets.SIGNING_KEY_VAULT_CERTIFICATE }}"
+        --azure-credential-type azure-cli
+        --file-digest SHA256
+        --timestamp-digest SHA256
+        --timestamp-url "http://timestamp.acs.microsoft.com"
+        --verbosity Information
 
     - name: Upload PowerShell Module as Artifact
       uses: actions/upload-artifact@v4
@@ -231,13 +252,20 @@ jobs:
       with:
         name: DSInternals_v${{ steps.get-module-info.outputs.version }}
         path: Build/bin/DSInternals.PowerShell/Release
-        
+
     - name: Upload NuGet Packages as Artifacts
       uses: actions/upload-artifact@v4
       id: upload-nuget
       with:
         name: NuGet_v${{ steps.get-module-info.outputs.version }}
         path: Build/package/release/*nupkg
+
+    - name: Upload Chocolatey Package as Artifact
+      uses: actions/upload-artifact@v4
+      id: upload-chocolatey
+      with:
+        name: Chocolatey_v${{ steps.get-module-info.outputs.version }}
+        path: Build/package/Chocolatey/*.nupkg
 
     - name: Run PowerShell Desktop Tests
       working-directory: Scripts
@@ -301,7 +329,7 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
-    
+
     - name: Download PowerShell Module
       uses: actions/download-artifact@v5
       with:
@@ -321,7 +349,7 @@ jobs:
       run: |
         @'
         ### Notable Changes
-        
+
         ${{ needs.build.outputs.powershell-module-release-notes }}
 
         See the [Changelog](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/CHANGELOG.md) for a more detailed list of new features.
@@ -330,11 +358,28 @@ jobs:
 
         - The module is available in the [PowerShell Gallery](https://www.powershellgallery.com/packages/DSInternals).
         - As an alternative, the attached `DSInternals_v${{ needs.build.outputs.powershell-module-version }}.zip` file can be used for [offline module installation](https://github.com/MichaelGrafnetter/DSInternals#offline-module-distribution).
-        
+        - The module is also available as a [Chocolatey package](https://community.chocolatey.org/packages/dsinternals-psmodule).
+
         ### NuGet Packages
 
         Official binary packages are available in the [NuGet Gallery](https://www.nuget.org/profiles/DSInternals).
         '@ > release-notes.md
         gh release create v${{ needs.build.outputs.powershell-module-version }} ./*.zip --draft --latest --title "DSInternals PowerShell Module ${{ needs.build.outputs.powershell-module-version }}" --notes-file release-notes.md
 
-  # TODO: chocolatey
+  chocolatey:
+    name: 'Publish to Chocolatey Gallery'
+    if: ${{ inputs.publish_chocolatey }}
+    runs-on: windows-2025
+    needs: build
+    steps:
+      - name: Download Chocolatey Package
+        uses: actions/download-artifact@v5
+        with:
+          artifact-ids: ${{ needs.build.outputs.chocolatey-artifact-id }}
+
+      - name: Publish Chocolatey Package
+        shell: pwsh
+        env:
+          CHOCOLATEY_APIKEY: ${{ secrets.CHOCOLATEY_APIKEY }}
+        run: |
+          choco push *.nupkg --source='https://push.chocolatey.org/' --api-key=$env:CHOCOLATEY_APIKEY

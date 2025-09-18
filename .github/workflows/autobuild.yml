@@ -31,8 +31,8 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        # .NET SDK 9 is used for build. Platform-specific IJW hosts from .NET SDK 8 are used when building C++/CLI projects. 
-        dotnet-version: | 
+        # .NET SDK 9 is used for build. Platform-specific IJW hosts from .NET SDK 8 are used when building C++/CLI projects.
+        dotnet-version: |
           8.0.x
           9.0.x
         cache: true
@@ -58,7 +58,7 @@ jobs:
       shell: powershell
       working-directory: Build/bin/DSInternals.PowerShell/Debug
       run: New-FileCatalog -CatalogVersion 2 -Path DSInternals -CatalogFilePath .\DSInternals\DSInternals.cat
-    
+
     - name: Create Managed NuGet Packages
       working-directory: Src
       run: |
@@ -113,9 +113,20 @@ jobs:
       with:
         name: DSInternals_v${{ steps.get-module-version.outputs.version }}_debug
         path: Build/bin/DSInternals.PowerShell/Debug
-        
+
     - name: Upload NuGet Packages as Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: NuGet_v${{ steps.get-module-version.outputs.version }}_debug
         path: Build/package/debug/*nupkg
+
+    - name: Create Chocolatey Package
+      shell: pwsh
+      run: |
+        choco pack Src/DSInternals.PowerShell/Chocolatey/dsinternals-psmodule.nuspec --version=${{ steps.get-module-version.outputs.version }} --output-directory=Build/package/Chocolatey --execution-timeout=60 --confirm configuration=Debug
+
+    - name: Upload Chocolatey Package as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Chocolatey_v${{ steps.get-module-version.outputs.version }}_debug
+        path: Build/package/Chocolatey/*.nupkg

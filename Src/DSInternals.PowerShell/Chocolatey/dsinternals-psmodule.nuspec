@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>DSInternals-PSModule</id>
-    <version>6.1.1</version>
+    <version>$version$</version>
     <packageSourceUrl>https://github.com/MichaelGrafnetter/DSInternals/tree/master/Src/DSInternals.PowerShell/Chocolatey</packageSourceUrl>
     <owners>MichaelGrafnetter</owners>
     <title>DSInternals PowerShell Module</title>
@@ -40,17 +40,16 @@ Features exposed through these tools are not supported by Microsoft. Improper us
 * Resolved issues with parsing LAPS passwords and key credentials.
     </releaseNotes>
     <dependencies>
-      <!-- Windows Management Framework 3+. For OS prior to Windows 8 and Windows Server 2012. -->
-      <dependency id="powershell" version="3.0.20121027" />
+      <!-- Windows Management Framework 5.1+. For OS prior to Windows 10 and Windows Server 2016. -->
+      <dependency id="powershell" version="5.1.14409.1005" />
       <!-- Universal C Runtime. For RTM OS prior to Windows 10 and Windows Server 2016. -->
       <dependency id="kb2999226" version="1.0.20181019" />
-      <!-- .NET Framework 4.7.2+. For RTM OS prior to Windows 10 1703 and Windows Server 1709. -->
-      <dependency id="dotnetfx" version="4.7.2.0"  />
+      <!-- .NET Framework 4.8+. For RTM OS prior to Windows 10 1903 and Windows Server 1903. -->
+      <dependency id="dotnetfx" version="4.8.0.20220524"  />
     </dependencies>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
-    <file src="..\..\..\Build\bin\DSInternals.PowerShell\Release\DSInternals\**" target="DSInternals" />
-    <file src="..\..\..\Build\bin\DSInternals.PowerShell\Release\DSInternals.cat" target="tools\DSInternals.cat" />
+    <file src="..\..\..\Build\bin\DSInternals.PowerShell\$configuration$\DSInternals\**" target="DSInternals" />
   </files>
 </package>

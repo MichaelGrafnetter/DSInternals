@@ -4,7 +4,7 @@
 #>
 #Requires -Version 5.1
 #Requires -Modules @{ ModuleName = 'Pester'; ModuleVersion = '5.0' }
- 
+
 Describe 'Chocolatey Package' {
     BeforeAll {
         # Get the manifest paths
@@ -18,11 +18,6 @@ Describe 'Chocolatey Package' {
 
     It 'does not exceed the maximum Description length' {
         $chocolateySpec.package.metadata.description.Length | Should -BeLessOrEqual 4000 -Because 'package upload would fail otherwise.'
-    }
-
-    # Now compare the shared values
-    It 'has the same version as the module' {
-        $chocolateySpec.package.metadata.version | Should -Be $moduleManifest.ModuleVersion
     }
 
     It 'has the same release notes as the module' {
