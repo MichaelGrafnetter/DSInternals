@@ -1,137 +1,130 @@
-﻿namespace DSInternals.SAM.Test
+﻿namespace DSInternals.SAM.Test;
+
+[TestClass]
+public class LSAPolicyTester
 {
-    using DSInternals.SAM;
-    using DSInternals.SAM.Interop;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
-    using System.IO;
-
-    [TestClass]
-    public class LSAPolicyTester
+    [TestMethod]
+    public void LsaPolicy_QueryDnsDomainInformation()
     {
-        [TestMethod]
-        public void LsaPolicy_QueryDnsDomainInformation()
+        try
         {
-            try
+            using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation))
             {
-                using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation))
-                {
-                    var result = policy.QueryDnsDomainInformation();
-                }
-            }
-            catch(UnauthorizedAccessException e)
-            {
-                // This is expected.
-                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+                var result = policy.QueryDnsDomainInformation();
             }
         }
-
-        [TestMethod]
-        public void LsaPolicy_QueryAccountDomainInformation()
+        catch(UnauthorizedAccessException e)
         {
-            try
+            // This is expected.
+            throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+        }
+    }
+
+    [TestMethod]
+    public void LsaPolicy_QueryAccountDomainInformation()
+    {
+        try
+        {
+            using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation))
             {
-                using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation))
-                {
-                    var result = policy.QueryAccountDomainInformation();
-                }
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                // This is expected.
-                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+                var result = policy.QueryAccountDomainInformation();
             }
         }
-
-        [TestMethod]
-        public void LsaPolicy_QueryMachineAccountInformation()
+        catch (UnauthorizedAccessException e)
         {
-            try
+            // This is expected.
+            throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+        }
+    }
+
+    [TestMethod]
+    public void LsaPolicy_QueryMachineAccountInformation()
+    {
+        try
+        {
+            using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation))
             {
-                using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation))
-                {
-                    var result = policy.QueryMachineAccountInformation();
-                }
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                // This is expected.
-                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+                var result = policy.QueryMachineAccountInformation();
             }
         }
-
-        [TestMethod]
-        public void LsaPolicy_QueryLocalAccountDomainInformation()
+        catch (UnauthorizedAccessException e)
         {
-            try
+            // This is expected.
+            throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+        }
+    }
+
+    [TestMethod]
+    public void LsaPolicy_QueryLocalAccountDomainInformation()
+    {
+        try
+        {
+            using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation))
             {
-                using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation))
-                {
-                    var result = policy.QueryLocalAccountDomainInformation();
-                }
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                // This is expected.
-                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+                var result = policy.QueryLocalAccountDomainInformation();
             }
         }
-
-        [TestMethod]
-        public void LsaPolicy_SetDnsDomainInformation()
+        catch (UnauthorizedAccessException e)
         {
-            try
+            // This is expected.
+            throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+        }
+    }
+
+    [TestMethod]
+    public void LsaPolicy_SetDnsDomainInformation()
+    {
+        try
+        {
+            using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation | LsaPolicyAccessMask.TrustAdmin))
             {
-                using (var policy = new LsaPolicy(LsaPolicyAccessMask.ViewLocalInformation | LsaPolicyAccessMask.TrustAdmin))
-                {
-                    // Retrieve domain info
-                    var info = policy.QueryDnsDomainInformation();
-                    
-                    // Now try to set it to the same value.
-                    // BE CAREFUL WHEN TESTING THIS!!!
-                    policy.SetDnsDomainInformation(info);
-                }
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                // This is expected.
-                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+                // Retrieve domain info
+                var info = policy.QueryDnsDomainInformation();
+                
+                // Now try to set it to the same value.
+                // BE CAREFUL WHEN TESTING THIS!!!
+                policy.SetDnsDomainInformation(info);
             }
         }
-
-        [TestMethod]
-        public void LsaPolicy_LsaRetrievePrivateData_Existing()
+        catch (UnauthorizedAccessException e)
         {
-            try
+            // This is expected.
+            throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+        }
+    }
+
+    [TestMethod]
+    public void LsaPolicy_LsaRetrievePrivateData_Existing()
+    {
+        try
+        {
+            using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
             {
-                using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
-                {
-                    policy.RetrievePrivateData("DPAPI_SYSTEM");
-                }
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                // This is expected.
-                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+                policy.RetrievePrivateData("DPAPI_SYSTEM");
             }
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(FileNotFoundException))]
-        public void LsaPolicy_LsaRetrievePrivateData_NonExisting()
+        catch (UnauthorizedAccessException e)
         {
-            try
+            // This is expected.
+            throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+        }
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(FileNotFoundException))]
+    public void LsaPolicy_LsaRetrievePrivateData_NonExisting()
+    {
+        try
+        {
+            using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
             {
-                using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
-                {
-                    policy.RetrievePrivateData("bflmpsvz");
-                }
+                policy.RetrievePrivateData("bflmpsvz");
             }
-            catch (UnauthorizedAccessException e)
-            {
-                // This is expected.
-                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
-            }
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            // This is expected.
+            throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
         }
     }
 }

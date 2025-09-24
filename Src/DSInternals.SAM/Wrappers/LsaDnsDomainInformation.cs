@@ -1,21 +1,29 @@
-﻿namespace DSInternals.SAM
-{
-    using DSInternals.SAM.Interop;
-    using System;
-    using System.Security.Principal;
+﻿using System.Security.Principal;
+using DSInternals.SAM.Interop;
 
-    public class LsaDnsDomainInformation
+namespace DSInternals.SAM
+{
+    /// <summary>
+    /// Represents information about the primary domain of a LSA server.
+    /// </summary>
+    public struct LsaDnsDomainInformation
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LsaDnsDomainInformation"/> struct.
+        /// </summary>
         public LsaDnsDomainInformation() { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LsaDnsDomainInformation"/> struct from a native structure.
+        /// </summary>
+        /// <param name="nativeInfo">The native structure containing domain information.</param>
         internal LsaDnsDomainInformation(LsaDnsDomainInformationNative nativeInfo)
         {
-            
             this.Name = nativeInfo.Name.Buffer;
             this.DnsDomainName = nativeInfo.DnsDomainName.Buffer;
             this.DnsForestName = nativeInfo.DnsForestName.Buffer;
             this.Guid = nativeInfo.DomainGuid != System.Guid.Empty ? nativeInfo.DomainGuid : (Guid?)null;
-            this.Sid = nativeInfo.Sid != IntPtr.Zero ? new SecurityIdentifier(nativeInfo.Sid) : null;
+            this.Sid = nativeInfo.GetDomainSid();
         }
 
         /// <summary>

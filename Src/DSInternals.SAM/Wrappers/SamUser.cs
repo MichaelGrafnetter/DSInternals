@@ -1,31 +1,28 @@
 ﻿using DSInternals.Common;
 using DSInternals.Common.Interop;
 using DSInternals.SAM.Interop;
-using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
 
-namespace DSInternals.SAM
+namespace DSInternals.SAM;
+
+/// <summary>
+/// Represents a user account in the SAM database.
+/// </summary>
+public sealed class SamUser : SamObject
 {
-    public class SamUser : SamObject
+    internal SamUser(SafeSamHandle handle) : base(handle)
     {
-        internal SamUser(SafeSamHandle handle) : base(handle)
-        {
-        }
+    }
 
-        public void SetPasswordHash(string ntHash, string lmHash = null)
-        {
-            byte[] binaryNTHash = ntHash.HexToBinary();
-            byte[] binaryLMHash = lmHash.HexToBinary();
-            this.SetPasswordHash(binaryNTHash, binaryLMHash);
-        }
-
-        public void SetPasswordHash(byte[] ntHash, byte[] lmHash = null)
-        {
-            Validator.AssertNotNull(ntHash, "ntHash");
-            SamUserInternal1Information passwordInfo = new SamUserInternal1Information(ntHash);
-            NtStatus result = NativeMethods.SamSetInformationUser(this.Handle, ref passwordInfo);
-            Validator.AssertSuccess(result);
-        }
+    /// <summary>
+    /// Sets the password hash for this user.
+    /// </summary>
+    /// <param name="ntHash">The NT hash.</param>
+    /// <param name="lmHash">Optional LM hash.</param>
+    public void SetPasswordHash(byte[] ntHash, byte[] lmHash = null)
+    {
+        // Validation is performed in SamUserInternal1Information
+        SamUserInternal1Information passwordInfo = new(ntHash, lmHash);
+        NtStatus result = NativeMethods.SamSetInformationUser(this.Handle, ref passwordInfo);
+        Validator.AssertSuccess(result);
     }
 }
