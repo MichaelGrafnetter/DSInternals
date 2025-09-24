@@ -76,22 +76,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Protocol
-Specifies the protocol sequence that is used for RPC communication.
-
-```yaml
-Type: RpcProtocol
-Parameter Sets: (All)
-Aliases: Proto, RPCProtocol, NCACN
-Accepted values: TCP, SMB, HTTP
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -RootKeyId
 Specifies a single KDS Root Key to be fetched.
 

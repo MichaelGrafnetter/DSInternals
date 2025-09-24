@@ -1,7 +1,5 @@
 ﻿using DSInternals.Common;
 using DSInternals.Common.Schema;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DSInternals.Replication.Model
 {
@@ -22,7 +20,7 @@ namespace DSInternals.Replication.Model
 
             ReplicaAttribute preexistingAttribute;
             bool attributeAlreadyPresent = this.TryGetValue(attribute.Id, out preexistingAttribute);
-            
+
             if(attributeAlreadyPresent)
             {
                 // TODO: Under what circumstances does this sometimes occur with linked attributes?

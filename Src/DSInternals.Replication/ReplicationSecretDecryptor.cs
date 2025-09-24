@@ -1,32 +1,42 @@
 ﻿using DSInternals.Common;
 using DSInternals.Common.Cryptography;
-using System;
 
 namespace DSInternals.Replication
 {
+    /// <summary>
+    /// Provides functionality to decrypt secrets (passwords) obtained via replication.
+    /// </summary>
     public class ReplicationSecretDecryptor : DirectorySecretDecryptor
     {
+        /// <summary>
+        /// The offset of the salt in the encrypted blob.
+        /// </summary>
         private const int SaltOffset = 0;
+
+        /// <summary>
+        /// The minimum size of the encrypted blob.
+        /// </summary>
         private const int EncryptedBlobMinSize = SaltSize + 1;
 
+        /// <summary>
+        /// Decryption key.
+        /// </summary>
         private byte[] key;
 
-        public override byte[] CurrentKey
-        {
-            get
-            {
-                return this.key;
-            }
-        }
+        /// <summary>
+        /// Gets the current decryption key.
+        /// </summary>
+        public override byte[] CurrentKey => this.key;
 
-        public override SecretEncryptionType EncryptionType
-        {
-            get
-            {
-                return SecretEncryptionType.ReplicationRC4WithSalt;
-            }
-        }
+        /// <summary>
+        /// Gets the encryption algorithm used to protect the secrets.
+        /// </summary>
+        public override SecretEncryptionType EncryptionType => SecretEncryptionType.ReplicationRC4WithSalt;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReplicationSecretDecryptor"/> class.
+        /// </summary>
+        /// <param name="key">The decryption key.</param>
         public ReplicationSecretDecryptor(byte[] key)
         {
             Validator.AssertNotNull(key, "key");
@@ -35,6 +45,11 @@ namespace DSInternals.Replication
             this.key = key;
         }
 
+        /// <summary>
+        /// Decrypts the provided secret blob.
+        /// </summary>
+        /// <param name="blob">The secret blob to decrypt.</param>
+        /// <returns>The decrypted secret.</returns>
         public override byte[] DecryptSecret(byte[] blob)
         {
             // Blob structure: Salt (16B), Encrypted secret (rest)
@@ -56,6 +71,10 @@ namespace DSInternals.Replication
             return decryptedSecret;
         }
 
+        /// <summary>
+        /// Encrypts the provided secret.
+        /// </summary>
+        /// <exception cref="NotImplementedException">This method is not implemented.</exception>
         public override byte[] EncryptSecret(byte[] secret)
         {
             throw new NotImplementedException("We will never act as a replication source so secret encryption is out of scope.");

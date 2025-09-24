@@ -14,7 +14,8 @@ namespace DSInternals
 			using namespace DSInternals::Common::Data;
 			using namespace DSInternals::Common::Schema;
 			using namespace DSInternals::Replication::Model;
-			using namespace System::Security::Principal;
+            using namespace System::Collections::Generic;
+            using namespace System::Security::Principal;
 			using namespace Microsoft::Win32::SafeHandles;
 			using namespace System;
 			using namespace System::Runtime::InteropServices;
@@ -109,7 +110,7 @@ namespace DSInternals
 				static ReplicaAttribute^ ReadAttribute(const REPLVALINF_V3& attribute);
 				static ReplicaAttributeCollection^ ReadAttributes(const ATTRBLOCK& attributes);
 				static ReplicaObject^ ReadObject(const ENTINF& object, BaseSchema^ schema);
-				static ReplicaObjectCollection^ ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount, BaseSchema^ schema);
+				static List<ReplicaObject^>^ ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount, BaseSchema^ schema);
 				static DS_NAME_FORMAT GetAccountNameFormat(NTAccount^ accountName);
 				static void LoadPrefixTable(SCHEMA_PREFIX_TABLE nativePrefixTable, BaseSchema^ schema);
 			};

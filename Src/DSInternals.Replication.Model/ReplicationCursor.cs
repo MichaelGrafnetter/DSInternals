@@ -11,6 +11,11 @@ namespace DSInternals.Replication.Model
     /// </summary>
     public class ReplicationCursor
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReplicationCursor"/> class.
+        /// </summary>
+        /// <param name="invocationId">The unique identifier of the replication invocation.</param>
+        /// <param name="highestUsn">The highest update sequence number (USN) for the replication.</param>
         public ReplicationCursor(Guid invocationId, long highestUsn)
         {
             this.UpToDatenessUsn = highestUsn;
@@ -36,6 +41,9 @@ namespace DSInternals.Replication.Model
             protected set;
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
         public override string ToString()
         {
             return String.Format("{0}: {1}", this.SourceInvocationId, this.UpToDatenessUsn);

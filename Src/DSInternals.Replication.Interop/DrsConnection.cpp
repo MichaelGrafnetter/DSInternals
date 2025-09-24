@@ -600,7 +600,6 @@ namespace DSInternals
 			{
 				if (this->IsInvalid)
 				{
-					// TODO: Extract as resource
 					throw gcnew InvalidOperationException("The RPC connection is currently not active.");
 				}
 			}
@@ -669,7 +668,7 @@ namespace DSInternals
 				return gcnew ReplicaObject(dn, guid, sid, attributes, schema);
 			}
 
-			ReplicaObjectCollection^ DrsConnection::ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount, BaseSchema^ schema)
+            List<ReplicaObject^>^ DrsConnection::ReadObjects(const REPLENTINFLIST* objects, int objectCount, const REPLVALINF_V3* linkedValues, int valueCount, BaseSchema^ schema)
 			{
 				// Read linked values first
 				// TODO: Handle the case when linked attributes of an object are split between several responses.
@@ -686,7 +685,7 @@ namespace DSInternals
 				}
 
 				// Now read the replicated objects
-				auto managedObjects = gcnew ReplicaObjectCollection(objectCount);
+				auto managedObjects = gcnew List<ReplicaObject^>(objectCount);
 				auto currentObject = objects;
 				while (currentObject != nullptr)
 				{

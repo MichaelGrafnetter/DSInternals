@@ -31,31 +31,31 @@ PS C:\> Get-ADReplBackupKey -Server 'lon-dc1.contoso.com'
 <# Sample Output:
 
 FilePath          : ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
-KiwiCommand       : 
+KiwiCommand       :
 Type              : LegacyKey
-DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22 
+DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22
                     Secret,CN=System,DC=contoso,DC=com
 KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
 Data              : {1, 0, 0, 0...}
 
-FilePath          : 
-KiwiCommand       : 
+FilePath          :
+KiwiCommand       :
 Type              : PreferredLegacyKeyPointer
 DistinguishedName : CN=BCKUPKEY_P Secret,CN=System,DC=contoso,DC=com
 KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
 Data              : {250, 203, 22, 177...}
 
 FilePath          : ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
-KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey 
+KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey
                     command: /pvk:"ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk"
 Type              : RSAKey
-DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3 
+DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3
                     Secret,CN=System,DC=contoso,DC=com
 KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
 Data              : {2, 0, 0, 0...}
 
-FilePath          : 
-KiwiCommand       : 
+FilePath          :
+KiwiCommand       :
 Type              : PreferredRSAKeyPointer
 DistinguishedName : CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=contoso,DC=com
 KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
@@ -104,22 +104,6 @@ Specifies the DNS name of the target Active Directory domain.
 Type: String
 Parameter Sets: (All)
 Aliases: FQDN, DomainName, DNSDomainName
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Protocol
-Specifies the protocol sequence that is used for RPC communication.
-
-```yaml
-Type: RpcProtocol
-Parameter Sets: (All)
-Aliases: Proto, RPCProtocol, NCACN
-Accepted values: TCP, SMB, HTTP
 
 Required: False
 Position: Named

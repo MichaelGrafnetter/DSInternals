@@ -30,6 +30,12 @@ namespace DSInternals.Replication
         /// </summary>
         public string? DistinguishedName { get; private set; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DSName"/> class.
+    /// </summary>
+    /// <param name="objectSid">The object's security identifier (SID).</param>
+    /// <param name="objectGuid">The object's globally unique identifier (GUID).</param>
+    /// <param name="distinguishedName">The object's distinguished name (DN).</param>
         public DSName(SecurityIdentifier? objectSid = null, Guid? objectGuid = null, string? distinguishedName = null)
         {
             this.ObjectSid = objectSid;
@@ -37,11 +43,21 @@ namespace DSInternals.Replication
             this.DistinguishedName = distinguishedName;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DSName"/> class.
+        /// </summary>
         private DSName()
         {
             // This constructor is only used by the static parse method.
         }
 
+        /// <summary>
+        /// Parses a binary representation of a DSName structure.
+        /// </summary>
+        /// <param name="buffer">The binary data to parse.</param>
+        /// <returns>A parsed <see cref="DSName"/> instance.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the buffer is too small.</exception>
+        /// <exception cref="ArgumentException">Thrown when the buffer contains invalid data.</exception>
         public static DSName Parse(ReadOnlySpan<byte> buffer)
         {
             if (buffer.Length < DSNameHeaderSize)
@@ -120,6 +136,11 @@ namespace DSInternals.Replication
             return result;
         }
 
+        /// <summary>
+        /// Parses a Unicode string from a byte buffer.
+        /// </summary>
+        /// <param name="buffer">The byte buffer containing the Unicode string.</param>
+        /// <returns>The parsed Unicode string.</returns>
         unsafe private static string ParseUnicodeString(ReadOnlySpan<byte> buffer)
         {
             fixed (byte* pBuffer = buffer)

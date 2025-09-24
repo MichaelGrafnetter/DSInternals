@@ -42,8 +42,8 @@
       },
       "System.Formats.Asn1": {
         "type": "Transitive",
-        "resolved": "9.0.8",
-        "contentHash": "gGL0gt2nAArsF2oOMFzClll6QN2FhtooTxEQ+K26uer4lrhahnYIo/qOn5HUSfjHlM91646L5/7dYIMJ86fHkQ==",
+        "resolved": "9.0.9",
+        "contentHash": "hnQCFWPAvZM45fFEExgbHTgq6GyfyQdHxyI+PvuzqI1G7KvBYcnNEPHbLJ+1jP+Ip69yBvvUOxaibmDInmOw2Q==",
         "dependencies": {
           "System.Buffers": "4.5.1",
           "System.Memory": "4.5.5",
@@ -52,8 +52,8 @@
       },
       "System.Formats.Cbor": {
         "type": "Transitive",
-        "resolved": "9.0.8",
-        "contentHash": "DelHsgpxWFqcmlDkqceKSZY0kqs0N/Rdg3isJDWtZP9atnxstPWwfsxZVtjf41wizxFVkmUpV4zxFL39lcR7MA==",
+        "resolved": "9.0.9",
+        "contentHash": "typxwjuGJyooPZNwInKvEBB/qXwGFoXDH+2gEP0YidaK/qwcrbHl0naeE1O3A2Xn30cCVl79G/v/+ta2eJxh1w==",
         "dependencies": {
           "Microsoft.Bcl.HashCode": "1.1.1",
           "System.Buffers": "4.5.1",
@@ -134,8 +134,8 @@
         "type": "Project",
         "dependencies": {
           "System.Buffers": "[4.6.1, )",
-          "System.Formats.Asn1": "[9.0.8, )",
-          "System.Formats.Cbor": "[9.0.8, )",
+          "System.Formats.Asn1": "[9.0.9, )",
+          "System.Formats.Cbor": "[9.0.9, )",
           "System.Memory": "[4.6.3, )",
           "System.Text.Json": "[9.0.8, )",
           "System.ValueTuple": "[4.6.1, )"
@@ -165,13 +165,13 @@
       },
       "System.Formats.Cbor": {
         "type": "Transitive",
-        "resolved": "9.0.8",
-        "contentHash": "DelHsgpxWFqcmlDkqceKSZY0kqs0N/Rdg3isJDWtZP9atnxstPWwfsxZVtjf41wizxFVkmUpV4zxFL39lcR7MA=="
+        "resolved": "9.0.9",
+        "contentHash": "typxwjuGJyooPZNwInKvEBB/qXwGFoXDH+2gEP0YidaK/qwcrbHl0naeE1O3A2Xn30cCVl79G/v/+ta2eJxh1w=="
       },
       "dsinternals.common": {
         "type": "Project",
         "dependencies": {
-          "System.Formats.Cbor": "[9.0.8, )"
+          "System.Formats.Cbor": "[9.0.9, )"
         }
       }
     }
