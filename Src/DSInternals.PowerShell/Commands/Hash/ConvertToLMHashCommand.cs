@@ -34,7 +34,6 @@
 
         protected override void ProcessRecord()
         {
-            // TODO: Extract as resource
             WriteVerbose("Calculating LM hash.");
             try
             {

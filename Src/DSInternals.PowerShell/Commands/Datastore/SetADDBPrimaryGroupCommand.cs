@@ -21,7 +21,6 @@ namespace DSInternals.PowerShell.Commands
         protected override void ProcessRecord()
         {
             //TODO: Exception handling: Object not found, malformed DN, ...
-            // TODO: Extract as Resource
             string verboseMessage = "Setting the primary group of account {0}.";
             bool hasChanged;
             switch (this.ParameterSetName)

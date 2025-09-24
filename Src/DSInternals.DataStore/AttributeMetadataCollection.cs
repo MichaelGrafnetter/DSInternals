@@ -9,8 +9,8 @@ namespace DSInternals.DataStore
 {
     public class AttributeMetadataCollection
     {
-        private const int guidSize = 16;
-        private const int entrySize = 3 * sizeof(long) + 2 * sizeof(int) + guidSize;
+        private const int GuidSize = 16;
+        private const int EntrySize = 3 * sizeof(long) + 2 * sizeof(int) + GuidSize;
         private const int HeaderSize = 2 * sizeof(long); // Structure: | Unknown | Number of Entries | Entries |
         private const long DefaultUnknownValue = 1;
 
@@ -151,7 +151,7 @@ namespace DSInternals.DataStore
         private static long CalculateBinarySize(long numEntries)
         {
             // Unknown Value + Entry Count + Entries
-            return 2 * sizeof(long) + numEntries * entrySize;
+            return 2 * sizeof(long) + numEntries * EntrySize;
         }
     }
 }

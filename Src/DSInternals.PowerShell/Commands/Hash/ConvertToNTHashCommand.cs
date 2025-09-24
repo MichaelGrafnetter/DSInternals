@@ -35,7 +35,6 @@ namespace DSInternals.PowerShell.Commands
 
         protected override void ProcessRecord()
         {
-            // TODO: Extract as resource
             this.WriteVerbose("Calculating NT hash.");
             try
             {

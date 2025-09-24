@@ -25,15 +25,6 @@ namespace DSInternals.PowerShell.Commands
             get;
             set;
         }
-
-        [Parameter(Mandatory = false)]
-        [ValidateNotNull]
-        [Alias("Proto", "RPCProtocol", "NCACN")]
-        public RpcProtocol Protocol
-        {
-            get;
-            set;
-        }
         #endregion Parameters
 
         protected DirectoryReplicationClient ReplicationClient
@@ -53,7 +44,7 @@ namespace DSInternals.PowerShell.Commands
                 netCredential = this.Credential.GetNetworkCredential();
             }
 
-            this.ReplicationClient = new DirectoryReplicationClient(this.Server, this.Protocol, netCredential);
+            this.ReplicationClient = new DirectoryReplicationClient(this.Server, netCredential);
         }
 
         #endregion Cmdlet Overrides

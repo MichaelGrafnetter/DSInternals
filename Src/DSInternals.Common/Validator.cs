@@ -69,12 +69,13 @@ namespace DSInternals.Common
                     exceptionToThrow = new OutOfMemoryException(genericException.Message, genericException);
                     break;
                 case Win32ErrorCode.NO_LOGON_SERVERS:
-                case Win32ErrorCode.NO_SUCH_DOMAIN:
                 case Win32ErrorCode.RPC_S_SERVER_UNAVAILABLE:
                 case Win32ErrorCode.RPC_S_CALL_FAILED:
                     exceptionToThrow = new SocketException((int)code);
                     break;
+                case Win32ErrorCode.NO_SUCH_DOMAIN:
                 case Win32ErrorCode.DS_OBJ_NOT_FOUND:
+                // TODO: Add NoneMapped and SomeNotMapped errors
                 // This error code means either a non-existing DN or Access Denied.
                 case Win32ErrorCode.DS_DRA_BAD_DN:
                     exceptionToThrow = new DirectoryObjectNotFoundException(null, genericException);

@@ -6,7 +6,6 @@
     using System.Management.Automation;
 
     [Cmdlet(VerbsData.Save, "DPAPIBlob")]
-    // TODO: Export None as resource.
     [OutputType("None")]
     public class SaveDPAPIBlobCmdlet : PSCmdletEx
     {
@@ -80,7 +79,7 @@
                             this.ProcessSingleObject(blob);
                         }
                     }
-                    
+
                     break;
             }
         }

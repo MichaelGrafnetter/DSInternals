@@ -1,4 +1,4 @@
-﻿namespace DSInternals.Common.Interop
+﻿namespace DSInternals.Common.Data
 {
     /// <see>https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gkdi/4cac87a3-521e-4918-a272-240f8fabed39</see>
     internal enum GroupKeyLevel : uint

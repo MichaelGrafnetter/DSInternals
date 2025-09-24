@@ -1,12 +1,11 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common;
-    using DSInternals.Common.Interop;
-    using DSInternals.SAM;
-    using DSInternals.SAM.Interop;
     using System.ComponentModel;
     using System.Management.Automation;
     using System.Security.Principal;
+    using DSInternals.Common;
+    using DSInternals.Common.Interop;
+    using DSInternals.SAM;
 
     [Cmdlet(VerbsCommon.Set, "SamAccountPasswordHash")]
     [OutputType("None")]
@@ -100,13 +99,11 @@
                 switch(this.ParameterSetName)
                 {
                     case ParameterSetByLogonName:
-                        // TODO: Extract as resource:
                         this.WriteVerbose(string.Format("Setting password hash on account {0}\\{1}.", this.Domain, this.SamAccountName));
-                        
+
                         if (this.Domain.Contains("."))
                         {
                             // This is not a hard check, because dots are actually allowed in NetBIOS names, although not recommended.
-                            // TODO: Extract as a resource
                             this.WriteWarning("The domain name supplied appears to be a DNS name instead of NetBIOS name.");
                         }
 
@@ -117,11 +114,10 @@
                         if (!this.Sid.IsAccountSid())
                         {
                             // Allow the processing to continue on this error:
-                            // TODO: Extract as resource:
                             PSArgumentException ex = new PSArgumentException("The SID provided is not a account SID.", "Sid");
                             this.WriteError(ex.ErrorRecord);
                         }
-                        // TODO: Extract as resource:
+
                         this.WriteVerbose(string.Format("Setting password hash on account {0}.", this.Sid));
                         // We already know the SID:
                         domainSid = this.Sid.AccountDomainSid;
@@ -134,7 +130,7 @@
                 using (SamDomain domain = this.SamServer.OpenDomain(domainSid, SamDomainAccessMask.Lookup))
                 {
                     /* Retrieve RID of the current user. */
-                    int userId = (this.ParameterSetName == ParameterSetBySid) ? this.Sid.GetRid() : domain.LookupUser(this.SamAccountName);
+                    int userId = (this.ParameterSetName == ParameterSetBySid) ? this.Sid.GetRid() : domain.LookupUser(this.SamAccountName, throwIfNotFound: true).Value;
                     /* Open the user account and reset password: */
                     using (SamUser user = domain.OpenUser(userId, SamUserAccessMask.ForcePasswordChange))
                     {

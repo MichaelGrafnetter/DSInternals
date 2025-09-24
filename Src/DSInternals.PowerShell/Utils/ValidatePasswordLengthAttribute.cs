@@ -30,8 +30,7 @@ namespace DSInternals.PowerShell
             }
             if (maxLength < minLength)
             {
-                // TODO: Extract message as a resource
-                new ValidationMetadataException("Maximum length must be greater than or equal to the minimum length.");
+                throw new ValidationMetadataException("Maximum length must be greater than or equal to the minimum length.");
             }
             // Set properties:
             this.MinLength = minLength;
@@ -67,7 +66,6 @@ namespace DSInternals.PowerShell
             int length = pwd.Length;
             if (length < this.MinLength || length > this.MaxLength)
             {
-                // TODO: Extract as resource
                 string message = String.Format("The password must be {0}-{1} characters long.", this.MinLength, this.MaxLength);
                 throw new ValidationMetadataException(message);
             }

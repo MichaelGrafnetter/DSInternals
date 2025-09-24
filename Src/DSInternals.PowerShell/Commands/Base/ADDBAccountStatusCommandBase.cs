@@ -16,7 +16,6 @@ namespace DSInternals.PowerShell.Commands
 
         protected override void ProcessRecord()
         {
-            // TODO: Extract messages as resources
             string verboseMessage = this.Enabled ?
                 "Enabling account {0}." :
                 "Disabling account {0}.";

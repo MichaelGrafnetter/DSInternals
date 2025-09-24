@@ -127,7 +127,7 @@ namespace DSInternals.DataStore
                         secretLength = reader.ReadInt32();
                     }
                     // Read the underlaying stream to end
-                    encryptedSecret = stream.ReadToEnd();    
+                    encryptedSecret = stream.ReadToEnd();
                 }
             }
 
@@ -140,10 +140,9 @@ namespace DSInternals.DataStore
                     break;
                 case SecretEncryptionType.DatabaseAES:
                     decryptedSecret = DecryptUsingAES(encryptedSecret, salt, decryptionKey);
-                    // TODO: Check that decryptedSecret.Lenght == secretLength;
+                    // TODO: Check that decryptedSecret.Length == secretLength;
                     break;
                 default:
-                    // TODO: Extract as resource
                     var ex = new FormatException("Unsupported encryption type.");
                     ex.Data.Add("SecretEncryptionType", encryptionType);
                     throw ex;
@@ -163,7 +162,7 @@ namespace DSInternals.DataStore
 
                     // Write Flags(2B)
                     writer.Write(EncryptedSecretFlags);
-                    
+
                     // Write PEK ID(4B)
                     writer.Write(this.CurrentKeyIndex);
 
@@ -185,7 +184,6 @@ namespace DSInternals.DataStore
                             encryptedSecret = EncryptUsingRC4(secret, salt, this.CurrentKey);
                             break;
                         default:
-                            // TODO: Extract as resource
                             var ex = new FormatException("Unsupported encryption type.");
                             ex.Data.Add("SecretEncryptionType", this.EncryptionType);
                             throw ex;
@@ -288,7 +286,6 @@ namespace DSInternals.DataStore
                                     writer.Write(encryptedBlob);
                                     break;
                                 default:
-                                    // TODO: Extract as a resource.
                                     throw new FormatException("Unsupported PEK list version.");
                             }
                             break;
@@ -320,7 +317,7 @@ namespace DSInternals.DataStore
                 }
             }
 
-            // Decrypt 
+            // Decrypt
             byte[] decryptedPekList;
             switch(flags)
             {
@@ -337,16 +334,14 @@ namespace DSInternals.DataStore
                             decryptedPekList = DecryptUsingAES(encryptedPekList, salt, bootKey);
                             break;
                         default:
-                            // TODO: Extract as resource.
                             throw new FormatException("Unsupported PEK list version.");
-                    }                    
+                    }
                     break;
                 case PekListFlags.Clear:
                     // No decryption is needed. This is a very rare case.
                     decryptedPekList = encryptedPekList;
                     break;
                 default:
-                    // TODO: Extract as a resource.
                     throw new FormatException("Unsupported PEK list flags");
             }
 
@@ -376,7 +371,7 @@ namespace DSInternals.DataStore
                     writer.Write(this.LastGenerated.ToFileTimeUtc());
                     writer.Write(this.CurrentKeyIndex);
                     writer.Write(this.Keys.Length);
-                    
+
                     // Keys
                     for(int i = 0; i < this.Keys.Length; i++)
                     {

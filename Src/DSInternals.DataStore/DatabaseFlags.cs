@@ -40,7 +40,6 @@ namespace DSInternals.DataStore
                 case '\0':
                     return false;
                 default:
-                    // TODO: Extract as resource.
                     // TODO: Exception type
                     throw new Exception("Unknown flag value");
             }
@@ -67,7 +66,7 @@ namespace DSInternals.DataStore
                 return this.HasFlag(SDConversionRequiredOffset);
             }
         }
-        
+
         /// <summary>
         /// Root DNT GUID was updated.
         /// </summary>
@@ -78,7 +77,7 @@ namespace DSInternals.DataStore
                 return this.HasFlag(RootGUIDUpdatedOffset);
             }
         }
-        
+
         /// <summary>
         /// ADAM database.
         /// </summary>
@@ -89,7 +88,7 @@ namespace DSInternals.DataStore
                 return this.HasFlag(ADAMDatabaseOffset);
             }
         }
-        
+
         /// <summary>
         /// Win2k3 SP1 required rebuilt ASCII indices, this indicates that has been done.
         /// </summary>
@@ -100,7 +99,7 @@ namespace DSInternals.DataStore
                 return this.HasFlag(ASCIIIndicesRebuiltOffset);
             }
         }
-        
+
         /// <summary>
         /// Win2k3 SP1 to LH upgrade requires rebuild of showInAddressBookArray column.
         /// </summary>

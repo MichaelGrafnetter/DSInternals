@@ -32,7 +32,6 @@
                 if (!this.Domain.Contains("."))
                 {
                     // This is not a hard check, because root domain does not need to have a dot in it.
-                    // TODO: Extract as a resource
                     this.WriteWarning("The domain name supplied appears to be a NetBIOS name instead of DNS name.");
                 }
 

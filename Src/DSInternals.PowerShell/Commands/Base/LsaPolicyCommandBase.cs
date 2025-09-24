@@ -28,14 +28,13 @@
 
         protected override void BeginProcessing()
         {
-            // TODO: Extract as resource:
             string serverName = this.ComputerName ?? "localhost";
             this.WriteDebug(string.Format("Connecting to LSA service running on {0}.", serverName));
             // TODO: Exception handling (process error category)
             this.LsaPolicy = new LsaPolicy(this.ComputerName, this.RequiredAccessMask);
         }
         #endregion Cmdlet Overrides
-        
+
         protected abstract LsaPolicyAccessMask RequiredAccessMask
         {
             get;

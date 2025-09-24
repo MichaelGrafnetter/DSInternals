@@ -45,12 +45,10 @@
         {
             if (hasChanged)
             {
-                // TODO: Extract as resource:
                 this.WriteVerbose("The object has been updated successfully.");
             }
             else
             {
-                // TODO: Extract as resource:
                 this.WriteVerbose("The object already contained the value to be added.");
             }
         }

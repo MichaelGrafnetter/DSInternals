@@ -42,7 +42,6 @@ namespace DSInternals.PowerShell.Commands
         protected override void ProcessRecord()
         {
             //TODO: Exception handling: Object not found, malformed DN, ...
-            // TODO: Extract as Resource
             string verboseMessage = "Setting password hash for account {0}.";
             bool hasChanged;
             switch (this.ParameterSetName)

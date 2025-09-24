@@ -8,3 +8,5 @@ JET_paramUnicodeIndexDefault
 JET_paramEngineFormatVersion
 JET_paramDeleteOldLogs
 JET_paramDisableCallbacks
+DS_BEHAVIOR_*
+NTDSDSA_OPT_*

@@ -1,8 +1,6 @@
 ﻿using DSInternals.Common;
 using DSInternals.Common.Interop;
 using Microsoft.Win32;
-using System;
-using System.Globalization;
 
 namespace DSInternals.DataStore
 {

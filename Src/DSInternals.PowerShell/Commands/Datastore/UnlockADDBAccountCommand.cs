@@ -10,7 +10,6 @@ namespace DSInternals.PowerShell.Commands
     {
         protected override void ProcessRecord()
         {
-            // TODO: Extract message as resource
             string verboseMessage = "Unlocking account {0}.";
             bool hasChanged;
 

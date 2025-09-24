@@ -60,17 +60,11 @@ namespace DSInternals.PowerShell.Commands
         protected override void BeginProcessing()
         {
             /* Connect to the specified SAM server: */
-            // TODO: Extract as resource:
             WriteDebug(string.Format("Connecting to SAM server {0}.", this.Server));
             try
             {
-                NetworkCredential netCred = null;
-                if (this.Credential != null)
-                {
-                    netCred = this.Credential.GetNetworkCredential();
-
-                }
-                this.SamServer = new SamServer(this.Server, netCred, SamServerAccessMask.LookupDomain | SamServerAccessMask.EnumerateDomains);
+                NetworkCredential netCred = this.Credential?.GetNetworkCredential();
+                this.SamServer = new SamServer(this.Server, SamServerAccessMask.LookupDomain | SamServerAccessMask.EnumerateDomains, netCred);
             }
             catch (Win32Exception ex)
             {

@@ -25,7 +25,6 @@
             switch (this.ParameterSetName)
             {
                 case ADDBObjectCommandBase.ParameterSetByDN:
-                    // TODO: Extract these messages as a resource.
                     this.WriteVerbose(String.Format("Adding SID history to principal {0}.", this.DistinguishedName));
                     var dn = new DistinguishedName(this.DistinguishedName);
                     hasChanged = this.DirectoryAgent.AddSidHistory(dn, this.SidHistory, this.SkipMetaUpdate);

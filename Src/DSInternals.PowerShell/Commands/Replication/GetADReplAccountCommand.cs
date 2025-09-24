@@ -109,7 +109,6 @@ namespace DSInternals.PowerShell.Commands
         protected void ReturnAllAccounts()
         {
             // Write the initial progress
-            // TODO: Extract strings as resources
             var progress = new ProgressRecord(1, "Replication", "Replicating Active Directory objects.");
             progress.PercentComplete = 0;
             this.WriteProgress(progress);

@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Changed
+
+- Migrated from `PeterO.Cbor` to `System.Formats.Cbor`.
+- Moved the `System.DirectoryServices.ActiveDirectory` dependency from `DSInternals.Common` to `DSInternals.ADSI`.
+- Major `DSInternals.Replication` and `DSInternals.SAM` code cleanup may result in breaking changes.
+- Removed the broken `-Protocol` parameter from replication cmdlets.
+
 ## [6.1.1] - 2025-08-19
 
 ### Fixed
@@ -112,7 +119,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added the [Get-ADDBDnsResourceRecord](PowerShell/Get-ADDBDnsResourceRecord.md#get-addbdnsresourcerecord) cmdlet for retrieving DNS resource records from `ntds.dit` files.
 - The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount), [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount), and [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlets have a new parameter called `-Properties` for specifying the properties to be fetched, which greatly increases the performance.
 - The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) and [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlets have a new parameter called `-ExportFormat`, which replaces the `Format-Custom` cmdlet when exporting data to `hashcat`, `pwdump`, and other formats.
-- Legacy LAPS and Windows LAPS cleartext passwords can now be extracted from `ntds.dit` files using the [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet. 
+- Legacy LAPS and Windows LAPS cleartext passwords can now be extracted from `ntds.dit` files using the [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet.
 - More user and computer attributes can optionally be retrieved by the [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount), [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount), and [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlets, including email addresses, phone numbers, managers, and OS versions.
 
 ## [4.16] - 2025-01-05
@@ -189,7 +196,7 @@ This is a PowerShell-only release.
 
 ### Fixed
 
-- Fixed Kerberos PBKDF2 salt derivation for service accounts in the [ConvertTo-KerberosKey](PowerShell/ConvertTo-KerberosKey.md#convertto-kerberoskey) cmdlet and the corresponding 
+- Fixed Kerberos PBKDF2 salt derivation for service accounts in the [ConvertTo-KerberosKey](PowerShell/ConvertTo-KerberosKey.md#convertto-kerberoskey) cmdlet and the corresponding
 [KerberosKeyDerivation](../Src/DSInternals.Common/Cryptography/KerberosKeyDerivation.cs) class.
 
 ## [4.10] - 2023-09-16
@@ -315,7 +322,7 @@ This is a PowerShell-only release.
 
 ### Added
 
-- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet now contains a check for accounts that require smart card authentication and have a password at the same time. 
+- The [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet now contains a check for accounts that require smart card authentication and have a password at the same time.
 
 ### Fixed
 
@@ -476,14 +483,14 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## [2.21.2] - 2017-04-19
 ### Fixed
 - [Framework] Fixed a bug in roamed credentials processing.
-- [Module] Fixed a bug in hexadecimal parameter parsing. 
+- [Module] Fixed a bug in hexadecimal parameter parsing.
 
 ## [2.21.1] - 2017-04-14
 ### Fixed
 - Fixed a bug in linked value replication.
 
 ## [2.21] - 2017-03-25
-- [Module] The replication cmdlets now use Kerberos authentication by default. 
+- [Module] The replication cmdlets now use Kerberos authentication by default.
 - [Module] Added support for roamed credentials.
 - [Module] Cmdlets now accept hashes in both byte array and hexadecimal string forms.
 - [Framework] Added support for linked value retrieval.
@@ -518,7 +525,7 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 - [Module] Added support for the the UserAccountControl attribute of user accounts.
 - [Framework] Added the ability to replicate user accounts by specifying their UPN.
 - [Framework] Added the ability to calculate a NT hash from both String and SecureString.
-- [Framework] Added the `HashEqualityComparer`, which allows the hashes to be stored 
+- [Framework] Added the `HashEqualityComparer`, which allows the hashes to be stored
   in the built-in generic collections.
 
 ## [2.15] - 2016-06-18

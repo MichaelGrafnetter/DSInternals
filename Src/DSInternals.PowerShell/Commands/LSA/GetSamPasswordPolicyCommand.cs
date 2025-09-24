@@ -26,7 +26,6 @@
             if (this.Domain.Contains("."))
             {
                 // This is not a hard check, because dots are actually allowed in NetBIOS names, although not recommended.
-                // TODO: Extract as a resource
                 this.WriteWarning("The domain name supplied appears to be a DNS name instead of NetBIOS name.");
             }
             using(var samDomain = this.SamServer.OpenDomain(this.Domain, SamDomainAccessMask.ReadPasswordParameters))

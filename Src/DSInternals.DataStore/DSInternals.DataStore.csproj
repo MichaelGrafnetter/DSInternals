@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="DSInternals.ManagedEsent.Interop" Version="2.0.4.1" />
     <PackageReference Include="DSInternals.ManagedEsent.Isam" Version="2.0.4.1" />
-    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183">
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.205">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -15,7 +15,7 @@
         private const char dnsNameSeparator = '.';
 
         private List<DistinguishedNameComponent> components = new List<DistinguishedNameComponent>();
-        
+
         public IReadOnlyList<DistinguishedNameComponent> Components
         {
             get
@@ -239,7 +239,6 @@
             if (inQuotes)
             {
                 // Unpaired quotes
-                // TODO: Extract as resource
                 throw new ArgumentException("Error parsing distinguished name.", "dn");
             }
             // Add the last segment to the list

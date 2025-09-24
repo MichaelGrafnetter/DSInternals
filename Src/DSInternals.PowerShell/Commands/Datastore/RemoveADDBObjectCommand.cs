@@ -44,7 +44,6 @@
 
         protected override void ProcessRecord()
         {
-            // TODO: Extract message strings as resources
             try
             {
                 switch (this.ParameterSetName)

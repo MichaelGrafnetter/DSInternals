@@ -1,15 +1,10 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 using DSInternals.Common.Data;
-using Microsoft.Win32.SafeHandles;
 using Windows.Win32.Foundation;
-using Windows.Win32.Security.Cryptography;
 
 namespace DSInternals.Common.Interop
 {
-    internal static class NativeMethods
+    internal static partial class NativeMethods
     {
         internal const int NTHashNumBits = 128;
         internal const int NTHashNumBytes = NTHashNumBits / 8;
@@ -22,10 +17,6 @@ namespace DSInternals.Common.Interop
         private const string Advapi = "advapi32.dll";
         private const string CryptDll = "cryptdll.Dll";
         private const string Ntdll = "ntdll.dll";
-        private const string Mpr = "mpr.dll";
-        private const string KdsCli = "KdsCli.dll";
-        private const string BCrypt = "bcrypt.dll";
-        private const string NCrypt = "ncrypt.dll";
         private const string LMOwfInternalName = "SystemFunction006";
         private const string NTOwfInternalName = "SystemFunction007";
         private const string LMOwfEncryptInternalName = "SystemFunction024";
@@ -38,14 +29,14 @@ namespace DSInternals.Common.Interop
         /// <summary>
         /// Converts the specified NTSTATUS code to its equivalent system error code.
         /// </summary>
-        /// <param name="Status">The NTSTATUS code to be converted.</param>
+        /// <param name="status">The NTSTATUS code to be converted.</param>
         /// <returns>The function returns the corresponding system error code.</returns>
         [DllImport(Ntdll)]
         internal static extern Win32ErrorCode RtlNtStatusToDosError(NtStatus status);
 
         /// <summary>
         /// Takes the passed NtPassword and performs a one-way-function on it.
-        /// Uses the RSA MD4 function 
+        /// Uses the RSA MD4 function
         /// </summary>
         /// <param name="password">The password to perform the one-way-function on. </param>
         /// <param name="hash">The hashed password is returned here.</param>
@@ -56,7 +47,7 @@ namespace DSInternals.Common.Interop
 
         /// <summary>
         /// Takes the passed NtPassword and performs a one-way-function on it.
-        /// Uses the RSA MD4 function 
+        /// Uses the RSA MD4 function
         /// </summary>
         /// <param name="password">The password to perform the one-way-function on. </param>
         /// <param name="hash">The hashed password is returned here.</param>
@@ -134,9 +125,9 @@ namespace DSInternals.Common.Interop
         }
 
         /// <summary>
-        /// This function upper cases the specified unicode source string 
+        /// This function upper cases the specified unicode source string
         /// and then converts it into an oem string. The translation is done with respect
-        /// to the OEM code page (OCP). ma
+        /// to the OEM code page (OCP).
         /// </summary>
         /// <param name="destinationString">Returns an oem string that is equivalent to the unicode source string. The maximum length field is only set if AllocateDestinationString is TRUE.</param>
         /// <param name="sourceString">Supplies the unicode source string that is to be converted to oem.</param>
@@ -151,7 +142,7 @@ namespace DSInternals.Common.Interop
         }
 
         /// <summary>
-        /// Decrypt NtOwfPassword using an index as the key 
+        /// Decrypt NtOwfPassword using an index as the key
         /// </summary>
         [DllImport(Advapi, EntryPoint = NTOwfDecryptInternalName, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         private static extern NtStatus RtlDecryptNtOwfPwdWithIndex([In] byte[] encryptedNtOwfPassword, [In] ref int index, [In, Out] byte[] ntOwfPassword);
@@ -163,7 +154,7 @@ namespace DSInternals.Common.Interop
         }
 
         /// <summary>
-        /// Encrypt NtOwfPassword using an index as the key 
+        /// Encrypt NtOwfPassword using an index as the key
         /// </summary>
         [DllImport(Advapi, EntryPoint = NTOwfEncryptInternalName, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         private static extern NtStatus RtlEncryptNtOwfPwdWithIndex([In] byte[] ntOwfPassword, [In] ref int index, [In, Out] byte[] encryptedNtOwfPassword);
@@ -175,7 +166,7 @@ namespace DSInternals.Common.Interop
         }
 
         /// <summary>
-        /// Decrypt LmOwfPassword using an index as the key 
+        /// Decrypt LmOwfPassword using an index as the key
         /// </summary>
         [DllImport(Advapi, EntryPoint = LMOwfDecryptInternalName, SetLastError = true)]
         private static extern NtStatus RtlDecryptLmOwfPwdWithIndex([In] byte[] encryptedLmOwfPassword, [In] ref int index, [In, Out] byte[] lmOwfPassword);
@@ -187,7 +178,7 @@ namespace DSInternals.Common.Interop
         }
 
         /// <summary>
-        /// Encrypt LmOwfPassword using an index as the key 
+        /// Encrypt LmOwfPassword using an index as the key
         /// </summary>
         [DllImport(Advapi, EntryPoint = LMOwfEncryptInternalName, SetLastError = true)]
         private static extern NtStatus RtlEncryptLmOwfPwdWithIndex([In] byte[] lmOwfPassword, [In] ref int index, [In, Out] byte[] encryptedLmOwfPassword);
@@ -243,284 +234,5 @@ namespace DSInternals.Common.Interop
             cryptoSystem = (status == NtStatus.Success) ? (KerberosCryptoSystem)Marshal.PtrToStructure(cryptoSystemPtr, typeof(KerberosCryptoSystem)) : null;
             return status;
         }
-
-        /// <summary>
-        /// Creates a subkey under HKEY_USERS or HKEY_LOCAL_MACHINE and loads the data from the specified registry hive into that subkey.
-        /// </summary>
-        /// <param name="hKey">A handle to the key where the subkey will be created.</param>
-        /// <param name="SubKey">The name of the key to be created under hKey. This subkey is where the registration information from the file will be loaded.</param>
-        /// <param name="File">The name of the file containing the registry data. This file must be a local file that was created with the RegSaveKey function. If this file does not exist, a file is created with the specified name.</param>
-        /// <returns>If the function succeeds, the return value is ERROR_SUCCESS.</returns>
-        [DllImport(Advapi, CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern Win32ErrorCode RegLoadKey(IntPtr hKey, string SubKey, string File);
-
-        /// <summary>
-        /// Unloads the specified registry key and its subkeys from the registry.
-        /// </summary>
-        /// <param name="hKey">A handle to the registry key to be unloaded.</param>
-        /// <param name="SubKey">The name of the subkey to be unloaded. The key referred to by the lpSubKey parameter must have been created by using the RegLoadKey function.</param>
-        /// <returns>If the function succeeds, the return value is ERROR_SUCCESS.</returns>
-        [DllImport(Advapi, CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern Win32ErrorCode RegUnLoadKey(IntPtr hKey, string SubKey);
-
-
-        [DllImport(Advapi, CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern Win32ErrorCode RegQueryInfoKey(SafeRegistryHandle hKey, StringBuilder lpClass, ref int lpcbClass, IntPtr lpReserved, int[] lpcSubKeys, int[] lpcbMaxSubKeyLen, int[] lpcbMaxClassLen, int[] lpcValues, int[] lpcbMaxValueNameLen, int[] lpcbMaxValueLen, int[] lpcbSecurityDescriptor, out long lpftLastWriteTime);
-        internal static Win32ErrorCode RegQueryInfoKey(SafeRegistryHandle hKey, out string keyClass, out DateTime lastWriteTime)
-        {
-            StringBuilder buffer = new StringBuilder(MaxRegistryKeyClassSize);
-            int bufferSize = buffer.Capacity;
-            long fileTime;
-            Win32ErrorCode result = NativeMethods.RegQueryInfoKey(hKey, buffer, ref bufferSize, IntPtr.Zero, null, null, null, null, null, null, null, out fileTime);
-            keyClass = buffer.ToString();
-            lastWriteTime = DateTime.FromFileTimeUtc(fileTime);
-            return result;
-        }
-
-        /// <summary>
-        /// The WNetAddConnection2 function makes a connection to a network resource and can redirect a local device to the network resource.
-        /// </summary>
-        /// <param name="netResource">This is a pointer to a network resource structure that specifies the network resource to connect to.</param>
-        /// <param name="password">Specifies the password to be used in making the connection. The NULL value may be passed in to indicate use of the 'default' password.  An empty string may be used to indicate no password.</param>
-        /// <param name="userName">This specifies the username used to make the connection. If NULL, the default username (currently logged on user) will be applied.  This is used when the user wishes to connect to a resource, but has a different user name or account assigned to him for that resource.</param>
-        /// <param name="flags">A set of connection options.</param>
-        /// <returns>If the function succeeds, the return value is NO_ERROR.</returns>
-        /// <see>http://msdn.microsoft.com/library/windows/desktop/aa385413.aspx</see>
-        [DllImport(Mpr, CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern Win32ErrorCode WNetAddConnection2([In] ref NetResource netResource, [In] SafeUnicodeSecureStringPointer password, [In][MarshalAs(UnmanagedType.LPWStr)] string userName, NetConnectOptions flags);
-
-        internal static Win32ErrorCode WNetAddConnection2(ref NetResource netResource, SecureString password, string userName, NetConnectOptions flags)
-        {
-            using (SafeUnicodeSecureStringPointer passwordPointer = new SafeUnicodeSecureStringPointer(password))
-            {
-                return WNetAddConnection2(ref netResource, passwordPointer, userName, flags);
-            }
-        }
-
-        /// <summary>
-        /// The WNetCancelConnection2 function cancels an existing network connection. You can also call the function to remove remembered network connections that are not currently connected.
-        /// </summary>
-        /// <param name="name">Pointer to a constant null-terminated string that specifies the name of either the redirected local device or the remote network resource to disconnect from. </param>
-        /// <param name="flags">Connection type.</param>
-        /// <param name="force">Specifies whether the disconnection should occur if there are open files or jobs on the connection. If this parameter is FALSE, the function fails if there are open files or jobs.</param>
-        /// <returns>If the function succeeds, the return value is NO_ERROR.</returns>
-        /// <see>http://msdn.microsoft.com/library/windows/desktop/aa385427.aspx</see>
-        [DllImport(Mpr, CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern Win32ErrorCode WNetCancelConnection2([MarshalAs(UnmanagedType.LPWStr)] string name, NetCancelOptions flags, [MarshalAs(UnmanagedType.Bool)] bool force);
-
-
-        [DllImport(Advapi, CharSet = CharSet.Unicode, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool ConvertStringSecurityDescriptorToSecurityDescriptor(string stringSecurityDescriptor, uint stringSDRevision, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] out byte[] securityDescriptor, out uint securityDescriptorSize);
-
-        internal static Win32ErrorCode ConvertStringSecurityDescriptorToSecurityDescriptor(string stringSecurityDescriptor, uint stringSDRevision, out byte[] securityDescriptor)
-        {
-            uint securityDescriptorSize;
-            bool result = ConvertStringSecurityDescriptorToSecurityDescriptor(stringSecurityDescriptor, stringSDRevision, out securityDescriptor, out securityDescriptorSize);
-            if (result)
-            {
-                return Win32ErrorCode.Success;
-            }
-            else
-            {
-                return (Win32ErrorCode)Marshal.GetLastWin32Error();
-            }
-        }
-
-        /// <param name="rootKeyId">Root key identifier of the requested key. It can be set to NULL.</param>
-        /// <param name="l0KeyId">L0 index of the requested group key. It MUST be a signed 32-bit integer greater than or equal to -1.</param>
-        /// <param name="l1KeyId">L1 index of the requested group key. It MUST be a signed 32-bit integer between -1 and 31 (inclusive).</param>
-        /// <param name="l2KeyId">L2 index of the requested group key. It MUST be a 32-bit integer between -1 and 31 (inclusive).</param>
-        /// <param name="level">Group key level.</param>
-        /// <returns>If the function succeeds, the return value is NO_ERROR.</returns>
-        internal static Win32ErrorCode GenerateKDFContext(
-            Guid rootKeyId,
-            int l0KeyId,
-            int l1KeyId,
-            int l2KeyId,
-            GroupKeyLevel level,
-            out byte[] context,
-            out int counterOffset)
-        {
-            var result = GenerateKDFContext(
-                rootKeyId,
-                l0KeyId,
-                l1KeyId,
-                l2KeyId,
-                level,
-                out SafeSidKeyProviderHandle contextHandle,
-                out int contextLength,
-                out counterOffset
-            );
-            
-            try
-            {
-                context = contextHandle.ToArray(contextLength);
-            }
-            finally
-            {
-                contextHandle.Close();
-            }
-
-            return result;
-        }
-
-        [DllImport(KdsCli, SetLastError = true)]
-        private static extern Win32ErrorCode GenerateKDFContext(
-            Guid rootKeyId,
-            int l0KeyId,
-            int l1KeyId,
-            int l2KeyId,
-            GroupKeyLevel level,
-            out SafeSidKeyProviderHandle context,
-            out int contextLength,
-            out int counterOffset);
-
-        internal static Win32ErrorCode GenerateDerivedKey(
-            string kdfAlgorithmName,
-            byte[] kdfParameters,
-            byte[] secret,
-            byte[] context,
-            int? counterOffset,
-            string label,
-            int iteration,
-            int desiredKeyLength,
-            out byte[] derivedKey,
-            out string invalidAttribute)
-        {
-            int kdfParametersLength = kdfParameters?.Length ?? 0;
-            int secretLength = secret?.Length ?? 0;
-            int contextLength = context?.Length ?? 0;
-            int labelLength = label!= null ? Encoding.Unicode.GetMaxByteCount(label.Length) : 0; // size of the unicode string, including the trailing zero
-            byte[] derivedKeyBuffer = new byte[desiredKeyLength];
-            StringBuilder invalidAttributeBuffer = new StringBuilder(byte.MaxValue);
-
-            // Deal with the optional int parameter
-            int counterOffsetValue = counterOffset.GetValueOrDefault();
-            var counterOffsetHandle = GCHandle.Alloc(counterOffsetValue, GCHandleType.Pinned);
-
-            try
-            {
-                Win32ErrorCode result = GenerateDerivedKey(
-                    kdfAlgorithmName,
-                    kdfParameters,
-                    kdfParametersLength,
-                    secret,
-                    secretLength,
-                    context,
-                    contextLength,
-                    (counterOffset.HasValue ? counterOffsetHandle.AddrOfPinnedObject() : IntPtr.Zero),
-                    label,
-                    labelLength,
-                    iteration,
-                    derivedKeyBuffer,
-                    desiredKeyLength,
-                    ref invalidAttributeBuffer
-                );
-
-                derivedKey = derivedKeyBuffer;
-                invalidAttribute = invalidAttributeBuffer.ToString();
-                return result;
-            }
-            finally
-            {
-                counterOffsetHandle.Free();
-            }
-        }
-
-        [DllImport(KdsCli, CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern Win32ErrorCode GenerateDerivedKey(
-            string kdfAlgorithmName,
-            byte[] kdfParameters,
-            int kdfParametersLength,
-            byte[] secret,
-            int secretLength,
-            byte[] context,
-            int contextLength,
-            IntPtr counterOffset,
-            string label,
-            int labelLength,
-            int iteration,
-            [MarshalAs(UnmanagedType.LPArray)] byte[] key,
-            int keyLength,
-            ref StringBuilder invalidAttribute);
-
-        /// <summary>
-        /// Frees memory allocated for a credentials structure by the GenerateKDFContext and GenerateDerivedKey functions.
-        /// </summary>
-        /// <param name="memory">Memory to be freed.</param>
-        [DllImport(KdsCli)]
-        internal static extern void SIDKeyProvFree([In] IntPtr memory);
-
-        internal static Win32ErrorCode GetSIDKeyCacheFolder(
-            byte[] targetSecurityDescriptor,
-            out string userStorageArea,
-            out string sidKeyCacheFolder,
-            bool isLowBox = false)
-        {
-            Win32ErrorCode result = GetSIDKeyCacheFolder(targetSecurityDescriptor, targetSecurityDescriptor?.Length ?? 0, isLowBox, out var userStorageAreaHandle, out var sidKeyCacheFolderHandle);
-
-            userStorageArea = userStorageAreaHandle.StringValue;
-            sidKeyCacheFolder = sidKeyCacheFolderHandle.StringValue;
-
-            return result;
-        }
-
-        [DllImport(KdsCli, CharSet = CharSet.Unicode)]
-        private static extern Win32ErrorCode GetSIDKeyCacheFolder(byte[] targetSecurityDescriptor, int targetSecurityDescriptorLength, bool isLowBox, out SafeSidKeyProviderHandle userStorageArea, out SafeSidKeyProviderHandle sidKeyCacheFolder);
-
-        internal static Win32ErrorCode GetSIDKeyFileName(Guid rootKeyId, int l0KeyId, bool publicKey, string sidKeyFolder, out string sidKeyFileName)
-        {
-            Win32ErrorCode result = GetSIDKeyFileName(rootKeyId, l0KeyId, publicKey, sidKeyFolder, out SafeSidKeyProviderHandle sidKeyFileNameHnadle);
-            sidKeyFileName = sidKeyFileNameHnadle.StringValue;
-            return result;
-        }
-
-        [DllImport(KdsCli, CharSet = CharSet.Unicode)]
-        private static extern Win32ErrorCode GetSIDKeyFileName(Guid rootKeyId, int l0KeyId, bool publicKey, string sidKeyFolder, out SafeSidKeyProviderHandle sidKeyFileName);
-
-        internal static Win32ErrorCode WriteSIDKeyInCache(byte[] sidKey, byte[] targetSecurityDescriptor, string sidKeyFolder, string sidKeyStorageArea)
-        {
-            return WriteSIDKeyInCache(sidKey, sidKey?.Length ?? 0, targetSecurityDescriptor, targetSecurityDescriptor?.Length ?? 0, sidKeyFolder, sidKeyStorageArea);
-        }
-
-
-        [DllImport(KdsCli, CharSet = CharSet.Unicode)]
-        private static extern Win32ErrorCode WriteSIDKeyInCache(byte[] sidKey, int sidKeyLength, byte[] targetSecurityDescriptor, int targetSecurityDescriptorLength, string sidKeyFolder, string sidKeyStorageArea);
-
-        [DllImport(KdsCli, CharSet = CharSet.Unicode)]
-        internal static extern Win32ErrorCode DeleteAllCachedKeys(string sidFromCaller = null);
-
-        internal static unsafe Win32ErrorCode NCryptUnprotectSecret(ReadOnlySpan<byte> protectedBlob, out ReadOnlySpan<byte> data)
-        {
-            fixed(byte* protectedBlobPtr = protectedBlob)
-            {
-                Win32ErrorCode result = NCryptUnprotectSecret(
-                    descriptorHandle: IntPtr.Zero,
-                    NCRYPT_FLAGS.NCRYPT_SILENT_FLAG,
-                    protectedBlobPtr,
-                    protectedBlob.Length,
-                    memPara: IntPtr.Zero,
-                    windowHandle: IntPtr.Zero,
-                    out SafeSidKeyProviderHandle dataHandle,
-                    out int dataLength
-                 );
-
-                data = new ReadOnlySpan<byte>(dataHandle.ToArray(dataLength));
-                dataHandle.Close();
-                return result;
-            }
-        }
-
-        [DllImport(NCrypt)]
-        private static unsafe extern Win32ErrorCode NCryptUnprotectSecret(
-            IntPtr descriptorHandle,
-            NCRYPT_FLAGS flags,
-            byte* protectedBlob,
-            int protectedBlobLength,
-            IntPtr memPara,
-            IntPtr windowHandle,
-            out SafeSidKeyProviderHandle data,
-            out int dataLength);
     }
 }
