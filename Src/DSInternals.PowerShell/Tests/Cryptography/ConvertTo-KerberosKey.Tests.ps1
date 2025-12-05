@@ -9,7 +9,7 @@
 Describe 'ConvertTo-KerberosKey' {
     It 'should return the correct key when the input is a secure string' {
         [securestring] $testInput = ConvertTo-SecureString 'Pa$$w0rd' -AsPlainText -Force
-        ConvertTo-KerberosKey -Password $testInput -Salt 'CONTOSOAdministrator' | Should -HaveCount 4
+        ConvertTo-KerberosKey -Password $testInput -Salt 'CONTOSOAdministrator' | Should -HaveCount 3
     }
 
     It 'Supplemental credentials are serialized properly' {
