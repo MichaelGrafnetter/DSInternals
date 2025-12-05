@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Text;
 
 namespace DSInternals.Common.Schema
 {
     /// <summary>
-    /// Any OID-valued quantity is stored as a 32-bit unsigned integer. 
+    /// Any OID-valued quantity is stored as a 32-bit unsigned integer.
     /// </summary>
     using ATTRTYP = uint;
 

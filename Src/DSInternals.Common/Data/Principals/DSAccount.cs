@@ -154,7 +154,8 @@
                 }
 
                 return this.SupportedEncryptionTypes.Value.HasFlag(Data.SupportedEncryptionTypes.AES128_CTS_HMAC_SHA1_96) ||
-                       this.SupportedEncryptionTypes.Value.HasFlag(Data.SupportedEncryptionTypes.AES256_CTS_HMAC_SHA1_96);
+                       this.SupportedEncryptionTypes.Value.HasFlag(Data.SupportedEncryptionTypes.AES256_CTS_HMAC_SHA1_96) ||
+                       this.SupportedEncryptionTypes.Value.HasFlag(Data.SupportedEncryptionTypes.AES256_CTS_HMAC_SHA1_96_SK);
             }
         }
 

@@ -136,7 +136,7 @@
             // We are creating an empty structure that containins no properties.
         }
 
-        public SupplementalCredentials(SecureString password, string samAccountName, string userPrincipalName, string netBiosDomainName, string dnsDomainName)
+        public SupplementalCredentials(SecureString password, string samAccountName, string? userPrincipalName, string netBiosDomainName, string dnsDomainName, bool includeDES = false, bool includeRC4 = true, bool includeSHA2 = false)
         {
             // Input validation
             Validator.AssertNotNull(password, "password");
@@ -145,9 +145,21 @@
             Validator.AssertNotNull(netBiosDomainName, "netBiosDomainName");
             Validator.AssertNotNull(dnsDomainName, "dnsDomainName");
 
+            string principalName = samAccountName;
+
+            if (userPrincipalName != null)
+            {
+                // Use the name part of the UPN as the principal name
+                principalName = userPrincipalName.Split('@')[0];
+            }
+
             // Generate Kerberos keys
-            this.Kerberos = new KerberosCredential(password, samAccountName, dnsDomainName);
-            this.KerberosNew = new KerberosCredentialNew(password, samAccountName, dnsDomainName);
+            if (includeDES)
+            {
+                this.Kerberos = new(password, principalName, dnsDomainName);
+            }
+
+            this.KerberosNew = new(password, principalName, dnsDomainName, includeDES, includeRC4, includeSHA2);
 
             // Generate WDigest hashes
             this.WDigest = WDigestHash.ComputeHash(password, userPrincipalName, samAccountName, netBiosDomainName, dnsDomainName);

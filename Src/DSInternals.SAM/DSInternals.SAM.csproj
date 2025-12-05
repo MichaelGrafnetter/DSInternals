@@ -2,7 +2,7 @@
   <!-- NuGet package metadata -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Version>6.1</Version>
+    <Version>6.2</Version>
     <AssemblyTitle>DSInternals SAM Library</AssemblyTitle>
     <Title>$(AssemblyTitle)</Title>
     <Description>DSInternals SAM implements a client for the Security Accounts Manager Remote Protocol (SAM-R) and Local Security Authority Remote Protocol(MS-LSAD or LSARPC). It can be used to import password hashes into Active Directory or to query and modify LSA Policy.</Description>

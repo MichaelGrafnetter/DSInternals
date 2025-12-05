@@ -128,15 +128,25 @@ namespace DSInternals.Common.Test
 
             // Test WDigest
             Assert.AreEqual(credentials2.WDigest.Length, credentials.WDigest.Length);
-            Assert.AreEqual(credentials2.WDigest[0].ToHex(), credentials.WDigest[0].ToHex());
+            Assert.AreEqual(credentials2.WDigest[0].AsSpan().ToHex(), credentials.WDigest[0].AsSpan().ToHex());
 
-            // Test Kerberos
-            Assert.AreEqual(credentials2.Kerberos.DefaultSalt, credentials.Kerberos.DefaultSalt);
-            Assert.AreEqual(credentials2.Kerberos.Credentials[0].KeyType, credentials.Kerberos.Credentials[0].KeyType);
+            // Test Kerberos new creds
+            Assert.AreEqual(credentials2.KerberosNew.DefaultSalt, credentials.KerberosNew.DefaultSalt);
+            Assert.AreEqual(credentials2.KerberosNew.Credentials[0].KeyType, credentials.KerberosNew.Credentials[0].KeyType);
+            Assert.AreEqual(credentials2.KerberosNew.ToByteArray().AsSpan().ToHex(), credentials.KerberosNew.ToByteArray().AsSpan().ToHex());
 
-            // Test key serialization
-            Assert.AreEqual(credentials2.Kerberos.ToByteArray().ToHex(), credentials.Kerberos.ToByteArray().ToHex());
-            Assert.AreEqual(credentials2.KerberosNew.ToByteArray().ToHex(), credentials.KerberosNew.ToByteArray().ToHex());
+            // Test Kerberos legacy creds
+            if (credentials.Kerberos != null)
+            {
+                Assert.AreEqual(credentials2.Kerberos.DefaultSalt, credentials.Kerberos.DefaultSalt);
+                Assert.AreEqual(credentials2.Kerberos.Credentials[0].KeyType, credentials.Kerberos.Credentials[0].KeyType);
+                Assert.AreEqual(credentials2.Kerberos.ToByteArray().AsSpan().ToHex(), credentials.Kerberos.ToByteArray().AsSpan().ToHex());
+            }
+
+            // Test the entire structure
+            byte[] blob2 = credentials2.ToByteArray();
+            Assert.AreEqual(blob.Length, blob2.Length);
+            Assert.AreEqual(blob.AsSpan().ToHex(), blob2.AsSpan().ToHex());
         }
 
         [TestMethod]
@@ -151,9 +161,17 @@ namespace DSInternals.Common.Test
             // Test integrity
             Assert.AreEqual(expectedCredentials.ClearText, credentials.ClearText);
             Assert.AreEqual(expectedCredentials.NTLMStrongHash.Length, credentials.NTLMStrongHash.Length);
-            Assert.AreEqual(WDigestHash.Encode(expectedCredentials.WDigest).ToHex(), WDigestHash.Encode(credentials.WDigest).ToHex());
-            Assert.AreEqual(expectedCredentials.Kerberos.ToByteArray().ToHex(), credentials.Kerberos.ToByteArray().ToHex());
-            Assert.AreEqual(expectedCredentials.KerberosNew.ToByteArray().ToHex(), credentials.KerberosNew.ToByteArray().ToHex());
+            Assert.AreEqual(WDigestHash.Encode(expectedCredentials.WDigest).AsSpan().ToHex(), WDigestHash.Encode(credentials.WDigest).AsSpan().ToHex());
+            Assert.AreEqual(expectedCredentials.KerberosNew.DefaultSalt, credentials.KerberosNew.DefaultSalt);
+            Assert.AreEqual(expectedCredentials.KerberosNew.DefaultIterationCount, credentials.KerberosNew.DefaultIterationCount);
+            Assert.AreEqual(expectedCredentials.KerberosNew.Credentials[0].Key.AsSpan().ToHex(), credentials.KerberosNew.Credentials[0].Key.AsSpan().ToHex());
+
+            // Test Kerberos legacy creds
+            if (credentials.Kerberos != null)
+            {
+                Assert.AreEqual(expectedCredentials.Kerberos.ToByteArray().AsSpan().ToHex(), credentials.Kerberos.ToByteArray().AsSpan().ToHex());
+            }
+
         }
     }
 }

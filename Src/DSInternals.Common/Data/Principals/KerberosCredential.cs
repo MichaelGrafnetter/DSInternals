@@ -23,7 +23,7 @@
             this.ReadCredentials(blob);
         }
 
-        public KerberosCredential(SecureString password, string principal, string realm)
+        public KerberosCredential(SecureString password, string principal, string realm, bool includeRC4 = false)
         {
             // Generate salt
             this.DefaultSalt = KerberosKeyDerivation.DeriveSalt(principal, realm);
@@ -32,11 +32,18 @@
             byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
             var desKeyData = new KerberosKeyData(KerberosKeyType.DES_CBC_MD5, desKey);
 
-            // TODO: Generate RC4 key
-            // byte[] rc4Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.RC4_HMAC_NT, password, this.DefaultSalt);
-            // var rc4KeyData = new KerberosKeyData(KerberosKeyType.RC4_HMAC_NT, rc4Key);
+            if (includeRC4)
+            {
+                // Generate RC4 key
+                byte[] rc4Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.RC4_HMAC_NT, password, this.DefaultSalt);
+                var rc4KeyData = new KerberosKeyData(KerberosKeyType.RC4_HMAC_NT, rc4Key);
 
-            this.Credentials = new KerberosKeyData[] { desKeyData /*, rc4KeyData */ };
+                this.Credentials = [desKeyData, rc4KeyData];
+            }
+            else
+            {
+                this.Credentials = [desKeyData];
+            }    
         }
 
         public short Flags

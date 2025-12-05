@@ -11,17 +11,11 @@ $products = @(
         Name = 'ESENT Managed Interop';
         LicenseUrl = 'https://raw.githubusercontent.com/microsoft/ManagedEsent/master/LICENSE.md'
      }, @{
-        Name = 'NDceRpc (.NET Distributed Computing Environment Remote Procedure Call)';
-        LicenseUrl = 'https://raw.githubusercontent.com/OpenSharp/NDceRpc/master/license.txt'
-     }, @{
         Name = 'PBKDF2.NET';
         LicenseUrl = 'https://raw.githubusercontent.com/therealmagicmike/PBKDF2.NET/master/License.txt'
      }, @{
         Name = 'Bouncy Castle';
         LicenseUrl = 'https://raw.githubusercontent.com/bcgit/bc-csharp/master/crypto/License.html'
-     }, @{
-        Name = 'Peter O. CBOR Library';
-        LicenseUrl = 'https://raw.githubusercontent.com/peteroupc/CBOR/master/LICENSE.md'
      }
 )
 

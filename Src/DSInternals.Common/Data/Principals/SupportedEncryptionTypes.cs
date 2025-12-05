@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DSInternals.Common.Data
+﻿namespace DSInternals.Common.Data
 {
     /// <summary>
     /// Supported Encryption Types Bit Flags
@@ -37,14 +35,12 @@ namespace DSInternals.Common.Data
         AES256_CTS_HMAC_SHA1_96 = 16,
 
         /// <summary>
-        /// Advanced Encryption Standard in 128-bit cipher block with Hashed Message Authentication Code using the Secure Hash Algorithm (2)
+        /// Enforce AES session keys when legacy ciphers are in use.
         /// </summary>
-        AES128_CTS_HMAC_SHA256_128 = 32,
-
-        /// <summary>
-        /// Advanced Encryption Standard in 256-bit cipher block with Hashed Message Authentication Code using the Secure Hash Algorithm (2)
-        /// </summary>
-        AES256_CTS_HMAC_SHA384_192 = 64,
+        /// <remarks>
+        /// When the bit is set, this indicates to the KDC that all cases where RC4 session keys can be used will be superseded with AES keys.
+        /// </remarks>
+        AES256_CTS_HMAC_SHA1_96_SK = 32,
 
         /// <summary>
         /// Flexible Authentication Secure Tunneling (FAST) supported

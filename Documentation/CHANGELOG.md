@@ -5,14 +5,23 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [6.2] - 2025-12-05
+
+> [!WARNING]
+> Due to unexpected delays in code signing certificate renewal, this version of the PowerShell module is not digitally signed.
+> NuGet packages will be released once a new code signing certificate is obtained.
 
 ### Changed
 
+- Disabled `DES_CBC_MD5` Kerberos key derivation support due to recent Windows API changes.
 - Migrated from `PeterO.Cbor` to `System.Formats.Cbor`.
 - Moved the `System.DirectoryServices.ActiveDirectory` dependency from `DSInternals.Common` to `DSInternals.ADSI`.
 - Major `DSInternals.Replication` and `DSInternals.SAM` code cleanup may result in breaking changes.
 - Removed the broken `-Protocol` parameter from replication cmdlets.
+
+### Fixed
+
+- The `New-ADDBRestoreFromMediaScript` cmdlet should no longer be throwing the `NullReferenceException`.
 
 ## [6.1.1] - 2025-08-19
 
@@ -667,7 +676,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.1.1...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.2...HEAD
+[6.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.1.1...6.2
 [6.1.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.1...v6.1.1
 [6.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0.1...v6.1
 [6.0.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0...v6.0.1

@@ -2,7 +2,7 @@
   <!-- NuGet package metadata -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Version>6.1</Version>
+    <Version>6.2</Version>
     <AssemblyTitle>DSInternals Replication Library</AssemblyTitle>
     <Title>$(AssemblyTitle)</Title>
     <Description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</Description>

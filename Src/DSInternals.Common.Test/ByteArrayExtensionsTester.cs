@@ -61,8 +61,8 @@ namespace DSInternals.Common.Test
         public void ByteArrayExtensions_ToHex_EmptyInput()
         {
             byte[] binary = new byte[0];
-            string result = binary.ToHex();
-            Assert.AreEqual(string.Empty, result);
+            string result = binary.AsSpan().ToHex();
+            Assert.IsNull(result);
         }
 
         [TestMethod]

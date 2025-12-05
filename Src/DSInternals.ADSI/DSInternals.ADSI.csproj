@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>6.1</Version>
+    <Version>6.2</Version>
     <AssemblyTitle>DSInternals ADSI Library</AssemblyTitle>
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
   </PropertyGroup>

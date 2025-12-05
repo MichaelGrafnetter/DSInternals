@@ -22,12 +22,12 @@
             this.ReadCredentials(blob);
         }
 
-        public KerberosCredentialNew(SecureString password, string principal, string realm, bool includeDES = true) :
-            this(password, KerberosKeyDerivation.DeriveSalt(principal, realm), includeDES)
+        public KerberosCredentialNew(SecureString password, string principal, string realm, bool includeDES = false, bool includeRC4 = true, bool includeSHA2 = false) :
+            this(password, KerberosKeyDerivation.DeriveSalt(principal, realm), includeDES, includeRC4, includeSHA2)
         {
         }
 
-        public KerberosCredentialNew(SecureString password, string salt, bool includeDES = true)
+        public KerberosCredentialNew(SecureString password, string salt, bool includeDES = false, bool includeRC4 = true, bool includeSHA2 = false)
         {
             Validator.AssertNotNull(password, "password");
             Validator.AssertNotNull(salt, "salt");
@@ -35,40 +35,49 @@
             this.DefaultSalt = salt;
             this.DefaultIterationCount = KerberosKeyDerivation.DefaultIterationCount;
 
-            // Generate AES SHA1 keys
-            byte[] aes128sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
-            var aes128sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, aes128sha1Key, this.DefaultIterationCount);
+            List<KerberosKeyDataNew> credentials = [];
 
+            if (includeSHA2)
+            {
+                // Derive AES SHA2 keys (Windows Server 2025)
+                byte[] aes256sha2Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA384_192, password, this.DefaultSalt);
+                var aes256sha2KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA384_192, aes256sha2Key, this.DefaultIterationCount);
+                credentials.Add(aes256sha2KeyData);
+
+                byte[] aes128sha2Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA256_128, password, this.DefaultSalt);
+                var aes128sha2KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA256_128, aes128sha2Key, this.DefaultIterationCount);
+                credentials.Add(aes128sha2KeyData);
+            }
+
+            // Derive AES SHA1 keys (Windows Server 2008+)
             byte[] aes256sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
             var aes256sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, aes256sha1Key, this.DefaultIterationCount);
+            credentials.Add(aes256sha1KeyData);
 
-            // TODO: Generate AES SHA2 keys (Windows Server 2025)
-            // byte[] aes128sha2Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA256_128, password, this.DefaultSalt);
-            // var aes128sha2KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA256_128, aes128sha2Key, this.DefaultIterationCount);
-
-            // byte[] aes256sha2Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA384_192, password, this.DefaultSalt);
-            // var aes256sha2KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA384_192, aes256sha2Key, this.DefaultIterationCount);
-
-            // TODO: Generate RC4 key
-            // byte[] rc4Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.RC4_HMAC_NT, password, this.DefaultSalt);
-            // var rc4KeyData = new KerberosKeyDataNew(KerberosKeyType.RC4_HMAC_NT, rc4Key, this.DefaultIterationCount);
+            byte[] aes128sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
+            var aes128sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, aes128sha1Key, this.DefaultIterationCount);
+            credentials.Add(aes128sha1KeyData);
 
             if (includeDES)
             {
-                // Generate DES key
+                // Derive DES keys (Windows 2000+)
                 byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
                 var desKeyData = new KerberosKeyDataNew(KerberosKeyType.DES_CBC_MD5, desKey, this.DefaultIterationCount);
+                credentials.Add(desKeyData);
+            }
 
-                this.Credentials = new KerberosKeyDataNew[] { /* aes256sha2KeyData, aes128sha2KeyData, */ aes256sha1KeyData, aes128sha1KeyData, desKeyData /*, rc4KeyData */ };
-            }
-            else
+            if (includeRC4)
             {
-                // AES keys only
-                this.Credentials = new KerberosKeyDataNew[] { /* aes256sha2KeyData, aes128sha2KeyData */ aes256sha1KeyData, aes128sha1KeyData /*, rc4KeyData*/ };
+                // Derive RC4 key (Windows 2000+)
+                byte[] rc4Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.RC4_HMAC_NT, password, this.DefaultSalt);
+                var rc4KeyData = new KerberosKeyDataNew(KerberosKeyType.RC4_HMAC_NT, rc4Key, this.DefaultIterationCount);
+                credentials.Add(rc4KeyData);
             }
+
+            this.Credentials = credentials.ToArray();
         }
 
-        public KerberosCredentialNew(ReadOnlyMemory<byte> password, string salt, bool includeDES = true)
+        public KerberosCredentialNew(ReadOnlyMemory<byte> password, string salt, bool includeDES = true, bool includeRC4 = true, bool includeSHA2 = false)
         {
             if (password.IsEmpty)
             {
@@ -83,26 +92,46 @@
             this.DefaultSalt = salt;
             this.DefaultIterationCount = KerberosKeyDerivation.DefaultIterationCount;
 
-            // Generate AES SHA1 keys
-            byte[] aes128sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
-            var aes128sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, aes128sha1Key, this.DefaultIterationCount);
+            List<KerberosKeyDataNew> credentials = [];
 
+            if (includeSHA2)
+            {
+                // Derive AES SHA2 keys (Windows Server 2025)
+                byte[] aes256sha2Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA384_192, password, this.DefaultSalt);
+                var aes256sha2KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA384_192, aes256sha2Key, this.DefaultIterationCount);
+                credentials.Add(aes256sha2KeyData);
+
+                byte[] aes128sha2Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA256_128, password, this.DefaultSalt);
+                var aes128sha2KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA256_128, aes128sha2Key, this.DefaultIterationCount);
+                credentials.Add(aes128sha2KeyData);
+            }
+
+            // Derive AES SHA1 keys (Windows Server 2008+)
             byte[] aes256sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
             var aes256sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES256_CTS_HMAC_SHA1_96, aes256sha1Key, this.DefaultIterationCount);
+            credentials.Add(aes256sha1KeyData);
+
+            byte[] aes128sha1Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, password, this.DefaultSalt);
+            var aes128sha1KeyData = new KerberosKeyDataNew(KerberosKeyType.AES128_CTS_HMAC_SHA1_96, aes128sha1Key, this.DefaultIterationCount);
+            credentials.Add(aes128sha1KeyData);
 
             if (includeDES)
             {
-                // Generate DES key
+                // Derive DES keys (Windows 2000+)
                 byte[] desKey = KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, this.DefaultSalt);
                 var desKeyData = new KerberosKeyDataNew(KerberosKeyType.DES_CBC_MD5, desKey, this.DefaultIterationCount);
+                credentials.Add(desKeyData);
+            }
 
-                this.Credentials = new KerberosKeyDataNew[] { /* aes256sha2KeyData, aes128sha2KeyData, */ aes256sha1KeyData, aes128sha1KeyData, desKeyData /*, rc4KeyData */ };
-            }
-            else
+            if (includeRC4)
             {
-                // AES keys only
-                this.Credentials = new KerberosKeyDataNew[] { /* aes256sha2KeyData, aes128sha2KeyData */ aes256sha1KeyData, aes128sha1KeyData /*, rc4KeyData*/ };
+                // Derive RC4 key (Windows 2000+)
+                byte[] rc4Key = KerberosKeyDerivation.DeriveKey(KerberosKeyType.RC4_HMAC_NT, password, this.DefaultSalt);
+                var rc4KeyData = new KerberosKeyDataNew(KerberosKeyType.RC4_HMAC_NT, rc4Key, this.DefaultIterationCount);
+                credentials.Add(rc4KeyData);
             }
+
+            this.Credentials = credentials.ToArray();
         }
 
         public short Flags

@@ -100,7 +100,7 @@ namespace DSInternals.Common.AzureAD
             using (var request = new HttpRequestMessage(HttpMethod.Get, url.ToString()))
             {
                 // Perform API call
-                var result = await SendODataRequest<OdataPagedResponse<AzureADUser>>(request).ConfigureAwait(false);
+                var result = await SendODataRequestAsync<OdataPagedResponse<AzureADUser>>(request).ConfigureAwait(false);
 
                 // Update key credential owner references
                 if (result.Items != null)
@@ -138,11 +138,11 @@ namespace DSInternals.Common.AzureAD
             using (var request = new HttpRequestMessage(new HttpMethod("PATCH"), url.ToString()))
             {
                 request.Content = new StringContent(JsonSerializer.Serialize(properties, LenientJsonSerializer.Options), Encoding.UTF8, JsonContentType);
-                await SendODataRequest<object>(request).ConfigureAwait(false);
+                await SendODataRequestAsync<object>(request).ConfigureAwait(false);
             }
         }
 
-        private async Task<T> SendODataRequest<T>(HttpRequestMessage request)
+        private async Task<T> SendODataRequestAsync<T>(HttpRequestMessage request)
         {
             try
             {

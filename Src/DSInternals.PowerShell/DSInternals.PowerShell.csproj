@@ -5,7 +5,7 @@
     <!-- Redirect the build directory so that it includes the module name -->
     <ArtifactsPivots>$(Configuration)/DSInternals/$(TargetFramework)</ArtifactsPivots>
     <IncludeSymbols>False</IncludeSymbols>
-    <Version>6.1.1</Version>
+    <Version>6.2</Version>
     <AssemblyTitle>DSInternals PowerShell Commands</AssemblyTitle>
     <!-- Copy all dependency DLLs to the binary module -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

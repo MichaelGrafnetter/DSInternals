@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security;
+﻿using System.Security;
 using System.Text;
 using DSInternals.Common.Data;
 using DSInternals.Common.Interop;
@@ -25,7 +24,13 @@ namespace DSInternals.Common.Cryptography
 
             KerberosCryptoSystem cryptoSystem;
             var status = NativeMethods.CDLocateCSystem(type, out cryptoSystem);
-            Validator.AssertSuccess(status);
+
+            if (status != NtStatus.Success)
+            {
+                // On the latest Windows versions, some older KDFs (like DES) are no longer supported natively.
+                // The failure code is typically 0x80080341, which is undocumented.
+                throw new NotSupportedException("The requested key derivation function is not supported by the current OS.");
+            }
 
             switch(type)
             {

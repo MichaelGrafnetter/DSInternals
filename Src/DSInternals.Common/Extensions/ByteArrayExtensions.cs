@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Security;
+﻿using System.Security;
 using System.Security.Principal;
 using System.Text;
 
@@ -97,7 +95,7 @@ namespace DSInternals.Common
 
         public static string ToHex(this ReadOnlySpan<byte> bytes, bool caps = false)
         {
-            if (bytes == null)
+            if (bytes.IsEmpty)
             {
                 return null;
             }

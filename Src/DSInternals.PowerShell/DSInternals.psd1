@@ -8,7 +8,7 @@
 RootModule = 'DSInternals.Bootstrap.psm1'
 
 # Version number of this module.
-ModuleVersion = '6.1.1'
+ModuleVersion = '6.2'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -234,7 +234,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Resolved issues with parsing LAPS passwords and key credentials.
+- The New-ADDBRestoreFromMediaScript cmdlet should no longer be throwing the NullReferenceException.
+- Disabled DES_CBC_MD5 Kerberos key derivation support due to recent Windows API changes.
+- Removed the broken -Protocol parameter from replication cmdlets.
+- Due to unexpected delays in code signing certificate renewal, this release is not digitally signed.
 "@
     } # End of PSData hashtable
 
