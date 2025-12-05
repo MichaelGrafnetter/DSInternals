@@ -57,17 +57,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-----------------------------------------------------------------------
-NDceRpc (.NET Distributed Computing Environment Remote Procedure Call)
-----------------------------------------------------------------------
-
-(License updated on 7/7/2019 from https://raw.githubusercontent.com/OpenSharp/NDceRpc/master/license.txt.)
-
-CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
-http://creativecommons.org/publicdomain/zero/1.0/
-
-Other codes, if any used, are under MIT, CPOL, BSD, Apache, MS-PL.
-
 ----------
 PBKDF2.NET
 ----------

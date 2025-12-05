@@ -278,6 +278,7 @@ jobs:
       run: ./Invoke-SmokeTests.ps1 -Configuration 'Release'
 
     - name: Test Module Digital Signatures
+      if: ${{ inputs.certificate_sign }}
       shell: powershell
       run: ./Build/bin/DSInternals.PowerShell/Release/DSInternals/Integrity.Tests.ps1
 

@@ -111,11 +111,7 @@ Describe 'DSInternals PowerShell Module Integrity' {
             param([string] $FileName, [string] $FilePath)
 
             # These 3rd-party files are not signed, so we will skip them.
-            [string[]] $unsignedFiles = @(
-                'CBOR.dll',
-                'Numbers.dll',
-                'URIUtility.dll'
-            )
+            [string[]] $unsignedFiles = @()
 
             if ($FileName -in $unsignedFiles) {
                 Set-ItResult -Skipped -Because 'this file is not signed by its vendor.'
