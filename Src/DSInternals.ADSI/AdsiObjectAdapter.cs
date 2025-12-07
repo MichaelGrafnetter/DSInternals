@@ -1,10 +1,10 @@
-﻿namespace DSInternals.ADSI;
-
-using System.DirectoryServices;
+﻿using System.DirectoryServices;
 using System.Security.Principal;
 using DSInternals.Common;
 using DSInternals.Common.Data;
 using DSInternals.Common.Schema;
+
+namespace DSInternals.ADSI;
 
 public class AdsiObjectAdapter : DirectoryObject
 {

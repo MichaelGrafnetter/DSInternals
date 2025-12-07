@@ -70,6 +70,11 @@ namespace DSInternals.Common.Schema
         /// </summary>
         public const string NtdsSettingsRO = "nTDSDSARO";
 
+        /// <summary>
+        /// This container holds the configuration information for a domain.
+        /// </summary>
+        public const string Configuration = "configuration";
+
         public static ClassType? Translate(string ldapDisplayName)
         {
             if (ldapDisplayName == null) throw new ArgumentNullException(nameof(ldapDisplayName));
@@ -89,6 +94,7 @@ namespace DSInternals.Common.Schema
                 DnsNode => ClassType.DnsZone,
                 NtdsSettings => ClassType.NtdsSettings,
                 NtdsSettingsRO => ClassType.NtdsSettingsRO,
+                Configuration => ClassType.Configuration,
                 _ => null
             };
         }

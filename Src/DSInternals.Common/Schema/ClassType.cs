@@ -112,6 +112,11 @@
         TrustedDomain = 655394,
 
         /// <summary>
+        /// configuration
+        /// </summary>
+        Configuration = 655372,
+
+        /// <summary>
         /// top
         /// </summary>
         Top = 65536
