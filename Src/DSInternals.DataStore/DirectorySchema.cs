@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using DSInternals.Common;
+﻿using System.Globalization;
 using DSInternals.Common.Exceptions;
 using DSInternals.Common.Schema;
 using Microsoft.Database.Isam;
@@ -9,14 +6,10 @@ using Microsoft.Database.Isam;
 namespace DSInternals.DataStore
 {
     /// <summary>
-    /// The ActiveDirectorySchema class represents the schema partition for a particular domain.
+    /// The DirectorySchema class represents the schema partition for a particular domain.
     /// </summary>
-    public class DirectorySchema
+    public sealed class DirectorySchema : BaseSchema
     {
-        // Clean AD contains 1500+ attributes and Exchange adds many more, but 3K should be enough for everyone.
-        private const int InitialAttributeDictionaryCapacity = 3000;
-        // Clean AD contains 250+ classes and Exchange adds many more, but 500 should be enough for everyone.
-        private const int InitialClassDictionaryCapacity = 500;
         private const string AttributeColumnPrefix = "ATT";
         private const string AttributeIndexPrefix = "INDEX_";
         public const string DistinguishedNameTagColumn = "DNT_col";
@@ -31,23 +24,6 @@ namespace DSInternals.DataStore
         public const string PartitionedGuidIndex = "nc_guid_Index";
         public const string AncestorsColumn = "Ancestors_col";
         public const string AncestorsIndex = "Ancestors_index";
-
-        private IDictionary<AttributeType, AttributeSchema> _attributesById;
-        private IDictionary<AttributeType, AttributeSchema> _attributesByInternalId;
-        private IDictionary<string, AttributeSchema> _attributesByName;
-        private IDictionary<string, Columnid> _columnsByAttributeName;
-        private IDictionary<string, DNTag> _objectCategoriesByName;
-        private IDictionary<ClassType, DNTag> _objectCategoriesByGovernsId;
-        private IDictionary<string, ClassType> _classesByName;
-
-        /// <summary>
-        /// Gets the OID prefix map.
-        /// </summary>
-        public PrefixTable PrefixTable
-        {
-            get;
-            private set;
-        }
 
         public Columnid DistinguishedNameTagColumnId
         {
@@ -85,42 +61,35 @@ namespace DSInternals.DataStore
             private set;
         }
 
+        private IDictionary<string, Columnid> ColumnsByAttributeName
+        {
+            get;
+            set;
+        }
+
+        private IDictionary<string, DNTag> ObjectCategoriesByName
+        {
+            get;
+            set;
+        }
+
+        private IDictionary<ClassType, DNTag> ObjectCategoriesByGovernsId
+        {
+            get;
+            set;
+        }
+
         private DirectorySchema()
         {
             // Initialize value maps for fast lookups
-            _attributesById = new Dictionary<AttributeType, AttributeSchema>(InitialAttributeDictionaryCapacity);
-            _attributesByInternalId = new Dictionary<AttributeType, AttributeSchema>(InitialAttributeDictionaryCapacity);
-            _attributesByName = new Dictionary<string, AttributeSchema>(InitialAttributeDictionaryCapacity, StringComparer.InvariantCultureIgnoreCase);
-            _columnsByAttributeName = new Dictionary<string, Columnid>(InitialAttributeDictionaryCapacity, StringComparer.InvariantCultureIgnoreCase);
-            _objectCategoriesByName = new Dictionary<string, DNTag>(InitialClassDictionaryCapacity, StringComparer.InvariantCultureIgnoreCase);
-            _objectCategoriesByGovernsId = new Dictionary<ClassType, DNTag>(InitialClassDictionaryCapacity);
-            _classesByName = new Dictionary<string, ClassType>(InitialClassDictionaryCapacity, StringComparer.InvariantCultureIgnoreCase);
-            this.PrefixTable = new PrefixTable();
-        }
-
-        public ICollection<AttributeSchema> FindAllAttributes()
-        {
-            return _attributesByName.Values;
-        }
-
-        public AttributeSchema? FindAttribute(string attributeName)
-        {
-            Validator.AssertNotNullOrWhiteSpace(attributeName, nameof(attributeName));
-            bool found = _attributesByName.TryGetValue(attributeName, out AttributeSchema attribute);
-            return found ? attribute : null;
-        }
-
-        public AttributeSchema? FindAttribute(AttributeType attributeId)
-        {
-            // Try to find the attribute either by attributeID or msDS-IntId.
-            var attributeDictionary = attributeId.IsCompressedOid() ? _attributesById : _attributesByInternalId;
-            bool attributeFound = attributeDictionary.TryGetValue(attributeId, out AttributeSchema attribute);
-            return attributeFound ? attribute : null;
+            ColumnsByAttributeName = new Dictionary<string, Columnid>(InitialAttributeDictionaryCapacity, StringComparer.InvariantCultureIgnoreCase);
+            ObjectCategoriesByName = new Dictionary<string, DNTag>(InitialClassDictionaryCapacity, StringComparer.InvariantCultureIgnoreCase);
+            ObjectCategoriesByGovernsId = new Dictionary<ClassType, DNTag>(InitialClassDictionaryCapacity);
         }
 
         public Columnid? FindColumnId(string attributeName)
         {
-            bool found = _columnsByAttributeName.TryGetValue(attributeName, out Columnid column);
+            bool found = ColumnsByAttributeName.TryGetValue(attributeName, out Columnid column);
             return found ? column : null;
         }
 
@@ -129,21 +98,15 @@ namespace DSInternals.DataStore
             return this.FindAttribute(attributeName)?.IndexName;
         }
 
-        public ClassType? FindClass(string className)
-        {
-            bool found = _classesByName.TryGetValue(className, out ClassType classType);
-            return found ? classType : null;
-        }
-
         public DNTag? FindObjectCategory(string className)
         {
-            bool found = _objectCategoriesByName.TryGetValue(className, out DNTag objectCategory);
+            bool found = ObjectCategoriesByName.TryGetValue(className, out DNTag objectCategory);
             return found ? objectCategory : null;
         }
 
         public DNTag? FindObjectCategory(ClassType governsId)
         {
-            bool found = _objectCategoriesByGovernsId.TryGetValue(governsId, out DNTag objectCategory);
+            bool found = ObjectCategoriesByGovernsId.TryGetValue(governsId, out DNTag objectCategory);
             return found ? objectCategory : null;
         }
 
@@ -212,7 +175,7 @@ namespace DSInternals.DataStore
                     // Clean older ADs might not contain any prefix table
                     schema.PrefixTable.LoadFromBlob(binaryPrefixMap);
                 }
-                
+
                 // Load the list of attributes and classes.
                 // Corresponding LDAP filter: (lDAPDisplayName=*)
                 cursor.CurrentIndex = baseSchema.FindAttribute(AttributeType.LdapDisplayName).DerivedIndexName;
@@ -272,13 +235,7 @@ namespace DSInternals.DataStore
                             );
 
                         // Populate all relevant indices
-                        schema._attributesById[attributeId.Value] = attribute;
-                        schema._attributesByName[ldapDisplayName] = attribute;
-
-                        if (internalId.HasValue)
-                        {
-                            schema._attributesByInternalId[internalId.Value] = attribute;
-                        }
+                        schema.AddAttribute(attribute);
                     }
                     else
                     {
@@ -287,9 +244,9 @@ namespace DSInternals.DataStore
                         DNTag? classDNT = cursor.RetrieveColumnAsDNTag(schema.DistinguishedNameTagColumnId);
 
                         // Populate all relevant indices
-                        schema._classesByName[ldapDisplayName] = governsId.Value;
-                        schema._objectCategoriesByName[ldapDisplayName] = classDNT.Value;
-                        schema._objectCategoriesByGovernsId[governsId.Value] = classDNT.Value;
+                        schema.ClassesByName[ldapDisplayName] = governsId.Value;
+                        schema.ObjectCategoriesByName[ldapDisplayName] = classDNT.Value;
+                        schema.ObjectCategoriesByGovernsId[governsId.Value] = classDNT.Value;
                     }
                 }
             }
@@ -303,13 +260,12 @@ namespace DSInternals.DataStore
                 if (attributeType.HasValue)
                 {
                     // This column should be mapped to an attribute either through attributeID or msDS-IntId.
-                    var attributeDictionary = attributeType.Value.IsCompressedOid() ? schema._attributesById : schema._attributesByInternalId;
-                    bool attributeFound = attributeDictionary.TryGetValue(attributeType.Value, out AttributeSchema attribute);
+                    AttributeSchema? attribute = schema.FindAttribute(attributeType.Value);
 
-                    if (attributeFound)
+                    if (attribute != null)
                     {
                         attribute.ColumnName = column.Name;
-                        schema._columnsByAttributeName[attribute.Name] = column.Columnid;
+                        schema.ColumnsByAttributeName[attribute.Name] = column.Columnid;
                     }
                 }
             }
@@ -326,10 +282,9 @@ namespace DSInternals.DataStore
                 if (attributeType.HasValue)
                 {
                     // Try to map the index name to an attribute either through attributeID or msDS-IntId.
-                    var attributeDictionary = attributeType.Value.IsCompressedOid() ? schema._attributesById : schema._attributesByInternalId;
-                    bool attributeFound = attributeDictionary.TryGetValue(attributeType.Value, out AttributeSchema attribute);
+                    AttributeSchema? attribute = schema.FindAttribute(attributeType.Value);
 
-                    if (attributeFound)
+                    if (attribute != null) // Attribute found
                     {
                         switch (indexTypeCode)
                         {
@@ -445,5 +400,11 @@ namespace DSInternals.DataStore
                 throw new SchemaAttributeNotFoundException(columnName);
             }
         }
+
+        // Clean AD contains 1500+ attributes and Exchange adds many more, but 3K should be enough for everyone.
+        protected override int InitialAttributeDictionaryCapacity => 3000;
+
+        // Clean AD contains 250+ classes and Exchange adds many more, but 500 should be enough for everyone.
+        protected override int InitialClassDictionaryCapacity => 500;
     }
 }

@@ -31,7 +31,7 @@ namespace DSInternals.Common.Data
             this.DecryptionStatus = LapsDecryptionStatus.NotApplicable;
         }
 
-        public LapsPasswordInformation(string computerName, LapsEncryptedPassword encryptedPassword, LapsPasswordSource source, DateTime? expiration, IKdsRootKeyResolver rootKeyResolver = null)
+        public LapsPasswordInformation(string computerName, LapsEncryptedPassword encryptedPassword, LapsPasswordSource source, DateTime? expiration, IKdsRootKeyResolver? rootKeyResolver = null)
         {
             Validator.AssertNotNull(encryptedPassword, nameof(encryptedPassword));
 
@@ -56,6 +56,7 @@ namespace DSInternals.Common.Data
 
                 if (rootKey != null)
                 {
+                    rootKeyFound = true;
                     var gke = GroupKeyEnvelope.Create(rootKey, encryptedPassword.EncryptedBlob.ProtectionKeyIdentifier, encryptedPassword.EncryptedBlob.TargetSid);
                     gke.WriteToCache();
                 }

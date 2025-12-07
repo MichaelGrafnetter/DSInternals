@@ -20,16 +20,19 @@ namespace DSInternals.Common.Schema
         private IDictionary<PrefixIndex, string> _forwardMap;
         private IDictionary<string, PrefixIndex> _reverseMap;
 
-        public PrefixTable(byte[] blob = null)
+        public PrefixTable(byte[] blob = null, bool prePopulate = true)
         {
             _forwardMap = new SortedDictionary<PrefixIndex, string>();
             _reverseMap = new SortedDictionary<string, PrefixIndex>(StringComparer.Ordinal);
 
-            // Add hardcoded prefixes
-            this.AddBuiltinPrefixes();
+            if (prePopulate)
+            {
+                // Add hardcoded prefixes
+                this.AddBuiltinPrefixes();
+            }
 
             // Add user prefixes, if any
-            if(blob != null)
+            if (blob != null)
             {
                 this.LoadFromBlob(blob);
             }
@@ -40,12 +43,8 @@ namespace DSInternals.Common.Schema
             get
             {
                 // Return null if not found
-                _ = _forwardMap.TryGetValue(prefixIndex, out string value);
+                _ = _forwardMap.TryGetValue(prefixIndex, out string? value);
                 return value;
-            }
-            set
-            {
-                _forwardMap[prefixIndex] = value;
             }
         }
 
@@ -183,6 +182,17 @@ namespace DSInternals.Common.Schema
             string oidString = MakeOidStringFromBytes(oidPrefix);
             _forwardMap[index] = oidString;
             _reverseMap[oidString] = index;
+        }
+
+        public void Add(PrefixTable other)
+        {
+            if (other == null) throw new ArgumentNullException(nameof(other));
+
+            // Merge the other prefix table into the current one
+            foreach (var kvp in other._forwardMap)
+            {
+                this.Add(kvp.Key, kvp.Value);
+            }
         }
 
         public void LoadFromBlob(byte[] blob)

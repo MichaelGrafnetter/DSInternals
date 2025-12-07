@@ -25,7 +25,7 @@ namespace DSInternals.Common.Schema
         /// <summary>
         /// Gets the unique X.500 OID for identifying an attribute.
         /// </summary>
-        public readonly string AttributeOid;
+        public readonly string? AttributeOid;
 
         /// <summary>
         /// Gets the optional internal ID of the attribute that is used as column and name suffix.
@@ -177,7 +177,7 @@ namespace DSInternals.Common.Schema
 
         public AttributeSchema(
             string ldapDisplayName,
-            string attributeOid,
+            string? attributeOid,
             AttributeType attributeId,
             AttributeSyntax syntax,
             AttributeSearchFlags searchFlags = AttributeSearchFlags.None)
@@ -185,11 +185,6 @@ namespace DSInternals.Common.Schema
             if (ldapDisplayName == null)
             {
                 throw new ArgumentNullException(nameof(ldapDisplayName));
-            }
-
-            if (attributeOid == null)
-            {
-                throw new ArgumentNullException(nameof(attributeOid));
             }
 
             this.Name = ldapDisplayName;
@@ -202,7 +197,7 @@ namespace DSInternals.Common.Schema
         public AttributeSchema(
             string ldapDisplayName,
             string commonName,
-            string attributeOid,
+            string? attributeOid,
             Guid schemaIdGuid,
             AttributeType attributeId,
             AttributeType? internalId,
@@ -226,11 +221,6 @@ namespace DSInternals.Common.Schema
             if (ldapDisplayName == null)
             {
                 throw new ArgumentNullException(nameof(ldapDisplayName));
-            }
-
-            if (attributeOid == null)
-            {
-                throw new ArgumentNullException(nameof(attributeOid));
             }
 
             this.Name = ldapDisplayName;

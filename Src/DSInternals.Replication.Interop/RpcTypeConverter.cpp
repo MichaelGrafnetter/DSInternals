@@ -2,6 +2,7 @@
 #include "RpcTypeConverter.h"
 
 using namespace DSInternals::Common;
+using namespace DSInternals::Common::Schema;
 using namespace System;
 using namespace System::Runtime::InteropServices;
 using namespace std;
@@ -87,11 +88,11 @@ namespace DSInternals
 				return dsName;
 			}
 
-			midl_ptr<byte> RpcTypeConverter::ToNative(cli::array<byte>^ managedArray)
+			midl_ptr<System::Byte> RpcTypeConverter::ToNative(cli::array<System::Byte>^ managedArray)
 			{
 				// Copy the byte array from managed memory to unmanaged
-				auto nativeArray = make_midl_ptr<byte>(managedArray->Length);
-				pin_ptr<byte> pinnedManagedArray = &managedArray[0];
+				auto nativeArray = make_midl_ptr<System::Byte>(managedArray->Length);
+				pin_ptr<System::Byte> pinnedManagedArray = &managedArray[0];
 				memcpy(nativeArray.get(), pinnedManagedArray, managedArray->Length);
 
 				return nativeArray;
@@ -154,16 +155,37 @@ namespace DSInternals
 				return gcnew SecurityIdentifier(IntPtr((void*)& dsName->Sid));
 			}
 
-			cli::array<byte>^ RpcTypeConverter::ToByteArray(const OID_t& prefix)
+			cli::array<System::Byte>^ RpcTypeConverter::ToByteArray(const OID_t& prefix)
 			{
 				// Allocate managed array
-				auto managedValue = gcnew cli::array<byte>(prefix.length);
+				auto managedValue = gcnew cli::array<System::Byte>(prefix.length);
 				// Pin it so the GC does not touch it
-				pin_ptr<byte> managedValuePin = &managedValue[0];
+				pin_ptr<System::Byte> managedValuePin = &managedValue[0];
 				// Copy data from native to managed memory
 				memcpy(managedValuePin, prefix.elements, prefix.length);
 				return managedValue;
 			}
+
+            PrefixTable^ RpcTypeConverter::ToManaged(const SCHEMA_PREFIX_TABLE& prefixTable)
+            {
+                // Create an empty prefix table, without the built-in prefixes
+                auto managedPrefixTable = gcnew PrefixTable(nullptr, false);
+
+                for (DWORD i = 0; i < prefixTable.PrefixCount; i++)
+                {
+                    unsigned long prefixIndex = prefixTable.pPrefixEntry[i].ndx;
+
+                    // Do not re-add prefixes 0-38
+                    if (prefixIndex > PrefixTable::LastBuitlInPrefixIndex)
+                    {
+                        OID_t nativePrefix = prefixTable.pPrefixEntry[i].prefix;
+                        auto managedPrefix = ToByteArray(nativePrefix);
+                        managedPrefixTable->Add(prefixIndex, managedPrefix);
+                    }
+                }
+
+                return managedPrefixTable;
+            }
 		}
 	}
 }

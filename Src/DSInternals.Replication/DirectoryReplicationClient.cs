@@ -31,6 +31,11 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     private const string ConfigurationNamingContextPrefix = "CN=Configuration,DC=";
 
     /// <summary>
+    /// Prefix of the schema naming context.
+    /// </summary>
+    private const string SchemaNamingContextPrefix = "CN=Schema,CN=Configuration,DC=";
+
+    /// <summary>
     /// Identifier of Windows Server 2000 dcpromo.
     /// </summary>
     private static readonly Guid DcPromoGuid2k = new("6abec3d1-3054-41c8-a362-5a0c5b7d5d71");
@@ -45,6 +50,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     /// </summary>
     private static readonly Guid NtdsApiClientGuid = new("e24d201a-4fd6-11d1-a3da-0000f875ae0d");
 
+    private bool _isFullSchemaLoaded = false;
     private RpcBinding _rpcBinding;
     private DrsConnection _drsConnection;
     private IKdsRootKeyResolver _rootKeyResolver;
@@ -118,6 +124,19 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     }
 
     /// <summary>
+    /// The schema naming context of the connected server.
+    /// </summary>
+    public string SchemaNamingContext
+    {
+        get
+        {
+            return this.NamingContexts.
+                Where(context => context.StartsWith(SchemaNamingContextPrefix, StringComparison.InvariantCultureIgnoreCase)).
+                First();
+        }
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="DirectoryReplicationClient"/> class.
     /// </summary>
     /// <param name="server">The FQDN or IP address of the domain controller.</param>
@@ -130,6 +149,8 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
         string spn = String.Format(ServicePrincipalNameFormat, server);
         this._rpcBinding.AuthenticateAs(spn, credential, RpcAuthenticationLevel.PacketPrivacy, RpcAuthenticationType.Negotiate);
         this._drsConnection = new DrsConnection(this._rpcBinding.DangerousGetHandle(), NtdsApiClientGuid, schema);
+
+        // The replication client can fetch root keys. Cache them for performance.
         this._rootKeyResolver = new KdsRootKeyCache(this);
     }
 
@@ -154,22 +175,22 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
     {
         Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
-        ReplicationCookie cookie = new(domainNamingContext);
-        return GetAccounts(cookie, progressReporter, propertySets);
+
+        return ReplicateAllObjects(domainNamingContext, progressReporter)
+            .Select(dsObject => AccountFactory.CreateAccount(dsObject, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets))
+            .Where(account => account != null); // CreateAccount returns null for other object types
     }
 
     /// <summary>
-    /// Retrieves all accounts starting from the specified replication cookie.
+    /// Retrieves all directory objects from the specified naming context.
     /// </summary>
-    /// <param name="initialCookie">The initial replication cookie.</param>
-    /// <param name="progressReporter">The progress reporter to report replication progress.</param>
-    /// <param name="propertySets">The set of properties to retrieve for each account.</param>
-    /// <returns>An enumerable collection of directory service accounts.</returns>
-    public IEnumerable<DSAccount> GetAccounts(ReplicationCookie initialCookie, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
+    /// <param name="namingContext">Partition to replicate.</param>
+    /// <param name="progressReporter">Progress reporter for replication progress.</param>
+    /// <returns>An enumerable collection of directory service objects.</returns>
+    public IEnumerable<ReplicaObject> ReplicateAllObjects(string namingContext, ReplicationProgressHandler progressReporter = null)
     {
-        Validator.AssertNotNull(initialCookie, nameof(initialCookie));
-
-        ReplicationCookie currentCookie = initialCookie;
+        Validator.AssertNotNullOrWhiteSpace(namingContext, nameof(namingContext));
+        ReplicationCookie currentCookie = new(namingContext);
         ReplicationResult result;
         int processedObjectCount = 0;
 
@@ -185,16 +206,10 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
                 progressReporter(result.Cookie, processedObjectCount, result.TotalObjectCount);
             }
 
-            // Process the returned objects
+            // Pass-through the returned objects
             foreach (var obj in result.Objects)
             {
-                DSAccount account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets);
-
-                if (account != null)
-                {
-                    // CreateAccount returns null for other object types
-                    yield return account;
-                }
+                yield return obj;
             }
 
             // Update the position of the replication cursor
@@ -370,6 +385,59 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     public void WriteNgcKey(string accountDN, byte[] publicKey)
     {
         this._drsConnection.WriteNgcKey(accountDN, publicKey);
+    }
+
+    /// <summary>
+    /// Replicates the entire schema partition.
+    /// </summary>
+    /// <param name="progressReporter">Replication progress reporter.</param>
+    public void FetchFullSchema(ReplicationProgressHandler progressReporter = null)
+    {
+        if (_isFullSchemaLoaded)
+        {
+            // Full schema only needs to be replicated once.
+            return;
+        }
+
+        // Create a blank schema representation
+        ReplicationSchema schema = new();
+
+        // Replicate the entire schema partition
+        ReplicationCookie currentCookie = new(SchemaNamingContext);
+        ReplicationResult result;
+        int processedObjectCount = 0;
+
+        do
+        {
+            // Perform one replication cycle
+            result = this._drsConnection.ReplicateAllObjects(currentCookie);
+
+            // Report replication progress
+            if (progressReporter != null)
+            {
+                processedObjectCount += result.Objects.Count;
+                progressReporter(result.Cookie, processedObjectCount, result.TotalObjectCount);
+            }
+
+            // Merge the prefix tables
+            if (result.PrefixTable != null)
+            {
+                schema.PrefixTable.Add(result.PrefixTable);
+            }
+
+            // Try to add the object to the schema if it is an attribute or class definition
+            foreach (var schemaObject in result.Objects)
+            {
+                schema.AddSchemaObject(schemaObject);
+            }
+
+            // Update the position of the replication cursor
+            currentCookie = result.Cookie;
+        } while (result.HasMoreData);
+
+        _drsConnection.UpdateSchemaCache(schema);
+
+        _isFullSchemaLoaded = true;
     }
 
     /// <summary>

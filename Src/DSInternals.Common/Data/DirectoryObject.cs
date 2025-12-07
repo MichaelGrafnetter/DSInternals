@@ -20,14 +20,12 @@
 
         public void ReadAttribute(string name, out Guid? value)
         {
-            byte[] binaryValue;
-            this.ReadAttribute(name, out binaryValue);
+            this.ReadAttribute(name, out byte[] binaryValue);
             value = (binaryValue != null) ? new Guid(binaryValue) : (Guid?)null;
         }
         public void ReadAttribute(string name, out bool value)
         {
-            int? numericValue;
-            this.ReadAttribute(name, out numericValue);
+            this.ReadAttribute(name, out int? numericValue);
             value = numericValue.HasValue ? (numericValue.Value != 0) : false;
         }
         public abstract void ReadAttribute(string name, out int? value);
@@ -37,8 +35,7 @@
 
         public virtual void ReadAttribute(string name, out RawSecurityDescriptor value)
         {
-            byte[] binarySecurityDescriptor;
-            this.ReadAttribute(name, out binarySecurityDescriptor);
+            this.ReadAttribute(name, out byte[] binarySecurityDescriptor);
             value = (binarySecurityDescriptor != null) ? new RawSecurityDescriptor(binarySecurityDescriptor, 0) : null;
         }
 
@@ -61,8 +58,7 @@
 
         public void ReadAttribute(string name, out SecurityIdentifier value)
         {
-            byte[] binarySid;
-            this.ReadAttribute(name, out binarySid);
+            this.ReadAttribute(name, out byte[] binarySid);
             value = binarySid.ToSecurityIdentifier(this.HasBigEndianRid);
         }
 
@@ -106,20 +102,21 @@
         public void ReadAttribute(string name, out DateTime? value, bool asGeneralizedTime)
         {
             value = null;
-            long? timestamp;
-            this.ReadAttribute(name, out timestamp);
+            this.ReadAttribute(name, out long? timestamp);
             if(timestamp.HasValue && timestamp.Value > 0)
             {
                 value = asGeneralizedTime ? timestamp.Value.FromGeneralizedTime() : DateTime.FromFileTime(timestamp.Value); 
             }
         }
 
-        public bool IsDeleted
+        /// <summary>
+        /// Indicates whether this object has been marked for deletion. After the tombstone period has expired, it will be removed from the system.
+        /// </summary>
+        public virtual bool IsDeleted
         {
             get
             {
-                bool result;
-                this.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out result);
+                this.ReadAttribute(CommonDirectoryAttributes.IsDeleted, out bool result);
                 return result;
             }
         }
@@ -128,8 +125,7 @@
         {
             get
             {
-                int? result;
-                this.ReadAttribute(CommonDirectoryAttributes.InstanceType, out result);
+                this.ReadAttribute(CommonDirectoryAttributes.InstanceType, out int? result);
                 return (InstanceType?)result;
             }
         }

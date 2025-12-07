@@ -42,6 +42,11 @@
         Group = 655368,
 
         /// <summary>
+        /// contact
+        /// </summary>
+        Contact = 655375,
+
+        /// <summary>
         /// dMD
         /// </summary>
         Schema = 196617,
@@ -104,6 +109,11 @@
         /// <summary>
         /// trustedDomain
         /// </summary>
-        TrustedDomain = 655394
+        TrustedDomain = 655394,
+
+        /// <summary>
+        /// top
+        /// </summary>
+        Top = 65536
     }
 }

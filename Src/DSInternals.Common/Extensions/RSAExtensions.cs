@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.ConstrainedExecution;
+﻿using System.Numerics;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
@@ -243,7 +240,7 @@ namespace DSInternals.Common
         public static bool IsWeakKey(this RSAParameters publicKey)
         {
             // Convert the byte array modulus to unsigned BigInteger by changing it to little endian and appending 0 as sign bit:
-            BigInteger modulus = new BigInteger(publicKey.Modulus.Reverse().Concat(new byte[] { Byte.MinValue }).ToArray());
+            BigInteger modulus = new BigInteger(publicKey.Modulus.AsEnumerable().Reverse().Concat(new byte[] { Byte.MinValue }).ToArray());
 
             for (int i = 0; i < Primes.Length; i++)
             {

@@ -8,7 +8,7 @@ namespace DSInternals.Common.Data
     {
         private List<LapsPasswordInformation>? _lapsPasswords;
 
-        public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
+        public DSComputer(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver? rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
         {
             if (this.SamAccountType != SamAccountType.Computer)
             {
@@ -156,7 +156,7 @@ namespace DSInternals.Common.Data
             }
         }
 
-        protected void LoadWindowsLAPS(DirectoryObject dsObject, IKdsRootKeyResolver rootKeyResolver = null)
+        protected void LoadWindowsLAPS(DirectoryObject dsObject, IKdsRootKeyResolver? rootKeyResolver = null)
         {
             dsObject.ReadAttribute(CommonDirectoryAttributes.WindowsLapsPasswordExpirationTime, out DateTime? expirationTime, false);
 

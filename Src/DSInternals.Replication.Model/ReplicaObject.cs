@@ -1,8 +1,8 @@
-﻿using DSInternals.Common;
+﻿using System.Security.Principal;
+using System.Text;
+using DSInternals.Common;
 using DSInternals.Common.Data;
 using DSInternals.Common.Schema;
-using System.Security.Principal;
-using System.Text;
 
 namespace DSInternals.Replication.Model
 {
@@ -13,7 +13,7 @@ namespace DSInternals.Replication.Model
     {
         private string distinguishedName;
         private Guid guid;
-        private SecurityIdentifier sid;
+        private SecurityIdentifier? sid;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReplicaObject"/> class.
@@ -23,8 +23,12 @@ namespace DSInternals.Replication.Model
         /// <param name="objectSid">The security identifier (SID) of the object.</param>
         /// <param name="attributes">The attributes of the object.</param>
         /// <param name="schema">The Active Directory schema.</param>
-        public ReplicaObject(String distinguishedName, Guid objectGuid, SecurityIdentifier objectSid, ReplicaAttributeCollection attributes, BaseSchema schema)
+        public ReplicaObject(string distinguishedName, Guid objectGuid, SecurityIdentifier? objectSid, ReplicaAttributeCollection attributes, BaseSchema schema)
         {
+            Validator.AssertNotNull(distinguishedName, nameof(distinguishedName));
+            Validator.AssertNotNull(attributes, nameof(attributes));
+            Validator.AssertNotNull(schema, nameof(schema));
+
             this.guid = objectGuid;
             this.distinguishedName = distinguishedName;
             this.sid = objectSid;
@@ -42,6 +46,34 @@ namespace DSInternals.Replication.Model
         }
 
         /// <summary>
+        /// Gets the class of which the object is an instance, as well as all structural or abstract superclasses from which that class is derived.
+        /// </summary>
+        public ClassType[] ObjectClass
+        {
+            get
+            {
+                this.ReadAttribute(AttributeType.ObjectClass, out uint[]? numericObjectClasses);
+
+                if (numericObjectClasses != null)
+                {
+                    ClassType[] objectClasses = new ClassType[numericObjectClasses.Length];
+
+                    for (int i = 0; i < numericObjectClasses.Length; i++)
+                    {
+                        objectClasses[i] = (ClassType)numericObjectClasses[i];
+                    }
+
+                    return objectClasses;
+                }
+                else
+                {
+                    // This should never happen, as objectClass is a mandatory attribute.
+                    return [];
+                }
+            }
+        }
+
+        /// <summary>
         /// The distinguished name of the object.
         /// </summary>
         public override string DistinguishedName => this.distinguishedName;
@@ -55,6 +87,21 @@ namespace DSInternals.Replication.Model
         /// The security identifier (SID) of the object.
         /// </summary>
         public override SecurityIdentifier Sid => this.sid;
+
+        /// <summary>
+        /// Indicates whether this object has been marked for deletion. After the tombstone period has expired, it will be removed from the system.
+        /// </summary>
+        /// <remarks>
+        /// This is a more efficient implementation than the base class, as it directly reads the isDeleted attribute.
+        /// </remarks>
+        public override bool IsDeleted
+        {
+            get
+            {
+                ReadAttribute(AttributeType.IsDeleted, out bool isDeleted);
+                return isDeleted;
+            }
+        }
 
         // TODO: Read only collection
         /// <summary>
@@ -89,7 +136,7 @@ namespace DSInternals.Replication.Model
         /// </summary>
         /// <param name="attributeId">The identifier of the attribute to check.</param>
         /// <returns>True if the object has the specified attribute; otherwise, false.</returns>
-        protected bool HasAttribute(AttributeType attributeId)
+        public bool HasAttribute(AttributeType attributeId)
         {
             return this.Attributes.ContainsKey(attributeId);
         }
@@ -99,11 +146,10 @@ namespace DSInternals.Replication.Model
         /// </summary>
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="values">The values of the attribute.</param>
-        protected void ReadAttribute(AttributeType attributeId, out byte[][] values)
+        public void ReadAttribute(AttributeType attributeId, out byte[][]? values)
         {
             values = null;
-            ReplicaAttribute attribute;
-            bool hasAttribute = this.Attributes.TryGetValue(attributeId, out attribute);
+            bool hasAttribute = this.Attributes.TryGetValue(attributeId, out ReplicaAttribute attribute);
             if (hasAttribute)
             {
                 bool hasValue = attribute.Values != null && attribute.Values.Length > 0;
@@ -119,7 +165,7 @@ namespace DSInternals.Replication.Model
         /// </summary>
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="value">The first value of the attribute.</param>
-        protected void ReadAttribute(AttributeType attributeId, out byte[] value)
+        public void ReadAttribute(AttributeType attributeId, out byte[]? value)
         {
             this.ReadAttribute(attributeId, out value, 0);
         }
@@ -130,10 +176,9 @@ namespace DSInternals.Replication.Model
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="value">The value of the attribute.</param>
         /// <param name="valueIndex">The index of the value to read.</param>
-        protected void ReadAttribute(AttributeType attributeId, out byte[] value, int valueIndex)
+        public void ReadAttribute(AttributeType attributeId, out byte[]? value, int valueIndex)
         {
-            byte[][] values;
-            this.ReadAttribute(attributeId, out values);
+            this.ReadAttribute(attributeId, out byte[][] values);
             bool containsValue = values != null && values.Length > valueIndex;
             value = containsValue ? values[valueIndex] : null;
         }
@@ -143,11 +188,10 @@ namespace DSInternals.Replication.Model
         /// </summary>
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="value">The value of the attribute.</param>
-        protected void ReadAttribute(AttributeType attributeId, out int? value)
+        public void ReadAttribute(AttributeType attributeId, out int? value)
         {
-            byte[] binaryValue;
-            this.ReadAttribute(attributeId, out binaryValue);
-            value = (binaryValue != null) ? BitConverter.ToInt32(binaryValue, 0) : (int?)null;
+            this.ReadAttribute(attributeId, out byte[]? binaryValue);
+            value = (binaryValue != null) ? BitConverter.ToInt32(binaryValue, 0) : null;
         }
 
         /// <summary>
@@ -155,11 +199,57 @@ namespace DSInternals.Replication.Model
         /// </summary>
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="value">The value of the attribute.</param>
-        protected void ReadAttribute(AttributeType attributeId, out long? value)
+        public void ReadAttribute(AttributeType attributeId, out uint? value)
         {
-            byte[] binaryValue;
-            this.ReadAttribute(attributeId, out binaryValue);
-            value = (binaryValue != null) ? BitConverter.ToInt64(binaryValue, 0) : (long?)null;
+            this.ReadAttribute(attributeId, out byte[]? binaryValue);
+            value = (binaryValue != null) ? BitConverter.ToUInt32(binaryValue, 0) : null;
+        }
+
+        /// <summary>
+        /// Reads the first value of the specified attribute.
+        /// </summary>
+        /// <param name="attributeId">The identifier of the attribute to read.</param>
+        /// <param name="value">The value of the attribute.</param>
+        public void ReadAttribute(AttributeType attributeId, out long? value)
+        {
+            this.ReadAttribute(attributeId, out byte[] binaryValue);
+            value = (binaryValue != null) ? BitConverter.ToInt64(binaryValue, 0) : null;
+        }
+
+        /// <summary>
+        /// Reads the first value of the specified attribute.
+        /// </summary>
+        /// <param name="attributeId">The identifier of the attribute to read.</param>
+        /// <param name="value">The value of the attribute.</param>
+        public void ReadAttribute(AttributeType attributeId, out Guid? value)
+        {
+            this.ReadAttribute(attributeId, out byte[] binaryValue);
+            value = (binaryValue != null) ? new Guid(binaryValue) : null;
+        }
+
+        /// <summary>
+        /// Reads the specified attribute and returns its values as an array of unsigned integers.
+        /// </summary>
+        /// <param name="attributeId">The identifier of the attribute to read.</param>
+        /// <param name="values">When this method returns, contains an array of unsigned integers representing the attribute values, or <see
+        /// langword="null"/> if no values are available.</param>
+        public void ReadAttribute(AttributeType attributeId, out uint[]? values)
+        {
+            this.ReadAttribute(attributeId, out byte[][]? binaryValues);
+
+            if (binaryValues != null && binaryValues.Length > 0)
+            {
+                values = new uint[binaryValues.Length];
+
+                for (int i = 0; i < binaryValues.Length; i++)
+                {
+                    values[i] = BitConverter.ToUInt32(binaryValues[i], 0);
+                }
+            }
+            else
+            {
+                values = null;
+            }
         }
 
         /// <summary>
@@ -168,11 +258,10 @@ namespace DSInternals.Replication.Model
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="value">The value of the attribute.</param>
         /// <param name="unicode">Indicates whether to use Unicode encoding.</param>
-        protected void ReadAttribute(AttributeType attributeId, out string value, bool unicode = true)
+        public void ReadAttribute(AttributeType attributeId, out string? value, bool unicode = true)
         {
             var encoding = unicode ? Encoding.Unicode : Encoding.ASCII;
-            byte[] binaryValue;
-            this.ReadAttribute(attributeId, out binaryValue);
+            this.ReadAttribute(attributeId, out byte[] binaryValue);
             value = (binaryValue != null) ? encoding.GetString(binaryValue) : null;
         }
 
@@ -182,12 +271,11 @@ namespace DSInternals.Replication.Model
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="values">The values of the attribute.</param>
         /// <param name="unicode">Indicates whether to use Unicode encoding.</param>
-        protected void ReadAttribute(AttributeType attributeId, out string[] values, bool unicode = true)
+        public void ReadAttribute(AttributeType attributeId, out string[]? values, bool unicode = true)
         {
             var encoding = unicode ? Encoding.Unicode : Encoding.ASCII;
             values = null;
-            byte[][] binaryValues;
-            this.ReadAttribute(attributeId, out binaryValues);
+            this.ReadAttribute(attributeId, out byte[][] binaryValues);
             if (binaryValues != null)
             {
                 values = binaryValues.Select(item => encoding.GetString(item)).ToArray();
@@ -200,7 +288,7 @@ namespace DSInternals.Replication.Model
         /// </summary>
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="value">The value of the attribute.</param>
-        protected void ReadAttribute(AttributeType attributeId, out DistinguishedName value)
+        public void ReadAttribute(AttributeType attributeId, out DistinguishedName? value)
         {
             value = null;
             this.ReadAttribute(attributeId, out byte[] binaryValue);
@@ -222,10 +310,9 @@ namespace DSInternals.Replication.Model
         /// </summary>
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="value">The value of the attribute.</param>
-        protected void ReadAttribute(AttributeType attributeId, out SecurityIdentifier value)
+        public void ReadAttribute(AttributeType attributeId, out SecurityIdentifier? value)
         {
-            byte[] binaryValue;
-            this.ReadAttribute(attributeId, out binaryValue);
+            this.ReadAttribute(attributeId, out byte[] binaryValue);
             value = (binaryValue != null) ? new SecurityIdentifier(binaryValue, 0) : null;
         }
 
@@ -234,11 +321,11 @@ namespace DSInternals.Replication.Model
         /// </summary>
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="value">The value of the attribute.</param>
-        protected void ReadAttribute(AttributeType attributeId, out SamAccountType? value)
+        public void ReadAttribute(AttributeType attributeId, out SamAccountType? value)
         {
             int? numericValue;
             this.ReadAttribute(attributeId, out numericValue);
-            value = numericValue.HasValue ? (SamAccountType)numericValue.Value : (SamAccountType?)null;
+            value = numericValue.HasValue ? (SamAccountType)numericValue.Value : null;
         }
 
         /// <summary>
@@ -246,10 +333,9 @@ namespace DSInternals.Replication.Model
         /// </summary>
         /// <param name="attributeId">The identifier of the attribute to read.</param>
         /// <param name="value">The value of the attribute.</param>
-        protected void ReadAttribute(AttributeType attributeId, out bool value)
+        public void ReadAttribute(AttributeType attributeId, out bool value)
         {
-            int? numericValue;
-            this.ReadAttribute(attributeId, out numericValue);
+            this.ReadAttribute(attributeId, out int? numericValue);
             value = numericValue.HasValue ? numericValue.Value != 0 : false;
         }
 
@@ -271,15 +357,11 @@ namespace DSInternals.Replication.Model
         /// <param name="value">The value of the attribute.</param>
         public override void ReadAttribute(string name, out byte[] value)
         {
+            value = null;
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
             if (attributeId != null)
             {
                 this.ReadAttribute(attributeId.Value, out value);
-            }
-            else
-            {
-                // The schema does not even contain this attribute.
-                value = null;
             }
         }
 
@@ -290,15 +372,11 @@ namespace DSInternals.Replication.Model
         /// <param name="value">The values of the attribute.</param>
         public override void ReadAttribute(string name, out byte[][] value)
         {
+            value = null;
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
             if (attributeId != null)
             {
                 this.ReadAttribute(attributeId.Value, out value);
-            }
-            else
-            {
-                // The schema does not even contain this attribute.
-                value = null;
             }
         }
 
@@ -309,15 +387,11 @@ namespace DSInternals.Replication.Model
         /// <param name="value">The value of the attribute.</param>
         public override void ReadAttribute(string name, out int? value)
         {
+            value = null;
             AttributeType? attributeId = this.Schema.FindAttributeId(name);
             if (attributeId != null)
             {
                 this.ReadAttribute(attributeId.Value, out value);
-            }
-            else
-            {
-                // The schema does not even contain this attribute.
-                value = null;
             }
         }
 
@@ -407,11 +481,45 @@ namespace DSInternals.Replication.Model
         public override void ReadLinkedValues(string attributeName, out byte[][]? values)
         {
             // The linked values have already been merged with regular attributes using LoadLinkedValues
+            AttributeType? attributeId = Schema.FindAttributeId(attributeName);
+            if (attributeId.HasValue)
+            {
+                ReadAttribute(attributeId.Value, out values);
+            }
+            else
+            {
+                // The schema does not even contain this attribute.
+                values = null;
+            }
+        }
+
+        /// <summary>
+        /// Reads the linked values for the specified attribute and returns them as an array of parsed binary data.
+        /// </summary>
+        /// <param name="attributeId">The identifier of the attribute whose linked values are to be read.</param>
+        /// <param name="values">When this method returns, contains an array of byte arrays representing the parsed linked values, or null if
+        /// no values are present.</param>
+        public void ReadLinkedValues(AttributeType attributeId, out byte[][]? values)
+        {
+            // The linked values have already been merged with regular attributes using LoadLinkedValues
             // TODO: We currently only support DN-Binary linked values.
             // TODO: Check if the attribute exists
-            byte[][] rawValues;
-            this.ReadAttribute(attributeName, out rawValues);
-            values = (rawValues != null) ? rawValues.Select(rawValue => ParseDNBinary(rawValue)).ToArray() : null;
+            this.ReadAttribute(attributeId, out byte[][]? rawValues);
+
+            if (rawValues != null && rawValues.Length > 0)
+            {
+                // Allocate the array for parsed values
+                values = new byte[rawValues.Length][];
+
+                for (int i = 0; i < rawValues.Length; i++)
+                {
+                    values[i] = ParseDNBinary(rawValues[i]);
+                }
+            }
+            else
+            {
+                values = null;
+            }
         }
 
         /// <summary>
@@ -425,7 +533,7 @@ namespace DSInternals.Replication.Model
         /// <param name="blob">SYNTAX_DISTNAME_BINARY structure</param>
         /// <returns>Binary value</returns>
         /// <see>https://msdn.microsoft.com/en-us/library/cc228431.aspx</see>
-        protected static byte[] ParseDNBinary(byte[] blob)
+        public static byte[] ParseDNBinary(byte[] blob)
         {
             // Read structLen (4 bytes): The length of the structure, in bytes, up to and including the field StringName.
             int structLen = BitConverter.ToInt32(blob, 0);

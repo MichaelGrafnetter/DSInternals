@@ -1,4 +1,7 @@
-﻿namespace DSInternals.Replication.Model
+﻿using DSInternals.Common;
+using DSInternals.Common.Schema;
+
+namespace DSInternals.Replication.Model
 {
     /// <summary>
     /// Represents the result of a replication operation, including the replicated objects, a cookie for continuation, and metadata about the operation.
@@ -12,48 +15,41 @@
         /// <param name="hasMore">Indicates whether there are more objects to replicate.</param>
         /// <param name="cookie">A cookie for continuation.</param>
         /// <param name="totalObjectCount">The total number of objects available for replication.</param>
-        public ReplicationResult(List<ReplicaObject> objects, bool hasMore, ReplicationCookie cookie, int totalObjectCount)
+        public ReplicationResult(List<ReplicaObject> objects, bool hasMore, ReplicationCookie cookie, PrefixTable prefixTable, int totalObjectCount)
         {
+            Validator.AssertNotNull(objects, nameof(objects));
+            Validator.AssertNotNull(cookie, nameof(cookie));
+
             this.Objects = objects;
             this.HasMoreData = hasMore;
             this.Cookie = cookie;
+            this.PrefixTable = prefixTable;
             this.TotalObjectCount = totalObjectCount;
         }
 
         /// <summary>
         /// The replicated objects.
         /// </summary>
-        public List<ReplicaObject> Objects
-        {
-            get;
-            private set;
-        }
+        public readonly List<ReplicaObject> Objects;
 
         /// <summary>
         /// Indicates whether there are more objects to replicate.
         /// </summary>
-        public bool HasMoreData
-        {
-            get;
-            private set;
-        }
+        public readonly bool HasMoreData;
 
         /// <summary>
         /// A cookie for continuation.
         /// </summary>
-        public ReplicationCookie Cookie
-        {
-            get;
-            private set;
-        }
+        public readonly ReplicationCookie Cookie;
+
+        /// <summary>
+        /// Table for translating ATTRTYP values in the response to OIDs.
+        /// </summary>
+        public readonly PrefixTable? PrefixTable;
 
         /// <summary>
         /// The total number of objects available for replication.
         /// </summary>
-        public int TotalObjectCount
-        {
-            get;
-            private set;
-        }
+        public readonly int TotalObjectCount;
     }
 }

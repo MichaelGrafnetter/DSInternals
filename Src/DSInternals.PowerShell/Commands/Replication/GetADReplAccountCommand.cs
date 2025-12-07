@@ -89,6 +89,14 @@ namespace DSInternals.PowerShell.Commands
                     this.Properties |= requiredProperties;
                 }
             }
+
+            // Windows LAPS and legacy LAPS use custom attributes that are not part of the default schema.
+            bool fullSchemaRequired = (this.Properties & AccountPropertySets.LAPS) != AccountPropertySets.None;
+
+            if (fullSchemaRequired)
+            {
+                FetchSchema();
+            }
         }
 
         protected override void ProcessRecord()
@@ -109,7 +117,7 @@ namespace DSInternals.PowerShell.Commands
         protected void ReturnAllAccounts()
         {
             // Write the initial progress
-            var progress = new ProgressRecord(1, "Replication", "Replicating Active Directory objects.");
+            var progress = new ProgressRecord(1, "Account Replication", "Replicating Active Directory objects.");
             progress.PercentComplete = 0;
             this.WriteProgress(progress);
 
@@ -170,6 +178,30 @@ namespace DSInternals.PowerShell.Commands
             }
 
             this.WriteObject(account);
+        }
+
+        protected void FetchSchema()
+        {
+            // Write the initial progress
+            var progress = new ProgressRecord(2, "Schema Replication", "Replicating Active Directory schema.");
+            progress.PercentComplete = 0;
+            this.WriteProgress(progress);
+
+            // Update the progress after each replication cycle
+            ReplicationProgressHandler progressReporter = (ReplicationCookie cookie, int processedObjectCount, int totalObjectCount) =>
+            {
+                int percentComplete = (int)(((double)processedObjectCount / (double)totalObjectCount) * 100);
+                // AD's object count estimate is sometimes lower than the actual count, so we cap the value to 100%.
+                progress.PercentComplete = Math.Min(percentComplete, 100);
+                this.WriteProgress(progress);
+            };
+
+            // Replicate the schema partition
+            this.ReplicationClient.FetchFullSchema(progressReporter);
+
+            // Write progress completed
+            progress.RecordType = ProgressRecordType.Completed;
+            this.WriteProgress(progress);
         }
 
         private new void WriteObject(object sendToPipeline)
