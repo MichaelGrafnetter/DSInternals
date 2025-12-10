@@ -1,5 +1,4 @@
-﻿using System;
-using System.Buffers.Binary;
+﻿using System.Buffers.Binary;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -263,7 +262,7 @@ namespace DSInternals.Common.Data
             public uint SerialNo;
 
             /// <summary>
-            /// The interval, in seconds, at which a secondary DNS server attempts to contact the primary DNS server for getting an update. 
+            /// The interval, in seconds, at which a secondary DNS server attempts to contact the primary DNS server for getting an update.
             /// </summary>
             public uint Refresh;
 
@@ -364,6 +363,10 @@ namespace DSInternals.Common.Data
                 ResourceRecordType.CERT or
                 ResourceRecordType.TKEY or
                 ResourceRecordType.TSIG or
+                ResourceRecordType.CAA or
+                ResourceRecordType.SSHFP or
+                ResourceRecordType.SVCB or
+                ResourceRecordType.HTTPS or
                 _ => ParseUnknown(binaryData)
             };
 

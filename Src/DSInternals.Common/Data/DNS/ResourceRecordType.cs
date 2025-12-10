@@ -3,7 +3,7 @@
 namespace DSInternals.Common.Data
 {
     /// <summary>
-    /// Specifies DNS record types that can be enumerated by the DNS server. 
+    /// Specifies DNS record types that can be enumerated by the DNS server.
     /// </summary>
     public enum ResourceRecordType : ushort
     {
@@ -51,6 +51,8 @@ namespace DSInternals.Common.Data
         TKEY = DNS_TYPE.DNS_TYPE_TKEY,
         TSIG = DNS_TYPE.DNS_TYPE_TSIG,
         CAA = 257,
-        SSHFP = 44
+        SSHFP = 44,
+        SVCB = DNS_TYPE.DNS_TYPE_SVCB,
+        HTTPS = DNS_TYPE.DNS_TYPE_HTTPS
     }
 }

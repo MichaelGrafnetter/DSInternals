@@ -1,6 +1,5 @@
 ﻿using System;
 using DSInternals.Common.Data;
-using System.Collections.Generic;
 using DSInternals.Common.Schema;
 
 namespace DSInternals.DataStore
@@ -87,6 +86,38 @@ namespace DSInternals.DataStore
                 if (fqdn != RootHintsZoneName && fqdn != TrustAnchorsZoneName)
                 {
                     yield return fqdn;
+                }
+            }
+        }
+
+        public IEnumerable<DnsSigningKey> GetDnsSigningKeys()
+        {
+            DNTag? dnsZoneCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsZone);
+
+            if (!dnsZoneCategory.HasValue)
+            {
+                // This must be some initial AD schema or ADAM schema, which does not support DNS records.
+                yield break;
+            }
+
+            foreach (var zone in this.FindObjectsByCategory(dnsZoneCategory.Value, includeReadOnly: true))
+            {
+                // Check if the current DNS zone has signing keys
+                zone.ReadAttribute(CommonDirectoryAttributes.DnsSigningKeys, out byte[][]? signingKeys);
+
+                if (signingKeys != null)
+                {
+                    zone.ReadAttribute(CommonDirectoryAttributes.DomainComponent, out string fqdn);
+                    // TODO: Consider fetching the msDNS-IsSigned and msDNS-SigningKeyDescriptors attributes
+
+                    foreach (var signingKey in signingKeys)
+                    {
+                        var dnsSigningKey = DnsSigningKey.Decode(fqdn, signingKey);
+
+                        // TODO: Fetch KDS root keys and decrypt
+
+                        yield return dnsSigningKey;
+                    }
                 }
             }
         }

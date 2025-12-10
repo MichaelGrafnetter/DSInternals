@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace DSInternals.Common.Schema
 {
@@ -13,6 +14,31 @@ namespace DSInternals.Common.Schema
         /// Stores information about an employee or contractor who works for an organization.
         /// </summary>
         public const string User = "user";
+
+        /// <summary>
+        /// Represents a computer account in the domain.
+        /// </summary>
+        public const string Computer = "computer";
+
+        /// <summary>
+        /// Stores a list of user names. Used to apply security principals on resources.
+        /// </summary>
+        public const string Group = "group";
+
+        /// <summary>
+        /// A container for storing users, computers, and other account objects.
+        /// </summary>
+        public const string OrganizationalUnit = "organizationalUnit";
+
+        /// <summary>
+        /// This class is used to hold other classes.
+        /// </summary>
+        public const string Container = "container";
+
+        /// <summary>
+        /// Contains information about a person or company that you may need to contact on a regular basis.
+        /// </summary>
+        public const string Contact = "contact";
 
         /// <summary>
         /// Defines a class object in the schema.
@@ -75,6 +101,11 @@ namespace DSInternals.Common.Schema
         /// </summary>
         public const string Configuration = "configuration";
 
+        /// <summary>
+        /// The top level class from which all classes are derived.
+        /// </summary>
+        public const string Top = "top";
+
         public static ClassType? Translate(string ldapDisplayName)
         {
             if (ldapDisplayName == null) throw new ArgumentNullException(nameof(ldapDisplayName));
@@ -83,6 +114,11 @@ namespace DSInternals.Common.Schema
             {
                 Secret => ClassType.Secret,
                 User => ClassType.User,
+                Group => ClassType.Group,
+                Computer => ClassType.Computer,
+                Contact => ClassType.Contact,
+                Container => ClassType.Container,
+                OrganizationalUnit => ClassType.OrganizationalUnit,
                 ClassSchema => ClassType.ClassSchema,
                 AttributeSchema => ClassType.AttributeSchema,
                 Schema => ClassType.Schema,
@@ -95,6 +131,7 @@ namespace DSInternals.Common.Schema
                 NtdsSettings => ClassType.NtdsSettings,
                 NtdsSettingsRO => ClassType.NtdsSettingsRO,
                 Configuration => ClassType.Configuration,
+                Top => ClassType.Top,
                 _ => null
             };
         }

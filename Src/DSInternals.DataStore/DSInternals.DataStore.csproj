@@ -27,4 +27,11 @@
   <ItemGroup>
     <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <!-- Group partial class C# files -->
+    <Compile Update="DirectoryAgent.*.cs">
+      <DependentUpon>DirectoryAgent.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

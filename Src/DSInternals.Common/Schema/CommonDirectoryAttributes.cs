@@ -143,25 +143,17 @@ namespace DSInternals.Common.Schema
         public const string FVERecoveryGuid = "msFVE-RecoveryGuid";
         public const string FVERecoveryPassword = "msFVE-RecoveryPassword";
         public const string LAPSPassword = "ms-Mcs-AdmPwd";
-        public const string LAPSPasswordOid = "1.2.840.113556.1.8000.2554.50051.45980.28112.18903.35903.6685103.1224907.2.1";
         public const string LAPSPasswordExpirationTime = "ms-Mcs-AdmPwdExpirationTime";
-        public const string LAPSPasswordExpirationTimeOid = "1.2.840.113556.1.8000.2554.50051.45980.28112.18903.35903.6685103.1224907.2.2";
         public const string WindowsLapsPasswordExpirationTime = "msLAPS-PasswordExpirationTime";
-        public const string WindowsLapsPasswordExpirationTimeOid = "1.2.840.113556.1.6.44.1.1";
         public const string WindowsLapsPassword = "msLAPS-Password";
-        public const string WindowsLapsPasswordOid = "1.2.840.113556.1.6.44.1.2";
         public const string WindowsLapsEncryptedPassword = "msLAPS-EncryptedPassword";
-        public const string WindowsLapsEncryptedPasswordOid = "1.2.840.113556.1.6.44.1.3";
         public const string WindowsLapsEncryptedPasswordHistory = "msLAPS-EncryptedPasswordHistory";
-        public const string WindowsLapsEncryptedPasswordHistoryOid = "1.2.840.113556.1.6.44.1.4";
         public const string WindowsLapsEncryptedDsrmPassword = "msLAPS-EncryptedDSRMPassword";
-        public const string WindowsLapsEncryptedDsrmPasswordOid = "1.2.840.113556.1.6.44.1.5";
         public const string WindowsLapsEncryptedDsrmPasswordHistory = "msLAPS-EncryptedDSRMPasswordHistory";
-        public const string WindowsLapsEncryptedDsrmPasswordHistoryOid = "1.2.840.113556.1.6.44.1.6";
         public const string WindowsLapsCurrentPasswordVersion = "msLAPS-CurrentPasswordVersion";
-        public const string WindowsLapsCurrentPasswordVersionOid = "1.2.840.113556.1.6.44.1.7";
         public const string DnsRecord = "dnsRecord";
         public const string DnsTombstoned = "dNSTombstoned";
+        public const string DnsSigningKeys = "msDNS-SigningKeys";
 
         public static AttributeType? Translate(string ldapDisplayName)
         {
