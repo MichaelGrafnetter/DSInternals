@@ -12,7 +12,7 @@ public class DnsSigningKeyDescriptor
 {
     private static readonly int DescriptorPart2Size = Marshal.SizeOf<DescriptorPart2>();
     private static readonly int GuidSize = Marshal.SizeOf<Guid>();
-    private static readonly int MinimumSize = sizeof(int) + GuidSize + DescriptorPart2Size; // TODO
+    private static readonly int MinimumSize = sizeof(int) + GuidSize + sizeof(char) + DescriptorPart2Size + 3 * (sizeof(char) + sizeof(DnsSigningKeyScope));
     private const int ExtectedHeaderVersion = 1;
     private const int GuidStringLengthInBytes = 78; // "{f86d0667-f864-4276-8788-86fbf1c1234b}" with \0 terminator
     private const int MaxKspNameLengthInBytes = 256; // Must fit "Microsoft Software Key Storage Provider"
