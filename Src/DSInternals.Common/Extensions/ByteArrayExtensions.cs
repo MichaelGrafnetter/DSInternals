@@ -26,7 +26,7 @@ namespace DSInternals.Common
                 exception.Data.Add("Value", hex);
                 throw exception;
             }
-            
+
             if(startIndex < 0 || startIndex >= hex.Length )
             {
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
@@ -244,7 +244,7 @@ namespace DSInternals.Common
             long remainingBytes = stream.Length - stream.Position;
             if(remainingBytes > int.MaxValue)
             {
-                throw new ArgumentOutOfRangeException("stream");
+                throw new ArgumentOutOfRangeException(nameof(stream));
             }
             byte[] buffer = new byte[remainingBytes];
             stream.Read(buffer, 0, (int)remainingBytes);

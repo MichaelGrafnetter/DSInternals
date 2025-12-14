@@ -176,7 +176,7 @@ namespace DSInternals
                     unsigned long prefixIndex = prefixTable.pPrefixEntry[i].ndx;
 
                     // Do not re-add prefixes 0-38
-                    if (prefixIndex > PrefixTable::LastBuitlInPrefixIndex)
+                    if (prefixIndex > PrefixTable::LastBuiltInPrefixIndex)
                     {
                         OID_t nativePrefix = prefixTable.pPrefixEntry[i].prefix;
                         auto managedPrefix = ToByteArray(nativePrefix);

@@ -47,7 +47,7 @@
                 string[] rdnSegments = SplitDN(segment, true);
                 if (rdnSegments.Length != 2)
                 {
-                    throw new ArgumentException("Error parsing distinguished name.", "dn");
+                    throw new ArgumentException("Error parsing distinguished name.", nameof(dn));
                 }
                 try
                 {
@@ -56,7 +56,7 @@
                 }
                 catch (ArgumentNullException)
                 {
-                    throw new ArgumentException("Error parsing distinguished name.", "dn");
+                    throw new ArgumentException("Error parsing distinguished name.", nameof(dn));
                 }
             }
         }
@@ -239,7 +239,7 @@
             if (inQuotes)
             {
                 // Unpaired quotes
-                throw new ArgumentException("Error parsing distinguished name.", "dn");
+                throw new ArgumentException("Error parsing distinguished name.", nameof(dn));
             }
             // Add the last segment to the list
             segments.Add(currentSegment.ToString());

@@ -314,7 +314,7 @@
         private void LookupAccountNTHashInSortedFile()
         {
             string hash = this.Account.NTHash.ToHex(true);
-            // If there is a file path present, the hashes are in seperate sorted files
+            // If there is a file path present, the hashes are in separate sorted files
             if (this.WeakPasswordHashesSortedFilePath != null)
             {
                 // The files in the path should be named with the first 5 chararacters of the hash and the extension txt, like ABDD0.txt

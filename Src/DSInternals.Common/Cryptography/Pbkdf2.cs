@@ -61,15 +61,15 @@ namespace DSInternals.Common.Cryptography
         public Pbkdf2(byte[] password, byte[] salt, int iterations, string hashName)
         {
             if (password == null)
-                throw new ArgumentNullException("password");
+                throw new ArgumentNullException(nameof(password));
             if (salt == null)
-                throw new ArgumentNullException("salt");
+                throw new ArgumentNullException(nameof(salt));
             if (string.IsNullOrWhiteSpace(hashName))
-                throw new ArgumentNullException("hashName");
+                throw new ArgumentNullException(nameof(hashName));
             if (salt.Length < 8)
-                throw new ArgumentException("Argument must be at least 8 bytes in length.", "salt");
+                throw new ArgumentException("Argument must be at least 8 bytes in length.", nameof(salt));
             if (iterations < 1)
-                throw new ArgumentException("Argument must be greater than zero.", "iterations");
+                throw new ArgumentException("Argument must be greater than zero.", nameof(iterations));
 
             _password = (byte[])password.Clone();
             _salt = (byte[])salt.Clone();
@@ -90,15 +90,15 @@ namespace DSInternals.Common.Cryptography
         public Pbkdf2(string password, byte[] salt, int iterations, string hashName)
         {
             if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentNullException("password");
+                throw new ArgumentNullException(nameof(password));
             if (salt == null)
-                throw new ArgumentNullException("salt");
+                throw new ArgumentNullException(nameof(salt));
             if (string.IsNullOrWhiteSpace(hashName))
-                throw new ArgumentNullException("hashName");
+                throw new ArgumentNullException(nameof(hashName));
             if (salt.Length < 8)
-                throw new ArgumentException("Argument must be at least 8 bytes in length.", "salt");
+                throw new ArgumentException("Argument must be at least 8 bytes in length.", nameof(salt));
             if (iterations < 1)
-                throw new ArgumentException("Argument must be greater than zero.", "iterations");
+                throw new ArgumentException("Argument must be greater than zero.", nameof(iterations));
 
             _password = new UTF8Encoding(false).GetBytes(password);
             _salt = (byte[])salt.Clone();
@@ -125,7 +125,7 @@ namespace DSInternals.Common.Cryptography
                 if (_state != 0)
                     throw new InvalidOperationException("HashName value cannot be changed once the operation has begun.");
                 if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 _hashName = value;
                 Initialize();
             }
@@ -145,7 +145,7 @@ namespace DSInternals.Common.Cryptography
                 if (_state != 0)
                     throw new InvalidOperationException("IterationCount value cannot be changed once the operation has begun.");
                 if (value < 1)
-                    throw new ArgumentOutOfRangeException("value", "value must be greater than zero.");
+                    throw new ArgumentOutOfRangeException(nameof(value), "value must be greater than zero.");
                 _iterationCount = (uint)value;
                 Initialize();
             }
@@ -166,9 +166,9 @@ namespace DSInternals.Common.Cryptography
                 if (_state != 0)
                     throw new InvalidOperationException("Password value cannot be chance once the operation has begun.");
                 if (value == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 if (value.Length < 1)
-                    throw new ArgumentException("Value must be a byte array at least 1 byte in length.", "value");
+                    throw new ArgumentException("Value must be a byte array at least 1 byte in length.", nameof(value));
                 _password = (byte[])value.Clone();
                 Initialize();
             }
@@ -189,9 +189,9 @@ namespace DSInternals.Common.Cryptography
                 if (_state != 0)
                     throw new InvalidOperationException("Salt value cannot be changed once the operation has begun.");
                 if (value == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 if (value.Length < 8)
-                    throw new ArgumentException("Value must be a byte array at least 8 bytes in length.", "value");
+                    throw new ArgumentException("Value must be a byte array at least 8 bytes in length.", nameof(value));
                 _salt = (byte[])value.Clone();
                 Initialize();
             }
@@ -256,7 +256,7 @@ namespace DSInternals.Common.Cryptography
         public override byte[] GetBytes(int cb)
         {
             if (cb <= 0)
-                throw new ArgumentOutOfRangeException("cb", "Argument must be a value greater than zero.");
+                throw new ArgumentOutOfRangeException(nameof(cb), "Argument must be a value greater than zero.");
 
             _state = 1;
 

@@ -20,7 +20,7 @@ namespace DSInternals.Common.Interop
             }
             else if (passwordPtr.NumBytesTotal >= ushort.MaxValue)
             {
-                throw new ArgumentOutOfRangeException("passwordPtr");
+                throw new ArgumentOutOfRangeException(nameof(passwordPtr));
             }
             else
             {

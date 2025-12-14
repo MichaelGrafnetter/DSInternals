@@ -24,7 +24,7 @@
 
         // The length goes right after Reserverd1
         private const int LengthOffset = sizeof(int);
-        
+
         // Footer := Reserved5
         private const int FooterSize = sizeof(byte);
 
@@ -101,7 +101,7 @@
                     int expectedLength = blob.Length - (PrefixSize + FooterSize);
                     if(length != expectedLength)
                     {
-                        throw new ArgumentOutOfRangeException("blob", length, "Unexpected length of the supplemental credentials structure.");
+                        throw new ArgumentOutOfRangeException(nameof(blob), length, "Unexpected length of the supplemental credentials structure.");
                     }
 
                     // This value MUST be set to zero and MUST be ignored by the recipient.
@@ -110,14 +110,14 @@
                     // This value MUST be set to zero and MUST be ignored by the recipient.
                     short reserved3 = reader.ReadInt16();
 
-                    //  This value MUST be ignored by the recipient and MAY<19> contain arbitrary values. 
+                    //  This value MUST be ignored by the recipient and MAY<19> contain arbitrary values.
                     byte[] reserved4 = reader.ReadBytes(Reserved4Size);
 
                     // This field MUST be the value 0x50, in little-endian byte order.
                     short propertySignature = reader.ReadInt16();
                     if (propertySignature != Signature)
                     {
-                        throw new ArgumentOutOfRangeException("Supplemental credentials do not have a valid signature.", propertySignature, "blob");
+                        throw new ArgumentOutOfRangeException(nameof(blob), propertySignature, "Supplemental credentials do not have a valid signature.");
                     }
 
                     // Parse properties
@@ -222,7 +222,7 @@
 
             for (int i = 0; i < propertyCount; i++)
             {
-                // The number of bytes, in little-endian byte order, of PropertyName. 
+                // The number of bytes, in little-endian byte order, of PropertyName.
                 short nameLength = reader.ReadInt16();
 
                 // The number of bytes contained in PropertyValue.
@@ -340,7 +340,7 @@
         {
             byte[] encodedName = Encoding.Unicode.GetBytes(name);
             byte[] encodedValue = Encoding.ASCII.GetBytes(value.ToHex(false));
-            
+
             // NameLength(2 bytes): The number of bytes, in little - endian byte order, of PropertyName.The property name is located at an offset of zero bytes just following the Reserved field.
             writer.Write((short) encodedName.Length);
 

@@ -16,7 +16,7 @@ namespace DSInternals.Common.Interop
             }
             else if (oemStringPtr.Length >= ushort.MaxValue)
             {
-                throw new ArgumentOutOfRangeException("oemStringPtr");
+                throw new ArgumentOutOfRangeException(nameof(oemStringPtr));
             }
             else
             {

@@ -214,7 +214,7 @@ internal static partial class NativeMethods
     /// <param name="count">Number of names to translate. </param>
     /// <param name="names">Pointer to an array of Count UNICODE_STRINGs that contain the names to map to relative IDs.  Case-insensitive comparisons of these names will be performed for the lookup operation.</param>
     /// <param name="relativeIds">Receives a pointer to an array of Count Relative IDs that have been filled in.  The relative ID of the nth name will be the nth entry in this array.  Any names that could not be translated will have a zero relative ID.  This buffer must be freed when no longer needed using SamFreeMemory().</param>
-    /// <param name="use">Recieves a pointer to an array of Count SID_NAME_USE entries that have been filled in with what significance each name has.  The nth entry in this array indicates the meaning of the nth name passed.  This buffer must be freed when no longer needed using SamFreeMemory().</param>
+    /// <param name="use">Receives a pointer to an array of Count SID_NAME_USE entries that have been filled in with what significance each name has.  The nth entry in this array indicates the meaning of the nth name passed.  This buffer must be freed when no longer needed using SamFreeMemory().</param>
     /// <returns>
     /// STATUS_SUCCESS - The Service completed successfully.
     /// STATUS_ACCESS_DENIED - Caller does not have the appropriate access to complete the operation.
@@ -236,7 +236,7 @@ internal static partial class NativeMethods
         uint count = (uint)names.Length;
         if (count > MaxNamesToLookup)
         {
-            throw new ArgumentOutOfRangeException("names", count, $"Cannot translate more than {MaxNamesToLookup} names at once.");
+            throw new ArgumentOutOfRangeException(nameof(names), count, $"Cannot translate more than {MaxNamesToLookup} names at once.");
         }
 
         // Prepare parameters

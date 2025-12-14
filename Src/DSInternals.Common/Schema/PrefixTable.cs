@@ -12,7 +12,7 @@ namespace DSInternals.Common.Schema
 
     public class PrefixTable
     {
-        public const int LastBuitlInPrefixIndex = 38;
+        public const int LastBuiltInPrefixIndex = 38;
         private const int MinBlobLength = 2 * sizeof(uint);
         private const long LongLimit = (long.MaxValue >> 7) - 0x7f;
         private const string AttributeSyntaxOidFormat = "2.5.5.{0}";

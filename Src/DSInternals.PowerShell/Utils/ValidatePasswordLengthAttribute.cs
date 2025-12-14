@@ -22,11 +22,11 @@ namespace DSInternals.PowerShell
             // Validate parameters:
             if (minLength < 0)
             {
-                throw new ArgumentOutOfRangeException("minLength");
+                throw new ArgumentOutOfRangeException(nameof(minLength));
             }
             if (maxLength <= 0)
             {
-                throw new ArgumentOutOfRangeException("maxLength");
+                throw new ArgumentOutOfRangeException(nameof(maxLength));
             }
             if (maxLength < minLength)
             {

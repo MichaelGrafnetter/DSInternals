@@ -5,7 +5,7 @@
 #define DECLSPEC_IMPORT
 #define WINAPI
 
-// This is starndard definition from windows.h, but including it causes many conflicts.
+// This is standard definition from windows.h, but including it causes many conflicts.
 // It is also defined in drsr.idl, but we use it before it is defined.
 typedef LONGLONG USN;
 #endif

@@ -5,25 +5,31 @@ using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.Serialization
 {
-    // TODO: This class needs refactoring and cleanup.
+    /// <summary>
+    /// Provides JSON serialization with relaxed parsing rules for handling AD/Azure AD data formats.
+    /// </summary>
+    /// <remarks>
+    /// This serializer adds capabilities not available in System.Text.Json:
+    /// - Single-quoted JSON normalization (converts '...' to "...")
+    /// - Binary JSON decoding with UTF-8/UTF-16 support
+    /// - Zero-terminator trimming for AD binary attributes
+    /// - UTF-16 BOM handling
+    /// </remarks>
     public static class LenientJsonSerializer
     {
-        // One place to set behavior for all JSON in DSInternals
+        /// <summary>
+        /// Shared JSON serializer options for all JSON operations in DSInternals.
+        /// </summary>
         public static readonly JsonSerializerOptions Options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             AllowTrailingCommas = true,
             ReadCommentHandling = JsonCommentHandling.Skip,
-            DefaultIgnoreCondition = JsonIgnoreCondition.Never,
             IncludeFields = true, // LAPS uses fields (n/t/p)
-            NumberHandling = JsonNumberHandling.AllowReadingFromString, // Newtonsoft parity for quoted numbers
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            NumberHandling = JsonNumberHandling.AllowReadingFromString,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters = { new JsonStringEnumConverter() }
         };
-
-        static LenientJsonSerializer()
-        {
-            Options.Converters.Add(new JsonStringEnumConverter());
-        }
 
         // ---------- String input ----------
         public static T DeserializeLenient<T>(string json)
@@ -66,7 +72,7 @@ namespace DSInternals.Common.Serialization
 #else
             // .NET Framework: no span GetString; copy to array explicitly.
             byte[] buf = trimmed.Length == 0 ? Array.Empty<byte>() : new byte[trimmed.Length];
-            if (buf.Length != 0) 
+            if (buf.Length != 0)
             {
                 for (int i = 0; i < trimmed.Length; i++)
                 {

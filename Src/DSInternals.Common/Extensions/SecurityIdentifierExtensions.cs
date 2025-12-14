@@ -14,7 +14,7 @@
             int domainSidLength = binaryForm.Length - ridLength;
             if (domainSidLength < 0)
             {
-                throw new ArgumentOutOfRangeException("sid", binaryForm.Length, "The SID is too short.");
+                throw new ArgumentOutOfRangeException(nameof(sid), binaryForm.Length, "The SID is too short.");
             }
             return BitConverter.ToInt32(binaryForm, domainSidLength);
         }

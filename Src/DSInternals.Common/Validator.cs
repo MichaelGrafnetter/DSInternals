@@ -20,7 +20,7 @@ namespace DSInternals.Common
         {
             if (status.SeverityCode == NTSTATUS.Severity.Success)
             {
-                // No error has occured
+                // No error has occurred
                 return;
             }
 
@@ -40,7 +40,7 @@ namespace DSInternals.Common
             {
                 case Win32ErrorCode.Success:
                 case Win32ErrorCode.MORE_DATA:
-                    // No error occured, so exit gracefully.
+                    // No error occurred, so exit gracefully.
                     return;
             }
 

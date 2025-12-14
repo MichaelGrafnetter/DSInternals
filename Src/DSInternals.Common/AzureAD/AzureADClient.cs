@@ -186,7 +186,7 @@ namespace DSInternals.Common.AzureAD
             catch (HttpRequestException e)
             {
                 // Unpack a more meaningful message, e. g. DNS error
-                throw new GraphApiException(e?.InnerException.Message ?? "An error occured while trying to call the REST API.", e);
+                throw new GraphApiException(e?.InnerException.Message ?? "An error occurred while trying to call the REST API.", e);
             }
         }
 
