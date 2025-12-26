@@ -1,17 +1,26 @@
 <Project>
-  <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+  <!-- These common settings only apply to C# projects. C++ projects have their own config file.-->
+  <PropertyGroup>
+    <!-- Target both .NET Framework 4.8 (Windows PowerShell 5) and modern .NET (PowerShell 7) -->
+    <!-- Linux and MacOS are currently unsupported because of P/Invokes. -->
+    <TargetFrameworks>net48;net8.0-windows;net10.0-windows</TargetFrameworks>
+
     <!-- Configure C# language properties -->
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
-	  <ImplicitUsings>enable</ImplicitUsings>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
-    <EnableNETAnalyzers>false</EnableNETAnalyzers>
-    <AnalysisLevel>6.0-recommended</AnalysisLevel>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     <DebugType>portable</DebugType>
-    
+
+    <!-- Code Analysis -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+
     <!-- Redirect output directories -->
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <ArtifactsPath>$(MSBuildThisFileDirectory)../Build</ArtifactsPath>
@@ -47,17 +56,31 @@
     <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+  <ItemGroup>
     <!-- Additional files to include in NuGet packages -->
-    <!-- Note: Without the condition, these files would always be visible in C++ projects. -->
     <None Include="$(MSBuildThisFileDirectory)Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
     <None Include="$(MSBuildThisFileDirectory)../LICENSE.md" Pack="true" PackagePath="/" Visible="false" />
+
+    <!-- Enable source-link -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net48'">
     <!-- Some crypto API functions are not available in WoW64.-->
     <Prefer32Bit>false</Prefer32Bit>
     <PreferNativeArm64>True</PreferNativeArm64>
+  </PropertyGroup>
+
+  <!-- AOT and Trim compatibility settings for modern .NET -->
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net48'">
+    <!-- TODO: DllImport needs to be migrated to LibraryImport to support AOT compilation. -->
+    <!-- TODO: JSON serialization needs to be improved before AOT can be enabled. -->
+    <IsAotCompatible>false</IsAotCompatible>
+    <IsTrimmable>false</IsTrimmable>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+    <EnableSingleFileAnalyzer>false</EnableSingleFileAnalyzer>
+    <EnableAotAnalyzer>false</EnableAotAnalyzer>
+    <VerifyReferenceAotCompatibility>false</VerifyReferenceAotCompatibility>
   </PropertyGroup>
 
   <!-- Configure strong name signing for C# projects if the private key exists -->
@@ -68,11 +91,6 @@
     <DelaySign>false</DelaySign>
    </PropertyGroup>
 
-  <ItemGroup>
-    <!-- Enable source-link -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
-  </ItemGroup>
-
   <PropertyGroup Condition="'$(Configuration)' == 'Release' AND '$(GITHUB_ACTIONS)' == 'true'">
     <!-- Enable continuous integration build metadata for GitHub Actions -->
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
@@ -81,11 +99,14 @@
   </PropertyGroup>
 
   <!-- Configure C# test projects -->
-  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Test')) AND '$(MSBuildProjectExtension)' == '.csproj'">
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Test'))">
+    <!-- Enable MSTest runner -->
+    <EnableMSTestRunner>true</EnableMSTestRunner>
+
     <!-- For .NET Framework, copy all dependencies to the output directory. -->
     <CopyLocalLockFileAssemblies Condition="'$(TargetFramework)'=='net48'">true</CopyLocalLockFileAssemblies>
 
-    <!-- For .NET 8, generate runtimeconfig.dev.json with dependencies instead. -->
-    <GenerateRuntimeConfigDevFile Condition="'$(TargetFramework)' == 'net8.0-windows'">true</GenerateRuntimeConfigDevFile>
+    <!-- For .NET 8+, generate runtimeconfig.dev.json with dependencies instead. -->
+    <GenerateRuntimeConfigDevFile Condition="'$(TargetFramework)' != 'net48'">true</GenerateRuntimeConfigDevFile>
   </PropertyGroup>
 </Project>

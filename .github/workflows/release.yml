@@ -84,10 +84,11 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        # .NET SDK 9 is used for build. Platform-specific IJW hosts from .NET SDK 8 are used when building C++/CLI projects.
+        # .NET SDK 10 is used for build. Platform-specific IJW hosts from previous .NET SDKs are used when building C++/CLI projects.
         dotnet-version: |
           8.0.x
           9.0.x
+          10.0.x
         cache: true
         cache-dependency-path: 'Src/*/packages.lock.json'
 

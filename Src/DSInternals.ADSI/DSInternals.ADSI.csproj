@@ -2,7 +2,6 @@
   <PropertyGroup>
     <Version>6.2</Version>
     <AssemblyTitle>DSInternals ADSI Library</AssemblyTitle>
-    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -11,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj" />
-    <PackageReference Include="System.DirectoryServices" Version="9.0.8" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+    <PackageReference Include="System.DirectoryServices" Condition="'$(TargetFramework)' != 'net48'" />
     <!-- Do not use packages for assemblies that are part of .NET Framework -->
     <Reference Include="System.DirectoryServices" Condition="'$(TargetFramework)' == 'net48'" />
   </ItemGroup>

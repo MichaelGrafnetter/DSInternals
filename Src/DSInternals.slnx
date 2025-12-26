@@ -7,7 +7,7 @@
   </Configurations>
 
   <!-- Binary PowerShell module -->
-  <Project Path="DSInternals.PowerShell/DSInternals.PowerShell.csproj" />
+  <Project Path="DSInternals.PowerShell/DSInternals.PowerShell.csproj" DefaultStartup="true" />
 
   <!-- C# libraries / NuGet packages -->
   <Project Path="DSInternals.Common/DSInternals.Common.csproj" />

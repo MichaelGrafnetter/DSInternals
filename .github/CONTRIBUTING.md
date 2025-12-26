@@ -49,7 +49,7 @@ $PSVersion
 ### Development Environment
 
 If you want to build the module from source code yourself, you need to install these programs first:
-- [Microsoft Visual Studio Community](https://visualstudio.microsoft.com/vs/community/) 2022 with these features installed:
+- [Microsoft Visual Studio Community](https://visualstudio.microsoft.com/vs/community/) 2026 with these features installed:
    * .NET Framework 4.8 targeting pack
    * C++ 2022 Redistributable Update
    * C++/CLI support for v143 build tools (Latest)

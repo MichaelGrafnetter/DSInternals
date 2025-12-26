@@ -8,7 +8,6 @@
     <Description>DSInternals DataStore is an advanced framework for offline ntds.dit file manipulation. It can be used to extract password hashes from Active Directory backups or to modify the sIDHistory and primaryGroupId attributes.</Description>
     <PackageReleaseNotes>- Fixed a bug in prefix table parsing.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security NTDS AD Identity Active Directory</PackageTags>
-    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -16,9 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DSInternals.ManagedEsent.Interop" Version="2.0.4.1" />
-    <PackageReference Include="DSInternals.ManagedEsent.Isam" Version="2.0.4.1" />
-    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.205">
+    <PackageReference Include="DSInternals.ManagedEsent.Interop" />
+    <PackageReference Include="DSInternals.ManagedEsent.Isam" />
+    <PackageReference Include="Microsoft.Windows.CsWin32">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

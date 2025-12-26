@@ -1,7 +1,4 @@
 ﻿<Project Sdk="MSTest.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
-  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSInternals.Replication.Model\DSInternals.Replication.Model.csproj" />
   </ItemGroup>
