@@ -25,52 +25,23 @@ jobs:
         include:
         - language: actions
           build-mode: none
-        # Temporarily disable C++
-        #- language: c-cpp
-        #  build-mode: manual
+        - language: c-cpp
+          build-mode: none
         - language: csharp
-          build-mode: manual
+          build-mode: none
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
-      
+      uses: actions/checkout@v6
+
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        # If you wish to specify custom queries, you can do so here or in a config file.
-        # By default, queries listed here will override any specified in a config file.
-        # Prefix the list here with "+" to use these queries and those in the config file.
-
-        # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
-        # queries: security-extended,security-and-quality
-
-    - name: Setup MSBuild
-      if: matrix.build-mode == 'manual'
-      uses: microsoft/setup-msbuild@v2
-      with:
-        msbuild-architecture: x64 # default is x86
-
-    - name: Setup .NET
-      if: matrix.build-mode == 'manual'
-      uses: actions/setup-dotnet@v4
-      with:
-        cache: true
-        cache-dependency-path: 'Src/*/packages.lock.json'
-
-    - name: Restore NuGet Packages
-      if: matrix.build-mode == 'manual'
-      working-directory: Src
-      run: msbuild.exe -target:Restore -property:RestorePackagesConfig=true -property:Configuration=Debug -property:Platform=x64
-
-    - name: Build All Projects
-      if: matrix.build-mode == 'manual'
-      working-directory: Src
-      run: msbuild.exe -target:Build -property:Configuration=Debug -property:Platform=x64 -property:RestorePackages=false
+        queries: security-and-quality
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
       with:
         category: "/language:${{matrix.language}}"

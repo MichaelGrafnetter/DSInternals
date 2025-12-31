@@ -1,7 +1,7 @@
 <Project>
   <!-- Configure common C++ project properties -->
   <PropertyGroup>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>7.0</WindowsTargetPlatformMinVersion>
     <VCProjectVersion>17.0</VCProjectVersion>
