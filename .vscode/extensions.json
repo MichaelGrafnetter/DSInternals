@@ -6,6 +6,7 @@
     "GitHub.vscode-pull-request-github",
     "GitHub.vscode-github-actions",
     "EditorConfig.EditorConfig",
-    "DavidAnson.vscode-markdownlint"
+    "DavidAnson.vscode-markdownlint",
+    "MermaidChart.vscode-mermaid-chart"
   ]
 }
