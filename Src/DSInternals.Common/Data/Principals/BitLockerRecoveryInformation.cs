@@ -35,7 +35,7 @@ public class BitLockerRecoveryInformation
 
         // ms-FVE-KeyPackage
         dsObject.ReadAttribute(CommonDirectoryAttributes.FVEKeyPackage, out byte[] keyPackage);
-        this.KeyPackage = KeyPackage;
+        this.KeyPackage = keyPackage;
     }
 
     public string DistinguishedName

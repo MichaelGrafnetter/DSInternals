@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/MichaelGrafnetter/DSInternals/tree/master/Documentation/PowerShell
+    about: Check the PowerShell cmdlet documentation before opening an issue.
+  - name: 📋 Changelog
+    url: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/CHANGELOG.md
+    about: Review the changelog to see if your issue has been addressed in a recent release.
+  - name: 📝 Contributing Guidelines
+    url: https://github.com/MichaelGrafnetter/DSInternals/blob/master/.github/CONTRIBUTING.md
+    about: Read the contributing guidelines before submitting.

@@ -1,0 +1,29 @@
+name: ❓ Question
+description: Ask a question about using the DSInternals PowerShell module
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in DSInternals! Before asking a question, please check:
+        - [PowerShell Documentation](https://github.com/MichaelGrafnetter/DSInternals/tree/master/Documentation/PowerShell)
+        - [Changelog](https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/CHANGELOG.md)
+        - [Existing Issues](https://github.com/MichaelGrafnetter/DSInternals/issues?q=is%3Aissue)
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What would you like to know?
+      placeholder: Describe your question in detail...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched the existing issues and documentation for an answer to my question.
+          required: true

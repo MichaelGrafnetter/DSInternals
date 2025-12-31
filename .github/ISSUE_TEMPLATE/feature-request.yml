@@ -1,0 +1,46 @@
+name: 💡 Feature Request
+description: Suggest a new feature or enhancement for the DSInternals PowerShell module
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please provide as much detail as possible to help us understand and evaluate your request.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of the feature you'd like to see.
+      placeholder: Describe the feature...
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe the problem you're trying to solve or the scenario where this feature would be useful.
+      placeholder: |
+        As a security auditor, I want to...
+        When performing AD recovery, I need to...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be willing to help implement this feature?
+      options:
+        - label: I would be willing to submit a pull request for this feature.
+          required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched the existing issues to make sure this feature has not already been requested.
+          required: true

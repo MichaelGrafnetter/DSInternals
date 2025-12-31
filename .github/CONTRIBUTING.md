@@ -6,59 +6,35 @@
 ## How can I contribute?
 
 Any contributions to this project are warmly welcome. These are the most important areas:
-- Bug reports
-- Feature requests
-- Testing the module against different Active Directory configurations
+
+- [Bug reports](https://github.com/MichaelGrafnetter/DSInternals/issues)
+- [Feature requests](https://github.com/MichaelGrafnetter/DSInternals/issues)
+- Testing the PowerShell module against different Active Directory configurations
 - Documentation
-    * PowerShell help
-    * XML documentation comments in the source code
+  - PowerShell help
+  - XML documentation comments in the source code
 - Code
-    * Bug fixes
-    * New features
-    * Test cases
-    * Code cleanup (StyleCop, FXCop,...)
-
-## Submitting Bug Reports
-
-When submitting a [new bug report](https://github.com/MichaelGrafnetter/DSInternals/issues), please do not forget to mention the version of the target domain controller. The following information would also be very useful:
-
-```powershell
-# The entire command that caused the error
-Get-History
-
-# Error message
-$Error[0].Exception.Message
-
-# The entire exception stack trace
-$Error[0].Exception.StackTrace
-
-# Version of the DSInternals module
-(Get-Module -Name DSInternals -ListAvailable).Version.ToString()
-
-# OS on which the command was running
-(Get-WmiObject -Class Win32_OperatingSystem).Caption
-
-# PowerShell version
-$PSVersion
-
-# Anything else that might help identifying and fixing the issue
-```
+  - Bug fixes
+  - New features
+  - Test cases
+  - Code cleanup
 
 ## Building from Source Code
 
 ### Development Environment
 
 If you want to build the module from source code yourself, you need to install these programs first:
+
 - [Microsoft Visual Studio Community](https://visualstudio.microsoft.com/vs/community/) 2026 with these features installed:
-   * .NET Framework 4.8 targeting pack
-   * C++ 2022 Redistributable Update
-   * C++/CLI support for v143 build tools (Latest)
-   * MSVC v143 - VS 2022 C++ x64/x86 build tools (Latest)
-   * MSVC v143 - VS 2022 C++ ARM64/ARM64EC build tools (Latest)
-   * Windows 11 SDK (you might have to retarget the `DSInternals.Replication.Interop` projects to the version you have)
-   * PowerShell Tools for Visual Studio (optional)
-   * Git for Windows (optional)
-   * GitHub Extension for Visual Studio (optional)
+  - .NET Framework 4.8 targeting pack
+  - C++ 2022 Redistributable Update
+  - C++/CLI support for v143 build tools (Latest)
+  - MSVC v143 - VS 2022 C++ x64/x86 build tools (Latest)
+  - MSVC v143 - VS 2022 C++ ARM64/ARM64EC build tools (Latest)
+  - Windows 11 SDK (you might have to retarget the `DSInternals.Replication.Interop` projects to the version you have)
+  - PowerShell Tools for Visual Studio (optional)
+  - Git for Windows (optional)
+  - GitHub Extension for Visual Studio (optional)
 
 To make IntelliSense work with `*.ps1xml` files, the following code needs to be added to the `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Xml\Schemas\catalog.xml` file:
 
