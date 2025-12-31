@@ -1,10 +1,10 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.SAM;
-    using DSInternals.SAM.Interop;
     using System;
     using System.Management.Automation;
     using System.Security.Principal;
+    using DSInternals.SAM;
+    using DSInternals.SAM.Interop;
 
     [Cmdlet(VerbsCommon.Set, "LsaPolicyInformation")]
     [OutputType("None")]

@@ -1,7 +1,7 @@
-﻿using DSInternals.Common;
-using System;
+﻿using System;
 using System.Management.Automation;
 using System.Security;
+using DSInternals.Common;
 
 namespace DSInternals.PowerShell.Commands
 {

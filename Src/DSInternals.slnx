@@ -28,4 +28,18 @@
   <Project Path="DSInternals.Replication.Model.Test/DSInternals.Replication.Model.Test.csproj" />
   <Project Path="DSInternals.Replication.Test/DSInternals.Replication.Test.csproj" />
   <Project Path="DSInternals.SAM.Test/DSInternals.SAM.Test.csproj" />
+
+  <!-- Additional files -->
+  <Folder Name="/Config/">
+    <File Path="../.editorconfig" />
+    <File Path="../.gitignore" />
+    <File Path="global.json" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/Workflows/">
+    <File Path="../.github/workflows/autobuild.yml" />
+    <File Path="../.github/workflows/release.yml" />
+    <File Path="../.github/workflows/codeql-analysis.yml" />
+  </Folder>
 </Solution>

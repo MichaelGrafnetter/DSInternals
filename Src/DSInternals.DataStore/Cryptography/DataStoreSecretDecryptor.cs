@@ -1,9 +1,9 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Cryptography;
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using DSInternals.Common;
+using DSInternals.Common.Cryptography;
 
 namespace DSInternals.DataStore
 {
@@ -45,7 +45,7 @@ namespace DSInternals.DataStore
         {
             get
             {
-                switch(this.Version)
+                switch (this.Version)
                 {
                     case PekListVersion.W2016:
                         return SecretEncryptionType.DatabaseAES;
@@ -79,7 +79,7 @@ namespace DSInternals.DataStore
                 // Parse the inner structure
                 this.ParsePekList(decryptedPekList);
             }
-            catch(Exception originalException)
+            catch (Exception originalException)
             {
                 var newException = new CryptographicException("Could not decrypt or parse the PEK list.", originalException);
                 newException.Data.Add(nameof(encryptedPEKListBlob), encryptedPEKListBlob.ToHex());
@@ -102,7 +102,7 @@ namespace DSInternals.DataStore
             // const int EncryptedDataOffsetAES = 2 * sizeof(short) + SaltSize + sizeof(ulong);
 
             // Validate (DES has shorter blob)
-            Validator.AssertMinLength(blob, EncryptedDataOffsetDES + 1, "blob");
+            Validator.AssertMinLength(blob, EncryptedDataOffsetDES + 1);
 
             // Extract salt and metadata from the blob
             byte[] decryptionKey;
@@ -114,14 +114,14 @@ namespace DSInternals.DataStore
             {
                 using (var reader = new BinaryReader(stream))
                 {
-                    encryptionType = (SecretEncryptionType) reader.ReadUInt16();
+                    encryptionType = (SecretEncryptionType)reader.ReadUInt16();
                     // The flags field is actually not used by AD and is always 0.
                     uint flags = reader.ReadUInt16();
                     uint keyId = reader.ReadUInt32();
                     // TODO: Check if the key exists
                     decryptionKey = this.Keys[keyId];
                     salt = reader.ReadBytes(SaltSize);
-                    if(encryptionType == SecretEncryptionType.DatabaseAES)
+                    if (encryptionType == SecretEncryptionType.DatabaseAES)
                     {
                         // AES data is padded, so the actual length is provided
                         secretLength = reader.ReadInt32();
@@ -202,15 +202,15 @@ namespace DSInternals.DataStore
         {
             // Blob structure: Signature (16B), Last Generated (8B), Current Key (4B), Key Count (4B), { Key Id (4B), Key (16B) } * Key Count
             const int minBlobLength = 16 + sizeof(long) + 3 * sizeof(uint) + KeySize;
-            Validator.AssertMinLength(cleartextBlob, minBlobLength, "cleartextBlob");
+            Validator.AssertMinLength(cleartextBlob, minBlobLength);
 
             using (Stream stream = new MemoryStream(cleartextBlob))
             {
                 using (BinaryReader reader = new BinaryReader(stream))
                 {
-                    byte[] binarySignature = reader.ReadBytes(Marshal.SizeOf(typeof(Guid)));
+                    byte[] binarySignature = reader.ReadBytes(Marshal.SizeOf<Guid>());
                     Guid signature = new Guid(binarySignature);
-                    if(signature != ExpectedSignature)
+                    if (signature != ExpectedSignature)
                     {
                         // TODO: Exception type
                         throw new Exception("Invalid PEK signature.");
@@ -247,7 +247,7 @@ namespace DSInternals.DataStore
             if (bootKey != null)
             {
                 // Encrypt if the boot key is provided.
-                Validator.AssertLength(bootKey, BootKeyRetriever.BootKeyLength, "bootKey");
+                Validator.AssertLength(bootKey, BootKeyRetriever.BootKeyLength);
                 flags = PekListFlags.Encrypted;
             }
 
@@ -265,7 +265,7 @@ namespace DSInternals.DataStore
                     writer.Write(salt);
 
                     // Data
-                    switch(flags)
+                    switch (flags)
                     {
                         case PekListFlags.Clear:
                             writer.Write(cleartextBlob);
@@ -299,8 +299,8 @@ namespace DSInternals.DataStore
         private byte[] DecryptPekList(byte[] encryptedBlob, byte[] bootKey)
         {
             // Blob structure: Version (4B), Flags (4B), Salt (16B), Encrypted PEK List
-            Validator.AssertMinLength(encryptedBlob, EncryptedPekListOffset + 1, "blob");
-            Validator.AssertLength(bootKey, BootKeyRetriever.BootKeyLength, "bootKey");
+            Validator.AssertMinLength(encryptedBlob, EncryptedPekListOffset + 1);
+            Validator.AssertLength(bootKey, BootKeyRetriever.BootKeyLength);
 
             // Parse blob
             byte[] salt;
@@ -310,8 +310,8 @@ namespace DSInternals.DataStore
             {
                 using (var reader = new BinaryReader(stream))
                 {
-                    this.Version = (PekListVersion) reader.ReadUInt32();
-                    flags = (PekListFlags) reader.ReadUInt32();
+                    this.Version = (PekListVersion)reader.ReadUInt32();
+                    flags = (PekListFlags)reader.ReadUInt32();
                     salt = reader.ReadBytes(SaltSize);
                     encryptedPekList = stream.ReadToEnd();
                 }
@@ -319,11 +319,11 @@ namespace DSInternals.DataStore
 
             // Decrypt
             byte[] decryptedPekList;
-            switch(flags)
+            switch (flags)
             {
                 case PekListFlags.Encrypted:
                     // Decrypt
-                    switch(this.Version)
+                    switch (this.Version)
                     {
                         case PekListVersion.W2k:
                             decryptedPekList = DecryptUsingRC4(encryptedPekList, salt, bootKey, BootKeySaltHashRounds);
@@ -359,7 +359,7 @@ namespace DSInternals.DataStore
             {
                 return null;
             }
-            int bufferSize = Marshal.SizeOf(typeof(Guid)) + sizeof(long) + 2 * sizeof(int) + Keys.Length * (sizeof(int) + KeySize);
+            int bufferSize = Marshal.SizeOf<Guid>() + sizeof(long) + 2 * sizeof(int) + Keys.Length * (sizeof(int) + KeySize);
             byte[] buffer = new byte[bufferSize];
 
             using (MemoryStream stream = new MemoryStream(buffer))
@@ -373,7 +373,7 @@ namespace DSInternals.DataStore
                     writer.Write(this.Keys.Length);
 
                     // Keys
-                    for(int i = 0; i < this.Keys.Length; i++)
+                    for (int i = 0; i < this.Keys.Length; i++)
                     {
                         writer.Write(i);
                         writer.Write(this.Keys[i]);

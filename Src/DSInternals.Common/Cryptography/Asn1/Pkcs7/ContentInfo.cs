@@ -10,7 +10,7 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs7
         internal string ContentType;
         internal ReadOnlyMemory<byte> Content;
         internal ReadOnlyMemory<byte> AdditionalContent;
-        
+
         public EnvelopedData? EnvelopedData
         {
             get
@@ -75,8 +75,7 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs7
 
         internal static ContentInfo Decode(AsnReader reader)
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
+            ArgumentNullException.ThrowIfNull(reader);
 
             // ContentInfo ::= SEQUENCE {
             //    contentType ContentType,

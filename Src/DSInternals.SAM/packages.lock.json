@@ -23,6 +23,12 @@
           "Microsoft.Windows.WDK.Win32Metadata": "0.12.8-experimental"
         }
       },
+      "Polyfill": {
+        "type": "Direct",
+        "requested": "[9.5.0, )",
+        "resolved": "9.5.0",
+        "contentHash": "T3E8+K+W0u78495PwSSJOzT6QUbnZSdkDK4B3nfvxUo9nctDr6ChSDLV4l/RD2ZmA5oHM2YbLvyp+a2uE0ftOQ=="
+      },
       "Microsoft.Bcl.AsyncInterfaces": {
         "type": "Transitive",
         "resolved": "9.0.8",
@@ -105,6 +111,7 @@
       "dsinternals.common": {
         "type": "Project",
         "dependencies": {
+          "Polyfill": "[9.5.0, )",
           "System.Buffers": "[4.6.1, )",
           "System.Formats.Asn1": "[9.0.9, )",
           "System.Formats.Cbor": "[9.0.9, )",
@@ -177,7 +184,7 @@
         "contentHash": "+RJT4qaekpZ7DDLhf+LTjq+E48jieKiY9ulJ+BoxKmZblIJfIJT8Ufcaa/clQqnYvWs8jugfGSMu8ylS0caG0w=="
       }
     },
-    "net10.0-windows7.0": {
+    "net8.0-windows7.0": {
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
         "requested": "[8.0.0, )",
@@ -240,7 +247,7 @@
         "contentHash": "typxwjuGJyooPZNwInKvEBB/qXwGFoXDH+2gEP0YidaK/qwcrbHl0naeE1O3A2Xn30cCVl79G/v/+ta2eJxh1w=="
       }
     },
-    "net8.0-windows7.0": {
+    "net9.0-windows7.0": {
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
         "requested": "[8.0.0, )",

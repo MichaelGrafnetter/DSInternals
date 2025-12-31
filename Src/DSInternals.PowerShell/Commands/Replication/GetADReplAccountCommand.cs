@@ -210,7 +210,7 @@ namespace DSInternals.PowerShell.Commands
             {
                 // Add a virtual type to the object to change the default out-of-band View, e.g., DSInternals.Common.Data.DSAccount#PwDump.
                 PSObject psObject = PSObject.AsPSObject(sendToPipeline);
-                string virtualTypeName = String.Format("{0}#{1}", typeof(DSAccount).FullName, this.ExportFormat.ToString());
+                string virtualTypeName = $"{typeof(DSAccount).FullName}#{ExportFormat}";
                 psObject.TypeNames.Insert(0, virtualTypeName);
                 base.WriteObject(psObject);
             }

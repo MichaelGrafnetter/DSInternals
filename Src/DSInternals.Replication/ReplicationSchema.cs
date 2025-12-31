@@ -8,7 +8,7 @@ public class ReplicationSchema : BaseSchema
 {
     public void AddSchemaObject(ReplicaObject schemaObject)
     {
-        Validator.AssertNotNull(schemaObject, nameof(schemaObject));
+        ArgumentNullException.ThrowIfNull(schemaObject);
 
         if (schemaObject.IsDeleted)
         {

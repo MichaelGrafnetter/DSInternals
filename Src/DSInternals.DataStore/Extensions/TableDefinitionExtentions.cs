@@ -13,10 +13,7 @@ namespace DSInternals.DataStore
         /// </summary>
         public static IEnumerable<IndexInfo> GetIndices2(this TableDefinition tableDefinition, IsamDatabase database)
         {
-            if (tableDefinition == null)
-            {
-                throw new ArgumentNullException(nameof(tableDefinition));
-            }
+            ArgumentNullException.ThrowIfNull(tableDefinition);
 
             // HACK: We added support to retrieve the low-level IndexInfo instead of high-level IndexCollection.
             /* There is a bug in Isam IndexCollection enumerator, which causes it to loop indefinitely

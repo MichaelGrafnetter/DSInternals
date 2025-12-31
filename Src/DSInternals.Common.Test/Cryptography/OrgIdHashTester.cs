@@ -1,7 +1,7 @@
-﻿using DSInternals.Common;
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
 using System.Security;
+using DSInternals.Common;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Common.Cryptography.Test
 {
@@ -18,12 +18,11 @@ namespace DSInternals.Common.Cryptography.Test
             Assert.AreEqual(expected, result);
         }
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void OrgIdHash_NullInput()
         {
             SecureString password = null;
             byte[] salt = "317ee9d1dec6508fa510".HexToBinary();
-            string result = OrgIdHash.ComputeFormattedHash(password, salt);
+            Assert.ThrowsExactly<ArgumentNullException>(() => OrgIdHash.ComputeFormattedHash(password, salt));
         }
         [TestMethod]
         public void OrgIdHash_EmptyInput()

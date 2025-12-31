@@ -65,7 +65,7 @@
         {
             string command = this.KiwiCommand;
 
-            if(string.IsNullOrEmpty(command))
+            if (string.IsNullOrEmpty(command))
             {
                 // Mimikatz probably does not support this DPAPI object type, so there is nothing to write to the script file
                 return;

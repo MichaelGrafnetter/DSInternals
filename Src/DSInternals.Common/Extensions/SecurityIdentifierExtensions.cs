@@ -1,38 +1,36 @@
-﻿namespace DSInternals.Common
+﻿using System.Security.Principal;
+
+namespace DSInternals.Common;
+
+public static class SecurityIdentifierExtensions
 {
-    using System;
-    using System.Security.Principal;
+    private const int ridLength = 4;
 
-    public static class SecurityIdentifierExtensions
+    public static int GetRid(this SecurityIdentifier sid)
     {
-        private const int ridLength = 4;
-
-        public static int GetRid(this SecurityIdentifier sid)
+        ArgumentNullException.ThrowIfNull(sid);
+        byte[] binaryForm = sid.GetBinaryForm();
+        int domainSidLength = binaryForm.Length - ridLength;
+        if (domainSidLength < 0)
         {
-            Validator.AssertNotNull(sid, "sid");
-            byte[] binaryForm = sid.GetBinaryForm();
-            int domainSidLength = binaryForm.Length - ridLength;
-            if (domainSidLength < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(sid), binaryForm.Length, "The SID is too short.");
-            }
-            return BitConverter.ToInt32(binaryForm, domainSidLength);
+            throw new ArgumentOutOfRangeException(nameof(sid), binaryForm.Length, "The SID is too short.");
         }
+        return BitConverter.ToInt32(binaryForm, domainSidLength);
+    }
 
-        public static byte[] GetBinaryForm(this SecurityIdentifier sid, bool bigEndianRid = false)
+    public static byte[] GetBinaryForm(this SecurityIdentifier sid, bool bigEndianRid = false)
+    {
+        ArgumentNullException.ThrowIfNull(sid);
+        int sidLength = sid.BinaryLength;
+        byte[] binarySid = new byte[sidLength];
+        sid.GetBinaryForm(binarySid, 0);
+        if (bigEndianRid)
         {
-            Validator.AssertNotNull(sid, "sid");
-            int sidLength = sid.BinaryLength;
-            byte[] binarySid = new byte[sidLength];
-            sid.GetBinaryForm(binarySid, 0);
-            if (bigEndianRid)
-            {
-                int lastByteIndex = sidLength - 1;
-                // Convert RID from big endian to little endian (Reverse the order of the last 4 bytes)
-                binarySid.SwapBytes(lastByteIndex - 3, lastByteIndex);
-                binarySid.SwapBytes(lastByteIndex - 2, lastByteIndex - 1);
-            }
-            return binarySid;
+            int lastByteIndex = sidLength - 1;
+            // Convert RID from big endian to little endian (Reverse the order of the last 4 bytes)
+            binarySid.SwapBytes(lastByteIndex - 3, lastByteIndex);
+            binarySid.SwapBytes(lastByteIndex - 2, lastByteIndex - 1);
         }
+        return binarySid;
     }
 }

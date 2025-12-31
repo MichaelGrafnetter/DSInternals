@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Security;
 using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Common.Cryptography.Test
 {
@@ -30,11 +30,10 @@ namespace DSInternals.Common.Cryptography.Test
             Assert.IsNull(result);
         }
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SecureStringExtensions_ToSecureString_ReadOnlyTest()
         {
             SecureString pwd = "Pa$$w0rd".ToSecureString();
-            pwd.AppendChar('c');
+            Assert.ThrowsExactly<InvalidOperationException>(() => pwd.AppendChar('c'));
         }
         [TestMethod]
         public void SecureStringExtensions_Append_Test1()

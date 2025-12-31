@@ -1,7 +1,7 @@
-﻿using DSInternals.Common;
-using System;
+﻿using System;
 using System.Management.Automation;
 using System.Security;
+using DSInternals.Common;
 
 namespace DSInternals.PowerShell
 {
@@ -20,14 +20,9 @@ namespace DSInternals.PowerShell
         public ValidatePasswordLengthAttribute(int minLength, int maxLength)
         {
             // Validate parameters:
-            if (minLength < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(minLength));
-            }
-            if (maxLength <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(maxLength));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(minLength);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxLength);
+
             if (maxLength < minLength)
             {
                 throw new ValidationMetadataException("Maximum length must be greater than or equal to the minimum length.");
@@ -61,12 +56,15 @@ namespace DSInternals.PowerShell
         /// <param name="password">The argument to be validated.</param>
         protected override void ValidateElement(object password)
         {
-            SecureString pwd = password as SecureString;
-            Validator.AssertNotNull(pwd, "password");
+            ArgumentNullException.ThrowIfNull(password);
+
+            // This can throw for non-SecureString types
+            SecureString pwd = (SecureString)password;
+
             int length = pwd.Length;
             if (length < this.MinLength || length > this.MaxLength)
             {
-                string message = String.Format("The password must be {0}-{1} characters long.", this.MinLength, this.MaxLength);
+                string message = $"The password must be {this.MinLength}-{this.MaxLength} characters long.";
                 throw new ValidationMetadataException(message);
             }
         }

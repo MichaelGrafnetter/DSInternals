@@ -1,10 +1,10 @@
-﻿using DSInternals.Common;
-using DSInternals.DataStore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
 using System.Security;
 using System.Text;
+using DSInternals.Common;
+using DSInternals.DataStore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.DataStore.Test
 {
@@ -17,16 +17,14 @@ namespace DSInternals.DataStore.Test
             throw new AssertInconclusiveException("There are no test registry hives available yet.");
         }
         [TestMethod]
-        [ExpectedException(typeof(FileNotFoundException))]
         public void BootKeyRetriever_NonExistingFile()
         {
-            BootKeyRetriever.GetBootKey(@"C:\xxxxxx");
+            Assert.ThrowsExactly<FileNotFoundException>(() => BootKeyRetriever.GetBootKey(@"C:\xxxxxx"));
         }
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void BootKeyRetriever_NullFile()
         {
-            BootKeyRetriever.GetBootKey(null);
+            Assert.ThrowsExactly<ArgumentNullException>(() => BootKeyRetriever.GetBootKey(null));
         }
         [TestMethod]
         public void BootKeyRetriever_NotRegistryHiveFile()

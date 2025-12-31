@@ -1,9 +1,9 @@
 ﻿
 #pragma warning disable SA1028 // ignore whitespace warnings for generated code
 using System;
+using System.Formats.Asn1;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Formats.Asn1;
 
 namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
 {
@@ -18,30 +18,30 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
         public DSInternals.Common.Cryptography.Asn1.Pkcs7.ContentInfo AuthSafe;
         public DSInternals.Common.Cryptography.Asn1.Pkcs12.MacData? MacData;
 
-/*
-        public IList<ContentInfo> AuthSafeData
-        {
-            get
-            {
-                if (this.AuthSafe.ContentType == DSInternals.Common.Cryptography.Asn1.Pkcs7.ContentType.Data)
+        /*
+                public IList<ContentInfo> AuthSafeData
                 {
-                    return new[] { this.AuthSafe };
+                    get
+                    {
+                        if (this.AuthSafe.ContentType == DSInternals.Common.Cryptography.Asn1.Pkcs7.ContentType.Data)
+                        {
+                            return new[] { this.AuthSafe };
+                        }
+                        else if (this.AuthSafe.ContentType == DSInternals.Common.Cryptography.Asn1.Pkcs7.ContentType.SignedData)
+                        {
+                            return new[] { this.AuthSafe };
+                        }
+                        else if (this.AuthSafe.ContentType == DSInternals.Common.Cryptography.Asn1.Pkcs7.ContentType.EnvelopedData)
+                        {
+                            return new[] { this.AuthSafe };
+                        }
+                        else
+                        {
+                            throw new NotSupportedException($"Unsupported AuthSafe content type: {this.AuthSafe.ContentType}");
+                        }
+                    }
                 }
-                else if (this.AuthSafe.ContentType == DSInternals.Common.Cryptography.Asn1.Pkcs7.ContentType.SignedData)
-                {
-                    return new[] { this.AuthSafe };
-                }
-                else if (this.AuthSafe.ContentType == DSInternals.Common.Cryptography.Asn1.Pkcs7.ContentType.EnvelopedData)
-                {
-                    return new[] { this.AuthSafe };
-                }
-                else
-                {
-                    throw new NotSupportedException($"Unsupported AuthSafe content type: {this.AuthSafe.ContentType}");
-                }
-            }
-        }
-*/
+        */
         public static Pfx Decode(ReadOnlyMemory<byte> encoded)
         {
             AsnReader reader = new AsnReader(encoded, AsnEncodingRules.DER);
@@ -62,8 +62,7 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12
             }
             */
 
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
+            ArgumentNullException.ThrowIfNull(reader);
 
             Pfx decoded = default;
             AsnReader sequenceReader = reader.ReadSequence();

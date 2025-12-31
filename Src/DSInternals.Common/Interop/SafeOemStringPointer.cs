@@ -1,7 +1,7 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using Microsoft.Win32.SafeHandles;
 
 namespace DSInternals.Common.Interop
 {

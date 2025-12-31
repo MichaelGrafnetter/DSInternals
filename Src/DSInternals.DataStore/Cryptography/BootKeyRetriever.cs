@@ -1,4 +1,5 @@
-﻿using DSInternals.Common;
+﻿using System.Globalization;
+using DSInternals.Common;
 using DSInternals.Common.Interop;
 using Microsoft.Win32;
 
@@ -27,7 +28,7 @@ namespace DSInternals.DataStore
         /// <returns>Boot Key</returns>
         public static byte[] GetBootKey(string hiveFilePath)
         {
-            Validator.AssertNotNullOrWhiteSpace(hiveFilePath, "hiveFilePath");
+            ArgumentException.ThrowIfNullOrWhiteSpace(hiveFilePath);
             Validator.AssertFileExists(hiveFilePath);
             using (var hive = new RegistryHiveFileMapping(hiveFilePath))
             {
@@ -46,7 +47,7 @@ namespace DSInternals.DataStore
         {
             using (var hklm = Registry.LocalMachine)
             {
-                using(var system = hklm.OpenSubKey(SystemKey))
+                using (var system = hklm.OpenSubKey(SystemKey))
                 {
                     return GetBootKey(system);
                 }
@@ -59,13 +60,13 @@ namespace DSInternals.DataStore
         /// <returns>Boot Key</returns>
         public static byte[] GetBootKey(byte[] rootPekList, byte[] schemaPekList)
         {
-            Validator.AssertLength(rootPekList, AdamPekListLength, "rootPekList");
-            Validator.AssertLength(rootPekList, AdamPekListLength, "schemaPekList");
-            
+            Validator.AssertLength(rootPekList, AdamPekListLength);
+            Validator.AssertLength(schemaPekList, AdamPekListLength);
+
             byte[] result = new byte[BootKeyLength];
-            
+
             // Construct the first 8 bytes of bootkey:
-            for(int i = 0; i < AdamRootPekListPermutation.Length; i++)
+            for (int i = 0; i < AdamRootPekListPermutation.Length; i++)
             {
                 result[i] = rootPekList[AdamRootPekListPermutation[i]];
             }
@@ -73,7 +74,7 @@ namespace DSInternals.DataStore
             // Construct the remaining 8 bytes of bootkey:
             for (int i = 0; i < AdamSchemaPekListPermutation.Length; i++)
             {
-                result[i+AdamRootPekListPermutation.Length] = schemaPekList[AdamSchemaPekListPermutation[i]];
+                result[i + AdamRootPekListPermutation.Length] = schemaPekList[AdamSchemaPekListPermutation[i]];
             }
 
             return result;
@@ -82,11 +83,11 @@ namespace DSInternals.DataStore
         private static byte[] GetBootKey(RegistryKey systemKey)
         {
             int currentControlSetId = GetCurrentControlSetId(systemKey);
-            string lsaKeyName = String.Format(LsaKeyFormat, currentControlSetId);
+            string lsaKeyName = String.Format(CultureInfo.InvariantCulture, LsaKeyFormat, currentControlSetId);
             byte[] bootKey = new byte[BootKeyLength];
-            using(var lsa = systemKey.OpenSubKey(lsaKeyName))
+            using (var lsa = systemKey.OpenSubKey(lsaKeyName))
             {
-                for(int i = 0; i < BootKeySubKeyNames.Length; i++)
+                for (int i = 0; i < BootKeySubKeyNames.Length; i++)
                 {
                     using (var bootKeyPartKey = lsa.OpenSubKey(BootKeySubKeyNames[i]))
                     {
@@ -103,7 +104,7 @@ namespace DSInternals.DataStore
         {
             using (var ccsKey = systemKey.OpenSubKey(CurrentControlSetKey))
             {
-                if(ccsKey != null)
+                if (ccsKey != null)
                 {
                     return (int)ccsKey.GetValue(CurrentControlSetValue, DefaultControlSetId);
                 }

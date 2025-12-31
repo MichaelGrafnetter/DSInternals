@@ -13,7 +13,7 @@ public class LSAPolicyTester
                 var result = policy.QueryDnsDomainInformation();
             }
         }
-        catch(UnauthorizedAccessException e)
+        catch (UnauthorizedAccessException e)
         {
             // This is expected.
             throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
@@ -80,7 +80,7 @@ public class LSAPolicyTester
             {
                 // Retrieve domain info
                 var info = policy.QueryDnsDomainInformation();
-                
+
                 // Now try to set it to the same value.
                 // BE CAREFUL WHEN TESTING THIS!!!
                 policy.SetDnsDomainInformation(info);
@@ -111,20 +111,22 @@ public class LSAPolicyTester
     }
 
     [TestMethod]
-    [ExpectedException(typeof(FileNotFoundException))]
     public void LsaPolicy_LsaRetrievePrivateData_NonExisting()
     {
-        try
+        Assert.ThrowsExactly<FileNotFoundException>(() =>
         {
-            using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
+            try
             {
-                policy.RetrievePrivateData("bflmpsvz");
+                using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
+                {
+                    policy.RetrievePrivateData("bflmpsvz");
+                }
             }
-        }
-        catch (UnauthorizedAccessException e)
-        {
-            // This is expected.
-            throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
-        }
+            catch (UnauthorizedAccessException e)
+            {
+                // This is expected.
+                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+            }
+        });
     }
 }

@@ -96,12 +96,12 @@
                 SecurityIdentifier domainSid;
                 // TODO: Domain name to SID translation Cache
                 // TODO: Get default domain from server
-                switch(this.ParameterSetName)
+                switch (this.ParameterSetName)
                 {
                     case ParameterSetByLogonName:
-                        this.WriteVerbose(string.Format("Setting password hash on account {0}\\{1}.", this.Domain, this.SamAccountName));
+                        this.WriteVerbose($"Setting password hash on account {this.Domain}\\{this.SamAccountName}.");
 
-                        if (this.Domain.Contains("."))
+                        if (this.Domain.Contains('.'))
                         {
                             // This is not a hard check, because dots are actually allowed in NetBIOS names, although not recommended.
                             this.WriteWarning("The domain name supplied appears to be a DNS name instead of NetBIOS name.");
@@ -118,7 +118,7 @@
                             this.WriteError(ex.ErrorRecord);
                         }
 
-                        this.WriteVerbose(string.Format("Setting password hash on account {0}.", this.Sid));
+                        this.WriteVerbose($"Setting password hash on account {this.Sid}.");
                         // We already know the SID:
                         domainSid = this.Sid.AccountDomainSid;
                         break;

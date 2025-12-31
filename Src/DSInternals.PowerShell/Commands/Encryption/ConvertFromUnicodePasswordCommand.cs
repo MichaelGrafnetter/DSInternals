@@ -36,11 +36,11 @@
         {
             byte[] binaryPassword = Convert.FromBase64String(this.UnicodePassword);
             string plainPassword = Encoding.Unicode.GetString(binaryPassword);
-            if (plainPassword.EndsWith(adminPwdSuffix))
+            if (plainPassword.EndsWith(adminPwdSuffix, StringComparison.Ordinal))
             {
                 this.WriteObject(plainPassword.TrimEnd(adminPwdSuffix));
             }
-            else if (plainPassword.EndsWith(pwdSuffix))
+            else if (plainPassword.EndsWith(pwdSuffix, StringComparison.Ordinal))
             {
                 this.WriteObject(plainPassword.TrimEnd(pwdSuffix));
             }

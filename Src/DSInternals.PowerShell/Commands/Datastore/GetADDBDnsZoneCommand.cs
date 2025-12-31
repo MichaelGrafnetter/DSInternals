@@ -11,7 +11,7 @@ namespace DSInternals.PowerShell.Commands
         {
             base.BeginProcessing();
 
-            using(var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+            using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
             {
                 foreach (string dnsZone in directoryAgent.GetDnsZone())
                 {

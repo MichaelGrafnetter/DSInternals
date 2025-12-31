@@ -24,7 +24,7 @@ namespace DSInternals.Common.Test
             // Test one of the decoded prefixes
             string oid1 = map.Translate((AttributeType)18467);
             Assert.IsNotNull(oid1);
-            
+
             string prefix = map[18467];
             Assert.AreEqual("1.2.840.113556.1.4.7000.102", prefix);
 
@@ -58,7 +58,7 @@ namespace DSInternals.Common.Test
             // searchFlags
             oid = map.Translate(131406);
             Assert.AreEqual("1.2.840.113556.1.2.334", oid);
-            
+
             // Entry-TTL
             oid = map.Translate(1769475);
             Assert.AreEqual("1.3.6.1.4.1.1466.101.119.3", oid);
@@ -84,33 +84,30 @@ namespace DSInternals.Common.Test
         {
             byte[] binaryPrefixMap = null;
             var map = new PrefixTable(binaryPrefixMap);
-            
+
             // Should only contain 39 builtin prefixes
             Assert.AreEqual(39, map.Count);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void PrefixMap_EmptyInput()
         {
             byte[] binaryPrefixMap = new byte[0];
-            var map = new PrefixTable(binaryPrefixMap);
-        }
-        
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void PrefixMap_InvalidInput1()
-        {
-            byte[] binaryPrefixMap = { 1, 2, 3, 4, 5 };
-            var map = new PrefixTable(binaryPrefixMap);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new PrefixTable(binaryPrefixMap));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void PrefixMap_InvalidInput1()
+        {
+            byte[] binaryPrefixMap = { 1, 2, 3, 4, 5 };
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new PrefixTable(binaryPrefixMap));
+        }
+
+        [TestMethod]
         public void PrefixMap_InvalidInput2()
         {
             byte[] binaryPrefixMap = { 1, 2, 3, 4, 5, 6, 7, 8 };
-            var map = new PrefixTable(binaryPrefixMap);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new PrefixTable(binaryPrefixMap));
         }
     }
 }

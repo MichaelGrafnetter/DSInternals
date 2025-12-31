@@ -28,7 +28,7 @@ namespace DSInternals.Common.Cryptography
 
         public CngSoftwareProviderTransportBlob(byte[] blob)
         {
-            Validator.AssertNotNull(blob, nameof(blob));
+            ArgumentNullException.ThrowIfNull(blob);
             Validator.AssertMinLength(blob, BlobHeaderLength, nameof(blob));
 
             // Parse the blob
@@ -37,7 +37,8 @@ namespace DSInternals.Common.Cryptography
                 using (var reader = new BinaryReader(stream, Encoding.ASCII))
                 {
                     string actualMagic = Encoding.ASCII.GetString(reader.ReadBytes(Magic.Length));
-                    Validator.AssertEquals(actualMagic, Magic, nameof(blob));
+
+                    ArgumentOutOfRangeException.ThrowIfNotEqual(actualMagic, Magic);
 
                     int containerNameLength = reader.ReadInt32();
                     int fileNameLength = reader.ReadInt32();
@@ -46,7 +47,7 @@ namespace DSInternals.Common.Cryptography
                     int legacyPrivateKeyLength = reader.ReadInt32();
 
                     int[] masterKeyFileLengths = new int[MasterKeyFileCount];
-                    for(int i = 0; i < MasterKeyFileCount; i++)
+                    for (int i = 0; i < MasterKeyFileCount; i++)
                     {
                         masterKeyFileLengths[i] = reader.ReadInt32();
                     }
@@ -64,9 +65,9 @@ namespace DSInternals.Common.Cryptography
                                              legacyPrivateKeyLength;
                     for (int i = 0; i < MasterKeyFileCount; i++)
                     {
-                        if(masterKeyFileLengths[i] > 0)
+                        if (masterKeyFileLengths[i] > 0)
                         {
-                            expectedStructSize += masterKeyFileLengths[i] + Marshal.SizeOf(typeof(Guid));
+                            expectedStructSize += masterKeyFileLengths[i] + Marshal.SizeOf<Guid>();
                         }
                     }
                     Validator.AssertLength(blob, expectedStructSize, nameof(blob));
@@ -78,13 +79,13 @@ namespace DSInternals.Common.Cryptography
                         this.KeyContainerName = Encoding.Unicode.GetString(reader.ReadBytes(containerNameLength * sizeof(char)));
                     }
 
-                    if(fileNameLength > 0)
+                    if (fileNameLength > 0)
                     {
                         // Read ANSI string
                         string fileName = new string(reader.ReadChars(fileNameLength));
                     }
 
-                    if(privateKeyLength > 0)
+                    if (privateKeyLength > 0)
                     {
                         this.KeyData = reader.ReadBytes(privateKeyLength);
                     }
@@ -96,17 +97,17 @@ namespace DSInternals.Common.Cryptography
                         string legacyFileName = new string(reader.ReadChars(fileNameLength));
                     }
 
-                    if(legacyPrivateKeyLength > 0)
+                    if (legacyPrivateKeyLength > 0)
                     {
                         byte[] legacyPrivateKey = reader.ReadBytes(legacyPrivateKeyLength);
                     }
 
                     for (int i = 0; i < MasterKeyFileCount; i++)
                     {
-                        if(masterKeyFileLengths[i] > 0)
+                        if (masterKeyFileLengths[i] > 0)
                         {
                             // Read master key GUID
-                            byte[] masterKeyGuidBytes = reader.ReadBytes(Marshal.SizeOf(typeof(Guid)));
+                            byte[] masterKeyGuidBytes = reader.ReadBytes(Marshal.SizeOf<Guid>());
                             // TODO: Is endianness conversion needed?
                             Guid masterKeyGuid = new Guid(masterKeyGuidBytes);
 

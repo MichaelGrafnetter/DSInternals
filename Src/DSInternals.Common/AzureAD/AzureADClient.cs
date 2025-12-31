@@ -36,7 +36,7 @@ namespace DSInternals.Common.AzureAD
         public AzureADClient(string accessToken, Guid? tenantId = null, int batchSize = MaxBatchSize)
         {
             // Validate inputs
-            Validator.AssertNotNullOrWhiteSpace(accessToken, nameof(accessToken));
+            ArgumentException.ThrowIfNullOrWhiteSpace(accessToken);
 
             _tenantId = tenantId?.ToString() ?? DefaultTenantId;
             _batchSizeParameter = string.Format(CultureInfo.InvariantCulture, BatchSizeParameterFormat, batchSize);
@@ -49,7 +49,7 @@ namespace DSInternals.Common.AzureAD
         public async Task<AzureADUser> GetUserAsync(string userPrincipalName)
         {
             // Vaidate the input
-            Validator.AssertNotNullOrEmpty(userPrincipalName, nameof(userPrincipalName));
+            ArgumentException.ThrowIfNullOrEmpty(userPrincipalName);
 
             var filter = string.Format(CultureInfo.InvariantCulture, UPNFilterParameterFormat, userPrincipalName);
             return await GetUserAsync(filter, userPrincipalName).ConfigureAwait(false);
@@ -115,7 +115,7 @@ namespace DSInternals.Common.AzureAD
         public async Task SetUserAsync(string userPrincipalName, KeyCredential[] keyCredentials)
         {
             // Vaidate the input
-            Validator.AssertNotNullOrEmpty(userPrincipalName, nameof(userPrincipalName));
+            ArgumentException.ThrowIfNullOrEmpty(userPrincipalName);
 
             var properties = new Dictionary<string, object> { { KeyCredentialAttributeName, keyCredentials } };
             await SetUserAsync(userPrincipalName, properties).ConfigureAwait(false);
@@ -148,7 +148,7 @@ namespace DSInternals.Common.AzureAD
             {
                 using (var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                 {
-                    if(response.StatusCode == HttpStatusCode.NoContent)
+                    if (response.StatusCode == HttpStatusCode.NoContent)
                     {
                         // No objects have been returned, but the call was successful.
                         return default(T);
@@ -156,7 +156,7 @@ namespace DSInternals.Common.AzureAD
 
                     using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
                     {
-                        if (s_odataContentType.MediaType.Equals(response.Content.Headers.ContentType.MediaType, StringComparison.InvariantCultureIgnoreCase))
+                        if (s_odataContentType.MediaType.Equals(response.Content.Headers.ContentType.MediaType, StringComparison.OrdinalIgnoreCase))
                         {
                             if (response.StatusCode == HttpStatusCode.OK)
                             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Management.Automation;
 using DSInternals.Common.Data;
 
@@ -77,7 +78,7 @@ namespace DSInternals.PowerShell.Commands
             switch (this.ParameterSetName)
             {
                 case ParameterSetByDN:
-                    this.WriteVerbose(String.Format(verboseMessage, this.DistinguishedName));
+                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.DistinguishedName));
                     var dn = new DistinguishedName(this.DistinguishedName);
 
                     hasChanged = this.DirectoryAgent.SetAccountControl(
@@ -92,7 +93,7 @@ namespace DSInternals.PowerShell.Commands
                     break;
 
                 case ParameterSetByName:
-                    this.WriteVerbose(String.Format(verboseMessage, this.SamAccountName));
+                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.SamAccountName));
                     hasChanged = this.DirectoryAgent.SetAccountControl(
                         this.SamAccountName,
                         this.Enabled,
@@ -105,7 +106,7 @@ namespace DSInternals.PowerShell.Commands
                     break;
 
                 case ParameterSetByGuid:
-                    this.WriteVerbose(String.Format(verboseMessage, this.ObjectGuid));
+                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectGuid));
                     hasChanged = this.DirectoryAgent.SetAccountControl(
                         this.ObjectGuid,
                         this.Enabled,
@@ -118,7 +119,7 @@ namespace DSInternals.PowerShell.Commands
                     break;
 
                 case ParameterSetBySid:
-                    this.WriteVerbose(String.Format(verboseMessage, this.ObjectSid));
+                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectSid));
                     hasChanged = this.DirectoryAgent.SetAccountControl(
                         this.ObjectSid,
                         this.Enabled,

@@ -24,10 +24,7 @@ namespace DSInternals.Common.Data
 
         public KdsRootKeyCache(IKdsRootKeyResolver resolver, bool preloadCache = false)
         {
-            if (resolver == null)
-                throw new ArgumentNullException(nameof(resolver));
-
-            _innerResolver = resolver;
+            _innerResolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
 
             if (preloadCache)
             {

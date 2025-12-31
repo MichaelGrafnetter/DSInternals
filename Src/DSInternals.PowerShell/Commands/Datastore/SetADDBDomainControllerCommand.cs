@@ -1,8 +1,8 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.DataStore;
     using System;
     using System.Management.Automation;
+    using DSInternals.DataStore;
 
     [Cmdlet(VerbsCommon.Set, "ADDBDomainController", ConfirmImpact = ConfirmImpact.High)]
     [OutputType("None")]

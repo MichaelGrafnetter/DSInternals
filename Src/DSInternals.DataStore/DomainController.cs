@@ -83,7 +83,7 @@
             this.backupExpirationCache = this.systemTableCursor.RetrieveColumnAsTimestamp(backupExpirationCol, true);
 
             this.BackupUsn = this.systemTableCursor.RetrieveColumnAsLong(backupUsnCol);
-            this.State = (DatabaseState) this.systemTableCursor.RetrieveColumnAsInt(stateCol).Value;
+            this.State = (DatabaseState)this.systemTableCursor.RetrieveColumnAsInt(stateCol).Value;
             byte[] binaryFlags = this.systemTableCursor.RetrieveColumnAsByteArray(flagsCol);
             var databaseFlags = new DatabaseFlags(binaryFlags);
             this.IsADAM = databaseFlags.ADAMDatabase;
@@ -107,7 +107,7 @@
                 string ntdsName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.CommonName));
 
                 // The RODC feature is supported since Windows Server 2008+ (version 6.0)
-                if (this.OSVersion >= new Version(6,0))
+                if (this.OSVersion >= new Version(6, 0))
                 {
                     // Check if this is a RODC
                     DNTag? ntdsSettingsObjectCategory = dataTableCursor.RetrieveColumnAsDNTag(schema.FindColumnId(CommonDirectoryAttributes.ObjectCategory));
@@ -159,7 +159,7 @@
                 bool siteFound = dataTableCursor.GotoParentObject(schema);
 
                 // Load data from the Site object
-                if(siteFound)
+                if (siteFound)
                 {
                     this.SiteName = dataTableCursor.RetrieveColumnAsString(schema.FindColumnId(CommonDirectoryAttributes.CommonName));
                 }
@@ -603,7 +603,8 @@
             private set;
         }
 
-        public bool IsADAM {
+        public bool IsADAM
+        {
             get;
             private set;
         }

@@ -1,6 +1,6 @@
-﻿using DSInternals.Common.Data;
-using System;
+﻿using System;
 using System.Security.Principal;
+using DSInternals.Common.Data;
 
 namespace DSInternals.Common.Exceptions
 {

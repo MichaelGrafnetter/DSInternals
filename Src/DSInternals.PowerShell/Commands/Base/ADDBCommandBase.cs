@@ -65,7 +65,7 @@
                 string logPathResolved = this.ResolveDirectoryPath(this.LogPath);
                 this.DirectoryContext = new DirectoryContext(dbPathResolved, this.ReadOnly, logPathResolved);
             }
-            catch(SessionStateException ex)
+            catch (SessionStateException ex)
             {
                 // This may be DriveNotFoundException, ItemNotFoundException, ProviderNotFoundException, etc.
                 // Terminate on this error:

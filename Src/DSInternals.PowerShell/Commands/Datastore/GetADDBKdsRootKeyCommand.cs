@@ -25,13 +25,13 @@
             base.ProcessRecord();
 
             bool findSingle = this.ParameterSetName == ByGuidParameterSet;
-            IKdsRootKeyResolver resolver = new DatastoreRootKeyResolver(this.DirectoryContext);
+            DatastoreRootKeyResolver resolver = new(this.DirectoryContext);
 
             if (findSingle)
             {
                 KdsRootKey? rootKey = resolver.GetKdsRootKey(this.RootKeyId);
 
-                if(rootKey != null)
+                if (rootKey != null)
                 {
                     this.WriteObject(rootKey);
                 }

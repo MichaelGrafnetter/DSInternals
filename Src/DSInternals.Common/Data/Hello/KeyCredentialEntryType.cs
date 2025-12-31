@@ -36,7 +36,7 @@
         /// Device Identifier
         /// </summary>
         DeviceId = 0x06,
-        
+
         /// <summary>
         /// Custom key information.
         /// </summary>

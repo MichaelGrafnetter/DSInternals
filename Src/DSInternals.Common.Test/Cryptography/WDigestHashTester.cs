@@ -1,18 +1,17 @@
 ﻿namespace DSInternals.Common.Cryptography.Test
 {
+    using System;
     using DSInternals.Common;
     using DSInternals.Common.Data;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
 
     [TestClass]
     public class WDigestHashTester
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void WDigestHash_NullInput()
         {
-            var hashes = WDigestHash.ComputeHash(null, null, null, null, null);
+            Assert.ThrowsExactly<ArgumentNullException>(() => WDigestHash.ComputeHash(null, null, null, null, null));
         }
 
         [TestMethod]

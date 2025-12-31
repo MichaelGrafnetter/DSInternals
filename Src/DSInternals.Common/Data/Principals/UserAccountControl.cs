@@ -118,12 +118,12 @@
     {
         public static void SetFlags(ref this UserAccountControl uac, UserAccountControl flag, bool? status)
         {
-            if(status == true)
+            if (status == true)
             {
                 // Set the flag
                 uac |= flag;
             }
-            else if(status == false)
+            else if (status == false)
             {
                 // Clear the flag
                 uac &= ~flag;

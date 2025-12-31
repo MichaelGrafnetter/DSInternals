@@ -62,7 +62,7 @@
             ParameterSetName = ParamSetFromUserCertificate
         )]
         [Alias("ComputerId", "ComputerGuid")]
-        public Guid?  DeviceId
+        public Guid? DeviceId
         {
             get;
             set;
@@ -120,7 +120,7 @@
         {
             KeyCredential keyCredential;
 
-            switch(this.ParameterSetName)
+            switch (this.ParameterSetName)
             {
                 case ParamSetFromDNBinary:
                     foreach (string singleValue in this.DNWithBinaryData)

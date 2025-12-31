@@ -1,14 +1,14 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common;
-    using DSInternals.Common.Cryptography;
-    using DSInternals.Common.Data;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Management.Automation;
     using System.Text;
+    using DSInternals.Common;
+    using DSInternals.Common.Cryptography;
+    using DSInternals.Common.Data;
 
     [Cmdlet(VerbsDiagnostic.Test, "PasswordQuality", DefaultParameterSetName = ParamSetSingleSortedFile)]
     [OutputType(new Type[] { typeof(PasswordQualityTestResult) })]
@@ -157,13 +157,13 @@
             if (this.Account.Enabled == false && !this.IncludeDisabledAccounts.IsPresent)
             {
                 // The account is disabled and should be skipped.
-                string message = String.Format("Skipping account {0}, because it is disabled.", this.Account.LogonName);
+                string message = $"Skipping account {this.Account.LogonName}, because it is disabled.";
                 this.WriteVerbose(message);
                 return;
             }
 
             // Verbose message
-            string message2 = String.Format("Processing account {0}...", this.Account.LogonName);
+            string message2 = $"Processing account {this.Account.LogonName}...";
             this.WriteVerbose(message2);
 
             if (this.Account.UserAccountControl.HasFlag(UserAccountControl.PasswordNeverExpires))
@@ -196,7 +196,7 @@
                 this.result.PreAuthNotRequired.Add(this.Account.LogonName);
             }
 
-            if(this.Account.SamAccountType == SamAccountType.User && this.Account.ServicePrincipalName?.Length > 0 && !this.Account.SupportsKerberosAESEncryption)
+            if (this.Account.SamAccountType == SamAccountType.User && this.Account.ServicePrincipalName?.Length > 0 && !this.Account.SupportsKerberosAESEncryption)
             {
                 // This is a kerberoastable user/service account, because it has a SPN configured, but has Kerberos AES encryption support disabled.
                 this.result.Kerberoastable.Add(this.Account.LogonName);
@@ -210,7 +210,7 @@
                     this.result.ClearTextPassword.Add(this.Account.LogonName);
                 }
 
-                if(this.Account.UserAccountControl.HasFlag(UserAccountControl.SmartCardRequired))
+                if (this.Account.UserAccountControl.HasFlag(UserAccountControl.SmartCardRequired))
                 {
                     // Smart card user
                     if (this.Account.SupplementalCredentials.Kerberos != null)
@@ -507,7 +507,7 @@
 
         private void TestSamAccountNameAsPassword()
         {
-            string userLowerPassword = this.Account.SamAccountName.ToLower();
+            string userLowerPassword = this.Account.SamAccountName.ToLowerInvariant();
             byte[] userLowerHash = NTHash.ComputeHash(userLowerPassword);
 
             if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, userLowerHash))
@@ -529,7 +529,7 @@
 
         private void TestComputerDefaultPassword()
         {
-            string defaultPassword = this.Account.SamAccountName.TrimEnd('$').ToLower();
+            string defaultPassword = this.Account.SamAccountName.TrimEnd('$').ToLowerInvariant();
             byte[] defaultHash = NTHash.ComputeHash(defaultPassword);
             if (HashEqualityComparer.GetInstance().Equals(this.Account.NTHash, defaultHash))
             {

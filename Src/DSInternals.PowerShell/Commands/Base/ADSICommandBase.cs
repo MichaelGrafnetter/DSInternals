@@ -1,9 +1,9 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.ADSI;
     using System;
     using System.Management.Automation;
     using System.Net;
+    using DSInternals.ADSI;
 
     public abstract class ADSICommandBase : PSCmdlet, IDisposable
     {
@@ -39,7 +39,7 @@
             // TODO: Debug output
             // TODO: Exception handling
             NetworkCredential netCredential = null;
-            if(this.Credential != null)
+            if (this.Credential != null)
             {
                 // Convert PSCredential to NetworkCredential
                 netCredential = this.Credential.GetNetworkCredential();

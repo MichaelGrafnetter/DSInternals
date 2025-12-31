@@ -17,14 +17,14 @@ namespace DSInternals.Common.Data
                 return null;
             }
 
-            if(reader.TokenType == JsonTokenType.String)
+            if (reader.TokenType == JsonTokenType.String)
             {
                 try
                 {
                     byte[] blob = Convert.FromBase64String(reader.GetString());
                     return new CustomKeyInformation(blob);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     throw new JsonException("Cannot convert invalid value to CustomKeyInformation.", e);
                 }
@@ -35,7 +35,7 @@ namespace DSInternals.Common.Data
 
         public override void Write(Utf8JsonWriter writer, CustomKeyInformation value, JsonSerializerOptions options)
         {
-            if(value != null)
+            if (value != null)
             {
                 writer.WriteStringValue(Convert.ToBase64String(value.ToByteArray()));
             }

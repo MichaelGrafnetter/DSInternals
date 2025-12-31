@@ -101,7 +101,7 @@ namespace DSInternals.DataStore
 
         public override string ToString()
         {
-            return String.Format("Ver: {0}, USN: {1}, Time: {2}, DSA: {3}", this.Version, this.OriginatingChangeUsn, this.LastOriginatingChangeTime, this.LastOriginatingInvocationId);
+            return $"Ver: {this.Version}, USN: {this.OriginatingChangeUsn}, Time: {this.LastOriginatingChangeTime}, DSA: {this.LastOriginatingInvocationId}";
         }
     }
 }

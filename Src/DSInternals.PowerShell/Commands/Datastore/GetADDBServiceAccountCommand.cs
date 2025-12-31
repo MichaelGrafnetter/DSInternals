@@ -26,7 +26,7 @@
             // Current date is the default value
             DateTime passwordEffectiveTime = this.EffectiveTime ?? DateTime.Now;
 
-            using(var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+            using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
             {
                 // Now fetch all gMSAs and associate them with the KDS root keys
                 foreach (var gmsa in directoryAgent.GetGroupManagedServiceAccounts(passwordEffectiveTime))

@@ -23,7 +23,7 @@ namespace DSInternals.Common.Data.Fido
         }
 
         /// <summary>
-        /// Flags contains information from the authenticator about the authentication 
+        /// Flags contains information from the authenticator about the authentication
         /// and whether or not certain data is present in the authenticator data.
         /// </summary>
         public AuthenticatorFlags Flags
@@ -33,15 +33,16 @@ namespace DSInternals.Common.Data.Fido
         }
 
         /// <summary>
-        /// Signature counter, 32-bit unsigned big-endian integer. 
+        /// Signature counter, 32-bit unsigned big-endian integer.
         /// </summary>
-        public uint SignatureCount {
+        public uint SignatureCount
+        {
             get;
             private set;
         }
 
         /// <summary>
-        /// Attested credential data is a variable-length byte array added to the 
+        /// Attested credential data is a variable-length byte array added to the
         /// authenticator data when generating an attestation object for a given credential.
         /// </summary>
         public AttestedCredentialData? AttestedCredentialData
@@ -63,8 +64,7 @@ namespace DSInternals.Common.Data.Fido
         public AuthenticatorData(ReadOnlyMemory<byte> authData)
         {
             // Input validation
-            Validator.AssertNotNull(authData, nameof(authData));
-            Validator.AssertMinLength(authData, MinLength, nameof(authData));
+            Validator.AssertMinLength(authData, MinLength);
 
             // Read the authenticator data structure, as defined by W3C
             int currentPosition = 0;

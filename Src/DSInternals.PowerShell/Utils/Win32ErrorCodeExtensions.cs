@@ -1,5 +1,5 @@
-﻿using DSInternals.Common.Interop;
-using System.Management.Automation;
+﻿using System.Management.Automation;
+using DSInternals.Common.Interop;
 
 namespace DSInternals.PowerShell
 {

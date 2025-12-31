@@ -39,9 +39,9 @@ namespace DSInternals.Replication
         /// <param name="key">The decryption key.</param>
         public ReplicationSecretDecryptor(byte[] key)
         {
-            Validator.AssertNotNull(key, "key");
+            ArgumentNullException.ThrowIfNull(key);
             // Session key size: NTLM - 16B, Kerberos - 32B
-            Validator.AssertMinLength(key, KeySize, "key");
+            Validator.AssertMinLength(key, KeySize);
             this.key = key;
         }
 
@@ -53,7 +53,7 @@ namespace DSInternals.Replication
         public override byte[] DecryptSecret(byte[] blob)
         {
             // Blob structure: Salt (16B), Encrypted secret (rest)
-            Validator.AssertMinLength(blob, EncryptedBlobMinSize, "blob");
+            Validator.AssertMinLength(blob, EncryptedBlobMinSize);
 
             // Extract salt and the actual encrypted data from the blob
             byte[] salt = blob.Cut(SaltOffset, SaltSize);

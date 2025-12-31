@@ -1,8 +1,8 @@
 ﻿namespace DSInternals.DataStore
 {
-    using DSInternals.Common.Data;
     using System;
     using System.Security.Principal;
+    using DSInternals.Common.Data;
 
     public interface IDomainController
     {

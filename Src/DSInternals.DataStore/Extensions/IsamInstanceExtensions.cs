@@ -16,13 +16,10 @@ namespace DSInternals.DataStore
     {
         public static IsamSystemParametersExt GetIsamSystemParametersExt(this IsamInstance managedInstance)
         {
-            if (managedInstance == null)
-            {
-                throw new ArgumentNullException(nameof(managedInstance));
-            }
+            ArgumentNullException.ThrowIfNull(managedInstance);
 
             // HACK: Use reflection to get the private field
-            JET_INSTANCE nativeInstance = (JET_INSTANCE) typeof(IsamInstance).GetField("instance", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(managedInstance);
+            JET_INSTANCE nativeInstance = (JET_INSTANCE)typeof(IsamInstance).GetField("instance", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(managedInstance);
 
             return new IsamSystemParametersExt(nativeInstance);
         }
@@ -35,7 +32,8 @@ namespace DSInternals.DataStore
     {
         private readonly JET_INSTANCE _instance;
 
-        public IsamSystemParametersExt(JET_INSTANCE instance) {
+        public IsamSystemParametersExt(JET_INSTANCE instance)
+        {
             this._instance = instance;
         }
 
@@ -66,12 +64,12 @@ namespace DSInternals.DataStore
             {
                 int numericValue = 0;
                 // TODO: Add JET_paramDisableCallbacks to JET_param.
-                Api.JetGetSystemParameter(this._instance, JET_SESID.Nil, (JET_param) PInvoke.JET_paramDisableCallbacks, ref numericValue, out string ignored, 0);
+                Api.JetGetSystemParameter(this._instance, JET_SESID.Nil, (JET_param)PInvoke.JET_paramDisableCallbacks, ref numericValue, out string ignored, 0);
                 return Convert.ToBoolean(numericValue);
             }
             set
             {
-                Api.JetSetSystemParameter(this._instance, JET_SESID.Nil, (JET_param) PInvoke.JET_paramDisableCallbacks, Convert.ToInt32(value), null);
+                Api.JetSetSystemParameter(this._instance, JET_SESID.Nil, (JET_param)PInvoke.JET_paramDisableCallbacks, Convert.ToInt32(value), null);
             }
         }
 
@@ -160,7 +158,7 @@ namespace DSInternals.DataStore
                 {
                     // TODO: Add JET_paramUnicodeIndexDefault to JET_param.
                     IntPtr resultPointer = resultHandle.AddrOfPinnedObject();
-                    Api.JetGetSystemParameter(this._instance, JET_SESID.Nil, (JET_param) PInvoke.JET_paramUnicodeIndexDefault, ref resultPointer, out string ignored, Marshal.SizeOf<NATIVE_UNICODEINDEX>());
+                    Api.JetGetSystemParameter(this._instance, JET_SESID.Nil, (JET_param)PInvoke.JET_paramUnicodeIndexDefault, ref resultPointer, out string ignored, Marshal.SizeOf<NATIVE_UNICODEINDEX>());
                 }
                 finally
                 {
@@ -174,7 +172,7 @@ namespace DSInternals.DataStore
                 var nativeoptionsHandle = GCHandle.Alloc(value, GCHandleType.Pinned);
                 try
                 {
-                    Api.JetSetSystemParameter(this._instance, JET_SESID.Nil, (JET_param) PInvoke.JET_paramUnicodeIndexDefault, nativeoptionsHandle.AddrOfPinnedObject(), null);
+                    Api.JetSetSystemParameter(this._instance, JET_SESID.Nil, (JET_param)PInvoke.JET_paramUnicodeIndexDefault, nativeoptionsHandle.AddrOfPinnedObject(), null);
                 }
                 finally
                 {

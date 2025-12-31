@@ -17,7 +17,7 @@ namespace DSInternals.PowerShell
 
             // Check if inputData is a String encapsulated in an PSObject
             PSObject psObject = inputData as PSObject;
-            if(psObject != null)
+            if (psObject != null)
             {
                 hexString = psObject.BaseObject as string;
             }

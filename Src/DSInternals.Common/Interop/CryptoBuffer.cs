@@ -12,7 +12,7 @@
             this.Length = length;
             this.MaximumLength = length;
         }
-        public CryptoBuffer(IntPtr buffer, int length) : this(buffer, (uint) length)
+        public CryptoBuffer(IntPtr buffer, int length) : this(buffer, (uint)length)
         {
         }
 

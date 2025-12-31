@@ -18,25 +18,22 @@ namespace DSInternals.Common.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void DNWithBinary_NullInput()
         {
-            DNWithBinary.Parse(null);
+            Assert.ThrowsExactly<ArgumentNullException>(() => DNWithBinary.Parse(null));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void DNWithBinary_EmptyInput()
         {
-            DNWithBinary.Parse(String.Empty);
+            Assert.ThrowsExactly<ArgumentNullException>(() => DNWithBinary.Parse(String.Empty));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void DNWithBinary_MalformedInput()
         {
             string input = "B:828::CN = Admin,CN=Users,DC=contoso,DC=com";
-            DNWithBinary.Parse(input);
+            Assert.ThrowsExactly<ArgumentException>(() => DNWithBinary.Parse(input));
         }
     }
 }

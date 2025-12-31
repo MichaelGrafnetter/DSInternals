@@ -1,6 +1,6 @@
-﻿using DSInternals.Common.Interop;
-using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
+using DSInternals.Common.Interop;
 
 namespace DSInternals.Common.Cryptography
 {
@@ -10,7 +10,7 @@ namespace DSInternals.Common.Cryptography
     public abstract class DirectorySecretDecryptor
     {
         private const int HashSize = NativeMethods.NTHashNumBytes;
-        
+
         protected const int KeySize = 16;
         protected const int SaltSize = 16;
         protected const int DefaultSaltHashRounds = 1;
@@ -78,14 +78,14 @@ namespace DSInternals.Common.Cryptography
 
         public byte[] EncryptHashHistory(byte[][] hashHistory, int rid)
         {
-            Validator.AssertNotNull(hashHistory, "hashHistory");
+            ArgumentNullException.ThrowIfNull(hashHistory);
 
             int expectedBufferLength = hashHistory.Length * NTHash.HashSize;
 
             using (var buffer = new MemoryStream(expectedBufferLength))
             {
                 // Encryption layer 1: Encrypt the individual hashes
-                foreach(byte[] hash in hashHistory)
+                foreach (byte[] hash in hashHistory)
                 {
                     byte[] encryptedHash = EncryptUsingDES(hash, rid);
                     buffer.Write(encryptedHash, 0, encryptedHash.Length);
@@ -127,17 +127,17 @@ namespace DSInternals.Common.Cryptography
 
         protected static byte[] DecryptUsingAES(byte[] data, byte[] iv, byte[] key)
         {
-            using(var aes = Aes.Create())
+            using (var aes = Aes.Create())
             {
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.PKCS7;
-                using(var decryptor = aes.CreateDecryptor(key, iv))
+                using (var decryptor = aes.CreateDecryptor(key, iv))
                 {
                     using (var inputStream = new MemoryStream(data, false))
                     {
                         using (var cryptoStream = new CryptoStream(inputStream, decryptor, CryptoStreamMode.Read))
                         {
-                            using(var outputStream = new MemoryStream(data.Length))
+                            using (var outputStream = new MemoryStream(data.Length))
                             {
                                 cryptoStream.CopyTo(outputStream);
                                 return outputStream.ToArray();
@@ -171,6 +171,7 @@ namespace DSInternals.Common.Cryptography
             }
         }
 
+        [SuppressMessage("Security", "CA5351:Do Not Use Broken Cryptographic Algorithms", Justification = "MD5 is still used by Active Directory.")]
         protected static byte[] ComputeMD5(byte[] key, byte[] salt, int saltHashRounds = DefaultSaltHashRounds)
         {
             // TODO: Test that saltHashRounds >= 1
@@ -179,7 +180,7 @@ namespace DSInternals.Common.Cryptography
                 // Hash key
                 md5.TransformBlock(key, 0, key.Length, null, 0);
                 // Hash salt (saltHashRounds-1) times
-                for(int i = 1; i < saltHashRounds; i++)
+                for (int i = 1; i < saltHashRounds; i++)
                 {
                     md5.TransformBlock(salt, 0, salt.Length, null, 0);
                 }

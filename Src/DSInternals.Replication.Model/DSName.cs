@@ -30,12 +30,12 @@ namespace DSInternals.Replication
         /// </summary>
         public string? DistinguishedName { get; private set; }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DSName"/> class.
-    /// </summary>
-    /// <param name="objectSid">The object's security identifier (SID).</param>
-    /// <param name="objectGuid">The object's globally unique identifier (GUID).</param>
-    /// <param name="distinguishedName">The object's distinguished name (DN).</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DSName"/> class.
+        /// </summary>
+        /// <param name="objectSid">The object's security identifier (SID).</param>
+        /// <param name="objectGuid">The object's globally unique identifier (GUID).</param>
+        /// <param name="distinguishedName">The object's distinguished name (DN).</param>
         public DSName(SecurityIdentifier? objectSid = null, Guid? objectGuid = null, string? distinguishedName = null)
         {
             this.ObjectSid = objectSid;

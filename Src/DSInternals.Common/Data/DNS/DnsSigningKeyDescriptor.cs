@@ -340,7 +340,7 @@ public class DnsSigningKeyDescriptor
         currentOffset += standbyKeyLength.Value;
 
         // Read StandbyKeyScope (4 bytes)
-        descriptor.StandbyKeyScope = (DnsSigningKeyScope) BinaryPrimitives.ReadUInt32LittleEndian(binaryData.Slice(currentOffset));
+        descriptor.StandbyKeyScope = (DnsSigningKeyScope)BinaryPrimitives.ReadUInt32LittleEndian(binaryData.Slice(currentOffset));
         currentOffset += sizeof(int);
 
         // Read pwszNextKey (variable)
@@ -355,7 +355,7 @@ public class DnsSigningKeyDescriptor
         currentOffset += nextKeyLength.Value;
 
         // Read NextKeyScope (4 bytes)
-        descriptor.NextKeyScope = (DnsSigningKeyScope) BinaryPrimitives.ReadUInt32LittleEndian(binaryData.Slice(currentOffset));
+        descriptor.NextKeyScope = (DnsSigningKeyScope)BinaryPrimitives.ReadUInt32LittleEndian(binaryData.Slice(currentOffset));
         currentOffset += sizeof(int);
 
         if (part2.RevokedOrSwappedRecordCount > 0)

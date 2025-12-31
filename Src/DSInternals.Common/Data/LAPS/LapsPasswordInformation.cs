@@ -2,12 +2,19 @@
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents LAPS (Local Administrator Password Solution) password information for a computer.
+    /// </summary>
     public class LapsPasswordInformation
     {
         /// <summary>
-        /// Constructor for a legacy LAPS password.
+        /// Initializes a new instance of the <see cref="LapsPasswordInformation"/> class for a legacy LAPS password.
         /// </summary>
-        public LapsPasswordInformation(string computerName, string password, DateTime? expiration) {
+        /// <param name="computerName">The name of the computer.</param>
+        /// <param name="password">The cleartext password.</param>
+        /// <param name="expiration">The expiration date and time of the password.</param>
+        public LapsPasswordInformation(string computerName, string password, DateTime? expiration)
+        {
             this.Source = LapsPasswordSource.LegacyLapsCleartextPassword;
             this.DecryptionStatus = LapsDecryptionStatus.NotApplicable;
             this.ComputerName = computerName;
@@ -16,11 +23,15 @@ namespace DSInternals.Common.Data
         }
 
         /// <summary>
-        /// Constructor for a cleartext Windows LAPS password.
+        /// Initializes a new instance of the <see cref="LapsPasswordInformation"/> class for a cleartext Windows LAPS password.
         /// </summary>
+        /// <param name="computerName">The name of the computer.</param>
+        /// <param name="password">The parsed cleartext LAPS password.</param>
+        /// <param name="expiration">The expiration date and time of the password.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="password"/> parameter is <see langword="null"/>.</exception>
         public LapsPasswordInformation(string computerName, LapsClearTextPassword password, DateTime? expiration)
         {
-            Validator.AssertNotNull(password, nameof(password));
+            ArgumentNullException.ThrowIfNull(password);
 
             this.ComputerName = computerName;
             this.Account = password.AccountName;
@@ -31,9 +42,19 @@ namespace DSInternals.Common.Data
             this.DecryptionStatus = LapsDecryptionStatus.NotApplicable;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LapsPasswordInformation"/> class for an encrypted Windows LAPS password.
+        /// </summary>
+        /// <param name="computerName">The name of the computer.</param>
+        /// <param name="encryptedPassword">The encrypted LAPS password.</param>
+        /// <param name="source">One of the enumeration values that specifies the source of the LAPS password.</param>
+        /// <param name="expiration">The expiration date and time of the password.</param>
+        /// <param name="rootKeyResolver">The KDS root key resolver for decrypting the password. Can be <see langword="null"/> if decryption is not needed.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="encryptedPassword"/> parameter is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="source"/> parameter is not a valid encrypted password source.</exception>
         public LapsPasswordInformation(string computerName, LapsEncryptedPassword encryptedPassword, LapsPasswordSource source, DateTime? expiration, IKdsRootKeyResolver? rootKeyResolver = null)
         {
-            Validator.AssertNotNull(encryptedPassword, nameof(encryptedPassword));
+            ArgumentNullException.ThrowIfNull(encryptedPassword);
 
             // Validate the source type
             this.Source = source switch
@@ -78,12 +99,39 @@ namespace DSInternals.Common.Data
             }
         }
 
+        /// <summary>
+        /// Gets the name of the computer.
+        /// </summary>
         public string ComputerName { get; private set; }
+
+        /// <summary>
+        /// Gets the account name that the password applies to.
+        /// </summary>
         public string Account { get; private set; }
+
+        /// <summary>
+        /// Gets the cleartext password.
+        /// </summary>
         public string Password { get; private set; }
+
+        /// <summary>
+        /// Gets the date and time when the password was last updated.
+        /// </summary>
         public DateTime? PasswordUpdateTime { get; private set; }
+
+        /// <summary>
+        /// Gets the date and time when the password expires.
+        /// </summary>
         public DateTime? ExpirationTimestamp { get; private set; }
+
+        /// <summary>
+        /// Gets the source of the LAPS password.
+        /// </summary>
         public LapsPasswordSource Source { get; private set; }
+
+        /// <summary>
+        /// Gets the status of the password decryption.
+        /// </summary>
         public LapsDecryptionStatus DecryptionStatus { get; private set; }
     }
 }

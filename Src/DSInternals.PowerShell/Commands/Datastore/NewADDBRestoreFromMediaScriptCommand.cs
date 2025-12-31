@@ -1,15 +1,16 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common;
-    using DSInternals.Common.Cryptography;
-    using DSInternals.Common.Interop;
-    using DSInternals.DataStore;
     using System;
+    using System.Globalization;
     using System.IO;
     using System.Management.Automation;
     using System.Reflection;
     using System.Security;
     using System.Text;
+    using DSInternals.Common;
+    using DSInternals.Common.Cryptography;
+    using DSInternals.Common.Interop;
+    using DSInternals.DataStore;
 
     [Cmdlet(VerbsCommon.New, "ADDBRestoreFromMediaScript")]
     [OutputType(typeof(string))]
@@ -121,7 +122,7 @@
             using (var dsa = new DirectoryAgent(this.DirectoryContext))
             {
                 bool bootKeyIsValid = dsa.CheckBootKey(this.BootKey);
-                if(!bootKeyIsValid)
+                if (!bootKeyIsValid)
                 {
                     this.ThrowTerminatingError(new ErrorRecord(
                         new ArgumentException("The boot key provided cannot be used to decrypt the database.", nameof(BootKey)),
@@ -171,8 +172,8 @@
                 Replace("{ConfigNC}", dc.ConfigurationNamingContext.ToString()).
                 Replace("{RootDomainNC}", dc.ForestRootNamingContext.ToString()).
                 Replace("{NTDSSettingsObject}", dc.NTDSSettingsObjectDN.ToString()).
-                Replace("{DomainMode}", ((int)dc.DomainMode).ToString()).
-                Replace("{ForestMode}", ((int)dc.ForestMode).ToString()).
+                Replace("{DomainMode}", ((int)dc.DomainMode).ToString(NumberFormatInfo.InvariantInfo)).
+                Replace("{ForestMode}", ((int)dc.ForestMode).ToString(NumberFormatInfo.InvariantInfo)).
                 Replace("{DomainModeString}", (dc.DomainMode).ToString()).
                 Replace("{ForestModeString}", (dc.ForestMode).ToString()).
                 Replace("{OSName}", dc.OSName).

@@ -345,7 +345,7 @@ namespace DSInternals.DataStore
             // Note: Must be in transaction and record must be in editing state.
             ColumnAccessor record = cursor.EditRecord;
             object currentValue = record[columnId];
-            bool hasChanged =  currentValue != DBNull.Value ? !currentValue.Equals(newValue) : newValue != null;
+            bool hasChanged = currentValue != DBNull.Value ? !currentValue.Equals(newValue) : newValue != null;
 
             if (hasChanged)
             {
@@ -372,8 +372,8 @@ namespace DSInternals.DataStore
             // Retrieve the current value and compare it to the new one
             ColumnAccessor record = cursor.EditRecord;
             object currentRawValue = record[columnId];
-            T currentValue = currentRawValue != DBNull.Value ? (T) record[columnId] : null;
-            bool hasChanged = ! equalityComparer.Equals(currentValue, newValue);
+            T currentValue = currentRawValue != DBNull.Value ? (T)record[columnId] : null;
+            bool hasChanged = !equalityComparer.Equals(currentValue, newValue);
 
             if (hasChanged)
             {
@@ -416,7 +416,7 @@ namespace DSInternals.DataStore
             var columnId = cursor.TableDefinition.Columns[columnName].Columnid;
             return cursor.SetValue(columnId, newValue, asGeneralizedTime);
         }
-        
+
         public static bool SetValue(this Cursor cursor, Columnid columnId, DateTime? newValue, bool asGeneralizedTime)
         {
             long? newTimeStamp = null;
@@ -449,7 +449,7 @@ namespace DSInternals.DataStore
             // TODO: Check if we are really dealing with the datatable.
             // Read DN Tag of the current record
             DNTag dnTag = dataTableCursor.RetrieveColumnAsDNTag(schema.DistinguishedNameTagColumnId).Value;
-            
+
             // Set the index to PDNT column to get all children pointing to the current record
             dataTableCursor.CurrentIndex = DirectorySchema.ParentDistinguishedNameTagIndex;
 
@@ -461,31 +461,6 @@ namespace DSInternals.DataStore
         {
             cursor.MoveBeforeFirst();
             return cursor.MoveNext();
-        }
-
-        [Obsolete]
-        public static Location SaveLocation(this Cursor cursor)
-        {
-            Location location;
-            try
-            {
-                location = cursor.Location;
-            }
-            catch(EsentNoCurrentRecordException)
-            {
-                // The cursor is not yet positioned.
-                location = null;
-            }
-            return location;
-        }
-
-        [Obsolete]
-        public static void RestoreLocation(this Cursor cursor, Location location)
-        {
-            if (location != null)
-            {
-                cursor.Location = location;
-            }
         }
     }
 }

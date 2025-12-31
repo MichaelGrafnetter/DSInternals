@@ -75,7 +75,7 @@ namespace DSInternals.PowerShell.Commands
         {
             base.BeginProcessing();
 
-            if(this.ExportFormat != null)
+            if (this.ExportFormat != null)
             {
                 // Override the property set to match the requirements of the export formats.
                 AccountPropertySets requiredProperties = this.ExportFormat.GetRequiredProperties();
@@ -132,10 +132,10 @@ namespace DSInternals.PowerShell.Commands
                 accountCount++;
 
                 // Update progress
-                if(accountCount % ProgressReportingInterval == 1)
+                if (accountCount % ProgressReportingInterval == 1)
                 {
                     // We do not want to change the progress too often, for performance reasons.
-                    progress.StatusDescription = String.Format("{0}+ accounts", accountCount);
+                    progress.StatusDescription = $"{accountCount}+ accounts";
                     this.WriteProgress(progress);
                 }
             }
@@ -181,7 +181,7 @@ namespace DSInternals.PowerShell.Commands
             {
                 // Add a virtual type to the object to change the default out-of-band View, e.g., DSInternals.Common.Data.DSAccount#PwDump.
                 PSObject psObject = PSObject.AsPSObject(sendToPipeline);
-                string virtualTypeName = String.Format("{0}#{1}", typeof(DSAccount).FullName, this.ExportFormat.ToString());
+                string virtualTypeName = $"{typeof(DSAccount).FullName}#{ExportFormat}";
                 psObject.TypeNames.Insert(0, virtualTypeName);
                 base.WriteObject(psObject);
             }

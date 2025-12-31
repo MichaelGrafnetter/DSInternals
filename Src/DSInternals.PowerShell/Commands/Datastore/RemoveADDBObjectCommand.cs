@@ -1,10 +1,10 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
+    using System;
+    using System.Management.Automation;
     using DSInternals.Common.Data;
     using DSInternals.Common.Exceptions;
     using DSInternals.DataStore;
-    using System;
-    using System.Management.Automation;
 
     [Cmdlet(VerbsCommon.Remove, "ADDBObject",
         ConfirmImpact = ConfirmImpact.High,
@@ -30,7 +30,7 @@
 
         protected override void BeginProcessing()
         {
-            if(! Force.IsPresent)
+            if (!Force.IsPresent)
             {
                 // Do not continue with operation until the user enforces it.
                 // TODO: Move to resources
@@ -78,7 +78,7 @@
                         throw new PSInvalidOperationException(InvalidParameterSetMessage);
                 }
             }
-            catch(DirectoryObjectNotFoundException ex)
+            catch (DirectoryObjectNotFoundException ex)
             {
                 var error = new ErrorRecord(ex, "RemoveADDBObject_NotFound", ErrorCategory.ObjectNotFound, ex.ObjectIdentifier);
                 this.WriteError(error);

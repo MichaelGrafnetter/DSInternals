@@ -1,6 +1,6 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Security.Principal;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Common.Test
 {

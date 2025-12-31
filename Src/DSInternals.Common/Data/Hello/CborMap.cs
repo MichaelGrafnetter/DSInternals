@@ -1,9 +1,9 @@
-﻿namespace DSInternals.Common.Data;
-
-using System.Collections;
+﻿using System.Collections;
 using System.Formats.Cbor;
 using System.Text.Json;
 using DSInternals.Common.Data.Fido;
+
+namespace DSInternals.Common.Data;
 
 /// <summary>
 /// Represents a CBOR (Concise Binary Object Representation) map data structure that stores key-value pairs.
@@ -24,8 +24,7 @@ public sealed class CborMap
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="items"/> is null.</exception>
     public CborMap(Hashtable items)
     {
-        if (items == null) throw new ArgumentNullException(nameof(items));
-        _items = items;
+        _items = items ?? throw new ArgumentNullException(nameof(items));
     }
 
     /// <summary>

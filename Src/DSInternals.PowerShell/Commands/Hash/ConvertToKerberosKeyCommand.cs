@@ -1,10 +1,10 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common.Cryptography;
-    using DSInternals.Common.Data;
     using System;
     using System.Management.Automation;
     using System.Security;
+    using DSInternals.Common.Cryptography;
+    using DSInternals.Common.Data;
 
     [Cmdlet(VerbsData.ConvertTo, "KerberosKey")]
     [OutputType(new Type[] { typeof(KerberosKeyDataNew) })]
@@ -53,7 +53,7 @@
         protected override void BeginProcessing()
         {
             // Set default values
-            if(this.Iterations < 1)
+            if (this.Iterations < 1)
             {
                 this.Iterations = KerberosKeyDerivation.DefaultIterationCount;
             }

@@ -15,7 +15,7 @@
             get
             {
                 return this.ObjectIdentifier != null ?
-                    String.Format("Object with identity '{0}' has not been found.", this.ObjectIdentifier) :
+                    $"Object with identity '{this.ObjectIdentifier}' has not been found." :
                     "Could not find the requested object.";
             }
         }

@@ -24,9 +24,9 @@
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
-            using(var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+            using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
             {
-                foreach(var secret in directoryAgent.GetDPAPIBackupKeys(this.BootKey))
+                foreach (var secret in directoryAgent.GetDPAPIBackupKeys(this.BootKey))
                 {
                     this.WriteObject(secret);
                 }

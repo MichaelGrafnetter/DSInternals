@@ -1,7 +1,7 @@
-﻿using DSInternals.Common;
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
 using System.Security;
+using DSInternals.Common;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Common.Cryptography.Test
 {
@@ -27,17 +27,15 @@ namespace DSInternals.Common.Cryptography.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GPPrefPwdObfuscator_Decrypt_NullInput()
         {
-            string result = GPPrefPwdObfuscator.Decrypt(null);
+            Assert.ThrowsExactly<ArgumentNullException>(() => GPPrefPwdObfuscator.Decrypt(null));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GPPrefPwdObfuscator_Decrypt_EmptyInput()
         {
-            string result = GPPrefPwdObfuscator.Decrypt(String.Empty);
+            Assert.ThrowsExactly<ArgumentNullException>(() => GPPrefPwdObfuscator.Decrypt(String.Empty));
         }
         [TestMethod]
         public void GPPrefPwdObfuscator_Encrypt_Test1()
@@ -55,10 +53,9 @@ namespace DSInternals.Common.Cryptography.Test
             Assert.AreEqual(String.Empty, result);
         }
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GPPrefPwdObfuscator_Encrypt_NullInput()
         {
-            string result = GPPrefPwdObfuscator.Encrypt(null);
+            Assert.ThrowsExactly<ArgumentNullException>(() => GPPrefPwdObfuscator.Encrypt(null));
         }
     }
 }

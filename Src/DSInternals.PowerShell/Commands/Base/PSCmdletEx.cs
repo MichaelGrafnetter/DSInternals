@@ -1,8 +1,8 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using Microsoft.PowerShell.Commands;
     using System.IO;
     using System.Management.Automation;
+    using Microsoft.PowerShell.Commands;
 
     public abstract class PSCmdletEx : PSCmdlet
     {

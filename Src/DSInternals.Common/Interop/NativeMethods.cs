@@ -212,11 +212,11 @@ namespace DSInternals.Common.Interop
             }
             finally
             {
-                if (dataPin != null && dataPin.IsAllocated)
+                if (dataPin.IsAllocated)
                 {
                     dataPin.Free();
                 }
-                if (keyPin != null && keyPin.IsAllocated)
+                if (keyPin.IsAllocated)
                 {
                     keyPin.Free();
                 }
@@ -231,7 +231,7 @@ namespace DSInternals.Common.Interop
             IntPtr cryptoSystemPtr;
             NtStatus status = CDLocateCSystem(type, out cryptoSystemPtr);
 
-            cryptoSystem = (status == NtStatus.Success) ? (KerberosCryptoSystem)Marshal.PtrToStructure(cryptoSystemPtr, typeof(KerberosCryptoSystem)) : null;
+            cryptoSystem = (status == NtStatus.Success) ? Marshal.PtrToStructure<KerberosCryptoSystem>(cryptoSystemPtr) : null;
             return status;
         }
     }

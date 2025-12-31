@@ -123,10 +123,7 @@ public sealed class SamServer : SamObject
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="domainSid"/> is null.</exception>
     public SamDomain OpenDomain(SecurityIdentifier domainSid, SamDomainAccessMask accessMask = SamDomainAccessMask.MaximumAllowed)
     {
-        if (domainSid == null)
-        {
-            throw new ArgumentNullException(nameof(domainSid));
-        }
+        ArgumentNullException.ThrowIfNull(domainSid);
 
         NtStatus result = NativeMethods.SamOpenDomain(this.Handle, accessMask, domainSid, out SafeSamHandle domainHandle);
         Validator.AssertSuccess(result);

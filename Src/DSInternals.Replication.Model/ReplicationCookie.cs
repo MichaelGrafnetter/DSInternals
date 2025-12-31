@@ -1,5 +1,5 @@
-﻿using DSInternals.Common;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using DSInternals.Common;
 
 namespace DSInternals.Replication.Model
 {
@@ -15,7 +15,7 @@ namespace DSInternals.Replication.Model
         /// <param name="namingContext">The naming context.</param>
         public ReplicationCookie(string namingContext)
         {
-            Validator.AssertNotNullOrWhiteSpace(namingContext, "namingContext");
+            ArgumentException.ThrowIfNullOrWhiteSpace(namingContext);
             this.NamingContext = namingContext;
         }
 
@@ -29,7 +29,7 @@ namespace DSInternals.Replication.Model
         /// <param name="reserved">Reserved for future use.</param>
         public ReplicationCookie(string namingContext, Guid invocationId, Int64 highObjectUpdate, Int64 highPropUpdate, Int64 reserved)
         {
-            Validator.AssertNotNullOrWhiteSpace(namingContext, "namingContext");
+            ArgumentException.ThrowIfNullOrWhiteSpace(namingContext);
             this.NamingContext = namingContext;
             this.InvocationId = invocationId;
             this.HighObjUpdate = highObjectUpdate;

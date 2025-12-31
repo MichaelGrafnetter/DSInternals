@@ -1,7 +1,7 @@
-﻿namespace DSInternals.Common
+﻿using System.Net;
+
+namespace DSInternals.Common
 {
-    using System;
-    using System.Net;
 
     public static class NetworkCredentialExtensions
     {
@@ -22,7 +22,7 @@
                 else
                 {
                     // Combine Domain with UserName.
-                    logonName = String.Format(@"{0}\{1}", credential.Domain, credential.UserName);
+                    logonName = $@"{credential.Domain}\{credential.UserName}";
                 }
             }
 

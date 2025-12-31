@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!-- Target both .NET Framework 4.8 (Windows PowerShell 5) and modern .NET (PowerShell 7) -->
     <!-- Linux and MacOS are currently unsupported because of P/Invokes. -->
-    <TargetFrameworks>net48;net8.0-windows;net10.0-windows</TargetFrameworks>
+    <TargetFrameworks>net48;net8.0-windows;net9.0-windows</TargetFrameworks>
 
     <!-- Configure C# language properties -->
     <LangVersion>latest</LangVersion>
@@ -63,12 +63,18 @@
 
     <!-- Enable source-link -->
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
+
+    <!-- Expose new .NET features like ThrowIf to .NET Framework. -->
+    <PackageReference Include="Polyfill" Condition="'$(TargetFramework)' == 'net48'" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net48'">
     <!-- Some crypto API functions are not available in WoW64.-->
     <Prefer32Bit>false</Prefer32Bit>
     <PreferNativeArm64>True</PreferNativeArm64>
+
+    <!-- Enable Polyfill argument exception improvements for .NET Framework -->
+    <PolyArgumentExceptions>true</PolyArgumentExceptions>
   </PropertyGroup>
 
   <!-- AOT and Trim compatibility settings for modern .NET -->

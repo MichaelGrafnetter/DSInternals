@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Globalization;
+using System.Net;
 using System.Security.Principal;
 using DSInternals.Common;
 using DSInternals.Common.Cryptography;
@@ -143,10 +144,10 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     /// <param name="credential">The credentials to use for authentication.</param>
     public DirectoryReplicationClient(string server, NetworkCredential credential = null)
     {
-        Validator.AssertNotNullOrWhiteSpace(server, nameof(server));
+        ArgumentException.ThrowIfNullOrWhiteSpace(server);
         var schema = BaseSchema.Create();
         this._rpcBinding = new RpcBinding(server, RpcProtseq.ncacn_ip_tcp);
-        string spn = String.Format(ServicePrincipalNameFormat, server);
+        string spn = String.Format(CultureInfo.InvariantCulture, ServicePrincipalNameFormat, server);
         this._rpcBinding.AuthenticateAs(spn, credential, RpcAuthenticationLevel.PacketPrivacy, RpcAuthenticationType.Negotiate);
         this._drsConnection = new DrsConnection(this._rpcBinding.DangerousGetHandle(), NtdsApiClientGuid, schema);
 
@@ -161,7 +162,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     /// <returns>An array of replication cursors.</returns>
     public ReplicationCursor[] GetReplicationCursors(string namingContext)
     {
-        Validator.AssertNotNullOrWhiteSpace(namingContext, nameof(namingContext));
+        ArgumentException.ThrowIfNullOrWhiteSpace(namingContext);
         return this._drsConnection.GetReplicationCursors(namingContext);
     }
 
@@ -174,7 +175,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     /// <returns>An enumerable collection of directory service accounts.</returns>
     public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
     {
-        Validator.AssertNotNullOrWhiteSpace(domainNamingContext, nameof(domainNamingContext));
+        ArgumentException.ThrowIfNullOrWhiteSpace(domainNamingContext);
 
         return ReplicateAllObjects(domainNamingContext, progressReporter)
             .Select(dsObject => AccountFactory.CreateAccount(dsObject, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets))
@@ -189,7 +190,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     /// <returns>An enumerable collection of directory service objects.</returns>
     public IEnumerable<ReplicaObject> ReplicateAllObjects(string namingContext, ReplicationProgressHandler progressReporter = null)
     {
-        Validator.AssertNotNullOrWhiteSpace(namingContext, nameof(namingContext));
+        ArgumentException.ThrowIfNullOrWhiteSpace(namingContext);
         ReplicationCookie currentCookie = new(namingContext);
         ReplicationResult result;
         int processedObjectCount = 0;

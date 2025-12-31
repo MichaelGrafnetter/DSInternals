@@ -48,7 +48,7 @@
             }
 
             base.BeginProcessing();
-            using(var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+            using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
             {
                 directoryAgent.ChangeBootKey(this.OldBootKey, this.NewBootKey);
             }

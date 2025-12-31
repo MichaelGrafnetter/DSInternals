@@ -1,7 +1,7 @@
 ﻿namespace DSInternals.Common.Cryptography.Test
 {
-    using DSInternals.Common;
     using System;
+    using DSInternals.Common;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
@@ -13,7 +13,7 @@
         public void HashEqualityComparer_Equals_SameSize1()
         {
             byte[] vector1 = "92937945B518814341DE3F726500D4FF".HexToBinary();
-            byte[] vector2 = (byte[]) vector1.Clone();
+            byte[] vector2 = (byte[])vector1.Clone();
             bool result = comparer.Equals(vector1, vector2);
             Assert.AreEqual(true, result);
         }

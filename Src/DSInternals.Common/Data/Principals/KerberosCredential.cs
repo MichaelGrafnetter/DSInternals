@@ -1,12 +1,12 @@
 ﻿namespace DSInternals.Common.Data
 {
-    using DSInternals.Common.Cryptography;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Security;
     using System.Text;
+    using DSInternals.Common.Cryptography;
 
     public class KerberosCredential
     {
@@ -43,7 +43,7 @@
             else
             {
                 this.Credentials = [desKeyData];
-            }    
+            }
         }
 
         public short Flags
@@ -116,7 +116,7 @@
                     int currentKeyValueOffset = defaultSaltOffset + defaultSaltLength;
 
                     // Credentials (variable): An array of CredentialCount KERB_KEY_DATA (section 2.2.10.5) elements.
-                    foreach(var credential in allCredentials)
+                    foreach (var credential in allCredentials)
                     {
                         WriteCredential(writer, credential, currentKeyValueOffset);
                         currentKeyValueOffset += credential.Key.Length;
@@ -138,7 +138,7 @@
                 return stream.ToArray();
             }
         }
-        
+
         private void ReadCredentials(byte[] blob)
         {
             using (Stream stream = new MemoryStream(blob))
@@ -167,7 +167,7 @@
                     int defaultSaltOffset = reader.ReadInt32();
 
                     // Credentials (variable): An array of CredentialCountKERB_KEY_DATA (section 2.2.10.5) elements.
-                    if(credentialCount > 0)
+                    if (credentialCount > 0)
                     {
                         this.Credentials = new KerberosKeyData[credentialCount];
                         for (int i = 0; i < credentialCount; i++)
@@ -177,7 +177,7 @@
                     }
 
                     // OldCredentials (variable): An array of OldCredentialCount KERB_KEY_DATA elements.
-                    if(oldCredentialCount > 0)
+                    if (oldCredentialCount > 0)
                     {
                         this.OldCredentials = new KerberosKeyData[oldCredentialCount];
                         for (int i = 0; i < oldCredentialCount; i++)

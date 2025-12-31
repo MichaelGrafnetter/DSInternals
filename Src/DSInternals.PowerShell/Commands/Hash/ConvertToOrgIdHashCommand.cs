@@ -1,8 +1,8 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Cryptography;
-using System;
+﻿using System;
 using System.Management.Automation;
 using System.Security;
+using DSInternals.Common;
+using DSInternals.Common.Cryptography;
 
 namespace DSInternals.PowerShell.Commands
 {

@@ -89,7 +89,7 @@
         public CustomKeyInformation(byte[] blob)
         {
             // Validate the input
-            Validator.AssertNotNull(blob, nameof(blob));
+            ArgumentNullException.ThrowIfNull(blob);
             Validator.AssertMinLength(blob, ShortRepresentationSize, nameof(blob));
 
             using (var stream = new MemoryStream(blob, false))
@@ -107,13 +107,13 @@
                     this.VolumeType = (VolumeType)stream.ReadByte();
                 }
 
-                if(stream.Position < stream.Length)
+                if (stream.Position < stream.Length)
                 {
                     // An 8-bit unsigned integer that specifies whether the device associated with this credential supports notification.
                     this.SupportsNotification = Convert.ToBoolean(stream.ReadByte());
                 }
 
-                if(stream.Position < stream.Length)
+                if (stream.Position < stream.Length)
                 {
                     // An 8-bit unsigned integer that specifies the version of the File Encryption Key (FEK). This field must be set to 1.
                     this.FekKeyVersion = (byte)stream.ReadByte();
@@ -134,7 +134,7 @@
                     stream.Read(this.Reserved, 0, actualReservedSize);
                 }
 
-                if(stream.Position < stream.Length)
+                if (stream.Position < stream.Length)
                 {
                     // Extended custom key information.
                     this.EncodedExtendedCKI = stream.ReadToEnd();
@@ -144,12 +144,12 @@
 
         public byte[] ToByteArray()
         {
-            using(var stream = new MemoryStream())
+            using (var stream = new MemoryStream())
             {
                 stream.WriteByte(this.Version);
                 stream.WriteByte((byte)this.Flags);
 
-                if(this.VolumeType.HasValue)
+                if (this.VolumeType.HasValue)
                 {
                     stream.WriteByte((byte)this.VolumeType.Value);
                 }
@@ -159,7 +159,7 @@
                     stream.WriteByte(Convert.ToByte(this.SupportsNotification.Value));
                 }
 
-                if(this.FekKeyVersion.HasValue)
+                if (this.FekKeyVersion.HasValue)
                 {
                     stream.WriteByte(this.FekKeyVersion.Value);
                 }
@@ -174,7 +174,7 @@
                     stream.Write(this.Reserved, 0, Reserved.Length);
                 }
 
-                if(this.EncodedExtendedCKI != null)
+                if (this.EncodedExtendedCKI != null)
                 {
                     stream.Write(this.EncodedExtendedCKI, 0, this.EncodedExtendedCKI.Length);
                 }

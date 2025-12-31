@@ -27,7 +27,7 @@ namespace DSInternals.PowerShell.Commands
         {
             base.BeginProcessing();
 
-            using(var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+            using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
             {
                 // Invert the selection logic
                 bool skipRootHints = !this.IncludeRootHints.IsPresent;

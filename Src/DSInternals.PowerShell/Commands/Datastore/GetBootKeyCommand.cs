@@ -1,11 +1,11 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common;
-    using DSInternals.Common.Interop;
-    using DSInternals.DataStore;
     using System;
     using System.ComponentModel;
     using System.Management.Automation;
+    using DSInternals.Common;
+    using DSInternals.Common.Interop;
+    using DSInternals.DataStore;
 
     [Cmdlet(VerbsCommon.Get, "BootKey")]
     [OutputType(typeof(string))]
@@ -34,7 +34,7 @@
             try
             {
                 byte[] bootKey;
-                if(Online.IsPresent)
+                if (Online.IsPresent)
                 {
                     // Online
                     bootKey = BootKeyRetriever.GetBootKey();
@@ -47,13 +47,13 @@
                 }
                 this.WriteObject(bootKey.ToHex());
             }
-            catch(SessionStateException ex)
+            catch (SessionStateException ex)
             {
                 // This may be DriveNotFoundException, ItemNotFoundException, ProviderNotFoundException, etc.
                 // Terminate on this error:
                 this.ThrowTerminatingError(new ErrorRecord(ex.ErrorRecord, ex));
             }
-            catch(Win32Exception ex)
+            catch (Win32Exception ex)
             {
                 ErrorCategory category = ((Win32ErrorCode)ex.NativeErrorCode).ToPSCategory();
                 ErrorRecord error = new ErrorRecord(ex, "GetBootKey_Win32Error", category, this.SystemHiveFilePath);

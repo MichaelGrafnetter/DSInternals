@@ -56,7 +56,7 @@ namespace DSInternals.PowerShell.Commands
         #region IDisposable Support
         public virtual void Dispose()
         {
-            if(Client != null)
+            if (Client != null)
             {
                 Client.Dispose();
             }

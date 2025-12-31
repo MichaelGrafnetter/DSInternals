@@ -110,15 +110,15 @@ Zulu";
             using (var stream = new MemoryStream(binaryInput))
             {
                 var searcher = new SortedFileSearcher(stream);
-                
+
                 // Check that we can find all the words that are contained in the input
                 string[] words = PhoneticAlphabet.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-                foreach(string word in words)
+                foreach (string word in words)
                 {
                     Assert.IsTrue(searcher.FindString(word));
                 }
 
-                // Test some non-existing words 
+                // Test some non-existing words
                 Assert.IsFalse(searcher.FindString("AAAA"));
                 Assert.IsFalse(searcher.FindString("ZZZZ"));
                 string[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Split();
@@ -204,10 +204,9 @@ Zulu";
 
         [TestMethod]
         [Timeout(5000)]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void SortedFileSearcher_StreamInput_Null()
         {
-            var searcher = new SortedFileSearcher((Stream)null);
+            Assert.ThrowsExactly<ArgumentNullException>(() => new SortedFileSearcher((Stream)null));
         }
 
         [TestMethod]

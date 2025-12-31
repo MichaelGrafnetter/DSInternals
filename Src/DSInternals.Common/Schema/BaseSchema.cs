@@ -61,7 +61,7 @@ public class BaseSchema
     /// </summary>
     public AttributeSchema? FindAttribute(string attributeName)
     {
-        Validator.AssertNotNullOrWhiteSpace(attributeName, nameof(attributeName));
+        ArgumentException.ThrowIfNullOrWhiteSpace(attributeName);
         bool found = AttributesByName.TryGetValue(attributeName, out AttributeSchema? attribute);
         return found ? attribute : null;
     }
@@ -96,7 +96,7 @@ public class BaseSchema
 
     protected void AddAttribute(AttributeSchema attribute)
     {
-        if (attribute == null) throw new ArgumentNullException(nameof(attribute));
+        ArgumentNullException.ThrowIfNull(attribute);
 
         // This overwrites any pre-existing values and does not throw any exception for duplicate adds.
         AttributesByName[attribute.Name] = attribute;

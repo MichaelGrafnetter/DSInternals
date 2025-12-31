@@ -29,5 +29,8 @@
 
     <!-- PowerShell -->
     <PackageVersion Include="PowerShellStandard.Library" Version="5.1.1" />
+
+    <!-- Polyfill (.NET Framework compatibility layer) -->
+    <PackageVersion Include="Polyfill" Version="9.5.0" />
   </ItemGroup>
 </Project>

@@ -108,7 +108,7 @@ namespace DSInternals.Common.Schema
 
         public static ClassType? Translate(string ldapDisplayName)
         {
-            if (ldapDisplayName == null) throw new ArgumentNullException(nameof(ldapDisplayName));
+            ArgumentNullException.ThrowIfNull(ldapDisplayName);
 
             return ldapDisplayName switch
             {

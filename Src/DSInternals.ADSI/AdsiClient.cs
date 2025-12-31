@@ -1,5 +1,6 @@
 ﻿using System.DirectoryServices;
 using System.DirectoryServices.ActiveDirectory;
+using System.Globalization;
 using System.Net;
 using DSInternals.Common;
 using DSInternals.Common.Data;
@@ -10,7 +11,7 @@ namespace DSInternals.ADSI;
 public sealed class AdsiClient : IDisposable
 {
     private const string NetbiosNameFilterFormat = "(&(objectCategory=crossRef)(nETBIOSName=*)(dnsroot={0}))";
-    private static readonly string[] NetbiosNamePropertiesToLoad = [ CommonDirectoryAttributes.NetBIOSName ];
+    private static readonly string[] NetbiosNamePropertiesToLoad = [CommonDirectoryAttributes.NetBIOSName];
     private const string AccountsFilter = "(objectClass=user)";
 
     private DirectoryContext _directoryContext;
@@ -41,7 +42,7 @@ public sealed class AdsiClient : IDisposable
                 // Resolve the domain partition
                 _domainNamingContext = dc.Domain.GetDirectoryEntry();
                 _dnsDomainName = dc.Domain.Name;
-                
+
                 // Resolve the configuration partition
                 _configurationNamingContext = GetConfigurationNamingContext(dc);
             }
@@ -131,7 +132,7 @@ public sealed class AdsiClient : IDisposable
                 CommonDirectoryAttributes.Description,
                 CommonDirectoryAttributes.PasswordLastSet
             ]);
-            }
+        }
 
         if (propertySets.HasFlag(AccountPropertySets.GenericUserInfo))
         {
@@ -249,7 +250,7 @@ public sealed class AdsiClient : IDisposable
     /// <exception cref="InvalidOperationException">Thrown if the NetBIOS domain name cannot be found for the current DNS domain name.</exception>
     private string GetNetbiosDomainName()
     {
-        string netbiosNameFilter = string.Format(NetbiosNameFilterFormat, _dnsDomainName);
+        string netbiosNameFilter = string.Format(CultureInfo.InvariantCulture, NetbiosNameFilterFormat, _dnsDomainName);
 
         using (var netbiosNameSearcher = new DirectorySearcher(_configurationNamingContext, netbiosNameFilter, NetbiosNamePropertiesToLoad, SearchScope.Subtree))
         {

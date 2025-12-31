@@ -1,7 +1,7 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Runtime.Serialization;
 using System.IO;
+using System.Runtime.Serialization;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Replication.Model.Test
 {
@@ -85,7 +85,7 @@ namespace DSInternals.Replication.Model.Test
         {
             Guid guid = Guid.NewGuid();
             var originalCookie = new ReplicationCookie("DC=adatum,DC=com", guid, 1, 2, 3);
-            
+
             // Serialize
             var serializer = new DataContractSerializer(typeof(ReplicationCookie));
             byte[] binaryForm;
@@ -99,7 +99,7 @@ namespace DSInternals.Replication.Model.Test
             ReplicationCookie deserializedCookie;
             using (var stream = new MemoryStream(binaryForm))
             {
-                deserializedCookie = (ReplicationCookie) serializer.ReadObject(stream);
+                deserializedCookie = (ReplicationCookie)serializer.ReadObject(stream);
             }
 
             // Test that the deserialization worked

@@ -114,7 +114,11 @@ namespace DSInternals
 			array<ReplicationCursor^>^ DrsConnection::GetReplicationCursors(String^ namingContext)
 			{
 				this->ValidateConnection();
-				Validator::AssertNotNullOrEmpty(namingContext, nameof(namingContext));
+
+                if (namingContext == nullptr || namingContext->Trim()->Length == 0)
+                {
+                    throw gcnew ArgumentException("The naming context cannot be null or empty.", "namingContext");
+                }
 
 				// Prepare the parameters
 				DRS_HANDLE handle = this->handle.ToPointer();
@@ -222,7 +226,10 @@ namespace DSInternals
 			ReplicationResult^ DrsConnection::ReplicateAllObjects(ReplicationCookie^ cookie, array<ATTRTYP>^ partialAttributeSet, ULONG maxBytes, ULONG maxObjects)
 			{
 				// Validate parameters
-				Validator::AssertNotNull(cookie, nameof(cookie));
+                if (cookie == nullptr)
+                {
+                    throw gcnew ArgumentNullException("cookie");
+                }
 
 				auto request = CreateReplicateAllRequest(cookie, partialAttributeSet, maxBytes, maxObjects);
 				auto reply = GetNCChanges(move(request));
@@ -235,7 +242,7 @@ namespace DSInternals
 				Guid invocationId = RpcTypeConverter::ToManaged(reply->uuidInvocIdSrc);
 				auto newCookie = gcnew ReplicationCookie(cookie->NamingContext, invocationId, usnTo.usnHighObjUpdate, usnTo.usnHighPropUpdate, usnTo.usnReserved);
 				bool hasMoreData = reply->fMoreData != FALSE;
-                
+
 				return gcnew ReplicationResult(objects, hasMoreData, newCookie, prefixTable, reply->cNumNcSizeObjects);
 			}
 
@@ -246,7 +253,10 @@ namespace DSInternals
 
 			ReplicaObject^ DrsConnection::ReplicateSingleObject(String^ distinguishedName, array<ATTRTYP>^ partialAttributeSet)
 			{
-				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
+                if (distinguishedName == nullptr || distinguishedName->Trim()->Length == 0)
+                {
+                    throw gcnew ArgumentException("The distinguished name cannot be null or empty.", "distinguishedName");
+                }
 
 				try
 				{
@@ -350,8 +360,12 @@ namespace DSInternals
 
 			String^ DrsConnection::ResolveDistinguishedName(NTAccount^ accountName)
 			{
-				Validator::AssertNotNull(accountName, nameof(accountName));
-				auto stringAccountName = accountName->Value;
+                if (accountName == nullptr)
+                {
+                    throw gcnew ArgumentNullException("accountName");
+                }
+
+                auto stringAccountName = accountName->Value;
 				bool isUPN = stringAccountName->Contains(UpnSeparator);
 				auto nameFormat = isUPN ? DS_NAME_FORMAT::DS_USER_PRINCIPAL_NAME : DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME;
 				return this->ResolveName(stringAccountName, nameFormat, DS_NAME_FORMAT::DS_FQDN_1779_NAME, true);
@@ -359,7 +373,11 @@ namespace DSInternals
 
 			String^ DrsConnection::ResolveDistinguishedName(SecurityIdentifier^ objectSid)
 			{
-				Validator::AssertNotNull(objectSid, nameof(objectSid));
+                if (objectSid == nullptr)
+                {
+                    throw gcnew ArgumentNullException("objectSid");
+                }
+
 				auto stringSid = objectSid->ToString();
 				return this->ResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_FQDN_1779_NAME, true);
 			}
@@ -372,7 +390,11 @@ namespace DSInternals
 
 			Guid DrsConnection::ResolveGuid(NTAccount^ accountName)
 			{
-				Validator::AssertNotNull(accountName, nameof(accountName));
+                if (accountName == nullptr)
+                {
+                    throw gcnew ArgumentNullException("accountName");
+                }
+
 				auto stringAccountName = accountName->Value;
 				bool isUPN = stringAccountName->Contains(DrsConnection::UpnSeparator);
 				auto nameFormat = isUPN ? DS_NAME_FORMAT::DS_USER_PRINCIPAL_NAME : DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME;
@@ -382,15 +404,23 @@ namespace DSInternals
 
 			Guid DrsConnection::ResolveGuid(SecurityIdentifier^ objectSid)
 			{
-				Validator::AssertNotNull(objectSid, nameof(objectSid));
-				auto stringSid = objectSid->ToString();
+                if (objectSid == nullptr)
+                {
+                    throw gcnew ArgumentNullException("objectSid");
+                }
+
+                auto stringSid = objectSid->ToString();
 				auto stringGuid = this->ResolveName(stringSid, DS_NAME_FORMAT::DS_SID_OR_SID_HISTORY_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, true);
 				return Guid::Parse(stringGuid);
 			}
 
 			NTAccount^ DrsConnection::ResolveAccountName(String^ distinguishedName)
 			{
-				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
+                if (distinguishedName == nullptr || distinguishedName->Trim()->Length == 0)
+                {
+                    throw gcnew ArgumentException("The distinguished name cannot be null or empty.", "distinguishedName");
+                }
+
 				String^ result = this->ResolveName(distinguishedName, DS_NAME_FORMAT::DS_FQDN_1779_NAME, DS_NAME_FORMAT::DS_NT4_ACCOUNT_NAME, true);
 				return gcnew NTAccount(result);
 			}
@@ -505,20 +535,31 @@ namespace DSInternals
 
 			array<String^>^ DrsConnection::ListServersInSite(String^ name)
 			{
-				Validator::AssertNotNullOrEmpty(name, nameof(name));
+                if (name == nullptr || name->Trim()->Length == 0)
+                {
+                    throw gcnew ArgumentException("The site name cannot be null or empty.", "name");
+                }
+
 				return this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_SERVERS_IN_SITE, name);
 			}
 
 			array<String^>^ DrsConnection::ListDomainsInSite(String^ name)
 			{
-				Validator::AssertNotNullOrEmpty(name, nameof(name));
+                if (name == nullptr || name->Trim()->Length == 0)
+                {
+                    throw gcnew ArgumentException("The site name cannot be null or empty.", "name");
+                }
+
 				return this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_DOMAINS_IN_SITE, name);
 			}
 
 			DomainControllerInformation^ DrsConnection::ListInfoForServer(String^ distinguishedName)
 			{
 				// Input validation
-				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
+                if (distinguishedName == nullptr || distinguishedName->Trim()->Length == 0)
+                {
+                    throw gcnew ArgumentException("The distinguished name cannot be null or empty.", "distinguishedName");
+                }
 
 				// Retrieve info
 				auto result = this->ListInfo(DS_NAME_FORMAT_EXT::DS_LIST_INFO_FOR_SERVER, distinguishedName);
@@ -533,7 +574,11 @@ namespace DSInternals
 
 			bool DrsConnection::TestObjectExistence(String^ distinguishedName)
 			{
-				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
+                if (distinguishedName == nullptr || distinguishedName->Trim()->Length == 0)
+                {
+                    throw gcnew ArgumentException("The distinguished name cannot be null or empty.", "distinguishedName");
+                }
+
 				auto resolvedName = this->ResolveName(distinguishedName, DS_NAME_FORMAT::DS_FQDN_1779_NAME, DS_NAME_FORMAT::DS_UNIQUE_ID_NAME, false);
 				// Return true if and only if the object exists
 				return resolvedName != nullptr;
@@ -550,9 +595,17 @@ namespace DSInternals
 			void DrsConnection::WriteNgcKey(String^ distinguishedName, cli::array<byte>^ key)
 			{
 				this->ValidateConnection();
-				// Input validation
-				Validator::AssertNotNullOrEmpty(distinguishedName, nameof(distinguishedName));
-				Validator::AssertNotNull(key, nameof(key));
+
+                // Input validation
+                if (distinguishedName == nullptr || distinguishedName->Trim()->Length == 0)
+                {
+                    throw gcnew ArgumentException("The distinguished name cannot be null or empty.", "distinguishedName");
+                }
+
+                if (key == nullptr)
+                {
+                    throw gcnew ArgumentNullException("key");
+                }
 
 				DRS_HANDLE handle = this->handle.ToPointer();
 

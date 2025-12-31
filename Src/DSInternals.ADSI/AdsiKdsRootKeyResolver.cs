@@ -1,4 +1,5 @@
 ﻿using System.DirectoryServices;
+using System.Globalization;
 using DSInternals.Common.Data;
 using DSInternals.Common.Schema;
 
@@ -44,7 +45,7 @@ public sealed class AdsiKdsRootKeyResolver : IKdsRootKeyResolver
 
     public KdsRootKey? GetKdsRootKey(Guid id)
     {
-        string rootKeyFilter = string.Format(KdsRootKeyByIdFilterFormat, id.ToString("D"));
+        string rootKeyFilter = string.Format(CultureInfo.InvariantCulture, KdsRootKeyByIdFilterFormat, id.ToString("D"));
         using var singleRootKeySearcher = new DirectorySearcher(
             _configurationNamingContext,
             rootKeyFilter,

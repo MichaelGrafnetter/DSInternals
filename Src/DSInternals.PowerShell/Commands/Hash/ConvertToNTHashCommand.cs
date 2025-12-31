@@ -1,10 +1,10 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Interop;
-using DSInternals.Common.Cryptography;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Management.Automation;
 using System.Security;
+using DSInternals.Common;
+using DSInternals.Common.Cryptography;
+using DSInternals.Common.Interop;
 
 namespace DSInternals.PowerShell.Commands
 {

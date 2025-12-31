@@ -103,9 +103,9 @@
         {
             value = null;
             this.ReadAttribute(name, out long? timestamp);
-            if(timestamp.HasValue && timestamp.Value > 0)
+            if (timestamp.HasValue && timestamp.Value > 0)
             {
-                value = asGeneralizedTime ? timestamp.Value.FromGeneralizedTime() : DateTime.FromFileTime(timestamp.Value); 
+                value = asGeneralizedTime ? timestamp.Value.FromGeneralizedTime() : DateTime.FromFileTime(timestamp.Value);
             }
         }
 

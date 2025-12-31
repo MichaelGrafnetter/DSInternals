@@ -63,7 +63,10 @@ namespace DSInternals
 			midl_ptr<DSNAME> RpcTypeConverter::ToDsName(String^ distinguishedName)
 			{
 				// Validate the parameter
-				Validator::AssertNotNullOrWhiteSpace(distinguishedName, "distinguishedName");
+                if (distinguishedName == nullptr || distinguishedName->Trim()->Length == 0)
+                {
+                    throw gcnew ArgumentException("The distinguished name cannot be null or empty.", "distinguishedName");
+                }
 
 				// Allocate and initialize the DSNAME struct
 				auto dnLen = distinguishedName->Length;

@@ -46,7 +46,7 @@ namespace DSInternals.Replication.Model
         /// </summary>
         public override string ToString()
         {
-            return String.Format("{0}: {1}", this.SourceInvocationId, this.UpToDatenessUsn);
+            return $"{SourceInvocationId}: {UpToDatenessUsn}";
         }
     }
 }

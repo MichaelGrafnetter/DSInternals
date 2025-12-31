@@ -1,9 +1,10 @@
 ﻿namespace DSInternals.PowerShell.Commands
 {
-    using DSInternals.Common.Data;
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Management.Automation;
+    using DSInternals.Common.Data;
 
     [Cmdlet(VerbsData.Save, "DPAPIBlob")]
     [OutputType("None")]
@@ -63,7 +64,7 @@
 
         protected override void ProcessRecord()
         {
-            switch(this.ParameterSetName)
+            switch (this.ParameterSetName)
             {
                 case ObjectParameterSet:
                     this.ProcessSingleObject(this.DPAPIObject);
@@ -72,7 +73,7 @@
                     // Extract all roamed credentials from a user account. Other account types do not have roamed credentials.
                     var user = this.Account as DSUser;
 
-                    if(user?.RoamedCredentials != null)
+                    if (user?.RoamedCredentials != null)
                     {
                         foreach (var blob in user.RoamedCredentials)
                         {
@@ -95,7 +96,7 @@
             }
 
             // Save the blob
-            string verboseMessage = String.Format(VerboseMessageFormat, filePath);
+            string verboseMessage = String.Format(CultureInfo.InvariantCulture, VerboseMessageFormat, filePath);
             this.WriteVerbose(verboseMessage);
             blob.Save(this.AbsoluteDirectoryPath);
 

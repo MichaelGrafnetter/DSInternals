@@ -189,7 +189,7 @@
             // Note: this record type is not natively supported by Microsoft
             byte[] input = "1200010105f00000ab00000000000e10000000000000000000056973737565656e74727573742e6e6574".HexToBinary();
             var record = DnsResourceRecord.Create("contoso.com", "@", input);
-            Assert.AreEqual(257, (ushort) record.Type); // TYPE257
+            Assert.AreEqual(257, (ushort)record.Type); // TYPE257
             Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
             Assert.AreEqual("\\# 18 00056973737565656e74727573742e6e6574", record.Data);
         }
@@ -205,21 +205,19 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void DnsResoutceRecord_Malformed1()
         {
             // A record missing the last byte
             byte[] input = "0400010005f000003000000000000e1000000000000000000ad500".HexToBinary();
-            var record = DnsResourceRecord.Create("contoso.com", "www", input);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => DnsResourceRecord.Create("contoso.com", "www", input));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void DnsResoutceRecord_Malformed2()
         {
             // A record with an incorrect version (0x07 instead of 0x05)
             byte[] input = "0400010007f000003000000000000e1000000000000000000ad50004".HexToBinary();
-            var record = DnsResourceRecord.Create("contoso.com", "www", input);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => DnsResourceRecord.Create("contoso.com", "www", input));
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Text.Json;
 using DSInternals.Common.Data;
 using DSInternals.Common.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Text.Json;
 
 namespace DSInternals.Common.Test
 {

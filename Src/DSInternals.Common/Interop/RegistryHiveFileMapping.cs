@@ -1,10 +1,10 @@
-﻿using Microsoft.Win32;
-using System.ComponentModel;
-using Microsoft.Win32.SafeHandles;
-using System.Security.Principal;
-using Windows.Win32.Foundation;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
+using Microsoft.Win32;
+using Microsoft.Win32.SafeHandles;
 using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace DSInternals.Common.Interop;
 public class RegistryHiveFileMapping : IDisposable

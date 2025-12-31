@@ -22,14 +22,14 @@
             base.BeginProcessing();
 
             string domainDN;
-            if(string.IsNullOrEmpty(this.Domain))
+            if (string.IsNullOrEmpty(this.Domain))
             {
                 // Automatically infer DC's domain name.
                 domainDN = this.ReplicationClient.DomainNamingContext;
             }
             else
             {
-                if (!this.Domain.Contains("."))
+                if (!this.Domain.Contains('.'))
                 {
                     // This is not a hard check, because root domain does not need to have a dot in it.
                     this.WriteWarning("The domain name supplied appears to be a NetBIOS name instead of DNS name.");

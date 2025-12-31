@@ -1,6 +1,6 @@
-﻿using DSInternals.Common.Interop;
+﻿using System;
+using DSInternals.Common.Interop;
 using Microsoft.Win32;
-using System;
 
 namespace DSInternals.Common
 {
@@ -12,7 +12,7 @@ namespace DSInternals.Common
             DateTime lastWrite;
             Win32ErrorCode result = NativeMethods.RegQueryInfoKey(key.Handle, out keyClass, out lastWrite);
             Validator.AssertSuccess(result);
-            return keyClass;                
+            return keyClass;
         }
     }
 }

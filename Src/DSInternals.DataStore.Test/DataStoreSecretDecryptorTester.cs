@@ -193,7 +193,7 @@ namespace DSInternals.DataStore.Test
             // Decrypt
             var pek = new DataStoreSecretDecryptor(pekList, bootKey);
             string result = pek.DecryptSecret(unicodePwd).ToHex(true);
-            
+
             // Validate
             Assert.AreEqual(expectedHash, result);
         }
@@ -302,7 +302,7 @@ namespace DSInternals.DataStore.Test
 
             // Compare the result with the original data
             Assert.AreEqual(hashHistory.Length, decryptedHashHistory.Length);
-            for(int i = 0; i < hashHistory.Length; i++)
+            for (int i = 0; i < hashHistory.Length; i++)
             {
                 CollectionAssert.AreEqual(hashHistory[i], decryptedHashHistory[i]);
             }

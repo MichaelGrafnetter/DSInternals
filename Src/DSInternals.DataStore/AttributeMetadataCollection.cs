@@ -1,9 +1,9 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Schema;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using DSInternals.Common;
+using DSInternals.Common.Schema;
 
 namespace DSInternals.DataStore
 {
@@ -39,7 +39,7 @@ namespace DSInternals.DataStore
         /// <summary>
         /// Holds a list of attribute metadata sorted by attribute ID.
         /// </summary>
-        protected SortedList<AttributeType,AttributeMetadata> InnerList
+        protected SortedList<AttributeType, AttributeMetadata> InnerList
         {
             get;
             private set;
@@ -73,7 +73,7 @@ namespace DSInternals.DataStore
                     this.InnerList = new SortedList<AttributeType, AttributeMetadata>((int)numEntries);
                     for (int i = 1; i <= numEntries; i++)
                     {
-                        AttributeType attributeId = (AttributeType) reader.ReadUInt32();
+                        AttributeType attributeId = (AttributeType)reader.ReadUInt32();
                         int version = reader.ReadInt32();
                         long timestamp = reader.ReadInt64();
                         Guid originatingDSA = new Guid(reader.ReadBytes(16));
@@ -84,7 +84,7 @@ namespace DSInternals.DataStore
                         {
                             this.InnerList.Add(attributeId, entry);
                         }
-                        catch(ArgumentException)
+                        catch (ArgumentException)
                         {
                             // An element with the same key already exists.
                             // We will simply ignore duplicate values and thus remove them on save.

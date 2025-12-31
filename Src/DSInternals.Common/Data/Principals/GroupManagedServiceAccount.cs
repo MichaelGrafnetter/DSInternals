@@ -160,7 +160,7 @@ namespace DSInternals.Common.Data
             private set;
         }
 
-        public DateTime? PasswordLastSet 
+        public DateTime? PasswordLastSet
         {
             get;
             private set;
@@ -221,7 +221,7 @@ namespace DSInternals.Common.Data
 
             // Read and parse msDS-ManagedPasswordId
             dsObject.ReadAttribute(CommonDirectoryAttributes.ManagedPasswordId, out byte[] rawManagedPasswordId);
-            if (rawManagedPasswordId != null )
+            if (rawManagedPasswordId != null)
             {
                 this.ManagedPasswordId = new ProtectionKeyIdentifier(rawManagedPasswordId);
             }
@@ -312,15 +312,8 @@ namespace DSInternals.Common.Data
 
         public static byte[] CalculateManagedPassword(SecurityIdentifier gMsaSid, ProtectionKeyIdentifier keyIdentifier, KdsRootKey kdsRootKey)
         {
-            if (gMsaSid == null)
-            {
-                throw new ArgumentNullException(nameof(gMsaSid));
-            }
-
-            if (kdsRootKey == null)
-            {
-                throw new ArgumentOutOfRangeException(nameof(kdsRootKey));
-            }
+            ArgumentNullException.ThrowIfNull(gMsaSid);
+            ArgumentNullException.ThrowIfNull(kdsRootKey);
 
             if (keyIdentifier.RootKeyId != kdsRootKey.KeyId)
             {
@@ -373,15 +366,8 @@ namespace DSInternals.Common.Data
             bool isClockSkewConsidered = false
             )
         {
-            if (managedPasswordInterval <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(managedPasswordInterval));
-            }
-
-            if (effectiveTime < previousPasswordChange)
-            {
-                throw new ArgumentOutOfRangeException(nameof(effectiveTime));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(managedPasswordInterval);
+            ArgumentOutOfRangeException.ThrowIfLessThan(effectiveTime, previousPasswordChange);
 
             int daysDifference = (int)(effectiveTime - previousPasswordChange).TotalDays;
             int totalPasswordCycles = daysDifference / managedPasswordInterval;

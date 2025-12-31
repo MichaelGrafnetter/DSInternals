@@ -228,10 +228,7 @@ internal static partial class NativeMethods
 
     internal static NtStatus SamLookupNamesInDomain(SafeSamHandle domainHandle, string[] names, out int[]? relativeIds, out SID_NAME_USE[]? use)
     {
-        if (names == null)
-        {
-            throw new ArgumentNullException(nameof(names));
-        }
+        ArgumentNullException.ThrowIfNull(names);
 
         uint count = (uint)names.Length;
         if (count > MaxNamesToLookup)

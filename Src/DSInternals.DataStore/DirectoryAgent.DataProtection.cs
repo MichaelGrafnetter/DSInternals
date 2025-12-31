@@ -12,7 +12,7 @@
         #region Data Protection API (DPAPI)
         public IEnumerable<DPAPIBackupKey> GetDPAPIBackupKeys(byte[] bootKey)
         {
-            Validator.AssertNotNull(bootKey, "bootKey");
+            ArgumentNullException.ThrowIfNull(bootKey);
             var pek = this.GetSecretDecryptor(bootKey);
 
             DNTag? secretObjectCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.Secret);

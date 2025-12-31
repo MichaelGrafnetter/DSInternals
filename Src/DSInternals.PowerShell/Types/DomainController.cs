@@ -1,9 +1,9 @@
 ﻿namespace DSInternals.PowerShell
 {
     using System;
-    using DSInternals.DataStore;
     using System.Security.Principal;
     using DSInternals.Common.Data;
+    using DSInternals.DataStore;
     // Transport object
     public class DomainController : IDomainController
     {
@@ -90,7 +90,7 @@
             get;
             set;
         }
-                
+
         public Guid InvocationId
         {
             get;

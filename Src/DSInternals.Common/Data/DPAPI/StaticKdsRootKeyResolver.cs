@@ -15,11 +15,8 @@ namespace DSInternals.Common.Data
 
         public StaticKdsRootKeyResolver(KdsRootKey rootKey)
         {
-            if (rootKey == null)
-                throw new ArgumentNullException(nameof(rootKey));
-
             // Cache the single root key
-            _kdsRootKey = rootKey;
+            _kdsRootKey = rootKey ?? throw new ArgumentNullException(nameof(rootKey));
         }
 
         public bool SupportsLookupAll => true;

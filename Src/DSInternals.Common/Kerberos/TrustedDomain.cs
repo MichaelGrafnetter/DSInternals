@@ -149,14 +149,9 @@ namespace DSInternals.Common.Kerberos
 
         public TrustedDomain(DirectoryObject dsObject, string dnsDomainName, string netBiosDomainName, DirectorySecretDecryptor pek)
         {
-            if (dsObject == null)
-                throw new ArgumentNullException(nameof(dsObject));
-
-            if (dnsDomainName == null)
-                throw new ArgumentNullException(nameof(dnsDomainName));
-
-            if (netBiosDomainName == null)
-                throw new ArgumentNullException(nameof(netBiosDomainName));
+            ArgumentNullException.ThrowIfNull(dsObject);
+            ArgumentNullException.ThrowIfNull(dnsDomainName);
+            ArgumentNullException.ThrowIfNull(netBiosDomainName);
 
             // Cache the source domain DNS and NetBIOS names for Kerberos salt derivation.
             this.Source = dnsDomainName;

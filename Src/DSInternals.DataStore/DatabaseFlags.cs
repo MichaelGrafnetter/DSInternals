@@ -1,6 +1,6 @@
 ﻿
-using DSInternals.Common;
 using System;
+using DSInternals.Common;
 namespace DSInternals.DataStore
 {
     /// <summary>
@@ -24,7 +24,7 @@ namespace DSInternals.DataStore
 
         public DatabaseFlags(byte[] binaryFlags)
         {
-            Validator.AssertNotNull(binaryFlags, "binaryFlags");
+            ArgumentNullException.ThrowIfNull(binaryFlags);
             this.binaryFlags = binaryFlags;
         }
 
@@ -32,7 +32,7 @@ namespace DSInternals.DataStore
         {
             byte value = this.binaryFlags[offset];
             // The value is curiously stored as char.
-            switch((char)value)
+            switch ((char)value)
             {
                 case '1':
                     return true;

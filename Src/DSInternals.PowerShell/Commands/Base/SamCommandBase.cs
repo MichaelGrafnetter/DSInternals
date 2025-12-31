@@ -1,10 +1,10 @@
-﻿using DSInternals.Common.Interop;
-using DSInternals.SAM;
-using DSInternals.SAM.Interop;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Management.Automation;
 using System.Net;
+using DSInternals.Common.Interop;
+using DSInternals.SAM;
+using DSInternals.SAM.Interop;
 namespace DSInternals.PowerShell.Commands
 {
     public abstract class SamCommandBase : PSCmdletEx, IDisposable
@@ -60,7 +60,7 @@ namespace DSInternals.PowerShell.Commands
         protected override void BeginProcessing()
         {
             /* Connect to the specified SAM server: */
-            WriteDebug(string.Format("Connecting to SAM server {0}.", this.Server));
+            WriteDebug($"Connecting to SAM server {this.Server}.");
             try
             {
                 NetworkCredential netCred = this.Credential?.GetNetworkCredential();

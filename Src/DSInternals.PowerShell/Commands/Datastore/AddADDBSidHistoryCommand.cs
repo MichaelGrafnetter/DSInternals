@@ -25,23 +25,23 @@
             switch (this.ParameterSetName)
             {
                 case ADDBObjectCommandBase.ParameterSetByDN:
-                    this.WriteVerbose(String.Format("Adding SID history to principal {0}.", this.DistinguishedName));
+                    this.WriteVerbose($"Adding SID history to principal {DistinguishedName}.");
                     var dn = new DistinguishedName(this.DistinguishedName);
                     hasChanged = this.DirectoryAgent.AddSidHistory(dn, this.SidHistory, this.SkipMetaUpdate);
                     break;
 
                 case ADDBPrincipalCommandBase.ParameterSetByName:
-                    this.WriteVerbose(String.Format("Adding SID history to principal {0}.", this.SamAccountName));
+                    this.WriteVerbose($"Adding SID history to principal {SamAccountName}.");
                     hasChanged = this.DirectoryAgent.AddSidHistory(this.SamAccountName, this.SidHistory, this.SkipMetaUpdate);
                     break;
 
                 case ADDBObjectCommandBase.ParameterSetByGuid:
-                    this.WriteVerbose(String.Format("Adding SID history to principal {0}.", this.ObjectGuid));
+                    this.WriteVerbose($"Adding SID history to principal {ObjectGuid}.");
                     hasChanged = this.DirectoryAgent.AddSidHistory(this.ObjectGuid, this.SidHistory, this.SkipMetaUpdate);
                     break;
 
                 case ADDBPrincipalCommandBase.ParameterSetBySid:
-                    this.WriteVerbose(String.Format("Adding SID history to principal {0}.", this.ObjectSid));
+                    this.WriteVerbose($"Adding SID history to principal {ObjectSid}.");
                     hasChanged = this.DirectoryAgent.AddSidHistory(this.ObjectSid, this.SidHistory, this.SkipMetaUpdate);
                     break;
 

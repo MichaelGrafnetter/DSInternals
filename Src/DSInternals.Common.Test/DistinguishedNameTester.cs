@@ -1,8 +1,8 @@
 ﻿namespace DSInternals.Common.Test
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using DSInternals.Common.Data;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class DistinguishedNameTester
@@ -20,7 +20,7 @@
         {
             string dnStr = @"CN=Doe\, John,OU=Employees,DC=adatum,DC=com";
             var dn = new DistinguishedName(dnStr);
-            Assert.AreEqual( dnStr, dn.ToString());
+            Assert.AreEqual(dnStr, dn.ToString());
         }
 
         [TestMethod]
@@ -47,24 +47,21 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void DistinguishedName_AllSpaces()
         {
-            var dn = new DistinguishedName("     ");
+            Assert.ThrowsExactly<ArgumentException>(() => new DistinguishedName("     "));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void DistinguishedName_BlankRDNValue()
         {
-            var dn = new DistinguishedName("CN=,OU=Employees,DC=adatum,DC=com");
+            Assert.ThrowsExactly<ArgumentException>(() => new DistinguishedName("CN=,OU=Employees,DC=adatum,DC=com"));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void DistinguishedName_MalformedRDN()
         {
-            var dn = new DistinguishedName("CN=John,Employees,DC=adatum,DC=com");
+            Assert.ThrowsExactly<ArgumentException>(() => new DistinguishedName("CN=John,Employees,DC=adatum,DC=com"));
         }
 
         [TestMethod]
@@ -123,10 +120,9 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void DistinguishedName_UnescapedSpecialCharacter()
         {
-            var dn = new DistinguishedName(@"CN=Winkin, Blinkin, and Nod,OU=Employees,DC=adatum,DC=com");
+            Assert.ThrowsExactly<ArgumentException>(() => new DistinguishedName(@"CN=Winkin, Blinkin, and Nod,OU=Employees,DC=adatum,DC=com"));
         }
 
         [TestMethod]
@@ -187,10 +183,9 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void DistinguishedName_UnterminatedQuotes()
         {
-            var dn = new DistinguishedName(@"OU=""John is cool");
+            Assert.ThrowsExactly<ArgumentException>(() => new DistinguishedName(@"OU=""John is cool"));
         }
 
         [TestMethod]

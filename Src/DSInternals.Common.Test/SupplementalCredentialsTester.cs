@@ -1,7 +1,7 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DSInternals.Common.Data;
 using DSInternals.Common.Cryptography;
+using DSInternals.Common.Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Common.Test
 {

@@ -3,7 +3,8 @@ using System.Runtime.InteropServices;
 using System.Security;
 
 namespace DSInternals.Common
-{    public static class SecureStringExtensions
+{
+    public static class SecureStringExtensions
     {
         public static string ToUnicodeString(this SecureString input)
         {
@@ -34,7 +35,7 @@ namespace DSInternals.Common
         }
         public static void Append(this SecureString input, string suffix)
         {
-            if(suffix != null)
+            if (suffix != null)
             {
                 char[] chars = suffix.ToCharArray();
                 foreach (char c in chars)

@@ -28,11 +28,10 @@ namespace DSInternals.Common.Test
             Assert.AreEqual(hex, result);
         }
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ByteArrayExtensions_HexToBinary_InvalidInput()
         {
             string hex = "eqwewqwty";
-            byte[] result = hex.HexToBinary();
+            Assert.ThrowsExactly<ArgumentException>(() => hex.HexToBinary());
         }
         [TestMethod]
         public void ByteArrayExtensions_HexToBinary_NullInput()
@@ -68,8 +67,8 @@ namespace DSInternals.Common.Test
         [TestMethod]
         public void ByteArrayExtensions_ZeroFill_Input1()
         {
-            byte[] input = new byte[] {2, 4, 0};
-            byte[] expected = new byte[] {0, 0, 0};
+            byte[] input = new byte[] { 2, 4, 0 };
+            byte[] expected = new byte[] { 0, 0, 0 };
             input.ZeroFill();
             CollectionAssert.AreEqual(expected, input);
         }

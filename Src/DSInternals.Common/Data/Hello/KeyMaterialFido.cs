@@ -4,6 +4,10 @@ using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.Data
 {
+    /// <summary>
+    /// Represents FIDO2/WebAuthn key material stored in Active Directory.
+    /// </summary>
+    /// <seealso href="https://www.w3.org/TR/webauthn/"/>
     public class KeyMaterialFido
     {
         // All PEM certificates that are less than 16,383B long start with MII.
@@ -63,10 +67,10 @@ namespace DSInternals.Common.Data
             get
             {
                 X509Certificate2Collection certs = new X509Certificate2Collection();
-                foreach (string s in this.AttestationCertificatesRaw)
+                foreach (string s in this.AttestationCertificatesRaw ?? [])
                 {
                     // In AAD, some x5c values are not really certificates, so we need to filter them out.
-                    if(s.StartsWith(X509CertificateHeader))
+                    if (s.StartsWith(X509CertificateHeader, StringComparison.InvariantCulture))
                     {
                         certs.Add(new X509Certificate2(Convert.FromBase64String(s)));
                     }

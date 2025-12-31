@@ -26,7 +26,7 @@ namespace DSInternals.Common.Cryptography
             Validator.AssertMaxLength(password, MaxInputLength, nameof(password));
 
             byte[] hash;
-            using(SafeUnicodeSecureStringPointer passwordPtr = new SafeUnicodeSecureStringPointer(password))
+            using (SafeUnicodeSecureStringPointer passwordPtr = new SafeUnicodeSecureStringPointer(password))
             {
                 NtStatus result = NativeMethods.RtlCalculateNtOwfPassword(passwordPtr, out hash);
                 Validator.AssertSuccess(result);
@@ -44,7 +44,7 @@ namespace DSInternals.Common.Cryptography
 
         public static byte[] ComputeHash(byte[] password)
         {
-            Validator.AssertMaxLength(password, MaxInputLength*sizeof(char), nameof(password));
+            Validator.AssertMaxLength(password, MaxInputLength * sizeof(char), nameof(password));
 
             byte[] hash;
             using (SafeUnicodeSecureStringPointer passwordPtr = new SafeUnicodeSecureStringPointer(password))

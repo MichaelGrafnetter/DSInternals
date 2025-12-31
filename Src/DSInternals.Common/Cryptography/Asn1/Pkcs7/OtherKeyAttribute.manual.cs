@@ -60,7 +60,7 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs7
                     // Not a SID protector
                     return null;
                 }
-                
+
                 // TODO: What is the meaning of the 3 nested sequences?
                 var sidProtector = protector.ReadSequence().ReadSequence().ReadSequence();
                 string sidName = sidProtector.ReadCharacterString(UniversalTagNumber.UTF8String);

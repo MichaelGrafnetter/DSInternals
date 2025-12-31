@@ -60,16 +60,15 @@ namespace DSInternals.Common.Cryptography
         /// <exception cref="System.ArgumentException">The salt size is less than 8 or the iterations is less than 1.</exception>
         public Pbkdf2(byte[] password, byte[] salt, int iterations, string hashName)
         {
-            if (password == null)
-                throw new ArgumentNullException(nameof(password));
-            if (salt == null)
-                throw new ArgumentNullException(nameof(salt));
-            if (string.IsNullOrWhiteSpace(hashName))
-                throw new ArgumentNullException(nameof(hashName));
+            ArgumentNullException.ThrowIfNull(password);
+            ArgumentNullException.ThrowIfNull(salt);
+            ArgumentException.ThrowIfNullOrWhiteSpace(hashName);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(iterations);
+
             if (salt.Length < 8)
+            {
                 throw new ArgumentException("Argument must be at least 8 bytes in length.", nameof(salt));
-            if (iterations < 1)
-                throw new ArgumentException("Argument must be greater than zero.", nameof(iterations));
+            }
 
             _password = (byte[])password.Clone();
             _salt = (byte[])salt.Clone();
@@ -89,16 +88,15 @@ namespace DSInternals.Common.Cryptography
         /// <exception cref="System.ArgumentException">The salt size is less than 8 or the iterations is less than 1.</exception>
         public Pbkdf2(string password, byte[] salt, int iterations, string hashName)
         {
-            if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentNullException(nameof(password));
-            if (salt == null)
-                throw new ArgumentNullException(nameof(salt));
-            if (string.IsNullOrWhiteSpace(hashName))
-                throw new ArgumentNullException(nameof(hashName));
+            ArgumentException.ThrowIfNullOrWhiteSpace(password);
+            ArgumentNullException.ThrowIfNull(salt);
+            ArgumentException.ThrowIfNullOrEmpty(hashName);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(iterations);
+
             if (salt.Length < 8)
+            {
                 throw new ArgumentException("Argument must be at least 8 bytes in length.", nameof(salt));
-            if (iterations < 1)
-                throw new ArgumentException("Argument must be greater than zero.", nameof(iterations));
+            }
 
             _password = new UTF8Encoding(false).GetBytes(password);
             _salt = (byte[])salt.Clone();
@@ -165,10 +163,12 @@ namespace DSInternals.Common.Cryptography
             {
                 if (_state != 0)
                     throw new InvalidOperationException("Password value cannot be chance once the operation has begun.");
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
+
+                ArgumentNullException.ThrowIfNull(value);
+
                 if (value.Length < 1)
                     throw new ArgumentException("Value must be a byte array at least 1 byte in length.", nameof(value));
+
                 _password = (byte[])value.Clone();
                 Initialize();
             }
@@ -188,8 +188,9 @@ namespace DSInternals.Common.Cryptography
             {
                 if (_state != 0)
                     throw new InvalidOperationException("Salt value cannot be changed once the operation has begun.");
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
+
+                ArgumentNullException.ThrowIfNull(value);
+
                 if (value.Length < 8)
                     throw new ArgumentException("Value must be a byte array at least 8 bytes in length.", nameof(value));
                 _salt = (byte[])value.Clone();

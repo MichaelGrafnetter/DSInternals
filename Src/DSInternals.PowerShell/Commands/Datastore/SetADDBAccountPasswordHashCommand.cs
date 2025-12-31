@@ -1,7 +1,8 @@
-﻿using DSInternals.Common.Data;
-using DSInternals.DataStore;
-using System;
+﻿using System;
+using System.Globalization;
 using System.Management.Automation;
+using DSInternals.Common.Data;
+using DSInternals.DataStore;
 
 namespace DSInternals.PowerShell.Commands
 {
@@ -47,23 +48,23 @@ namespace DSInternals.PowerShell.Commands
             switch (this.ParameterSetName)
             {
                 case ParameterSetByDN:
-                    this.WriteVerbose(String.Format(verboseMessage, this.DistinguishedName));
+                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.DistinguishedName));
                     var dn = new DistinguishedName(this.DistinguishedName);
                     hasChanged = this.DirectoryAgent.SetAccountPasswordHash(dn, this.NTHash, this.SupplementalCredentials, this.BootKey, this.SkipMetaUpdate);
                     break;
 
                 case ParameterSetByName:
-                    this.WriteVerbose(String.Format(verboseMessage, this.SamAccountName));
+                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.SamAccountName));
                     hasChanged = this.DirectoryAgent.SetAccountPasswordHash(this.SamAccountName, this.NTHash, this.SupplementalCredentials, this.BootKey, this.SkipMetaUpdate);
                     break;
 
                 case ParameterSetByGuid:
-                    this.WriteVerbose(String.Format(verboseMessage, this.ObjectGuid));
+                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectGuid));
                     hasChanged = this.DirectoryAgent.SetAccountPasswordHash(this.ObjectGuid, this.NTHash, this.SupplementalCredentials, this.BootKey, this.SkipMetaUpdate);
                     break;
 
                 case ParameterSetBySid:
-                    this.WriteVerbose(String.Format(verboseMessage, this.ObjectSid));
+                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectSid));
                     hasChanged = this.DirectoryAgent.SetAccountPasswordHash(this.ObjectSid, this.NTHash, this.SupplementalCredentials, this.BootKey, this.SkipMetaUpdate);
                     break;
 

@@ -1,8 +1,8 @@
 ﻿
-using System.Security.Cryptography;
-using System.Formats.Asn1;
-using System.Security.Principal;
 using System;
+using System.Formats.Asn1;
+using System.Security.Cryptography;
+using System.Security.Principal;
 
 namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
 {
@@ -57,10 +57,7 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
             }
             */
 
-            if (reader == null)
-            {
-                throw new ArgumentNullException(nameof(reader));
-            }
+            ArgumentNullException.ThrowIfNull(reader);
 
             var outerSequence = reader.ReadSequence();
             string contentType = outerSequence.ReadObjectIdentifier();

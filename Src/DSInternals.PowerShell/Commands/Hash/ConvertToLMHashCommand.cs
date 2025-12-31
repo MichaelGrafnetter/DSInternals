@@ -5,8 +5,8 @@
     using System.Management.Automation;
     using System.Security;
     using DSInternals.Common;
-    using DSInternals.Common.Interop;
     using DSInternals.Common.Cryptography;
+    using DSInternals.Common.Interop;
 
     [Cmdlet(VerbsData.ConvertTo, "LMHash")]
     [OutputType(new Type[] { typeof(string) })]

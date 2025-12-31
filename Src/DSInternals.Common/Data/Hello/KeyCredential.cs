@@ -5,10 +5,10 @@
     using System.Linq;
     using System.Security.Cryptography;
     using System.Security.Cryptography.X509Certificates;
-    using DSInternals.Common.Data.Fido;
-    using DSInternals.Common.Serialization;
     using System.Text.Json;
     using System.Text.Json.Serialization;
+    using DSInternals.Common.Data.Fido;
+    using DSInternals.Common.Serialization;
 
     /// <summary>
     /// This class represents a single AD/AAD key credential.
@@ -152,7 +152,7 @@
         {
             get
             {
-                if(this.RawKeyMaterial == null)
+                if (this.RawKeyMaterial == null)
                 {
                     return null;
                 }
@@ -165,7 +165,7 @@
                     return rsaPublicKey.ExportParameters(includePrivateParameters: false);
                 }
 
-                if(this.Usage == KeyUsage.NGC || this.Usage == KeyUsage.STK)
+                if (this.Usage == KeyUsage.NGC || this.Usage == KeyUsage.STK)
                 {
                     // The RSA public key can be stored in at least 3 different formats.
 
@@ -174,13 +174,13 @@
                         // This public key is in DER format. This is typically true for device/computer keys.
                         return this.RawKeyMaterial.ImportRSAPublicKeyBCrypt();
                     }
-                    else if(this.RawKeyMaterial.IsTPM20PublicKeyBlob())
+                    else if (this.RawKeyMaterial.IsTPM20PublicKeyBlob())
                     {
                         // This public key is encoded as PCP_KEY_BLOB_WIN8. This is typically true for device keys protected by TPM.
                         // The PCP_KEY_BLOB_WIN8 structure is not yet supported by DSInternals.
                         return null;
                     }
-                    else if(this.RawKeyMaterial.IsDERPublicKeyBlob())
+                    else if (this.RawKeyMaterial.IsDERPublicKeyBlob())
                     {
                         // This public key is encoded as BCRYPT_RSAKEY_BLOB. This is typically true for user keys.
                         return this.RawKeyMaterial.ImportRSAPublicKeyDER();
@@ -298,7 +298,7 @@
             get
             {
                 var fido = this.FidoKeyMaterial;
-                if(fido != null && fido.AttestationCertificates != null)
+                if (fido != null && fido.AttestationCertificates != null)
                 {
                     return fido.AttestationCertificates.Cast<X509Certificate2>().Select(cer => cer.Thumbprint.ToLowerInvariant()).ToArray();
                 }
@@ -311,7 +311,7 @@
 
         public KeyCredential(X509Certificate2 certificate, Guid? deviceId, string owner, DateTime? currentTime = null, bool isComputerKey = false)
         {
-            Validator.AssertNotNull(certificate, nameof(certificate));
+            ArgumentNullException.ThrowIfNull(certificate);
 
             // Computer NGC keys are DER-encoded, while user NGC keys are encoded as BCRYPT_RSAKEY_BLOB.
             byte[] publicKey = isComputerKey ? certificate.ExportRSAPublicKeyDER() : certificate.ExportRSAPublicKeyBCrypt();
@@ -320,14 +320,14 @@
 
         public KeyCredential(byte[] publicKey, Guid? deviceId, string owner, DateTime? currentTime = null, bool isComputerKey = false)
         {
-            Validator.AssertNotNull(publicKey, nameof(publicKey));
+            ArgumentNullException.ThrowIfNull(publicKey);
             this.Initialize(publicKey, deviceId, owner, currentTime, isComputerKey);
         }
 
         private void Initialize(byte[] publicKey, Guid? deviceId, string owner, DateTime? currentTime, bool isComputerKey)
         {
             // Prodess owner DN/UPN
-            Validator.AssertNotNullOrEmpty(owner, nameof(owner));
+            ArgumentException.ThrowIfNullOrEmpty(owner);
             this.Owner = owner;
 
             // Initialize the Key Credential based on requirements stated in MS-KPP Processing Details:
@@ -352,9 +352,9 @@
         public KeyCredential(byte[] blob, string owner)
         {
             // Input validation
-            Validator.AssertNotNull(blob, nameof(blob));
+            ArgumentNullException.ThrowIfNull(blob);
             Validator.AssertMinLength(blob, MinLength, nameof(blob));
-            Validator.AssertNotNullOrEmpty(owner, nameof(owner));
+            ArgumentException.ThrowIfNullOrEmpty(owner);
 
             // Init
             this.Owner = owner;
@@ -364,7 +364,7 @@
             {
                 using (var reader = new BinaryReader(stream))
                 {
-                    this.Version = (KeyCredentialVersion) reader.ReadUInt32();
+                    this.Version = (KeyCredentialVersion)reader.ReadUInt32();
 
                     // Read all entries corresponding to the KEYCREDENTIALLINK_ENTRY structure:
                     do
@@ -373,12 +373,12 @@
                         ushort length = reader.ReadUInt16();
 
                         // An 8-bit unsigned integer that specifies the type of data that is stored in the Value field.
-                        KeyCredentialEntryType entryType = (KeyCredentialEntryType) reader.ReadByte();
+                        KeyCredentialEntryType entryType = (KeyCredentialEntryType)reader.ReadByte();
 
                         // A series of bytes whose size and meaning are defined by the Identifier field.
                         byte[] value = reader.ReadBytes(length);
 
-                        if(this.Version == KeyCredentialVersion.Version0)
+                        if (this.Version == KeyCredentialVersion.Version0)
                         {
                             // Data used to be aligned to 4B in this legacy format.
                             int paddingLength = (PackSize - length % PackSize) % PackSize;
@@ -399,7 +399,7 @@
                                 this.RawKeyMaterial = value;
                                 break;
                             case KeyCredentialEntryType.KeyUsage:
-                                if(length == sizeof(byte))
+                                if (length == sizeof(byte))
                                 {
                                     // This is apparently a V2 structure
                                     this.Usage = (KeyUsage)value[0];
@@ -446,13 +446,7 @@
 
         public override string ToString()
         {
-            return String.Format(
-                "Id: {0}, Source: {1}, Version: {2}, Usage: {3}, CreationTime: {4}",
-                this.Identifier,
-                this.Source,
-                this.Version,
-                this.Usage,
-                this.CreationTime);
+            return $"Id: {this.Identifier}, Source: {this.Source}, Version: {this.Version}, Usage: {this.Usage}, CreationTime: {this.CreationTime}";
         }
 
         public byte[] ToByteArray()
@@ -481,7 +475,7 @@
                     propertyWriter.Write((byte)this.Source);
 
                     // Device ID
-                    if(this.DeviceId.HasValue)
+                    if (this.DeviceId.HasValue)
                     {
                         byte[] binaryGuid = this.DeviceId.Value.ToByteArray();
                         propertyWriter.Write((ushort)binaryGuid.Length);
@@ -490,7 +484,7 @@
                     }
 
                     // Custom Key Information
-                    if(this.CustomKeyInfo != null)
+                    if (this.CustomKeyInfo != null)
                     {
                         byte[] binaryKeyInfo = this.CustomKeyInfo.ToByteArray();
                         propertyWriter.Write((ushort)binaryKeyInfo.Length);
@@ -499,7 +493,7 @@
                     }
 
                     // Last Logon Time
-                    if(this.LastLogonTime.HasValue)
+                    if (this.LastLogonTime.HasValue)
                     {
                         byte[] binaryLastLogonTime = ConvertToBinaryTime(this.LastLogonTime.Value, this.Source, this.Version);
                         propertyWriter.Write((ushort)binaryLastLogonTime.Length);
@@ -555,7 +549,7 @@
 
         public static KeyCredential ParseDNBinary(string dnWithBinary)
         {
-            Validator.AssertNotNullOrEmpty(dnWithBinary, nameof(dnWithBinary));
+            ArgumentException.ThrowIfNullOrEmpty(dnWithBinary);
             var parsed = DNWithBinary.Parse(dnWithBinary);
             return new KeyCredential(parsed.Binary, parsed.DistinguishedName);
         }
@@ -607,10 +601,7 @@
 
         private static byte[] ComputeHash(byte[] data)
         {
-            using (var sha256 = new SHA256Managed())
-            {
-                return sha256.ComputeHash(data);
-            }
+            return SHA256.HashData(data);
         }
 
         private static string ComputeKeyIdentifier(byte[] keyMaterial, KeyCredentialVersion version)

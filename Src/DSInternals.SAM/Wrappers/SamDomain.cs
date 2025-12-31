@@ -81,10 +81,7 @@ public sealed class SamDomain : SamObject
     /// <returns>The user account.</returns>
     public SamUser OpenUser(SecurityIdentifier sid, SamUserAccessMask desiredAccess = SamUserAccessMask.MaximumAllowed)
     {
-        if (sid == null)
-        {
-            throw new ArgumentNullException(nameof(sid));
-        }
+        ArgumentNullException.ThrowIfNull(sid);
 
         int rid = sid.GetRid();
         return this.OpenUser(rid, desiredAccess);

@@ -1,5 +1,4 @@
-﻿using System;
-using DSInternals.Common.Schema;
+﻿using DSInternals.Common.Schema;
 
 namespace DSInternals.Common.Data
 {
@@ -8,7 +7,7 @@ namespace DSInternals.Common.Data
         public BitLockerRecoveryInformation(DirectoryObject dsObject)
         {
             // Parameter validation
-            Validator.AssertNotNull(dsObject, nameof(dsObject));
+            ArgumentNullException.ThrowIfNull(dsObject);
 
             // Load generic attribute values
             this.DistinguishedName = dsObject.DistinguishedName;
@@ -93,7 +92,7 @@ namespace DSInternals.Common.Data
 
         public override string ToString()
         {
-            return String.Format("Recovery ID: {0}, Key: {1}, Date: {2}", this.RecoveryGuid, this.RecoveryPassword, this.WhenCreated);
+            return $"Recovery ID: {this.RecoveryGuid}, Key: {this.RecoveryPassword}, Date: {this.WhenCreated}";
         }
     }
 }

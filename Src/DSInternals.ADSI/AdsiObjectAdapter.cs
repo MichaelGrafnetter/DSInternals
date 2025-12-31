@@ -12,7 +12,7 @@ public class AdsiObjectAdapter : DirectoryObject
 
     public AdsiObjectAdapter(SearchResult directoryEntry)
     {
-        Validator.AssertNotNull(directoryEntry, "directoryEntry");
+        ArgumentNullException.ThrowIfNull(directoryEntry);
         this.directoryEntry = directoryEntry;
     }
 
@@ -110,7 +110,7 @@ public class AdsiObjectAdapter : DirectoryObject
     protected TResult[] ReadAttributeMulti<TResult>(string name)
     {
         var result = this.directoryEntry.Properties[name].Cast<TResult>().ToArray();
-        if(result != null && result.Length == 0)
+        if (result != null && result.Length == 0)
         {
             // We do not want to return an empty array.
             result = null;

@@ -73,7 +73,7 @@ namespace DSInternals.PowerShell.Commands
 
             if (ParameterSetName == ParameterSetByName)
             {
-                if(string.IsNullOrEmpty(this.Domain))
+                if (string.IsNullOrEmpty(this.Domain))
                 {
                     // Automatically infer DC's domain name.
                     this.Domain = this.ReplicationClient.NetBIOSDomainName;

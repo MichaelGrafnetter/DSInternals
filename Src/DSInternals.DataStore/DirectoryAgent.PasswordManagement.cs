@@ -53,7 +53,7 @@
         protected bool SetAccountPassword(DatastoreObject targetObject, object targetObjectIdentifier, SecureString newPassword, byte[] bootKey, bool skipMetaUpdate)
         {
             // Validate input
-            Validator.AssertNotNull(newPassword, "newPassword");
+            ArgumentNullException.ThrowIfNull(newPassword);
 
             // Calculate NT hash
             byte[] ntHash = NTHash.ComputeHash(newPassword);
@@ -64,7 +64,6 @@
 
             string userPrincipalName;
             targetObject.ReadAttribute(CommonDirectoryAttributes.UserPrincipalName, out userPrincipalName);
-            
 
             var supplementalCredentials = new SupplementalCredentials(
                 newPassword,
@@ -112,7 +111,7 @@
         {
             // Validate input
             Validator.AssertLength(newNtHash, NTHash.HashSize, nameof(newNtHash));
-            Validator.AssertNotNull(bootKey, nameof(bootKey));
+            ArgumentNullException.ThrowIfNull(bootKey);
 
             // Check that the object is an account
             targetObject.ReadAttribute(CommonDirectoryAttributes.SamAccountType, out SamAccountType? accountType);
@@ -208,15 +207,15 @@
             }
 
             // Validate
-            Validator.AssertLength(oldBootKey, BootKeyRetriever.BootKeyLength, "oldBootKey");
-            
-            if(newBootKey != null)
+            Validator.AssertLength(oldBootKey, BootKeyRetriever.BootKeyLength);
+
+            if (newBootKey != null)
             {
                 // This value is optional. No encryption is used when blank key is provided.
-                Validator.AssertLength(newBootKey, BootKeyRetriever.BootKeyLength, "newBootKey");
+                Validator.AssertLength(newBootKey, BootKeyRetriever.BootKeyLength);
             }
 
-            if(HashEqualityComparer.GetInstance().Equals(oldBootKey, newBootKey))
+            if (HashEqualityComparer.GetInstance().Equals(oldBootKey, newBootKey))
             {
                 // Both keys are the same so no change is required.
                 return;

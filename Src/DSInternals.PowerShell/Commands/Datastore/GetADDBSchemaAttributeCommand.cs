@@ -32,14 +32,13 @@
             else
             {
                 // Return only requested attributes
-                foreach(string attributeName in this.Name)
+                foreach (string attributeName in this.Name)
                 {
                     var attribute = this.DirectoryContext.Schema.FindAttribute(attributeName);
 
                     if (attribute != null)
                     {
                         this.WriteObject(attribute);
-                        
                     }
                     else
                     {

@@ -37,15 +37,8 @@ namespace DSInternals.Common.Interop
 
         internal unsafe NtStatus DeriveKey(SecureString password, string salt, int iterations, out byte[] key)
         {
-            if (password == null)
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
-
-            if (salt == null)
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
+            ArgumentNullException.ThrowIfNull(password);
+            ArgumentNullException.ThrowIfNull(salt);
 
             if (password.Length > ushort.MaxValue)
             {
@@ -60,26 +53,26 @@ namespace DSInternals.Common.Interop
             key = new byte[this.KeySize];
 
             using (var passwordPointer = new SafeUnicodeSecureStringPointer(password))
-            fixed (char* saltPointer = salt)
-            {
-                UNICODE_STRING passwordUnicodeString = new UNICODE_STRING
+                fixed (char* saltPointer = salt)
                 {
-                    Length = (ushort)passwordPointer.NumBytes,
-                    MaximumLength = (ushort)passwordPointer.NumBytesTotal,
-                    Buffer = new PWSTR(passwordPointer.DangerousGetHandle())
-                };
+                    UNICODE_STRING passwordUnicodeString = new UNICODE_STRING
+                    {
+                        Length = (ushort)passwordPointer.NumBytes,
+                        MaximumLength = (ushort)passwordPointer.NumBytesTotal,
+                        Buffer = new PWSTR(passwordPointer.DangerousGetHandle())
+                    };
 
-                ushort saltBinaryLength = (ushort)(salt.Length * sizeof(char));
+                    ushort saltBinaryLength = (ushort)(salt.Length * sizeof(char));
 
-                UNICODE_STRING saltUnicodeString = new UNICODE_STRING
-                {
-                    Length = saltBinaryLength,
-                    MaximumLength = saltBinaryLength,
-                    Buffer = saltPointer
-                };
+                    UNICODE_STRING saltUnicodeString = new UNICODE_STRING
+                    {
+                        Length = saltBinaryLength,
+                        MaximumLength = saltBinaryLength,
+                        Buffer = saltPointer
+                    };
 
-                return this.KeyDerivationFunction(ref passwordUnicodeString, ref saltUnicodeString, iterations, key);
-            }
+                    return this.KeyDerivationFunction(ref passwordUnicodeString, ref saltUnicodeString, iterations, key);
+                }
         }
 
         internal unsafe NtStatus DeriveKey(ReadOnlyMemory<byte> password, string salt, int iterations, out byte[] key)
@@ -89,10 +82,7 @@ namespace DSInternals.Common.Interop
                 throw new ArgumentNullException(nameof(password));
             }
 
-            if (salt == null)
-            {
-                throw new ArgumentNullException(nameof(salt));
-            }
+            ArgumentNullException.ThrowIfNull(salt);
 
             if (password.Length > ushort.MaxValue)
             {
@@ -107,26 +97,26 @@ namespace DSInternals.Common.Interop
             key = new byte[this.KeySize];
 
             using (var passwordHandle = password.Pin())
-            fixed (char* saltPointer = salt)
-            {
-                UNICODE_STRING passwordUnicodeString = new UNICODE_STRING
+                fixed (char* saltPointer = salt)
                 {
-                    Length = (ushort)password.Length,
-                    MaximumLength = (ushort)password.Length,
-                    Buffer = (char*)passwordHandle.Pointer
-                };
+                    UNICODE_STRING passwordUnicodeString = new UNICODE_STRING
+                    {
+                        Length = (ushort)password.Length,
+                        MaximumLength = (ushort)password.Length,
+                        Buffer = (char*)passwordHandle.Pointer
+                    };
 
-                ushort saltBinaryLength = (ushort)(salt.Length * sizeof(char));
+                    ushort saltBinaryLength = (ushort)(salt.Length * sizeof(char));
 
-                UNICODE_STRING saltUnicodeString = new UNICODE_STRING
-                {
-                    Length = saltBinaryLength,
-                    MaximumLength = saltBinaryLength,
-                    Buffer = saltPointer
-                };
+                    UNICODE_STRING saltUnicodeString = new UNICODE_STRING
+                    {
+                        Length = saltBinaryLength,
+                        MaximumLength = saltBinaryLength,
+                        Buffer = saltPointer
+                    };
 
-                return this.KeyDerivationFunction(ref passwordUnicodeString, ref saltUnicodeString, iterations, key);
-            }
+                    return this.KeyDerivationFunction(ref passwordUnicodeString, ref saltUnicodeString, iterations, key);
+                }
         }
     }
 }

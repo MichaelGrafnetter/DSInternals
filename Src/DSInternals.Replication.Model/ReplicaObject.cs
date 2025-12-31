@@ -25,9 +25,9 @@ namespace DSInternals.Replication.Model
         /// <param name="schema">The Active Directory schema.</param>
         public ReplicaObject(string distinguishedName, Guid objectGuid, SecurityIdentifier? objectSid, ReplicaAttributeCollection attributes, BaseSchema schema)
         {
-            Validator.AssertNotNull(distinguishedName, nameof(distinguishedName));
-            Validator.AssertNotNull(attributes, nameof(attributes));
-            Validator.AssertNotNull(schema, nameof(schema));
+            ArgumentNullException.ThrowIfNull(distinguishedName);
+            ArgumentNullException.ThrowIfNull(attributes);
+            ArgumentNullException.ThrowIfNull(schema);
 
             this.guid = objectGuid;
             this.distinguishedName = distinguishedName;

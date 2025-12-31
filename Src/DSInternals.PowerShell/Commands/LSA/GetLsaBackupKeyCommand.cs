@@ -12,7 +12,7 @@ public class GetLsaBackupKeyCommand : LsaPolicyCommandBase
     protected override void ProcessRecord()
     {
         var keys = this.LsaPolicy.GetDPAPIBackupKeys();
-        foreach(var key in keys)
+        foreach (var key in keys)
         {
             this.WriteObject(key);
         }

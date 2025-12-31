@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using DSInternals.Common.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Text.Json;
 
 namespace DSInternals.Common.Test
 {
@@ -63,11 +63,10 @@ namespace DSInternals.Common.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(JsonException))]
         public void Parse_BadJson_StillThrows()
         {
             var bad = "{ \"OwnerDN\": \"CN=User,DC=contoso,DC=com\" ";
-            _ = KeyCredential.ParseJson(bad);
+            Assert.ThrowsExactly<JsonException>(() => _ = KeyCredential.ParseJson(bad));
         }
 
         [TestMethod]

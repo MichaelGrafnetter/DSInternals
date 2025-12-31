@@ -29,6 +29,12 @@
           "Microsoft.Windows.WDK.Win32Metadata": "0.12.8-experimental"
         }
       },
+      "Polyfill": {
+        "type": "Direct",
+        "requested": "[9.5.0, )",
+        "resolved": "9.5.0",
+        "contentHash": "T3E8+K+W0u78495PwSSJOzT6QUbnZSdkDK4B3nfvxUo9nctDr6ChSDLV4l/RD2ZmA5oHM2YbLvyp+a2uE0ftOQ=="
+      },
       "System.Buffers": {
         "type": "Direct",
         "requested": "[4.6.1, )",
@@ -172,7 +178,7 @@
         }
       }
     },
-    "net10.0-windows7.0": {
+    "net8.0-windows7.0": {
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
         "requested": "[8.0.0, )",
@@ -235,7 +241,7 @@
         }
       }
     },
-    "net8.0-windows7.0": {
+    "net9.0-windows7.0": {
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
         "requested": "[8.0.0, )",

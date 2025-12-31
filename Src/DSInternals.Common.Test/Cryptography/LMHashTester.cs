@@ -1,7 +1,7 @@
-﻿using DSInternals.Common;
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
 using System.Security;
+using DSInternals.Common;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DSInternals.Common.Cryptography.Test
 {
@@ -17,18 +17,16 @@ namespace DSInternals.Common.Cryptography.Test
             Assert.AreEqual(expected, result);
         }
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void LMHash_NullInput()
         {
-            LMHash.ComputeHash(null);
+            Assert.ThrowsExactly<ArgumentNullException>(() => LMHash.ComputeHash(null));
         }
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void LMHash_LongInput()
         {
             // LM Hash history contains aad3b435b51404eeaad3b435b51404ee, hash of empty string
             SecureString password = "17CharsLongString".ToSecureString();
-            string result = LMHash.ComputeHash(password).ToHex(true);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => LMHash.ComputeHash(password).ToHex(true));
         }
         [TestMethod]
         public void LMHash_UnicodeInput()

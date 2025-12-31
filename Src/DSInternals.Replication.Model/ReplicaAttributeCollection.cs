@@ -16,12 +16,12 @@ namespace DSInternals.Replication.Model
 
         public void Add(ReplicaAttribute attribute)
         {
-            Validator.AssertNotNull(attribute, "attribute");
+            ArgumentNullException.ThrowIfNull(attribute);
 
             ReplicaAttribute preexistingAttribute;
             bool attributeAlreadyPresent = this.TryGetValue(attribute.Id, out preexistingAttribute);
 
-            if(attributeAlreadyPresent)
+            if (attributeAlreadyPresent)
             {
                 // TODO: Under what circumstances does this sometimes occur with linked attributes?
                 // Combine the values into one attribute

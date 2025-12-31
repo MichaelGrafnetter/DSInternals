@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using DSInternals.Common.Data;
 using System.Text.Json.Serialization;
+using DSInternals.Common.Data;
 
 namespace DSInternals.Common.AzureAD
 {
@@ -46,7 +46,7 @@ namespace DSInternals.Common.AzureAD
 
         internal void UpdateKeyCredentialReferences()
         {
-            if(this.KeyCredentials != null)
+            if (this.KeyCredentials != null)
             {
                 this.KeyCredentials.ForEach(credential => credential.Owner = this.UserPrincipalName);
             }

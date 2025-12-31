@@ -1,157 +1,144 @@
-﻿namespace DSInternals.DataStore
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.AccessControl;
+using System.Security.Cryptography;
+using DSInternals.Common;
+using Microsoft.Database.Isam;
+
+namespace DSInternals.DataStore;
+
+using SecurityDescriptorIdentifier = long;
+
+public class SecurityDescriptorResolver : IDisposable
 {
-    using DSInternals.Common;
-    using Microsoft.Database.Isam;
-    using System;
-    using System.Collections.Generic;
-    using System.Security.AccessControl;
-    using System.Security.Cryptography;
+    private const string SecurityDescriptorIdentifierColumn = "sd_id";
+    private const string SecurityDescriptorValueColumn = "sd_value";
+    private const string SecurityDescriptorHashColumn = "sd_hash";
+    private const string ReferenceCountColumn = "sd_refcount";
+    private const string SecurityDescriptorIdentifierIndex = "sd_id_index";
+    private const string SecurityDescriptorHashIndex = "sd_hash_index";
+    private const SecurityDescriptorIdentifier RootSecurityDescriptorId = 1;
+    private const int RootSecurityDescriptorOffset = sizeof(int);
 
-    using SecurityDescriptorIdentifier = long;
+    private IsamDatabase _database;
+    private MD5 _hashFunction;
+    private Columnid _securityDescriptorIdentifierColumnId;
+    private Columnid _securityDescriptorValueColumnId;
 
-    public class SecurityDescriptorRersolver : IDisposable
+    [SuppressMessage("Security", "CA5351:Do Not Use Broken Cryptographic Algorithms", Justification = "AD security descriptor index still uses MD5.")]
+    public SecurityDescriptorResolver(IsamDatabase database)
     {
-        private const string SecurityDescriptorIdentifierColumn = "sd_id";
-        private const string SecurityDescriptorValueColumn = "sd_value";
-        private const string SecurityDescriptorHashColumn = "sd_hash";
-        private const string ReferenceCountColumn = "sd_refcount";
-        private const string SecurityDescriptorIdentifierIndex = "sd_id_index";
-        private const string SecurityDescriptorHashIndex = "sd_hash_index";
-        private const SecurityDescriptorIdentifier RootSecurityDescriptorId = 1;
-        private const int RootSecurityDescriptorOffset = sizeof(int);
+        _database = database ?? throw new ArgumentNullException(nameof(database));
 
-        private IsamDatabase _database;
-        private MD5 _hashFunction;
-        private Columnid _securityDescriptorIdentifierColumnId;
-        private Columnid _securityDescriptorValueColumnId;
+        var sdTable = database.Tables[ADConstants.SecurityDescriptorTableName];
 
-        public SecurityDescriptorRersolver(IsamDatabase database)
+        // Cache column identifiers
+        _securityDescriptorIdentifierColumnId = sdTable.Columns[SecurityDescriptorIdentifierColumn].Columnid;
+        _securityDescriptorValueColumnId = sdTable.Columns[SecurityDescriptorValueColumn].Columnid;
+
+        // Cache MD5
+        _hashFunction = MD5.Create();
+    }
+
+    public RawSecurityDescriptor? GetDescriptor(SecurityDescriptorIdentifier id)
+    {
+        RawSecurityDescriptor? result = null;
+
+        using (var cursor = _database.OpenCursor(ADConstants.SecurityDescriptorTableName))
         {
-            if (database == null)
+            cursor.CurrentIndex = SecurityDescriptorIdentifierIndex;
+            bool found = cursor.GotoKey(Key.Compose(id));
+
+            if (found)
             {
-                throw new ArgumentNullException(nameof(database));
-            }
+                byte[] binaryForm = cursor.RetrieveColumnAsByteArray(_securityDescriptorValueColumnId);
 
-            _database = database;
-
-            var sdTable = database.Tables[ADConstants.SecurityDescriptorTableName];
-
-            // Cache column identifiers
-            _securityDescriptorIdentifierColumnId = sdTable.Columns[SecurityDescriptorIdentifierColumn].Columnid;
-            _securityDescriptorValueColumnId = sdTable.Columns[SecurityDescriptorValueColumn].Columnid;
-
-            // Cache MD5
-            _hashFunction = MD5.Create();
-        }
-
-        public RawSecurityDescriptor? GetDescriptor(SecurityDescriptorIdentifier id)
-        {
-            RawSecurityDescriptor? result = null;
-
-            using (var cursor = _database.OpenCursor(ADConstants.SecurityDescriptorTableName))
-            {
-                cursor.CurrentIndex = SecurityDescriptorIdentifierIndex;
-                bool found = cursor.GotoKey(Key.Compose(id));
-
-                if (found)
-                {
-                    byte[] binaryForm = cursor.RetrieveColumnAsByteArray(_securityDescriptorValueColumnId);
-
-                    // Strip the root SD prefix, which is 0x0F000000
-                    int sdOffset = (id == RootSecurityDescriptorId) ? RootSecurityDescriptorOffset : 0;
-                    return new RawSecurityDescriptor(binaryForm, sdOffset);
-                }
-            }
-
-            return result;
-        }
-
-        public IEnumerable<SecurityDescriptorIdentifier> FindDescriptor(GenericSecurityDescriptor securityDescriptor)
-        {
-            byte[] sdHash = ComputeHash(_hashFunction, securityDescriptor);
-            // TODO: Handle possible collisions
-            return this.FindDescriptorHash(sdHash);
-        }
-
-        public IEnumerable<SecurityDescriptorIdentifier> FindDescriptor(string securityDescriptor)
-        {
-            byte[] sdHash = ComputeHash(_hashFunction, securityDescriptor);
-            // TODO: Handle possible collisions
-            return this.FindDescriptorHash(sdHash);
-        }
-
-        public IEnumerable<SecurityDescriptorIdentifier> FindDescriptorHash(byte[] sdHash)
-        {
-            if (sdHash == null)
-            {
-                throw new ArgumentNullException(nameof(sdHash));
-            }
-
-            using (var cursor = _database.OpenCursor(ADConstants.SecurityDescriptorTableName))
-            {
-                cursor.CurrentIndex = SecurityDescriptorHashIndex;
-                cursor.FindRecords(MatchCriteria.EqualTo, Key.Compose(sdHash));
-
-                while (cursor.MoveNext())
-                {
-                    yield return cursor.RetrieveColumnAsLong(_securityDescriptorIdentifierColumnId).Value;
-                }
+                // Strip the root SD prefix, which is 0x0F000000
+                int sdOffset = (id == RootSecurityDescriptorId) ? RootSecurityDescriptorOffset : 0;
+                return new RawSecurityDescriptor(binaryForm, sdOffset);
             }
         }
 
-        public static byte[] ComputeHash(GenericSecurityDescriptor securityDescriptor)
+        return result;
+    }
+
+    public IEnumerable<SecurityDescriptorIdentifier> FindDescriptor(GenericSecurityDescriptor securityDescriptor)
+    {
+        byte[] sdHash = ComputeHash(_hashFunction, securityDescriptor);
+        // TODO: Handle possible collisions
+        return this.FindDescriptorHash(sdHash);
+    }
+
+    public IEnumerable<SecurityDescriptorIdentifier> FindDescriptor(string securityDescriptor)
+    {
+        byte[] sdHash = ComputeHash(_hashFunction, securityDescriptor);
+        // TODO: Handle possible collisions
+        return this.FindDescriptorHash(sdHash);
+    }
+
+    public IEnumerable<SecurityDescriptorIdentifier> FindDescriptorHash(byte[] sdHash)
+    {
+        ArgumentNullException.ThrowIfNull(sdHash);
+
+        using (var cursor = _database.OpenCursor(ADConstants.SecurityDescriptorTableName))
         {
-            if (securityDescriptor == null)
-            {
-                throw new ArgumentNullException(nameof(securityDescriptor));
-            }
+            cursor.CurrentIndex = SecurityDescriptorHashIndex;
+            cursor.FindRecords(MatchCriteria.EqualTo, Key.Compose(sdHash));
 
-            using (MD5 hashFunction = MD5.Create())
+            while (cursor.MoveNext())
             {
-                return ComputeHash(hashFunction, securityDescriptor);
-            }
-        }
-
-        private static byte[] ComputeHash(MD5 hashFunction, GenericSecurityDescriptor securityDescriptor)
-        {
-            // Convert to binary form. We have to use double conversion, because .NET returns the SD in different order than Win32 API used by AD.
-            string stringSecurityDescriptor = securityDescriptor.GetSddlForm(AccessControlSections.All);
-            byte[] binaryDescriptor = stringSecurityDescriptor.SddlToBinary();
-            return hashFunction.ComputeHash(binaryDescriptor);
-        }
-
-        public static byte[] ComputeHash(string securityDescriptor)
-        {
-            if (securityDescriptor == null)
-            {
-                throw new ArgumentNullException(nameof(securityDescriptor));
-            }
-
-            using (MD5 hashFunction = MD5.Create())
-            {
-                return ComputeHash(hashFunction, securityDescriptor);
+                yield return cursor.RetrieveColumnAsLong(_securityDescriptorIdentifierColumnId).Value;
             }
         }
+    }
 
-        private static byte[] ComputeHash(MD5 hashFunction, string securityDescriptor)
+    [SuppressMessage("Security", "CA5351:Do Not Use Broken Cryptographic Algorithms", Justification = "AD security descriptor index still uses MD5.")]
+    public static byte[] ComputeHash(GenericSecurityDescriptor securityDescriptor)
+    {
+        ArgumentNullException.ThrowIfNull(securityDescriptor);
+
+        using (MD5 hashFunction = MD5.Create())
         {
-            byte[] binaryDescriptor = securityDescriptor.SddlToBinary();
-            return hashFunction.ComputeHash(binaryDescriptor);
+            return ComputeHash(hashFunction, securityDescriptor);
         }
+    }
 
-        public void Dispose()
+    private static byte[] ComputeHash(MD5 hashFunction, GenericSecurityDescriptor securityDescriptor)
+    {
+        // Convert to binary form. We have to use double conversion, because .NET returns the SD in different order than Win32 API used by AD.
+        string stringSecurityDescriptor = securityDescriptor.GetSddlForm(AccessControlSections.All);
+        byte[] binaryDescriptor = stringSecurityDescriptor.SddlToBinary();
+        return hashFunction.ComputeHash(binaryDescriptor);
+    }
+
+    [SuppressMessage("Security", "CA5351:Do Not Use Broken Cryptographic Algorithms", Justification = "AD security descriptor index still uses MD5.")]
+    public static byte[] ComputeHash(string securityDescriptor)
+    {
+        ArgumentNullException.ThrowIfNull(securityDescriptor);
+
+        using (MD5 hashFunction = MD5.Create())
         {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
+            return ComputeHash(hashFunction, securityDescriptor);
         }
+    }
 
-        protected virtual void Dispose(bool disposing)
+    private static byte[] ComputeHash(MD5 hashFunction, string securityDescriptor)
+    {
+        byte[] binaryDescriptor = securityDescriptor.SddlToBinary();
+        return hashFunction.ComputeHash(binaryDescriptor);
+    }
+
+    public void Dispose()
+    {
+        this.Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing && _hashFunction != null)
         {
-            if (disposing && _hashFunction != null)
-            {
-                _hashFunction.Dispose();
-                _hashFunction = null;
-            }
+            _hashFunction.Dispose();
+            _hashFunction = null;
         }
     }
 }

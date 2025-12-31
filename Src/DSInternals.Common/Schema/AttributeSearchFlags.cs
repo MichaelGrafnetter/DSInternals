@@ -57,7 +57,7 @@ namespace DSInternals.Common.Schema
         /// <summary>
         /// Specifies that auditing of changes to individual values contained in this attribute MUST NOT be performed.
         /// </summary>
-        NeverValueAudit = 0x00000100, 
+        NeverValueAudit = 0x00000100,
 
         /// <summary>
         /// Specifies that the attribute is a member of the filtered attribute set.

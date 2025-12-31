@@ -17,8 +17,8 @@ namespace DSInternals.Replication.Model
         /// <param name="totalObjectCount">The total number of objects available for replication.</param>
         public ReplicationResult(List<ReplicaObject> objects, bool hasMore, ReplicationCookie cookie, PrefixTable prefixTable, int totalObjectCount)
         {
-            Validator.AssertNotNull(objects, nameof(objects));
-            Validator.AssertNotNull(cookie, nameof(cookie));
+            ArgumentNullException.ThrowIfNull(objects);
+            ArgumentNullException.ThrowIfNull(cookie);
 
             this.Objects = objects;
             this.HasMoreData = hasMore;

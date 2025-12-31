@@ -38,7 +38,7 @@ namespace DSInternals.PowerShell.Commands
         protected override void BeginProcessing()
         {
             NetworkCredential netCredential = null;
-            if(this.Credential != null)
+            if (this.Credential != null)
             {
                 // Convert PSCredential to NetworkCredential
                 netCredential = this.Credential.GetNetworkCredential();

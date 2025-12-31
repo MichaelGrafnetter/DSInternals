@@ -1758,7 +1758,7 @@ namespace DSInternals.Common.Schema
             AttributeSyntax.SecurityDescriptor => 'p',
             AttributeSyntax.Int64 => 'q',
             AttributeSyntax.Sid => 'r',
-            _ => throw new ArgumentOutOfRangeException("Unsupported attribute syntax", nameof(syntax))
+            _ => throw new ArgumentOutOfRangeException(nameof(syntax), "Unsupported attribute syntax")
         };
 
         public static string DeriveIndexName(this AttributeType attrtyp)

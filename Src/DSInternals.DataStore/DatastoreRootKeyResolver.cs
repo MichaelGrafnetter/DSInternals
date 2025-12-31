@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DSInternals.Common.Data;
+﻿using DSInternals.Common.Data;
 using DSInternals.Common.Schema;
 using Microsoft.Database.Isam;
 
@@ -13,10 +11,7 @@ namespace DSInternals.DataStore
 
         public DatastoreRootKeyResolver(DirectoryContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             // The schema must contain the ms-Kds-Prov-RootKey class.
             bool inSchema = context.Schema.FindClass(CommonDirectoryClasses.KdsRootKey).HasValue;

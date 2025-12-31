@@ -28,7 +28,7 @@ namespace DSInternals.Common.Test
         [TestMethod]
         public void ParseKdfParameters_EmptyInput()
         {
-            var result = KdsRootKey.ParseKdfParameters(new byte[0]{});
+            var result = KdsRootKey.ParseKdfParameters(new byte[0] { });
             Assert.IsNull(result);
         }
 
