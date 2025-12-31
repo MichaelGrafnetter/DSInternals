@@ -39,7 +39,7 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        queries: security # Options: decurity, security-extended, security-and-quality
+        queries: code-scanning # Options: code-scanning, security-extended, security-and-quality
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
