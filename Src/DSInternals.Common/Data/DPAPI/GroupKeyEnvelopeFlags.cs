@@ -1,9 +1,8 @@
-﻿namespace DSInternals.Common.Data
+﻿namespace DSInternals.Common.Data;
+
+public enum GroupKeyEnvelopeFlags : int
 {
-    public enum GroupKeyEnvelopeFlags : int
-    {
-        PrivateAsymmetricKey = 0,
-        PublicAsymmetricKey = 1,
-        SymmetricKey = 2
-    }
+    PrivateAsymmetricKey = 0,
+    PublicAsymmetricKey = 1,
+    SymmetricKey = 2
 }

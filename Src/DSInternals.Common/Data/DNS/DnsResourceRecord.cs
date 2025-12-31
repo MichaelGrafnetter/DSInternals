@@ -1,5 +1,4 @@
 ﻿using System.Buffers.Binary;
-using System.Globalization;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;

@@ -1,38 +1,37 @@
-﻿namespace DSInternals.PowerShell.Commands
+﻿
+using System.Management.Automation;
+using System.Security.Principal;
+
+namespace DSInternals.PowerShell.Commands;
+public abstract class ADDBPrincipalCommandBase : ADDBObjectCommandBase
 {
-    using System.Management.Automation;
-    using System.Security.Principal;
+    protected const string ParameterSetByName = "ByName";
+    protected const string ParameterSetBySid = "BySID";
 
-    public abstract class ADDBPrincipalCommandBase : ADDBObjectCommandBase
+    [Parameter(
+        Mandatory = true,
+        Position = 0,
+        ValueFromPipelineByPropertyName = true,
+        ParameterSetName = ParameterSetByName
+    )]
+    [ValidateNotNullOrEmpty]
+    [Alias("Login", "sam")]
+    public string SamAccountName
     {
-        protected const string ParameterSetByName = "ByName";
-        protected const string ParameterSetBySid = "BySID";
+        get;
+        set;
+    }
 
-        [Parameter(
-            Mandatory = true,
-            Position = 0,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = ParameterSetByName
-        )]
-        [ValidateNotNullOrEmpty]
-        [Alias("Login", "sam")]
-        public string SamAccountName
-        {
-            get;
-            set;
-        }
-
-        [Parameter(
-            Mandatory = true,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = ParameterSetBySid
-        )]
-        [ValidateNotNullOrEmpty]
-        [Alias("Sid")]
-        public SecurityIdentifier ObjectSid
-        {
-            get;
-            set;
-        }
+    [Parameter(
+        Mandatory = true,
+        ValueFromPipelineByPropertyName = true,
+        ParameterSetName = ParameterSetBySid
+    )]
+    [ValidateNotNullOrEmpty]
+    [Alias("Sid")]
+    public SecurityIdentifier ObjectSid
+    {
+        get;
+        set;
     }
 }

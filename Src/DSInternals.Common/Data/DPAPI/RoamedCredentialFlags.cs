@@ -1,15 +1,11 @@
-﻿namespace DSInternals.Common.Data
+﻿namespace DSInternals.Common.Data;
+[Flags]
+public enum RoamedCredentialFlags : short
 {
-    using System;
-
-    [Flags]
-    public enum RoamedCredentialFlags : short
-    {
-        Tombstone = 1,
-        Unreadable = 2,
-        Unwritable = 4,
-        Unroamable = 8,
-        KnownType = 16,
-        EncryptionKey = 32
-    }
+    Tombstone = 1,
+    Unreadable = 2,
+    Unwritable = 4,
+    Unroamable = 8,
+    KnownType = 16,
+    EncryptionKey = 32
 }

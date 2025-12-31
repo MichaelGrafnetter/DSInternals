@@ -1,55 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using DSInternals.Common.Data;
 
-namespace DSInternals.Common.AzureAD
+namespace DSInternals.Common.AzureAD;
+
+public class AzureADUser
 {
-    public class AzureADUser
+    [JsonPropertyName("objectId")]
+    [JsonRequired]
+    public Guid ObjectId
     {
-        [JsonPropertyName("objectId")]
-        [JsonRequired]
-        public Guid ObjectId
-        {
-            get;
-            private set;
-        }
+        get;
+        private set;
+    }
 
-        [JsonPropertyName("userPrincipalName")]
-        [JsonRequired]
-        public string UserPrincipalName
-        {
-            get;
-            private set;
-        }
+    [JsonPropertyName("userPrincipalName")]
+    [JsonRequired]
+    public string UserPrincipalName
+    {
+        get;
+        private set;
+    }
 
-        [JsonPropertyName("accountEnabled")]
-        public bool Enabled
-        {
-            get;
-            private set;
-        }
+    [JsonPropertyName("accountEnabled")]
+    public bool Enabled
+    {
+        get;
+        private set;
+    }
 
-        [JsonPropertyName("displayName")]
-        public string DisplayName
-        {
-            get;
-            private set;
-        }
+    [JsonPropertyName("displayName")]
+    public string DisplayName
+    {
+        get;
+        private set;
+    }
 
-        [JsonPropertyName("searchableDeviceKey")]
-        public List<KeyCredential> KeyCredentials
-        {
-            get;
-            private set;
-        }
+    [JsonPropertyName("searchableDeviceKey")]
+    public List<KeyCredential> KeyCredentials
+    {
+        get;
+        private set;
+    }
 
-        internal void UpdateKeyCredentialReferences()
+    internal void UpdateKeyCredentialReferences()
+    {
+        if (this.KeyCredentials != null)
         {
-            if (this.KeyCredentials != null)
-            {
-                this.KeyCredentials.ForEach(credential => credential.Owner = this.UserPrincipalName);
-            }
+            this.KeyCredentials.ForEach(credential => credential.Owner = this.UserPrincipalName);
         }
     }
 }

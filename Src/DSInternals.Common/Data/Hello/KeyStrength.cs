@@ -1,24 +1,23 @@
-﻿namespace DSInternals.Common.Data
+﻿namespace DSInternals.Common.Data;
+
+/// <summary>
+/// Specifies the strength of the NGC key.
+/// </summary>
+/// <see>https://msdn.microsoft.com/en-us/library/mt220496.aspx</see>
+public enum KeyStrength : byte
 {
     /// <summary>
-    /// Specifies the strength of the NGC key.
+    /// Key strength is unknown.
     /// </summary>
-    /// <see>https://msdn.microsoft.com/en-us/library/mt220496.aspx</see>
-    public enum KeyStrength : byte
-    {
-        /// <summary>
-        /// Key strength is unknown.
-        /// </summary>
-        Unknown = 0x00,
+    Unknown = 0x00,
 
-        /// <summary>
-        /// Key strength is weak.
-        /// </summary>
-        Weak = 0x01,
+    /// <summary>
+    /// Key strength is weak.
+    /// </summary>
+    Weak = 0x01,
 
-        /// <summary>
-        /// Key strength is normal.
-        /// </summary>
-        Normal = 0x02
-    }
+    /// <summary>
+    /// Key strength is normal.
+    /// </summary>
+    Normal = 0x02
 }

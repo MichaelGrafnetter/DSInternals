@@ -1,10 +1,9 @@
-﻿namespace DSInternals.Common.Data
+﻿namespace DSInternals.Common.Data;
+
+public enum LapsDecryptionStatus
 {
-    public enum LapsDecryptionStatus
-    {
-        NotApplicable,
-        Success,
-        Unauthorized,
-        Error
-    }
+    NotApplicable,
+    Success,
+    Unauthorized,
+    Error
 }

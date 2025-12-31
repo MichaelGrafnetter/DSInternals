@@ -5,66 +5,65 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Formats.Asn1;
 
-namespace DSInternals.Common.Cryptography.Asn1.Pkcs7
+namespace DSInternals.Common.Cryptography.Asn1.Pkcs7;
+
+[StructLayout(LayoutKind.Sequential)]
+internal partial struct SignerIdentifier
 {
-    [StructLayout(LayoutKind.Sequential)]
-    internal partial struct SignerIdentifier
-    {
-        internal DSInternals.Common.Cryptography.Asn1.Pkcs7.IssuerAndSerialNumber? IssuerAndSerialNumber;
-        internal ReadOnlyMemory<byte>? SubjectKeyIdentifier;
+    internal DSInternals.Common.Cryptography.Asn1.Pkcs7.IssuerAndSerialNumber? IssuerAndSerialNumber;
+    internal ReadOnlyMemory<byte>? SubjectKeyIdentifier;
 
 #if DEBUG
-        static SignerIdentifier()
+    static SignerIdentifier()
+    {
+        var usedTags = new System.Collections.Generic.Dictionary<Asn1Tag, string>();
+        Action<Asn1Tag, string> ensureUniqueTag = (tag, fieldName) =>
         {
-            var usedTags = new System.Collections.Generic.Dictionary<Asn1Tag, string>();
-            Action<Asn1Tag, string> ensureUniqueTag = (tag, fieldName) =>
+            if (usedTags.TryGetValue(tag, out string existing))
             {
-                if (usedTags.TryGetValue(tag, out string existing))
-                {
-                    throw new InvalidOperationException($"Tag '{tag}' is in use by both '{existing}' and '{fieldName}'");
-                }
+                throw new InvalidOperationException($"Tag '{tag}' is in use by both '{existing}' and '{fieldName}'");
+            }
 
-                usedTags.Add(tag, fieldName);
-            };
-            
-            ensureUniqueTag(Asn1Tag.Sequence, "IssuerAndSerialNumber");
-            ensureUniqueTag(new Asn1Tag(TagClass.ContextSpecific, 0), "SubjectKeyIdentifier");
-        }
+            usedTags.Add(tag, fieldName);
+        };
+        
+        ensureUniqueTag(Asn1Tag.Sequence, "IssuerAndSerialNumber");
+        ensureUniqueTag(new Asn1Tag(TagClass.ContextSpecific, 0), "SubjectKeyIdentifier");
+    }
 #endif
 
-        internal static SignerIdentifier Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+    internal static SignerIdentifier Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+    {
+        AsnReader reader = new AsnReader(encoded, ruleSet);
+        
+        Decode(reader, out SignerIdentifier decoded);
+        reader.ThrowIfNotEmpty();
+        return decoded;
+    }
+
+    internal static void Decode(AsnReader reader, out SignerIdentifier decoded)
+    {
+        if (reader == null)
+            throw new ArgumentNullException(nameof(reader));
+
+        decoded = default;
+        Asn1Tag tag = reader.PeekTag();
+        
+        if (tag.HasSameClassAndValue(Asn1Tag.Sequence))
         {
-            AsnReader reader = new AsnReader(encoded, ruleSet);
-            
-            Decode(reader, out SignerIdentifier decoded);
-            reader.ThrowIfNotEmpty();
-            return decoded;
+            DSInternals.Common.Cryptography.Asn1.Pkcs7.IssuerAndSerialNumber tmpIssuerAndSerialNumber;
+            DSInternals.Common.Cryptography.Asn1.Pkcs7.IssuerAndSerialNumber.Decode(reader, out tmpIssuerAndSerialNumber);
+            decoded.IssuerAndSerialNumber = tmpIssuerAndSerialNumber;
+
         }
-
-        internal static void Decode(AsnReader reader, out SignerIdentifier decoded)
+        else if (tag.HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
+        decoded.SubjectKeyIdentifier = reader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0));
 
-            decoded = default;
-            Asn1Tag tag = reader.PeekTag();
-            
-            if (tag.HasSameClassAndValue(Asn1Tag.Sequence))
-            {
-                DSInternals.Common.Cryptography.Asn1.Pkcs7.IssuerAndSerialNumber tmpIssuerAndSerialNumber;
-                DSInternals.Common.Cryptography.Asn1.Pkcs7.IssuerAndSerialNumber.Decode(reader, out tmpIssuerAndSerialNumber);
-                decoded.IssuerAndSerialNumber = tmpIssuerAndSerialNumber;
-
-            }
-            else if (tag.HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
-            {
-            decoded.SubjectKeyIdentifier = reader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0));
-    
-            }
-            else
-            {
-                throw new CryptographicException();
-            }
+        }
+        else
+        {
+            throw new CryptographicException();
         }
     }
 }

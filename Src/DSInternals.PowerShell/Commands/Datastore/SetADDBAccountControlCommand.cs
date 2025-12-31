@@ -1,141 +1,139 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Management.Automation;
 using DSInternals.Common.Data;
 
-namespace DSInternals.PowerShell.Commands
+namespace DSInternals.PowerShell.Commands;
+
+/// <summary>
+/// Modifies user account control (UAC) values for an Active Directory account.
+/// </summary>
+[Cmdlet(VerbsCommon.Set, "ADDBAccountControl")]
+[OutputType("None")]
+public class SetADDBAccountControlCommand : ADDBModifyPrincipalCommandBase
 {
     /// <summary>
-    /// Modifies user account control (UAC) values for an Active Directory account.
+    /// Indicates whether an account is enabled.
     /// </summary>
-    [Cmdlet(VerbsCommon.Set, "ADDBAccountControl")]
-    [OutputType("None")]
-    public class SetADDBAccountControlCommand : ADDBModifyPrincipalCommandBase
+    [Parameter(Mandatory = false)]
+    public bool? Enabled { get; set; }
+
+    /// <summary>
+    /// Indicates whether an account can change its password.
+    /// </summary>
+    [Parameter(Mandatory = false)]
+    public bool? CannotChangePassword { get; set; }
+
+    /// <summary>
+    /// Indicates whether the password of an account can expire.
+    /// </summary>
+    [Parameter(Mandatory = false)]
+    public bool? PasswordNeverExpires { get; set; }
+
+    /// <summary>
+    /// Indicates whether a smart card is required to logon.
+    /// </summary>
+    [Parameter(Mandatory = false)]
+    public bool? SmartcardLogonRequired { get; set; }
+
+    /// <summary>
+    /// Indicates whether the account is restricted to use only Data Encryption Standard encryption types for keys.
+    /// </summary>
+    [Parameter(Mandatory = false)]
+    public bool? UseDESKeyOnly { get; set; }
+
+    /// <summary>
+    /// Indicates whether a home directory is required for the account.
+    /// </summary>
+    [Parameter(Mandatory = false)]
+    public bool? HomedirRequired { get; set; }
+
+    protected override void BeginProcessing()
     {
-        /// <summary>
-        /// Indicates whether an account is enabled.
-        /// </summary>
-        [Parameter(Mandatory = false)]
-        public bool? Enabled { get; set; }
-
-        /// <summary>
-        /// Indicates whether an account can change its password.
-        /// </summary>
-        [Parameter(Mandatory = false)]
-        public bool? CannotChangePassword { get; set; }
-
-        /// <summary>
-        /// Indicates whether the password of an account can expire.
-        /// </summary>
-        [Parameter(Mandatory = false)]
-        public bool? PasswordNeverExpires { get; set; }
-
-        /// <summary>
-        /// Indicates whether a smart card is required to logon.
-        /// </summary>
-        [Parameter(Mandatory = false)]
-        public bool? SmartcardLogonRequired { get; set; }
-
-        /// <summary>
-        /// Indicates whether the account is restricted to use only Data Encryption Standard encryption types for keys.
-        /// </summary>
-        [Parameter(Mandatory = false)]
-        public bool? UseDESKeyOnly { get; set; }
-
-        /// <summary>
-        /// Indicates whether a home directory is required for the account.
-        /// </summary>
-        [Parameter(Mandatory = false)]
-        public bool? HomedirRequired { get; set; }
-
-        protected override void BeginProcessing()
+        // Validate the parameters:
+        if (this.Enabled == null &&
+            this.CannotChangePassword == null &&
+            this.PasswordNeverExpires == null &&
+            this.SmartcardLogonRequired == null &&
+            this.UseDESKeyOnly == null &&
+            this.HomedirRequired == null)
         {
-            // Validate the parameters:
-            if (this.Enabled == null &&
-                this.CannotChangePassword == null &&
-                this.PasswordNeverExpires == null &&
-                this.SmartcardLogonRequired == null &&
-                this.UseDESKeyOnly == null &&
-                this.HomedirRequired == null)
-            {
-                this.ThrowTerminatingError(
-                    new ErrorRecord(
-                        new ArgumentException("At least one of the parameters must be specified."),
-                        "SetADDBAccountControl_ParameterRequired",
-                        ErrorCategory.InvalidArgument,
-                        null));
-            }
-
-            base.BeginProcessing();
+            this.ThrowTerminatingError(
+                new ErrorRecord(
+                    new ArgumentException("At least one of the parameters must be specified."),
+                    "SetADDBAccountControl_ParameterRequired",
+                    ErrorCategory.InvalidArgument,
+                    null));
         }
 
-        protected override void ProcessRecord()
+        base.BeginProcessing();
+    }
+
+    protected override void ProcessRecord()
+    {
+        bool hasChanged;
+
+        string verboseMessage = "Configuring account {0}.";
+
+        switch (this.ParameterSetName)
         {
-            bool hasChanged;
+            case ParameterSetByDN:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.DistinguishedName));
+                var dn = new DistinguishedName(this.DistinguishedName);
 
-            string verboseMessage = "Configuring account {0}.";
+                hasChanged = this.DirectoryAgent.SetAccountControl(
+                    dn,
+                    this.Enabled,
+                    this.CannotChangePassword,
+                    this.PasswordNeverExpires,
+                    this.SmartcardLogonRequired,
+                    this.UseDESKeyOnly,
+                    this.HomedirRequired,
+                    this.SkipMetaUpdate);
+                break;
 
-            switch (this.ParameterSetName)
-            {
-                case ParameterSetByDN:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.DistinguishedName));
-                    var dn = new DistinguishedName(this.DistinguishedName);
+            case ParameterSetByName:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.SamAccountName));
+                hasChanged = this.DirectoryAgent.SetAccountControl(
+                    this.SamAccountName,
+                    this.Enabled,
+                    this.CannotChangePassword,
+                    this.PasswordNeverExpires,
+                    this.SmartcardLogonRequired,
+                    this.UseDESKeyOnly,
+                    this.HomedirRequired,
+                    this.SkipMetaUpdate);
+                break;
 
-                    hasChanged = this.DirectoryAgent.SetAccountControl(
-                        dn,
-                        this.Enabled,
-                        this.CannotChangePassword,
-                        this.PasswordNeverExpires,
-                        this.SmartcardLogonRequired,
-                        this.UseDESKeyOnly,
-                        this.HomedirRequired,
-                        this.SkipMetaUpdate);
-                    break;
+            case ParameterSetByGuid:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectGuid));
+                hasChanged = this.DirectoryAgent.SetAccountControl(
+                    this.ObjectGuid,
+                    this.Enabled,
+                    this.CannotChangePassword,
+                    this.PasswordNeverExpires,
+                    this.SmartcardLogonRequired,
+                    this.UseDESKeyOnly,
+                    this.HomedirRequired,
+                    this.SkipMetaUpdate);
+                break;
 
-                case ParameterSetByName:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.SamAccountName));
-                    hasChanged = this.DirectoryAgent.SetAccountControl(
-                        this.SamAccountName,
-                        this.Enabled,
-                        this.CannotChangePassword,
-                        this.PasswordNeverExpires,
-                        this.SmartcardLogonRequired,
-                        this.UseDESKeyOnly,
-                        this.HomedirRequired,
-                        this.SkipMetaUpdate);
-                    break;
+            case ParameterSetBySid:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectSid));
+                hasChanged = this.DirectoryAgent.SetAccountControl(
+                    this.ObjectSid,
+                    this.Enabled,
+                    this.CannotChangePassword,
+                    this.PasswordNeverExpires,
+                    this.SmartcardLogonRequired,
+                    this.UseDESKeyOnly,
+                    this.HomedirRequired,
+                    this.SkipMetaUpdate);
+                break;
 
-                case ParameterSetByGuid:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectGuid));
-                    hasChanged = this.DirectoryAgent.SetAccountControl(
-                        this.ObjectGuid,
-                        this.Enabled,
-                        this.CannotChangePassword,
-                        this.PasswordNeverExpires,
-                        this.SmartcardLogonRequired,
-                        this.UseDESKeyOnly,
-                        this.HomedirRequired,
-                        this.SkipMetaUpdate);
-                    break;
-
-                case ParameterSetBySid:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectSid));
-                    hasChanged = this.DirectoryAgent.SetAccountControl(
-                        this.ObjectSid,
-                        this.Enabled,
-                        this.CannotChangePassword,
-                        this.PasswordNeverExpires,
-                        this.SmartcardLogonRequired,
-                        this.UseDESKeyOnly,
-                        this.HomedirRequired,
-                        this.SkipMetaUpdate);
-                    break;
-
-                default:
-                    // This should never happen:
-                    throw new PSInvalidOperationException(InvalidParameterSetMessage);
-            }
-            this.WriteVerboseResult(hasChanged);
+            default:
+                // This should never happen:
+                throw new PSInvalidOperationException(InvalidParameterSetMessage);
         }
+        this.WriteVerboseResult(hasChanged);
     }
 }

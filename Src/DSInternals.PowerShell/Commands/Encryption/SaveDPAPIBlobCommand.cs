@@ -1,107 +1,103 @@
-﻿namespace DSInternals.PowerShell.Commands
+﻿using System.Globalization;
+using System.Management.Automation;
+using DSInternals.Common.Data;
+
+namespace DSInternals.PowerShell.Commands;
+[Cmdlet(VerbsData.Save, "DPAPIBlob")]
+[OutputType("None")]
+public class SaveDPAPIBlobCmdlet : PSCmdletEx
 {
-    using System;
-    using System.Globalization;
-    using System.Linq;
-    using System.Management.Automation;
-    using DSInternals.Common.Data;
+    private const string VerboseMessageFormat = "Creating DPAPI file {0}.";
+    private const string AccountParameterSet = "FromAccount";
+    private const string ObjectParameterSet = "FromObject";
 
-    [Cmdlet(VerbsData.Save, "DPAPIBlob")]
-    [OutputType("None")]
-    public class SaveDPAPIBlobCmdlet : PSCmdletEx
+    [Parameter(
+        Mandatory = true,
+        ValueFromPipeline = true,
+        ParameterSetName = ObjectParameterSet
+    )]
+    [ValidateNotNullOrEmpty]
+    [Alias("DPAPIBlob", "Object", "Blob", "BackupKey")]
+    public DPAPIObject DPAPIObject
     {
-        private const string VerboseMessageFormat = "Creating DPAPI file {0}.";
-        private const string AccountParameterSet = "FromAccount";
-        private const string ObjectParameterSet = "FromObject";
+        get;
+        set;
+    }
 
-        [Parameter(
-            Mandatory = true,
-            ValueFromPipeline = true,
-            ParameterSetName = ObjectParameterSet
-        )]
-        [ValidateNotNullOrEmpty]
-        [Alias("DPAPIBlob", "Object", "Blob", "BackupKey")]
-        public DPAPIObject DPAPIObject
+    [Parameter(
+        Mandatory = true,
+        ValueFromPipeline = true,
+        ParameterSetName = AccountParameterSet
+    )]
+    [ValidateNotNullOrEmpty]
+    public DSAccount Account
+    {
+        get;
+        set;
+    }
+
+    [Parameter(
+        Mandatory = true,
+        Position = 0
+    )]
+    [ValidateNotNullOrEmpty]
+    [Alias("Path", "OutputPath")]
+    public string DirectoryPath
+    {
+        get;
+        set;
+    }
+
+    private string AbsoluteDirectoryPath
+    {
+        get;
+        set;
+    }
+
+    protected override void BeginProcessing()
+    {
+        this.AbsoluteDirectoryPath = this.ResolveDirectoryPath(this.DirectoryPath);
+    }
+
+    protected override void ProcessRecord()
+    {
+        switch (this.ParameterSetName)
         {
-            get;
-            set;
-        }
+            case ObjectParameterSet:
+                this.ProcessSingleObject(this.DPAPIObject);
+                break;
+            case AccountParameterSet:
+                // Extract all roamed credentials from a user account. Other account types do not have roamed credentials.
+                var user = this.Account as DSUser;
 
-        [Parameter(
-            Mandatory = true,
-            ValueFromPipeline = true,
-            ParameterSetName = AccountParameterSet
-        )]
-        [ValidateNotNullOrEmpty]
-        public DSAccount Account
-        {
-            get;
-            set;
-        }
-
-        [Parameter(
-            Mandatory = true,
-            Position = 0
-        )]
-        [ValidateNotNullOrEmpty]
-        [Alias("Path", "OutputPath")]
-        public string DirectoryPath
-        {
-            get;
-            set;
-        }
-
-        private string AbsoluteDirectoryPath
-        {
-            get;
-            set;
-        }
-
-        protected override void BeginProcessing()
-        {
-            this.AbsoluteDirectoryPath = this.ResolveDirectoryPath(this.DirectoryPath);
-        }
-
-        protected override void ProcessRecord()
-        {
-            switch (this.ParameterSetName)
-            {
-                case ObjectParameterSet:
-                    this.ProcessSingleObject(this.DPAPIObject);
-                    break;
-                case AccountParameterSet:
-                    // Extract all roamed credentials from a user account. Other account types do not have roamed credentials.
-                    var user = this.Account as DSUser;
-
-                    if (user?.RoamedCredentials != null)
+                if (user?.RoamedCredentials != null)
+                {
+                    foreach (var blob in user.RoamedCredentials)
                     {
-                        foreach (var blob in user.RoamedCredentials)
-                        {
-                            this.ProcessSingleObject(blob);
-                        }
+                        this.ProcessSingleObject(blob);
                     }
+                }
 
-                    break;
-            }
+                break;
         }
+    }
 
-        private void ProcessSingleObject(DPAPIObject blob)
+    private void ProcessSingleObject(DPAPIObject blob)
+    {
+        string filePath = blob.FilePath;
+
+        if (String.IsNullOrEmpty(filePath))
         {
-            string filePath = blob.FilePath;
-
-            if (String.IsNullOrEmpty(filePath))
-            {
-                // There is nothing to save
-                return;
-            }
-
-            // Save the blob
-            string verboseMessage = String.Format(CultureInfo.InvariantCulture, VerboseMessageFormat, filePath);
-            this.WriteVerbose(verboseMessage);
-            blob.Save(this.AbsoluteDirectoryPath);
-
-            // Append the Mimikatz command to a script file
-            blob.SaveKiwiCommand(this.AbsoluteDirectoryPath);
+            // There is nothing to save
+            return;
         }
+
+        // Save the blob
+        string verboseMessage = String.Format(CultureInfo.InvariantCulture, VerboseMessageFormat, filePath);
+        this.WriteVerbose(verboseMessage);
+        blob.Save(this.AbsoluteDirectoryPath);
+
+        // Append the Mimikatz command to a script file
+        blob.SaveKiwiCommand(this.AbsoluteDirectoryPath);
     }
 }

@@ -1,25 +1,24 @@
-﻿namespace DSInternals.Common.Exceptions
-{
-    [Serializable]
-    public class DirectoryObjectOperationException : DirectoryObjectException
-    {
-        public string Reason
-        {
-            get;
-            private set;
-        }
-        public DirectoryObjectOperationException(string reason, object objectIdentifier)
-            : base(objectIdentifier)
-        {
-            this.Reason = reason;
-        }
+﻿namespace DSInternals.Common.Exceptions;
 
-        public override string Message
+[Serializable]
+public class DirectoryObjectOperationException : DirectoryObjectException
+{
+    public string Reason
+    {
+        get;
+        private set;
+    }
+    public DirectoryObjectOperationException(string reason, object objectIdentifier)
+        : base(objectIdentifier)
+    {
+        this.Reason = reason;
+    }
+
+    public override string Message
+    {
+        get
         {
-            get
-            {
-                return $"{this.Reason} (Object identity: '{this.ObjectIdentifier}')";
-            }
+            return $"{this.Reason} (Object identity: '{this.ObjectIdentifier}')";
         }
     }
 }

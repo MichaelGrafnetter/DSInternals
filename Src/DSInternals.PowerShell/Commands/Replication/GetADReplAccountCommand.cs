@@ -1,225 +1,223 @@
-﻿using System;
-using System.Management.Automation;
+﻿using System.Management.Automation;
 using System.Security.Principal;
 using DSInternals.Common.Data;
 using DSInternals.Replication;
 using DSInternals.Replication.Model;
 
-namespace DSInternals.PowerShell.Commands
+namespace DSInternals.PowerShell.Commands;
+
+[Cmdlet(VerbsCommon.Get, "ADReplAccount")]
+[OutputType(typeof(DSAccount), typeof(DSUser), typeof(DSComputer))]
+public class GetADReplAccountCommand : ADReplPrincipalCommandBase
 {
-    [Cmdlet(VerbsCommon.Get, "ADReplAccount")]
-    [OutputType(typeof(DSAccount), typeof(DSUser), typeof(DSComputer))]
-    public class GetADReplAccountCommand : ADReplPrincipalCommandBase
+    #region Constants
+    protected const string ParameterSetAll = "All";
+    #endregion Constants
+
+    #region Parameters
+    [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
+    [Alias("AllAccounts", "ReturnAllAccounts")]
+    public SwitchParameter All
     {
-        #region Constants
-        protected const string ParameterSetAll = "All";
-        #endregion Constants
+        get;
+        set;
+    }
 
-        #region Parameters
-        [Parameter(Mandatory = true, ParameterSetName = ParameterSetAll)]
-        [Alias("AllAccounts", "ReturnAllAccounts")]
-        public SwitchParameter All
+    [Parameter(Mandatory = false, ParameterSetName = ParameterSetAll)]
+    [ValidateNotNullOrEmpty]
+    [Alias("NC", "DomainNC", "DomainNamingContext")]
+    public string NamingContext
+    {
+        get;
+        set;
+    }
+
+    [Parameter(Mandatory = false)]
+    [Alias("Property", "PropertySets", "PropertySet")]
+    [PSDefaultValue(Value = "All")]
+    public AccountPropertySets Properties
+    {
+        get;
+        set;
+    } = AccountPropertySets.All;
+
+    [Parameter(Mandatory = false)]
+    [Alias("View", "ExportView", "Format")]
+    [ValidateSet(
+        "JohnNT",
+        "JohnNTHistory",
+        "JohnLM",
+        "JohnLMHistory",
+        "HashcatNT",
+        "HashcatNTHistory",
+        "HashcatLM",
+        "HashcatLMHistory",
+        "NTHash",
+        "NTHashHistory",
+        "LMHash",
+        "LMHashHistory",
+        "Ophcrack",
+        "PWDump",
+        "PWDumpHistory"
+    )]
+    public AccountExportFormat? ExportFormat
+    {
+        get;
+        set;
+    }
+    #endregion Parameters
+
+    #region Cmdlet Overrides
+    protected override void BeginProcessing()
+    {
+        base.BeginProcessing();
+
+        if (this.ExportFormat != null)
         {
-            get;
-            set;
-        }
+            // Override the property set to match the requirements of the export formats.
+            AccountPropertySets requiredProperties = this.ExportFormat.GetRequiredProperties();
 
-        [Parameter(Mandatory = false, ParameterSetName = ParameterSetAll)]
-        [ValidateNotNullOrEmpty]
-        [Alias("NC", "DomainNC", "DomainNamingContext")]
-        public string NamingContext
-        {
-            get;
-            set;
-        }
-
-        [Parameter(Mandatory = false)]
-        [Alias("Property", "PropertySets", "PropertySet")]
-        [PSDefaultValue(Value = "All")]
-        public AccountPropertySets Properties
-        {
-            get;
-            set;
-        } = AccountPropertySets.All;
-
-        [Parameter(Mandatory = false)]
-        [Alias("View", "ExportView", "Format")]
-        [ValidateSet(
-            "JohnNT",
-            "JohnNTHistory",
-            "JohnLM",
-            "JohnLMHistory",
-            "HashcatNT",
-            "HashcatNTHistory",
-            "HashcatLM",
-            "HashcatLMHistory",
-            "NTHash",
-            "NTHashHistory",
-            "LMHash",
-            "LMHashHistory",
-            "Ophcrack",
-            "PWDump",
-            "PWDumpHistory"
-        )]
-        public AccountExportFormat? ExportFormat
-        {
-            get;
-            set;
-        }
-        #endregion Parameters
-
-        #region Cmdlet Overrides
-        protected override void BeginProcessing()
-        {
-            base.BeginProcessing();
-
-            if (this.ExportFormat != null)
+            if (this.Properties == AccountPropertySets.All)
             {
-                // Override the property set to match the requirements of the export formats.
-                AccountPropertySets requiredProperties = this.ExportFormat.GetRequiredProperties();
-
-                if (this.Properties == AccountPropertySets.All)
-                {
-                    // The user did not explicitly specify any properties, so we set them to the required ones.
-                    this.Properties = requiredProperties;
-                }
-                else
-                {
-                    // Merge the required properties with the user-specified ones.
-                    this.Properties |= requiredProperties;
-                }
-            }
-
-            // Windows LAPS and legacy LAPS use custom attributes that are not part of the default schema.
-            bool fullSchemaRequired = (this.Properties & AccountPropertySets.LAPS) != AccountPropertySets.None;
-
-            if (fullSchemaRequired)
-            {
-                FetchSchema();
-            }
-        }
-
-        protected override void ProcessRecord()
-        {
-            if (this.ParameterSetName == ParameterSetAll)
-            {
-                this.ReturnAllAccounts();
+                // The user did not explicitly specify any properties, so we set them to the required ones.
+                this.Properties = requiredProperties;
             }
             else
             {
-                this.ReturnSingleAccount();
+                // Merge the required properties with the user-specified ones.
+                this.Properties |= requiredProperties;
             }
         }
-        #endregion Cmdlet Overrides
 
-        #region Helper Methods
+        // Windows LAPS and legacy LAPS use custom attributes that are not part of the default schema.
+        bool fullSchemaRequired = (this.Properties & AccountPropertySets.LAPS) != AccountPropertySets.None;
 
-        protected void ReturnAllAccounts()
+        if (fullSchemaRequired)
         {
-            // Write the initial progress
-            var progress = new ProgressRecord(1, "Account Replication", "Replicating Active Directory objects.");
-            progress.PercentComplete = 0;
-            this.WriteProgress(progress);
-
-            // Update the progress after each replication cycle
-            ReplicationProgressHandler progressReporter = (ReplicationCookie cookie, int processedObjectCount, int totalObjectCount) =>
-            {
-                int percentComplete = (int)(((double)processedObjectCount / (double)totalObjectCount) * 100);
-                // AD's object count estimate is sometimes lower than the actual count, so we cap the value to 100%.
-                progress.PercentComplete = Math.Min(percentComplete, 100);
-                this.WriteProgress(progress);
-            };
-
-            // Automatically infer domain name if no value is provided
-            string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
-
-            // Replicate all accounts
-            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter, this.Properties))
-            {
-                this.WriteObject(account);
-            }
-
-            // Write progress completed
-            progress.RecordType = ProgressRecordType.Completed;
-            this.WriteProgress(progress);
+            FetchSchema();
         }
+    }
 
-        protected void ReturnSingleAccount()
+    protected override void ProcessRecord()
+    {
+        if (this.ParameterSetName == ParameterSetAll)
         {
-            DSAccount account = null;
+            this.ReturnAllAccounts();
+        }
+        else
+        {
+            this.ReturnSingleAccount();
+        }
+    }
+    #endregion Cmdlet Overrides
 
-            switch (this.ParameterSetName)
-            {
-                case ParameterSetByDN:
-                    account = this.ReplicationClient.GetAccount(this.DistinguishedName, this.Properties);
-                    break;
+    #region Helper Methods
 
-                case ParameterSetByName:
-                    var accountName = new NTAccount(this.Domain, this.SamAccountName);
-                    account = this.ReplicationClient.GetAccount(accountName, this.Properties);
-                    break;
+    protected void ReturnAllAccounts()
+    {
+        // Write the initial progress
+        var progress = new ProgressRecord(1, "Account Replication", "Replicating Active Directory objects.");
+        progress.PercentComplete = 0;
+        this.WriteProgress(progress);
 
-                case ParameterSetByGuid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectGuid, this.Properties);
-                    break;
+        // Update the progress after each replication cycle
+        ReplicationProgressHandler progressReporter = (ReplicationCookie cookie, int processedObjectCount, int totalObjectCount) =>
+        {
+            int percentComplete = (int)(((double)processedObjectCount / (double)totalObjectCount) * 100);
+            // AD's object count estimate is sometimes lower than the actual count, so we cap the value to 100%.
+            progress.PercentComplete = Math.Min(percentComplete, 100);
+            this.WriteProgress(progress);
+        };
 
-                case ParameterSetBySid:
-                    account = this.ReplicationClient.GetAccount(this.ObjectSid, this.Properties);
-                    break;
+        // Automatically infer domain name if no value is provided
+        string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
 
-                case ParameterSetByUPN:
-                    var upn = new NTAccount(this.UserPrincipalName);
-                    account = this.ReplicationClient.GetAccount(upn, this.Properties);
-                    break;
-
-                default:
-                    // This should never happen:
-                    throw new PSInvalidOperationException(InvalidParameterSetMessage);
-            }
-
+        // Replicate all accounts
+        foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter, this.Properties))
+        {
             this.WriteObject(account);
         }
 
-        protected void FetchSchema()
-        {
-            // Write the initial progress
-            var progress = new ProgressRecord(2, "Schema Replication", "Replicating Active Directory schema.");
-            progress.PercentComplete = 0;
-            this.WriteProgress(progress);
-
-            // Update the progress after each replication cycle
-            ReplicationProgressHandler progressReporter = (ReplicationCookie cookie, int processedObjectCount, int totalObjectCount) =>
-            {
-                int percentComplete = (int)(((double)processedObjectCount / (double)totalObjectCount) * 100);
-                // AD's object count estimate is sometimes lower than the actual count, so we cap the value to 100%.
-                progress.PercentComplete = Math.Min(percentComplete, 100);
-                this.WriteProgress(progress);
-            };
-
-            // Replicate the schema partition
-            this.ReplicationClient.FetchFullSchema(progressReporter);
-
-            // Write progress completed
-            progress.RecordType = ProgressRecordType.Completed;
-            this.WriteProgress(progress);
-        }
-
-        private new void WriteObject(object sendToPipeline)
-        {
-            if (this.ExportFormat != null)
-            {
-                // Add a virtual type to the object to change the default out-of-band View, e.g., DSInternals.Common.Data.DSAccount#PwDump.
-                PSObject psObject = PSObject.AsPSObject(sendToPipeline);
-                string virtualTypeName = $"{typeof(DSAccount).FullName}#{ExportFormat}";
-                psObject.TypeNames.Insert(0, virtualTypeName);
-                base.WriteObject(psObject);
-            }
-            else
-            {
-                // Pass-through the original object without any changes.
-                base.WriteObject(sendToPipeline);
-            }
-        }
-        #endregion Helper Methods
+        // Write progress completed
+        progress.RecordType = ProgressRecordType.Completed;
+        this.WriteProgress(progress);
     }
+
+    protected void ReturnSingleAccount()
+    {
+        DSAccount account = null;
+
+        switch (this.ParameterSetName)
+        {
+            case ParameterSetByDN:
+                account = this.ReplicationClient.GetAccount(this.DistinguishedName, this.Properties);
+                break;
+
+            case ParameterSetByName:
+                var accountName = new NTAccount(this.Domain, this.SamAccountName);
+                account = this.ReplicationClient.GetAccount(accountName, this.Properties);
+                break;
+
+            case ParameterSetByGuid:
+                account = this.ReplicationClient.GetAccount(this.ObjectGuid, this.Properties);
+                break;
+
+            case ParameterSetBySid:
+                account = this.ReplicationClient.GetAccount(this.ObjectSid, this.Properties);
+                break;
+
+            case ParameterSetByUPN:
+                var upn = new NTAccount(this.UserPrincipalName);
+                account = this.ReplicationClient.GetAccount(upn, this.Properties);
+                break;
+
+            default:
+                // This should never happen:
+                throw new PSInvalidOperationException(InvalidParameterSetMessage);
+        }
+
+        this.WriteObject(account);
+    }
+
+    protected void FetchSchema()
+    {
+        // Write the initial progress
+        var progress = new ProgressRecord(2, "Schema Replication", "Replicating Active Directory schema.");
+        progress.PercentComplete = 0;
+        this.WriteProgress(progress);
+
+        // Update the progress after each replication cycle
+        ReplicationProgressHandler progressReporter = (ReplicationCookie cookie, int processedObjectCount, int totalObjectCount) =>
+        {
+            int percentComplete = (int)(((double)processedObjectCount / (double)totalObjectCount) * 100);
+            // AD's object count estimate is sometimes lower than the actual count, so we cap the value to 100%.
+            progress.PercentComplete = Math.Min(percentComplete, 100);
+            this.WriteProgress(progress);
+        };
+
+        // Replicate the schema partition
+        this.ReplicationClient.FetchFullSchema(progressReporter);
+
+        // Write progress completed
+        progress.RecordType = ProgressRecordType.Completed;
+        this.WriteProgress(progress);
+    }
+
+    private new void WriteObject(object sendToPipeline)
+    {
+        if (this.ExportFormat != null)
+        {
+            // Add a virtual type to the object to change the default out-of-band View, e.g., DSInternals.Common.Data.DSAccount#PwDump.
+            PSObject psObject = PSObject.AsPSObject(sendToPipeline);
+            string virtualTypeName = $"{typeof(DSAccount).FullName}#{ExportFormat}";
+            psObject.TypeNames.Insert(0, virtualTypeName);
+            base.WriteObject(psObject);
+        }
+        else
+        {
+            // Pass-through the original object without any changes.
+            base.WriteObject(sendToPipeline);
+        }
+    }
+    #endregion Helper Methods
 }

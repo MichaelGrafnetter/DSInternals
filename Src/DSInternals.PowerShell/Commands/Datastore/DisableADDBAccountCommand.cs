@@ -1,18 +1,16 @@
-﻿using System;
-using System.Management.Automation;
+﻿using System.Management.Automation;
 
-namespace DSInternals.PowerShell.Commands
+namespace DSInternals.PowerShell.Commands;
+
+[Cmdlet(VerbsLifecycle.Disable, "ADDBAccount")]
+[OutputType("None")]
+public class DisableADDBAccountCommand : ADDBAccountStatusCommandBase
 {
-    [Cmdlet(VerbsLifecycle.Disable, "ADDBAccount")]
-    [OutputType("None")]
-    public class DisableADDBAccountCommand : ADDBAccountStatusCommandBase
+    protected override bool Enabled
     {
-        protected override bool Enabled
+        get
         {
-            get
-            {
-                return false;
-            }
+            return false;
         }
     }
 }

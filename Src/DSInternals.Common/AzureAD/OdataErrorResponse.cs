@@ -1,21 +1,19 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace DSInternals.Common.AzureAD
+namespace DSInternals.Common.AzureAD;
+
+public class OdataErrorResponse
 {
-    public class OdataErrorResponse
+    [JsonPropertyName("odata.error")]
+    [JsonRequired]
+    public ODataError Error
     {
-        [JsonPropertyName("odata.error")]
-        [JsonRequired]
-        public ODataError Error
-        {
-            get;
-            private set;
-        }
+        get;
+        private set;
+    }
 
-        public Exception GetException()
-        {
-            return new GraphApiException(this.Error);
-        }
+    public Exception GetException()
+    {
+        return new GraphApiException(this.Error);
     }
 }

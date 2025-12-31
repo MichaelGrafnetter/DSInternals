@@ -1,10 +1,9 @@
 ﻿
-namespace DSInternals.Common.Schema
+namespace DSInternals.Common.Schema;
+
+public enum LinkType
 {
-    public enum LinkType
-    {
-        None = 0,
-        ForwardLink,
-        BackLink
-    }
+    None = 0,
+    ForwardLink,
+    BackLink
 }

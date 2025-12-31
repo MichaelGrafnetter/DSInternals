@@ -1,24 +1,23 @@
 ﻿using System.Management.Automation;
 using DSInternals.DataStore;
 
-namespace DSInternals.PowerShell.Commands
-{
-    [Cmdlet(VerbsCommon.Get, "ADDBDnsZone")]
-    [OutputType(typeof(string))]
-    public class GetADDBDnsZoneCommand : ADDBCommandBase
-    {
-        protected override void BeginProcessing()
-        {
-            base.BeginProcessing();
+namespace DSInternals.PowerShell.Commands;
 
-            using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+[Cmdlet(VerbsCommon.Get, "ADDBDnsZone")]
+[OutputType(typeof(string))]
+public class GetADDBDnsZoneCommand : ADDBCommandBase
+{
+    protected override void BeginProcessing()
+    {
+        base.BeginProcessing();
+
+        using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+        {
+            foreach (string dnsZone in directoryAgent.GetDnsZone())
             {
-                foreach (string dnsZone in directoryAgent.GetDnsZone())
-                {
-                    this.WriteObject(dnsZone);
-                }
+                this.WriteObject(dnsZone);
             }
-            // TODO: Exception handling
         }
+        // TODO: Exception handling
     }
 }

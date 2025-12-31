@@ -1,18 +1,13 @@
-﻿namespace DSInternals.Common.Cryptography.Test
-{
-    using System;
-    using System.IO;
-    using System.Text;
-    using DSInternals.Common.Cryptography;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Text;
 
-    [TestClass]
-    public class SortedFileSearcherTester
-    {
-        /// <summary>
-        /// Sorted password hashes sample from HaveIBeenPwned
-        /// </summary>
-        private static readonly string PwnedPasswordHashesOrderedByHash =
+namespace DSInternals.Common.Cryptography.Test;
+[TestClass]
+public class SortedFileSearcherTester
+{
+    /// <summary>
+    /// Sorted password hashes sample from HaveIBeenPwned
+    /// </summary>
+    private static readonly string PwnedPasswordHashesOrderedByHash =
 @"1AE188AB6DF35626E09C77F2880CAD75:1
 1AE188AE54DEEE65F98EA8DAF5C06389:5
 1AE188B2771D3DD69D0F40F56042C609:3
@@ -53,10 +48,10 @@
 1AE189A260C9DDA7E0F5FEF34F92FF19:4
 1AE189A6FFF7DB51548F12F063491E36:1";
 
-        /// <summary>
-        /// Unsorted password hashes sample from HaveIBeenPwned
-        /// </summary>
-        private static readonly string PwnedPasswordHashesOrderedByCount =
+    /// <summary>
+    /// Unsorted password hashes sample from HaveIBeenPwned
+    /// </summary>
+    private static readonly string PwnedPasswordHashesOrderedByCount =
 @"32ED87BDB5FDC5E9CBA88547376818D4:22390492
 C22B315C040AE6E0EFEE3518D830362B:7481454
 2D20D252A479F485CDF5E171D93985BF:3752262
@@ -71,10 +66,10 @@ F2477A144DFF4F216AB81F2AC3E3207D:967018
 69CBE3ACBC48A3A289E8CDB000C2B7A8:965645
 F7EB9C06FAFAA23C4BCF22BA6781C1E2:945785";
 
-        /// <summary>
-        /// Sample input for better debugging experience
-        /// </summary>
-        private static readonly string PhoneticAlphabet =
+    /// <summary>
+    /// Sample input for better debugging experience
+    /// </summary>
+    private static readonly string PhoneticAlphabet =
 @"Alpha
 Bravo
 Charlie
@@ -102,42 +97,123 @@ X-ray
 Yankee
 Zulu";
 
-        [TestMethod]
-        [Timeout(5000)]
-        public void SortedFileSearcher_StreamInput_Words()
+    [TestMethod]
+    [Timeout(5000)]
+    public void SortedFileSearcher_StreamInput_Words()
+    {
+        byte[] binaryInput = Encoding.ASCII.GetBytes(PhoneticAlphabet);
+        using (var stream = new MemoryStream(binaryInput))
         {
-            byte[] binaryInput = Encoding.ASCII.GetBytes(PhoneticAlphabet);
-            using (var stream = new MemoryStream(binaryInput))
+            var searcher = new SortedFileSearcher(stream);
+
+            // Check that we can find all the words that are contained in the input
+            string[] words = PhoneticAlphabet.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            foreach (string word in words)
             {
-                var searcher = new SortedFileSearcher(stream);
+                Assert.IsTrue(searcher.FindString(word));
+            }
 
-                // Check that we can find all the words that are contained in the input
-                string[] words = PhoneticAlphabet.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-                foreach (string word in words)
-                {
-                    Assert.IsTrue(searcher.FindString(word));
-                }
-
-                // Test some non-existing words
-                Assert.IsFalse(searcher.FindString("AAAA"));
-                Assert.IsFalse(searcher.FindString("ZZZZ"));
-                string[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Split();
-                foreach (string letter in letters)
-                {
-                    Assert.IsFalse(searcher.FindString(letter));
-                }
+            // Test some non-existing words
+            Assert.IsFalse(searcher.FindString("AAAA"));
+            Assert.IsFalse(searcher.FindString("ZZZZ"));
+            string[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Split();
+            foreach (string letter in letters)
+            {
+                Assert.IsFalse(searcher.FindString(letter));
             }
         }
+    }
 
-        [TestMethod]
-        [Timeout(5000)]
-        public void SortedFileSearcher_StreamInput_SortedHashes()
+    [TestMethod]
+    [Timeout(5000)]
+    public void SortedFileSearcher_StreamInput_SortedHashes()
+    {
+        byte[] binaryInput = Encoding.ASCII.GetBytes(PwnedPasswordHashesOrderedByHash);
+        using (var stream = new MemoryStream(binaryInput))
         {
-            byte[] binaryInput = Encoding.ASCII.GetBytes(PwnedPasswordHashesOrderedByHash);
-            using (var stream = new MemoryStream(binaryInput))
-            {
-                var searcher = new SortedFileSearcher(stream);
+            var searcher = new SortedFileSearcher(stream);
 
+            // Find first
+            Assert.IsTrue(searcher.FindString("1AE188AB6DF35626E09C77F2880CAD75"));
+
+            // Find last
+            Assert.IsTrue(searcher.FindString("1AE189A6FFF7DB51548F12F063491E36"));
+
+            // Find middle
+            Assert.IsTrue(searcher.FindString("1AE188FF3AF08946C275C9A7E2B894F2"));
+
+            // Find non-existing
+            Assert.IsFalse(searcher.FindString("F7EB9C06FAFAA23C4BCF22BA6781C1E2"));
+        }
+    }
+
+    [TestMethod]
+    [Timeout(5000)]
+    public void SortedFileSearcher_StreamInput_UnsortedHashes()
+    {
+        // We just need to test that this does not end with an endless loop
+
+        byte[] binaryInput = Encoding.ASCII.GetBytes(PwnedPasswordHashesOrderedByCount);
+        using (var stream = new MemoryStream(binaryInput))
+        {
+            using (var searcher = new SortedFileSearcher(stream))
+            {
+                searcher.FindString("1AE188AB6DF35626E09C77F2880CAD75");
+                searcher.FindString("69CBE3ACBC48A3A289E8CDB000C2B7A8");
+                searcher.FindString("1AE188FF3AF08946C275C9A7E2B894F2");
+                searcher.FindString("F7EB9C06FAFAA23C4BCF22BA6781C1E2");
+            }
+        }
+    }
+
+    [TestMethod]
+    [Timeout(5000)]
+    public void SortedFileSearcher_StreamInput_SingleLine()
+    {
+        byte[] binaryInput = Encoding.ASCII.GetBytes("Gamma");
+        using (var stream = new MemoryStream(binaryInput))
+        {
+            using (var searcher = new SortedFileSearcher(stream))
+            {
+                Assert.IsTrue(searcher.FindString("Gamma"));
+                Assert.IsFalse(searcher.FindString("Alpha"));
+                Assert.IsFalse(searcher.FindString("Omega"));
+            }
+        }
+    }
+
+    [TestMethod]
+    [Timeout(5000)]
+    public void SortedFileSearcher_StreamInput_Empty()
+    {
+        byte[] input = new byte[0];
+        using (var stream = new MemoryStream(input))
+        {
+            using (var searcher = new SortedFileSearcher(stream))
+            {
+                bool result = searcher.FindString("F7EB9C06FAFAA23C4BCF22BA6781C1E2");
+                Assert.IsFalse(result);
+            }
+        }
+    }
+
+    [TestMethod]
+    [Timeout(5000)]
+    public void SortedFileSearcher_StreamInput_Null()
+    {
+        Assert.ThrowsExactly<ArgumentNullException>(() => new SortedFileSearcher((Stream)null));
+    }
+
+    [TestMethod]
+    [Timeout(5000)]
+    public void SortedFileSearcher_FileInput()
+    {
+        string hashesFile = Path.GetTempFileName();
+        try
+        {
+            File.WriteAllText(hashesFile, PwnedPasswordHashesOrderedByHash);
+            using (var searcher = new SortedFileSearcher(hashesFile))
+            {
                 // Find first
                 Assert.IsTrue(searcher.FindString("1AE188AB6DF35626E09C77F2880CAD75"));
 
@@ -147,101 +223,19 @@ Zulu";
                 // Find middle
                 Assert.IsTrue(searcher.FindString("1AE188FF3AF08946C275C9A7E2B894F2"));
 
-                // Find non-existing
+                // Find non-existing (before first)
+                Assert.IsFalse(searcher.FindString("0AE188AB6DF35626E09C77F2880CAD75"));
+
+                // Find non-existing (in the middle)
+                Assert.IsFalse(searcher.FindString("1AE188FF3AF08946C275C9A7E2B894F1"));
+
+                // Find non-existing (after last)
                 Assert.IsFalse(searcher.FindString("F7EB9C06FAFAA23C4BCF22BA6781C1E2"));
             }
         }
-
-        [TestMethod]
-        [Timeout(5000)]
-        public void SortedFileSearcher_StreamInput_UnsortedHashes()
+        finally
         {
-            // We just need to test that this does not end with an endless loop
-
-            byte[] binaryInput = Encoding.ASCII.GetBytes(PwnedPasswordHashesOrderedByCount);
-            using (var stream = new MemoryStream(binaryInput))
-            {
-                using (var searcher = new SortedFileSearcher(stream))
-                {
-                    searcher.FindString("1AE188AB6DF35626E09C77F2880CAD75");
-                    searcher.FindString("69CBE3ACBC48A3A289E8CDB000C2B7A8");
-                    searcher.FindString("1AE188FF3AF08946C275C9A7E2B894F2");
-                    searcher.FindString("F7EB9C06FAFAA23C4BCF22BA6781C1E2");
-                }
-            }
-        }
-
-        [TestMethod]
-        [Timeout(5000)]
-        public void SortedFileSearcher_StreamInput_SingleLine()
-        {
-            byte[] binaryInput = Encoding.ASCII.GetBytes("Gamma");
-            using (var stream = new MemoryStream(binaryInput))
-            {
-                using (var searcher = new SortedFileSearcher(stream))
-                {
-                    Assert.IsTrue(searcher.FindString("Gamma"));
-                    Assert.IsFalse(searcher.FindString("Alpha"));
-                    Assert.IsFalse(searcher.FindString("Omega"));
-                }
-            }
-        }
-
-        [TestMethod]
-        [Timeout(5000)]
-        public void SortedFileSearcher_StreamInput_Empty()
-        {
-            byte[] input = new byte[0];
-            using (var stream = new MemoryStream(input))
-            {
-                using (var searcher = new SortedFileSearcher(stream))
-                {
-                    bool result = searcher.FindString("F7EB9C06FAFAA23C4BCF22BA6781C1E2");
-                    Assert.IsFalse(result);
-                }
-            }
-        }
-
-        [TestMethod]
-        [Timeout(5000)]
-        public void SortedFileSearcher_StreamInput_Null()
-        {
-            Assert.ThrowsExactly<ArgumentNullException>(() => new SortedFileSearcher((Stream)null));
-        }
-
-        [TestMethod]
-        [Timeout(5000)]
-        public void SortedFileSearcher_FileInput()
-        {
-            string hashesFile = Path.GetTempFileName();
-            try
-            {
-                File.WriteAllText(hashesFile, PwnedPasswordHashesOrderedByHash);
-                using (var searcher = new SortedFileSearcher(hashesFile))
-                {
-                    // Find first
-                    Assert.IsTrue(searcher.FindString("1AE188AB6DF35626E09C77F2880CAD75"));
-
-                    // Find last
-                    Assert.IsTrue(searcher.FindString("1AE189A6FFF7DB51548F12F063491E36"));
-
-                    // Find middle
-                    Assert.IsTrue(searcher.FindString("1AE188FF3AF08946C275C9A7E2B894F2"));
-
-                    // Find non-existing (before first)
-                    Assert.IsFalse(searcher.FindString("0AE188AB6DF35626E09C77F2880CAD75"));
-
-                    // Find non-existing (in the middle)
-                    Assert.IsFalse(searcher.FindString("1AE188FF3AF08946C275C9A7E2B894F1"));
-
-                    // Find non-existing (after last)
-                    Assert.IsFalse(searcher.FindString("F7EB9C06FAFAA23C4BCF22BA6781C1E2"));
-                }
-            }
-            finally
-            {
-                File.Delete(hashesFile);
-            }
+            File.Delete(hashesFile);
         }
     }
 }

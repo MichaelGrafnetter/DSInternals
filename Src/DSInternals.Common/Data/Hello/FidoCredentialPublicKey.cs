@@ -1,8 +1,6 @@
-﻿namespace DSInternals.Common.Data.Fido;
+﻿using System.Security.Cryptography;
 
-using System;
-using System.Security.Cryptography;
-
+namespace DSInternals.Common.Data.Fido;
 /// <summary>
 /// Represents a FIDO2/WebAuthn credential public key encoded in COSE format.
 /// </summary>

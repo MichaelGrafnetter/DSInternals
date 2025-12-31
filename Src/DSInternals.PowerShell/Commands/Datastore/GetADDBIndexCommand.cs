@@ -1,16 +1,14 @@
-﻿using System;
-using System.Management.Automation;
+﻿using System.Management.Automation;
 
-namespace DSInternals.PowerShell.Commands
+namespace DSInternals.PowerShell.Commands;
+
+[Cmdlet(VerbsCommon.Get, "ADDBIndex")]
+// TODO: output type
+[OutputType("None")]
+public class GetADDBIndexCommand : ADDBCommandBase
 {
-    [Cmdlet(VerbsCommon.Get, "ADDBIndex")]
-    // TODO: output type
-    [OutputType("None")]
-    public class GetADDBIndexCommand : ADDBCommandBase
+    protected override void ProcessRecord()
     {
-        protected override void ProcessRecord()
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
     }
 }

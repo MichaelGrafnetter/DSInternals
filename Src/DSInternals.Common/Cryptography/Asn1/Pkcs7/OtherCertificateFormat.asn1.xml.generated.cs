@@ -5,49 +5,48 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Formats.Asn1;
 
-namespace DSInternals.Common.Cryptography.Asn1.Pkcs7
+namespace DSInternals.Common.Cryptography.Asn1.Pkcs7;
+
+[StructLayout(LayoutKind.Sequential)]
+internal partial struct OtherCertificateFormat
 {
-    [StructLayout(LayoutKind.Sequential)]
-    internal partial struct OtherCertificateFormat
+    internal string OtherCertFormat;
+    internal ReadOnlyMemory<byte> OtherCert;
+  
+
+    internal static OtherCertificateFormat Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
-        internal string OtherCertFormat;
-        internal ReadOnlyMemory<byte> OtherCert;
-      
-
-        internal static OtherCertificateFormat Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
-        {
-            return Decode(Asn1Tag.Sequence, encoded, ruleSet);
-        }
+        return Decode(Asn1Tag.Sequence, encoded, ruleSet);
+    }
+    
+    internal static OtherCertificateFormat Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+    {
+        AsnReader reader = new AsnReader(encoded, ruleSet);
         
-        internal static OtherCertificateFormat Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
-        {
-            AsnReader reader = new AsnReader(encoded, ruleSet);
-            
-            Decode(reader, expectedTag, out OtherCertificateFormat decoded);
-            reader.ThrowIfNotEmpty();
-            return decoded;
-        }
+        Decode(reader, expectedTag, out OtherCertificateFormat decoded);
+        reader.ThrowIfNotEmpty();
+        return decoded;
+    }
 
-        internal static void Decode(AsnReader reader, out OtherCertificateFormat decoded)
-        {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
+    internal static void Decode(AsnReader reader, out OtherCertificateFormat decoded)
+    {
+        if (reader == null)
+            throw new ArgumentNullException(nameof(reader));
 
-            Decode(reader, Asn1Tag.Sequence, out decoded);
-        }
+        Decode(reader, Asn1Tag.Sequence, out decoded);
+    }
 
-        internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out OtherCertificateFormat decoded)
-        {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
+    internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out OtherCertificateFormat decoded)
+    {
+        if (reader == null)
+            throw new ArgumentNullException(nameof(reader));
 
-            decoded = default;
-            AsnReader sequenceReader = reader.ReadSequence(expectedTag);
-            
-            decoded.OtherCertFormat = sequenceReader.ReadObjectIdentifier();
-            decoded.OtherCert = sequenceReader.ReadEncodedValue();
+        decoded = default;
+        AsnReader sequenceReader = reader.ReadSequence(expectedTag);
+        
+        decoded.OtherCertFormat = sequenceReader.ReadObjectIdentifier();
+        decoded.OtherCert = sequenceReader.ReadEncodedValue();
 
-            sequenceReader.ThrowIfNotEmpty();
-        }
+        sequenceReader.ThrowIfNotEmpty();
     }
 }

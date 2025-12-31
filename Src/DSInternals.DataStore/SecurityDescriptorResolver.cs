@@ -4,10 +4,9 @@ using System.Security.Cryptography;
 using DSInternals.Common;
 using Microsoft.Database.Isam;
 
-namespace DSInternals.DataStore;
-
 using SecurityDescriptorIdentifier = long;
 
+namespace DSInternals.DataStore;
 public class SecurityDescriptorResolver : IDisposable
 {
     private const string SecurityDescriptorIdentifierColumn = "sd_id";

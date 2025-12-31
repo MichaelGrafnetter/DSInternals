@@ -1,16 +1,14 @@
-﻿using System;
-using System.Security.Principal;
+﻿using System.Security.Principal;
 
-namespace DSInternals.Common
+namespace DSInternals.Common;
+
+public static class NTAccountExtensions
 {
-    public static class NTAccountExtensions
-    {
-        private static readonly char[] DomainNameSeparator = { '\\' };
+    private static readonly char[] DomainNameSeparator = { '\\' };
 
-        public static string NetBIOSDomainName(this NTAccount account)
-        {
-            string[] parts = account.Value.Split(DomainNameSeparator, 2);
-            return parts.Length == 2 ? parts[0] : String.Empty;
-        }
+    public static string NetBIOSDomainName(this NTAccount account)
+    {
+        string[] parts = account.Value.Split(DomainNameSeparator, 2);
+        return parts.Length == 2 ? parts[0] : String.Empty;
     }
 }

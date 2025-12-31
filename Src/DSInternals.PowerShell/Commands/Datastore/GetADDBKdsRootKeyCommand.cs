@@ -1,54 +1,51 @@
-﻿namespace DSInternals.PowerShell.Commands
+﻿using System.Management.Automation;
+using DSInternals.Common.Data;
+using DSInternals.Common.Exceptions;
+using DSInternals.DataStore;
+
+namespace DSInternals.PowerShell.Commands;
+[Cmdlet(VerbsCommon.Get, "ADDBKdsRootKey", DefaultParameterSetName = GetADDBKdsRootKeyCommand.AllKeysParameterSet)]
+[OutputType(typeof(DSInternals.Common.Data.KdsRootKey))]
+public class GetADDBKdsRootKeyCommand : ADDBCommandBase
 {
-    using System;
-    using System.Management.Automation;
-    using DSInternals.Common.Data;
-    using DSInternals.Common.Exceptions;
-    using DSInternals.DataStore;
+    private const string AllKeysParameterSet = "All";
+    private const string ByGuidParameterSet = "ByGuid";
 
-    [Cmdlet(VerbsCommon.Get, "ADDBKdsRootKey", DefaultParameterSetName = GetADDBKdsRootKeyCommand.AllKeysParameterSet)]
-    [OutputType(typeof(DSInternals.Common.Data.KdsRootKey))]
-    public class GetADDBKdsRootKeyCommand : ADDBCommandBase
+    [Parameter(Mandatory = true, ParameterSetName = ByGuidParameterSet, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, Position = 1)]
+    [Alias("Id", "KeyId")]
+    public Guid RootKeyId { get; set; }
+
+    [Parameter(Mandatory = false, ParameterSetName = AllKeysParameterSet)]
+    public SwitchParameter All { get; set; }
+
+    protected override void ProcessRecord()
     {
-        private const string AllKeysParameterSet = "All";
-        private const string ByGuidParameterSet = "ByGuid";
+        base.ProcessRecord();
 
-        [Parameter(Mandatory = true, ParameterSetName = ByGuidParameterSet, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true, Position = 1)]
-        [Alias("Id", "KeyId")]
-        public Guid RootKeyId { get; set; }
+        bool findSingle = this.ParameterSetName == ByGuidParameterSet;
+        DatastoreRootKeyResolver resolver = new(this.DirectoryContext);
 
-        [Parameter(Mandatory = false, ParameterSetName = AllKeysParameterSet)]
-        public SwitchParameter All { get; set; }
-
-        protected override void ProcessRecord()
+        if (findSingle)
         {
-            base.ProcessRecord();
+            KdsRootKey? rootKey = resolver.GetKdsRootKey(this.RootKeyId);
 
-            bool findSingle = this.ParameterSetName == ByGuidParameterSet;
-            DatastoreRootKeyResolver resolver = new(this.DirectoryContext);
-
-            if (findSingle)
+            if (rootKey != null)
             {
-                KdsRootKey? rootKey = resolver.GetKdsRootKey(this.RootKeyId);
-
-                if (rootKey != null)
-                {
-                    this.WriteObject(rootKey);
-                }
-                else
-                {
-                    // No key with the given ID has been found. Write non-terminating error.
-                    var exception = new DirectoryObjectNotFoundException(this.RootKeyId);
-                    var error = new ErrorRecord(exception, "Database_KdsRootKeyIdNotFound", ErrorCategory.ObjectNotFound, this.RootKeyId);
-                    this.WriteError(error);
-                }
+                this.WriteObject(rootKey);
             }
             else
             {
-                foreach (var rootKey in resolver.GetKdsRootKeys())
-                {
-                    this.WriteObject(rootKey);
-                }
+                // No key with the given ID has been found. Write non-terminating error.
+                var exception = new DirectoryObjectNotFoundException(this.RootKeyId);
+                var error = new ErrorRecord(exception, "Database_KdsRootKeyIdNotFound", ErrorCategory.ObjectNotFound, this.RootKeyId);
+                this.WriteError(error);
+            }
+        }
+        else
+        {
+            foreach (var rootKey in resolver.GetKdsRootKeys())
+            {
+                this.WriteObject(rootKey);
             }
         }
     }

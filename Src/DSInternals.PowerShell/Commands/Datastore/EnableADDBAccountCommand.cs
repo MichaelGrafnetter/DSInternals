@@ -1,17 +1,16 @@
 ﻿using System.Management.Automation;
 
-namespace DSInternals.PowerShell.Commands
+namespace DSInternals.PowerShell.Commands;
+
+[Cmdlet(VerbsLifecycle.Enable, "ADDBAccount")]
+[OutputType("None")]
+public class EnableADDBAccountCommand : ADDBAccountStatusCommandBase
 {
-    [Cmdlet(VerbsLifecycle.Enable, "ADDBAccount")]
-    [OutputType("None")]
-    public class EnableADDBAccountCommand : ADDBAccountStatusCommandBase
+    protected override bool Enabled
     {
-        protected override bool Enabled
+        get
         {
-            get
-            {
-                return true;
-            }
+            return true;
         }
     }
 }

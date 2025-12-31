@@ -1,15 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿namespace DSInternals.DataStore.Test;
 
-namespace DSInternals.DataStore.Test
+[TestClass]
+public class DistinguishedNameResolverTester
 {
-    [TestClass]
-    public class DistinguishedNameResolverTester
+    [TestMethod]
+    public void TestMethod1()
     {
-        [TestMethod]
-        public void TestMethod1()
-        {
-            throw new AssertInconclusiveException();
-        }
+        throw new AssertInconclusiveException();
     }
 }

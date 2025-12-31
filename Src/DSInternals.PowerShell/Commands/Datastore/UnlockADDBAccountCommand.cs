@@ -1,48 +1,46 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Management.Automation;
 using DSInternals.Common.Data;
 
-namespace DSInternals.PowerShell.Commands
+namespace DSInternals.PowerShell.Commands;
+
+[Cmdlet(VerbsCommon.Unlock, "ADDBAccount")]
+[OutputType("None")]
+public class UnlockADDBAccountCommand : ADDBModifyPrincipalCommandBase
 {
-    [Cmdlet(VerbsCommon.Unlock, "ADDBAccount")]
-    [OutputType("None")]
-    public class UnlockADDBAccountCommand : ADDBModifyPrincipalCommandBase
+    protected override void ProcessRecord()
     {
-        protected override void ProcessRecord()
+        string verboseMessage = "Unlocking account {0}.";
+        bool hasChanged;
+
+        switch (this.ParameterSetName)
         {
-            string verboseMessage = "Unlocking account {0}.";
-            bool hasChanged;
+            case ParameterSetByDN:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.DistinguishedName));
+                var dn = new DistinguishedName(this.DistinguishedName);
+                hasChanged = this.DirectoryAgent.UnlockAccount(dn, this.SkipMetaUpdate);
+                break;
 
-            switch (this.ParameterSetName)
-            {
-                case ParameterSetByDN:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.DistinguishedName));
-                    var dn = new DistinguishedName(this.DistinguishedName);
-                    hasChanged = this.DirectoryAgent.UnlockAccount(dn, this.SkipMetaUpdate);
-                    break;
+            case ParameterSetByName:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.SamAccountName));
+                hasChanged = this.DirectoryAgent.UnlockAccount(this.SamAccountName, this.SkipMetaUpdate);
+                break;
 
-                case ParameterSetByName:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.SamAccountName));
-                    hasChanged = this.DirectoryAgent.UnlockAccount(this.SamAccountName, this.SkipMetaUpdate);
-                    break;
+            case ParameterSetByGuid:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectGuid));
+                hasChanged = this.DirectoryAgent.UnlockAccount(this.ObjectGuid, this.SkipMetaUpdate);
+                break;
 
-                case ParameterSetByGuid:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectGuid));
-                    hasChanged = this.DirectoryAgent.UnlockAccount(this.ObjectGuid, this.SkipMetaUpdate);
-                    break;
+            case ParameterSetBySid:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectSid));
+                hasChanged = this.DirectoryAgent.UnlockAccount(this.ObjectSid, this.SkipMetaUpdate);
+                break;
 
-                case ParameterSetBySid:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectSid));
-                    hasChanged = this.DirectoryAgent.UnlockAccount(this.ObjectSid, this.SkipMetaUpdate);
-                    break;
-
-                default:
-                    // This should never happen:
-                    throw new PSInvalidOperationException(InvalidParameterSetMessage);
-            }
-
-            this.WriteVerboseResult(hasChanged);
+            default:
+                // This should never happen:
+                throw new PSInvalidOperationException(InvalidParameterSetMessage);
         }
+
+        this.WriteVerboseResult(hasChanged);
     }
 }

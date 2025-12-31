@@ -1,150 +1,146 @@
-﻿
-using System;
-using DSInternals.Common;
-namespace DSInternals.DataStore
+﻿namespace DSInternals.DataStore;
+
+/// <summary>
+/// Database setting flags stored in the hiddentable.
+/// </summary>
+public class DatabaseFlags
 {
-    /// <summary>
-    /// Database setting flags stored in the hiddentable.
-    /// </summary>
-    public class DatabaseFlags
+    private const int AuxClassOffset = 0;
+    private const int SDConversionRequiredOffset = 1;
+    private const int RootGUIDUpdatedOffset = 2;
+    private const int ADAMDatabaseOffset = 3;
+    private const int ASCIIIndicesRebuiltOffset = 4;
+    private const int ShowInABArrayRebuildOffset = 5;
+    private const int UpdateNCTypeRequiredOffset = 6;
+    private const int LinkQuotaUSNOffset = 7;
+    private const int OldStructureSize = 200;
+    private const int NewStructureSize = 192;
+    private const int DatabaseGUIDOffset = NewStructureSize - 16;
+
+    private byte[] binaryFlags;
+
+    public DatabaseFlags(byte[] binaryFlags)
     {
-        private const int AuxClassOffset = 0;
-        private const int SDConversionRequiredOffset = 1;
-        private const int RootGUIDUpdatedOffset = 2;
-        private const int ADAMDatabaseOffset = 3;
-        private const int ASCIIIndicesRebuiltOffset = 4;
-        private const int ShowInABArrayRebuildOffset = 5;
-        private const int UpdateNCTypeRequiredOffset = 6;
-        private const int LinkQuotaUSNOffset = 7;
-        private const int OldStructureSize = 200;
-        private const int NewStructureSize = 192;
-        private const int DatabaseGUIDOffset = NewStructureSize - 16;
+        ArgumentNullException.ThrowIfNull(binaryFlags);
+        this.binaryFlags = binaryFlags;
+    }
 
-        private byte[] binaryFlags;
-
-        public DatabaseFlags(byte[] binaryFlags)
+    private bool HasFlag(int offset)
+    {
+        byte value = this.binaryFlags[offset];
+        // The value is curiously stored as char.
+        switch ((char)value)
         {
-            ArgumentNullException.ThrowIfNull(binaryFlags);
-            this.binaryFlags = binaryFlags;
+            case '1':
+                return true;
+            case '0':
+            case '\0':
+                return false;
+            default:
+                // TODO: Exception type
+                throw new Exception("Unknown flag value");
         }
+    }
 
-        private bool HasFlag(int offset)
+    /// <summary>
+    ///  Indexes used into this array.
+    /// </summary>
+    public bool AuxClass
+    {
+        get
         {
-            byte value = this.binaryFlags[offset];
-            // The value is curiously stored as char.
-            switch ((char)value)
-            {
-                case '1':
-                    return true;
-                case '0':
-                case '\0':
-                    return false;
-                default:
-                    // TODO: Exception type
-                    throw new Exception("Unknown flag value");
-            }
+            return this.HasFlag(AuxClassOffset);
         }
+    }
 
-        /// <summary>
-        ///  Indexes used into this array.
-        /// </summary>
-        public bool AuxClass
+    /// <summary>
+    /// Set if SDs need to be updated (when an old DIT is detected without SD table)
+    /// </summary>
+    public bool SDConversionRequired
+    {
+        get
         {
-            get
-            {
-                return this.HasFlag(AuxClassOffset);
-            }
+            return this.HasFlag(SDConversionRequiredOffset);
         }
+    }
 
-        /// <summary>
-        /// Set if SDs need to be updated (when an old DIT is detected without SD table)
-        /// </summary>
-        public bool SDConversionRequired
+    /// <summary>
+    /// Root DNT GUID was updated.
+    /// </summary>
+    public bool RootGUIDUpdated
+    {
+        get
         {
-            get
-            {
-                return this.HasFlag(SDConversionRequiredOffset);
-            }
+            return this.HasFlag(RootGUIDUpdatedOffset);
         }
+    }
 
-        /// <summary>
-        /// Root DNT GUID was updated.
-        /// </summary>
-        public bool RootGUIDUpdated
+    /// <summary>
+    /// ADAM database.
+    /// </summary>
+    public bool ADAMDatabase
+    {
+        get
         {
-            get
-            {
-                return this.HasFlag(RootGUIDUpdatedOffset);
-            }
+            return this.HasFlag(ADAMDatabaseOffset);
         }
+    }
 
-        /// <summary>
-        /// ADAM database.
-        /// </summary>
-        public bool ADAMDatabase
+    /// <summary>
+    /// Win2k3 SP1 required rebuilt ASCII indices, this indicates that has been done.
+    /// </summary>
+    public bool ASCIIIndicesRebuilt
+    {
+        get
         {
-            get
-            {
-                return this.HasFlag(ADAMDatabaseOffset);
-            }
+            return this.HasFlag(ASCIIIndicesRebuiltOffset);
         }
+    }
 
-        /// <summary>
-        /// Win2k3 SP1 required rebuilt ASCII indices, this indicates that has been done.
-        /// </summary>
-        public bool ASCIIIndicesRebuilt
+    /// <summary>
+    /// Win2k3 SP1 to LH upgrade requires rebuild of showInAddressBookArray column.
+    /// </summary>
+    public bool ShowInABArrayRebuild
+    {
+        get
         {
-            get
-            {
-                return this.HasFlag(ASCIIIndicesRebuiltOffset);
-            }
+            return this.HasFlag(ShowInABArrayRebuildOffset);
         }
+    }
 
-        /// <summary>
-        /// Win2k3 SP1 to LH upgrade requires rebuild of showInAddressBookArray column.
-        /// </summary>
-        public bool ShowInABArrayRebuild
+    /// <summary>
+    /// Pre-LH to LH upgrade requires addition of msds-NCType.
+    /// </summary>
+    public bool UpdateNCTypeRequired
+    {
+        get
         {
-            get
-            {
-                return this.HasFlag(ShowInABArrayRebuildOffset);
-            }
+            return this.HasFlag(UpdateNCTypeRequiredOffset);
         }
+    }
 
-        /// <summary>
-        /// Pre-LH to LH upgrade requires addition of msds-NCType.
-        /// </summary>
-        public bool UpdateNCTypeRequired
+    /// <summary>
+    /// Link quota feature start USN in DBFLAGS.
+    /// </summary>
+    public long LinkQuotaUSN
+    {
+        get
         {
-            get
-            {
-                return this.HasFlag(UpdateNCTypeRequiredOffset);
-            }
+            return BitConverter.ToInt64(this.binaryFlags, LinkQuotaUSNOffset);
         }
+    }
 
-        /// <summary>
-        /// Link quota feature start USN in DBFLAGS.
-        /// </summary>
-        public long LinkQuotaUSN
+    /// <summary>
+    /// The database GUID
+    /// </summary>
+    public Guid? DatabaseGUID
+    {
+        get
         {
-            get
-            {
-                return BitConverter.ToInt64(this.binaryFlags, LinkQuotaUSNOffset);
-            }
-        }
-
-        /// <summary>
-        /// The database GUID
-        /// </summary>
-        public Guid? DatabaseGUID
-        {
-            get
-            {
-                // Contains GUID in the last 16B in newer database versions.
-                // Old size is 200 bytes, new size is 192 bytes.
-                // TODO: Implement database GUID retrieval.
-                throw new NotImplementedException();
-            }
+            // Contains GUID in the last 16B in newer database versions.
+            // Old size is 200 bytes, new size is 192 bytes.
+            // TODO: Implement database GUID retrieval.
+            throw new NotImplementedException();
         }
     }
 }

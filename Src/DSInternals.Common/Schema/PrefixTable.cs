@@ -2,8 +2,6 @@
 using System.Numerics;
 using System.Text;
 
-namespace DSInternals.Common.Schema;
-
 /// <summary>
 /// Any OID-valued quantity is stored as a 32-bit unsigned integer.
 /// </summary>
@@ -11,6 +9,7 @@ using ATTRTYP = uint;
 
 using PrefixIndex = ushort;
 
+namespace DSInternals.Common.Schema;
 public class PrefixTable
 {
     public const int LastBuiltInPrefixIndex = 38;

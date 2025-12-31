@@ -2,10 +2,9 @@
 using Microsoft.Database.Isam;
 using Microsoft.Isam.Esent.Interop;
 
-namespace DSInternals.DataStore;
-
 using NATIVE_UNICODEINDEX = Windows.Win32.Storage.Jet.JET_UNICODEINDEX;
 
+namespace DSInternals.DataStore;
 public class DirectoryContext : IDisposable
 {
     private const string JetInstanceNameFormat = "DSInternals-{0:D}";

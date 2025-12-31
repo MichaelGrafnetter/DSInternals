@@ -1,30 +1,28 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace DSInternals.Common.AzureAD
+namespace DSInternals.Common.AzureAD;
+
+public class OdataPagedResponse<T>
 {
-    public class OdataPagedResponse<T>
+    [JsonPropertyName("value")]
+    public List<T> Items
     {
-        [JsonPropertyName("value")]
-        public List<T> Items
-        {
-            get;
-            private set;
-        }
+        get;
+        private set;
+    }
 
-        [JsonPropertyName("odata.nextlink")]
-        public string NextLink
-        {
-            get;
-            private set;
-        }
+    [JsonPropertyName("odata.nextlink")]
+    public string NextLink
+    {
+        get;
+        private set;
+    }
 
-        public bool HasMoreData
+    public bool HasMoreData
+    {
+        get
         {
-            get
-            {
-                return this.NextLink != null;
-            }
+            return this.NextLink != null;
         }
     }
 }

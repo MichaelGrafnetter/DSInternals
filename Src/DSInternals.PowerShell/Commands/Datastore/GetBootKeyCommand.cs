@@ -1,71 +1,68 @@
-﻿namespace DSInternals.PowerShell.Commands
+﻿using System.ComponentModel;
+using System.Management.Automation;
+using DSInternals.Common;
+using DSInternals.Common.Interop;
+using DSInternals.DataStore;
+
+namespace DSInternals.PowerShell.Commands;
+[Cmdlet(VerbsCommon.Get, "BootKey")]
+[OutputType(typeof(string))]
+public class GetBootKeyCommand : PSCmdletEx
 {
-    using System;
-    using System.ComponentModel;
-    using System.Management.Automation;
-    using DSInternals.Common;
-    using DSInternals.Common.Interop;
-    using DSInternals.DataStore;
+    private const string OnlineParameterSet = "Online";
+    private const string OfflineParameterSet = "Offline";
 
-    [Cmdlet(VerbsCommon.Get, "BootKey")]
-    [OutputType(typeof(string))]
-    public class GetBootKeyCommand : PSCmdletEx
+    [Parameter(Mandatory = true, Position = 0, ParameterSetName = OfflineParameterSet)]
+    [ValidateNotNullOrEmpty]
+    [Alias("Path", "FilePath", "SystemHivePath", "HivePath")]
+    public string SystemHiveFilePath
     {
-        private const string OnlineParameterSet = "Online";
-        private const string OfflineParameterSet = "Offline";
+        get;
+        set;
+    }
+    [Parameter(Mandatory = true, ParameterSetName = OnlineParameterSet)]
+    public SwitchParameter Online
+    {
+        get;
+        set;
+    }
 
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = OfflineParameterSet)]
-        [ValidateNotNullOrEmpty]
-        [Alias("Path", "FilePath", "SystemHivePath", "HivePath")]
-        public string SystemHiveFilePath
+    protected override void BeginProcessing()
+    {
+        try
         {
-            get;
-            set;
+            byte[] bootKey;
+            if (Online.IsPresent)
+            {
+                // Online
+                bootKey = BootKeyRetriever.GetBootKey();
+            }
+            else
+            {
+                // Offline
+                string hivePathResolved = this.ResolveFilePath(this.SystemHiveFilePath);
+                bootKey = BootKeyRetriever.GetBootKey(hivePathResolved);
+            }
+            this.WriteObject(bootKey.ToHex());
         }
-        [Parameter(Mandatory = true, ParameterSetName = OnlineParameterSet)]
-        public SwitchParameter Online
+        catch (SessionStateException ex)
         {
-            get;
-            set;
+            // This may be DriveNotFoundException, ItemNotFoundException, ProviderNotFoundException, etc.
+            // Terminate on this error:
+            this.ThrowTerminatingError(new ErrorRecord(ex.ErrorRecord, ex));
         }
-
-        protected override void BeginProcessing()
+        catch (Win32Exception ex)
         {
-            try
-            {
-                byte[] bootKey;
-                if (Online.IsPresent)
-                {
-                    // Online
-                    bootKey = BootKeyRetriever.GetBootKey();
-                }
-                else
-                {
-                    // Offline
-                    string hivePathResolved = this.ResolveFilePath(this.SystemHiveFilePath);
-                    bootKey = BootKeyRetriever.GetBootKey(hivePathResolved);
-                }
-                this.WriteObject(bootKey.ToHex());
-            }
-            catch (SessionStateException ex)
-            {
-                // This may be DriveNotFoundException, ItemNotFoundException, ProviderNotFoundException, etc.
-                // Terminate on this error:
-                this.ThrowTerminatingError(new ErrorRecord(ex.ErrorRecord, ex));
-            }
-            catch (Win32Exception ex)
-            {
-                ErrorCategory category = ((Win32ErrorCode)ex.NativeErrorCode).ToPSCategory();
-                ErrorRecord error = new ErrorRecord(ex, "GetBootKey_Win32Error", category, this.SystemHiveFilePath);
-                this.ThrowTerminatingError(error);
+            ErrorCategory category = ((Win32ErrorCode)ex.NativeErrorCode).ToPSCategory();
+            ErrorRecord error = new ErrorRecord(ex, "GetBootKey_Win32Error", category, this.SystemHiveFilePath);
+            this.ThrowTerminatingError(error);
 
-            }
-            catch (Exception ex)
-            {
-                ErrorRecord error = new ErrorRecord(ex, "GetBootKey_OtherError", ErrorCategory.OpenError, null);
-                // Terminate on this error:
-                this.ThrowTerminatingError(error);
-            }
+        }
+        catch (Exception ex)
+        {
+            ErrorRecord error = new ErrorRecord(ex, "GetBootKey_OtherError", ErrorCategory.OpenError, null);
+            // Terminate on this error:
+            this.ThrowTerminatingError(error);
         }
     }
 }

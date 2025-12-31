@@ -1,57 +1,55 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Management.Automation;
 using DSInternals.Common.Data;
 using DSInternals.DataStore;
 
-namespace DSInternals.PowerShell.Commands
+namespace DSInternals.PowerShell.Commands;
+
+[Cmdlet(VerbsCommon.Set, "ADDBPrimaryGroup")]
+[OutputType("None")]
+public class SetADDBPrimaryGroupCommand : ADDBModifyPrincipalCommandBase
 {
-    [Cmdlet(VerbsCommon.Set, "ADDBPrimaryGroup")]
-    [OutputType("None")]
-    public class SetADDBPrimaryGroupCommand : ADDBModifyPrincipalCommandBase
+    [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]
+    [Alias("gid", "Group", "PrimaryGroup", "GroupId")]
+    [ValidateRange(DirectoryAgent.RidMin, DirectoryAgent.RidMax)]
+    public int PrimaryGroupId
     {
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]
-        [Alias("gid", "Group", "PrimaryGroup", "GroupId")]
-        [ValidateRange(DirectoryAgent.RidMin, DirectoryAgent.RidMax)]
-        public int PrimaryGroupId
+        get;
+        set;
+    }
+
+    protected override void ProcessRecord()
+    {
+        //TODO: Exception handling: Object not found, malformed DN, ...
+        string verboseMessage = "Setting the primary group of account {0}.";
+        bool hasChanged;
+        switch (this.ParameterSetName)
         {
-            get;
-            set;
+            case ParameterSetByDN:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.DistinguishedName));
+                var dn = new DistinguishedName(this.DistinguishedName);
+                hasChanged = this.DirectoryAgent.SetPrimaryGroupId(dn, this.PrimaryGroupId, this.SkipMetaUpdate);
+                break;
+
+            case ParameterSetByName:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.SamAccountName));
+                hasChanged = this.DirectoryAgent.SetPrimaryGroupId(this.SamAccountName, this.PrimaryGroupId, this.SkipMetaUpdate);
+                break;
+
+            case ParameterSetByGuid:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectGuid));
+                hasChanged = this.DirectoryAgent.SetPrimaryGroupId(this.ObjectGuid, this.PrimaryGroupId, this.SkipMetaUpdate);
+                break;
+
+            case ParameterSetBySid:
+                this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectSid));
+                hasChanged = this.DirectoryAgent.SetPrimaryGroupId(this.ObjectSid, this.PrimaryGroupId, this.SkipMetaUpdate);
+                break;
+
+            default:
+                // This should never happen:
+                throw new PSInvalidOperationException(InvalidParameterSetMessage);
         }
-
-        protected override void ProcessRecord()
-        {
-            //TODO: Exception handling: Object not found, malformed DN, ...
-            string verboseMessage = "Setting the primary group of account {0}.";
-            bool hasChanged;
-            switch (this.ParameterSetName)
-            {
-                case ParameterSetByDN:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.DistinguishedName));
-                    var dn = new DistinguishedName(this.DistinguishedName);
-                    hasChanged = this.DirectoryAgent.SetPrimaryGroupId(dn, this.PrimaryGroupId, this.SkipMetaUpdate);
-                    break;
-
-                case ParameterSetByName:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.SamAccountName));
-                    hasChanged = this.DirectoryAgent.SetPrimaryGroupId(this.SamAccountName, this.PrimaryGroupId, this.SkipMetaUpdate);
-                    break;
-
-                case ParameterSetByGuid:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectGuid));
-                    hasChanged = this.DirectoryAgent.SetPrimaryGroupId(this.ObjectGuid, this.PrimaryGroupId, this.SkipMetaUpdate);
-                    break;
-
-                case ParameterSetBySid:
-                    this.WriteVerbose(String.Format(CultureInfo.InvariantCulture, verboseMessage, this.ObjectSid));
-                    hasChanged = this.DirectoryAgent.SetPrimaryGroupId(this.ObjectSid, this.PrimaryGroupId, this.SkipMetaUpdate);
-                    break;
-
-                default:
-                    // This should never happen:
-                    throw new PSInvalidOperationException(InvalidParameterSetMessage);
-            }
-            this.WriteVerboseResult(hasChanged);
-        }
+        this.WriteVerboseResult(hasChanged);
     }
 }

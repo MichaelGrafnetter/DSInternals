@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
+﻿namespace DSInternals.Replication.Model;
 
-namespace DSInternals.Replication.Model
+public class ReplicaObjectCollection : List<ReplicaObject>
 {
-    public class ReplicaObjectCollection : List<ReplicaObject>
+    // TODO: Move parent as member.
+    public ReplicaObjectCollection() : base()
     {
-        // TODO: Move parent as member.
-        public ReplicaObjectCollection() : base()
-        {
-        }
-        public ReplicaObjectCollection(int numObjects)
-            : base(numObjects)
-        {
-        }
+    }
+    public ReplicaObjectCollection(int numObjects)
+        : base(numObjects)
+    {
     }
 }

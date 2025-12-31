@@ -1,37 +1,33 @@
-﻿namespace DSInternals.PowerShell.Commands
+﻿
+using System.Management.Automation;
+using DSInternals.DataStore;
+
+namespace DSInternals.PowerShell.Commands;
+[Cmdlet(VerbsCommon.Get, "ADDBBackupKey")]
+[OutputType(typeof(DSInternals.Common.Data.DPAPIBackupKey))]
+public class GetADDBBackupKeyCommand : ADDBCommandBase
 {
-    using System;
-    using System.Management.Automation;
-    using DSInternals.Common;
-    using DSInternals.Common.Cryptography;
-    using DSInternals.DataStore;
-
-    [Cmdlet(VerbsCommon.Get, "ADDBBackupKey")]
-    [OutputType(typeof(DSInternals.Common.Data.DPAPIBackupKey))]
-    public class GetADDBBackupKeyCommand : ADDBCommandBase
+    [Parameter(Mandatory = true)]
+    [ValidateNotNull]
+    [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
+    [AcceptHexString]
+    [Alias("key", "SysKey", "SystemKey")]
+    public byte[] BootKey
     {
-        [Parameter(Mandatory = true)]
-        [ValidateNotNull]
-        [ValidateCount(BootKeyRetriever.BootKeyLength, BootKeyRetriever.BootKeyLength)]
-        [AcceptHexString]
-        [Alias("key", "SysKey", "SystemKey")]
-        public byte[] BootKey
-        {
-            get;
-            set;
-        }
+        get;
+        set;
+    }
 
-        protected override void BeginProcessing()
+    protected override void BeginProcessing()
+    {
+        base.BeginProcessing();
+        using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
         {
-            base.BeginProcessing();
-            using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+            foreach (var secret in directoryAgent.GetDPAPIBackupKeys(this.BootKey))
             {
-                foreach (var secret in directoryAgent.GetDPAPIBackupKeys(this.BootKey))
-                {
-                    this.WriteObject(secret);
-                }
+                this.WriteObject(secret);
             }
-            // TODO: Exception handling
         }
+        // TODO: Exception handling
     }
 }

@@ -1,101 +1,99 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Security.Principal;
 using DSInternals.Common.Data;
 using DSInternals.Common.Interop;
 
-namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
+namespace DSInternals.Common.Cryptography.Asn1.DpapiNg;
+
+/// <summary>
+/// Represents DPAPI-NG protected data, formatted as CMS (certificate message syntax) enveloped content.
+/// </summary>
+public class CngProtectedDataBlob
 {
-    /// <summary>
-    /// Represents DPAPI-NG protected data, formatted as CMS (certificate message syntax) enveloped content.
-    /// </summary>
-    public class CngProtectedDataBlob
+    public ReadOnlyMemory<byte> RawData { get; private set; }
+    public ProtectionKeyIdentifier ProtectionKeyIdentifier { get; private set; }
+    public SecurityIdentifier? TargetSid { get; private set; }
+    public Oid ContentEncryptionAlgorithm { get; private set; }
+    public Oid KeyEncryptionAlgorithm { get; private set; }
+    public ReadOnlyMemory<byte> EncryptedKey { get; private set; }
+    public ReadOnlyMemory<byte> EncryptedData { get; private set; }
+    public ReadOnlyMemory<byte> Nonce { get; private set; }
+
+
+    public ReadOnlySpan<byte> Decrypt()
     {
-        public ReadOnlyMemory<byte> RawData { get; private set; }
-        public ProtectionKeyIdentifier ProtectionKeyIdentifier { get; private set; }
-        public SecurityIdentifier? TargetSid { get; private set; }
-        public Oid ContentEncryptionAlgorithm { get; private set; }
-        public Oid KeyEncryptionAlgorithm { get; private set; }
-        public ReadOnlyMemory<byte> EncryptedKey { get; private set; }
-        public ReadOnlyMemory<byte> EncryptedData { get; private set; }
-        public ReadOnlyMemory<byte> Nonce { get; private set; }
-
-
-        public ReadOnlySpan<byte> Decrypt()
+        if (this.RawData.Length == 0)
         {
-            if (this.RawData.Length == 0)
-            {
-                return default;
-            }
-
-            // Use the native Win32 API to perform the decryption
-            var resultCode = NativeMethods.NCryptUnprotectSecret(this.RawData.Span, out var decryptedData);
-            Validator.AssertSuccess(resultCode);
-            return decryptedData;
+            return default;
         }
 
-        public bool TryDecrypt(out ReadOnlySpan<byte> cleartext)
+        // Use the native Win32 API to perform the decryption
+        var resultCode = NativeMethods.NCryptUnprotectSecret(this.RawData.Span, out var decryptedData);
+        Validator.AssertSuccess(resultCode);
+        return decryptedData;
+    }
+
+    public bool TryDecrypt(out ReadOnlySpan<byte> cleartext)
+    {
+        if (this.RawData.Length == 0)
         {
-            if (this.RawData.Length == 0)
-            {
-                // Nothing to decrypt
-                cleartext = default;
-                return true;
-            }
-
-            // Use the native Win32 API to perform the decryption
-            var resultCode = NativeMethods.NCryptUnprotectSecret(this.RawData.Span, out cleartext);
-
-            return resultCode == Win32ErrorCode.Success;
+            // Nothing to decrypt
+            cleartext = default;
+            return true;
         }
 
-        public static CngProtectedDataBlob Decode(ReadOnlyMemory<byte> blob)
+        // Use the native Win32 API to perform the decryption
+        var resultCode = NativeMethods.NCryptUnprotectSecret(this.RawData.Span, out cleartext);
+
+        return resultCode == Win32ErrorCode.Success;
+    }
+
+    public static CngProtectedDataBlob Decode(ReadOnlyMemory<byte> blob)
+    {
+        var cms = Cryptography.Asn1.Pkcs7.ContentInfo.Decode(blob);
+        var envelopedData = cms.EnvelopedData;
+
+        if (!envelopedData.HasValue)
         {
-            var cms = Cryptography.Asn1.Pkcs7.ContentInfo.Decode(blob);
-            var envelopedData = cms.EnvelopedData;
+            throw new CryptographicException("The data is not formatted as CMS enveloped content.");
+        }
 
-            if (!envelopedData.HasValue)
+        // TODO: Check enveloped data version
+
+        // Search for the DPAPI-NG SID and SDDL data protectors
+        foreach (var recipient in envelopedData.Value.RecipientInfos)
+        {
+            if (recipient.KEKRecipientInfo.HasValue)
             {
-                throw new CryptographicException("The data is not formatted as CMS enveloped content.");
-            }
+                var kekRecipientInfo = recipient.KEKRecipientInfo.Value;
+                var kekId = kekRecipientInfo.KekId;
 
-            // TODO: Check enveloped data version
-
-            // Search for the DPAPI-NG SID and SDDL data protectors
-            foreach (var recipient in envelopedData.Value.RecipientInfos)
-            {
-                if (recipient.KEKRecipientInfo.HasValue)
+                if (kekRecipientInfo.KekId.Other.HasValue)
                 {
-                    var kekRecipientInfo = recipient.KEKRecipientInfo.Value;
-                    var kekId = kekRecipientInfo.KekId;
+                    SecurityIdentifier? targetSid = kekId.Other.Value.SidProtector;
 
-                    if (kekRecipientInfo.KekId.Other.HasValue)
+                    if (targetSid != null)
                     {
-                        SecurityIdentifier? targetSid = kekId.Other.Value.SidProtector;
+                        var groupKeyIdentifier = kekId.KeyIdentifier;
 
-                        if (targetSid != null)
+                        // TODO: Support reading multiple protectors, instead of stopping after reading the first one.
+                        return new CngProtectedDataBlob()
                         {
-                            var groupKeyIdentifier = kekId.KeyIdentifier;
-
-                            // TODO: Support reading multiple protectors, instead of stopping after reading the first one.
-                            return new CngProtectedDataBlob()
-                            {
-                                RawData = blob,
-                                TargetSid = targetSid,
-                                ProtectionKeyIdentifier = new ProtectionKeyIdentifier(groupKeyIdentifier),
-                                ContentEncryptionAlgorithm = envelopedData.Value.EncryptedContentInfo.ContentEncryptionAlgorithm.Algorithm,
-                                KeyEncryptionAlgorithm = kekRecipientInfo.KeyEncryptionAlgorithm.Algorithm,
-                                EncryptedKey = kekRecipientInfo.EncryptedKey,
-                                EncryptedData = envelopedData.Value.EncryptedContentInfo.EncryptedContent ?? default
-                                // TODO: Parse Nonce
-                            };
-                        }
+                            RawData = blob,
+                            TargetSid = targetSid,
+                            ProtectionKeyIdentifier = new ProtectionKeyIdentifier(groupKeyIdentifier),
+                            ContentEncryptionAlgorithm = envelopedData.Value.EncryptedContentInfo.ContentEncryptionAlgorithm.Algorithm,
+                            KeyEncryptionAlgorithm = kekRecipientInfo.KeyEncryptionAlgorithm.Algorithm,
+                            EncryptedKey = kekRecipientInfo.EncryptedKey,
+                            EncryptedData = envelopedData.Value.EncryptedContentInfo.EncryptedContent ?? default
+                            // TODO: Parse Nonce
+                        };
                     }
                 }
             }
-
-            // Sentinel
-            throw new CryptographicException("Could not parse the DPAPI-NG protected data blob.");
         }
+
+        // Sentinel
+        throw new CryptographicException("Could not parse the DPAPI-NG protected data blob.");
     }
 }

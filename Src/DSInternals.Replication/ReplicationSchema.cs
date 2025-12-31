@@ -1,5 +1,4 @@
-﻿using DSInternals.Common;
-using DSInternals.Common.Schema;
+﻿using DSInternals.Common.Schema;
 using DSInternals.Replication.Model;
 
 namespace DSInternals.Replication;

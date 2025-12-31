@@ -1,18 +1,16 @@
-﻿using System;
-using DSInternals.Common.Interop;
+﻿using DSInternals.Common.Interop;
 using Microsoft.Win32;
 
-namespace DSInternals.Common
+namespace DSInternals.Common;
+
+public static class RegistryKeyExtensions
 {
-    public static class RegistryKeyExtensions
+    public static string GetClass(this RegistryKey key)
     {
-        public static string GetClass(this RegistryKey key)
-        {
-            string keyClass;
-            DateTime lastWrite;
-            Win32ErrorCode result = NativeMethods.RegQueryInfoKey(key.Handle, out keyClass, out lastWrite);
-            Validator.AssertSuccess(result);
-            return keyClass;
-        }
+        string keyClass;
+        DateTime lastWrite;
+        Win32ErrorCode result = NativeMethods.RegQueryInfoKey(key.Handle, out keyClass, out lastWrite);
+        Validator.AssertSuccess(result);
+        return keyClass;
     }
 }

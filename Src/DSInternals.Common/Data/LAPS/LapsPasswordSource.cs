@@ -1,12 +1,11 @@
-﻿namespace DSInternals.Common.Data
+﻿namespace DSInternals.Common.Data;
+
+public enum LapsPasswordSource
 {
-    public enum LapsPasswordSource
-    {
-        LegacyLapsCleartextPassword,
-        CleartextPassword,
-        EncryptedPassword,
-        EncryptedPasswordHistory,
-        EncryptedDSRMPassword,
-        EncryptedDSRMPasswordHistory
-    }
+    LegacyLapsCleartextPassword,
+    CleartextPassword,
+    EncryptedPassword,
+    EncryptedPasswordHistory,
+    EncryptedDSRMPassword,
+    EncryptedDSRMPasswordHistory
 }
