@@ -113,10 +113,10 @@ msbuild.exe DSInternals.slnx -target:Build -property:Configuration=Release -prop
 cd Src
 
 # Run all unit tests
-dotnet test DSInternals.DotNetSdk.slnf
+dotnet test --solution DSInternals.DotNetSdk.slnf
 
 # Run tests for a specific project
-dotnet test DSInternals.Common.Test
+dotnet test --project DSInternals.Common.Test
 ```
 
 ### Running PowerShell Smoke Tests

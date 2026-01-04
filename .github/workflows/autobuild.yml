@@ -73,7 +73,7 @@ jobs:
     - name: Run Unit Tests
       working-directory: Src
       run: |
-        dotnet test DSInternals.TestsOnly.slnf --configuration Debug --no-build -- --report-trx --results-directory "${{ github.workspace }}/TestResults"
+        dotnet test --solution DSInternals.TestsOnly.slnf --configuration Debug --no-build -- --report-trx --results-directory "${{ github.workspace }}/TestResults"
 
     - name: Run PowerShell Desktop Tests
       working-directory: Scripts
