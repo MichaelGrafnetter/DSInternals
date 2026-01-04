@@ -256,7 +256,6 @@
       "dsinternals.common": {
         "type": "Project",
         "dependencies": {
-          "Polyfill": "[9.5.0, )",
           "System.Buffers": "[4.6.1, )",
           "System.Formats.Asn1": "[9.0.9, )",
           "System.Formats.Cbor": "[9.0.9, )",

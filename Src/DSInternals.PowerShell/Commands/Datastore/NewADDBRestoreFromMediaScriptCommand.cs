@@ -9,6 +9,7 @@ using DSInternals.Common.Interop;
 using DSInternals.DataStore;
 
 namespace DSInternals.PowerShell.Commands;
+
 [Cmdlet(VerbsCommon.New, "ADDBRestoreFromMediaScript")]
 [OutputType(typeof(string))]
 public class NewADDBRestoreFromMediaScriptCommand : ADDBCommandBase
@@ -74,7 +75,7 @@ public class NewADDBRestoreFromMediaScriptCommand : ADDBCommandBase
 
     protected override void ProcessRecord()
     {
-        DomainController dc = this.DirectoryContext.DomainController;
+        var dc = this.DirectoryContext.DomainController;
 
         if (dc.IsADAM)
         {

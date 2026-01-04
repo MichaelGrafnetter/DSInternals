@@ -1,14 +1,14 @@
 ---
 agent: agent
 tools: ['edit/editFiles', 'search/codebase', 'search/readFile', 'problems', 'changes', 'runTests']
-description: 'Perform a code review focusing on key areas such as security, performance, backwards compatibility, and design principles.'
+description: 'Perform a systematic code review of all source files, focusing on security, performance, backwards compatibility, and design principles.'
 ---
 
 # Code Review Instructions for DSInternals
 
 These instructions guide code reviews for the DSInternals repository, which contains C#, C++/CLI, and PowerShell code for Active Directory security auditing, offline database manipulation, and password management. Focus on higher-level concerns that require expert judgment rather than stylistic or syntactic issues handled by automated tooling.
 
-If there are no code changes to review, perform a review of the entire codebase based on these guidelines to identify potential improvements or issues.
+If there are no code changes to review, perform a review of the entire codebase based on these guidelines to identify potential improvements or issues. Do not rely solely on targeted searches for specific artefacts. Systematically read all source files to ensure comprehensive coverage. For each file read, apply **all** the review priorities documented below. Do not skip files even if they appear simple—security issues often hide in seemingly innocuous code.
 
 ## Review Priorities
 

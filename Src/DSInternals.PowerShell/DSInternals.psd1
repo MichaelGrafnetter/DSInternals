@@ -23,7 +23,7 @@ Author = 'Michael Grafnetter'
 CompanyName = 'DSInternals'
 
 # Copyright statement for this module
-Copyright = '(c) 2015-2025 Michael Grafnetter. All rights reserved.'
+Copyright = '(c) 2015-2026 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"

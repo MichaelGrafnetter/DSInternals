@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- NuGet package metadata -->
   <PropertyGroup>
+    <!-- The Interop assembly is compiled for a subset of frameworks supported by other packages -->
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <!-- NuGet package metadata -->
     <IsPackable>true</IsPackable>
     <Version>6.2</Version>
     <AssemblyTitle>DSInternals Replication Library</AssemblyTitle>
@@ -8,7 +10,15 @@
     <Description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</Description>
     <PackageReleaseNotes>- Updated dependencies.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security Replication RPC DRSR DCSync</PackageTags>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyPrivateProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+    <!-- Override the NuGet package directory structure -->
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);PackReferenceAssemblies;PackRuntimeAssemblies</TargetsForTfmSpecificBuildOutput>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackVisualCRuntimes</TargetsForTfmSpecificContentInPackage>
+    <!-- Generate reference assemblies to support NuGet multi-targeting -->
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <ProduceReferenceAssemblyInOutDir>true</ProduceReferenceAssemblyInOutDir>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <!-- TODO: Re-enable package validation once unnecessary Polyfill dependencies are removed -->
+    <EnablePackageValidation>false</EnablePackageValidation>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -20,6 +30,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <!-- The tool is only used for generating reference assemblies for DSInternals.Replication.Interop. -->
+    <PackageDownload Include="JetBrains.Refasmer.CliTool" version="[2.0.3]" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,13 +50,93 @@
     </ProjectReference>
   </ItemGroup>
 
-    <!-- Include the files in the NuGet package directly -->
-    <Target DependsOnTargets="BuildOnlySettings;ResolveReferences" Name="CopyPrivateProjectReferencesToPackage">
-      <ItemGroup>
-        <!-- DSInternals.Replication.Interop and DSInternals.Replication.Model dll+xml+pdb -->
-        <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('PrivateAssets', 'all'))" />
-        <!-- .NET IJW host -->
-        <BuildOutputInPackage Include="$(OutputPath)Ijwhost.dll" Condition="'$(TargetFramework)' != 'net48'" />
-      </ItemGroup>
-    </Target>
+  <ItemGroup>
+    <!-- Pack the DSInternals.Replication.props file for packages.config compatibility. -->
+    <None Include="build/net48/DSInternals.Replication.props" Pack="true" PackagePath="/build/net48/DSInternals.Replication.props" />
+  </ItemGroup>
+
+  <!-- Pack Visual C and C++ Runtimes -->
+  <Target Name="PackVisualCRuntimes" BeforeTargets="Pack">
+    <PropertyGroup>
+      <ReplicationInteropRootDir>$(ArtifactsPath)\bin\DSInternals.Replication.Interop\$(Configuration.ToLower())_$(TargetFramework)\</ReplicationInteropRootDir>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+      <CppRuntimeBinariesX64 Include="$(ReplicationInteropRootDir)x64\msvc????.dll;$(ReplicationInteropRootDir)x64\vcruntime???.dll;$(ReplicationInteropRootDir)x64\vcruntime???_?.dll;$(ReplicationInteropRootDir)x64\Ijwhost.dll" />
+      <CppRuntimeBinariesX86 Include="$(ReplicationInteropRootDir)Win32\msvc????.dll;$(ReplicationInteropRootDir)Win32\vcruntime???.dll;$(ReplicationInteropRootDir)Win32\vcruntime???_?.dll;$(ReplicationInteropRootDir)Win32\Ijwhost.dll" />
+      <CppRuntimeBinariesARM64 Include="$(ReplicationInteropRootDir)ARM64\msvc????.dll;$(ReplicationInteropRootDir)ARM64\vcruntime???.dll;$(ReplicationInteropRootDir)ARM64\vcruntime???_?.dll;$(ReplicationInteropRootDir)ARM64\Ijwhost.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+      <CppRuntimeBinariesX64 Include="$(ReplicationInteropRootDir)x64\msvc????d.dll;$(ReplicationInteropRootDir)x64\vcruntime???d.dll;$(ReplicationInteropRootDir)x64\vcruntime???_?d.dll;$(ReplicationInteropRootDir)x64\ucrtbased.dll;$(ReplicationInteropRootDir)x64\Ijwhost.dll" />
+      <CppRuntimeBinariesX86 Include="$(ReplicationInteropRootDir)Win32\msvc????d.dll;$(ReplicationInteropRootDir)Win32\vcruntime???d.dll;$(ReplicationInteropRootDir)Win32\vcruntime???_?d.dll;$(ReplicationInteropRootDir)Win32\ucrtbased.dll;$(ReplicationInteropRootDir)Win32\Ijwhost.dll" />
+      <CppRuntimeBinariesARM64 Include="$(ReplicationInteropRootDir)ARM64\msvc????d.dll;$(ReplicationInteropRootDir)ARM64\vcruntime???d.dll;$(ReplicationInteropRootDir)ARM64\vcruntime???_?d.dll;$(ReplicationInteropRootDir)ARM64\ucrtbased.dll;$(ReplicationInteropRootDir)ARM64\Ijwhost.dll" />
+    </ItemGroup>
+    <!-- The runtimes are common for all frameworks, so we only include the files once. -->
+    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+      <TfmSpecificPackageFile Include="@(CppRuntimeBinariesX64)" PackagePath="/runtimes/win-x64/native/" />
+      <TfmSpecificPackageFile Include="@(CppRuntimeBinariesX86)" PackagePath="/runtimes/win-x86/native/" />
+      <TfmSpecificPackageFile Include="@(CppRuntimeBinariesARM64)" PackagePath="/runtimes/win-arm64/native/" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Pack compiled binaries -->
+  <Target Name="PackRuntimeAssemblies" BeforeTargets="Pack">
+    <PropertyGroup>
+      <TargetFrameworkAndPlatform Condition="'$(TargetFramework)' != 'net48'">$(TargetFramework)$(TargetPlatformVersion)</TargetFrameworkAndPlatform>
+      <TargetFrameworkAndPlatform Condition="'$(TargetFramework)' == 'net48'">$(TargetFramework)</TargetFrameworkAndPlatform>
+      <ReplicationInteropOutDir>$(ArtifactsPath)\bin\DSInternals.Replication.Interop\$(Configuration.ToLower())_$(TargetFramework)\</ReplicationInteropOutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- Remove the default build outputs (DLL+XML+PDB) from the package 'lib' directory-->
+      <BuiltProjectOutputGroupOutput Remove="@(BuiltProjectOutputGroupOutput)" />
+      <DocumentationProjectOutputGroupOutput Remove="@(DocumentationProjectOutputGroupOutput)" />
+      <DebugSymbolsProjectOutputGroupOutput Remove="@(DebugSymbolsProjectOutputGroupOutput)" />
+
+      <!-- Pack the AnyCPU DSInternals.Replication and DSInternals.Replication.Model DLL+XML+PDB for all platforms -->
+      <AnyCpuFiles Include="$(OutDir)$(TargetName).???;$(OutDir)DSInternals.Replication.Model.???" />
+      <BuildOutputInPackage Include="%(AnyCpuFiles.Identity)" TargetPath="/runtimes/win-x64/lib/$(TargetFrameworkAndPlatform)/%(AnyCpuFiles.Filename)%(AnyCpuFiles.Extension)" />
+      <BuildOutputInPackage Include="%(AnyCpuFiles.Identity)" TargetPath="/runtimes/win-x86/lib/$(TargetFrameworkAndPlatform)/%(AnyCpuFiles.Filename)%(AnyCpuFiles.Extension)" />
+      <BuildOutputInPackage Include="%(AnyCpuFiles.Identity)" TargetPath="/runtimes/win-arm64/lib/$(TargetFrameworkAndPlatform)/%(AnyCpuFiles.Filename)%(AnyCpuFiles.Extension)" />
+
+      <!-- Pack platform-specific DSInternals.Replication.Interop DLL+PDB+XML -->
+      <X64Files Include="$(ReplicationInteropOutDir)x64\DSInternals.Replication.Interop.???" />
+      <X86Files Include="$(ReplicationInteropOutDir)Win32\DSInternals.Replication.Interop.???" />
+      <ARM64Files Include="$(ReplicationInteropOutDir)ARM64\DSInternals.Replication.Interop.???" />
+      <BuildOutputInPackage Include="%(X64Files.Identity)" TargetPath="/runtimes/win-x64/lib/$(TargetFrameworkAndPlatform)/%(X64Files.Filename)%(X64Files.Extension)" />
+      <BuildOutputInPackage Include="%(X86Files.Identity)" TargetPath="/runtimes/win-x86/lib/$(TargetFrameworkAndPlatform)/%(X86Files.Filename)%(X86Files.Extension)" />
+      <BuildOutputInPackage Include="%(ARM64Files.Identity)" TargetPath="/runtimes/win-arm64/lib/$(TargetFrameworkAndPlatform)/%(ARM64Files.Filename)%(ARM64Files.Extension)" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Pack reference assemblies -->
+  <Target Name="PackReferenceAssemblies" BeforeTargets="Pack">
+    <PropertyGroup>
+      <ReferenceAssembliesTargetPath Condition="'$(TargetFramework)' != 'net48'">/ref/$(TargetFramework)$(TargetPlatformVersion)/</ReferenceAssembliesTargetPath>
+      <ReferenceAssembliesTargetPath Condition="'$(TargetFramework)' == 'net48'">/ref/$(TargetFramework)/</ReferenceAssembliesTargetPath>
+      <ReplicationModelOutDir>$(ArtifactsPath)\bin\DSInternals.Replication.Model\$(Configuration.ToLower())_$(TargetFramework)\</ReplicationModelOutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- Note that XML files might be absent, based on the current configuration. -->
+      <!-- DSInternals.Replication DLL+XML -->
+      <BuildOutputInPackage Include="$(TargetRefPath)" TargetPath="$(ReferenceAssembliesTargetPath)$(TargetName).dll" />
+      <BuildOutputInPackage Include="@(FinalDocFile)" TargetPath="$(ReferenceAssembliesTargetPath)$(TargetName).xml" />
+      <!-- DSInternals.Replication.Model DLL+XML -->
+      <BuildOutputInPackage Include="$(ReplicationModelOutDir)ref\DSInternals.Replication.Model.dll" TargetPath="$(ReferenceAssembliesTargetPath)DSInternals.Replication.Model.dll" />
+      <BuildOutputInPackage Include="$(ReplicationModelOutDir)DSInternals.Replication.Model.xml" TargetPath="$(ReferenceAssembliesTargetPath)DSInternals.Replication.Model.xml" Condition="Exists('$(ReplicationModelOutDir)DSInternals.Replication.Model.xml')" />
+      <!-- DSInternals.Replication.Interop DLL+XML -->
+      <BuildOutputInPackage Include="$(OutDir)ref\DSInternals.Replication.Interop.dll" TargetPath="$(ReferenceAssembliesTargetPath)DSInternals.Replication.Interop.dll" />
+      <BuildOutputInPackage Include="$(OutDir)DSInternals.Replication.Interop.xml" TargetPath="$(ReferenceAssembliesTargetPath)DSInternals.Replication.Interop.xml" Condition="Exists('$(OutDir)DSInternals.Replication.Interop.xml')" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Generate reference assemblies for C++/CLI projects using JetBrains Refasmer -->
+  <Target Name="GenerateInteropReferenceAssembly" AfterTargets="PostBuildEvent">
+    <PropertyGroup>
+      <!-- Path to the JetBrains Refasmer tool -->
+      <RefasmerPath>$(NuGetPackageRoot)jetbrains.refasmer.clitool\2.0.3\tools\net6.0\any\RefasmerCliTool.dll</RefasmerPath>
+      <RefAssemblyDir>$(OutDir)ref</RefAssemblyDir>
+    </PropertyGroup>
+    <!-- Note that the tool fails if outputdir ends with a backslash. -->
+    <Exec Command="dotnet &quot;$(RefasmerPath)&quot; -v --public --omit-non-api-members true --overwrite --outputdir &quot;$(RefAssemblyDir)&quot; &quot;$(OutDir)DSInternals.Replication.Interop.dll&quot;" WorkingDirectory="$(OutDir)" />
+  </Target>
+
 </Project>

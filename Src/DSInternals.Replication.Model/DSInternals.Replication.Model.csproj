@@ -2,6 +2,8 @@
   <PropertyGroup>
     <Version>6.2</Version>
     <AssemblyTitle>DSInternals Replication Data Model</AssemblyTitle>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <ProduceReferenceAssemblyInOutDir>true</ProduceReferenceAssemblyInOutDir>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

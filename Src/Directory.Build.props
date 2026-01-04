@@ -40,13 +40,14 @@
     <Authors>Michael Grafnetter</Authors>
     <Product>DSInternals PowerShell Module</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright © 2015-2025 Michael Grafnetter. All rights reserved.</Copyright>
+    <Copyright>Copyright © 2015-2026 Michael Grafnetter. All rights reserved.</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/MichaelGrafnetter/DSInternals</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MichaelGrafnetter/DSInternals</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -60,12 +61,16 @@
     <!-- Additional files to include in NuGet packages -->
     <None Include="$(MSBuildThisFileDirectory)Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
     <None Include="$(MSBuildThisFileDirectory)../LICENSE.md" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="$(MSBuildProjectDirectory)/PACKAGE.md" Pack="true" PackagePath="/README.md" Visible="true" />
 
     <!-- Enable source-link -->
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
 
     <!-- Expose new .NET features like ThrowIf to .NET Framework. -->
-    <PackageReference Include="Polyfill" Condition="'$(TargetFramework)' == 'net48'" />
+    <PackageReference Include="Polyfill" Condition="'$(TargetFramework)' == 'net48'">
+      <!-- Do not publish the dependency in NuGet package metadata -->
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net48'">

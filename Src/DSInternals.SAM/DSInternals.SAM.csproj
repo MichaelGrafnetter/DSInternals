@@ -9,6 +9,7 @@
     <PackageReleaseNotes>- Updated dependencies.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security RPC SAMR LSARPC AD Identity Active Directory</PackageTags>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.CsWin32">
       <PrivateAssets>all</PrivateAssets>

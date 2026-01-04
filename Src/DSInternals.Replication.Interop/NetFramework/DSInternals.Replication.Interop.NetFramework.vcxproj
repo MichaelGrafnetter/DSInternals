@@ -34,8 +34,8 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup>
-    <OutDir>$(MSBuildThisFileDirectory)..\..\..\Build\bin\$(TargetName)\$(Configuration)_net$(TargetFrameworkVersion)-$(Platform)\</OutDir>
-    <IntDir>$(MSBuildThisFileDirectory)..\..\..\Build\obj\$(TargetName)\$(Configuration)_net$(TargetFrameworkVersion)-$(Platform)\</IntDir>
+    <OutDir>$(MSBuildThisFileDirectory)..\..\..\Build\bin\$(TargetName)\$(Configuration.ToLowerInvariant())_net$(TargetFrameworkVersion.Replace(&quot;.&quot;,&quot;&quot;))\$(Platform)\</OutDir>
+    <IntDir>$(MSBuildThisFileDirectory)..\..\..\Build\obj\$(TargetName)\$(Configuration.ToLowerInvariant())_net$(TargetFrameworkVersion.Replace(&quot;.&quot;,&quot;&quot;))\$(Platform)\</IntDir>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="Shared">

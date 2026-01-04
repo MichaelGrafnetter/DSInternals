@@ -88,14 +88,12 @@
       "dsinternals.adsi": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[6.2.0, )",
-          "Polyfill": "[9.5.0, )"
+          "DSInternals.Common": "[6.2.0, )"
         }
       },
       "dsinternals.common": {
         "type": "Project",
         "dependencies": {
-          "Polyfill": "[9.5.0, )",
           "System.Buffers": "[4.6.1, )",
           "System.Formats.Asn1": "[9.0.9, )",
           "System.Formats.Cbor": "[9.0.9, )",
@@ -109,29 +107,25 @@
         "dependencies": {
           "DSInternals.Common": "[6.2.0, )",
           "DSInternals.ManagedEsent.Interop": "[2.0.4.1, )",
-          "DSInternals.ManagedEsent.Isam": "[2.0.4.1, )",
-          "Polyfill": "[9.5.0, )"
+          "DSInternals.ManagedEsent.Isam": "[2.0.4.1, )"
         }
       },
       "dsinternals.replication": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[6.2.0, )",
-          "Polyfill": "[9.5.0, )"
+          "DSInternals.Common": "[6.2.0, )"
         }
       },
       "dsinternals.replication.model": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[6.2.0, )",
-          "Polyfill": "[9.5.0, )"
+          "DSInternals.Common": "[6.2.0, )"
         }
       },
       "dsinternals.sam": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[6.2.0, )",
-          "Polyfill": "[9.5.0, )"
+          "DSInternals.Common": "[6.2.0, )"
         }
       },
       "DSInternals.ManagedEsent.Interop": {

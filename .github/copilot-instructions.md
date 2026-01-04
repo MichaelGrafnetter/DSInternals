@@ -20,29 +20,45 @@ The project primarily focuses on Active Directory security auditing, offline dat
 
 ```
 Src/
-├── DSInternals.Common/           # Shared utilities and cryptographic functions
-├── DSInternals.Common.Test/      # Unit tests for Common
-├── DSInternals.DataStore/        # Offline ntds.dit database access (ESE/JET)
-├── DSInternals.DataStore.Test/   # Unit tests for DataStore
-├── DSInternals.Replication/      # Replication (MS-DRSR) protocol implementation
+├── DSInternals.Common/               # Shared utilities and cryptographic functions
+│   └── DSInternals.Common.csproj
+├── DSInternals.Common.Test/          # Unit tests for Common
+│   └── DSInternals.Common.Test.csproj
+├── DSInternals.DataStore/            # Offline ntds.dit database access (ESE/JET)
+│   └── DSInternals.DataStore.csproj
+├── DSInternals.DataStore.Test/       # Unit tests for DataStore
+│   └── DSInternals.DataStore.Test.csproj
+├── DSInternals.Replication/          # Replication (MS-DRSR) protocol implementation
+│   └── DSInternals.Replication.csproj
 ├── DSInternals.Replication.Interop/  # Native C++/CLI interop for MS-DRSR RPC calls
 │   ├── Directory.Build.props         # C++/CLI-specific MSBuild properties
-│   ├── Directory.Build.targets       # C++/CLI-specific MSBuild targets
-│   └── DSInternals.Replication.Interop.Shared.vcxitems  # C++/CLI items shared between .NET and .NET Framework projects
+│   ├── DSInternals.Replication.Interop.Shared.vcxitems  # C++/CLI items shared between .NET and .NET Framework projects
+│   ├── NetCore/
+│   │   └── DSInternals.Replication.Interop.NetCore.vcxproj
+│   └── NetFramework/
+│       └── DSInternals.Replication.Interop.NetFramework.vcxproj
 ├── DSInternals.Replication.Model/    # Replication data model
+│   └── DSInternals.Replication.Model.csproj
 ├── DSInternals.Replication.Model.Test/ # Unit tests for Replication Model
-├── DSInternals.Replication.Test/ # Unit tests for Replication
-├── DSInternals.SAM/              # Security Accounts Manager (MS-SAMR) protocol implementation
-├── DSInternals.SAM.Test/         # Unit tests for SAM
-├── DSInternals.ADSI/             # Active Directory Service Interfaces (ADSI) / LDAP client wrapper
-├── DSInternals.PowerShell/       # PowerShell cmdlet implementations
-├── Directory.Build.props         # Common MSBuild properties
-├── Directory.Packages.props      # Central Package Management
-├── global.json                   # .NET SDK configuration
-├── DSInternals.slnx              # Full solution (requires Visual Studio for C++/CLI projects)
-├── DSInternals.DotNetSdk.slnf    # C# projects only (works with dotnet CLI)
-├── DSInternals.TestsOnly.slnf    # Test projects only
-└── DSInternals.SkipTests.slnf    # Non-test projects only
+│   └── DSInternals.Replication.Model.Test.csproj
+├── DSInternals.Replication.Test/     # Unit tests for Replication
+│   └── DSInternals.Replication.Test.csproj
+├── DSInternals.SAM/                  # Security Accounts Manager (MS-SAMR) protocol implementation
+│   └── DSInternals.SAM.csproj
+├── DSInternals.SAM.Test/             # Unit tests for SAM
+│   └── DSInternals.SAM.Test.csproj
+├── DSInternals.ADSI/                 # Active Directory Service Interfaces (ADSI) / LDAP client wrapper
+│   └── DSInternals.ADSI.csproj
+├── DSInternals.PowerShell/           # PowerShell cmdlet implementations
+│   ├── DSInternals.PowerShell.csproj
+│   └── DSInternals.psd1              # PowerShell module manifest
+├── Directory.Build.props             # Common MSBuild properties
+├── Directory.Packages.props          # Central Package Management
+├── global.json                       # .NET SDK configuration
+├── DSInternals.slnx                  # Full solution (requires Visual Studio for C++/CLI projects)
+├── DSInternals.DotNetSdk.slnf        # C# projects only (works with dotnet CLI)
+├── DSInternals.TestsOnly.slnf        # Test projects only
+└── DSInternals.SkipTests.slnf        # Non-test projects only
 ```
 
 ## Build Instructions

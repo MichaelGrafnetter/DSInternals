@@ -65,12 +65,45 @@
     <!-- The following dependencies from DSInternals.Common are already bundled with PowerShell Desktop on Windows Server 2025, but are absent on Windows Server 2008 R2: -->
     <!-- System.Memory, System.Numerics.Vectors, System.Buffers, System.Runtime.CompilerServices.Unsafe -->
   </ItemGroup>
+
+  <!-- Bundle the platform-specific DSInternals.Replication.Interop libraries and Visual C and C++ runtimes -->
+  <Target Name="CopyInteropLibraries" AfterTargets="Build">
+    <PropertyGroup>
+      <ReplicationInteropRootDir>$(ArtifactsPath)\bin\DSInternals.Replication.Interop\$(Configuration.ToLower())_$(TargetFramework)\</ReplicationInteropRootDir>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+      <CppRuntimeBinariesX64 Include="$(ReplicationInteropRootDir)x64\msvc????.dll;$(ReplicationInteropRootDir)x64\vcruntime???.dll;$(ReplicationInteropRootDir)x64\vcruntime???_?.dll" />
+      <CppRuntimeBinariesX86 Include="$(ReplicationInteropRootDir)Win32\msvc????.dll;$(ReplicationInteropRootDir)Win32\vcruntime???.dll;$(ReplicationInteropRootDir)Win32\vcruntime???_?.dll" />
+      <CppRuntimeBinariesARM64 Include="$(ReplicationInteropRootDir)ARM64\msvc????.dll;$(ReplicationInteropRootDir)ARM64\vcruntime???.dll;$(ReplicationInteropRootDir)ARM64\vcruntime???_?.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+      <CppRuntimeBinariesX64 Include="$(ReplicationInteropRootDir)x64\msvc????d.dll;$(ReplicationInteropRootDir)x64\vcruntime???d.dll;$(ReplicationInteropRootDir)x64\vcruntime???_?d.dll;$(ReplicationInteropRootDir)x64\ucrtbased.dll" />
+      <CppRuntimeBinariesX86 Include="$(ReplicationInteropRootDir)Win32\msvc????d.dll;$(ReplicationInteropRootDir)Win32\vcruntime???d.dll;$(ReplicationInteropRootDir)Win32\vcruntime???_?d.dll;$(ReplicationInteropRootDir)Win32\ucrtbased.dll" />
+      <CppRuntimeBinariesARM64 Include="$(ReplicationInteropRootDir)ARM64\msvc????d.dll;$(ReplicationInteropRootDir)ARM64\vcruntime???d.dll;$(ReplicationInteropRootDir)ARM64\vcruntime???_?d.dll;$(ReplicationInteropRootDir)ARM64\ucrtbased.dll" />
+    </ItemGroup>
+    <!-- X64 -->
+    <Copy SourceFiles="$(ReplicationInteropRootDir)x64\DSInternals.Replication.Interop.dll" DestinationFolder="$(OutDir)amd64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="$(ReplicationInteropRootDir)x64\DSInternals.Replication.Interop.pdb" DestinationFolder="$(OutDir)amd64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="@(CppRuntimeBinariesX64)" DestinationFolder="$(OutDir)amd64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="$(ReplicationInteropRootDir)x64\Ijwhost.dll" DestinationFolder="$(OutDir)amd64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="'$(TargetFramework)' != 'net48'" />
+    <!-- X86 -->
+    <Copy SourceFiles="$(ReplicationInteropRootDir)Win32\DSInternals.Replication.Interop.dll" DestinationFolder="$(OutDir)x86" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="$(ReplicationInteropRootDir)Win32\DSInternals.Replication.Interop.pdb" DestinationFolder="$(OutDir)x86" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="@(CppRuntimeBinariesX86)" DestinationFolder="$(OutDir)x86" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="$(ReplicationInteropRootDir)Win32\Ijwhost.dll" DestinationFolder="$(OutDir)x86" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="'$(TargetFramework)' != 'net48'" />
+    <!-- ARM64-->
+    <Copy SourceFiles="$(ReplicationInteropRootDir)ARM64\DSInternals.Replication.Interop.dll" DestinationFolder="$(OutDir)arm64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="$(ReplicationInteropRootDir)ARM64\DSInternals.Replication.Interop.pdb" DestinationFolder="$(OutDir)arm64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="@(CppRuntimeBinariesARM64)" DestinationFolder="$(OutDir)arm64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="$(ReplicationInteropRootDir)ARM64\Ijwhost.dll" DestinationFolder="$(OutDir)arm64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="'$(TargetFramework)' != 'net48'" />
+  </Target>
+
+  <!-- Remove platform-specific files from the AnyCPU root -->
   <Target Name="RemoveRootInteropDll" AfterTargets="Build">
-    <!-- TODO: Find a more elegant way of not including these 3 files. -->
-    <!-- Remove DSInternals.Replication.Interop DLL and PDB from module root. Only keep it in the architecture-specific subdirectory. -->
+    <!-- Remove DSInternals.Replication.Interop DLL and PDB from module root. Only keep it in the architecture-specific subdirectories. -->
     <Delete Files="$(OutDir)DSInternals.Replication.Interop.dll" />
     <Delete Files="$(OutDir)DSInternals.Replication.Interop.pdb" />
-    <!-- Remove the .NET IJW host from module root. Only keep it in the architecture-specific subdirectory. -->
+    <!-- Remove the .NET IJW host from module root. Only keep it in the architecture-specific subdirectories. -->
     <Delete Files="$(OutDir)Ijwhost.dll" />
   </Target>
 </Project>
