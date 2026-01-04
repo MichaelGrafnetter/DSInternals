@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- This config file enables legacy projects using packages.config to consume this NuGet package. -->
+
+  <!-- AnyCPU platform - default to x64 -->
+  <ItemGroup Condition=" (Exists('packages.config') Or Exists('packages.$(MSBuildProjectName).config')) And ('$(Platform)' == 'AnyCPU' Or '$(Platform)' == 'x64')">
+    <!-- Native runtime libraries -->
+    <Content Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\*">
+      <Link>x64\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+    <!-- Assembly references -->
+    <Reference Include="DSInternals.Replication">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\lib\net48\DSInternals.Replication.dll</HintPath>
+    </Reference>
+    <Reference Include="DSInternals.Replication.Interop">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\lib\net48\DSInternals.Replication.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="DSInternals.Replication.Model">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\lib\net48\DSInternals.Replication.Model.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- x86/Win32 platform -->
+  <ItemGroup Condition=" (Exists('packages.config') Or Exists('packages.$(MSBuildProjectName).config')) And ('$(Platform)' == 'Win32' Or '$(Platform)' == 'x86')">
+    <!-- Native runtime libraries -->
+    <Content Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\*">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+    <!-- Assembly references -->
+    <Reference Include="DSInternals.Replication">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\lib\net48\DSInternals.Replication.dll</HintPath>
+    </Reference>
+    <Reference Include="DSInternals.Replication.Interop">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\lib\net48\DSInternals.Replication.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="DSInternals.Replication.Model">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\lib\net48\DSInternals.Replication.Model.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- ARM64 platform -->
+  <ItemGroup Condition=" (Exists('packages.config') Or Exists('packages.$(MSBuildProjectName).config')) And '$(Platform)' == 'ARM64'">
+    <!-- Native runtime libraries -->
+    <Content Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-arm64\native\*">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+    <!-- Assembly references -->
+    <Reference Include="DSInternals.Replication">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\runtimes\win-arm64\lib\net48\DSInternals.Replication.dll</HintPath>
+    </Reference>
+    <Reference Include="DSInternals.Replication.Interop">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\runtimes\win-arm64\lib\net48\DSInternals.Replication.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="DSInternals.Replication.Model">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\runtimes\win-arm64\lib\net48\DSInternals.Replication.Model.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
