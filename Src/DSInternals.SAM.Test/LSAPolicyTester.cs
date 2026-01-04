@@ -113,20 +113,19 @@ public class LSAPolicyTester
     [TestMethod]
     public void LsaPolicy_LsaRetrievePrivateData_NonExisting()
     {
-        Assert.ThrowsExactly<FileNotFoundException>(() =>
+        try
         {
-            try
+            using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
             {
-                using (var policy = new LsaPolicy(LsaPolicyAccessMask.GetPrivateInformation))
-                {
+                Assert.ThrowsExactly<FileNotFoundException>(() => {
                     policy.RetrievePrivateData("bflmpsvz");
-                }
+                });
             }
-            catch (UnauthorizedAccessException e)
-            {
-                // This is expected.
-                throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
-            }
-        });
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            // This is expected.
+            throw new AssertInconclusiveException("LSA-related tests require admin rights.", e);
+        }
     }
 }

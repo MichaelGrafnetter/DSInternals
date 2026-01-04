@@ -53,7 +53,10 @@ public class SortedFileSearcher : IDisposable
                 break;
             }
 
-            switch (String.Compare(line, 0, query, 0, query.Length, StringComparison.OrdinalIgnoreCase))
+            int compareResult = string.Compare(line, 0, query, 0, query.Length, StringComparison.OrdinalIgnoreCase);
+
+            // In .NET Core, OrdinalIgnoreCase comparison might return values other than -1, 0, or 1.
+            switch (Math.Sign(compareResult))
             {
                 case -1:
                     // Continue with the right half

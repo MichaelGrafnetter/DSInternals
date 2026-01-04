@@ -67,7 +67,7 @@
   </ItemGroup>
 
   <!-- Bundle the platform-specific DSInternals.Replication.Interop libraries and Visual C and C++ runtimes -->
-  <Target Name="CopyInteropLibraries" AfterTargets="Build">
+  <Target Name="CopyInteropLibraries" AfterTargets="PostBuildEvent">
     <PropertyGroup>
       <ReplicationInteropRootDir>$(ArtifactsPath)\bin\DSInternals.Replication.Interop\$(Configuration.ToLower())_$(TargetFramework)\</ReplicationInteropRootDir>
     </PropertyGroup>
@@ -99,7 +99,7 @@
   </Target>
 
   <!-- Remove platform-specific files from the AnyCPU root -->
-  <Target Name="RemoveRootInteropDll" AfterTargets="Build">
+  <Target Name="RemoveRootInteropDll" AfterTargets="PostBuildEvent">
     <!-- Remove DSInternals.Replication.Interop DLL and PDB from module root. Only keep it in the architecture-specific subdirectories. -->
     <Delete Files="$(OutDir)DSInternals.Replication.Interop.dll" />
     <Delete Files="$(OutDir)DSInternals.Replication.Interop.pdb" />

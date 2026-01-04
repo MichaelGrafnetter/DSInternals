@@ -24,7 +24,7 @@ public class DNWithBinaryTester
     [TestMethod]
     public void DNWithBinary_EmptyInput()
     {
-        Assert.ThrowsExactly<ArgumentNullException>(() => DNWithBinary.Parse(String.Empty));
+        Assert.ThrowsExactly<ArgumentException>(() => DNWithBinary.Parse(String.Empty));
     }
 
     [TestMethod]

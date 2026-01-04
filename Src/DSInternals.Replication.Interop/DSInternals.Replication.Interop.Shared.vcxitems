@@ -15,9 +15,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Midl Include="$(MSBuildThisFileDirectory)drsr.idl">
+      <!-- MIDL compilation randomly fails and causes build errors. -->
+      <!-- When this starts happening, the file can temporarily be excluded from compilation. -->
       <ExcludedFromBuild>false</ExcludedFromBuild>
     </Midl>
     <Midl Include="$(MSBuildThisFileDirectory)drsr_imports.idl">
+      <!-- This file should never be compiled by MIDL directly. It should only be imported into drsr.idl. -->
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </Midl>
   </ItemGroup>

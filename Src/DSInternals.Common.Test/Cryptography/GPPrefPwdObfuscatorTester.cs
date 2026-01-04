@@ -32,7 +32,7 @@ public class GPPrefPwdObfuscatorTester
     [TestMethod]
     public void GPPrefPwdObfuscator_Decrypt_EmptyInput()
     {
-        Assert.ThrowsExactly<ArgumentNullException>(() => GPPrefPwdObfuscator.Decrypt(String.Empty));
+        Assert.ThrowsExactly<ArgumentException>(() => GPPrefPwdObfuscator.Decrypt(String.Empty));
     }
     [TestMethod]
     public void GPPrefPwdObfuscator_Encrypt_Test1()
