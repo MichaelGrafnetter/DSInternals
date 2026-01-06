@@ -7,15 +7,21 @@
 
 #Requires -Version 5.1
 
+[CmdletBinding(DefaultParameterSetName = 'Configuration')]
 param(
-    [Parameter(Mandatory = $false)]
+    [Parameter(Mandatory = $false, ParameterSetName = 'ModulePath')]
     [ValidateNotNullOrEmpty()]
-    [string] $ModulePath
+    [string] $ModulePath,
+
+    [Parameter(Mandatory = $false, ParameterSetName = 'Configuration')]
+    [ValidateNotNullOrEmpty()]
+    [ValidateSet('Debug', 'Release')]
+    [string] $Configuration = 'Debug'
 )
 
 if ([string]::IsNullOrWhiteSpace($ModulePath)) {
     # No path has been provided, so use a the default value
-    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\Build\bin\DSInternals.PowerShell\Release\DSInternals' -Resolve -ErrorAction Stop
+    $ModulePath = Join-Path -Path $PSScriptRoot -ChildPath "..\..\Build\bin\DSInternals.PowerShell\$Configuration\DSInternals" -Resolve -ErrorAction Stop
 } else {
     [bool] $isFile = Test-Path -Path $ModulePath -PathType Leaf -ErrorAction SilentlyContinue
     if ($isFile) {
@@ -34,7 +40,7 @@ function prompt() { 'PS> ' }
 # Load the compiled module
 Import-Module -Name $ModulePath -Force -Verbose -ErrorAction Stop
 
-# Set directory paths 
+# Set directory paths
 [string] $solutionDirectory = Split-Path -Path $PSScriptRoot -Parent
 [string] $repoRootDirectory = Split-Path -Path $solutionDirectory -Parent
 [string] $testDataDirectory = Join-Path -Path $repoRootDirectory -ChildPath 'TestData'

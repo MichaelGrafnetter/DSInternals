@@ -20,40 +20,10 @@ classDiagram
         +DatabasePath : string
         +LogPath : string
     }
-    class ADDBObjectCommandBase {
-        <<abstract>>
-        +DistinguishedName : string
-        +ObjectGuid : Guid
-    }
-    class ADDBPrincipalCommandBase {
-        <<abstract>>
-        +SamAccountName : string
-        +ObjectSid : SecurityIdentifier
-    }
-    class ADDBModifyPrincipalCommandBase {
-        <<abstract>>
-        +SkipMetaUpdate : SwitchParameter
-        +Force : SwitchParameter
-    }
-    class ADDBAccountStatusCommandBase {
-        <<abstract>>
-    }
     class ADReplCommandBase {
         <<abstract>>
         +Server : string
         +Credential : PSCredential
-    }
-    class ADReplObjectCommandBase {
-        <<abstract>>
-        +DistinguishedName : string
-        +ObjectGuid : Guid
-    }
-    class ADReplPrincipalCommandBase {
-        <<abstract>>
-        +SamAccountName : string
-        +Domain : string
-        +UserPrincipalName : string
-        +ObjectSid : SecurityIdentifier
     }
     class ADSICommandBase {
         <<abstract>>
@@ -79,13 +49,7 @@ classDiagram
 
     PSCmdlet <|-- PSCmdletEx
     PSCmdletEx <|-- ADDBCommandBase
-    ADDBCommandBase <|-- ADDBObjectCommandBase
-    ADDBObjectCommandBase <|-- ADDBPrincipalCommandBase
-    ADDBPrincipalCommandBase <|-- ADDBModifyPrincipalCommandBase
-    ADDBModifyPrincipalCommandBase <|-- ADDBAccountStatusCommandBase
     PSCmdletEx <|-- ADReplCommandBase
-    ADReplCommandBase <|-- ADReplObjectCommandBase
-    ADReplObjectCommandBase <|-- ADReplPrincipalCommandBase
     PSCmdlet <|-- ADSICommandBase
     PSCmdlet <|-- AzureADCommandBase
     PSCmdlet <|-- LsaPolicyCommandBase
@@ -96,7 +60,7 @@ classDiagram
 
 ```mermaid
 classDiagram
-    direction TB
+    direction LR
     class ADDBCommandBase {
         <<abstract>>
         +DatabasePath : string
@@ -320,7 +284,7 @@ classDiagram
     ADReplCommandBase <|-- GetADReplKdsRootKeyCommand
 ```
 
-## ADSI, Azure AD, LSA, and SAM Commands
+## ADSI Commands
 
 ```mermaid
 classDiagram
@@ -334,7 +298,13 @@ classDiagram
         +Properties : AccountPropertySets
     }
     ADSICommandBase <|-- GetADSIAccountCommand
+```
 
+## Azure AD Commands
+
+```mermaid
+classDiagram
+    direction TB
     class AzureADCommandBase {
         <<abstract>>
         +AccessToken : string
@@ -350,7 +320,13 @@ classDiagram
     }
     AzureADCommandBase <|-- GetAzureADUserExCommand
     AzureADCommandBase <|-- SetAzureADUserExCommand
+```
 
+## LSA Commands
+
+```mermaid
+classDiagram
+    direction TB
     class LsaPolicyCommandBase {
         <<abstract>>
         +ComputerName : string
@@ -367,7 +343,13 @@ classDiagram
     LsaPolicyCommandBase <|-- GetLsaBackupKeyCommand
     LsaPolicyCommandBase <|-- GetLsaPolicyInformationCommand
     LsaPolicyCommandBase <|-- SetLsaPolicyInformationCommand
+```
 
+## SAM Commands
+
+```mermaid
+classDiagram
+    direction TB
     class SamCommandBase {
         <<abstract>>
         +Credential : PSCredential

@@ -17,16 +17,20 @@ ConvertFrom-GPPrefPassword [-EncryptedPassword] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Decrypts a password that was encrypted using Group Policy Preferences (GPP). GPP stored passwords in SYSVOL using AES encryption with a key that Microsoft published in MSDN documentation. This vulnerability (MS14-025) allows anyone with access to SYSVOL to decrypt these passwords. This cmdlet can be used to audit GPP XML files for exposed credentials.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> ConvertFrom-GPPrefPassword -EncryptedPassword 'v9NWtCCOKEUHkZBxakMd6HLzo4+DzuizXP83EaImqF8'
+<#
+Output:
+Pa$$w0rd
+#>
 ```
 
-{{ Add example description here }}
+Decrypts a password from a Group Policy Preferences XML file (e.g., Groups.xml, ScheduledTasks.xml, or Drives.xml) and returns the cleartext password.
 
 ## PARAMETERS
 

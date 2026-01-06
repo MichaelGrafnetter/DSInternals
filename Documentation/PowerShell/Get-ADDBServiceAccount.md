@@ -82,7 +82,7 @@ Accept wildcard characters: False
 ```
 
 ### -EffectiveTime
-Specifies the date and time at which the fenerated credentials should be valid. Defaults to the current time. 
+Specifies the date and time at which the generated credentials should be valid. Defaults to the current time.
 
 ```yaml
 Type: DateTime

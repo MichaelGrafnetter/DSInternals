@@ -182,7 +182,7 @@ This is a PowerShell-only release.
 
 ### Fixed
 
-- The [Set-LsaPolicyInformation](PowerShell/Set-LsaPolicyInformation.md#set-lsapolicyinformation) cmdlet now generates the [UNICODE_STRING](https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_unicode_string) structure with the trailing null character, to improve compatibility with NETLOGON. This issue mainly affects the functionality of the [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet. Thanks Christoffer Andersson for reporting this issue and sorry Microsoft support escalation engineers for the trouble this bug has caused.
+- The [Set-LsaPolicyInformation](PowerShell/Set-LsaPolicyInformation.md#set-lsapolicyinformation) cmdlet now generates the [UNICODE_STRING](https://learn.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-_unicode_string) structure with the trailing null character, to improve compatibility with NETLOGON. This issue mainly affects the functionality of the [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet. Thanks Christoffer Andersson for reporting this issue, and sorry Microsoft support escalation engineers for the trouble this bug has caused.
 
 ## [4.12] - 2023-10-06
 
@@ -190,7 +190,7 @@ This is a PowerShell-only release.
 
 - The [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlet now works against Windows Server 2025 Insider Preview with the [32k database page size optional feature](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/whats-new-active-directory-domain-services-insider-preview#32k-database-page-size-optional-feature) enabled.
 - The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet is now able to read databases originating from Windows Server 2025 Insider Preview with the [32k database page size optional feature](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/whats-new-active-directory-domain-services-insider-preview#32k-database-page-size-optional-feature) enabled.
-- Added support for parsing AES SHA2 Kerbers keys.
+- Added support for parsing AES SHA2 Kerberos keys.
 
 ### Fixed
 
@@ -560,7 +560,7 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 - The `DSInternals.Replication` library now supports incremental replication (not exposed through PowerShell).
 
 ## [2.12] - 2016-02-07
-- Commandlets for ntds.dit manipulation now work on Windows 7 / Windows Server 2008 R2.
+- Cmdlets for ntds.dit manipulation now work on Windows 7 / Windows Server 2008 R2.
 - The module now requires .NET Framework 4.5.1 instead of 4.5.
 - Both Visual Studio 2013 and 2015 are now supported platforms.
 
@@ -625,7 +625,7 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 - Fixed a bug in SupplementalCredentials parsing
 
 ## 2.1
-- The [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlet can now retrieve all accounts from AD or just a sigle one
+- The [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlet can now retrieve all accounts from AD or just a single one
 - Added Microsoft Visual C++ 2013 Runtime libraries to the distribution
 - The module is now 64-bit only
 - Minor bug fixes

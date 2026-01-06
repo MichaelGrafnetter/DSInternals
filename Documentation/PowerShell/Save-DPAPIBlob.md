@@ -8,7 +8,7 @@ schema: 2.0.0
 # Save-DPAPIBlob
 
 ## SYNOPSIS
-Saves DPAPI and Credential Roaming data retrieved from Active Directory to the filesystem for further processing.
+Saves DPAPI and Credential Roaming data retrieved from Active Directory to the file system for further processing.
 
 ## SYNTAX
 
@@ -24,7 +24,7 @@ Save-DPAPIBlob -Account <DSAccount> [-DirectoryPath] <String> [<CommonParameters
 
 ## DESCRIPTION
 
-This cmdlet saves DPAPI-related data retrieved from Active Directory to a selected directory. It also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys and to decode the certificates.
+This cmdlet saves DPAPI-related data retrieved from Active Directory to a selected directory. It also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys and decode the certificates.
 Supports DPAPI backup keys returned by the Get-ADReplBackupKey, Get-ADDBBackupKey, and Get-LsaBackupKey cmdlets and roamed credentials (certificates, private keys, and DPAPI master keys) returned by the Get-ADReplAccount, Get-ADDBAccount, and Get-ADSIAccount cmdlets.
 
 ## EXAMPLES

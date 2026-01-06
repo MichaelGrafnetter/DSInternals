@@ -20,7 +20,7 @@ Get-ADDBBackupKey -BootKey <Byte[]> -DatabasePath <String> [-LogPath <String>] [
 
 Reads and decrypts Data Protection API (DPAPI) backup keys from an Active Directory database file. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.
 
-DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.
+DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of the user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.
 
 ## EXAMPLES
 
@@ -32,31 +32,31 @@ PS C:\> Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
 <# Sample Output:
 
 FilePath          : ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
-KiwiCommand       : 
+KiwiCommand       :
 Type              : LegacyKey
-DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22 
+DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22
                     Secret,CN=System,DC=contoso,DC=com
 KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
 Data              : {1, 0, 0, 0...}
 
-FilePath          : 
-KiwiCommand       : 
+FilePath          :
+KiwiCommand       :
 Type              : PreferredLegacyKeyPointer
 DistinguishedName : CN=BCKUPKEY_P Secret,CN=System,DC=contoso,DC=com
 KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
 Data              : {250, 203, 22, 177...}
 
 FilePath          : ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
-KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey 
+KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey
                     command: /pvk:"ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk"
 Type              : RSAKey
-DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3 
+DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3
                     Secret,CN=System,DC=contoso,DC=com
 KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
 Data              : {2, 0, 0, 0...}
 
-FilePath          : 
-KiwiCommand       : 
+FilePath          :
+KiwiCommand       :
 Type              : PreferredRSAKeyPointer
 DistinguishedName : CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=contoso,DC=com
 KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
@@ -64,7 +64,7 @@ Data              : {237, 20, 9, 41...}
 #>
 ```
 
-Extracts the boot key (AKA SysKey or system key) from a backup of the SYSTEM registry hive and decrypts all DPAPI backup keys stored in the an Active Directory database file.
+Extracts the boot key (AKA SysKey or system key) from a backup of the SYSTEM registry hive and decrypts all DPAPI backup keys stored in an Active Directory database file.
 
 ### Example 2
 ```powershell

@@ -17,16 +17,21 @@ ConvertTo-GPPrefPassword [-Password] <SecureString> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Encrypts a password using the AES key that was used by Group Policy Preferences (GPP) to store passwords in SYSVOL. This encryption method is considered insecure because Microsoft published the AES key in MSDN documentation (MS14-025). This cmdlet is provided for educational and testing purposes.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $password = Read-Host -AsSecureString -Prompt 'Enter password'
+PS C:\> ConvertTo-GPPrefPassword -Password $password
+<#
+Sample Output:
+v9NWtCCOKEUHkZBxakMd6HLzo4+DzuizXP83EaImqF8
+#>
 ```
 
-{{ Add example description here }}
+Encrypts a password using the well-known Group Policy Preferences AES key and returns the Base64-encoded ciphertext.
 
 ## PARAMETERS
 

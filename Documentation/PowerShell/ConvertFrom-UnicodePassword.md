@@ -17,16 +17,20 @@ ConvertFrom-UnicodePassword [-UnicodePassword] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Decodes a Base64-encoded Unicode password from the format used in Windows unattend.xml files. This is useful for recovering or auditing passwords that have been stored in unattend.xml configuration files used during automated Windows deployments.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> ConvertFrom-UnicodePassword -UnicodePassword 'UABhAHMAcwB3ADAAcgBkAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIAUABhAHMAcwB3AG8AcgBkAA=='
+<#
+Output:
+Passw0rd
+#>
 ```
 
-{{ Add example description here }}
+Decodes a Base64-encoded password from an unattend.xml file and returns the cleartext password.
 
 ## PARAMETERS
 

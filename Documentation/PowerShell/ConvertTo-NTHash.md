@@ -77,5 +77,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[ConvertTo-LMHash](ConvertTo-NTHash.md)
+[ConvertTo-LMHash](ConvertTo-LMHash.md)
 [ConvertTo-KerberosKey](ConvertTo-KerberosKey.md)

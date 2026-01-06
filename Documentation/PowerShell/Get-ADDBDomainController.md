@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-ADDBDomainController
 
 ## SYNOPSIS
-Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name and DC site.
+Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name, and DC site.
 
 ## SYNTAX
 
@@ -18,7 +18,7 @@ Get-ADDBDomainController -DatabasePath <String> [-LogPath <String>] [<CommonPara
 
 ## DESCRIPTION
 
-Reads domain controller (DC) infromation from a ntds.dit file that is either retrieved from an offline DC or from an (IFM) backup.
+Reads domain controller (DC) information from a ntds.dit file that is either retrieved from an offline DC or from an IFM backup.
 
 ## EXAMPLES
 

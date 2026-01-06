@@ -21,7 +21,7 @@ Get-ADReplBackupKey [-Domain <String>] -Server <String> [-Credential <PSCredenti
 
 Replicates the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-DRSR protocol. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.
 
-DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.
+DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of the user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.
 
 ## EXAMPLES
 

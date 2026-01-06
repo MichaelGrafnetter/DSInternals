@@ -1542,7 +1542,7 @@ UnchangedPasswordInterval : 29.17:10:36.3736817
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Supports the derivation of AES256, AES128 and DES encryption keys. To calculate the RC4 key, the ConvertTo-NTHash cmdlet should be used instead.</maml:para>
+      <maml:para>Supports the derivation of AES256, AES128, and DES encryption keys. To calculate the RC4 key, the ConvertTo-NTHash cmdlet should be used instead.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2103,7 +2103,7 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>Password</maml:name>
           <maml:description>
-            <maml:para>Specifies a password that will be converted to the specifiet format.</maml:para>
+            <maml:para>Specifies a password that will be converted to the specified format.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
           <dev:type>
@@ -2141,7 +2141,7 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>Password</maml:name>
         <maml:description>
-          <maml:para>Specifies a password that will be converted to the specifiet format.</maml:para>
+          <maml:para>Specifies a password that will be converted to the specified format.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">SecureString</command:parameterValue>
         <dev:type>
@@ -4219,7 +4219,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
       <command:example>
         <maml:title>-------------------------- Example 8 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $dc = Get-ADDBDomainController -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
-PS C:\&gt; $adminSid = '{0}-500' -f $dc.DomainSid           
+PS C:\&gt; $adminSid = '{0}-500' -f $dc.DomainSid
 PS C:\&gt; $account = Get-ADDBAccount -Sid $adminSid `
                                    -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
                                    -BootKey 0be7a2afe1713642182e9b96f73a75da</dev:code>
@@ -4232,7 +4232,7 @@ PS C:\&gt; $account = Get-ADDBAccount -Sid $adminSid `
         <dev:code>PS C:\&gt; Get-ADDBAccount -DatabasePath '.\ADBackup\Active Directory\ntds.dit' -All -Properties LAPS | Select-Object -ExpandProperty LapsPasswords
 &lt;# Sample Output:
 ComputerName Account       Password                 Expires   Source
------------- -------       --------                 -------   -----                                                                                                                                                
+------------ -------       --------                 -------   -----
 DC01         Administrator PluralTrimmingSuggest    2/3/2025  EncryptedDSRMPassword
 DC02         Administrator RoundupFructoseRoundworm 2/3/2025  EncryptedDSRMPassword
 ADFS01       WLapsAdmin    HerbsSkidUnproven        2/3/2025  EncryptedPassword
@@ -4313,7 +4313,7 @@ PC01         Administrator A6a3#7%eb!57be4a4B95Z433 1/24/2025 CleartextPassword
     </command:details>
     <maml:description>
       <maml:para>Reads and decrypts Data Protection API (DPAPI) backup keys from an Active Directory database file. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.</maml:para>
-      <maml:para>DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
+      <maml:para>DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of the user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -4428,38 +4428,38 @@ PS C:\&gt; Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit
 &lt;# Sample Output:
 
 FilePath          : ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
-KiwiCommand       : 
+KiwiCommand       :
 Type              : LegacyKey
-DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22 
+DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22
                     Secret,CN=System,DC=contoso,DC=com
 KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
 Data              : {1, 0, 0, 0...}
 
-FilePath          : 
-KiwiCommand       : 
+FilePath          :
+KiwiCommand       :
 Type              : PreferredLegacyKeyPointer
 DistinguishedName : CN=BCKUPKEY_P Secret,CN=System,DC=contoso,DC=com
 KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
 Data              : {250, 203, 22, 177...}
 
 FilePath          : ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
-KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey 
+KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey
                     command: /pvk:"ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk"
 Type              : RSAKey
-DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3 
+DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3
                     Secret,CN=System,DC=contoso,DC=com
 KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
 Data              : {2, 0, 0, 0...}
 
-FilePath          : 
-KiwiCommand       : 
+FilePath          :
+KiwiCommand       :
 Type              : PreferredRSAKeyPointer
 DistinguishedName : CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=contoso,DC=com
 KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
 Data              : {237, 20, 9, 41...}
 #&gt;</dev:code>
         <dev:remarks>
-          <maml:para>Extracts the boot key (AKA SysKey or system key) from a backup of the SYSTEM registry hive and decrypts all DPAPI backup keys stored in the an Active Directory database file.</maml:para>
+          <maml:para>Extracts the boot key (AKA SysKey or system key) from a backup of the SYSTEM registry hive and decrypts all DPAPI backup keys stored in an Active Directory database file.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -5020,7 +5020,7 @@ ftp                             3600  IN  CNAME www
 login                           3600  IN  A     10.213.0.4
 #&gt;</dev:code>
         <dev:remarks>
-          <maml:para>Extracts all DNS recource records from the offline Active Directory database file and displays the SOA, NS, A, CNAME, MX, and CNAME records from the contoso.com zone in a text format compatible with Windows Server and BIND zone files.</maml:para>
+          <maml:para>Extracts all DNS resource records from the offline Active Directory database file and displays the SOA, NS, A, CNAME, MX, and CNAME records from the contoso.com zone in a text format compatible with Windows Server and BIND zone files.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -5162,11 +5162,11 @@ contoso.com
       <command:verb>Get</command:verb>
       <command:noun>ADDBDomainController</command:noun>
       <maml:description>
-        <maml:para>Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name and DC site.</maml:para>
+        <maml:para>Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name, and DC site.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Reads domain controller (DC) infromation from a ntds.dit file that is either retrieved from an offline DC or from an (IFM) backup.</maml:para>
+      <maml:para>Reads domain controller (DC) information from a ntds.dit file that is either retrieved from an offline DC or from an IFM backup.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -5316,7 +5316,7 @@ Epoch                      : 961
       <command:verb>Get</command:verb>
       <command:noun>ADDBKdsRootKey</command:noun>
       <maml:description>
-        <maml:para>Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.</maml:para>
+        <maml:para>Reads KDS Root Keys from a ntds.dit file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -5501,13 +5501,13 @@ Secret Agreement
   Public Key Length: 2048
   Private Key Length: 512
   Parameters
-    0c0200004448504d0001000087a8e61db4b6663cffbbd19c651959998ceef608660dd0f25d2ceed4435e3b00e00df8f1d61957d4faf7df4561b2aa3016c3d91134096fa 
+    0c0200004448504d0001000087a8e61db4b6663cffbbd19c651959998ceef608660dd0f25d2ceed4435e3b00e00df8f1d61957d4faf7df4561b2aa3016c3d91134096fa
     a3bf4296d830e9a7c209e0c6497517abd5a8a9d306bcf67ed91f9e6725b4758c022e0b1ef4275bf7b6c5bfc11d45f9088b941f54eb1e59bb8bc39a0bf12307f5c4fdb70
-    c581b23f76b63acae1caa6b7902d52526735488a0ef13c6d9a51bfa4ab3ad8347796524d8ef6a167b5a41825d967e144e5140564251ccacb83e6b486f6b3ca3f7971506 
-    026c0b857f689962856ded4010abd0be621c3a3960a54e710c375f26375d7014103a4b54330c198af126116d2276e11715f693877fad7ef09cadb094ae91e1a15973fb3 
-    2c9b73134d0b2e77506660edbd484ca7b18f21ef205407f4793a1a0ba12510dbc15077be463fff4fed4aac0bb555be3a6c1b0c6b47b1bc3773bf7e8c6f62901228f8c28 
-    cbb18a55ae31341000a650196f931c77a57f2ddf463e5e9ec144b777de62aaab8a8628ac376d282d6ed3864e67982428ebc831d14348f6f2f9193b5045af2767164e1df 
-    c967c1fb3f2e55a4bd1bffe83b9c80d052b985d182ea0adb2a3b7313d3fe14c8484b1e052588b9b7d2bbd2df016199ecd06e1557cd0915b3353bbb64e0ec377fd028370 
+    c581b23f76b63acae1caa6b7902d52526735488a0ef13c6d9a51bfa4ab3ad8347796524d8ef6a167b5a41825d967e144e5140564251ccacb83e6b486f6b3ca3f7971506
+    026c0b857f689962856ded4010abd0be621c3a3960a54e710c375f26375d7014103a4b54330c198af126116d2276e11715f693877fad7ef09cadb094ae91e1a15973fb3
+    2c9b73134d0b2e77506660edbd484ca7b18f21ef205407f4793a1a0ba12510dbc15077be463fff4fed4aac0bb555be3a6c1b0c6b47b1bc3773bf7e8c6f62901228f8c28
+    cbb18a55ae31341000a650196f931c77a57f2ddf463e5e9ec144b777de62aaab8a8628ac376d282d6ed3864e67982428ebc831d14348f6f2f9193b5045af2767164e1df
+    c967c1fb3f2e55a4bd1bffe83b9c80d052b985d182ea0adb2a3b7313d3fe14c8484b1e052588b9b7d2bbd2df016199ecd06e1557cd0915b3353bbb64e0ec377fd028370
     df92b52c7891428cdc67eb6184b523d1db246c32f63078490f00ef8d647d148d47954515e2327cfef98c582664b4c0f6cc41659
 #&gt;
 
@@ -5713,7 +5713,7 @@ ATTj590126 sAMAccountType 1.2.840.113556.1.4.302 INDEX_0009012E
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="EffectiveDate, PasswordLastSet, PwdLastSet, Date, Time, d, t">
           <maml:name>EffectiveTime</maml:name>
           <maml:description>
-            <maml:para>Specifies the date and time at which the fenerated credentials should be valid. Defaults to the current time.</maml:para>
+            <maml:para>Specifies the date and time at which the generated credentials should be valid. Defaults to the current time.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
           <dev:type>
@@ -5752,7 +5752,7 @@ ATTj590126 sAMAccountType 1.2.840.113556.1.4.302 INDEX_0009012E
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="EffectiveDate, PasswordLastSet, PwdLastSet, Date, Time, d, t">
         <maml:name>EffectiveTime</maml:name>
         <maml:description>
-          <maml:para>Specifies the date and time at which the fenerated credentials should be valid. Defaults to the current time.</maml:para>
+          <maml:para>Specifies the date and time at which the generated credentials should be valid. Defaults to the current time.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
         <dev:type>
@@ -7853,7 +7853,7 @@ PS C:\&gt; Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' -Properties Roame
     </command:details>
     <maml:description>
       <maml:para>Replicates the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-DRSR protocol. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.</maml:para>
-      <maml:para>DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
+      <maml:para>DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of the user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -7995,31 +7995,31 @@ PS C:\&gt; Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' -Properties Roame
 &lt;# Sample Output:
 
 FilePath          : ntds_legacy_b116cbfa-b881-43e6-ba85-ef3efa64ba22.key
-KiwiCommand       : 
+KiwiCommand       :
 Type              : LegacyKey
-DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22 
+DistinguishedName : CN=BCKUPKEY_b116cbfa-b881-43e6-ba85-ef3efa64ba22
                     Secret,CN=System,DC=contoso,DC=com
 KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
 Data              : {1, 0, 0, 0...}
 
-FilePath          : 
-KiwiCommand       : 
+FilePath          :
+KiwiCommand       :
 Type              : PreferredLegacyKeyPointer
 DistinguishedName : CN=BCKUPKEY_P Secret,CN=System,DC=contoso,DC=com
 KeyId             : b116cbfa-b881-43e6-ba85-ef3efa64ba22
 Data              : {250, 203, 22, 177...}
 
 FilePath          : ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
-KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey 
+KiwiCommand       : REM Add this parameter to at least the first dpapi::masterkey
                     command: /pvk:"ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk"
 Type              : RSAKey
-DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3 
+DistinguishedName : CN=BCKUPKEY_290914ed-b1a8-482e-a89f-7caa217bf3c3
                     Secret,CN=System,DC=contoso,DC=com
 KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
 Data              : {2, 0, 0, 0...}
 
-FilePath          : 
-KiwiCommand       : 
+FilePath          :
+KiwiCommand       :
 Type              : PreferredRSAKeyPointer
 DistinguishedName : CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=contoso,DC=com
 KeyId             : 290914ed-b1a8-482e-a89f-7caa217bf3c3
@@ -9077,7 +9077,7 @@ PS C:\&gt; $key = Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:c
     </command:details>
     <maml:description>
       <maml:para>Reads the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-LSAD (AKA LSARPC) protocol. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.</maml:para>
-      <maml:para>DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
+      <maml:para>DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of the user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -9779,7 +9779,7 @@ icacls.exe C:\Windows\Sysvol\domain\Policies\* /save C:\IFM\SYSVOL\PolicyPermiss
       <command:verb>Remove</command:verb>
       <command:noun>ADDBObject</command:noun>
       <maml:description>
-        <maml:para>Physically removes specified object from a ntds.dit file, making it semantically inconsistent. Highly experimental!</maml:para>
+        <maml:para>Physically removes the specified object from a ntds.dit file, making it semantically inconsistent. Highly experimental!</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -10072,11 +10072,11 @@ icacls.exe C:\Windows\Sysvol\domain\Policies\* /save C:\IFM\SYSVOL\PolicyPermiss
       <command:verb>Save</command:verb>
       <command:noun>DPAPIBlob</command:noun>
       <maml:description>
-        <maml:para>Saves DPAPI and Credential Roaming data retrieved from Active Directory to the filesystem for further processing.</maml:para>
+        <maml:para>Saves DPAPI and Credential Roaming data retrieved from Active Directory to the file system for further processing.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This cmdlet saves DPAPI-related data retrieved from Active Directory to a selected directory. It also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys and to decode the certificates. Supports DPAPI backup keys returned by the Get-ADReplBackupKey, Get-ADDBBackupKey, and Get-LsaBackupKey cmdlets and roamed credentials (certificates, private keys, and DPAPI master keys) returned by the Get-ADReplAccount, Get-ADDBAccount, and Get-ADSIAccount cmdlets.</maml:para>
+      <maml:para>This cmdlet saves DPAPI-related data retrieved from Active Directory to a selected directory. It also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys and decode the certificates. Supports DPAPI backup keys returned by the Get-ADReplBackupKey, Get-ADDBBackupKey, and Get-LsaBackupKey cmdlets and roamed credentials (certificates, private keys, and DPAPI master keys) returned by the Get-ADReplAccount, Get-ADDBAccount, and Get-ADSIAccount cmdlets.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -13539,7 +13539,7 @@ PS C:\&gt; Set-AzureADUserEx -UserPrincipalName 'john@contoso.com' -KeyCredentia
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; $user = Get-AzureADUserEx -UserPrincipalName 'john@contoso.com' -AccessToken $token 
+        <dev:code>PS C:\&gt; $user = Get-AzureADUserEx -UserPrincipalName 'john@contoso.com' -AccessToken $token
 PS C:\&gt; $newCreds = $user.KeyCredentials | where { $PSItem.FidoKeyMaterial.DisplayName -notlike '*YubiKey*' }
 PS C:\&gt; Set-AzureADUserEx -UserPrincipalName 'john@contoso.com' -KeyCredential $newCreds -Token $token</dev:code>
         <dev:remarks>

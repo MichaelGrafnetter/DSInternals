@@ -17,7 +17,7 @@ ConvertTo-KerberosKey [-Password] <SecureString> [-Salt] <String> [[-Iterations]
 ```
 
 ## DESCRIPTION
-Supports the derivation of AES256, AES128 and DES encryption keys. To calculate the RC4 key, the ConvertTo-NTHash cmdlet should be used instead.
+Supports the derivation of AES256, AES128, and DES encryption keys.
 
 ## EXAMPLES
 

@@ -1,7 +1,7 @@
 ---
 Module Name: DSInternals
 Module Guid: 766b3ad8-eb78-48e6-84bd-61b31d96b53e
-Download Help Link: 
+Download Help Link:
 Help Version: 1.0
 Locale: en-US
 ---
@@ -13,11 +13,11 @@ Locale: en-US
 
 ## Description
 
-The DSInternals PowerShell Module exposes several internal features of Active Directory and Azure Active Directory. These include FIDO2 and NGC key auditing, offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.
+The DSInternals PowerShell Module exposes several internal features of Active Directory and Azure Active Directory. These include FIDO2 and NGC key auditing, offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups, and password hash calculation.
 
 ## Azure Active Directory Cmdlets
 
-These cmdlets utilize an undocumented API endpoint that exposes information not available through the Microsoft Graph API nor Azure AD Graph API.
+These cmdlets utilize an undocumented API endpoint that exposes information not available through the Microsoft Graph API or Azure AD Graph API.
 
 ### [Get-AzureADUserEx](Get-AzureADUserEx.md#get-azureaduserex)
 Gets a user from Azure AD, including the associated FIDO and NGC keys.
@@ -65,7 +65,7 @@ Reads inter-domain trust objects from a ntds.dit and decrypts the trust password
 Reads the DPAPI backup keys from a ntds.dit file.
 
 ### [Get-ADDBKdsRootKey](Get-ADDBKdsRootKey.md#get-addbkdsrootkey)
-Reads KDS Root Keys from a ntds.dit. file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
+Reads KDS Root Keys from a ntds.dit file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
 
 ### [Get-ADDBServiceAccount](Get-ADDBServiceAccount.md#get-addbserviceaccount)
 Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
@@ -80,7 +80,7 @@ Retrieves DNS resource records from an Active Directory database.
 Retrieves the list of DNS zones stored in an Active Directory database.
 
 ### [Get-ADDBDomainController](Get-ADDBDomainController.md#get-addbdomaincontroller)
-Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name and DC site.
+Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name, and DC site.
 
 ### [Set-ADDBDomainController](Set-ADDBDomainController.md#set-addbdomaincontroller)
 Writes information about the DC to a ntds.dit file, including the highest committed USN and database epoch.
@@ -95,7 +95,7 @@ Reads the Boot Key (AKA SysKey or System Key) from an online or offline SYSTEM r
 Re-encrypts a ntds.dit file with a new BootKey/SysKey.
 
 ### [Remove-ADDBObject](Remove-ADDBObject.md#remove-addbobject)
-Physically removes specified object from a ntds.dit file, making it semantically inconsistent. Highly experimental!
+Physically removes the specified object from a ntds.dit file, making it semantically inconsistent. Highly experimental!
 
 ## Cmdlets for Online Active Directory Operations
 
@@ -234,7 +234,7 @@ Calculates OrgId hash of a given password. Used by Azure Active Directory Connec
 ## Cmdlets for Credential Decryption
 
 ### [Save-DPAPIBlob](Save-DPAPIBlob.md#save-dpapiblob)
-Saves DPAPI and Credential Roaming data retrieved from Active Directory to the filesystem for further processing.
+Saves DPAPI and Credential Roaming data retrieved from Active Directory to the file system for further processing.
 
 ### [ConvertFrom-ADManagedPasswordBlob](ConvertFrom-ADManagedPasswordBlob.md#convertfrom-admanagedpasswordblob)
 Decodes the value of the msDS-ManagedPassword attribute of a Group Managed Service Account.

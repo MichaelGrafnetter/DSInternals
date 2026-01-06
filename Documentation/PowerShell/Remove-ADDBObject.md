@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-ADDBObject
 
 ## SYNOPSIS
-Physically removes specified object from a ntds.dit file, making it semantically inconsistent. Highly experimental!
+Physically removes the specified object from a ntds.dit file, making it semantically inconsistent. Highly experimental!
 
 ## SYNTAX
 
@@ -25,16 +25,16 @@ Remove-ADDBObject [-Force] -ObjectGuid <Guid> -DatabasePath <String> [-LogPath <
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Physically removes the specified object from an offline Active Directory database (ntds.dit) file. This operation bypasses normal Active Directory deletion mechanisms and directly removes the object from the ESE database, which makes the database semantically inconsistent. This cmdlet is highly experimental and should only be used in lab environments or extreme disaster recovery scenarios.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-ADDBObject -DistinguishedName 'CN=intruder,CN=Users,DC=contoso,DC=com' -DatabasePath '.\ntds.dit'
 ```
 
-{{ Add example description here }}
+Physically removes the object with the specified distinguished name from the offline ntds.dit file.
 
 ## PARAMETERS
 

@@ -17,16 +17,32 @@ ConvertTo-UnicodePassword [-Password] <SecureString> [-IsUnattendPassword] [<Com
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Converts a password to the Base64-encoded Unicode format that is used in Windows unattend.xml files or LDIF (LDAP Data Interchange Format) files. This format is required when specifying passwords in automated Windows deployment scenarios or when importing user accounts with passwords through LDIF.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $password = Read-Host -AsSecureString -Prompt 'Enter password'
+PS C:\> ConvertTo-UnicodePassword -Password $password
+<# Sample Output:
+UABhAHMAcwB3ADAAcgBkAA==
+#>
 ```
 
-{{ Add example description here }}
+Converts a password to the Base64-encoded Unicode format suitable for use in LDIF files.
+
+### Example 2
+```powershell
+PS C:\> $password = Read-Host -AsSecureString -Prompt 'Enter password'
+PS C:\> ConvertTo-UnicodePassword -Password $password -IsUnattendPassword
+<#
+Sample Output:
+UABhAHMAcwB3ADAAcgBkAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIAUABhAHMAcwB3AG8AcgBkAA==
+#>
+```
+
+Converts a password to the format used in Windows unattend.xml files, which includes the "AdministratorPassword" suffix.
 
 ## PARAMETERS
 
@@ -46,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -Password
-Specifies a password that will be converted to the specifiet format.
+Specifies a password that will be converted to the specified format.
 
 ```yaml
 Type: SecureString

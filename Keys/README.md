@@ -7,7 +7,7 @@ Strong Name Key Files
 The `DSInternals.Public.snk` file contains the public key that can be used to verify
 the strong name signature of the official binaries.
 
-The corresponding private key, contained in the D`SInternals.Private.snk` file,
+The corresponding private key, contained in the `DSInternals.Private.snk` file,
 is not publicly available. If you want to strong sign the resulting assemblies,
 you have to generate your own key pair.
 

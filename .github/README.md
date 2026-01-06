@@ -108,7 +108,7 @@ This package is self-contained and it will also install all dependencies.
 
 The DSInternals PowerShell module is part of FireEye's [Commando VM](https://github.com/fireeye/commando-vm), the Windows-based alternative to Kali Linux.
 
-###  NuGet Packages
+### NuGet Packages
 
 The easiest way of integrating the DSInternals functionality into .NET applications is by using the [DSInternals Framework NuGet packages](https://www.nuget.org/profiles/DSInternals):
 
@@ -119,10 +119,12 @@ The easiest way of integrating the DSInternals functionality into .NET applicati
 
 ### Building from Source Code
 
-[![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-383278.svg)](CONTRIBUTING.md#building-from-source-code)
+[![Visual Studio 2026](https://img.shields.io/badge/Visual%20Studio-2026-383278.svg)](CONTRIBUTING.md#building-from-source-code)
 [![CI Build](https://github.com/MichaelGrafnetter/DSInternals/actions/workflows/autobuild.yml/badge.svg)](https://github.com/MichaelGrafnetter/DSInternals/actions/workflows/autobuild.yml)
 
-You can of course download the [source code](https://github.com/MichaelGrafnetter/DSInternals/archive/master.zip), perform a review and compile the Module/Framework yourself. See the [CONTRIBUTING](CONTRIBUTING.md#building-from-source-code) guide for more info.
+You can of course download the [source code](https://github.com/MichaelGrafnetter/DSInternals/archive/master.zip),
+perform a review, and compile the Module/Framework yourself.
+See the [CONTRIBUTING](CONTRIBUTING.md#building-from-source-code) guide for more info.
 
 ## Documentation
 
@@ -132,7 +134,8 @@ The online version of [PowerShell Get-Help documentation](../Documentation/Power
 
 ### Blog Posts
 
-I have also published a series of articles about the DSInternals module on [my blog](https://www.dsinternals.com/en/). Here are a few of them:
+I have also published a series of articles about the DSInternals module on [my blog](https://www.dsinternals.com/en/).
+Here are a few of them:
 
 - [Juicing ntds.dit Files to the Last Drop](https://specterops.io/blog/2025/08/14/juicing-ntds-dit-files-last-drop-dsinternals-powershell-active-directory-offline-attacks/)
 - [New Offline Capabilities in DSInternals 4.11](https://www.dsinternals.com/en/dsinternals-v4.11/)

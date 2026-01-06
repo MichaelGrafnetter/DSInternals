@@ -53,7 +53,7 @@ login                           3600  IN  A     10.213.0.4
 #>
 ```
 
-Extracts all DNS recource records from the offline Active Directory database file and displays the SOA, NS, A, CNAME, MX, and CNAME records from the contoso.com zone in a text format compatible with Windows Server and BIND zone files.
+Extracts all DNS resource records from the offline Active Directory database file and displays the SOA, NS, A, CNAME, MX, and CNAME records from the contoso.com zone in a text format compatible with Windows Server and BIND zone files.
 
 ## PARAMETERS
 
