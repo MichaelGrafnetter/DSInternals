@@ -30,13 +30,6 @@ classDiagram
         +Server : string
         +Credential : PSCredential
     }
-    class AzureADCommandBase {
-        <<abstract>>
-        +AccessToken : string
-        +ObjectId : Guid
-        +UserPrincipalName : string
-        +TenantId : Guid
-    }
     class LsaPolicyCommandBase {
         <<abstract>>
         +ComputerName : string
@@ -51,7 +44,6 @@ classDiagram
     PSCmdletEx <|-- ADDBCommandBase
     PSCmdletEx <|-- ADReplCommandBase
     PSCmdlet <|-- ADSICommandBase
-    PSCmdlet <|-- AzureADCommandBase
     PSCmdlet <|-- LsaPolicyCommandBase
     PSCmdletEx <|-- SamCommandBase
 ```
@@ -300,28 +292,6 @@ classDiagram
     ADSICommandBase <|-- GetADSIAccountCommand
 ```
 
-## Azure AD Commands
-
-```mermaid
-classDiagram
-    direction TB
-    class AzureADCommandBase {
-        <<abstract>>
-        +AccessToken : string
-        +ObjectId : Guid
-        +UserPrincipalName : string
-        +TenantId : Guid
-    }
-    class GetAzureADUserExCommand {
-        +All : SwitchParameter
-    }
-    class SetAzureADUserExCommand {
-        +KeyCredential : KeyCredential[]
-    }
-    AzureADCommandBase <|-- GetAzureADUserExCommand
-    AzureADCommandBase <|-- SetAzureADUserExCommand
-```
-
 ## LSA Commands
 
 ```mermaid
@@ -474,7 +444,6 @@ classDiagram
 | Database | `ADDBCommandBase` | Offline ntds.dit database operations |
 | Replication | `ADReplCommandBase` | DCSync/DRS replication protocol operations |
 | ADSI | `ADSICommandBase` | LDAP-based operations via ADSI |
-| Azure AD | `AzureADCommandBase` | Azure Active Directory operations |
 | LSA | `LsaPolicyCommandBase` | Local Security Authority operations |
 | SAM | `SamCommandBase` | Security Accounts Manager operations |
 | Standalone | `PSCmdlet`/`PSCmdletEx` | Utility commands without specialized base |

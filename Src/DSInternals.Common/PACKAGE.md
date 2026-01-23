@@ -3,7 +3,7 @@
 ## Introduction
 
 The **DSInternals.Common** package is the foundational library shared between other DSInternals packages.
-It provides core cryptographic functionality and utilities for working with Active Directory and Microsoft Entra ID (Azure AD) security data.
+It provides core cryptographic functionality and utilities for working with Active Directory security data.
 
 As this library uses Windows-specific cryptographic APIs (P/Invoke), it is only supported on Windows.
 
