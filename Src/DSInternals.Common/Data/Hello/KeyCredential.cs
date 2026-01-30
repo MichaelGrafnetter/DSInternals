@@ -322,7 +322,7 @@ public class KeyCredential
 
     private void Initialize(byte[] publicKey, Guid? deviceId, string owner, DateTime? currentTime, bool isComputerKey)
     {
-        // Prodess owner DN/UPN
+        // Process owner DN/UPN
         ArgumentException.ThrowIfNullOrEmpty(owner);
         this.Owner = owner;
 
@@ -333,15 +333,27 @@ public class KeyCredential
         this.RawKeyMaterial = publicKey;
         this.Usage = KeyUsage.NGC;
         this.Source = KeySource.AD;
-        this.DeviceId = deviceId;
 
-        // Computer NGC keys have to meet some requirements to pass the validated write
-        // The CustomKeyInformation entry is not present.
-        // The KeyApproximateLastLogonTimeStamp entry is not present.
-        if (!isComputerKey)
+        if (isComputerKey)
+        {
+            // Computer NGC keys have to meet some requirements to pass the validated write.
+            // https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/f70afbcc-780e-4d91-850c-cfadce5bb15c
+            // The KeyApproximateLastLogonTimeStamp entry must not present.
+            // Although the spec also says that the CustomKeyInformation entry must not present,
+            // in practice it seems that Windows adds it with KeyFlags.MFANotUsed.
+            this.CustomKeyInfo = new CustomKeyInformation(KeyFlags.MFANotUsed);
+
+            if (deviceId.HasValue)
+            {
+                throw new ArgumentException("Device ID cannot be specified for computer NGC keys.", nameof(deviceId));
+            }
+        }
+        else
         {
             this.LastLogonTime = this.CreationTime;
             this.CustomKeyInfo = new CustomKeyInformation(KeyFlags.None);
+            // Device ID is only used for user NGC keys, but not for computer NGC keys.
+            this.DeviceId = deviceId;
         }
     }
 
