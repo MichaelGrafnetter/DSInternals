@@ -85,7 +85,6 @@
   <!-- AOT and Trim compatibility settings for modern .NET -->
   <PropertyGroup Condition="'$(TargetFramework)' != 'net48'">
     <!-- TODO: DllImport needs to be migrated to LibraryImport to support AOT compilation. -->
-    <!-- TODO: JSON serialization needs to be improved before AOT can be enabled. -->
     <IsAotCompatible>false</IsAotCompatible>
     <IsTrimmable>false</IsTrimmable>
     <EnableTrimAnalyzer>false</EnableTrimAnalyzer>

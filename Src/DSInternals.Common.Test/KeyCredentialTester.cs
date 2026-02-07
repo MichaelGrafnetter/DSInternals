@@ -14,57 +14,8 @@ public class KeyCredentialTester
     {
         byte[] publicKey = "525341310008000003000000000100000000000000000000010001C1A78914457758B0B13C70C710C7F8548F3F9ED56AD4640B6E6A112655C98ECAC1CBD68A298F5686C08439428A97FE6FDF58D78EA481905182BAD684C2D9C5CDE1CDE34AA19742E8BBF58B953EAC4C562FCF598CC176B02DBE9FFFEF5937A65815C236F92892F7E511A1FEDD5483CB33F1EA715D68106180DED2432A293367114A6E325E62F93F73D7ECE4B6A2BCDB829D95C8645C3073B94BA7CB7515CD29042F0967201C6E24A77821E92A6C756DF79841ACBAAE11D90CA03B9FCD24EF9E304B5D35248A7BD70557399960277058AE3E99C7C7E2284858B7BF8B08CDD286964186A50A7FCBCC6A24F00FEE5B9698BBD3B1AEAD0CE81FEA461C0ABD716843A5".HexToBinary();
         Guid deviceId = Guid.Parse("47f577e3-d2d0-4a0a-8aca-e0501098bde4");
-        DateTime creationTime = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime creationTime = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         return new KeyCredential(publicKey, deviceId, DummyDN, creationTime);
-    }
-
-    [TestMethod]
-    public void KeyCredential_RoundTrip_DoubleQuoted()
-    {
-        KeyCredential key = CreateSampleKey();
-        string json = key.ToJson();
-        KeyCredential result = KeyCredential.ParseJson(json);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(key.Identifier, result.Identifier);
-        Assert.AreEqual(key.DeviceId, result.DeviceId);
-        Assert.AreEqual(key.CreationTime, result.CreationTime);
-    }
-
-    [TestMethod]
-    public void KeyCredential_Deserialize_SingleQuoted_Input()
-    {
-        KeyCredential key = CreateSampleKey();
-        string json = key.ToJson().Replace('"', '\'');
-        KeyCredential result = KeyCredential.ParseJson(json);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(key.DeviceId, result.DeviceId);
-    }
-
-    [TestMethod]
-    public void KeyCredential_Deserialize_TrailingComma_And_Comments()
-    {
-        KeyCredential key = CreateSampleKey();
-        string json = key.ToJson();
-        string jsonWithComment = json.Insert(1, "\n  // comment\n");
-        jsonWithComment = jsonWithComment.Substring(0, jsonWithComment.Length - 1) + ",\n}";
-        KeyCredential result = KeyCredential.ParseJson(jsonWithComment);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(key.DeviceId, result.DeviceId);
-    }
-
-    [TestMethod]
-    public void Parse_SingleQuoted_WithEscapedApostrophe_Works()
-    {
-        var jsonSingleQuoted = "{ 'OwnerDN':'CN=O\\'Connor,DC=contoso,DC=com', 'IsComputerKey': false }";
-        var obj = KeyCredential.ParseJson(jsonSingleQuoted);
-        Assert.IsNotNull(obj);
-    }
-
-    [TestMethod]
-    public void Parse_BadJson_StillThrows()
-    {
-        var bad = "{ \"OwnerDN\": \"CN=User,DC=contoso,DC=com\" ";
-        Assert.ThrowsExactly<JsonException>(() => _ = KeyCredential.ParseJson(bad));
     }
 
     [TestMethod]
@@ -500,7 +451,7 @@ public class KeyCredentialTester
         Assert.AreEqual(KeyFlags.None, key.CustomKeyInfo.Flags);
         Assert.AreEqual("OoYGWyO8xBkLx3x2d0QltMav9+41lY0sGxKIMPF9if0=", key.Identifier);
         Assert.AreEqual(key.LastLogonTime, key.CreationTime);
-        Assert.AreEqual("2019-08-02T18:11:37.5665512Z", key.CreationTime.ToUniversalTime().ToString("o"));
+        Assert.AreEqual("2019-08-02T18:11:37.5665512Z", key.CreationTime.Value.ToUniversalTime().ToString("o"));
         Assert.AreEqual(0x304, key.RawKeyMaterial.Length);
 
         // Serialize
@@ -542,7 +493,7 @@ public class KeyCredentialTester
         Assert.AreEqual(KeySource.AD, key.Source);
 
         // Bug in Impacket causes a time skew of 1600 years:
-        Assert.AreEqual(3625, key.CreationTime.Year);
+        Assert.AreEqual(3625, key.CreationTime.Value.Year);
 
         // Serialize
         byte[] serialized = key.ToByteArray();

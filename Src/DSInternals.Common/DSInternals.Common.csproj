@@ -32,11 +32,6 @@
     <PackageReference Include="System.Text.Json" Condition="'$(TargetFramework)' == 'net48'" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- Do not use packages for assemblies that are part of .NET Framework -->
-    <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net48'" />
-  </ItemGroup>
-
   <!-- Compile ASN.1 XML definitions to C# -->
   <Import Project="Cryptography\Asn1\AsnXml.targets" />
   <ItemGroup>

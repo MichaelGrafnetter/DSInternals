@@ -65,7 +65,7 @@ public class LapsEncryptedPassword
             return null;
         }
 
-        return LapsClearTextPassword.Parse(binaryLapsPassword, utf16: true);
+        return LapsClearTextPassword.Parse(binaryLapsPassword, isUtf16: true);
     }
 
     public bool TryDecrypt(out LapsClearTextPassword lapsPassword)
@@ -79,7 +79,7 @@ public class LapsEncryptedPassword
             return success;
         }
 
-        lapsPassword = LapsClearTextPassword.Parse(binaryLapsPassword, utf16: true);
+        lapsPassword = LapsClearTextPassword.Parse(binaryLapsPassword, isUtf16: true);
         return true;
     }
 }
