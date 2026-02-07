@@ -4,6 +4,7 @@ using DSInternals.Common.Data;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsData.ConvertFrom, "ADManagedPasswordBlob")]
+[Alias("ConvertFrom-ManagedPasswordBlob")]
 [OutputType(typeof(ManagedPassword))]
 public class ConvertFromADManagedPasswordBlobCommand : PSCmdlet
 {

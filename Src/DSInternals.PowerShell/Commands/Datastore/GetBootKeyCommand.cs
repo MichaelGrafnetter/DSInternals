@@ -6,6 +6,7 @@ using DSInternals.DataStore;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsCommon.Get, "BootKey")]
+[Alias("Get-SysKey", "Get-SystemKey")]
 [OutputType(typeof(string))]
 public class GetBootKeyCommand : PSCmdletEx
 {

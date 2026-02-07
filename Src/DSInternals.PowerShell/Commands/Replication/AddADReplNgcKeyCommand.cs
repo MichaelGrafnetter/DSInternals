@@ -4,6 +4,7 @@ using System.Security.Principal;
 namespace DSInternals.PowerShell.Commands;
 
 [Cmdlet(VerbsCommon.Add, "ADReplNgcKey")]
+[Alias("Write-ADReplNgcKey", "Write-ADNgcKey", "Add-ADNgcKey")]
 [OutputType("None")]
 public class AddADReplNgcKeyCommand : ADReplPrincipalCommandBase
 {

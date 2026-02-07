@@ -3,6 +3,17 @@ using DSInternals.Common.Data;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsCommon.Get, "ADDBBitLockerRecoveryInformation")]
+[Alias(
+    "Get-ADDBBitLockerRecoveryInfo",
+    "Get-ADDBBitLockerRecoveryKey",
+    "Get-ADDBBitLockerKey",
+    "Get-ADDBBitLockerKeyProtector",
+    "Get-ADDBBitLockerRecoveryPassword",
+    "Get-ADDBFVERecoveryInformation",
+    "Get-ADDBFVERecoveryInfo",
+    "Get-ADDBFVERecoveryKey",
+    "Get-ADDBFVERecoveryPassword"
+)]
 [OutputType(typeof(DSInternals.Common.Data.BitLockerRecoveryInformation))]
 public class GetADDBBitLockerRecoveryInformationCommand : ADDBObjectCommandBase
 {

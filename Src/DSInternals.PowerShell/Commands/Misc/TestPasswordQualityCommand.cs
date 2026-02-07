@@ -6,6 +6,7 @@ using DSInternals.Common.Data;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsDiagnostic.Test, "PasswordQuality", DefaultParameterSetName = ParamSetSingleSortedFile)]
+[Alias("Test-ADPasswordQuality", "Test-ADDBPasswordQuality", "Test-ADReplPasswordQuality")]
 [OutputType(new Type[] { typeof(PasswordQualityTestResult) })]
 public class TestPasswordQualityCommand : PSCmdletEx, IDisposable
 {

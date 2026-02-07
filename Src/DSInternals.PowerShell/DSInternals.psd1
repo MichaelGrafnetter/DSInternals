@@ -4,8 +4,12 @@
 
 @{
 
-# Script module file associated with this manifest.
-RootModule = 'DSInternals.Bootstrap.psm1'
+# Binary module file associated with this manifest.
+RootModule = if ($PSEdition -eq 'Core') {
+    'net8.0-windows\DSInternals.PowerShell.dll'
+} else {
+    'net48\DSInternals.PowerShell.dll'
+}
 
 # Version number of this module.
 ModuleVersion = '6.2'
@@ -26,11 +30,11 @@ CompanyName = 'DSInternals'
 Copyright = '(c) 2015-2026 Michael Grafnetter. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = @"
+Description = @'
 The DSInternals PowerShell Module exposes several internal features of Active Directory. These include FIDO2 and NGC key auditing, offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups, and password hash calculation.
 
 DISCLAIMER: Features exposed through this module are not supported by Microsoft and it is therefore not intended to be used in production environments. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
-"@
+'@
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '5.1'
@@ -39,7 +43,9 @@ PowerShellVersion = '5.1'
 ProcessorArchitecture = 'None'
 
 # Type files (.ps1xml) to be loaded when importing this module
-TypesToProcess = @()
+TypesToProcess = @(
+    'DSInternals.types.ps1xml'
+)
 
 # Format files (.ps1xml) to be loaded when importing this module
 FormatsToProcess = @(
@@ -65,6 +71,9 @@ FormatsToProcess = @(
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @()
+
+# Scripts to run when the module is imported
+ScriptsToProcess = @('Test-ModuleCompatibility.ps1')
 
 # Functions to export from this module
 FunctionsToExport = @()
@@ -166,10 +175,29 @@ AliasesToExport = @(
 )
 
 # List of assemblies that must be loaded prior to importing this module
-RequiredAssemblies = @()
+RequiredAssemblies = if ($PSEdition -eq 'Core') { @(
+    'net8.0-windows\DSInternals.Common.dll',
+    'net8.0-windows\DSInternals.ADSI.dll',
+    'net8.0-windows\DSInternals.DataStore.dll',
+    'net8.0-windows\DSInternals.SAM.dll',
+    'net8.0-windows\DSInternals.Replication.Model.dll',
+    "net8.0-windows\$env:PROCESSOR_ARCHITECTURE\DSInternals.Replication.Interop.dll",
+    'net8.0-windows\DSInternals.Replication.dll',
+    'net8.0-windows\DSInternals.PowerShell.dll'
+) } else { @(
+    'net48\DSInternals.Common.dll',
+    'net48\DSInternals.ADSI.dll',
+    'net48\DSInternals.DataStore.dll',
+    'net48\DSInternals.SAM.dll',
+    'net48\DSInternals.Replication.Model.dll',
+    "net48\$env:PROCESSOR_ARCHITECTURE\DSInternals.Replication.Interop.dll",
+    'net48\DSInternals.Replication.dll',
+    'net48\DSInternals.PowerShell.dll'
+) }
 
 # List of all files packaged with this module
 FileList = @(
+    'Test-ModuleCompatibility.ps1',
     'DSInternals.types.ps1xml',
     'License.txt',
     'Integrity.Tests.ps1',
@@ -218,7 +246,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('ActiveDirectory', 'Security', 'SAM', 'LSA', 'DNS', 'BitLocker', 'LAPS', 'FIDO', 'NTDS', 'PSModule', 'Windows', 'PSEdition_Desktop', 'PSEdition_Core')
+        Tags = @('ActiveDirectory', 'Security', 'SAM', 'LSA', 'DNS', 'BitLocker', 'LAPS', 'NTDS', 'PSModule', 'Windows', 'PSEdition_Desktop', 'PSEdition_Core')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/License.txt'

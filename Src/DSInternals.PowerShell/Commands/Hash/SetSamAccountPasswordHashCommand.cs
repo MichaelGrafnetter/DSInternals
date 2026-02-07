@@ -8,6 +8,7 @@ using DSInternals.SAM;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsCommon.Set, "SamAccountPasswordHash")]
+[Alias("Set-ADAccountPasswordHash", "Set-WinUserPasswordHash")]
 [OutputType("None")]
 public class SetSamAccountPasswordHashCommand : SamCommandBase
 {

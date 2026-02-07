@@ -3,13 +3,14 @@
 ## Project Overview
 
 DSInternals is a .NET-based project consisting of:
+
 - **DSInternals Framework**: A .NET library exposing internal Active Directory features
 - **DSInternals PowerShell Module**: PowerShell cmdlets built on top of the Framework
 
 The project primarily focuses on Active Directory security auditing, offline database manipulation, and password management.
 
-Read the [README.md](README.md), [CHANGELOG.md](../Documentation/CHANGELOG.md), and [CONTRIBUTING.md](CONTRIBUTING.md) files
-and the [PowerShell module documentation](../Documentation/PowerShell/Readme.md) for further context.
+Read the [README.md](.github/README.md), [CHANGELOG.md](Documentation/CHANGELOG.md), and [CONTRIBUTING.md](.github/CONTRIBUTING.md) files
+and the [PowerShell module documentation](Documentation/PowerShell/Readme.md) for further context.
 
 ## Technology Stack
 
@@ -17,7 +18,7 @@ and the [PowerShell module documentation](../Documentation/PowerShell/Readme.md)
 - **Frameworks**: .NET Framework 4.8, .NET 10.0 (Windows-only)
 - **Build System**: MSBuild with Central Package Management
 - **Testing**: MSTest with Microsoft.Testing.Platform runner
-- **IDE**: Visual Studio 2026+ with the [DSInternals.slnx](../Src/DSInternals.slnx) solution
+- **IDE**: Visual Studio 2026+ with the [DSInternals.slnx](Src/DSInternals.slnx) solution
 
 ## Build Instructions
 
@@ -80,5 +81,3 @@ powershell -File ./Invoke-SmokeTests.ps1 -Configuration 'Debug'
 # Run smoke tests in PowerShell Core
 pwsh -File ./Invoke-SmokeTests.ps1 -Configuration 'Debug'
 ```
-
-

@@ -119,6 +119,13 @@
           "System.ValueTuple": "[4.6.1, )"
         }
       },
+      "dsinternals.replication.interop.netframework": {
+        "type": "Project",
+        "dependencies": {
+          "DSInternals.Common": "[1.0.0, )",
+          "DSInternals.Replication.Model": "[1.0.0, )"
+        }
+      },
       "dsinternals.replication.model": {
         "type": "Project",
         "dependencies": {
@@ -243,6 +250,13 @@
         "type": "Project",
         "dependencies": {
           "System.Formats.Cbor": "[9.0.9, )"
+        }
+      },
+      "dsinternals.replication.interop.netcore": {
+        "type": "Project",
+        "dependencies": {
+          "DSInternals.Common": "[6.2.0, )",
+          "DSInternals.Replication.Model": "[6.2.0, )"
         }
       },
       "dsinternals.replication.model": {

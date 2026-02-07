@@ -25,12 +25,6 @@ Describe 'DSInternals PowerShell Module' {
 
     Context 'Manifest' {
         BeforeDiscovery {
-            # List all aliases defined in the module script file.
-            [string] $bootstrapPath = Join-Path -Path $modulePath -ChildPath 'DSInternals.Bootstrap.psm1'
-            [hashtable[]] $moduleAliases =
-                Select-String -Path $bootstrapPath -Pattern 'New-Alias -Name ([a-zA-Z\-]+) ' |
-                ForEach-Object { @{ AliasName = $PSItem.Matches.Groups[1].Value } }
-            
             # Get the list of files bundled with the module.
             [hashtable[]] $bundledFiles =
                 Get-ChildItem -Path $modulePath -Recurse -File -Exclude *.pdb,*.psd1,msvcp*.dll,msvcr*.dll,vcruntime*.dll,Ijwhost.dll,ucrtbased.dll,DSInternals.cat |
@@ -53,11 +47,11 @@ Describe 'DSInternals PowerShell Module' {
             [System.Reflection.AssemblyName] $assembly = [System.Reflection.AssemblyName]::GetAssemblyName($assemblyPath)
 
             # Load the module manifest
-            [hashtable] $manifest =  Import-PowerShellDataFile -Path $moduleManifestPath
-            [version] $moduleVersion = [version]::Parse($manifest.ModuleVersion)
+            [System.Management.Automation.PSModuleInfo] $manifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction Stop
+            [version] $moduleVersion = $manifest.Version
 
             # Parser uses -1 instead of 0 for unused numbers, so we need to fix that
-            if($moduleVersion.Build -eq -1) {
+            if ($moduleVersion.Build -eq -1) {
                 $moduleVersion = [version]::new($moduleVersion.Major, $moduleVersion.Minor, 0, 0)
             } else {
                 $moduleVersion = [version]::new($moduleVersion.Major, $moduleVersion.Minor, $moduleVersion.Build, 0)
@@ -69,20 +63,12 @@ Describe 'DSInternals PowerShell Module' {
 
         It 'references the <FileName> file.' -TestCases $bundledFiles -Test {
             param([string] $FileName)
-            
+
             $moduleManifestPath | Should -FileContentMatch $FileName
         }
-
-        It 'exports alias <AliasName>.' -TestCases $moduleAliases -Test {
-            param([string] $AliasName)
-
-            $moduleManifestPath | Should -FileContentMatch "'$AliasName'"
-        }
-
     }
 
     Context 'File Structure' {
-        
         It 'contains MAML help' {
             Join-Path -Path $modulePath -ChildPath 'en-US\DSInternals.PowerShell.dll-Help.xml' | Should -Exist
         }
@@ -131,7 +117,6 @@ Describe 'DSInternals PowerShell Module' {
                         Where-Object { $PSItem -notlike '*#*' } |
                         ForEach-Object { @{ TypeName = $PSItem } }
         }
-        
 
         It 'referenced type <TypeName> exists' -TestCases $typeNames -Test {
             param([string] $TypeName)
@@ -158,7 +143,7 @@ Describe 'DSInternals PowerShell Module' {
 
     Context 'Assemblies' {
         BeforeDiscovery {
-            [hashtable[]] $assemblies = Get-ChildItem $ModulePath -Recurse -Filter *.dll | 
+            [hashtable[]] $assemblies = Get-ChildItem $ModulePath -Recurse -Filter *.dll |
                 Where-Object Name -NotLike msvcp* |
                 Where-Object Name -NotLike msvcr* |
                 Where-Object Name -NotLike vcruntime* |
@@ -166,7 +151,6 @@ Describe 'DSInternals PowerShell Module' {
 
             [hashtable[]] $ownedAssemblies = $assemblies | Where-Object { $PSItem.Assembly.Name -like 'DSInternals.*.dll' }
         }
-            
 
         It '<Name> has up-to-date copyright information' -TestCases $ownedAssemblies -Test {
             param([System.IO.FileInfo] $Assembly)

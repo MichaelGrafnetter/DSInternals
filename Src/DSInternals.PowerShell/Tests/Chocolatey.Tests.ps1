@@ -12,7 +12,7 @@ Describe 'Chocolatey Package' {
         [string] $chocolateySpecPath = Join-Path -Path $PSScriptRoot -ChildPath '..\Chocolatey\dsinternals-psmodule.nuspec'
 
         # Load the manifests
-        [hashtable] $moduleManifest =  Import-PowerShellDataFile -Path $moduleManifestPath -ErrorAction Stop
+        [System.Management.Automation.PSModuleInfo] $moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction Stop
         [xml] $chocolateySpec = Get-Content -Path $chocolateySpecPath -ErrorAction Stop
     }
 
