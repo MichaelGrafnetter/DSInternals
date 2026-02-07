@@ -217,7 +217,7 @@ jobs:
       shell: pwsh
       id: get-module-info
       run: |
-        [System.Management.Automation.PSModuleInfo] $manifest = Test-ModuleManifest -Path ./Src/DSInternals.PowerShell/DSInternals.psd1
+        [System.Management.Automation.PSModuleInfo] $manifest = Test-ModuleManifest -Path ./Src/DSInternals.PowerShell/DSInternals.psd1 -ErrorAction SilentlyContinue
         [string] $version = $manifest.Version
         [string] $releaseNotes = $manifest.PrivateData.PSData.ReleaseNotes
 

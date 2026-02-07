@@ -7,9 +7,9 @@
 
 Describe 'Markdown Module Documentation' {
     BeforeAll {
-        # Load the module manifest
+        # Load the module manifest and ignore errors stemming from missing DLLs, as we only need the metadata for the tests.
         [string] $moduleManifestPath = Join-Path -Path $PSScriptRoot -ChildPath '..\DSInternals.psd1'
-        [System.Management.Automation.PSModuleInfo] $moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction Stop
+        [System.Management.Automation.PSModuleInfo] $moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction SilentlyContinue
 
         # Locate the markdown documentation
         [string] $markdownDocumentationPath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Documentation'
@@ -76,7 +76,7 @@ Describe 'Markdown Module Documentation' {
         BeforeDiscovery {
             # Parse the list of cmdlets from the module manifest.
             [string] $moduleManifestPath = Join-Path -Path $PSScriptRoot -ChildPath '..\DSInternals.psd1'
-            [System.Management.Automation.PSModuleInfo] $moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction Stop
+            [System.Management.Automation.PSModuleInfo] $moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction SilentlyContinue
             [hashtable[]] $manifestCmdlets = $moduleManifest.ExportedCmdlets.Keys | ForEach-Object { @{
                 Cmdlet = $PSItem
             }}
