@@ -15,31 +15,31 @@ Composes and updates the msDS-KeyCredentialLink value on an object through the M
 ### ByName
 ```
 Add-ADReplNgcKey -PublicKey <Byte[]> [-SamAccountName] <String> [[-Domain] <String>] -Server <String>
- [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+ [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByUPN
 ```
 Add-ADReplNgcKey -PublicKey <Byte[]> -UserPrincipalName <String> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+ [<CommonParameters>]
 ```
 
 ### BySID
 ```
 Add-ADReplNgcKey -PublicKey <Byte[]> -ObjectSid <SecurityIdentifier> -Server <String>
- [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+ [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
 Add-ADReplNgcKey -PublicKey <Byte[]> [-DistinguishedName] <String> -Server <String>
- [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+ [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
 Add-ADReplNgcKey -PublicKey <Byte[]> -ObjectGuid <Guid> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -54,8 +54,473 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
           <maml:name>LogPath</maml:name>
           <maml:description>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
             <maml:name>String</maml:name>
             <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
+          <maml:name>SidHistory</maml:name>
+          <maml:description>
+            <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
+          <dev:type>
+            <maml:name>SecurityIdentifier[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
+          <maml:name>SkipMetaUpdate</maml:name>
+          <maml:description>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Add-ADDBSidHistory</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+          <maml:name>LogPath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
+          <maml:name>ObjectGuid</maml:name>
+          <maml:description>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
+          <maml:name>SidHistory</maml:name>
+          <maml:description>
+            <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
+          <dev:type>
+            <maml:name>SecurityIdentifier[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
+          <maml:name>SkipMetaUpdate</maml:name>
+          <maml:description>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Add-ADDBSidHistory</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+          <maml:name>LogPath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
+          <maml:name>ObjectSid</maml:name>
+          <maml:description>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
+          <dev:type>
+            <maml:name>SecurityIdentifier</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
+          <maml:name>SidHistory</maml:name>
+          <maml:description>
+            <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
+          <dev:type>
+            <maml:name>SecurityIdentifier[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
+          <maml:name>SkipMetaUpdate</maml:name>
+          <maml:description>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Add-ADDBSidHistory</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
+          <maml:name>SamAccountName</maml:name>
+          <maml:description>
+            <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+          <maml:name>DatabasePath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+          <maml:name>LogPath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
+          <maml:name>SidHistory</maml:name>
+          <maml:description>
+            <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
+          <dev:type>
+            <maml:name>SecurityIdentifier[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
+          <maml:name>SkipMetaUpdate</maml:name>
+          <maml:description>
+            <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Database, DBPath, DatabaseFilePath, DBFilePath">
+        <maml:name>DatabasePath</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="dn">
+        <maml:name>DistinguishedName</maml:name>
+        <maml:description>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>Forces the cmdlet to perform the desired operation.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Log, TransactionLogPath">
+        <maml:name>LogPath</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
+        <maml:name>ObjectGuid</maml:name>
+        <maml:description>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+        <dev:type>
+          <maml:name>Guid</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Sid">
+        <maml:name>ObjectSid</maml:name>
+        <maml:description>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
+        <dev:type>
+          <maml:name>SecurityIdentifier</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="Login, sam">
+        <maml:name>SamAccountName</maml:name>
+        <maml:description>
+          <maml:para>Specifies the identifier of an object on which to perform this operation.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="hist, History">
+        <maml:name>SidHistory</maml:name>
+        <maml:description>
+          <maml:para>Specifies an array of security IDs (SIDs) that will be added to the SID History of the target object.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">SecurityIdentifier[]</command:parameterValue>
+        <dev:type>
+          <maml:name>SecurityIdentifier[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SkipMeta, NoMetaUpdate, NoMeta, SkipObjMeta, NoObjMeta, SkipMetaDataUpdate, NoMetaDataUpdate">
+        <maml:name>SkipMetaUpdate</maml:name>
+        <maml:description>
+          <maml:para>Indicates that the replication metadata of the affected object should not be updated.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Security.Principal.SecurityIdentifier[]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Security.Principal.SecurityIdentifier</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Guid</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Stop-Service -Name ntds -Force
+PS C:\&gt; Add-ADDBSidHistory -SamAccountName John `
+                           -SidHistory 'S-1-5-21-3623811102-3361044346-30300840-512',
+                                       'S-1-5-21-3623811102-3361044346-30300840-519' `
+                           -DatabasePath C:\Windows\NTDS\ntds.dit
+PS C:\&gt; Start-Service -Name ntds</dev:code>
+        <dev:remarks>
+          <maml:para>Adds the SIDs of the Domain Admins and Enterprise Admins groups into user John 's sIDHistory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Import-Csv user.csv | Add-ADDBSidHistory -DatabasePath C:\Windows\NTDS\ntds.dit</dev:code>
+        <dev:remarks>
+          <maml:para>Imports a CSV file containing SamAccountName and SidHistory columns into a nds.dit file.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Add-ADDBSidHistory.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Set-ADDBPrimaryGroup</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDomainController</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Add-ADReplNgcKey</command:name>
+      <command:verb>Add</command:verb>
+      <command:noun>ADReplNgcKey</command:noun>
+      <maml:description>
+        <maml:para>Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet wraps the IDL_DRSWriteNgcKey RPC call.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Add-ADReplNgcKey</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="dn">
           <maml:name>DistinguishedName</maml:name>
           <maml:description>
@@ -76,23 +541,6 @@
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>PSCredential</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -160,23 +608,6 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PublicKey</maml:name>
           <maml:description>
@@ -224,23 +655,6 @@
           <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
           <dev:type>
             <maml:name>Guid</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -296,23 +710,6 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PublicKey</maml:name>
           <maml:description>
@@ -348,23 +745,6 @@
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>PSCredential</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -464,18 +844,6 @@
         <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
         <dev:type>
           <maml:name>SecurityIdentifier</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-        <maml:name>Protocol</maml:name>
-        <maml:description>
-          <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-        <dev:type>
-          <maml:name>RpcProtocol</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -709,7 +1077,7 @@ UnchangedPasswordInterval : 29.17:10:36.3736817
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Decrypts a password that was encrypted using Group Policy Preferences (GPP). GPP stored passwords in SYSVOL using AES encryption with a key that Microsoft published in MSDN documentation. This vulnerability (MS14-025) allows anyone with access to SYSVOL to decrypt these passwords. This cmdlet can be used to audit GPP XML files for exposed credentials.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -770,9 +1138,13 @@ UnchangedPasswordInterval : 29.17:10:36.3736817
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; ConvertFrom-GPPrefPassword -EncryptedPassword 'v9NWtCCOKEUHkZBxakMd6HLzo4+DzuizXP83EaImqF8'
+&lt;#
+Output:
+Pa$$w0rd
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Decrypts a password from a Group Policy Preferences XML file (e.g., Groups.xml, ScheduledTasks.xml, or Drives.xml) and returns the cleartext password.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -793,7 +1165,7 @@ UnchangedPasswordInterval : 29.17:10:36.3736817
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Decodes a Base64-encoded Unicode password from the format used in Windows unattend.xml files. This is useful for recovering or auditing passwords that have been stored in unattend.xml configuration files used during automated Windows deployments.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -854,9 +1226,13 @@ UnchangedPasswordInterval : 29.17:10:36.3736817
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; ConvertFrom-UnicodePassword -UnicodePassword 'UABhAHMAcwB3ADAAcgBkAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIAUABhAHMAcwB3AG8AcgBkAA=='
+&lt;#
+Output:
+Passw0rd
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Decodes a Base64-encoded password from an unattend.xml file and returns the cleartext password.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -877,7 +1253,7 @@ UnchangedPasswordInterval : 29.17:10:36.3736817
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Encrypts a password using the AES key that was used by Group Policy Preferences (GPP) to store passwords in SYSVOL. This encryption method is considered insecure because Microsoft published the AES key in MSDN documentation (MS14-025). This cmdlet is provided for educational and testing purposes.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -938,9 +1314,14 @@ UnchangedPasswordInterval : 29.17:10:36.3736817
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; $password = Read-Host -AsSecureString -Prompt 'Enter password'
+PS C:\&gt; ConvertTo-GPPrefPassword -Password $password
+&lt;#
+Sample Output:
+v9NWtCCOKEUHkZBxakMd6HLzo4+DzuizXP83EaImqF8
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Encrypts a password using the well-known Group Policy Preferences AES key and returns the Base64-encoded ciphertext.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1077,7 +1458,7 @@ UnchangedPasswordInterval : 29.17:10:36.3736817
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Supports the derivation of AES256, AES128, and DES encryption keys. To calculate the RC4 key, the ConvertTo-NTHash cmdlet should be used instead.</maml:para>
+      <maml:para>Supports the derivation of AES256, AES128, and DES encryption keys.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1630,7 +2011,7 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Converts a password to the Base64-encoded Unicode format that is used in Windows unattend.xml files or LDIF (LDAP Data Interchange Format) files. This format is required when specifying passwords in automated Windows deployment scenarios or when importing user accounts with passwords through LDIF.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1714,9 +2095,25 @@ v1;PPH1_MD4,a42b92067e4b8123101a,1000,f0fc762ea9051ef754652becd83ee5e54c1c857c1c
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; $password = Read-Host -AsSecureString -Prompt 'Enter password'
+PS C:\&gt; ConvertTo-UnicodePassword -Password $password
+&lt;# Sample Output:
+UABhAHMAcwB3ADAAcgBkAA==
+#&gt;</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Converts a password to the Base64-encoded Unicode format suitable for use in LDIF files.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $password = Read-Host -AsSecureString -Prompt 'Enter password'
+PS C:\&gt; ConvertTo-UnicodePassword -Password $password -IsUnattendPassword
+&lt;#
+Sample Output:
+UABhAHMAcwB3ADAAcgBkAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIAUABhAHMAcwB3AG8AcgBkAA==
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Converts a password to the format used in Windows unattend.xml files, which includes the "AdministratorPassword" suffix.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -6178,23 +6575,6 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
           </dev:type>
           <dev:defaultValue>All</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>TCP</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:description>
@@ -6299,23 +6679,6 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
             <maml:uri />
           </dev:type>
           <dev:defaultValue>All</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>TCP</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
@@ -6434,23 +6797,6 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
           </dev:type>
           <dev:defaultValue>All</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>TCP</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:description>
@@ -6555,23 +6901,6 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
             <maml:uri />
           </dev:type>
           <dev:defaultValue>All</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>TCP</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
@@ -6678,23 +7007,6 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
           </dev:type>
           <dev:defaultValue>All</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>TCP</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:description>
@@ -6787,23 +7099,6 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
             <maml:uri />
           </dev:type>
           <dev:defaultValue>All</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>TCP</dev:defaultValue>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
@@ -6939,18 +7234,6 @@ PS C:\&gt; Set-ADComputer -Identity 'PC01$' -Clear msDS-KeyCredentialLink -Add @
           <maml:uri />
         </dev:type>
         <dev:defaultValue>All</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-        <maml:name>Protocol</maml:name>
-        <maml:description>
-          <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-        <dev:type>
-          <maml:name>RpcProtocol</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>TCP</dev:defaultValue>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Login, sam, AccountName, User">
         <maml:name>SamAccountName</maml:name>
@@ -7413,23 +7696,6 @@ PS C:\&gt; Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' -Properties Roame
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:description>
@@ -7465,18 +7731,6 @@ PS C:\&gt; Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' -Properties Roame
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-        <maml:name>Protocol</maml:name>
-        <maml:description>
-          <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-        <dev:type>
-          <maml:name>RpcProtocol</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -7639,23 +7893,6 @@ ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-          <maml:name>Protocol</maml:name>
-          <maml:description>
-            <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">TCP</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SMB</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">HTTP</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-          <dev:type>
-            <maml:name>RpcProtocol</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
           <maml:name>Server</maml:name>
           <maml:description>
@@ -7679,18 +7916,6 @@ ntds_capi_290914ed-b1a8-482e-a89f-7caa217bf3c3.pvk
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>PSCredential</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Proto, RPCProtocol, NCACN">
-        <maml:name>Protocol</maml:name>
-        <maml:description>
-          <maml:para>Specifies the protocol sequence that is used for RPC communication.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">RpcProtocol</command:parameterValue>
-        <dev:type>
-          <maml:name>RpcProtocol</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -8853,7 +9078,7 @@ icacls.exe C:\Windows\Sysvol\domain\Policies\* /save C:\IFM\SYSVOL\PolicyPermiss
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{Fill in the Description}}</maml:para>
+      <maml:para>Physically removes the specified object from an offline Active Directory database (ntds.dit) file. This operation bypasses normal Active Directory deletion mechanisms and directly removes the object from the ESE database, which makes the database semantically inconsistent. This cmdlet is highly experimental and should only be used in lab environments or extreme disaster recovery scenarios.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -9123,9 +9348,9 @@ icacls.exe C:\Windows\Sysvol\domain\Policies\* /save C:\IFM\SYSVOL\PolicyPermiss
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Remove-ADDBObject -DistinguishedName 'CN=intruder,CN=Users,DC=contoso,DC=com' -DatabasePath '.\ntds.dit'</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Physically removes the object with the specified distinguished name from the offline ntds.dit file.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

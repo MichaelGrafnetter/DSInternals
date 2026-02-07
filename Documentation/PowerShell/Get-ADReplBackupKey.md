@@ -13,8 +13,7 @@ Reads the DPAPI backup keys from a domain controller through the MS-DRSR protoco
 ## SYNTAX
 
 ```
-Get-ADReplBackupKey [-Domain <String>] -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
- [<CommonParameters>]
+Get-ADReplBackupKey [-Domain <String>] -Server <String> [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
