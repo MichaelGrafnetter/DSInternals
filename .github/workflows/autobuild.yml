@@ -102,6 +102,16 @@ jobs:
         use-actions-summary: true
         badge-title: Unit Tests
 
+    - name: Generate Pester Test Report
+      uses: dorny/test-reporter@v2
+      if: ${{ !cancelled() }}
+      with:
+        name: Pester
+        reporter: dotnet-nunit
+        path: TestResults/*.xml
+        use-actions-summary: true
+        badge-title: Pester Tests
+
     - name: Get PowerShell Module Version
       shell: pwsh
       id: get-module-version
