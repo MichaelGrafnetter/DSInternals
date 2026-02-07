@@ -19,7 +19,6 @@ public struct LsaDomainInformation
     /// <param name="nativeInfo">The native structure containing domain information.</param>
     internal LsaDomainInformation(LsaDomainInformationNative nativeInfo)
     {
-
         this.Name = nativeInfo.DomainName.Buffer;
         this.Sid = nativeInfo.GetDomainSid();
     }
@@ -27,10 +26,10 @@ public struct LsaDomainInformation
     /// <summary>
     /// Name of the account domain.
     /// </summary>
-    public string Name;
+    public string? Name;
 
     /// <summary>
     /// SID of the account domain.
     /// </summary>
-    public SecurityIdentifier Sid;
+    public SecurityIdentifier? Sid;
 }

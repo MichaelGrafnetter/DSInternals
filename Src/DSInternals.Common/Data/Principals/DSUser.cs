@@ -16,7 +16,7 @@ public class DSUser : DSAccount
     /// <param name="pek">The secret decryptor used to decrypt password hashes. Can be <see langword="null"/> if decryption is not needed.</param>
     /// <param name="propertySets">A bitwise combination of the enumeration values that specifies which property sets to load.</param>
     /// <exception cref="ArgumentException">The object is not a user.</exception>
-    public DSUser(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
+    public DSUser(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor? pek, AccountPropertySets propertySets = AccountPropertySets.All) : base(dsObject, netBIOSDomainName, pek, propertySets)
     {
         if (this.SamAccountType != SamAccountType.User)
         {
@@ -62,7 +62,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the roamed credentials associated with this user.
     /// </summary>
-    public RoamedCredential[] RoamedCredentials
+    public RoamedCredential[]? RoamedCredentials
     {
         get;
         private set;
@@ -74,7 +74,7 @@ public class DSUser : DSAccount
     /// <value>
     /// The display name.
     /// </value>
-    public string DisplayName
+    public string? DisplayName
     {
         get;
         private set;
@@ -83,7 +83,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the given name for the <see cref="DSAccount"/>.
     /// </summary>
-    public string GivenName
+    public string? GivenName
     {
         get;
         private set;
@@ -92,7 +92,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the surname for the user <see cref="DSAccount"/>.
     /// </summary>
-    public string Surname
+    public string? Surname
     {
         get;
         private set;
@@ -101,7 +101,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the initials for the user.
     /// </summary>
-    public string Initials
+    public string? Initials
     {
         get;
         private set;
@@ -110,7 +110,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the state or province where the user is located.
     /// </summary>
-    public string State
+    public string? State
     {
         get;
         private set;
@@ -119,7 +119,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the street address for the user.
     /// </summary>
-    public string StreetAddress
+    public string? StreetAddress
     {
         get;
         private set;
@@ -128,7 +128,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the city where the user is located.
     /// </summary>
-    public string City
+    public string? City
     {
         get;
         private set;
@@ -137,7 +137,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the postal code for the user.
     /// </summary>
-    public string PostalCode
+    public string? PostalCode
     {
         get;
         private set;
@@ -146,7 +146,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the country where the user is located.
     /// </summary>
-    public string Country
+    public string? Country
     {
         get;
         private set;
@@ -155,7 +155,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the post office box for the user.
     /// </summary>
-    public string PostOfficeBox
+    public string? PostOfficeBox
     {
         get;
         private set;
@@ -164,7 +164,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the employee ID for the user.
     /// </summary>
-    public string EmployeeID
+    public string? EmployeeID
     {
         get;
         private set;
@@ -173,7 +173,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the employee number for the user.
     /// </summary>
-    public string EmployeeNumber
+    public string? EmployeeNumber
     {
         get;
         private set;
@@ -182,7 +182,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the office location for the user.
     /// </summary>
-    public string Office
+    public string? Office
     {
         get;
         private set;
@@ -191,7 +191,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the primary telephone number for the user.
     /// </summary>
-    public string TelephoneNumber
+    public string? TelephoneNumber
     {
         get;
         private set;
@@ -200,7 +200,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the email address for the user.
     /// </summary>
-    public string Email
+    public string? Email
     {
         get;
         private set;
@@ -209,7 +209,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the home phone number for the user.
     /// </summary>
-    public string HomePhone
+    public string? HomePhone
     {
         get;
         private set;
@@ -218,7 +218,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the pager number for the user.
     /// </summary>
-    public string Pager
+    public string? Pager
     {
         get;
         private set;
@@ -227,7 +227,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the mobile phone number for the user.
     /// </summary>
-    public string Mobile
+    public string? Mobile
     {
         get;
         private set;
@@ -236,7 +236,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the IP phone number for the user.
     /// </summary>
-    public string IpPhone
+    public string? IpPhone
     {
         get;
         private set;
@@ -245,7 +245,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the web page URL for the user.
     /// </summary>
-    public string WebPage
+    public string? WebPage
     {
         get;
         private set;
@@ -254,7 +254,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the job title for the user.
     /// </summary>
-    public string JobTitle
+    public string? JobTitle
     {
         get;
         private set;
@@ -263,7 +263,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the department for the user.
     /// </summary>
-    public string Department
+    public string? Department
     {
         get;
         private set;
@@ -272,7 +272,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the company name for the user.
     /// </summary>
-    public string Company
+    public string? Company
     {
         get;
         private set;
@@ -281,7 +281,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the distinguished name of the user's manager.
     /// </summary>
-    public string Manager
+    public string? Manager
     {
         get;
         private set;
@@ -290,7 +290,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the home directory path for the user.
     /// </summary>
-    public string HomeDirectory
+    public string? HomeDirectory
     {
         get;
         private set;
@@ -299,7 +299,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the home drive letter for the user.
     /// </summary>
-    public string HomeDrive
+    public string? HomeDrive
     {
         get;
         private set;
@@ -308,7 +308,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the Unix home directory path for the user.
     /// </summary>
-    public string UnixHomeDirectory
+    public string? UnixHomeDirectory
     {
         get;
         private set;
@@ -317,7 +317,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the profile path for the user.
     /// </summary>
-    public string ProfilePath
+    public string? ProfilePath
     {
         get;
         private set;
@@ -326,7 +326,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the logon script path for the user.
     /// </summary>
-    public string ScriptPath
+    public string? ScriptPath
     {
         get;
         private set;
@@ -335,7 +335,7 @@ public class DSUser : DSAccount
     /// <summary>
     /// Gets the notes or comments for the user.
     /// </summary>
-    public string Notes
+    public string? Notes
     {
         get;
         private set;

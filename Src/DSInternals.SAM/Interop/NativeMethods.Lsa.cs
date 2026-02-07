@@ -22,14 +22,14 @@ internal static partial class NativeMethods
     [DllImport(Advapi, SetLastError = true, CharSet = CharSet.Unicode)]
     private static extern NtStatus LsaOpenPolicy([In] ref UnicodeString systemName, [In] ref LsaObjectAttributes objectAttributes, LsaPolicyAccessMask desiredAccess, out SafeLsaPolicyHandle policyHandle);
 
-    internal static NtStatus LsaOpenPolicy(string systemName, LsaPolicyAccessMask desiredAccess, out SafeLsaPolicyHandle policyHandle)
+    internal static NtStatus LsaOpenPolicy(string? systemName, LsaPolicyAccessMask desiredAccess, out SafeLsaPolicyHandle policyHandle)
     {
         UnicodeString unicodeName = new(systemName);
         LsaObjectAttributes attributes = new();
         return LsaOpenPolicy(ref unicodeName, ref attributes, desiredAccess, out policyHandle);
     }
 
-    internal static NtStatus LsaRetrievePrivateData(SafeLsaPolicyHandle policyHandle, string keyName, out byte[] privateData)
+    internal static NtStatus LsaRetrievePrivateData(SafeLsaPolicyHandle policyHandle, string keyName, out byte[]? privateData)
     {
         UnicodeString unicodeKeyName = new(keyName);
         NtStatus result = LsaRetrievePrivateData(policyHandle, ref unicodeKeyName, out SafeLsaMemoryHandle privateDataPointer);

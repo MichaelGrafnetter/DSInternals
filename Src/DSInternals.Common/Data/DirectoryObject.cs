@@ -30,9 +30,9 @@ public abstract class DirectoryObject
     public abstract void ReadAttribute(string name, out string value, bool unicode = true);
     public abstract void ReadAttribute(string name, out string[] values, bool unicode = true);
 
-    public virtual void ReadAttribute(string name, out RawSecurityDescriptor value)
+    public virtual void ReadAttribute(string name, out RawSecurityDescriptor? value)
     {
-        this.ReadAttribute(name, out byte[] binarySecurityDescriptor);
+        this.ReadAttribute(name, out byte[]? binarySecurityDescriptor);
         value = (binarySecurityDescriptor != null) ? new RawSecurityDescriptor(binarySecurityDescriptor, 0) : null;
     }
 
@@ -53,19 +53,19 @@ public abstract class DirectoryObject
         get;
     }
 
-    public void ReadAttribute(string name, out SecurityIdentifier value)
+    public void ReadAttribute(string name, out SecurityIdentifier? value)
     {
-        this.ReadAttribute(name, out byte[] binarySid);
-        value = binarySid.ToSecurityIdentifier(this.HasBigEndianRid);
+        this.ReadAttribute(name, out byte[]? binarySid);
+        value = binarySid?.ToSecurityIdentifier(this.HasBigEndianRid);
     }
 
     public abstract void ReadAttribute(string name, out DistinguishedName value);
 
-    public void ReadAttribute(string name, out SecurityIdentifier[] value)
+    public void ReadAttribute(string name, out SecurityIdentifier[]? value)
     {
         value = null;
         // TODO: Always big endian?
-        this.ReadAttribute(name, out byte[][] binarySids);
+        this.ReadAttribute(name, out byte[][]? binarySids);
         if (binarySids != null)
         {
             value = binarySids.Select(binarySid => binarySid.ToSecurityIdentifier(this.HasBigEndianRid)).ToArray();

@@ -2,7 +2,7 @@
 [Serializable]
 public sealed class DirectoryObjectNotFoundException : DirectoryObjectException
 {
-    public DirectoryObjectNotFoundException(object objectIdentifier = null, Exception innerExcetion = null)
+    public DirectoryObjectNotFoundException(object? objectIdentifier = null, Exception? innerExcetion = null)
         : base(objectIdentifier, innerExcetion)
     {
     }

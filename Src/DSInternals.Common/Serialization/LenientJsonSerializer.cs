@@ -32,7 +32,7 @@ public static class LenientJsonSerializer
     };
 
     // ---------- String input ----------
-    public static T DeserializeLenient<T>(string json)
+    public static T? DeserializeLenient<T>(string json)
     {
         if (string.IsNullOrWhiteSpace(json)) return default;
 
@@ -56,7 +56,7 @@ public static class LenientJsonSerializer
     }
 
     // ---------- Binary input ----------
-    public static T DeserializeLenient<T>(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
+    public static T? DeserializeLenient<T>(ReadOnlySpan<byte> binaryJson, bool utf16 = false)
     {
         var json = DecodeJson(binaryJson, utf16);
         return DeserializeLenient<T>(json);

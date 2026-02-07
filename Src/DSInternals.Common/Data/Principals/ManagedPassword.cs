@@ -71,7 +71,7 @@ public class ManagedPassword
     /// <summary>
     /// Initializes a new instance of the <see cref="ManagedPassword"/> class.
     /// </summary>
-    public ManagedPassword(SecureString currentPassword, SecureString previousPassword, TimeSpan queryPasswordInterval, TimeSpan unchangedPasswordInterval)
+    public ManagedPassword(SecureString currentPassword, SecureString? previousPassword, TimeSpan queryPasswordInterval, TimeSpan unchangedPasswordInterval)
     {
         if (currentPassword == null)
         {
@@ -158,11 +158,11 @@ public class ManagedPassword
         ReadOnlySpan<byte> currentPasswordSlice = blob.Slice(currentPasswordOffset, currentPasswordUpperBound - currentPasswordOffset).Span;
         SecureString currentPassword = ReadSecureWString(currentPasswordSlice);
 
-        SecureString previousPassword = null;
+        SecureString? previousPassword = null;
 
         if (previousPasswordOffset > 0)
         {
-            // Read PreviousPassword (optional): A null-terminated WCHAR string containing the cleartext previous password for the account. 
+            // Read PreviousPassword (optional): A null-terminated WCHAR string containing the cleartext previous password for the account.
             ReadOnlySpan<byte> previousPasswordSlice = blob.Slice(previousPasswordOffset, queryPasswordIntervalOffset - previousPasswordOffset).Span;
             previousPassword = ReadSecureWString(previousPasswordSlice);
         }

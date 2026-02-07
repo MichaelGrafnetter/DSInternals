@@ -12,13 +12,13 @@ public class CngSoftwareProviderTransportBlob
     private const int BlobHeaderLength = (MasterKeyFileCount + 9) * sizeof(int);
     private const string Magic = "MIB1";
 
-    public string KeyContainerName
+    public string? KeyContainerName
     {
         get;
         private set;
     }
 
-    public byte[] KeyData
+    public byte[]? KeyData
     {
         get;
         private set;

@@ -47,19 +47,19 @@ public class KerberosCredential
         private set;
     }
 
-    public KerberosKeyData[] Credentials
+    public KerberosKeyData[]? Credentials
     {
         get;
         private set;
     }
 
-    public KerberosKeyData[] OldCredentials
+    public KerberosKeyData[]? OldCredentials
     {
         get;
         private set;
     }
 
-    public string DefaultSalt
+    public string? DefaultSalt
     {
         get;
         private set;

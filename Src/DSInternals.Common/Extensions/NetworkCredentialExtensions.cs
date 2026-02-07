@@ -8,9 +8,9 @@ public static class NetworkCredentialExtensions
     /// <summary>
     /// Gets either UPN or Down-Level Logon Name
     /// </summary>
-    public static string GetLogonName(this NetworkCredential credential)
+    public static string? GetLogonName(this NetworkCredential? credential)
     {
-        string logonName = null;
+        string? logonName = null;
 
         if (credential != null)
         {

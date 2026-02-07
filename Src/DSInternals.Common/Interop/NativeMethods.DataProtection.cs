@@ -40,7 +40,7 @@ internal static partial class NativeMethods
         int l1KeyId,
         int l2KeyId,
         GroupKeyLevel level,
-        out byte[] context,
+        out byte[]? context,
         out int counterOffset)
     {
         var result = GenerateKDFContext(
@@ -83,7 +83,7 @@ internal static partial class NativeMethods
         byte[] secret,
         byte[] context,
         int? counterOffset,
-        string label,
+        string? label,
         int iteration,
         int desiredKeyLength,
         out byte[] derivedKey,
@@ -132,14 +132,14 @@ internal static partial class NativeMethods
     [DllImport(KdsCli, CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern Win32ErrorCode GenerateDerivedKey(
         string kdfAlgorithmName,
-        byte[] kdfParameters,
+        byte[]? kdfParameters,
         int kdfParametersLength,
-        byte[] secret,
+        byte[]? secret,
         int secretLength,
-        byte[] context,
+        byte[]? context,
         int contextLength,
         IntPtr counterOffset,
-        string label,
+        string? label,
         int labelLength,
         int iteration,
         [MarshalAs(UnmanagedType.LPArray)] byte[] key,
@@ -155,8 +155,8 @@ internal static partial class NativeMethods
 
     internal static Win32ErrorCode GetSIDKeyCacheFolder(
         byte[] targetSecurityDescriptor,
-        out string userStorageArea,
-        out string sidKeyCacheFolder,
+        out string? userStorageArea,
+        out string? sidKeyCacheFolder,
         bool isLowBox = false)
     {
         Win32ErrorCode result = GetSIDKeyCacheFolder(targetSecurityDescriptor, targetSecurityDescriptor?.Length ?? 0, isLowBox, out var userStorageAreaHandle, out var sidKeyCacheFolderHandle);
@@ -170,7 +170,7 @@ internal static partial class NativeMethods
     [DllImport(KdsCli, CharSet = CharSet.Unicode)]
     private static extern Win32ErrorCode GetSIDKeyCacheFolder(byte[] targetSecurityDescriptor, int targetSecurityDescriptorLength, bool isLowBox, out SafeSidKeyProviderHandle userStorageArea, out SafeSidKeyProviderHandle sidKeyCacheFolder);
 
-    internal static Win32ErrorCode GetSIDKeyFileName(Guid rootKeyId, int l0KeyId, bool publicKey, string sidKeyFolder, out string sidKeyFileName)
+    internal static Win32ErrorCode GetSIDKeyFileName(Guid rootKeyId, int l0KeyId, bool publicKey, string sidKeyFolder, out string? sidKeyFileName)
     {
         Win32ErrorCode result = GetSIDKeyFileName(rootKeyId, l0KeyId, publicKey, sidKeyFolder, out SafeSidKeyProviderHandle sidKeyFileNameHnadle);
         sidKeyFileName = sidKeyFileNameHnadle.StringValue;
@@ -190,7 +190,7 @@ internal static partial class NativeMethods
     private static extern Win32ErrorCode WriteSIDKeyInCache(byte[] sidKey, int sidKeyLength, byte[] targetSecurityDescriptor, int targetSecurityDescriptorLength, string sidKeyFolder, string sidKeyStorageArea);
 
     [DllImport(KdsCli, CharSet = CharSet.Unicode)]
-    internal static extern Win32ErrorCode DeleteAllCachedKeys(string sidFromCaller = null);
+    internal static extern Win32ErrorCode DeleteAllCachedKeys(string? sidFromCaller = null);
 
     internal static unsafe Win32ErrorCode NCryptUnprotectSecret(ReadOnlySpan<byte> protectedBlob, out ReadOnlySpan<byte> data)
     {

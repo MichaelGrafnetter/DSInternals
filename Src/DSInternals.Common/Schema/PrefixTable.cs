@@ -19,7 +19,7 @@ public class PrefixTable
     private SortedDictionary<PrefixIndex, string> _forwardMap;
     private SortedDictionary<string, PrefixIndex> _reverseMap;
 
-    public PrefixTable(byte[] blob = null, bool prePopulate = true)
+    public PrefixTable(byte[]? blob = null, bool prePopulate = true)
     {
         _forwardMap = new SortedDictionary<PrefixIndex, string>();
         _reverseMap = new SortedDictionary<string, PrefixIndex>(StringComparer.Ordinal);

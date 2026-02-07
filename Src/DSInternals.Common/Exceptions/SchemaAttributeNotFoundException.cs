@@ -10,12 +10,12 @@ public sealed class SchemaAttributeNotFoundException : DirectoryException
         get;
         private set;
     }
-    public SchemaAttributeNotFoundException(string attributeName) : base(null)
+    public SchemaAttributeNotFoundException(string attributeName) : base(innerException: null)
     {
         this.AttributeIdentifier = attributeName;
     }
     public SchemaAttributeNotFoundException(AttributeType attributeId)
-        : base(null)
+        : base(innerException: null)
     {
         this.AttributeIdentifier = attributeId;
     }

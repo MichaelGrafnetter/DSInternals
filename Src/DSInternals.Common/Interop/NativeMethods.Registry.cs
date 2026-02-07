@@ -27,7 +27,7 @@ internal static partial class NativeMethods
     internal static extern Win32ErrorCode RegUnLoadKey(RegistryHive hKey, string subKey);
 
     [DllImport(Advapi, CharSet = CharSet.Unicode, SetLastError = true)]
-    private static extern Win32ErrorCode RegQueryInfoKey(SafeRegistryHandle hKey, StringBuilder lpClass, ref int lpcbClass, IntPtr lpReserved, int[] lpcSubKeys, int[] lpcbMaxSubKeyLen, int[] lpcbMaxClassLen, int[] lpcValues, int[] lpcbMaxValueNameLen, int[] lpcbMaxValueLen, int[] lpcbSecurityDescriptor, out long lpftLastWriteTime);
+    private static extern Win32ErrorCode RegQueryInfoKey(SafeRegistryHandle hKey, StringBuilder lpClass, ref int lpcbClass, IntPtr lpReserved, int[]? lpcSubKeys, int[]? lpcbMaxSubKeyLen, int[]? lpcbMaxClassLen, int[]? lpcValues, int[]? lpcbMaxValueNameLen, int[]? lpcbMaxValueLen, int[]? lpcbSecurityDescriptor, out long lpftLastWriteTime);
     internal static Win32ErrorCode RegQueryInfoKey(SafeRegistryHandle hKey, out string keyClass, out DateTime lastWriteTime)
     {
         StringBuilder buffer = new(MaxRegistryKeyClassSize);

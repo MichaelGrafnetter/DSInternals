@@ -82,7 +82,7 @@ public class LapsPasswordInformation
         }
 
         // Decrypt the data using the native Win32 API, which uses the pre-cached group keys if available.
-        bool isSuccess = encryptedPassword.TryDecrypt(out LapsClearTextPassword decryptedPassword);
+        bool isSuccess = encryptedPassword.TryDecrypt(out LapsClearTextPassword? decryptedPassword);
 
         if (isSuccess)
         {
@@ -105,12 +105,12 @@ public class LapsPasswordInformation
     /// <summary>
     /// Gets the account name that the password applies to.
     /// </summary>
-    public string Account { get; private set; }
+    public string? Account { get; private set; }
 
     /// <summary>
     /// Gets the cleartext password.
     /// </summary>
-    public string Password { get; private set; }
+    public string? Password { get; private set; }
 
     /// <summary>
     /// Gets the date and time when the password was last updated.

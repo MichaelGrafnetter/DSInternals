@@ -3,7 +3,7 @@
 public class HashEqualityComparer : IEqualityComparer<byte[]>
 {
     // Singleton
-    private static HashEqualityComparer instance;
+    private static HashEqualityComparer? instance;
 
     public static HashEqualityComparer GetInstance()
     {
@@ -16,7 +16,7 @@ public class HashEqualityComparer : IEqualityComparer<byte[]>
 
     private HashEqualityComparer() { }
 
-    public bool Equals(byte[] x, byte[] y)
+    public bool Equals(byte[]? x, byte[]? y)
     {
         if (x == null || y == null)
         {

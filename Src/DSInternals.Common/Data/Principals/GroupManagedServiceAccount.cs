@@ -18,7 +18,7 @@ public class GroupManagedServiceAccount
     /// SDDL: O:SYD:(A;;FRFW;;;ED) - Enterprise Domain Controllers
     /// https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/9cd2fc5e-7305-4fb8-b233-2a60bc3eec68
     /// </remarks>
-    private static readonly byte[] DefaultGMSASecurityDescriptor = "010004803000000000000000000000001400000002001c0001000000000014009f011200010100000000000509000000010100000000000512000000".HexToBinary();
+    private static readonly byte[] DefaultGMSASecurityDescriptor = "010004803000000000000000000000001400000002001c0001000000000014009f011200010100000000000509000000010100000000000512000000".HexToBinary()!;
     private const string GmsaKdfLabel = "GMSA PASSWORD";
     private const int GmsaPasswordLength = 256;
     private const int DefaultManagedPasswordInterval = 30; // in days
@@ -288,6 +288,11 @@ public class GroupManagedServiceAccount
             throw new ArgumentOutOfRangeException(nameof(kdsRootKey));
         }
 
+        if (this.Sid == null)
+        {
+            throw new InvalidOperationException("The SID is not set for this gMSA.");
+        }
+
         // Calculate and cache the effective managed password cycle
         DateTime previousPasswordChange = this.PasswordLastSet ?? this.WhenCreated;
         (int l0KeyId, int l1KeyId, int l2KeyId) = GetIntervalId(previousPasswordChange, effectiveTime, this.ManagedPasswordInterval ?? DefaultManagedPasswordInterval);
@@ -301,7 +306,7 @@ public class GroupManagedServiceAccount
         // Derive password hashes, as the password itself is not that important
         this.NTHash = Cryptography.NTHash.ComputeHash(this.SecureManagedPassword);
 
-        if (this.ManagedPasswordId.HasValue && this.ManagedPasswordId.Value.DomainName != null)
+        if (this.ManagedPasswordId.HasValue && this.ManagedPasswordId.Value.DomainName != null && this.SamAccountName != null)
         {
             // We only need the DNS domain name from the managed password id. This attribute should always be populated.
             // TODO: We are not generating DES keys, as this feature does not yield expected results yet.
@@ -319,19 +324,24 @@ public class GroupManagedServiceAccount
             throw new InvalidOperationException("The provided KDS root key does not match the gMSA password identifier.");
         }
 
-        (byte[] l1Key, byte[] l2Key) = kdsRootKey.ComputeSidPrivateKey(DefaultGMSASecurityDescriptor, keyIdentifier.L0KeyId, keyIdentifier.L1KeyId, keyIdentifier.L2KeyId);
+        (byte[]? l1Key, byte[]? l2Key) = kdsRootKey.ComputeSidPrivateKey(DefaultGMSASecurityDescriptor, keyIdentifier.L0KeyId, keyIdentifier.L1KeyId, keyIdentifier.L2KeyId);
 
         if (l2Key == null || l2Key.Length == 0)
         {
             // TODO: Add test cases for this branch
             // Recalculate the L2 key with new parameters
+            if (l1Key == null)
+            {
+                throw new InvalidOperationException("Unable to compute the L1 key for the gMSA password.");
+            }
+
             int nextl2KeyId = KdsRootKey.L2KeyModulus - 1;
             (_, l2Key) = KdsRootKey.ClientComputeL2Key(
                 kdsRootKey.KeyId,
                 kdsRootKey.KdfAlgorithm,
                 kdsRootKey.RawKdfParameters,
                 l1Key,
-                l2Key: null,
+                l2Key: null!,
                 keyIdentifier.L0KeyId,
                 keyIdentifier.L1KeyId,
                 l1KeyIteration: 0,

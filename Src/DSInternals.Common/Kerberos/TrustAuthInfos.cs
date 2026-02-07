@@ -15,13 +15,13 @@ public struct TrustAuthInfos
 
     public ReadOnlyMemory<byte> CurrentPasswordBytes { get; private set; }
 
-    public byte[] CurrentNTHash { get; private set; }
+    public byte[]? CurrentNTHash { get; private set; }
 
     public ReadOnlyMemory<byte> PreviousPasswordBytes { get; private set; }
 
-    public byte[] PreviousNTHash { get; private set; }
+    public byte[]? PreviousNTHash { get; private set; }
 
-    public string CurrentPassword
+    public string? CurrentPassword
     {
         get
         {
@@ -29,7 +29,7 @@ public struct TrustAuthInfos
         }
     }
 
-    public string PreviousPassword
+    public string? PreviousPassword
     {
         get
         {
@@ -37,7 +37,7 @@ public struct TrustAuthInfos
         }
     }
 
-    private TrustAuthInfos(ReadOnlyMemory<byte> currentPasswordBytes, ReadOnlyMemory<byte> previousPasswordBytes, byte[] currentNTHash, byte[] previousNTHash)
+    private TrustAuthInfos(ReadOnlyMemory<byte> currentPasswordBytes, ReadOnlyMemory<byte> previousPasswordBytes, byte[]? currentNTHash, byte[]? previousNTHash)
     {
         this.CurrentPasswordBytes = currentPasswordBytes;
         this.PreviousPasswordBytes = previousPasswordBytes;
@@ -85,7 +85,7 @@ public struct TrustAuthInfos
         // AuthenticationInformation(variable)
         currentPosition = currentOffset;
         ReadOnlyMemory<byte> currentPasswordBytes = default;
-        byte[] currentNTHash = null;
+        byte[]? currentNTHash = null;
 
         for (int i = 0; i < count; i++)
         {
@@ -113,7 +113,7 @@ public struct TrustAuthInfos
         // PreviousAuthenticationInformation (variable)
         currentPosition = previousOffset;
         ReadOnlyMemory<byte> previousPasswordBytes = default;
-        byte[] previousNTHash = null;
+        byte[]? previousNTHash = null;
 
         for (int i = 0; i < count; i++)
         {

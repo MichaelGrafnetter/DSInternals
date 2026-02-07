@@ -25,9 +25,9 @@
       },
       "Polyfill": {
         "type": "Direct",
-        "requested": "[9.5.0, )",
-        "resolved": "9.5.0",
-        "contentHash": "T3E8+K+W0u78495PwSSJOzT6QUbnZSdkDK4B3nfvxUo9nctDr6ChSDLV4l/RD2ZmA5oHM2YbLvyp+a2uE0ftOQ=="
+        "requested": "[9.7.7, )",
+        "resolved": "9.7.7",
+        "contentHash": "L4iI95ONeG95Wc5ViCGL5Z47yA53NCX1tP5W6ddlaF9h/C/tYR6i56GZkH/33d2H9+jwhF22nL4olnO5efmoFw=="
       },
       "Microsoft.Bcl.AsyncInterfaces": {
         "type": "Transitive",
@@ -117,6 +117,13 @@
           "System.Memory": "[4.6.3, )",
           "System.Text.Json": "[9.0.8, )",
           "System.ValueTuple": "[4.6.1, )"
+        }
+      },
+      "dsinternals.replication.interop.netframework": {
+        "type": "Project",
+        "dependencies": {
+          "DSInternals.Common": "[1.0.0, )",
+          "DSInternals.Replication.Model": "[1.0.0, )"
         }
       },
       "dsinternals.replication.model": {
@@ -243,6 +250,13 @@
         "type": "Project",
         "dependencies": {
           "System.Formats.Cbor": "[9.0.9, )"
+        }
+      },
+      "dsinternals.replication.interop.netcore": {
+        "type": "Project",
+        "dependencies": {
+          "DSInternals.Common": "[6.2.0, )",
+          "DSInternals.Replication.Model": "[6.2.0, )"
         }
       },
       "dsinternals.replication.model": {

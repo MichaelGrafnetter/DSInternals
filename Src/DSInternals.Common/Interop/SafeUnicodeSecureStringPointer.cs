@@ -86,7 +86,7 @@ public sealed class SafeUnicodeSecureStringPointer : SafeHandleZeroOrMinusOneIsI
         return true;
     }
 
-    public override string ToString()
+    public override string? ToString()
     {
         return Marshal.PtrToStringUni(this.handle);
     }

@@ -18,7 +18,7 @@ public static class AccountFactory
     /// <param name="propertySets">A bitwise combination of the enumeration values that specifies which property sets to load.</param>
     /// <returns>A <see cref="DSAccount"/> instance, or <see langword="null"/> if the object is not a security principal.</returns>
     /// <exception cref="ArgumentNullException">The <paramref name="dsObject"/> parameter is <see langword="null"/>.</exception>
-    public static DSAccount? CreateAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, IKdsRootKeyResolver rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All)
+    public static DSAccount? CreateAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor? pek, IKdsRootKeyResolver? rootKeyResolver = null, AccountPropertySets propertySets = AccountPropertySets.All)
     {
         // Validate the input.
         ArgumentNullException.ThrowIfNull(dsObject);

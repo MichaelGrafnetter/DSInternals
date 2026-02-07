@@ -226,7 +226,7 @@ internal static partial class NativeMethods
     [DllImport(CryptDll, CharSet = CharSet.Auto, SetLastError = true)]
     private static extern NtStatus CDLocateCSystem(KerberosKeyType type, out IntPtr cryptoSystem);
 
-    internal static NtStatus CDLocateCSystem(KerberosKeyType type, out KerberosCryptoSystem cryptoSystem)
+    internal static NtStatus CDLocateCSystem(KerberosKeyType type, out KerberosCryptoSystem? cryptoSystem)
     {
         IntPtr cryptoSystemPtr;
         NtStatus status = CDLocateCSystem(type, out cryptoSystemPtr);

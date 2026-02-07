@@ -19,7 +19,7 @@ public class DSAccount
     /// <param name="propertySets">A bitwise combination of the enumeration values that specifies which property sets to load.</param>
     /// <exception cref="ArgumentNullException">The <paramref name="dsObject"/> or <paramref name="netBIOSDomainName"/> parameter is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException">The object is not an account.</exception>
-    public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor pek, AccountPropertySets propertySets = AccountPropertySets.All)
+    public DSAccount(DirectoryObject dsObject, string netBIOSDomainName, DirectorySecretDecryptor? pek, AccountPropertySets propertySets = AccountPropertySets.All)
     {
         // Parameter validation
         ArgumentNullException.ThrowIfNull(dsObject);
@@ -65,7 +65,7 @@ public class DSAccount
     /// <summary>
     /// Gets the distinguished name (DN) for this <see cref="DSAccount"/>.
     /// </summary>
-    public string DistinguishedName
+    public string? DistinguishedName
     {
         get;
         private set;
@@ -78,7 +78,7 @@ public class DSAccount
     {
         get;
         private set;
-    }
+    } = null!;
 
     /// <summary>
     /// Gets the SID history for this <see cref="DSAccount"/>.
@@ -86,7 +86,7 @@ public class DSAccount
     /// <value>
     /// An array of security identifiers representing the SID history, or <see langword="null"/> if not available.
     /// </value>
-    public SecurityIdentifier[] SidHistory
+    public SecurityIdentifier[]? SidHistory
     {
         get;
         private set;
@@ -95,7 +95,7 @@ public class DSAccount
     /// <summary>
     /// Gets the security descriptor of the object.
     /// </summary>
-    public RawSecurityDescriptor SecurityDescriptor
+    public RawSecurityDescriptor? SecurityDescriptor
     {
         get;
         private set;
@@ -119,7 +119,7 @@ public class DSAccount
     /// <value>
     /// The description.
     /// </value>
-    public string Description
+    public string? Description
     {
         get;
         private set;
@@ -233,7 +233,7 @@ public class DSAccount
     /// <summary>
     /// Gets or sets the user principal name (UPN) associated with this <see cref="DSAccount"/>.
     /// </summary>
-    public string UserPrincipalName
+    public string? UserPrincipalName
     {
         get;
         private set;
@@ -242,7 +242,7 @@ public class DSAccount
     /// <summary>
     /// Gets or sets the SAM account name for this <see cref="DSAccount"/>.
     /// </summary>
-    public string SamAccountName
+    public string? SamAccountName
     {
         get;
         private set;
@@ -251,7 +251,7 @@ public class DSAccount
     /// <summary>
     /// Gets or sets the pre-Windows 2000 logon name of this this <see cref="DSAccount"/>.
     /// </summary>
-    public string LogonName
+    public string? LogonName
     {
         get;
         private set;
@@ -292,7 +292,7 @@ public class DSAccount
     /// <summary>
     /// List of principal names used for mutual authentication with an instance of a service.
     /// </summary>
-    public string[] ServicePrincipalName
+    public string[]? ServicePrincipalName
     {
         get;
         private set;
@@ -301,7 +301,7 @@ public class DSAccount
     /// <summary>
     /// Gets the account's password in Windows NT operating system one-way format (OWF).
     /// </summary>
-    public byte[] NTHash
+    public byte[]? NTHash
     {
         get;
         private set;
@@ -311,7 +311,7 @@ public class DSAccount
     /// Gets the account's password in LAN Manager (LM) one-way format (OWF).
     /// </summary>
     /// <remarks>The LM OWF is used for compatibility with LAN Manager 2.x clients, Windows 95, and Windows 98.</remarks>
-    public byte[] LMHash
+    public byte[]? LMHash
     {
         get;
         private set;
@@ -320,7 +320,7 @@ public class DSAccount
     /// <summary>
     /// Gets password history of the user in Windows NT operating system one-way format (OWF).
     /// </summary>
-    public byte[][] NTHashHistory
+    public byte[][]? NTHashHistory
     {
         get;
         private set;
@@ -332,7 +332,7 @@ public class DSAccount
     /// <value>
     /// The lm hash history.
     /// </value>
-    public byte[][] LMHashHistory
+    public byte[][]? LMHashHistory
     {
         get;
         private set;
@@ -341,7 +341,7 @@ public class DSAccount
     /// <summary>
     /// Gets the stored credentials for use in authenticating.
     /// </summary>
-    public SupplementalCredentials SupplementalCredentials
+    public SupplementalCredentials? SupplementalCredentials
     {
         get;
         private set;
@@ -351,7 +351,7 @@ public class DSAccount
     /// <summary>
     /// Device Registration / Windows Hello for Business Keys
     /// </summary>
-    public KeyCredential[] KeyCredentials
+    public KeyCredential[]? KeyCredentials
     {
         get;
         private set;

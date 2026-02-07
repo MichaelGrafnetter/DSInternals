@@ -15,7 +15,7 @@ public struct WindowsAuthenticationIdentity : IDisposable
     /// <summary>
     /// String containing the user name.
     /// </summary>
-    private string _user;
+    private string? _user;
 
     /// <summary>
     /// Number of characters in User, excluding the terminating NULL.
@@ -25,7 +25,7 @@ public struct WindowsAuthenticationIdentity : IDisposable
     /// <summary>
     /// String containing the domain or workgroup name.
     /// </summary>
-    private string _domain;
+    private string? _domain;
 
     /// <summary>
     /// Number of characters in Domain, excluding the terminating NULL.
@@ -35,7 +35,7 @@ public struct WindowsAuthenticationIdentity : IDisposable
     /// <summary>
     /// String containing the user's password in the domain or workgroup.
     /// </summary>
-    private SafeUnicodeSecureStringPointer _password;
+    private SafeUnicodeSecureStringPointer? _password;
 
     /// <summary>
     /// Number of characters in Password, excluding the terminating NULL.
@@ -53,7 +53,7 @@ public struct WindowsAuthenticationIdentity : IDisposable
     /// <summary>
     /// User name.
     /// </summary>
-    public string User
+    public string? User
     {
         get
         {
@@ -69,7 +69,7 @@ public struct WindowsAuthenticationIdentity : IDisposable
     /// <summary>
     /// Domain name.
     /// </summary>
-    public string Domain
+    public string? Domain
     {
         get
         {

@@ -58,7 +58,7 @@ public class SafeOemStringPointer : SafeHandleZeroOrMinusOneIsInvalid
         }
     }
 
-    public override string ToString()
+    public override string? ToString()
     {
         return Marshal.PtrToStringAnsi(this.handle);
     }
