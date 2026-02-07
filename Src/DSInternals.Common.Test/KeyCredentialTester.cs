@@ -604,7 +604,7 @@ public class KeyCredentialTester
         Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
         Assert.AreEqual(KeyUsage.NGC, key.Usage);
         Assert.AreEqual(KeySource.AD, key.Source);
-        Assert.IsNull(key.CustomKeyInfo);
+        Assert.AreEqual(KeyFlags.MFANotUsed, key.CustomKeyInfo.Flags);
         Assert.IsNull(key.LastLogonTime);
     }
 
@@ -625,7 +625,7 @@ public class KeyCredentialTester
         Assert.AreEqual(KeyCredentialVersion.Version2, key.Version);
         Assert.AreEqual(KeyUsage.NGC, key.Usage);
         Assert.AreEqual(KeySource.AD, key.Source);
-        Assert.IsNull(key.CustomKeyInfo);
+        Assert.AreEqual(KeyFlags.MFANotUsed, key.CustomKeyInfo.Flags);
         Assert.IsNull(key.LastLogonTime);
     }
 }
