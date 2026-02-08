@@ -59,6 +59,16 @@ ULONG IDL_DRSWriteNgcKey_NoSEH(
 	SuppressRpcException(IDL_DRSWriteNgcKey, hDrs, dwInVersion, pmsgIn, pdwOutVersion, pmsgOut)
 }
 
+ULONG IDL_DRSAddSidHistory_NoSEH(
+	/* [in, ref] */ DRS_HANDLE hDrs,
+	/* [in] */ DWORD dwInVersion,
+	/* [in, ref, switch_is(dwInVersion)] */ DRS_MSG_ADDSIDREQ* pmsgIn,
+	/* [out, ref] */ DWORD* pdwOutVersion,
+	/* [out, ref, switch_is(*pdwOutVersion)] */ DRS_MSG_ADDSIDREPLY* pmsgOut)
+{
+	SuppressRpcException(IDL_DRSAddSidHistory, hDrs, dwInVersion, pmsgIn, pdwOutVersion, pmsgOut)
+}
+
 ULONG IDL_DRSUnbind_NoSEH(
 	/* [ref][out][in] */ DRS_HANDLE* phDrs)
 {

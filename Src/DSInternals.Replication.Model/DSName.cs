@@ -61,7 +61,7 @@ public class DSName
     {
         if (buffer.Length < DSNameHeaderSize)
         {
-            throw new ArgumentOutOfRangeException($"Buffer is too small to contain a DSName structure. Minimum size is {DSNameHeaderSize} bytes.", nameof(buffer));
+            throw new ArgumentOutOfRangeException(nameof(buffer), $"Buffer is too small to contain a DSName structure. Minimum size is {DSNameHeaderSize} bytes.");
         }
 
         // Parse the binary structure

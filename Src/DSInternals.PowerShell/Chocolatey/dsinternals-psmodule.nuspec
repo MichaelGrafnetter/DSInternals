@@ -36,10 +36,10 @@ The DSInternals PowerShell Module has these main features:
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* The New-ADDBRestoreFromMediaScript cmdlet should no longer be throwing the NullReferenceException.
-* Disabled DES_CBC_MD5 Kerberos key derivation support due to recent Windows API changes.
-* Removed the broken -Protocol parameter from replication cmdlets.
-* Due to unexpected delays in code signing certificate renewal, this release is not digitally signed.
+* Added the Add-ADReplSidHistory cmdlet for SID history migration via MS-DRSR.
+* Improved generation of NGC keys to meet January 2026 Windows validation changes.
+* Removed Azure AD Graph API-related cmdlets.
+* Merged the *.psm1 script bootstrapper of the binary PowerShell module into the *.psd1 module manifest.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 5.1+. For OS prior to Windows 10 and Windows Server 2016. -->

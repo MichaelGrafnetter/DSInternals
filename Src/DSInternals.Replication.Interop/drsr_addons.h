@@ -543,7 +543,7 @@ enum DS_NAME_FORMAT_EXT : DWORD
 	DS_LIST_GLOBAL_CATALOG_SERVERS = 0xFFFFFFF1,
 
 	/// <summary>
-	/// Get value of sAMAccountName attribute; return status DS_NAME_ERROR_NOT_FOUND if account is invalid. 
+	/// Get value of sAMAccountName attribute; return status DS_NAME_ERROR_NOT_FOUND if account is invalid.
 	/// </summary>
 	DS_NT4_ACCOUNT_NAME_SANS_DOMAIN_EX = 0xFFFFFFF0,
 
@@ -594,6 +594,13 @@ ULONG IDL_DRSWriteNgcKey_NoSEH(
 	/* [in, ref, switch_is(dwInVersion)]*/ DRS_MSG_WRITENGCKEYREQ* pmsgIn,
 	/* [out, ref] */ DWORD* pdwOutVersion,
 	/* [out, ref, switch_is(*pdwOutVersion)] */ DRS_MSG_WRITENGCKEYREPLY* pmsgOut);
+
+ULONG IDL_DRSAddSidHistory_NoSEH(
+	/* [in, ref] */ DRS_HANDLE hDrs,
+	/* [in] */ DWORD dwInVersion,
+	/* [in, ref, switch_is(dwInVersion)] */ DRS_MSG_ADDSIDREQ* pmsgIn,
+	/* [out, ref] */ DWORD* pdwOutVersion,
+	/* [out, ref, switch_is(*pdwOutVersion)] */ DRS_MSG_ADDSIDREPLY* pmsgOut);
 
 ULONG IDL_DRSUnbind_NoSEH(
 	/* [ref][out][in] */ DRS_HANDLE* phDrs);

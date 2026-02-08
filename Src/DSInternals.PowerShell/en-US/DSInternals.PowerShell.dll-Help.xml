@@ -964,6 +964,399 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Add-ADReplSidHistory</command:name>
+      <command:verb>Add</command:verb>
+      <command:noun>ADReplSidHistory</command:noun>
+      <maml:description>
+        <maml:para>Adds SID history from a source principal to a destination principal through the MS-DRSR protocol.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet wraps the IDL_DRSAddSidHistory RPC call. It passes source and destination principal information to the domain controller and can optionally validate the secure channel or delete the source object.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Add-ADReplSidHistory</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CheckSecureChannel</maml:name>
+          <maml:description>
+            <maml:para>Verifies whether the channel is secure and returns the result of the verification.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account that has permission to connect to the destination domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target domain controller for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Add-ADReplSidHistory</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account that has permission to connect to the destination domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DeleteSourceObject</maml:name>
+          <maml:description>
+            <maml:para>Appends the source object's SID history to the destination and deletes the source object from the source domain.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>DestinationPrincipal</maml:name>
+          <maml:description>
+            <maml:para>Specifies the destination security principal that receives the source SID history.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target domain controller for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>SourcePrincipal</maml:name>
+          <maml:description>
+            <maml:para>Specifies the source security principal whose SID history is to be added. If -DeleteSourceObject is specified, this value should be a DN; otherwise, it should be a domain-relative SAM name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Add-ADReplSidHistory</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account that has permission to connect to the destination domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DestinationDomain</maml:name>
+          <maml:description>
+            <maml:para>Specifies the destination domain in which the destination principal resides. The domain name can be an FQDN or a NetBIOS name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>DestinationPrincipal</maml:name>
+          <maml:description>
+            <maml:para>Specifies the destination security principal that receives the source SID history.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target domain controller for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SourceCredential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credentials to be used in the source domain.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SourceDomain</maml:name>
+          <maml:description>
+            <maml:para>Specifies the source domain to query for the SID of the source principal. The domain name can be an FQDN or a NetBIOS name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SourceDomainController</maml:name>
+          <maml:description>
+            <maml:para>Specifies the primary domain controller (PDC) or PDC role owner in the source domain.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>SourcePrincipal</maml:name>
+          <maml:description>
+            <maml:para>Specifies the source security principal whose SID history is to be added. If -DeleteSourceObject is specified, this value should be a DN; otherwise, it should be a domain-relative SAM name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CheckSecureChannel</maml:name>
+        <maml:description>
+          <maml:para>Verifies whether the channel is secure and returns the result of the verification.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies a user account that has permission to connect to the destination domain controller. The default is the current user.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DeleteSourceObject</maml:name>
+        <maml:description>
+          <maml:para>Appends the source object's SID history to the destination and deletes the source object from the source domain.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DestinationDomain</maml:name>
+        <maml:description>
+          <maml:para>Specifies the destination domain in which the destination principal resides. The domain name can be an FQDN or a NetBIOS name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>DestinationPrincipal</maml:name>
+        <maml:description>
+          <maml:para>Specifies the destination security principal that receives the source SID history.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC">
+        <maml:name>Server</maml:name>
+        <maml:description>
+          <maml:para>Specifies the target domain controller for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SourceCredential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credentials to be used in the source domain.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SourceDomain</maml:name>
+        <maml:description>
+          <maml:para>Specifies the source domain to query for the SID of the source principal. The domain name can be an FQDN or a NetBIOS name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SourceDomainController</maml:name>
+        <maml:description>
+          <maml:para>Specifies the primary domain controller (PDC) or PDC role owner in the source domain.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <maml:name>SourcePrincipal</maml:name>
+        <maml:description>
+          <maml:para>Specifies the source security principal whose SID history is to be added. If -DeleteSourceObject is specified, this value should be a DN; otherwise, it should be a domain-relative SAM name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Add-ADReplSidHistory -SourceDomain 'CONTOSO' -SourcePrincipal 'LegacyUser' -SourceDomainController 'CONTOSO-PDC'
+ -SourceCredential (Get-Credential 'CONTOSO\Administrator') -DestinationDomain 'FABRIKAM'
+ -DestinationPrincipal 'MigratedUser' -Server 'FABRIKAM-DC1'</dev:code>
+        <dev:remarks>
+          <maml:para>Adds the SID history of LegacyUser from the CONTOSO domain to MigratedUser in the FABRIKAM domain.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Add-ADReplSidHistory -SourcePrincipal 'CN=LegacyUser,CN=Users,DC=contoso,DC=com'
+ -DestinationPrincipal 'CN=MigratedUser,CN=Users,DC=contoso,DC=com' -DeleteSourceObject -Server 'CONTOSO-DC1'</dev:code>
+        <dev:remarks>
+          <maml:para>Adds the SID history of the source object to the destination object in the same domain and deletes the source object.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Add-ADReplSidHistory -CheckSecureChannel -Server 'FABRIKAM-DC1'</dev:code>
+        <dev:remarks>
+          <maml:para>Verifies that the RPC connection to the destination DC is secure.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Add-ADReplSidHistory.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>ConvertFrom-ADManagedPasswordBlob</command:name>
       <command:verb>ConvertFrom</command:verb>
       <command:noun>ADManagedPasswordBlob</command:noun>
@@ -4151,7 +4544,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
       <command:example>
         <maml:title>-------------------------- Example 8 --------------------------</maml:title>
         <dev:code>PS C:\&gt; $dc = Get-ADDBDomainController -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
-PS C:\&gt; $adminSid = '{0}-500' -f $dc.DomainSid
+PS C:\&gt; $adminSid = '{0}-500' -f $dc.DomainSid           
 PS C:\&gt; $account = Get-ADDBAccount -Sid $adminSid `
                                    -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
                                    -BootKey 0be7a2afe1713642182e9b96f73a75da</dev:code>
@@ -4164,7 +4557,7 @@ PS C:\&gt; $account = Get-ADDBAccount -Sid $adminSid `
         <dev:code>PS C:\&gt; Get-ADDBAccount -DatabasePath '.\ADBackup\Active Directory\ntds.dit' -All -Properties LAPS | Select-Object -ExpandProperty LapsPasswords
 &lt;# Sample Output:
 ComputerName Account       Password                 Expires   Source
------------- -------       --------                 -------   -----
+------------ -------       --------                 -------   -----                                                                                                                                                
 DC01         Administrator PluralTrimmingSuggest    2/3/2025  EncryptedDSRMPassword
 DC02         Administrator RoundupFructoseRoundworm 2/3/2025  EncryptedDSRMPassword
 ADFS01       WLapsAdmin    HerbsSkidUnproven        2/3/2025  EncryptedPassword

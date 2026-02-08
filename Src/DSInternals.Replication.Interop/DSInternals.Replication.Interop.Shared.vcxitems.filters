@@ -31,9 +31,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)DrsConnection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)drsr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)drsr_addons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -73,9 +70,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)drsr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

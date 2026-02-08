@@ -12,7 +12,7 @@ RootModule = if ($PSEdition -eq 'Core') {
 }
 
 # Version number of this module.
-ModuleVersion = '6.2'
+ModuleVersion = '6.3'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -120,6 +120,7 @@ CmdletsToExport = @(
     'New-ADDBRestoreFromMediaScript',
     'Get-LsaBackupKey',
     'Add-ADReplNgcKey',
+    'Add-ADReplSidHistory',
     'Unlock-ADDBAccount',
     'Get-ADDBDnsResourceRecord',
     'Get-ADDBDnsZone',
@@ -259,10 +260,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- The New-ADDBRestoreFromMediaScript cmdlet should no longer be throwing the NullReferenceException.
-- Disabled DES_CBC_MD5 Kerberos key derivation support due to recent Windows API changes.
-- Removed the broken -Protocol parameter from replication cmdlets.
-- Due to unexpected delays in code signing certificate renewal, this release is not digitally signed.
+- Added the Add-ADReplSidHistory cmdlet for SID history migration via MS-DRSR.
+- Improved generation of NGC keys to meet January 2026 Windows validation changes.
+- Removed Azure AD Graph API-related cmdlets.
+- Merged the *.psm1 script bootstrapper of the binary PowerShell module into the *.psd1 module manifest.
 "@
     } # End of PSData hashtable
 

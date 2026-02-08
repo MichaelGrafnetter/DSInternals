@@ -5,7 +5,7 @@
     <!-- Redirect the build directory so that it includes the module name -->
     <ArtifactsPivots>$(Configuration)/DSInternals/$(TargetFramework)</ArtifactsPivots>
     <IncludeSymbols>False</IncludeSymbols>
-    <Version>6.2</Version>
+    <Version>6.3</Version>
     <AssemblyTitle>DSInternals PowerShell Commands</AssemblyTitle>
     <!-- Copy all dependency DLLs to the binary module -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -74,6 +74,7 @@
 
   <!-- Bundle the platform-specific DSInternals.Replication.Interop libraries and Visual C and C++ runtimes -->
   <!-- To avoid compilation errors when debugging, only existing files will be copied. -->
+  <!-- As the CPP runtime DLLs are specified using wildcards, only look for them if the corresponding Interop assembly exists. -->
   <Target Name="CopyInteropLibraries" AfterTargets="PostBuildEvent">
     <PropertyGroup>
       <ReplicationInteropRootDir>$(ArtifactsPath)\bin\DSInternals.Replication.Interop\$(Configuration.ToLower())_$(TargetFramework)\</ReplicationInteropRootDir>
@@ -91,17 +92,17 @@
     <!-- X64 -->
     <Copy SourceFiles="$(ReplicationInteropRootDir)x64\DSInternals.Replication.Interop.dll" DestinationFolder="$(OutDir)amd64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="Exists('$(ReplicationInteropRootDir)x64\DSInternals.Replication.Interop.dll')" />
     <Copy SourceFiles="$(ReplicationInteropRootDir)x64\DSInternals.Replication.Interop.pdb" DestinationFolder="$(OutDir)amd64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="Exists('$(ReplicationInteropRootDir)x64\DSInternals.Replication.Interop.pdb')" />
-    <Copy SourceFiles="@(CppRuntimeBinariesX64)" DestinationFolder="$(OutDir)amd64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="@(CppRuntimeBinariesX64)" DestinationFolder="$(OutDir)amd64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="Exists('$(ReplicationInteropRootDir)x64\DSInternals.Replication.Interop.dll')" />
     <Copy SourceFiles="$(ReplicationInteropRootDir)x64\Ijwhost.dll" DestinationFolder="$(OutDir)amd64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="'$(TargetFramework)' != 'net48' and Exists('$(ReplicationInteropRootDir)x64\Ijwhost.dll')" />
     <!-- X86 -->
     <Copy SourceFiles="$(ReplicationInteropRootDir)Win32\DSInternals.Replication.Interop.dll" DestinationFolder="$(OutDir)x86" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="Exists('$(ReplicationInteropRootDir)Win32\DSInternals.Replication.Interop.dll')" />
     <Copy SourceFiles="$(ReplicationInteropRootDir)Win32\DSInternals.Replication.Interop.pdb" DestinationFolder="$(OutDir)x86" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="Exists('$(ReplicationInteropRootDir)Win32\DSInternals.Replication.Interop.pdb')" />
-    <Copy SourceFiles="@(CppRuntimeBinariesX86)" DestinationFolder="$(OutDir)x86" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="@(CppRuntimeBinariesX86)" DestinationFolder="$(OutDir)x86" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="Exists('$(ReplicationInteropRootDir)Win32\DSInternals.Replication.Interop.dll')" />
     <Copy SourceFiles="$(ReplicationInteropRootDir)Win32\Ijwhost.dll" DestinationFolder="$(OutDir)x86" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="'$(TargetFramework)' != 'net48' and Exists('$(ReplicationInteropRootDir)Win32\Ijwhost.dll')" />
     <!-- ARM64-->
     <Copy SourceFiles="$(ReplicationInteropRootDir)ARM64\DSInternals.Replication.Interop.dll" DestinationFolder="$(OutDir)arm64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="Exists('$(ReplicationInteropRootDir)ARM64\DSInternals.Replication.Interop.dll')" />
     <Copy SourceFiles="$(ReplicationInteropRootDir)ARM64\DSInternals.Replication.Interop.pdb" DestinationFolder="$(OutDir)arm64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="Exists('$(ReplicationInteropRootDir)ARM64\DSInternals.Replication.Interop.pdb')" />
-    <Copy SourceFiles="@(CppRuntimeBinariesARM64)" DestinationFolder="$(OutDir)arm64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+    <Copy SourceFiles="@(CppRuntimeBinariesARM64)" DestinationFolder="$(OutDir)arm64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="Exists('$(ReplicationInteropRootDir)ARM64\DSInternals.Replication.Interop.dll')" />
     <Copy SourceFiles="$(ReplicationInteropRootDir)ARM64\Ijwhost.dll" DestinationFolder="$(OutDir)arm64" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" Condition="'$(TargetFramework)' != 'net48' and Exists('$(ReplicationInteropRootDir)ARM64\Ijwhost.dll')" />
   </Target>
 

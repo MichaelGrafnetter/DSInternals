@@ -7,8 +7,13 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+- Nothing yet.
+
+## [6.3] - 2026-02-08
+
 ### Added
 
+- The [Add-ADReplSidHistory](PowerShell/Add-ADReplSidHistory.md#add-adreplsidhistory) cmdlet for principal SID history migration through the MS-DRSR protocol.
 - Instructions and prompts for GitHub Copilot.
 
 ### Changed
@@ -699,7 +704,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.2...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.3...HEAD
+[6.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.2...v6.3
 [6.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.1.1...6.2
 [6.1.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.1...v6.1.1
 [6.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.0.1...v6.1

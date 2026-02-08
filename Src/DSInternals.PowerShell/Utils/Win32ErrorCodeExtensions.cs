@@ -5,6 +5,7 @@ namespace DSInternals.PowerShell;
 
 internal static class Win32ErrorCodeExtensions
 {
+    // TODO: Add extension method accepting Exception and extracting the error code from it, e.g. through Marshal.GetHRForException() and Marshal.GetLastWin32Error().
     static internal ErrorCategory ToPSCategory(this Win32ErrorCode code)
     {
         ErrorCategory category;

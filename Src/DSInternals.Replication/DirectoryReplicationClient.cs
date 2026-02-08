@@ -389,6 +389,86 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     }
 
     /// <summary>
+    /// Adds the SID history of a source principal to a destination principal through MS-DRSR.
+    /// </summary>
+    /// <param name="sourceDomain">Name of the source domain (FQDN or NetBIOS).</param>
+    /// <param name="sourcePrincipal">Name of the source principal in the source domain. Not used when <paramref name="flags" /> contains <see cref="AddSidHistoryOptions.CheckSecureChannel" />.</param>
+    /// <param name="sourceDomainController">Name of the source domain controller (PDC).
+    /// Required unless <paramref name="flags"/> contains <see cref="AddSidHistoryOptions.CheckSecureChannel"/> or <see cref="AddSidHistoryOptions.DeleteSourceObject"/>.</param>
+    /// <param name="sourceCredential">Credentials for the source domain.</param>
+    /// <param name="destinationDomain">Name of the destination domain (FQDN or NetBIOS).</param>
+    /// <param name="destinationPrincipal">Name of the destination principal in the destination domain. Not used when <paramref name="flags" /> contains <see cref="AddSidHistoryOptions.CheckSecureChannel" />.</param>
+    /// <param name="flags">Behavior flags for the operation.</param>
+    public void AddSidHistory(
+        string sourceDomain = null,
+        string sourcePrincipal = null,
+        string sourceDomainController = null,
+        NetworkCredential sourceCredential = null,
+        string destinationDomain = null,
+        string destinationPrincipal = null,
+        AddSidHistoryOptions flags = AddSidHistoryOptions.None)
+    {
+        this._drsConnection.AddSidHistory(
+            sourceDomain,
+            sourcePrincipal,
+            sourceDomainController,
+            sourceCredential,
+            destinationDomain,
+            destinationPrincipal,
+            flags);
+    }
+
+    /// <summary>
+    /// Verifies whether the RPC channel is secure.
+    /// </summary>
+    public void AddSidHistory()
+    {
+        this.AddSidHistory(flags: AddSidHistoryOptions.CheckSecureChannel);
+    }
+
+    /// <summary>
+    /// Adds SID history within the same domain and deletes the source object.
+    /// </summary>
+    /// <param name="sourcePrincipal">Distinguished name of the source principal.</param>
+    /// <param name="destinationPrincipal">Distinguished name of the destination principal.</param>
+    /// <param name="sourceDomainController">Name of the source domain controller (PDC).</param>
+    public void AddSidHistory(string sourcePrincipal, string destinationPrincipal, string? sourceDomainController = null)
+    {
+        this.AddSidHistory(
+            sourcePrincipal: sourcePrincipal,
+            sourceDomainController: sourceDomainController,
+            destinationPrincipal: destinationPrincipal,
+            flags: AddSidHistoryOptions.DeleteSourceObject);
+    }
+
+    /// <summary>
+    /// Adds SID history across forests.
+    /// </summary>
+    /// <param name="sourceDomain">Name of the source domain (FQDN or NetBIOS).</param>
+    /// <param name="sourcePrincipal">Name of the source principal in the source domain.</param>
+    /// <param name="destinationDomain">Name of the destination domain (FQDN or NetBIOS).</param>
+    /// <param name="destinationPrincipal">Name of the destination principal in the destination domain.</param>
+    /// <param name="sourceDomainController">Name of the source domain controller (PDC), if specified.</param>
+    /// <param name="sourceCredential">Credentials for the source domain, if specified.</param>
+    public void AddSidHistory(
+        string sourceDomain,
+        string sourcePrincipal,
+        string destinationDomain,
+        string destinationPrincipal,
+        string sourceDomainController = null,
+        NetworkCredential sourceCredential = null)
+    {
+        this.AddSidHistory(
+            sourceDomain: sourceDomain,
+            sourcePrincipal: sourcePrincipal,
+            sourceDomainController: sourceDomainController,
+            sourceCredential: sourceCredential,
+            destinationDomain: destinationDomain,
+            destinationPrincipal: destinationPrincipal,
+            flags: AddSidHistoryOptions.None);
+    }
+
+    /// <summary>
     /// Replicates the entire schema partition.
     /// </summary>
     /// <param name="progressReporter">Replication progress reporter.</param>

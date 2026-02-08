@@ -101,6 +101,9 @@ Fetches the specified KDS Root Key through the MS-DRSR protocol.
 ### [Add-ADReplNgcKey](Add-ADReplNgcKey.md#add-adreplngckey)
 Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.
 
+### [Add-ADReplSidHistory](Add-ADReplSidHistory.md#add-adreplsidhistory)
+Adds SID history from a source principal to a destination principal through the MS-DRSR protocol.
+
 ### [Get-SamPasswordPolicy](Get-SamPasswordPolicy.md#get-sampasswordpolicy)
 Queries Active Directory for the default password policy.
 

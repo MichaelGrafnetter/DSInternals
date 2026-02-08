@@ -272,3 +272,32 @@ void midl_delete<DRS_MSG_WRITENGCKEYREQ_V1>::operator()(DRS_MSG_WRITENGCKEYREQ_V
 	// Free the encapsulating object:
 	midl_user_free(request);
 }
+
+#pragma managed(push, on)
+template<>
+void midl_delete<DRS_MSG_ADDSIDREQ_V1>::operator()(DRS_MSG_ADDSIDREQ_V1* request) const
+{
+	if (request == nullptr)
+	{
+		return;
+	}
+
+	// Free allocated strings and credential buffers
+	midl_user_free(request->SrcDomain);
+	midl_user_free(request->SrcPrincipal);
+	midl_user_free(request->SrcDomainController);
+	midl_user_free(request->SrcCredsUser);
+	midl_user_free(request->SrcCredsDomain);
+	midl_user_free(request->DstDomain);
+	midl_user_free(request->DstPrincipal);
+
+	if (request->SrcCredsPassword != nullptr)
+	{
+		// The password buffer was allocated with Marshal::SecureStringToGlobalAllocUnicode, so we must use the corresponding free method.
+		System::Runtime::InteropServices::Marshal::ZeroFreeGlobalAllocUnicode(System::IntPtr(request->SrcCredsPassword));
+	}
+
+	// Free the encapsulating object
+	midl_user_free(request);
+}
+#pragma managed(pop)
