@@ -20,9 +20,7 @@
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <!-- TODO: Re-enable package validation once unnecessary Polyfill dependencies are removed -->
     <EnablePackageValidation>false</EnablePackageValidation>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <!-- Create XML documentation file -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 

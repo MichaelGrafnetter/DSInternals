@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- NuGet package metadata -->
   <PropertyGroup>
+    <!-- NuGet package metadata -->
     <IsPackable>true</IsPackable>
     <Version>6.3</Version>
     <AssemblyTitle>DSInternals SAM Library</AssemblyTitle>
@@ -8,6 +8,8 @@
     <Description>DSInternals SAM implements a client for the Security Accounts Manager Remote Protocol (SAM-R) and Local Security Authority Remote Protocol(MS-LSAD or LSARPC). It can be used to import password hashes into Active Directory or to query and modify LSA Policy.</Description>
     <PackageReleaseNotes>- Updated assembly dependencies.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security RPC SAMR LSARPC AD Identity Active Directory</PackageTags>
+    <!-- Create XML documentation file -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,8 +22,4 @@
   <ItemGroup>
     <ProjectReference Include="..\DSInternals.Common\DSInternals.Common.csproj" />
   </ItemGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
 </Project>

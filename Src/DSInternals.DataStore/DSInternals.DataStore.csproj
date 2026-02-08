@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- NuGet package metadata -->
   <PropertyGroup>
+    <!-- NuGet package metadata -->
     <IsPackable>true</IsPackable>
     <Version>6.3</Version>
     <AssemblyTitle>DSInternals DataStore Library</AssemblyTitle>
@@ -8,9 +8,7 @@
     <Description>DSInternals DataStore is an advanced framework for offline ntds.dit file manipulation. It can be used to extract password hashes from Active Directory backups or to modify the sIDHistory and primaryGroupId attributes.</Description>
     <PackageReleaseNotes>- Updated assembly dependencies.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security NTDS AD Identity Active Directory</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <!-- Create XML documentation file -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 

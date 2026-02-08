@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- NuGet package metadata -->
   <PropertyGroup>
+    <!-- NuGet package metadata -->
     <IsPackable>true</IsPackable>
     <Version>6.3</Version>
     <AssemblyTitle>DSInternals Common Library</AssemblyTitle>
@@ -9,9 +9,7 @@
     <PackageReleaseNotes>- Improved generation of NGC keys to meet January 2026 Windows validation changes.
   - Removed Azure AD Graph API-related code.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security Entra AD AAD Identity Active Directory</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <!-- Create XML documentation file -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
