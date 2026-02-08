@@ -140,7 +140,7 @@ jobs:
         "DSInternals.DataStore/release_*/DSInternals.DataStore.dll"
         "DSInternals.Replication/release_*/DSInternals.Replication.dll"
         "DSInternals.Replication.Model/release_*/DSInternals.Replication.Model.dll"
-        "DSInternals.Replication.Interop/Release_*/DSInternals.Replication.Interop.dll"
+        "DSInternals.Replication.Interop/release_*/*/DSInternals.Replication.Interop.dll"
         "DSInternals.SAM/release_*/DSInternals.SAM.dll"
         "DSInternals.PowerShell/Release/DSInternals/*/DSInternals.PowerShell.dll"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.psd1"
