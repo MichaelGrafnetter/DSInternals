@@ -65,10 +65,9 @@ public class LapsClearTextPassword
 
     /// <summary>
     /// Parses a JSON string containing the clear-text password information.
-     /// </summary>
     /// </summary>
     /// <param name="json">The JSON string to parse.</param>
-    /// <returns>>A <see cref="LapsClearTextPassword"/> object containing the parsed information.</returns>
+    /// <returns>A <see cref="LapsClearTextPassword"/> object containing the parsed information.</returns>
     public static LapsClearTextPassword? Parse(string json)
     {
         return JsonSerializer.Deserialize(json, LapsSerializationContext.Default.LapsClearTextPassword);
