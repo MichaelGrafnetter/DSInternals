@@ -13,6 +13,35 @@ The **DSInternals.Replication** package implements a client for the **Active Dir
 - **KDS Root Key Access**: Retrieve Key Distribution Service root keys for gMSA password computation
 - **Schema Replication**: Replicate the Active Directory schema
 
+## Platform Compatibility
+
+Applications using this library may encounter the `BadImageFormatException` or `FileNotFoundException` exceptions
+when trying to load the `DSInternals.Replication.Interop.dll` assembly.
+This is because the assembly contains platform-specific code.
+To resolve this issue, ensure that your project is configured to target the appropriate platform (x64, x86, or arm64).
+
+Modern SDK-style projects should contain these settings:
+
+```xml
+<PropertyGroup>
+  <TargetFrameworks>net10.0-windows;net48</TargetFrameworks>
+  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+</PropertyGroup>
+<ItemGroup>
+  <PackageReference Include="DSInternals.Replication" Version="6.3.0" />
+</ItemGroup>
+```
+
+Legacy .NET Framework projects using `packages.config` should contain the following settings:
+
+```xml
+<Import Project="packages\DSInternals.Replication.6.3.0\build\net48\DSInternals.Replication.props" Condition="Exists('packages\DSInternals.Replication.6.3.0\build\net48\DSInternals.Replication.props')" />
+<PropertyGroup>
+  <Prefer32Bit>false</Prefer32Bit>
+  <PreferNativeArm64>true</PreferNativeArm64>
+</PropertyGroup>
+```
+
 ## Usage Examples
 
 ### Connecting to a Domain Controller
