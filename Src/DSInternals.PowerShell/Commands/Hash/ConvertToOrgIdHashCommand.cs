@@ -5,6 +5,7 @@ using DSInternals.Common.Cryptography;
 namespace DSInternals.PowerShell.Commands;
 
 [Cmdlet(VerbsData.ConvertTo, "OrgIdHash", DefaultParameterSetName = "FromHash")]
+[Alias("ConvertTo-AADHash", "ConvertTo-MsoPasswordHash")]
 [OutputType(new Type[] { typeof(string) })]
 public class ConvertToOrgIdHashCommand : PSCmdlet
 {

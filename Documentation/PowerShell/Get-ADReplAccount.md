@@ -15,42 +15,38 @@ Reads one or more accounts through the MS-DRSR protocol, including secret attrib
 ### All
 ```
 Get-ADReplAccount [-All] [-NamingContext <String>] [-Properties <AccountPropertySets>]
- [-ExportFormat <AccountExportFormat>] -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
- [<CommonParameters>]
+ [-ExportFormat <AccountExportFormat>] -Server <String> [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByName
 ```
 Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>]
  [-SamAccountName] <String> [[-Domain] <String>] -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+ [<CommonParameters>]
 ```
 
 ### ByUPN
 ```
 Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>]
- -UserPrincipalName <String> -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
- [<CommonParameters>]
+ -UserPrincipalName <String> -Server <String> [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
 Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>]
- -ObjectSid <SecurityIdentifier> -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
- [<CommonParameters>]
+ -ObjectSid <SecurityIdentifier> -Server <String> [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
 Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>]
- [-DistinguishedName] <String> -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>]
- [<CommonParameters>]
+ [-DistinguishedName] <String> -Server <String> [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
 Get-ADReplAccount [-Properties <AccountPropertySets>] [-ExportFormat <AccountExportFormat>] -ObjectGuid <Guid>
- -Server <String> [-Credential <PSCredential>] [-Protocol <RpcProtocol>] [<CommonParameters>]
+ -Server <String> [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

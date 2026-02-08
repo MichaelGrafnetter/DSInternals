@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     name: 'Build'
-    runs-on: windows-2025
+    runs-on: windows-2025-vs2026
     timeout-minutes: 10
     env:
       DOTNET_NOLOGO: true
@@ -106,7 +106,7 @@ jobs:
       shell: pwsh
       id: get-module-version
       run: |
-        $version = Import-PowerShellDataFile -Path ./Src/DSInternals.PowerShell/DSInternals.psd1 | Select-Object -ExpandProperty ModuleVersion
+        $version = (Test-ModuleManifest -Path ./Src/DSInternals.PowerShell/DSInternals.psd1 -ErrorAction SilentlyContinue).Version
         echo "version=$version" >> $env:GITHUB_OUTPUT
 
     - name: Upload PowerShell Module as Artifact

@@ -4,6 +4,7 @@ using DSInternals.SAM;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsCommon.Get, "SamPasswordPolicy")]
+[Alias("Get-ADPasswordPolicy", "Get-ADDefaultPasswordPolicy")]
 [OutputType(typeof(SamDomainPasswordInformation))]
 public class GetSamPasswordPolicyCommand : SamCommandBase
 {

@@ -13,8 +13,7 @@ Fetches the specified KDS Root Key through the MS-DRSR protocol.
 ## SYNTAX
 
 ```
-Get-ADReplKdsRootKey [-RootKeyId] <Guid> -Server <String> [-Credential <PSCredential>]
- [-Protocol <RpcProtocol>] [<CommonParameters>]
+Get-ADReplKdsRootKey [-RootKeyId] <Guid> -Server <String> [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

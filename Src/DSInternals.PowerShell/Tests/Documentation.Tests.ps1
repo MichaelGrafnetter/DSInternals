@@ -7,9 +7,9 @@
 
 Describe 'Markdown Module Documentation' {
     BeforeAll {
-        # Load the module manifest
+        # Load the module manifest and ignore errors stemming from missing DLLs, as we only need the metadata for the tests.
         [string] $moduleManifestPath = Join-Path -Path $PSScriptRoot -ChildPath '..\DSInternals.psd1'
-        [hashtable] $moduleManifest =  Import-PowerShellDataFile -Path $moduleManifestPath -ErrorAction Stop
+        [System.Management.Automation.PSModuleInfo] $moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction SilentlyContinue
 
         # Locate the markdown documentation
         [string] $markdownDocumentationPath = Join-Path -Path $PSScriptRoot -ChildPath '..\..\..\Documentation'
@@ -24,15 +24,15 @@ Describe 'Markdown Module Documentation' {
             # Locate the CHANGELOG file in the markdown documentation.
             [string] $changeLogPath = Join-Path -Path $markdownDocumentationPath -ChildPath 'CHANGELOG.md'
         }
-        
+
         It 'should exist' {
             # Check if the CHANGELOG file exists.
             $changeLogPath | Should -Exist
         }
-        
+
         It 'should be up-to-date' {
             # Check that the current module version is mentioned in the changelog.
-            [string] $moduleVersion = $moduleManifest.ModuleVersion
+            [string] $moduleVersion = $moduleManifest.Version
             $changeLogPath | Should -FileContentMatch "## \[$moduleVersion\]"
         }
     }
@@ -76,8 +76,8 @@ Describe 'Markdown Module Documentation' {
         BeforeDiscovery {
             # Parse the list of cmdlets from the module manifest.
             [string] $moduleManifestPath = Join-Path -Path $PSScriptRoot -ChildPath '..\DSInternals.psd1'
-            [hashtable] $moduleManifest =  Import-PowerShellDataFile -Path $moduleManifestPath -ErrorAction Stop
-            [hashtable[]] $manifestCmdlets = $moduleManifest.CmdletsToExport | ForEach-Object { @{
+            [System.Management.Automation.PSModuleInfo] $moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction SilentlyContinue
+            [hashtable[]] $manifestCmdlets = $moduleManifest.ExportedCmdlets.Keys | ForEach-Object { @{
                 Cmdlet = $PSItem
             }}
         }
@@ -104,7 +104,7 @@ Describe 'Markdown Module Documentation' {
 
         It 'module page contains the <Cmdlet> cmdlet' -TestCases $mamlCmdlets {
             param([string] $Cmdlet, [string] $Description)
-            
+
             [string] $lowerCaseCmdlet = $Cmdlet.ToLower()
             [string] $cmdletLinkFormat = "### \[$Cmdlet\]\($Cmdlet.md#$lowerCaseCmdlet\)"
             $modulePageContent | Should -Match $cmdletLinkFormat

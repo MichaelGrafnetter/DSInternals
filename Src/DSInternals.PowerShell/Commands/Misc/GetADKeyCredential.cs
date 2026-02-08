@@ -4,6 +4,7 @@ using DSInternals.Common.Data;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsCommon.Get, "ADKeyCredential", DefaultParameterSetName = ParamSetFromUserCertificate)]
+[Alias("Get-KeyCredential", "Get-KeyCredentialLink", "Get-ADKeyCredentialLink", "New-ADKeyCredential", "New-ADKeyCredentialLink", "New-ADNgcKey")]
 [OutputType(new Type[] { typeof(KeyCredential) })]
 public class GetADKeyCredentialCommand : PSCmdlet
 {

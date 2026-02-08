@@ -5,6 +5,29 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+- Instructions and prompts for GitHub Copilot.
+
+### Changed
+
+- A new code signing certificate has been obtained from [DigiCert](https://www.digicert.com/).
+- Merged the `*.psm1` script bootstrapper of the binary PowerShell module into the `*.psd1` module manifest.
+- Improved the structure of the `DSInternals.Replication` NuGet package,
+  which now includes assemblies for all processor architectures and the Visual C++ runtime.
+
+### Fixed
+
+- Improved generation of NGC keys stored in the `msDS-KeyCredentialLink` AD attribute
+  to pass new validation constraints introduced in January 2026 Windows updates.
+
+### Removed
+
+- PowerShell cmdlets and all code related to the [decommissioned Azure AD Graph API](https://learn.microsoft.com/en-us/graph/migrate-azure-ad-graph-overview)
+  have been removed.
+
 ## [6.2] - 2025-12-05
 
 > [!WARNING]
@@ -296,14 +319,14 @@ This is a PowerShell-only release.
 
 ### Added
 
-- The new [Set-AzureADUserEx](PowerShell/Set-AzureADUserEx.md#set-azureaduserex) cmdlet can be used to revoke FIDO2 and NGC keys in Azure Active Directory.
+- The new `Set-AzureADUserEx` cmdlet can be used to revoke FIDO2 and NGC keys in Azure Active Directory.
 
 ## [4.3] - 2020-04-02
 
 ### Added
 
 - New logo and package icons!
-- The new [Get-AzureADUserEx](PowerShell/Get-AzureADUserEx.md#get-azureaduserex) cmdlet can be used to retrieve FIDO and NGC keys from Azure Active Directory, as the first tool on the market.
+- The new `Get-AzureADUserEx` cmdlet can be used to retrieve FIDO and NGC keys from Azure Active Directory, as the first tool on the market.
 - Both [lastLogon](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada1/93258066-276d-4357-8458-981c19caad95) and [lastLogonTimestamp](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada1/530d7194-20f6-4aaa-8d80-9ca6b6350ad6) user account attributes are now exposed. The LastLogonDate PowerShell property returns whichever of these 2 values is available.
 - The `-Server` parameter of the [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlet now has the standard `-ComputerName` alias.
 

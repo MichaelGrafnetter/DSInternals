@@ -3,6 +3,7 @@ using DSInternals.DataStore;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsCommon.Set, "ADDBBootKey")]
+[Alias("Set-ADDBSysKey")]
 [OutputType("None")]
 public class SetADDBBootKeyCommand : ADDBCommandBase
 {

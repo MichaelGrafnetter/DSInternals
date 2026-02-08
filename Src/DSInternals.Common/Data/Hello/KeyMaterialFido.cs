@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DSInternals.Common.Data;
@@ -20,7 +21,7 @@ public class KeyMaterialFido
     public int Version
     {
         get;
-        private set;
+        internal set;
     }
 
     /// <summary>
@@ -29,10 +30,10 @@ public class KeyMaterialFido
     /// </summary>
     [JsonInclude]
     [JsonPropertyName("authData")]
-    public string AuthenticatorDataRaw
+    public string? AuthenticatorDataRaw
     {
         get;
-        private set;
+        internal set;
     }
 
     /// <summary>
@@ -40,10 +41,10 @@ public class KeyMaterialFido
     /// </summary>
     [JsonInclude]
     [JsonPropertyName("x5c")]
-    public string[] AttestationCertificatesRaw
+    public string[]? AttestationCertificatesRaw
     {
         get;
-        private set;
+        internal set;
     }
 
     /// <summary>
@@ -51,10 +52,10 @@ public class KeyMaterialFido
     /// </summary>
     [JsonInclude]
     [JsonPropertyName("displayName")]
-    public string DisplayName
+    public string? DisplayName
     {
         get;
-        private set;
+        internal set;
     }
 
     /// <summary>
@@ -65,7 +66,7 @@ public class KeyMaterialFido
     {
         get
         {
-            X509Certificate2Collection certs = new X509Certificate2Collection();
+            X509Certificate2Collection certs = [];
             foreach (string s in this.AttestationCertificatesRaw ?? [])
             {
                 // In AAD, some x5c values are not really certificates, so we need to filter them out.
@@ -82,11 +83,36 @@ public class KeyMaterialFido
     /// Authenticator data contains information about the registered authenticator device.
     /// </summary>
     [JsonIgnore]
-    public Fido.AuthenticatorData AuthenticatorData
+    public Fido.AuthenticatorData? AuthenticatorData
     {
         get
         {
+            if (this.AuthenticatorDataRaw == null)
+            {
+                return null;
+            }
+
             return new Fido.AuthenticatorData(Convert.FromBase64String(this.AuthenticatorDataRaw));
         }
+    }
+
+    public static KeyMaterialFido? ParseJson(string json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return null;
+        }
+
+        return JsonSerializer.Deserialize(json, KeyCredentialSerializationContext.Default.KeyMaterialFido);
+    }
+
+    public static KeyMaterialFido? ParseJson(ReadOnlySpan<byte> jsonData)
+    {
+        if (jsonData.IsEmpty)
+        {
+            return null;
+        }
+
+        return JsonSerializer.Deserialize(jsonData, KeyCredentialSerializationContext.Default.KeyMaterialFido);
     }
 }

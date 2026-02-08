@@ -4,6 +4,7 @@ using DSInternals.SAM;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsCommon.Set, "LsaPolicyInformation")]
+[Alias("Set-LsaPolicy")]
 [OutputType("None")]
 public class SetLsaPolicyInformationCommand : LsaPolicyCommandBase
 {

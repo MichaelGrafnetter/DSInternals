@@ -3,6 +3,7 @@ using DSInternals.DataStore;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsCommon.Get, "ADDBServiceAccount")]
+[Alias("Get-ADDBGroupManagedServiceAccount", "Get-ADDBDelegatedManagedServiceAccount")]
 [OutputType(typeof(DSInternals.Common.Data.GroupManagedServiceAccount))]
 public class GetADDBServiceAccountCommand : ADDBCommandBase
 {

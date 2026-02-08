@@ -4,6 +4,7 @@ using DSInternals.Common;
 
 namespace DSInternals.PowerShell.Commands;
 [Cmdlet(VerbsData.ConvertFrom, "UnicodePassword")]
+[Alias("ConvertFrom-UnattendXmlPassword")]
 [OutputType(typeof(string))]
 public class ConvertFromUnicodePasswordCommand : PSCmdlet
 {

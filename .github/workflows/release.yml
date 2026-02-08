@@ -143,8 +143,8 @@ jobs:
         "DSInternals.Replication.Interop/Release_*/DSInternals.Replication.Interop.dll"
         "DSInternals.SAM/release_*/DSInternals.SAM.dll"
         "DSInternals.PowerShell/Release/DSInternals/*/DSInternals.PowerShell.dll"
-        "DSInternals.PowerShell/Release/DSInternals/DSInternals.Bootstrap.psm1"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.psd1"
+        "DSInternals.PowerShell/Release/DSInternals/Test-ModuleCompatibility.ps1"
         "DSInternals.PowerShell/Release/DSInternals/Integrity.Tests.ps1"
         "DSInternals.PowerShell/Release/DSInternals/DSInternals.types.ps1xml"
         "DSInternals.PowerShell/Release/DSInternals/Views/*.ps1xml"
@@ -217,8 +217,8 @@ jobs:
       shell: pwsh
       id: get-module-info
       run: |
-        [hashtable] $manifest = Import-PowerShellDataFile -Path ./Src/DSInternals.PowerShell/DSInternals.psd1
-        [string] $version = $manifest.ModuleVersion
+        [System.Management.Automation.PSModuleInfo] $manifest = Test-ModuleManifest -Path ./Src/DSInternals.PowerShell/DSInternals.psd1 -ErrorAction SilentlyContinue
+        [string] $version = $manifest.Version
         [string] $releaseNotes = $manifest.PrivateData.PSData.ReleaseNotes
 
         echo "version=$version" >> $env:GITHUB_OUTPUT

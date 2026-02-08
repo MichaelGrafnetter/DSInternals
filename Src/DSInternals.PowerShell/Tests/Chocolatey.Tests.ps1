@@ -11,8 +11,8 @@ Describe 'Chocolatey Package' {
         [string] $moduleManifestPath = Join-Path -Path $PSScriptRoot -ChildPath '..\DSInternals.psd1'
         [string] $chocolateySpecPath = Join-Path -Path $PSScriptRoot -ChildPath '..\Chocolatey\dsinternals-psmodule.nuspec'
 
-        # Load the manifests
-        [hashtable] $moduleManifest =  Import-PowerShellDataFile -Path $moduleManifestPath -ErrorAction Stop
+        # Load the manifests and ignore errors stemming from missing DLLs
+        [System.Management.Automation.PSModuleInfo] $moduleManifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction SilentlyContinue
         [xml] $chocolateySpec = Get-Content -Path $chocolateySpecPath -ErrorAction Stop
     }
 

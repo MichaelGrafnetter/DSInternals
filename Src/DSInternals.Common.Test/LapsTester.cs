@@ -49,7 +49,7 @@ public class LapsTester
     public void LAPS_Parse_Cleartext()
     {
         byte[] binaryLapsPassword = "7b226e223a2241646d696e6973747261746f72222c2274223a22316438313631623431633431636465222c2270223a2241366133233725656221353762653461344239355a343333393462613935366465363965356438393735227d".HexToBinary();
-        var rawLapsPassword = LapsClearTextPassword.Parse(new ReadOnlySpan<byte>(binaryLapsPassword), false);
+        var rawLapsPassword = LapsClearTextPassword.Parse(new ReadOnlySpan<byte>(binaryLapsPassword), isUtf16: false);
         LapsPasswordInformation laps = new LapsPasswordInformation("CONTOSO-PC1", rawLapsPassword, DateTime.Now);
 
         Assert.AreEqual("Administrator", laps.Account);

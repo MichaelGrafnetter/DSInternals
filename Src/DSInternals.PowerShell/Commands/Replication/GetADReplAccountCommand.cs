@@ -7,6 +7,7 @@ using DSInternals.Replication.Model;
 namespace DSInternals.PowerShell.Commands;
 
 [Cmdlet(VerbsCommon.Get, "ADReplAccount")]
+[Alias("Get-ADReplicationAccount")]
 [OutputType(typeof(DSAccount), typeof(DSUser), typeof(DSComputer))]
 public class GetADReplAccountCommand : ADReplPrincipalCommandBase
 {
