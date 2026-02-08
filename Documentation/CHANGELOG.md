@@ -5,6 +5,29 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+- Instructions and prompts for GitHub Copilot.
+
+### Changed
+
+- A new code signing certificate has been obtained from [DigiCert](https://www.digicert.com/).
+- Merged the `*.psm1` script bootstrapper of the binary PowerShell module into the `*.psd1` module manifest.
+- Improved the structure of the `DSInternals.Replication` NuGet package,
+  which now includes assemblies for all processor architectures and the Visual C++ runtime.
+
+### Fixed
+
+- Improved generation of NGC keys stored in the `msDS-KeyCredentialLink` AD attribute
+  to pass new validation constraints introduced in January 2026 Windows updates.
+
+### Removed
+
+- PowerShell cmdlets and all code related to the [decommissioned Azure AD Graph API](https://learn.microsoft.com/en-us/graph/migrate-azure-ad-graph-overview)
+  have been removed.
+
 ## [6.2] - 2025-12-05
 
 > [!WARNING]

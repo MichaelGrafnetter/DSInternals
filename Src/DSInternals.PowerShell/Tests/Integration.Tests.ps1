@@ -68,6 +68,58 @@ Describe 'DSInternals PowerShell Module' {
         }
     }
 
+    Context 'Module Members' {
+        BeforeDiscovery {
+            [string] $assemblyRelativePath = if ($PSEdition -eq 'Core') { 'net8.0-windows\DSInternals.PowerShell.dll' } else { 'net48\DSInternals.PowerShell.dll' }
+            [string] $assemblyPath = Join-Path -Path $modulePath -ChildPath $assemblyRelativePath
+            [System.Reflection.Assembly] $assembly = [System.Reflection.Assembly]::LoadFrom($assemblyPath)
+
+            [type] $cmdletAttributeType = [System.Management.Automation.CmdletAttribute]
+            [type] $aliasAttributeType = [System.Management.Automation.AliasAttribute]
+
+            # Deprecated or not yet implemented cmdlets
+            [string[]] $excludedCmdlets = @('Add-ADDBSidHistory', 'Get-ADDBIndex', 'Restore-ADDBAttribute')
+
+            # Get all cmdlets defined in the assembly using reflection
+            [hashtable[]] $moduleCmdlets = $assembly.GetTypes() |
+                Where-Object IsClass -eq $true |
+                Where-Object IsAbstract -eq $false |
+                Where-Object { $PSItem.GetCustomAttributes($cmdletAttributeType, $false).Count -gt 0 } |
+                ForEach-Object { $PSItem.GetCustomAttributes($cmdletAttributeType, $false)[0] } |
+                ForEach-Object { '{0}-{1}' -f $PSItem.VerbName, $PSItem.NounName } |
+                Where-Object { $PSItem -notin $excludedCmdlets } |
+                Sort-Object -Unique |
+                ForEach-Object { @{ Cmdlet = $PSItem } }
+
+            # Get all aliases defined in the assembly using reflection
+            [hashtable[]] $moduleAliases = $assembly.GetTypes() |
+                Where-Object IsClass -eq $true |
+                Where-Object IsAbstract -eq $false |
+                Where-Object { $PSItem.GetCustomAttributes($aliasAttributeType, $false).Count -gt 0 } |
+                ForEach-Object { $PSItem.GetCustomAttributes($aliasAttributeType, $false) } |
+                ForEach-Object -MemberName AliasNames |
+                Sort-Object -Unique |
+                ForEach-Object { @{ Alias = $PSItem } }
+        }
+
+        BeforeAll {
+            # Load the module manifest
+            [System.Management.Automation.PSModuleInfo] $manifest = Test-ModuleManifest -Path $moduleManifestPath -ErrorAction Stop
+        }
+
+        It 'exports cmdlet <Cmdlet>' -TestCases $moduleCmdlets -Test {
+            param([string] $Cmdlet)
+
+            $manifest.ExportedCmdlets.ContainsKey($Cmdlet) | Should -BeTrue
+        }
+
+        It 'exports alias <Alias>' -TestCases $moduleAliases -Test {
+            param([string] $Alias)
+
+            $manifest.ExportedAliases.ContainsKey($Alias) | Should -BeTrue
+        }
+    }
+
     Context 'File Structure' {
         It 'contains MAML help' {
             Join-Path -Path $modulePath -ChildPath 'en-US\DSInternals.PowerShell.dll-Help.xml' | Should -Exist
