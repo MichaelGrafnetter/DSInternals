@@ -158,6 +158,7 @@ AliasesToExport = @(
     'Write-ADReplNgcKey',
     'Write-ADNgcKey',
     'Add-ADNgcKey',
+    'Add-ADSidHistory',
     'New-ADKeyCredential',
     'New-ADKeyCredentialLink',
     'New-ADNgcKey',
