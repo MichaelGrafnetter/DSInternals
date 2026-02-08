@@ -34,7 +34,7 @@ public class KeyCredential
     /// <summary>
     /// Cached hash of the entries.
     /// </summary>
-    private byte[]? _cachedHash;
+    private readonly byte[]? _cachedHash;
 
     /// <summary>
     /// Defines the version of the structure.
