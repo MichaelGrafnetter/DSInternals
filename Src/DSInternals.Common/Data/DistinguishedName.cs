@@ -264,7 +264,7 @@ public class DistinguishedName
         return dn;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         // Check for null values and compare run-time types.
         if (obj == null || GetType() != obj.GetType())

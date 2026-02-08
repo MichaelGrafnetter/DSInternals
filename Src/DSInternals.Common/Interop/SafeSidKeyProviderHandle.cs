@@ -19,7 +19,7 @@ internal class SafeSidKeyProviderHandle : SafeHandleZeroOrMinusOneIsInvalid
         this.SetHandle(preexistingHandle);
     }
 
-    public byte[] ToArray(int size)
+    public byte[]? ToArray(int size)
     {
         if (this.IsInvalid)
         {
@@ -32,7 +32,7 @@ internal class SafeSidKeyProviderHandle : SafeHandleZeroOrMinusOneIsInvalid
         return binaryData;
     }
 
-    public string StringValue
+    public string? StringValue
     {
         get
         {

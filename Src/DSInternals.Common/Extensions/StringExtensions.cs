@@ -19,7 +19,7 @@ public static class StringExtensions
         }
     }
 
-    public static SecureString ToSecureString(this string input)
+    public static SecureString? ToSecureString(this string? input)
     {
         if (input == null)
         {

@@ -43,7 +43,7 @@ internal static partial class NativeMethods
     }
 
     [DllImport(SamLib, SetLastError = true, CharSet = CharSet.Unicode)]
-    private static extern NtStatus SamConnectWithCreds([In] ref UnicodeString serverName, out SafeSamHandle serverHandle, SamServerAccessMask accessMask, IntPtr objectAttributes, [In] ref WindowsAuthenticationIdentity authIdentity, [MarshalAs(UnmanagedType.LPWStr)] string servicePrincipalName, [MarshalAs(UnmanagedType.Bool)] out bool isWin2k);
+    private static extern NtStatus SamConnectWithCreds([In] ref UnicodeString serverName, out SafeSamHandle serverHandle, SamServerAccessMask accessMask, IntPtr objectAttributes, [In] ref WindowsAuthenticationIdentity authIdentity, [MarshalAs(UnmanagedType.LPWStr)] string? servicePrincipalName, [MarshalAs(UnmanagedType.Bool)] out bool isWin2k);
 
     internal static NtStatus SamConnectWithCreds(string serverName, out SafeSamHandle serverHandle, SamServerAccessMask accessMask, NetworkCredential credential)
     {
@@ -273,12 +273,12 @@ internal static partial class NativeMethods
     internal static NtStatus SamLookupNameInDomain(SafeSamHandle domainHandle, string name, out int? relativeId, out SID_NAME_USE? sidType)
     {
         string[] names = [name];
-        NtStatus result = SamLookupNamesInDomain(domainHandle, names, out int[] relativeIds, out SID_NAME_USE[] use);
+        NtStatus result = SamLookupNamesInDomain(domainHandle, names, out int[]? relativeIds, out SID_NAME_USE[]? use);
 
         if (result == NtStatus.Success)
         {
-            relativeId = relativeIds[0];
-            sidType = use[0];
+            relativeId = relativeIds![0];
+            sidType = use![0];
         }
         else
         {

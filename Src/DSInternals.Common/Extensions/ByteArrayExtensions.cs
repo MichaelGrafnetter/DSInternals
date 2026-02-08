@@ -69,7 +69,7 @@ public static class ByteArrayExtensions
         return bytes;
     }
 
-    public static byte[] HexToBinary(this string hex)
+    public static byte[]? HexToBinary(this string? hex)
     {
         // Trivial case
         if (String.IsNullOrEmpty(hex))
@@ -81,19 +81,19 @@ public static class ByteArrayExtensions
     }
 
     [Obsolete("Use ReadOnlySpan<byte> instead on byte[].")]
-    public static string ToHex(this byte[] bytes, bool caps = false)
+    public static string? ToHex(this byte[]? bytes, bool caps = false)
     {
         return bytes == null ? null : ToHex(bytes.AsSpan(), caps);
     }
 
-    public static string ToHex(this Span<byte> bytes, bool caps = false)
+    public static string? ToHex(this Span<byte> bytes, bool caps = false)
     {
         // TODO: Migrate to .AsReadOnlySpan()
         ReadOnlySpan<byte> readOnly = bytes;
         return readOnly.ToHex(caps);
     }
 
-    public static string ToHex(this ReadOnlySpan<byte> bytes, bool caps = false)
+    public static string? ToHex(this ReadOnlySpan<byte> bytes, bool caps = false)
     {
         if (bytes.IsEmpty)
         {
@@ -201,7 +201,7 @@ public static class ByteArrayExtensions
         return new Guid(bytes);
     }
 
-    public static SecurityIdentifier ToSecurityIdentifier(this byte[] binarySid, bool bigEndianRid = false)
+    public static SecurityIdentifier? ToSecurityIdentifier(this byte[]? binarySid, bool bigEndianRid = false)
     {
         if (binarySid == null)
         {

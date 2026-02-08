@@ -55,7 +55,7 @@ public class LapsEncryptedPassword
         this.EncryptedBlob = CngProtectedDataBlob.Decode(encryptedPassword);
     }
 
-    public LapsClearTextPassword Decrypt()
+    public LapsClearTextPassword? Decrypt()
     {
         var binaryLapsPassword = EncryptedBlob.Decrypt();
 
@@ -68,7 +68,7 @@ public class LapsEncryptedPassword
         return LapsClearTextPassword.Parse(binaryLapsPassword, isUtf16: true);
     }
 
-    public bool TryDecrypt(out LapsClearTextPassword lapsPassword)
+    public bool TryDecrypt(out LapsClearTextPassword? lapsPassword)
     {
         bool success = EncryptedBlob.TryDecrypt(out ReadOnlySpan<byte> binaryLapsPassword);
 

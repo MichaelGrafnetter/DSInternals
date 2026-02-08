@@ -14,7 +14,9 @@ namespace DSInternals.SAM;
 /// </summary>
 public sealed class LsaPolicy : IDisposable
 {
-    private SafeLsaPolicyHandle policyHandle;
+    private SafeLsaPolicyHandle? _policyHandle;
+
+    private SafeLsaPolicyHandle PolicyHandle => _policyHandle ?? throw new ObjectDisposedException(nameof(LsaPolicy));
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LsaPolicy"/> class with the specified access rights on the local system.
@@ -27,9 +29,9 @@ public sealed class LsaPolicy : IDisposable
     /// </summary>
     /// <param name="systemName">The name of the remote system.</param>
     /// <param name="accessMask">The access rights to be granted to the policy handle.</param>
-    public LsaPolicy(string systemName, LsaPolicyAccessMask accessMask)
+    public LsaPolicy(string? systemName, LsaPolicyAccessMask accessMask)
     {
-        var status = NativeMethods.LsaOpenPolicy(systemName, accessMask, out this.policyHandle);
+        var status = NativeMethods.LsaOpenPolicy(systemName, accessMask, out this._policyHandle);
         Validator.AssertSuccess(status);
     }
 
@@ -39,7 +41,7 @@ public sealed class LsaPolicy : IDisposable
     /// <returns>A <see cref="LsaDnsDomainInformation"/> object containing the DNS domain information.</returns>
     public LsaDnsDomainInformation QueryDnsDomainInformation()
     {
-        var status = NativeMethods.LsaQueryInformationPolicy(this.policyHandle, POLICY_INFORMATION_CLASS.PolicyDnsDomainInformation, out SafeLsaMemoryHandle buffer);
+        var status = NativeMethods.LsaQueryInformationPolicy(this.PolicyHandle, POLICY_INFORMATION_CLASS.PolicyDnsDomainInformation, out SafeLsaMemoryHandle buffer);
         Validator.AssertSuccess(status);
 
         try
@@ -58,9 +60,9 @@ public sealed class LsaPolicy : IDisposable
     /// Queries machine account information from the LSA.
     /// </summary>
     /// <returns>A <see cref="SecurityIdentifier"/> object containing the machine account SID.</returns>
-    public SecurityIdentifier QueryMachineAccountInformation()
+    public SecurityIdentifier? QueryMachineAccountInformation()
     {
-        var status = NativeMethods.LsaQueryInformationPolicy(this.policyHandle, POLICY_INFORMATION_CLASS.PolicyMachineAccountInformation, out SafeLsaMemoryHandle buffer);
+        var status = NativeMethods.LsaQueryInformationPolicy(this.PolicyHandle, POLICY_INFORMATION_CLASS.PolicyMachineAccountInformation, out SafeLsaMemoryHandle buffer);
 
         if (status == NtStatus.InvalidParameter)
         {
@@ -107,7 +109,7 @@ public sealed class LsaPolicy : IDisposable
     public void SetDnsDomainInformation(LsaDnsDomainInformation newDomainInfo)
     {
         // Convert values to unmanaged types
-        byte[] binarySid = newDomainInfo.Sid?.GetBinaryForm() ?? null;
+        byte[]? binarySid = newDomainInfo.Sid?.GetBinaryForm();
         var pinnedSid = GCHandle.Alloc(binarySid, GCHandleType.Pinned);
         try
         {
@@ -120,7 +122,7 @@ public sealed class LsaPolicy : IDisposable
                 DomainSid = pinnedSid.AddrOfPinnedObject()
             };
 
-            var status = NativeMethods.LsaSetInformationPolicy(this.policyHandle, nativeInfo);
+            var status = NativeMethods.LsaSetInformationPolicy(this.PolicyHandle, nativeInfo);
             Validator.AssertSuccess(status);
         }
         finally
@@ -134,14 +136,14 @@ public sealed class LsaPolicy : IDisposable
     /// </summary>
     /// <param name="keyName">The name of the private data key to retrieve.</param>
     /// <returns>A byte array containing the private data.</returns>
-    public byte[] RetrievePrivateData(string keyName)
+    public byte[]? RetrievePrivateData(string keyName)
     {
         if (string.IsNullOrWhiteSpace(keyName))
         {
             throw new ArgumentException("Key name cannot be null or whitespace.", nameof(keyName));
         }
 
-        NtStatus status = NativeMethods.LsaRetrievePrivateData(this.policyHandle, keyName, out byte[] privateData);
+        NtStatus status = NativeMethods.LsaRetrievePrivateData(this.PolicyHandle, keyName, out byte[]? privateData);
         Validator.AssertSuccess(status);
         return privateData;
     }
@@ -153,14 +155,14 @@ public sealed class LsaPolicy : IDisposable
     /// <exception cref="CryptographicException">Thrown when the backup keys cannot be retrieved.</exception>
     public DPAPIBackupKey[] GetDPAPIBackupKeys()
     {
-        byte[] rsaKeyIdBinary = this.RetrievePrivateData(DPAPIBackupKey.PreferredRSAKeyName);
+        byte[]? rsaKeyIdBinary = this.RetrievePrivateData(DPAPIBackupKey.PreferredRSAKeyName);
 
         if (rsaKeyIdBinary == null || rsaKeyIdBinary.Length != Marshal.SizeOf<Guid>())
         {
             throw new CryptographicException("Failed reading the preferred RSA key ID. This typically happens on RODCs.");
         }
 
-        byte[] legacyKeyIdBinary = this.RetrievePrivateData(DPAPIBackupKey.PreferredLegacyKeyName);
+        byte[]? legacyKeyIdBinary = this.RetrievePrivateData(DPAPIBackupKey.PreferredLegacyKeyName);
 
         if (legacyKeyIdBinary == null || legacyKeyIdBinary.Length != Marshal.SizeOf<Guid>())
         {
@@ -170,8 +172,13 @@ public sealed class LsaPolicy : IDisposable
         Guid rsaKeyId = new Guid(rsaKeyIdBinary);
         Guid legacyKeyId = new Guid(legacyKeyIdBinary);
 
-        byte[] rsaKeyData = this.RetrievePrivateData(DPAPIBackupKey.GetKeyName(rsaKeyId));
-        byte[] legacyKeyData = this.RetrievePrivateData(DPAPIBackupKey.GetKeyName(legacyKeyId));
+        byte[]? rsaKeyData = this.RetrievePrivateData(DPAPIBackupKey.GetKeyName(rsaKeyId));
+        byte[]? legacyKeyData = this.RetrievePrivateData(DPAPIBackupKey.GetKeyName(legacyKeyId));
+
+        if (rsaKeyData == null || legacyKeyData == null)
+        {
+            throw new CryptographicException("Failed reading the DPAPI backup key data. This typically happens on RODCs.");
+        }
 
         DPAPIBackupKey rsaKey = new DPAPIBackupKey(rsaKeyId, rsaKeyData);
         DPAPIBackupKey legacyKey = new DPAPIBackupKey(legacyKeyId, legacyKeyData);
@@ -184,7 +191,7 @@ public sealed class LsaPolicy : IDisposable
     /// </summary>
     private LsaDomainInformation QueryDomainInformation(POLICY_INFORMATION_CLASS informationClass)
     {
-        var status = NativeMethods.LsaQueryInformationPolicy(this.policyHandle, informationClass, out SafeLsaMemoryHandle buffer);
+        var status = NativeMethods.LsaQueryInformationPolicy(this.PolicyHandle, informationClass, out SafeLsaMemoryHandle buffer);
         Validator.AssertSuccess(status);
 
         try
@@ -203,7 +210,7 @@ public sealed class LsaPolicy : IDisposable
     /// </summary>
     public void Dispose()
     {
-        this.policyHandle?.Dispose();
-        this.policyHandle = null;
+        _policyHandle?.Dispose();
+        _policyHandle = null;
     }
 }

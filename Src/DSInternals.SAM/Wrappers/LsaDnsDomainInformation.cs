@@ -29,25 +29,25 @@ public struct LsaDnsDomainInformation
     /// <summary>
     /// Name of the primary domain.
     /// </summary>
-    public string Name;
+    public string? Name { get; set; }
 
     /// <summary>
     /// DNS name of the primary domain.
     /// </summary>
-    public string DnsDomainName;
+    public string? DnsDomainName { get; set; }
 
     /// <summary>
     /// DNS forest name of the primary domain. This is the DNS name of the domain at the root of the enterprise.
     /// </summary>
-    public string DnsForestName;
+    public string? DnsForestName { get; set; }
 
     /// <summary>
     /// The GUID of the primary domain.
     /// </summary>
-    public Guid? Guid;
+    public Guid? Guid { get; set; }
 
     /// <summary>
     /// The SID of the primary domain.
     /// </summary>
-    public SecurityIdentifier Sid;
+    public SecurityIdentifier? Sid { get; set; }
 }

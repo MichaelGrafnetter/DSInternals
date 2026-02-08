@@ -24,18 +24,18 @@ public class RegistryHiveFileMapping : IDisposable
         Validator.AssertSuccess(result);
     }
 
-    public RegistryKey RootKey
+    public RegistryKey? RootKey
     {
         get
         {
             using (var users = Registry.Users)
             {
-                return users.OpenSubKey(this.UsersSubKey);
+                return users.OpenSubKey(this.UsersSubKey!);
             }
         }
     }
 
-    public string UsersSubKey
+    public string? UsersSubKey
     {
         get;
         private set;

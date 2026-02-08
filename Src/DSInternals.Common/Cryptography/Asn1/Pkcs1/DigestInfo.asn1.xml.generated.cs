@@ -18,11 +18,10 @@ internal partial struct DigestInfo
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static DigestInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out DigestInfo decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -45,9 +44,8 @@ internal partial struct DigestInfo
         AsnReader sequenceReader = reader.ReadSequence(expectedTag);
         
         DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(sequenceReader, out decoded.DigestAlgorithm);
-    decoded.Digest = sequenceReader.ReadOctetString();
-
-
+        decoded.Digest = sequenceReader.ReadOctetString();
+    
         sequenceReader.ThrowIfNotEmpty();
     }
 }

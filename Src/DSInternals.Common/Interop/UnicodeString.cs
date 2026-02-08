@@ -16,7 +16,7 @@ public struct UnicodeString
     /// </summary>
     public const ushort MaxLength = ushort.MaxValue / UnicodeCharLength - 1;
 
-    public UnicodeString(string text)
+    public UnicodeString(string? text)
     {
         if (text == null)
         {
@@ -57,5 +57,5 @@ public struct UnicodeString
     /// Pointer to a buffer used to contain a string of wide characters.
     /// </summary>
     [MarshalAs(UnmanagedType.LPWStr)]
-    public string Buffer;
+    public string? Buffer;
 }

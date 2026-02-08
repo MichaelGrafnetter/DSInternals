@@ -20,7 +20,7 @@ internal struct SamUserInternal1Information
     /// </summary>
     /// <param name="ntHash">The NT hash of the password.</param>
     /// <param name="lmHash">Optional LM hash of the password.</param>
-    internal SamUserInternal1Information(byte[] ntHash, byte[] lmHash = null)
+    internal SamUserInternal1Information(byte[] ntHash, byte[]? lmHash = null)
     {
         if (ntHash == null || ntHash.Length != NTHashSize)
         {
@@ -60,7 +60,7 @@ internal struct SamUserInternal1Information
     /// The LM hash of the password of the user account.
     /// </summary>
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = LMHashSize)]
-    internal byte[] LmOwfPassword;
+    internal byte[]? LmOwfPassword;
 
     /// <summary>
     /// Indicates whether the NT hashed password is present.
