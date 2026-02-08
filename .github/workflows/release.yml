@@ -320,6 +320,7 @@ jobs:
         shell: pwsh
         env:
           POWERSHELL_GALLERY_APIKEY: ${{ secrets.POWERSHELL_GALLERY_APIKEY }}
+          PROCESSOR_ARCHITECTURE: amd64 # Fallback for Linux
         run: |
           Publish-Module -Path ./Module/DSInternals -NuGetApiKey $env:POWERSHELL_GALLERY_APIKEY -Repository PSGallery -Force
 
