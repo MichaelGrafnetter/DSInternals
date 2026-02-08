@@ -23,11 +23,10 @@ internal partial struct SignedData
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static SignedData Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out SignedData decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -65,7 +64,7 @@ internal partial struct SignedData
 
             while (collectionReader.HasData)
             {
-                DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(collectionReader, out tmpItem); 
+                DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(collectionReader, out tmpItem);
                 tmpList.Add(tmpItem);
             }
 
@@ -85,7 +84,7 @@ internal partial struct SignedData
 
                 while (collectionReader.HasData)
                 {
-                    DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice.Decode(collectionReader, out tmpItem); 
+                    DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice.Decode(collectionReader, out tmpItem);
                     tmpList.Add(tmpItem);
                 }
 
@@ -106,7 +105,7 @@ internal partial struct SignedData
 
                 while (collectionReader.HasData)
                 {
-                    tmpItem = collectionReader.ReadEncodedValue(); 
+                    tmpItem = collectionReader.ReadEncodedValue();
                     tmpList.Add(tmpItem);
                 }
 
@@ -124,13 +123,12 @@ internal partial struct SignedData
 
             while (collectionReader.HasData)
             {
-                DSInternals.Common.Cryptography.Asn1.Pkcs7.SignerInfo.Decode(collectionReader, out tmpItem); 
+                DSInternals.Common.Cryptography.Asn1.Pkcs7.SignerInfo.Decode(collectionReader, out tmpItem);
                 tmpList.Add(tmpItem);
             }
 
             decoded.SignerInfos = tmpList.ToArray();
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

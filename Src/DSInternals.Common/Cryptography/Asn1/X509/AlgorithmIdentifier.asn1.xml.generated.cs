@@ -18,11 +18,10 @@ internal partial struct AlgorithmIdentifier
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static AlgorithmIdentifier Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out AlgorithmIdentifier decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -50,7 +49,6 @@ internal partial struct AlgorithmIdentifier
         {
             decoded.Parameters = sequenceReader.ReadEncodedValue();
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

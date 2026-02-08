@@ -19,11 +19,10 @@ internal partial struct RecipientKeyIdentifier
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static RecipientKeyIdentifier Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out RecipientKeyIdentifier decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -45,8 +44,8 @@ internal partial struct RecipientKeyIdentifier
         decoded = default;
         AsnReader sequenceReader = reader.ReadSequence(expectedTag);
         
-    decoded.SubjectKeyIdentifier = sequenceReader.ReadOctetString();
-
+        decoded.SubjectKeyIdentifier = sequenceReader.ReadOctetString();
+    
 
         if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(Asn1Tag.GeneralizedTime))
         {
@@ -61,7 +60,6 @@ internal partial struct RecipientKeyIdentifier
             decoded.Other = tmpOther;
 
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

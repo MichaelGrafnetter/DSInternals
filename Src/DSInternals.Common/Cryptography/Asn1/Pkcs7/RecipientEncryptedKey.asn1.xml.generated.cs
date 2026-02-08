@@ -18,11 +18,10 @@ internal partial struct RecipientEncryptedKey
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static RecipientEncryptedKey Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out RecipientEncryptedKey decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -45,9 +44,8 @@ internal partial struct RecipientEncryptedKey
         AsnReader sequenceReader = reader.ReadSequence(expectedTag);
         
         DSInternals.Common.Cryptography.Asn1.Pkcs7.KeyAgreeRecipientIdentifier.Decode(sequenceReader, out decoded.Rid);
-    decoded.EncryptedKey = sequenceReader.ReadOctetString();
-
-
+        decoded.EncryptedKey = sequenceReader.ReadOctetString();
+    
         sequenceReader.ThrowIfNotEmpty();
     }
 }

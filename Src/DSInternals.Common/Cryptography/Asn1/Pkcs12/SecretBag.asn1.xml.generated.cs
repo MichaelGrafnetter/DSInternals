@@ -18,11 +18,10 @@ internal partial struct SecretBag
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static SecretBag Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out SecretBag decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -50,7 +49,6 @@ internal partial struct SecretBag
         explicitReader = sequenceReader.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0));
         decoded.SecretValue = explicitReader.ReadEncodedValue();
         explicitReader.ThrowIfNotEmpty();
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

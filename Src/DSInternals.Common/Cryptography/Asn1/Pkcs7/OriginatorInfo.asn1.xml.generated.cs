@@ -19,11 +19,10 @@ internal partial struct OriginatorInfo
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static OriginatorInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out OriginatorInfo decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -58,7 +57,7 @@ internal partial struct OriginatorInfo
 
                 while (collectionReader.HasData)
                 {
-                    DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice.Decode(collectionReader, out tmpItem); 
+                    DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice.Decode(collectionReader, out tmpItem);
                     tmpList.Add(tmpItem);
                 }
 
@@ -79,7 +78,7 @@ internal partial struct OriginatorInfo
 
                 while (collectionReader.HasData)
                 {
-                    tmpItem = collectionReader.ReadEncodedValue(); 
+                    tmpItem = collectionReader.ReadEncodedValue();
                     tmpList.Add(tmpItem);
                 }
 
@@ -87,7 +86,6 @@ internal partial struct OriginatorInfo
             }
 
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

@@ -18,11 +18,10 @@ internal partial struct OriginatorPublicKey
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static OriginatorPublicKey Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out OriginatorPublicKey decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -46,7 +45,6 @@ internal partial struct OriginatorPublicKey
         
         DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(sequenceReader, out decoded.Algorithm);
         decoded.PublicKey = sequenceReader.ReadBitString(out _);
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

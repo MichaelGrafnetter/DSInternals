@@ -94,9 +94,12 @@ public class LapsClearTextPassword
                 throw new FormatException("The input data is not a valid UTF-16 encoded JSON string.");
             }
 
-            if (binaryJson[^1] == 0 || binaryJson[^2] == 0)
+            // Trim optional trailing UTF-16 NUL terminator (0x0000 code unit)
+            if (binaryJson.Length >= 2 &&
+                binaryJson[^1] == 0 &&
+                binaryJson[^2] == 0)
             {
-                binaryJson = binaryJson[..^2]; // Trim the optional trailing \0x00 bytes
+                binaryJson = binaryJson[..^2];
             }
 
             string json = Encoding.Unicode.GetString(binaryJson);

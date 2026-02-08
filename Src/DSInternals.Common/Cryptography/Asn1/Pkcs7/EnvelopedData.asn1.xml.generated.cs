@@ -22,11 +22,10 @@ internal partial struct EnvelopedData
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static EnvelopedData Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out EnvelopedData decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -73,7 +72,7 @@ internal partial struct EnvelopedData
 
             while (collectionReader.HasData)
             {
-                DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo.Decode(collectionReader, out tmpItem); 
+                DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo.Decode(collectionReader, out tmpItem);
                 tmpList.Add(tmpItem);
             }
 
@@ -93,7 +92,7 @@ internal partial struct EnvelopedData
 
                 while (collectionReader.HasData)
                 {
-                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(collectionReader, out tmpItem); 
+                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(collectionReader, out tmpItem);
                     tmpList.Add(tmpItem);
                 }
 
@@ -101,7 +100,6 @@ internal partial struct EnvelopedData
             }
 
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

@@ -18,11 +18,10 @@ internal partial struct IssuerAndSerialNumber
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static IssuerAndSerialNumber Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out IssuerAndSerialNumber decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -51,7 +50,6 @@ internal partial struct IssuerAndSerialNumber
 
         decoded.Issuer = sequenceReader.ReadEncodedValue();
         decoded.SerialNumber = sequenceReader.ReadIntegerBytes();
-
         sequenceReader.ThrowIfNotEmpty();
     }
 }

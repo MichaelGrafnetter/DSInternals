@@ -35,7 +35,6 @@ internal partial struct RecipientIdentifier
     internal static RecipientIdentifier Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, out RecipientIdentifier decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -58,8 +57,8 @@ internal partial struct RecipientIdentifier
         }
         else if (tag.HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
         {
-        decoded.SubjectKeyIdentifier = reader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0));
-
+            decoded.SubjectKeyIdentifier = reader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0));
+    
         }
         else
         {
