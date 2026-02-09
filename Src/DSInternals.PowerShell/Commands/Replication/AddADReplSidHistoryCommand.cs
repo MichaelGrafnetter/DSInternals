@@ -1,10 +1,8 @@
-using System;
 using System.ComponentModel;
 using System.Management.Automation;
 using System.Net;
 using System.Security;
 using DSInternals.Common.Interop;
-using DSInternals.PowerShell;
 using DSInternals.Replication.Model;
 
 namespace DSInternals.PowerShell.Commands;
@@ -26,6 +24,7 @@ public class AddADReplSidHistoryCommand : ADReplCommandBase
     /// </summary>
     [Parameter(Mandatory = true, ParameterSetName = ParameterSetCrossForest)]
     [ValidateNotNullOrEmpty]
+    [Alias("SrcDomain")]
     public string SourceDomain
     {
         get;
@@ -38,6 +37,7 @@ public class AddADReplSidHistoryCommand : ADReplCommandBase
     [Parameter(Mandatory = true, ParameterSetName = ParameterSetCrossForest, ValueFromPipelineByPropertyName = true)]
     [Parameter(Mandatory = true, ParameterSetName = ParameterSetIntraDomain, ValueFromPipelineByPropertyName = true)]
     [ValidateNotNullOrEmpty]
+    [Alias("SrcPrincipal")]
     public string SourcePrincipal
     {
         get;
@@ -49,6 +49,7 @@ public class AddADReplSidHistoryCommand : ADReplCommandBase
     /// </summary>
     [Parameter(Mandatory = false, ParameterSetName = ParameterSetCrossForest)]
     [ValidateNotNullOrEmpty]
+    [Alias("SrcDomainController", "SourceServer")]
     public string SourceDomainController
     {
         get;
@@ -60,6 +61,7 @@ public class AddADReplSidHistoryCommand : ADReplCommandBase
     /// </summary>
     [Parameter(Mandatory = false, ParameterSetName = ParameterSetCrossForest)]
     [ValidateNotNull]
+    [Alias("SrcCreds")]
     public PSCredential SourceCredential
     {
         get;
@@ -71,6 +73,7 @@ public class AddADReplSidHistoryCommand : ADReplCommandBase
     /// </summary>
     [Parameter(Mandatory = true, ParameterSetName = ParameterSetCrossForest)]
     [ValidateNotNullOrEmpty]
+    [Alias("DstDomain")]
     public string DestinationDomain
     {
         get;
@@ -83,6 +86,7 @@ public class AddADReplSidHistoryCommand : ADReplCommandBase
     [Parameter(Mandatory = true, ParameterSetName = ParameterSetCrossForest, ValueFromPipelineByPropertyName = true)]
     [Parameter(Mandatory = true, ParameterSetName = ParameterSetIntraDomain, ValueFromPipelineByPropertyName = true)]
     [ValidateNotNullOrEmpty]
+    [Alias("DstPrincipal")]
     public string DestinationPrincipal
     {
         get;
@@ -128,7 +132,7 @@ public class AddADReplSidHistoryCommand : ADReplCommandBase
             }
             else
             {
-                this.WriteVerbose($"Performing cross-domain SID history migration from '{this.SourcePrincipal}' to '{this.DestinationPrincipal}'.");
+                this.WriteVerbose($"Performing cross-forest SID history migration from '{this.SourcePrincipal}' to '{this.DestinationPrincipal}'.");
             }
 
             // Build optional source credentials only for the cross-forest flow.
