@@ -96,10 +96,11 @@
       <BuildOutputInPackage Include="%(AnyCpuFiles.Identity)" TargetPath="/runtimes/win-x86/lib/$(TargetFrameworkAndPlatform)/%(AnyCpuFiles.Filename)%(AnyCpuFiles.Extension)" />
       <BuildOutputInPackage Include="%(AnyCpuFiles.Identity)" TargetPath="/runtimes/win-arm64/lib/$(TargetFrameworkAndPlatform)/%(AnyCpuFiles.Filename)%(AnyCpuFiles.Extension)" />
 
-      <!-- Pack platform-specific DSInternals.Replication.Interop DLL+PDB+XML -->
-      <X64Files Include="$(ReplicationInteropOutDir)x64\DSInternals.Replication.Interop.???" />
-      <X86Files Include="$(ReplicationInteropOutDir)Win32\DSInternals.Replication.Interop.???" />
-      <ARM64Files Include="$(ReplicationInteropOutDir)ARM64\DSInternals.Replication.Interop.???" />
+      <!-- Pack platform-specific DSInternals.Replication.Interop DLL+XML, but skip PDB files. -->
+      <!-- Visual C++ compiler only produces Windows PDB files, while the NuGet Gallery is only compatible with portable PDBs. -->
+      <X64Files Include="$(ReplicationInteropOutDir)x64\DSInternals.Replication.Interop.??l" />
+      <X86Files Include="$(ReplicationInteropOutDir)Win32\DSInternals.Replication.Interop.??l" />
+      <ARM64Files Include="$(ReplicationInteropOutDir)ARM64\DSInternals.Replication.Interop.??l" />
       <BuildOutputInPackage Include="%(X64Files.Identity)" TargetPath="/runtimes/win-x64/lib/$(TargetFrameworkAndPlatform)/%(X64Files.Filename)%(X64Files.Extension)" />
       <BuildOutputInPackage Include="%(X86Files.Identity)" TargetPath="/runtimes/win-x86/lib/$(TargetFrameworkAndPlatform)/%(X86Files.Filename)%(X86Files.Extension)" />
       <BuildOutputInPackage Include="%(ARM64Files.Identity)" TargetPath="/runtimes/win-arm64/lib/$(TargetFrameworkAndPlatform)/%(ARM64Files.Filename)%(ARM64Files.Extension)" />
