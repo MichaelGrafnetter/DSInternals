@@ -61,7 +61,7 @@
     <!-- Additional files to include in NuGet packages -->
     <None Include="$(MSBuildThisFileDirectory)Icons/package_black.png" Pack="true" PackagePath="/icon.png" Visible="false" />
     <None Include="$(MSBuildThisFileDirectory)../LICENSE.md" Pack="true" PackagePath="/" Visible="false" />
-    <None Include="$(MSBuildProjectDirectory)/PACKAGE.md" Pack="true" PackagePath="/README.md" Visible="true" />
+    <None Include="$(MSBuildProjectDirectory)/PACKAGE.md" Pack="true" PackagePath="/README.md" Visible="true" Condition="Exists('$(MSBuildProjectDirectory)/PACKAGE.md')" />
 
     <!-- Enable source-link -->
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
