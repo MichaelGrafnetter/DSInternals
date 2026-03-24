@@ -442,10 +442,13 @@ public class TestPasswordQualityCommand : PSCmdletEx, IDisposable
 
     private void ReportProgress(long fileLength, long position, ProgressRecord progress)
     {
-        if (position >= fileLength)
+        if (fileLength <= 0 || position >= fileLength)
         {
             // Report operation completion
             progress.RecordType = ProgressRecordType.Completed;
+            progress.PercentComplete = 100;
+            this.WriteProgress(progress);
+            return;
         }
 
         // Calculate the current progress
