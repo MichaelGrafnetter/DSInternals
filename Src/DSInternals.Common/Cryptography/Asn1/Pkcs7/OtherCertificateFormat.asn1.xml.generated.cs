@@ -18,11 +18,10 @@ internal partial struct OtherCertificateFormat
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static OtherCertificateFormat Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out OtherCertificateFormat decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -46,7 +45,6 @@ internal partial struct OtherCertificateFormat
         
         decoded.OtherCertFormat = sequenceReader.ReadObjectIdentifier();
         decoded.OtherCert = sequenceReader.ReadEncodedValue();
-
         sequenceReader.ThrowIfNotEmpty();
     }
 }

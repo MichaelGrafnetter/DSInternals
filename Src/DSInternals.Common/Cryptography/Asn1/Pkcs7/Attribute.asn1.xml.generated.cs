@@ -19,11 +19,10 @@ internal partial struct Attribute
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static Attribute Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out Attribute decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -56,13 +55,12 @@ internal partial struct Attribute
 
             while (collectionReader.HasData)
             {
-                tmpItem = collectionReader.ReadEncodedValue(); 
+                tmpItem = collectionReader.ReadEncodedValue();
                 tmpList.Add(tmpItem);
             }
 
             decoded.AttrValues = tmpList.ToArray();
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

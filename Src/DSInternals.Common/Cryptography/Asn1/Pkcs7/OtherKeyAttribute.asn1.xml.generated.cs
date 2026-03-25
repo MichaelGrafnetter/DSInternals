@@ -18,11 +18,10 @@ internal partial struct OtherKeyAttribute
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static OtherKeyAttribute Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out OtherKeyAttribute decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -50,7 +49,6 @@ internal partial struct OtherKeyAttribute
         {
             decoded.AttributeValue = sequenceReader.ReadEncodedValue();
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

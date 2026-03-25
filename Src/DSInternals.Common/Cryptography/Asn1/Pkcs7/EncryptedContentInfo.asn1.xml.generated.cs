@@ -19,11 +19,10 @@ internal partial struct EncryptedContentInfo
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static EncryptedContentInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out EncryptedContentInfo decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -50,10 +49,9 @@ internal partial struct EncryptedContentInfo
 
         if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
         {
-        decoded.EncryptedContent = sequenceReader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0));
-
+            decoded.EncryptedContent = sequenceReader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0));
+    
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

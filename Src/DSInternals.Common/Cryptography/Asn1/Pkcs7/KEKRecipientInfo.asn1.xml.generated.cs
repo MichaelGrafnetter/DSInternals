@@ -20,11 +20,10 @@ internal partial struct KEKRecipientInfo
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static KEKRecipientInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out KEKRecipientInfo decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -54,9 +53,8 @@ internal partial struct KEKRecipientInfo
 
         DSInternals.Common.Cryptography.Asn1.Pkcs7.KEKIdentifier.Decode(sequenceReader, out decoded.KekId);
         DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(sequenceReader, out decoded.KeyEncryptionAlgorithm);
-    decoded.EncryptedKey = sequenceReader.ReadOctetString();
-
-
+        decoded.EncryptedKey = sequenceReader.ReadOctetString();
+    
         sequenceReader.ThrowIfNotEmpty();
     }
 }

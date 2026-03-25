@@ -18,11 +18,10 @@ internal partial struct CertBag
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static CertBag Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out CertBag decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -50,7 +49,6 @@ internal partial struct CertBag
         explicitReader = sequenceReader.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 0));
         decoded.CertValue = explicitReader.ReadEncodedValue();
         explicitReader.ThrowIfNotEmpty();
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

@@ -41,7 +41,6 @@ internal partial struct CertificateChoice
     internal static CertificateChoice Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, out CertificateChoice decoded);
         reader.ThrowIfNotEmpty();
         return decoded;

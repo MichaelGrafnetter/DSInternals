@@ -35,7 +35,6 @@ internal partial struct KeyAgreeRecipientIdentifier
     internal static KeyAgreeRecipientIdentifier Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, out KeyAgreeRecipientIdentifier decoded);
         reader.ThrowIfNotEmpty();
         return decoded;

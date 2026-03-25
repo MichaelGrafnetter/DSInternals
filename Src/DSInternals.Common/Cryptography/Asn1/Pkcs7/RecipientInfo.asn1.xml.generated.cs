@@ -37,7 +37,6 @@ internal partial struct RecipientInfo
     internal static RecipientInfo Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, out RecipientInfo decoded);
         reader.ThrowIfNotEmpty();
         return decoded;

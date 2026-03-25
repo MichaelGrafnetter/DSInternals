@@ -11,7 +11,7 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs12;
 internal partial struct MacData
 {
     private static readonly byte[] s_defaultIterationCount = { 0x02, 0x01, 0x01 };
-
+  
     internal DSInternals.Common.Cryptography.Asn1.Pkcs1.DigestInfo Mac;
     internal ReadOnlyMemory<byte> MacSalt;
     internal int IterationCount;
@@ -32,17 +32,16 @@ internal partial struct MacData
         reader.ThrowIfNotEmpty();
     }
 #endif
-
+ 
 
     internal static MacData Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static MacData Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out MacData decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -66,8 +65,8 @@ internal partial struct MacData
         AsnReader defaultReader;
         
         DSInternals.Common.Cryptography.Asn1.Pkcs1.DigestInfo.Decode(sequenceReader, out decoded.Mac);
-    decoded.MacSalt = sequenceReader.ReadOctetString();
-
+        decoded.MacSalt = sequenceReader.ReadOctetString();
+    
 
         if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(Asn1Tag.Integer))
         {
@@ -88,7 +87,6 @@ internal partial struct MacData
             }
 
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

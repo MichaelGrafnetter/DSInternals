@@ -22,11 +22,10 @@ internal partial struct KeyAgreeRecipientInfo
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static KeyAgreeRecipientInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out KeyAgreeRecipientInfo decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -65,8 +64,8 @@ internal partial struct KeyAgreeRecipientInfo
         if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
         {
             explicitReader = sequenceReader.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 1));
-        decoded.Ukm = explicitReader.ReadOctetString();
-
+            decoded.Ukm = explicitReader.ReadOctetString();
+    
             explicitReader.ThrowIfNotEmpty();
         }
 
@@ -80,13 +79,12 @@ internal partial struct KeyAgreeRecipientInfo
 
             while (collectionReader.HasData)
             {
-                DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientEncryptedKey.Decode(collectionReader, out tmpItem); 
+                DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientEncryptedKey.Decode(collectionReader, out tmpItem);
                 tmpList.Add(tmpItem);
             }
 
             decoded.RecipientEncryptedKeys = tmpList.ToArray();
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

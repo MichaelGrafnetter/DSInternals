@@ -18,11 +18,10 @@ internal partial struct EncapsulatedContentInfo
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static EncapsulatedContentInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out EncapsulatedContentInfo decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -53,7 +52,6 @@ internal partial struct EncapsulatedContentInfo
             decoded.Content = explicitReader.ReadEncodedValue();
             explicitReader.ThrowIfNotEmpty();
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }
