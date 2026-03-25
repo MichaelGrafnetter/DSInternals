@@ -85,7 +85,7 @@ public sealed class CborMap
     public string ToJson()
     {
         // Convert the data to JSON
-        return JsonSerializer.SerializeToElement<Hashtable>(_items).ToString();
+        return JsonSerializer.Serialize(_items, KeyCredentialSerializationContext.Default.Hashtable);
     }
 
     /// <summary>
