@@ -149,12 +149,12 @@ public sealed class SamServer : SamObject
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
+        base.Dispose(disposing);
+
         if (disposing)
         {
             _namedPipeConnection?.Dispose();
             _namedPipeConnection = null;
         }
-
-        base.Dispose(disposing);
     }
 }
