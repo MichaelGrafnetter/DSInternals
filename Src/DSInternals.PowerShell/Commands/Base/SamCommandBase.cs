@@ -7,7 +7,6 @@ namespace DSInternals.PowerShell.Commands;
 
 public abstract class SamCommandBase : PSCmdletEx, IDisposable
 {
-    // TODO: Safe Critical everywhere?
     private const string DefaultServer = "localhost";
     private string server;
 
@@ -61,13 +60,13 @@ public abstract class SamCommandBase : PSCmdletEx, IDisposable
         WriteDebug($"Connecting to SAM server {this.Server}.");
         try
         {
-            NetworkCredential netCred = this.Credential?.GetNetworkCredential();
-            this.SamServer = new SamServer(this.Server, SamServerAccessMask.LookupDomain | SamServerAccessMask.EnumerateDomains, netCred);
+            NetworkCredential? netCred = this.Credential?.GetNetworkCredential();
+            this.SamServer = new(this.Server, SamServerAccessMask.LookupDomain | SamServerAccessMask.EnumerateDomains, netCred, useNamedPipes: true);
         }
         catch (Win32Exception ex)
         {
             ErrorCategory category = ((Win32ErrorCode)ex.NativeErrorCode).ToPSCategory();
-            ErrorRecord error = new ErrorRecord(ex, "WinAPIErrorConnect", category, this.Server);
+            ErrorRecord error = new(ex, "WinAPIErrorConnect", category, this.Server);
             // Terminate on this error:
             this.ThrowTerminatingError(error);
         }
