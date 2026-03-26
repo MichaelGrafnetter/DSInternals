@@ -20,11 +20,10 @@ internal partial struct SafeBag
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static SafeBag Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out SafeBag decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -66,7 +65,7 @@ internal partial struct SafeBag
 
                 while (collectionReader.HasData)
                 {
-                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(collectionReader, out tmpItem); 
+                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(collectionReader, out tmpItem);
                     tmpList.Add(tmpItem);
                 }
 
@@ -74,7 +73,6 @@ internal partial struct SafeBag
             }
 
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }

@@ -37,7 +37,6 @@ internal partial struct OriginatorIdentifierOrKey
     internal static OriginatorIdentifierOrKey Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, out OriginatorIdentifierOrKey decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -60,8 +59,8 @@ internal partial struct OriginatorIdentifierOrKey
         }
         else if (tag.HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
         {
-        decoded.SubjectKeyIdentifier = reader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0));
-
+            decoded.SubjectKeyIdentifier = reader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0));
+    
         }
         else if (tag.HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
         {

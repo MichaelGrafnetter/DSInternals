@@ -24,11 +24,10 @@ internal partial struct SignerInfo
     {
         return Decode(Asn1Tag.Sequence, encoded, ruleSet);
     }
-    
+
     internal static SignerInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
     {
         AsnReader reader = new AsnReader(encoded, ruleSet);
-        
         Decode(reader, expectedTag, out SignerInfo decoded);
         reader.ThrowIfNotEmpty();
         return decoded;
@@ -66,8 +65,8 @@ internal partial struct SignerInfo
         }
 
         DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(sequenceReader, out decoded.SignatureAlgorithm);
-    decoded.SignatureValue = sequenceReader.ReadOctetString();
-
+        decoded.SignatureValue = sequenceReader.ReadOctetString();
+    
 
         if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
         {
@@ -80,7 +79,7 @@ internal partial struct SignerInfo
 
                 while (collectionReader.HasData)
                 {
-                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(collectionReader, out tmpItem); 
+                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(collectionReader, out tmpItem);
                     tmpList.Add(tmpItem);
                 }
 
@@ -88,7 +87,6 @@ internal partial struct SignerInfo
             }
 
         }
-
 
         sequenceReader.ThrowIfNotEmpty();
     }
