@@ -19,6 +19,11 @@ public sealed class SamServer : SamObject
     private const uint InitialEnumerationContext = 0;
 
     /// <summary>
+    /// The authenticated SMB session used for named pipe transport, if any.
+    /// </summary>
+    private NamedPipeConnection? _namedPipeConnection;
+
+    /// <summary>
     /// The name of the server.
     /// </summary>
     public string Name
@@ -31,9 +36,14 @@ public sealed class SamServer : SamObject
     /// Initializes a new instance of the <see cref="SamServer"/> class and connects to the specified server with the specified credentials and access mask.
     /// </summary>
     /// <param name="serverName">The name of the server.</param>
-    /// <param name="credential">The credentials to use for the connection.</param>
     /// <param name="accessMask">The access mask to use for the connection.</param>
-    public SamServer(string serverName, SamServerAccessMask accessMask = SamServerAccessMask.MaximumAllowed, NetworkCredential credential = null) : base(null)
+    /// <param name="credential">The credentials to use for the connection.</param>
+    /// <param name="useNamedPipes">
+    /// When <c>true</c> and <paramref name="credential"/> is provided,
+    /// an authenticated SMB session is established first so that the RPC connection
+    /// uses named pipes (ncacn_np) instead of TCP. This is required for password reset operations.
+    /// </param>
+    public SamServer(string serverName, SamServerAccessMask accessMask = SamServerAccessMask.MaximumAllowed, NetworkCredential? credential = null, bool useNamedPipes = true) : base(null)
     {
         if (string.IsNullOrEmpty(serverName))
         {
@@ -41,6 +51,12 @@ public sealed class SamServer : SamObject
         }
 
         this.Name = serverName;
+
+        if (useNamedPipes && credential != null)
+        {
+            // Establish an authenticated SMB session to force RPC over named pipes
+            _namedPipeConnection = new NamedPipeConnection(serverName, credential);
+        }
 
         NtStatus result = (credential != null) ?
             NativeMethods.SamConnectWithCreds(serverName, out SafeSamHandle serverHandle, accessMask, credential) :
@@ -128,5 +144,17 @@ public sealed class SamServer : SamObject
         NtStatus result = NativeMethods.SamOpenDomain(this.Handle, accessMask, domainSid, out SafeSamHandle domainHandle);
         Validator.AssertSuccess(result);
         return new SamDomain(domainHandle);
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _namedPipeConnection?.Dispose();
+            _namedPipeConnection = null;
+        }
+
+        base.Dispose(disposing);
     }
 }
