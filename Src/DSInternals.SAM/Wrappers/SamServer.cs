@@ -52,13 +52,13 @@ public sealed class SamServer : SamObject
 
         this.Name = serverName;
 
-        if (useNamedPipes && credential != null)
+        if (useNamedPipes && credential is not null)
         {
             // Establish an authenticated SMB session to force RPC over named pipes
             _namedPipeConnection = new NamedPipeConnection(serverName, credential);
         }
 
-        NtStatus result = (credential != null) ?
+        NtStatus result = (!useNamedPipes && credential is not null) ?
             NativeMethods.SamConnectWithCreds(serverName, out SafeSamHandle serverHandle, accessMask, credential) :
             NativeMethods.SamConnect(serverName, out serverHandle, accessMask);
 
