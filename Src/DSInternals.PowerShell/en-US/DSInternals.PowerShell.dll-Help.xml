@@ -1038,7 +1038,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="DstPrincipal">
           <maml:name>DestinationPrincipal</maml:name>
           <maml:description>
             <maml:para>Specifies the destination security principal that receives the source SID history.</maml:para>
@@ -1062,7 +1062,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="SrcPrincipal">
           <maml:name>SourcePrincipal</maml:name>
           <maml:description>
             <maml:para>Specifies the source security principal whose SID history is to be added. If -DeleteSourceObject is specified, this value should be a DN; otherwise, it should be a domain-relative SAM name.</maml:para>
@@ -1089,7 +1089,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DstDomain">
           <maml:name>DestinationDomain</maml:name>
           <maml:description>
             <maml:para>Specifies the destination domain in which the destination principal resides. The domain name can be an FQDN or a NetBIOS name.</maml:para>
@@ -1101,7 +1101,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="DstPrincipal">
           <maml:name>DestinationPrincipal</maml:name>
           <maml:description>
             <maml:para>Specifies the destination security principal that receives the source SID history.</maml:para>
@@ -1125,7 +1125,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SrcCreds">
           <maml:name>SourceCredential</maml:name>
           <maml:description>
             <maml:para>Specifies the credentials to be used in the source domain.</maml:para>
@@ -1137,7 +1137,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SrcDomain">
           <maml:name>SourceDomain</maml:name>
           <maml:description>
             <maml:para>Specifies the source domain to query for the SID of the source principal. The domain name can be an FQDN or a NetBIOS name.</maml:para>
@@ -1149,7 +1149,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SrcDomainController, SourceServer">
           <maml:name>SourceDomainController</maml:name>
           <maml:description>
             <maml:para>Specifies the primary domain controller (PDC) or PDC role owner in the source domain.</maml:para>
@@ -1161,7 +1161,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="SrcPrincipal">
           <maml:name>SourcePrincipal</maml:name>
           <maml:description>
             <maml:para>Specifies the source security principal whose SID history is to be added. If -DeleteSourceObject is specified, this value should be a DN; otherwise, it should be a domain-relative SAM name.</maml:para>
@@ -1212,7 +1212,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="DstDomain">
         <maml:name>DestinationDomain</maml:name>
         <maml:description>
           <maml:para>Specifies the destination domain in which the destination principal resides. The domain name can be an FQDN or a NetBIOS name.</maml:para>
@@ -1224,7 +1224,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="DstPrincipal">
         <maml:name>DestinationPrincipal</maml:name>
         <maml:description>
           <maml:para>Specifies the destination security principal that receives the source SID history.</maml:para>
@@ -1248,7 +1248,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SrcCreds">
         <maml:name>SourceCredential</maml:name>
         <maml:description>
           <maml:para>Specifies the credentials to be used in the source domain.</maml:para>
@@ -1260,7 +1260,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SrcDomain">
         <maml:name>SourceDomain</maml:name>
         <maml:description>
           <maml:para>Specifies the source domain to query for the SID of the source principal. The domain name can be an FQDN or a NetBIOS name.</maml:para>
@@ -1272,7 +1272,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="SrcDomainController, SourceServer">
         <maml:name>SourceDomainController</maml:name>
         <maml:description>
           <maml:para>Specifies the primary domain controller (PDC) or PDC role owner in the source domain.</maml:para>
@@ -1284,7 +1284,7 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="SrcPrincipal">
         <maml:name>SourcePrincipal</maml:name>
         <maml:description>
           <maml:para>Specifies the source security principal whose SID history is to be added. If -DeleteSourceObject is specified, this value should be a DN; otherwise, it should be a domain-relative SAM name.</maml:para>
@@ -9061,6 +9061,17 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202
           </dev:type>
           <dev:defaultValue>localhost</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UseNamedPipes">
+          <maml:name>UseNamedPipe</maml:name>
+          <maml:description>
+            <maml:para>Use named pipes (RPC/NP) transport instead of TCP to connect to the target server.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -9100,6 +9111,18 @@ Local Domain SID      : S-1-5-21-2929860833-2984454239-2848460202
           <maml:uri />
         </dev:type>
         <dev:defaultValue>localhost</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UseNamedPipes">
+        <maml:name>UseNamedPipe</maml:name>
+        <maml:description>
+          <maml:para>Use named pipes (RPC/NP) transport instead of TCP to connect to the target server.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>

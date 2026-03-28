@@ -45,7 +45,7 @@ internal static partial class NativeMethods
     [DllImport(SamLib, SetLastError = true, CharSet = CharSet.Unicode)]
     private static extern NtStatus SamConnectWithCreds([In] ref UnicodeString serverName, out SafeSamHandle serverHandle, SamServerAccessMask accessMask, IntPtr objectAttributes, [In] ref WindowsAuthenticationIdentity authIdentity, [MarshalAs(UnmanagedType.LPWStr)] string? servicePrincipalName, [MarshalAs(UnmanagedType.Bool)] out bool isWin2k);
 
-    internal static NtStatus SamConnectWithCreds(string serverName, out SafeSamHandle serverHandle, SamServerAccessMask accessMask, NetworkCredential credential)
+    internal static NtStatus SamConnectWithCreds(string serverName, out SafeSamHandle serverHandle, SamServerAccessMask accessMask, NetworkCredential? credential)
     {
         UnicodeString unicodeServerName = new(serverName);
         string servicePrincipalName = SpnPrefix + serverName;
@@ -53,7 +53,9 @@ internal static partial class NativeMethods
 
         NtStatus result = SamConnectWithCreds(ref unicodeServerName, out serverHandle, accessMask, objectAttributes: IntPtr.Zero, ref authIdentity, servicePrincipalName, out bool _);
 
-        if (result == NtStatus.RpcUnknownAuthenticationService)
+        // If the server does not support Kerberos or if the SPN is not found, the server may return STATUS_RPC_UNKNOWN_AUTHENTICATION_SERVICE or STATUS_INVALID_HANDLE.
+        // STATUS_INVALID_HANDLE is also returned for localhost connections.
+        if (result == NtStatus.RpcUnknownAuthenticationService || result == NtStatus.InvalidHandle)
         {
             // Try it again, but without the SPN, to force NTLM instead of Negotiate.
             result = SamConnectWithCreds(ref unicodeServerName, out serverHandle, accessMask, objectAttributes: IntPtr.Zero, ref authIdentity, servicePrincipalName: null, out bool _);

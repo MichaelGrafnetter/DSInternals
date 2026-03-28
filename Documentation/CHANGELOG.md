@@ -7,7 +7,14 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
-- Nothing yet.
+### Added
+
+- Added the `-UseNamedPipe` parameter to the `Get-SamPasswordPolicy` cmdlet.
+
+### Fixed
+
+- Fixed a missing `throw` in `SafeUnicodeSecureStringPointer` that silently ignored invalid password byte arrays.
+- Improved SAMR authentication fallback for localhost and missing SPN scenarios.
 
 ## [6.4] - 2026-03-28
 

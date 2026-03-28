@@ -13,7 +13,8 @@ Queries Active Directory for the default password policy.
 ## SYNTAX
 
 ```
-Get-SamPasswordPolicy -Domain <String> [-Credential <PSCredential>] [-Server <String>] [<CommonParameters>]
+Get-SamPasswordPolicy -Domain <String> [-UseNamedPipe] [-Credential <PSCredential>] [-Server <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -98,6 +99,21 @@ Aliases: ComputerName, Computer
 Required: False
 Position: Named
 Default value: localhost
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseNamedPipe
+Use named pipes (RPC/NP) transport instead of TCP to connect to the target server.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: UseNamedPipes
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -35,7 +35,7 @@ public struct WindowsAuthenticationIdentity : IDisposable
     /// <summary>
     /// String containing the user's password in the domain or workgroup.
     /// </summary>
-    private SafeUnicodeSecureStringPointer? _password;
+    private SafeUnicodeSecureStringPointer _password;
 
     /// <summary>
     /// Number of characters in Password, excluding the terminating NULL.
@@ -85,7 +85,7 @@ public struct WindowsAuthenticationIdentity : IDisposable
     /// <summary>
     /// User's password.
     /// </summary>
-    public SecureString Password
+    public SecureString? Password
     {
         set
         {
@@ -100,13 +100,18 @@ public struct WindowsAuthenticationIdentity : IDisposable
     /// <summary>
     /// Initializes a new instance of the <see cref="WindowsAuthenticationIdentity"/> struct.
     /// </summary>
-    public WindowsAuthenticationIdentity(NetworkCredential credential)
+    public WindowsAuthenticationIdentity(NetworkCredential? credential)
     {
         if (credential != null)
         {
             User = credential.UserName;
             Domain = credential.Domain;
             Password = credential.SecurePassword;
+        }
+        else
+        {
+            // Impersonate the current user with a null password
+            Password = null;
         }
     }
 

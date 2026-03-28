@@ -112,7 +112,7 @@ Specifies the destination domain in which the destination principal resides. The
 ```yaml
 Type: String
 Parameter Sets: CrossForest
-Aliases:
+Aliases: DstDomain
 
 Required: True
 Position: Named
@@ -127,7 +127,7 @@ Specifies the destination security principal that receives the source SID histor
 ```yaml
 Type: String
 Parameter Sets: CrossForest, IntraDomain
-Aliases:
+Aliases: DstPrincipal
 
 Required: True
 Position: Named
@@ -157,7 +157,7 @@ Specifies the credentials to be used in the source domain.
 ```yaml
 Type: PSCredential
 Parameter Sets: CrossForest
-Aliases:
+Aliases: SrcCreds
 
 Required: False
 Position: Named
@@ -172,7 +172,7 @@ Specifies the source domain to query for the SID of the source principal. The do
 ```yaml
 Type: String
 Parameter Sets: CrossForest
-Aliases:
+Aliases: SrcDomain
 
 Required: True
 Position: Named
@@ -187,7 +187,7 @@ Specifies the primary domain controller (PDC) or PDC role owner in the source do
 ```yaml
 Type: String
 Parameter Sets: CrossForest
-Aliases:
+Aliases: SrcDomainController, SourceServer
 
 Required: False
 Position: Named
@@ -202,7 +202,7 @@ Specifies the source security principal whose SID history is to be added. If -De
 ```yaml
 Type: String
 Parameter Sets: CrossForest, IntraDomain
-Aliases:
+Aliases: SrcPrincipal
 
 Required: True
 Position: Named

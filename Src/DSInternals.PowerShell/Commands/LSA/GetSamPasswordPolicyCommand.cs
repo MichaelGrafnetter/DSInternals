@@ -16,9 +16,20 @@ public class GetSamPasswordPolicyCommand : SamCommandBase
         get;
         set;
     }
+
+    [Parameter]
+    [Alias("UseNamedPipes")]
+    public SwitchParameter UseNamedPipe
+    {
+        get;
+        set;
+    }
     #endregion Parameters
 
     #region Cmdlet Overrides
+
+    protected override bool UseNamedPipes => UseNamedPipe.IsPresent;
+
     protected override void ProcessRecord()
     {
         this.WriteVerbose($"Opening domain {this.Domain}.");

@@ -58,9 +58,9 @@ public sealed class SamServer : SamObject
             _namedPipeConnection = new NamedPipeConnection(serverName, credential);
         }
 
-        NtStatus result = (!useNamedPipes && credential is not null) ?
-            NativeMethods.SamConnectWithCreds(serverName, out SafeSamHandle serverHandle, accessMask, credential) :
-            NativeMethods.SamConnect(serverName, out serverHandle, accessMask);
+        NtStatus result = useNamedPipes ?
+            NativeMethods.SamConnect(serverName, out SafeSamHandle serverHandle, accessMask) :
+            NativeMethods.SamConnectWithCreds(serverName, out serverHandle, accessMask, credential);
 
         Validator.AssertSuccess(result);
         this.Handle = serverHandle;

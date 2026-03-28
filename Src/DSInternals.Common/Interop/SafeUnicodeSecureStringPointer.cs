@@ -12,7 +12,7 @@ public sealed class SafeUnicodeSecureStringPointer : SafeHandleZeroOrMinusOneIsI
 {
     private int numChars;
 
-    public SafeUnicodeSecureStringPointer(SecureString password)
+    public SafeUnicodeSecureStringPointer(SecureString? password)
         : base(true)
     {
         if (password != null)
@@ -23,7 +23,7 @@ public sealed class SafeUnicodeSecureStringPointer : SafeHandleZeroOrMinusOneIsI
         }
     }
 
-    public SafeUnicodeSecureStringPointer(byte[] password)
+    public SafeUnicodeSecureStringPointer(byte[]? password)
         : base(true)
     {
         if (password != null)
@@ -31,7 +31,7 @@ public sealed class SafeUnicodeSecureStringPointer : SafeHandleZeroOrMinusOneIsI
             if (password.Length % sizeof(char) == 1)
             {
                 // Unicode strings must have even number of bytes
-                new ArgumentOutOfRangeException(nameof(password));
+                throw new ArgumentOutOfRangeException(nameof(password));
             }
 
             IntPtr buffer = Marshal.AllocHGlobal(password.Length + sizeof(char));

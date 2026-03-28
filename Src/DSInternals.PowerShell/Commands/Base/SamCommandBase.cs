@@ -16,6 +16,10 @@ public abstract class SamCommandBase : PSCmdletEx, IDisposable
         private set;
     }
 
+    // Most password-related operations are denied when RPC over TCP is used,
+    // so we use RPC over named pipes by default.
+    protected virtual bool UseNamedPipes => true;
+
     #region Parameters
     [Parameter(
         HelpMessage = "Specify the user account credentials to use to perform this task. The default credentials are the credentials of the currently logged on user.",
@@ -61,7 +65,7 @@ public abstract class SamCommandBase : PSCmdletEx, IDisposable
         try
         {
             NetworkCredential? netCred = this.Credential?.GetNetworkCredential();
-            this.SamServer = new(this.Server, SamServerAccessMask.LookupDomain | SamServerAccessMask.EnumerateDomains, netCred, useNamedPipes: true);
+            this.SamServer = new(this.Server, SamServerAccessMask.LookupDomain | SamServerAccessMask.EnumerateDomains, netCred, this.UseNamedPipes);
         }
         catch (Win32Exception ex)
         {
