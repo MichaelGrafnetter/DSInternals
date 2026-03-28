@@ -2,15 +2,17 @@
 
 ## Introduction
 
-The **DSInternals.Replication** package implements a client for the **Active Directory Replication Service Remote Protocol (MS-DRSR)**. This is commonly known as **DCSync** and allows you to remotely extract password hashes and other sensitive data from domain controllers.
+The **DSInternals.Replication** package implements a client
+for the **Active Directory Replication Service Remote Protocol (MS-DRSR)**.
+This is commonly known as **DCSync** and allows you to remotely extract password hashes
+and other sensitive data from domain controllers.
 
 ### Key Features
 
-- **DCSync Attack**: Replicate password hashes from domain controllers remotely
-- **Full Account Replication**: Retrieve complete account objects including all attributes
-- **Incremental Replication**: Sync only changed objects since last replication
+- **Full Account Replication**: Retrieve complete account objects including password hashes
+- **Incremental Replication**: Sync only changed objects since the last replication
 - **DPAPI Backup Key Retrieval**: Extract domain DPAPI backup keys for credential decryption
-- **KDS Root Key Access**: Retrieve Key Distribution Service root keys for gMSA password computation
+- **KDS Root Key Access**: Retrieve Key Distribution Service root keys for gMSA and dMSA password computation
 - **Schema Replication**: Replicate the Active Directory schema
 
 ## Platform Compatibility

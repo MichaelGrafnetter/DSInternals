@@ -1,6 +1,5 @@
 ---
-agent: agent
-tools: ['edit/editFiles', 'search/codebase', 'search/readFile', 'problems', 'changes', 'runTests']
+name: code-review
 description: 'Perform a systematic code review of all source files, focusing on security, performance, backwards compatibility, and design principles.'
 ---
 

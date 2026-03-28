@@ -1,4 +1,4 @@
-# GitHub Copilot Instructions for DSInternals
+# Agent Instructions for DSInternals
 
 ## Project Overview
 
@@ -22,7 +22,8 @@ and the [PowerShell module documentation](Documentation/PowerShell/Readme.md) fo
 
 ## Build Instructions
 
-> **Important:** The `Src` directory must be the working directory for all build and test commands due to the `global.json` SDK configuration.
+> [!IMPORTANT]
+> The `Src` directory must be the working directory for all build and test commands due to the `global.json` SDK configuration.
 
 ### Building C# Projects Only
 
@@ -38,7 +39,7 @@ dotnet build DSInternals.DotNetSdk.slnf
 dotnet build DSInternals.Common
 ```
 
-> **Note:** The `dotnet build` command cannot compile C++/CLI projects. Use MSBuild or Visual Studio for full builds including the PowerShell module:
+**Note:** The `dotnet build` command cannot compile C++/CLI projects. Use MSBuild or Visual Studio for full builds including the PowerShell module:
 
 ```powershell
 cd Src

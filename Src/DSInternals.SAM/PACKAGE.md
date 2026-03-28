@@ -8,7 +8,7 @@ It enables remote manipulation of user accounts and LSA policies on Windows syst
 
 ### Key Features
 
-- **Password Hash Injection**: Set NT/LM password hashes directly on accounts
+- **Password Hash Injection**: Set NT/LM password hashes directly on local and Active Directory accounts
 - **Account Management**: Query and modify user account properties
 - **LSA Policy Access**: Read and modify Local Security Authority policies
 - **DPAPI Backup Key Retrieval**: Extract domain DPAPI backup keys via LSARPC

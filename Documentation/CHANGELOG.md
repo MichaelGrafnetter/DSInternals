@@ -9,6 +9,17 @@ All notable changes to this project will be documented in this file. The format 
 
 - Nothing yet.
 
+## [6.4] - 2026-03-28
+
+### Changed
+
+- Switched `CborMap.ToJson` to source-generated `System.Text.Json` serialization.
+
+### Fixed
+
+- Fixed MS-SAMR authentication.
+- Fixed an arithmetic overflow in the [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) cmdlet when using an empty dictionary file.
+
 ## [6.3] - 2026-02-08
 
 ### Added
@@ -704,7 +715,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.3...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.4...HEAD
+[6.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.3...v6.4
 [6.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.2...v6.3
 [6.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.1.1...6.2
 [6.1.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.1...v6.1.1

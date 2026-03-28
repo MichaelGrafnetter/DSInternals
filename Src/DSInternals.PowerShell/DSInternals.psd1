@@ -12,7 +12,7 @@ RootModule = if ($PSEdition -eq 'Core') {
 }
 
 # Version number of this module.
-ModuleVersion = '6.3'
+ModuleVersion = '6.4'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -261,10 +261,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the Add-ADReplSidHistory cmdlet for SID history migration via MS-DRSR.
-- Improved generation of NGC keys to meet January 2026 Windows validation changes.
-- Removed Azure AD Graph API-related cmdlets.
-- Merged the *.psm1 script bootstrapper of the binary PowerShell module into the *.psd1 module manifest.
+- Fixed MS-SAMR authentication.
+- Fixed an arithmetic overflow in Test-PasswordQuality when using an empty dictionary file.
 "@
     } # End of PSData hashtable
 

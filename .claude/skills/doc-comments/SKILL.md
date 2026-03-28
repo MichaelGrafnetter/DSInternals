@@ -1,12 +1,11 @@
 ---
-agent: agent
-tools: ['edit/editFiles', 'search/readFile', 'search/codebase', 'problems', 'changes']
+name: doc-comments
 description: 'Ensure that C# and C++/CLI types are documented with XML comments and follow best practices for documentation.'
 ---
 
 # C# and C++/CLI Documentation Best Practices
 
-- Public members should be documented with XML comments.
+- All public members in the entire solution should be documented with XML comments.
 - It is encouraged to document internal members as well, especially if they are complex or not self-explanatory.
 
 ## Guidance for all APIs
