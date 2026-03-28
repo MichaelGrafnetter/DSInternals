@@ -6,6 +6,11 @@ namespace DSInternals.Common.Test;
 [TestClass]
 public class DnsSigningKeyTester
 {
+    // The Windows SID key cache API overwrites the entire L0 key file on each write.
+    // All TFM test processes must serialize their write+decrypt sequences to avoid
+    // a process overwriting another's cache entry between WriteToCache() and Decrypt().
+    private static readonly Mutex CacheMutex = new Mutex(false, @"Local\DSInternals_DnsSigningKeyTest");
+
     [TestMethod]
     public void DnsSigningKey_KSK_RSA()
     {
@@ -30,8 +35,17 @@ public class DnsSigningKeyTester
 
         // Decrypt the key
         var gke = GroupKeyEnvelope.Create(kdsRootKey, signingKey.ProtectedKeyBlob.ProtectionKeyIdentifier, signingKey.ProtectedKeyBlob.TargetSid);
-        gke.WriteToCache();
-        ReadOnlySpan<byte> decryptedKey = signingKey.ProtectedKeyBlob.Decrypt();
+        CacheMutex.WaitOne();
+        ReadOnlySpan<byte> decryptedKey;
+        try
+        {
+            gke.WriteToCache();
+            decryptedKey = signingKey.ProtectedKeyBlob.Decrypt();
+        }
+        finally
+        {
+            CacheMutex.ReleaseMutex();
+        }
 
         // Assert decrypted key magic
         Assert.StartsWith("52534132", decryptedKey.ToHex()); // "RSA2" encoded in HEX (RSAPUBKEY structure magic)
@@ -57,8 +71,17 @@ public class DnsSigningKeyTester
 
         // Decrypt the key
         var gke = GroupKeyEnvelope.Create(kdsRootKey, signingKey.ProtectedKeyBlob.ProtectionKeyIdentifier, signingKey.ProtectedKeyBlob.TargetSid);
-        gke.WriteToCache();
-        ReadOnlySpan<byte> decryptedKey = signingKey.ProtectedKeyBlob.Decrypt();
+        CacheMutex.WaitOne();
+        ReadOnlySpan<byte> decryptedKey;
+        try
+        {
+            gke.WriteToCache();
+            decryptedKey = signingKey.ProtectedKeyBlob.Decrypt();
+        }
+        finally
+        {
+            CacheMutex.ReleaseMutex();
+        }
 
         // Assert decrypted key magic
         Assert.StartsWith("52534132", decryptedKey.ToHex()); // "RSA2" encoded in HEX (RSAPUBKEY structure magic)
@@ -84,8 +107,17 @@ public class DnsSigningKeyTester
 
         // Decrypt the key
         var gke = GroupKeyEnvelope.Create(kdsRootKey, signingKey.ProtectedKeyBlob.ProtectionKeyIdentifier, signingKey.ProtectedKeyBlob.TargetSid);
-        gke.WriteToCache();
-        ReadOnlySpan<byte> decryptedKey = signingKey.ProtectedKeyBlob.Decrypt();
+        CacheMutex.WaitOne();
+        ReadOnlySpan<byte> decryptedKey;
+        try
+        {
+            gke.WriteToCache();
+            decryptedKey = signingKey.ProtectedKeyBlob.Decrypt();
+        }
+        finally
+        {
+            CacheMutex.ReleaseMutex();
+        }
 
         // Assert decrypted key magic
         Assert.StartsWith("45435332", decryptedKey.ToHex()); // "ECK2" encoded in HEX
