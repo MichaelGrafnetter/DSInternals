@@ -111,9 +111,25 @@ public class DistinguishedNameTester
     [TestMethod]
     public void DistinguishedName_HexEscapeNonSpecialCharacter()
     {
-        throw new AssertInconclusiveException("Support for this type of DN has not yet been implemented.");
+        // \20 is the hex escape for a space character.
         var dn = new DistinguishedName(@"CN=John\20Doe,OU=Employees,DC=adatum,DC=com");
-        Assert.AreEqual(dn.ToString(), @"CN=John Doe,OU=Employees,DC=adatum,DC=com");
+        Assert.AreEqual("John Doe", dn.Components[0].Value);
+        Assert.AreEqual(@"CN=John Doe,OU=Employees,DC=adatum,DC=com", dn.ToString());
+
+        // \C3\B6 is the RFC 4514 byte-by-byte UTF-8 encoding of 'ö'. The parser must accept
+        // hex-escaped input (some tools produce it), but the writer must emit the literal
+        // Unicode character — DRSR IDL_DRSCrackNames rejects the hex-escaped form for
+        // DS_FQDN_1779_NAME, which broke Get-ADReplAccount on domains with German umlauts
+        // in site names (issue #224).
+        var dn2 = new DistinguishedName(@"CN=142SRV-DC,CN=Servers,CN=L\C3\B6hne,CN=Sites,CN=Configuration,DC=adatum,DC=local");
+        Assert.AreEqual("Löhne", dn2.Components[2].Value);
+        Assert.AreEqual("CN=142SRV-DC,CN=Servers,CN=Löhne,CN=Sites,CN=Configuration,DC=adatum,DC=local", dn2.ToString());
+
+        // Round-trip a DN that already uses literal Unicode — non-ASCII chars must be
+        // preserved verbatim, not converted to hex byte escapes.
+        var dn3 = new DistinguishedName("CN=Löhne,CN=Sites,CN=Configuration,DC=adatum,DC=local");
+        Assert.AreEqual("Löhne", dn3.Components[0].Value);
+        Assert.AreEqual("CN=Löhne,CN=Sites,CN=Configuration,DC=adatum,DC=local", dn3.ToString());
     }
 
     [TestMethod]

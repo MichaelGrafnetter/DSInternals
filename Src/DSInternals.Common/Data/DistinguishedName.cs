@@ -191,9 +191,25 @@ public class DistinguishedName
             switch (currentChar)
             {
                 case escapeChar:
-                    // Skip the next char if not at the end of the string:
-                    if (i < dn.Length - 1)
+                    if (i + 2 < dn.Length && IsHexDigit(dn[i + 1]) && IsHexDigit(dn[i + 2]))
                     {
+                        // RFC 4514 hex-pair escape (\XX). Consecutive \XX pairs form a UTF-8
+                        // byte sequence and must be decoded together to handle multi-byte
+                        // characters (e.g. \C3\B6 → "ö").
+                        var bytes = new List<byte>(2);
+                        do
+                        {
+                            bytes.Add((byte)((HexValue(dn[i + 1]) << 4) | HexValue(dn[i + 2])));
+                            i += 3;
+                        }
+                        while (i + 2 < dn.Length && dn[i] == escapeChar && IsHexDigit(dn[i + 1]) && IsHexDigit(dn[i + 2]));
+                        // The outer for-loop will increment i.
+                        i--;
+                        currentSegment.Append(Encoding.UTF8.GetString(bytes.ToArray()));
+                    }
+                    else if (i < dn.Length - 1)
+                    {
+                        // Single-character escape (e.g. \, \= \\ \").
                         i++;
                         currentSegment.Append(dn[i]);
                     }
@@ -241,6 +257,18 @@ public class DistinguishedName
         // Add the last segment to the list
         segments.Add(currentSegment.ToString());
         return segments.ToArray();
+    }
+
+    private static bool IsHexDigit(char c)
+    {
+        return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+    }
+
+    private static int HexValue(char c)
+    {
+        if (c <= '9') return c - '0';
+        if (c <= 'F') return c - 'A' + 10;
+        return c - 'a' + 10;
     }
 
     public static string GetDnsNameFromDN(string dn)

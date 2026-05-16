@@ -1,6 +1,6 @@
 {
   "recommendations": [
-    "ms-dotnettools.csharp",
+    "ms-dotnettools.csdevkit",
     "ms-vscode.PowerShell",
     "ms-vscode.cpptools",
     "GitHub.vscode-pull-request-github",

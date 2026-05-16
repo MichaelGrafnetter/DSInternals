@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed a missing `throw` in `SafeUnicodeSecureStringPointer` that silently ignored invalid password byte arrays.
 - Improved SAMR authentication fallback for localhost and missing SPN scenarios.
+- Fixed `Get-ADReplAccount` failure on domains with non-ASCII site names (e.g. German umlauts)
+  caused by over-escaping of distinguished names
+  ([#224](https://github.com/MichaelGrafnetter/DSInternals/issues/224)).
 
 ## [6.4] - 2026-03-28
 

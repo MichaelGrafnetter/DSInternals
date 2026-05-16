@@ -53,16 +53,6 @@ public class DistinguishedNameComponent
                 // Escape control chars
                 result.AppendFormat(CultureInfo.InvariantCulture, "\\{0:X2}", (int)currentChar);
             }
-            else if (currentChar >= 128)
-            {
-                // Escape multibyte chars
-                byte[] bytes = Encoding.UTF8.GetBytes(currentChar.ToString());
-
-                foreach (byte currentByte in bytes)
-                {
-                    result.AppendFormat(CultureInfo.InvariantCulture, "\\{0:X2}", currentByte);
-                }
-            }
             else
             {
                 // Append the char without escaping
