@@ -36,8 +36,10 @@ The DSInternals PowerShell Module has these main features:
 ## Disclaimer
 Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.</description>
     <releaseNotes>
-* Fixed MS-SAMR authentication.
-* Fixed an arithmetic overflow in Test-PasswordQuality when using an empty dictionary file.
+* Added the -UseNamedPipe parameter to the Get-SamPasswordPolicy cmdlet.
+* Improved MS-SAMR authentication fallback for localhost and missing SPN scenarios.
+* Fixed Get-ADReplAccount failure on domains with non-ASCII site names (e.g. German umlauts).
+* Fixed a missing throw in SafeUnicodeSecureStringPointer that silently ignored invalid password byte arrays.
     </releaseNotes>
     <dependencies>
       <!-- Windows Management Framework 5.1+. For OS prior to Windows 10 and Windows Server 2016. -->

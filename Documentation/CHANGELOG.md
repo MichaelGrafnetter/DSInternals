@@ -7,15 +7,19 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+- Nothing yet.
+
+## [6.5] - 2026-05-16
+
 ### Added
 
-- Added the `-UseNamedPipe` parameter to the `Get-SamPasswordPolicy` cmdlet.
+- Added the `-UseNamedPipe` parameter to the [Get-SamPasswordPolicy](PowerShell/Get-SamPasswordPolicy.md#get-sampasswordpolicy) cmdlet.
 
 ### Fixed
 
 - Fixed a missing `throw` in `SafeUnicodeSecureStringPointer` that silently ignored invalid password byte arrays.
 - Improved SAMR authentication fallback for localhost and missing SPN scenarios.
-- Fixed `Get-ADReplAccount` failure on domains with non-ASCII site names (e.g. German umlauts)
+- Fixed [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) failure on domains with non-ASCII site names (e.g. German umlauts)
   caused by over-escaping of distinguished names
   ([#224](https://github.com/MichaelGrafnetter/DSInternals/issues/224)).
 
@@ -725,7 +729,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.4...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.5...HEAD
+[6.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.4...v6.5
 [6.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.3...v6.4
 [6.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.2...v6.3
 [6.2]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.1.1...6.2

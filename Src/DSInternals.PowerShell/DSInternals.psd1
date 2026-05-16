@@ -12,7 +12,7 @@ RootModule = if ($PSEdition -eq 'Core') {
 }
 
 # Version number of this module.
-ModuleVersion = '6.4'
+ModuleVersion = '6.5'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -261,8 +261,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Fixed MS-SAMR authentication.
-- Fixed an arithmetic overflow in Test-PasswordQuality when using an empty dictionary file.
+- Added the -UseNamedPipe parameter to the Get-SamPasswordPolicy cmdlet.
+- Improved MS-SAMR authentication fallback for localhost and missing SPN scenarios.
+- Fixed Get-ADReplAccount failure on domains with non-ASCII site names (e.g. German umlauts).
+- Fixed a missing throw in SafeUnicodeSecureStringPointer that silently ignored invalid password byte arrays.
 "@
     } # End of PSData hashtable
 

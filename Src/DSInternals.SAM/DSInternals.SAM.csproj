@@ -2,11 +2,13 @@
   <PropertyGroup>
     <!-- NuGet package metadata -->
     <IsPackable>true</IsPackable>
-    <Version>6.4</Version>
+    <Version>6.5</Version>
     <AssemblyTitle>DSInternals SAM Library</AssemblyTitle>
     <Title>$(AssemblyTitle)</Title>
     <Description>DSInternals SAM implements a client for the Security Accounts Manager Remote Protocol (MS-SAMR) and Local Security Authority Remote Protocol(MS-LSAD or LSARPC). It can be used to import password hashes into Active Directory or to query and modify LSA Policy.</Description>
-    <PackageReleaseNotes>- Fixed MS-SAMR authentication.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Added optional named pipe (RPC/NP) transport support.
+- Improved MS-SAMR authentication fallback for localhost and missing SPN scenarios.
+- Fixed a missing throw in SafeUnicodeSecureStringPointer that silently ignored invalid password byte arrays.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security RPC SAMR LSARPC AD Identity Active Directory</PackageTags>
     <!-- Create XML documentation file -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
