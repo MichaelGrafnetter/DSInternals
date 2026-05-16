@@ -179,3 +179,6 @@ FakesAssemblies/
 
 # Test Data
 [Tt]est[Dd]ata/
+
+# Claude Code
+.claude/

@@ -7,6 +7,12 @@ namespace DSInternals.Common.Test;
 [TestClass]
 public class LapsTester
 {
+    // The Windows SID key cache API overwrites the entire L0 key file on each write.
+    // All TFM test processes must serialize their write+decrypt sequences to avoid
+    // a process overwriting another's cache entry between WriteToCache() and Decrypt().
+    // Shared with DnsSigningKeyTester because both write to the same on-disk cache.
+    private static readonly Mutex CacheMutex = new Mutex(false, @"Local\DSInternals_SidKeyCache");
+
     [TestMethod]
     public void LAPS_Parse_Encrypted1()
     {
@@ -21,7 +27,16 @@ public class LapsTester
         var rootKeyResolver = new StaticKdsRootKeyResolver(rootKey);
 
         // Try to decrypt the password
-        var lapsInfo = new LapsPasswordInformation("PC01", encryptedLaps, LapsPasswordSource.EncryptedPassword, null, rootKeyResolver);
+        CacheMutex.WaitOne();
+        LapsPasswordInformation lapsInfo;
+        try
+        {
+            lapsInfo = new LapsPasswordInformation("PC01", encryptedLaps, LapsPasswordSource.EncryptedPassword, null, rootKeyResolver);
+        }
+        finally
+        {
+            CacheMutex.ReleaseMutex();
+        }
         Assert.AreEqual(expectedPassword, lapsInfo.Password);
     }
 
@@ -39,9 +54,17 @@ public class LapsTester
 
         // Calculate the group keys and save them to cache
         var gke = GroupKeyEnvelope.Create(rootKey, laps.EncryptedBlob.ProtectionKeyIdentifier, laps.EncryptedBlob.TargetSid);
-        gke.WriteToCache();
-
-        var cleartextLaps = laps.Decrypt();
+        CacheMutex.WaitOne();
+        LapsClearTextPassword? cleartextLaps;
+        try
+        {
+            gke.WriteToCache();
+            cleartextLaps = laps.Decrypt();
+        }
+        finally
+        {
+            CacheMutex.ReleaseMutex();
+        }
         Assert.AreEqual(expectedPassword, cleartextLaps.Password);
     }
 

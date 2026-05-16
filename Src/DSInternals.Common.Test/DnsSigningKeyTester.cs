@@ -9,7 +9,7 @@ public class DnsSigningKeyTester
     // The Windows SID key cache API overwrites the entire L0 key file on each write.
     // All TFM test processes must serialize their write+decrypt sequences to avoid
     // a process overwriting another's cache entry between WriteToCache() and Decrypt().
-    private static readonly Mutex CacheMutex = new Mutex(false, @"Local\DSInternals_DnsSigningKeyTest");
+    private static readonly Mutex CacheMutex = new Mutex(false, @"Local\DSInternals_SidKeyCache");
 
     [TestMethod]
     public void DnsSigningKey_KSK_RSA()
