@@ -113,6 +113,9 @@ Sets NT and LM hashes of an Active Directory or local account through the MS-SAM
 ### [Get-ADSIAccount](Get-ADSIAccount.md#get-adsiaccount)
 Gets all Active Directory user accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.
 
+### [Get-ADSIKdsRootKey](Get-ADSIKdsRootKey.md#get-adsikdsrootkey)
+Reads KDS Root Keys from a domain controller through the LDAP protocol.
+
 ### [Get-LsaBackupKey](Get-LsaBackupKey.md#get-lsabackupkey)
 Reads the DPAPI backup keys from a domain controller through the LSARPC protocol.
 
@@ -254,6 +257,9 @@ Generates a PowerShell script that can be used to restore a domain controller fr
 
 ### [Test-PasswordQuality](Test-PasswordQuality.md#test-passwordquality)
 Performs AD audit, including checks for weak, duplicate, default and empty passwords. Accepts input from the [Get-ADReplAccount](Get-ADReplAccount.md#get-adreplaccount) and [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount) cmdlets.
+
+### [Save-DnsResourceRecord](Save-DnsResourceRecord.md#save-dnsresourcerecord)
+Saves DNS resource records retrieved from Active Directory to one or more DNS zone files.
 
 ### [ConvertTo-Hex](ConvertTo-Hex.md#convertto-hex)
 Helper cmdlet that converts binary input to a hexadecimal string.

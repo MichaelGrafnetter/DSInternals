@@ -5303,7 +5303,7 @@ PC02         caeaa622-6c6a-4d2b-8e33-29e46df659af 782066-216356-283624-291397-40
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>DSInternals.Common.Data.DnsResourceRecord</maml:name>
+          <maml:name>DSInternals.Common.DNS.DnsResourceRecord</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

@@ -149,3 +149,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Get-ADDBServiceAccount](Get-ADDBServiceAccount.md)
 [Get-ADReplKdsRootKey](Get-ADReplKdsRootKey.md)
+[Get-ADSIKdsRootKey](Get-ADSIKdsRootKey.md)

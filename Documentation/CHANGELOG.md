@@ -7,7 +7,14 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
-- Nothing yet.
+### Added
+
+- Added the [Save-DnsResourceRecord](PowerShell/Save-DnsResourceRecord.md#save-dnsresourcerecord) cmdlet for exporting DNS records to zone files.
+- Added the [Get-ADSIKdsRootKey](PowerShell/Get-ADSIKdsRootKey.md#get-adsikdsrootkey) cmdlet for reading KDS root keys from a domain controller through LDAP.
+
+### Fixed
+
+- WKS resource records now emit lowercase `tcp`/`udp` and translate port numbers to IANA service names (e.g. `25` → `smtp`) using the system `services` file, with a fallback to the numeric port.
 
 ## [6.5] - 2026-05-16
 

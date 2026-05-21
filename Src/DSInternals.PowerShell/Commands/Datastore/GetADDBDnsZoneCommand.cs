@@ -1,10 +1,11 @@
 ﻿using System.Management.Automation;
+using DSInternals.Common.DNS;
 using DSInternals.DataStore;
 
 namespace DSInternals.PowerShell.Commands;
 
 [Cmdlet(VerbsCommon.Get, "ADDBDnsZone")]
-[OutputType(typeof(string))]
+[OutputType(typeof(DnsZone))]
 public class GetADDBDnsZoneCommand : ADDBCommandBase
 {
     protected override void BeginProcessing()
@@ -13,7 +14,7 @@ public class GetADDBDnsZoneCommand : ADDBCommandBase
 
         using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
         {
-            foreach (string dnsZone in directoryAgent.GetDnsZone())
+            foreach (DnsZone dnsZone in directoryAgent.GetDnsZones())
             {
                 this.WriteObject(dnsZone);
             }

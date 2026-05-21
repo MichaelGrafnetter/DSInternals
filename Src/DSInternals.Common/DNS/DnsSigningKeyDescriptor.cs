@@ -1,8 +1,8 @@
-﻿using System.Buffers.Binary;
+using System.Buffers.Binary;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace DSInternals.Common.Data;
+namespace DSInternals.Common.DNS;
 
 /// <summary>
 /// Represents a signing key for zone signing and key signing on a DNS server.
@@ -253,8 +253,10 @@ public class DnsSigningKeyDescriptor
         }
 
         // Deserialize the descriptor
-        DnsSigningKeyDescriptor descriptor = new();
-        descriptor.ZoneName = dnsZone;
+        DnsSigningKeyDescriptor descriptor = new()
+        {
+            ZoneName = dnsZone
+        };
 
         if (binaryData.Length < MinimumSize)
         {
@@ -360,7 +362,7 @@ public class DnsSigningKeyDescriptor
 
         if (part2.RevokedOrSwappedRecordCount > 0)
         {
-            // TODO: Read RevokedOrSwappedDnskeys (variable)    
+            // TODO: Read RevokedOrSwappedDnskeys (variable)
         }
 
         if (part2.FinalRecordCount > 0)
@@ -374,6 +376,10 @@ public class DnsSigningKeyDescriptor
     /// <summary>
     /// Partial body of the DNS_RPC_SKD structure.
     /// </summary>
+    /// <remarks>
+    /// SigningAlgorithm occupies a 1-byte field that the SKD encodes in a 4-byte DWORD slot; three private padding bytes
+    /// follow it so that subsequent fields land at their documented offsets under sequential layout.
+    /// </remarks>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     private struct DescriptorPart2
     {
@@ -393,7 +399,19 @@ public class DnsSigningKeyDescriptor
         /// <summary>
         /// The cryptographic algorithm used to generate signing keys.
         /// </summary>
+        /// <remarks>
+        /// Stored as a DWORD in the SKD structure even though only the low byte carries the algorithm identifier;
+        /// the three <see cref="_signingAlgorithmHighByte1"/>/<see cref="_signingAlgorithmHighByte2"/>/<see cref="_signingAlgorithmHighByte3"/> fields reserve the remaining three bytes of that slot.
+        /// </remarks>
         public DnsSigningAlgorithm SigningAlgorithm;
+
+#pragma warning disable IDE0044 // Add readonly modifier — these fields preserve the DWORD slot for marshaling.
+#pragma warning disable CS0169  // Field is never used — these fields are read by MemoryMarshal.
+        private byte _signingAlgorithmHighByte1;
+        private byte _signingAlgorithmHighByte2;
+        private byte _signingAlgorithmHighByte3;
+#pragma warning restore CS0169
+#pragma warning restore IDE0044
 
         /// <summary>
         /// The length, in bits, of cryptographic signing keys.

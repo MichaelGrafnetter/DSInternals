@@ -151,6 +151,7 @@ public static class CommonDirectoryAttributes
     public const string WindowsLapsCurrentPasswordVersion = "msLAPS-CurrentPasswordVersion";
     public const string DnsRecord = "dnsRecord";
     public const string DnsTombstoned = "dNSTombstoned";
+    public const string DnsIsSigned = "msDNS-IsSigned";
     public const string DnsSigningKeys = "msDNS-SigningKeys";
 
     public static AttributeType? Translate(string ldapDisplayName)

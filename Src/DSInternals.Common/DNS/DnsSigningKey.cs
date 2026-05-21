@@ -2,8 +2,15 @@ using System.Runtime.InteropServices;
 using System.Text;
 using DSInternals.Common.Cryptography.Asn1.DpapiNg;
 
-namespace DSInternals.Common.Data;
+namespace DSInternals.Common.DNS;
 
+/// <summary>
+/// Represents a DNSSEC signing key extracted from an Active Directory-integrated DNS zone.
+/// </summary>
+/// <remarks>
+/// Wraps the Exported Key Pair structure used to persist a Zone Signing Key (ZSK)
+/// on the DNS zone object in Active Directory, with the private key material protected by DPAPI-NG.
+/// </remarks>
 public class DnsSigningKey
 {
     private static readonly int GuidSize = Marshal.SizeOf<Guid>();
@@ -11,13 +18,33 @@ public class DnsSigningKey
     private const uint ExpectedReserved1 = 0x00000010; // Documentation says 0x00000014, which is wrong.
     private const uint ExpectedReserved2 = 0x4B545250; // 'PRTK' in ASCII (Magic)
 
+    /// <summary>
+    /// The name of the DNS zone to which this signing key belongs.
+    /// </summary>
     public string DnsZone { get; private set; }
+
+    /// <summary>
+    /// The unique identifier of the signing key.
+    /// </summary>
     public Guid Guid { get; private set; }
 
+    /// <summary>
+    /// The name of the cryptographic algorithm associated with the key (e.g. <c>RSA</c>, <c>ECDSA_P256</c>, or <c>ECDSA_P384</c>).
+    /// </summary>
     public string AlgorithmName { get; private set; }
 
+    /// <summary>
+    /// The DPAPI-NG-protected blob containing the private key material.
+    /// </summary>
     public CngProtectedDataBlob ProtectedKeyBlob { get; private set; }
 
+    /// <summary>
+    /// Deserializes a DNS signing key from the specified binary data.
+    /// </summary>
+    /// <param name="dnsZone">The name of the DNS zone to which the key belongs.</param>
+    /// <param name="binaryData">The raw binary representation of the signing key.</param>
+    /// <returns>A populated <see cref="DnsSigningKey"/> instance.</returns>
+    /// <exception cref="ArgumentException">Thrown when the binary data is malformed or has an unexpected size or signature.</exception>
     public static DnsSigningKey Decode(string dnsZone, ReadOnlySpan<byte> binaryData)
     {
         if (binaryData.Length < GuidSize + ExportedKeyPairHeaderSize)

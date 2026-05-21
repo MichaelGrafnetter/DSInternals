@@ -2,6 +2,7 @@
   <PropertyGroup>
     <Version>6.5</Version>
     <AssemblyTitle>DSInternals ADSI Library</AssemblyTitle>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -13,5 +14,12 @@
     <PackageReference Include="System.DirectoryServices" Condition="'$(TargetFramework)' != 'net48'" />
     <!-- Do not use packages for assemblies that are part of .NET Framework -->
     <Reference Include="System.DirectoryServices" Condition="'$(TargetFramework)' == 'net48'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Group partial class C# files -->
+    <Compile Update="AdsiClient.*.cs">
+      <DependentUpon>AdsiClient.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

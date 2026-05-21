@@ -1,6 +1,7 @@
-﻿using System.Management.Automation;
+using System.Management.Automation;
 using System.Net;
 using DSInternals.ADSI;
+using DSInternals.Common.Data;
 
 namespace DSInternals.PowerShell.Commands;
 public abstract class ADSICommandBase : PSCmdlet, IDisposable
@@ -24,6 +25,14 @@ public abstract class ADSICommandBase : PSCmdlet, IDisposable
     }
 
     #endregion Parameters
+
+    /// <summary>
+    /// When overridden in a derived cmdlet, supplies an explicit set of KDS root keys that
+    /// replaces the default LDAP-based resolver used by the <see cref="AdsiClient"/>.
+    /// Returns <c>null</c> by default, leaving the client's resolver unchanged.
+    /// </summary>
+    protected virtual KdsRootKey[]? KdsRootKeysOverride => null;
+
     protected AdsiClient Client
     {
         get;
@@ -42,7 +51,7 @@ public abstract class ADSICommandBase : PSCmdlet, IDisposable
             // Convert PSCredential to NetworkCredential
             netCredential = this.Credential.GetNetworkCredential();
         }
-        this.Client = new AdsiClient(this.Server, netCredential);
+        this.Client = new AdsiClient(this.Server, netCredential, this.KdsRootKeysOverride);
     }
 
     #endregion Cmdlet Overrides

@@ -1,4 +1,4 @@
-﻿namespace DSInternals.Common.Data;
+namespace DSInternals.Common.DNS;
 
 /// <summary>
 /// Defines the current state of a signing key descriptor.

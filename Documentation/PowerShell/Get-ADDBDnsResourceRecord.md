@@ -30,26 +30,26 @@ PS C:\> Get-ADDBDnsResourceRecord -DatabasePath 'C:\IFM Backup\Active Directory\
             Where-Object Type -in SOA,NS,A,CNAME,MX,CNAME |
             Sort-Object -Property Name
 <# Sample Output:
-@                               3600  IN  SOA   dc01.contoso.com. hostmaster.contoso.com. (
+@                                     IN  SOA   dc01.contoso.com. hostmaster.contoso.com. (
                                                 186          ; serial number
                                                 900          ; refresh
                                                 600          ; retry
                                                 86400        ; expire
                                                 3600       ) ; default TTL
-@                               3600  IN  NS    dc01.contoso.com.
-@                               3600  IN  NS    dc02.contoso.com.
-@                               600   IN  A     10.213.0.3
-@                               600   IN  A     10.213.0.9
-_msdcs                          3600  IN  NS    dc01.contoso.com.
-certauth.login                  3600  IN  A     10.213.0.4
-dc01                            3600  IN  A     10.213.0.3
-dc02                            3600  IN  A     10.213.0.9
-DomainDnsZones                  600   IN  A     10.213.0.9
-DomainDnsZones                  600   IN  A     10.213.0.3
-ForestDnsZones                  600   IN  A     10.213.0.9
-ForestDnsZones                  600   IN  A     10.213.0.3
-ftp                             3600  IN  CNAME www
-login                           3600  IN  A     10.213.0.4
+@                                         NS    dc01.contoso.com.
+@                                         NS    dc02.contoso.com.
+@                               600       A     10.213.0.3
+@                               600       A     10.213.0.9
+_msdcs                                    NS    dc01.contoso.com.
+certauth.login                            A     10.213.0.4
+dc01                                      A     10.213.0.3
+dc02                                      A     10.213.0.9
+DomainDnsZones                  600       A     10.213.0.9
+DomainDnsZones                  600       A     10.213.0.3
+ForestDnsZones                  600       A     10.213.0.9
+ForestDnsZones                  600       A     10.213.0.3
+ftp                                       CNAME www
+login                                     A     10.213.0.4
 #>
 ```
 
@@ -126,11 +126,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### DSInternals.Common.Data.DnsResourceRecord
+### DSInternals.Common.DNS.DnsResourceRecord
 
 ## NOTES
 
 ## RELATED LINKS
 
 [Get-ADDBDnsZone](Get-ADDBDnsZone.md)
+[Save-DnsResourceRecord](Save-DnsResourceRecord.md)
 [Get-ADDBDomainController](Get-ADDBDomainController.md)

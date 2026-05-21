@@ -121,3 +121,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Get-ADDBKdsRootKey](Get-ADDBKdsRootKey.md)
+[Get-ADSIKdsRootKey](Get-ADSIKdsRootKey.md)

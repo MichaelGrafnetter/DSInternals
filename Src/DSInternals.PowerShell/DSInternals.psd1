@@ -110,6 +110,9 @@ CmdletsToExport = @(
     'Get-ADDBKdsRootKey',
     'Get-SamPasswordPolicy',
     'Get-ADSIAccount',
+    'Get-ADSIDnsServerResourceRecord',
+    'Get-ADSIDnsServerZone',
+    'Get-ADSIKdsRootKey',
     'Enable-ADDBAccount',
     'Disable-ADDBAccount',
     'Get-ADKeyCredential',
@@ -125,6 +128,7 @@ CmdletsToExport = @(
     'Get-ADDBDnsResourceRecord',
     'Get-ADDBDnsZone',
     'Set-ADDBAccountControl',
+    'Save-DnsResourceRecord',
     'Get-ADDBTrust'
     # Intentionally excluded: 'Add-ADDBSidHistory'
 )
@@ -173,7 +177,8 @@ AliasesToExport = @(
     'Get-ADDBDelegatedManagedServiceAccount',
     'Get-ADDBFVERecoveryInformation',
     'Get-ADDBFVERecoveryInfo',
-    'Get-ADDBDnsRecord'
+    'Get-ADDBDnsRecord',
+    'Get-ADSIDnsServerRecord'
 )
 
 # List of assemblies that must be loaded prior to importing this module

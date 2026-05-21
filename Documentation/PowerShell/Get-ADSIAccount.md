@@ -13,8 +13,8 @@ Gets all Active Directory user accounts from a given domain controller using ADS
 ## SYNTAX
 
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-Server <String>] [-Credential <PSCredential>]
- [<CommonParameters>]
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] [-Server <String>]
+ [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,6 +57,21 @@ Specifies a user account to use when connecting to the target domain controller.
 Type: PSCredential
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -KdsRootKeys
+Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.
+
+```yaml
+Type: KdsRootKey[]
+Parameter Sets: (All)
+Aliases: KdsRootKey, RootKey, RootKeys
 
 Required: False
 Position: Named

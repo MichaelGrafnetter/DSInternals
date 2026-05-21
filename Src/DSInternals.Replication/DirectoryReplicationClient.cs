@@ -55,60 +55,24 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     private RpcBinding _rpcBinding;
     private DrsConnection _drsConnection;
     private IKdsRootKeyResolver _rootKeyResolver;
-    private string _domainNamingContext;
-    private string _netBIOSDomainName;
-    private string[] _namingContexts;
+    private readonly Lazy<(string DomainNamingContext, string NetBIOSDomainName)> _domainInfo;
+    private readonly Lazy<string[]> _namingContexts;
+    private readonly Lazy<DirectorySecretDecryptor> _secretDecryptor;
 
     /// <summary>
     /// The domain naming context of the connected server.
     /// </summary>
-    public string DomainNamingContext
-    {
-        get
-        {
-            if (_domainNamingContext == null)
-            {
-                // Lazy loading
-                this.LoadDomainInfo();
-            }
-
-            return _domainNamingContext;
-        }
-    }
+    public string DomainNamingContext => _domainInfo.Value.DomainNamingContext;
 
     /// <summary>
     /// The NetBIOS domain name of the connected server.
     /// </summary>
-    public string NetBIOSDomainName
-    {
-        get
-        {
-            if (_netBIOSDomainName == null)
-            {
-                // Lazy loading
-                this.LoadDomainInfo();
-            }
-
-            return _netBIOSDomainName;
-        }
-    }
+    public string NetBIOSDomainName => _domainInfo.Value.NetBIOSDomainName;
 
     /// <summary>
     /// The naming contexts (partitions) hosted by the connected server.
     /// </summary>
-    public string[] NamingContexts
-    {
-        get
-        {
-            if (_namingContexts == null)
-            {
-                // Lazy loading
-                _namingContexts = this._drsConnection.ListNamingContexts();
-            }
-
-            return _namingContexts;
-        }
-    }
+    public string[] NamingContexts => _namingContexts.Value;
 
     /// <summary>
     /// The configuration naming context of the connected server.
@@ -153,6 +117,11 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
 
         // The replication client can fetch root keys. Cache them for performance.
         this._rootKeyResolver = new KdsRootKeyCache(this);
+
+        // Lazily fetch domain info, naming contexts, and the secret decryptor on first access.
+        this._domainInfo = new Lazy<(string, string)>(this.LoadDomainInfo);
+        this._namingContexts = new Lazy<string[]>(() => this._drsConnection.ListNamingContexts());
+        this._secretDecryptor = new Lazy<DirectorySecretDecryptor>(() => new ReplicationSecretDecryptor(this._drsConnection.SessionKey));
     }
 
     /// <summary>
@@ -178,7 +147,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
         ArgumentException.ThrowIfNullOrWhiteSpace(domainNamingContext);
 
         return ReplicateAllObjects(domainNamingContext, progressReporter)
-            .Select(dsObject => AccountFactory.CreateAccount(dsObject, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets))
+            .Select(dsObject => AccountFactory.CreateAccount(dsObject, this.NetBIOSDomainName, _secretDecryptor.Value, _rootKeyResolver, propertySets))
             .Where(account => account != null); // CreateAccount returns null for other object types
     }
 
@@ -228,7 +197,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     public DSAccount GetAccount(Guid objectGuid, AccountPropertySets propertySets = AccountPropertySets.All)
     {
         ReplicaObject obj = this._drsConnection.ReplicateSingleObject(objectGuid);
-        var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets);
+        var account = AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, _secretDecryptor.Value, _rootKeyResolver, propertySets);
 
         if (account == null)
         {
@@ -249,7 +218,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     public DSAccount GetAccount(string distinguishedName, AccountPropertySets propertySets = AccountPropertySets.All)
     {
         ReplicaObject obj = this._drsConnection.ReplicateSingleObject(distinguishedName);
-        return AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, this.SecretDecryptor, _rootKeyResolver, propertySets) ??
+        return AccountFactory.CreateAccount(obj, this.NetBIOSDomainName, _secretDecryptor.Value, _rootKeyResolver, propertySets) ??
             throw new DirectoryObjectOperationException("The object is not an account.", distinguishedName);
     }
 
@@ -342,7 +311,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     private DPAPIBackupKey GetLSASecret(string distinguishedName)
     {
         var secretObj = this._drsConnection.ReplicateSingleObject(distinguishedName);
-        return new DPAPIBackupKey(secretObj, this.SecretDecryptor);
+        return new DPAPIBackupKey(secretObj, _secretDecryptor.Value);
     }
 
     /// <summary>
@@ -522,18 +491,6 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     }
 
     /// <summary>
-    /// Gets the secret decryptor used to decrypt sensitive attributes.
-    /// </summary>
-    private DirectorySecretDecryptor SecretDecryptor
-    {
-        get
-        {
-            // TODO: Cache the decryptor
-            return new ReplicationSecretDecryptor(this._drsConnection.SessionKey);
-        }
-    }
-
-    /// <summary>
     /// Releases all resources used by the <see cref="DirectoryReplicationClient"/>.
     /// </summary>
     public void Dispose()
@@ -569,7 +526,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     /// <summary>
     /// Loads the domain naming context and NetBIOS domain name of the connected server.
     /// </summary>
-    private void LoadDomainInfo()
+    private (string DomainNamingContext, string NetBIOSDomainName) LoadDomainInfo()
     {
         // These is no direct way of retrieving current DC's domain info, so we are using a combination of 3 calls.
 
@@ -584,11 +541,13 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
         string pdcAccountDN = pdcInfo.ServerReference;
 
         // Get the PDC Emulator's domain naming context.
-        _domainNamingContext = new DistinguishedName(pdcAccountDN).RootNamingContext.ToString();
+        string domainNamingContext = new DistinguishedName(pdcAccountDN).RootNamingContext.ToString();
 
         // Get the PDC Emulator's NetBIOS account name and extract the domain part.
         NTAccount pdcAccount = _drsConnection.ResolveAccountName(pdcAccountDN);
-        _netBIOSDomainName = pdcAccount.NetBIOSDomainName();
+        string netBIOSDomainName = pdcAccount.NetBIOSDomainName();
+
+        return (domainNamingContext, netBIOSDomainName);
     }
 
     #region IKdsRootKeyResolver

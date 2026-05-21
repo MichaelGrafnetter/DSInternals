@@ -1,4 +1,4 @@
-﻿namespace DSInternals.Common.Data;
+namespace DSInternals.Common.DNS;
 
 /// <summary>
 /// Specifies possible key rollover types for a signing key descriptor.

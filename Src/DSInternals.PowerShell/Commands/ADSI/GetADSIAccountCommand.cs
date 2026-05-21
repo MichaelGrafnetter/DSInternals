@@ -1,4 +1,4 @@
-﻿
+
 using System.Management.Automation;
 using DSInternals.Common.Data;
 
@@ -16,9 +16,20 @@ public class GetADSIAccountCommand : ADSICommandBase
         set;
     } = AccountPropertySets.All;
 
+    [Parameter(Mandatory = false)]
+    [ValidateNotNullOrEmpty]
+    [Alias("KdsRootKey", "RootKey", "RootKeys")]
+    public KdsRootKey[]? KdsRootKeys
+    {
+        get;
+        set;
+    }
+
+    protected override KdsRootKey[]? KdsRootKeysOverride => this.KdsRootKeys;
+
     protected override void ProcessRecord()
     {
-        foreach (var account in this.Client.GetAccounts(this.Properties))
+        foreach (DSAccount account in this.Client.GetAccounts(this.Properties))
         {
             this.WriteObject(account);
         }

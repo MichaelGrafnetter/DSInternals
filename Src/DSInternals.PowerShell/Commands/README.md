@@ -288,8 +288,21 @@ classDiagram
     }
     class GetADSIAccountCommand {
         +Properties : AccountPropertySets
+        +KdsRootKeys : KdsRootKey[]
     }
+    class GetADSIKdsRootKeyCommand {
+        +RootKeyId : Guid
+        +All : SwitchParameter
+    }
+    class GetADSIDnsServerResourceRecordCommand {
+        +IncludeTombstones : SwitchParameter
+        +IncludeRootHints : SwitchParameter
+    }
+    class GetADSIDnsServerZoneCommand
     ADSICommandBase <|-- GetADSIAccountCommand
+    ADSICommandBase <|-- GetADSIKdsRootKeyCommand
+    ADSICommandBase <|-- GetADSIDnsServerResourceRecordCommand
+    ADSICommandBase <|-- GetADSIDnsServerZoneCommand
 ```
 
 ## LSA Commands

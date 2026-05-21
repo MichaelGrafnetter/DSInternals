@@ -1,4 +1,5 @@
 ﻿using DSInternals.Common.Data;
+using DSInternals.Common.DNS;
 using DSInternals.Common.Schema;
 
 namespace DSInternals.DataStore;
@@ -68,7 +69,7 @@ public partial class DirectoryAgent : IDisposable
         }
     }
 
-    public IEnumerable<string> GetDnsZone()
+    public IEnumerable<DnsZone> GetDnsZones()
     {
         DNTag? dnsZoneCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsZone);
 
@@ -84,7 +85,7 @@ public partial class DirectoryAgent : IDisposable
 
             if (fqdn != RootHintsZoneName && fqdn != TrustAnchorsZoneName)
             {
-                yield return fqdn;
+                yield return DnsZone.Create(zone);
             }
         }
     }

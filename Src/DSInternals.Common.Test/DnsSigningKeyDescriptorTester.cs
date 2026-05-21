@@ -1,4 +1,4 @@
-using DSInternals.Common.Data;
+using DSInternals.Common.DNS;
 
 namespace DSInternals.Common.Test;
 

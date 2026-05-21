@@ -15,104 +15,74 @@ public class AdsiObjectAdapter : DirectoryObject
         this.directoryEntry = directoryEntry;
     }
 
-    public override string DistinguishedName
-    {
-        get
-        {
-            return this.ReadAttributeSingle<string>(CommonDirectoryAttributes.DistinguishedName);
-        }
-    }
+    /// <summary>
+    /// Gets the distinguished name of the object.
+    /// </summary>
+    /// <remarks>All AD objects should have a distinguished name, so this property is expected to always return a non-null value.</remarks>
+    public override string DistinguishedName => this.ReadAttributeSingle<string>(CommonDirectoryAttributes.DistinguishedName) ?? throw new InvalidOperationException("Could not read the distinguished name.");
 
+    /// <summary>
+    /// Gets the GUID of the object.
+    /// </summary>
+    /// <remarks>All AD objects should have a GUID, so this property is expected to always return a non-empty value.</remarks>
     public override Guid Guid
     {
         get
         {
-            Guid? guid;
-            this.ReadAttribute(CommonDirectoryAttributes.ObjectGuid, out guid);
-            return guid.Value;
+            this.ReadAttribute(CommonDirectoryAttributes.ObjectGuid, out Guid? guid);
+            return guid ?? throw new InvalidOperationException("Could not read the object GUID.");
         }
     }
 
-    public override SecurityIdentifier Sid
+    public override SecurityIdentifier? Sid
     {
         get
         {
-            SecurityIdentifier sid;
-            this.ReadAttribute(CommonDirectoryAttributes.ObjectSid, out sid);
+            this.ReadAttribute(CommonDirectoryAttributes.ObjectSid, out SecurityIdentifier? sid);
             return sid;
         }
     }
 
-    protected override bool HasBigEndianRid
-    {
-        get
-        {
-            return false;
-        }
-    }
+    protected override bool HasBigEndianRid => false;
 
-    public override bool HasAttribute(string name)
-    {
-        return this.directoryEntry.Properties.Contains(name);
-    }
+    public override bool HasAttribute(string name) => this.directoryEntry.Properties.Contains(name);
 
-    public override void ReadAttribute(string name, out byte[] value)
-    {
-        value = this.ReadAttributeSingle<byte[]>(name);
-    }
+    public override void ReadAttribute(string name, out byte[]? value) => value = this.ReadAttributeSingle<byte[]>(name);
 
-    public override void ReadAttribute(string name, out byte[][] value)
-    {
-        value = this.ReadAttributeMulti<byte[]>(name);
-    }
+    public override void ReadAttribute(string name, out byte[][]? value) => value = this.ReadAttributeMulti<byte[]>(name);
 
-    public override void ReadAttribute(string name, out int? value)
-    {
-        value = this.ReadAttributeSingle<int?>(name);
-    }
+    public override void ReadAttribute(string name, out int? value) => value = this.ReadAttributeSingle<int?>(name);
 
-    public override void ReadAttribute(string name, out long? value)
-    {
-        value = this.ReadAttributeSingle<long?>(name);
-    }
+    public override void ReadAttribute(string name, out long? value) => value = this.ReadAttributeSingle<long?>(name);
 
-    public override void ReadAttribute(string name, out string value, bool unicode = true)
-    {
-        // Unicode vs. IA5 strings are handled by ADSI itself.
-        value = this.ReadAttributeSingle<string>(name);
-    }
+    // Unicode vs. IA5 strings are handled by ADSI itself.
+    public override void ReadAttribute(string name, out string? value, bool unicode = true) => value = this.ReadAttributeSingle<string>(name);
 
-    public override void ReadAttribute(string name, out string[] values, bool unicode = true)
-    {
-        // Unicode vs. IA5 strings are handled by ADSI itself.
-        values = this.ReadAttributeMulti<string>(name);
-    }
+    // Unicode vs. IA5 strings are handled by ADSI itself.
+    public override void ReadAttribute(string name, out string[]? values, bool unicode = true) => values = this.ReadAttributeMulti<string>(name);
 
     public override void ReadAttribute(string name, out DistinguishedName value)
     {
-        string dnString = this.ReadAttributeSingle<string>(name);
+        string? dnString = this.ReadAttributeSingle<string>(name);
         value = new DistinguishedName(dnString);
     }
 
-    public override void ReadLinkedValues(string attributeName, out byte[][] values)
+    public override void ReadLinkedValues(string attributeName, out byte[][]? values)
     {
         // Parse the DN with binary value
-        string[] textValues = this.ReadAttributeMulti<string>(attributeName);
-        values = textValues?.Select(textValue => DNWithBinary.Parse(textValue).Binary).ToArray();
+        string[]? textValues = this.ReadAttributeMulti<string>(attributeName);
+        values = textValues?.Select(textValue => DNWithBinary.Parse(textValue).Binary)?.ToArray();
     }
 
-    protected TResult ReadAttributeSingle<TResult>(string name)
-    {
-        return this.directoryEntry.Properties[name].Cast<TResult>().FirstOrDefault();
-    }
+    protected TResult? ReadAttributeSingle<TResult>(string name) => this.directoryEntry.Properties[name].Cast<TResult>().FirstOrDefault();
 
-    protected TResult[] ReadAttributeMulti<TResult>(string name)
+    protected TResult[]? ReadAttributeMulti<TResult>(string name)
     {
         var result = this.directoryEntry.Properties[name].Cast<TResult>().ToArray();
-        if (result != null && result.Length == 0)
+        if (result.Length == 0)
         {
             // We do not want to return an empty array.
-            result = null;
+            return null;
         }
         return result;
     }
