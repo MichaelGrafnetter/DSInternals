@@ -1,6 +1,7 @@
 using System.DirectoryServices;
 using System.DirectoryServices.ActiveDirectory;
 using System.Net;
+using System.Text;
 using DSInternals.Common;
 using DSInternals.Common.Data;
 using DSInternals.Common.Schema;
@@ -179,4 +180,35 @@ public sealed partial class AdsiClient : IDisposable
         return currentEntry;
     }
 
+    /// <summary>
+    /// Escapes a string so that it can be safely embedded as an assertion value in an LDAP search filter,
+    /// per the encoding rules defined in RFC 4515 section 3.
+    /// </summary>
+    /// <remarks>
+    /// The characters <c>\</c>, <c>*</c>, <c>(</c>, <c>)</c>, and the NUL character are replaced with their
+    /// backslash-prefixed two-digit hexadecimal representation. All other characters are passed through unchanged.
+    /// Use this method on any caller-supplied value that is concatenated into an LDAP filter string in order to
+    /// prevent LDAP injection.
+    /// </remarks>
+    /// <param name="value">The value to be embedded into an LDAP filter assertion. Cannot be <see langword="null"/>.</param>
+    /// <returns>The escaped representation of <paramref name="value"/>, safe for inclusion in an LDAP filter.</returns>
+    public static string EscapeLdapFilterString(string value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        var sb = new StringBuilder(value.Length);
+        foreach (char c in value)
+        {
+            switch (c)
+            {
+                case '\\': sb.Append("\\5c"); break;
+                case '*': sb.Append("\\2a"); break;
+                case '(': sb.Append("\\28"); break;
+                case ')': sb.Append("\\29"); break;
+                case '\0': sb.Append("\\00"); break;
+                default: sb.Append(c); break;
+            }
+        }
+        return sb.ToString();
+    }
 }

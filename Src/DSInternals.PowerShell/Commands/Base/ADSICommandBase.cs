@@ -4,7 +4,7 @@ using DSInternals.ADSI;
 using DSInternals.Common.Data;
 
 namespace DSInternals.PowerShell.Commands;
-public abstract class ADSICommandBase : PSCmdlet, IDisposable
+public abstract class ADSICommandBase : PSCmdletEx, IDisposable
 {
     #region Parameters
     [Parameter(Mandatory = false)]

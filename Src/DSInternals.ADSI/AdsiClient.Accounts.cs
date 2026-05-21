@@ -1,5 +1,8 @@
 using System.DirectoryServices;
+using System.Globalization;
+using System.Security.Principal;
 using DSInternals.Common.Data;
+using DSInternals.Common.Exceptions;
 using DSInternals.Common.Schema;
 
 namespace DSInternals.ADSI;
@@ -7,6 +10,11 @@ namespace DSInternals.ADSI;
 public sealed partial class AdsiClient
 {
     private const string AccountsFilter = "(objectClass=user)";
+    private const string AccountBySamAccountNameFilterFormat = "(&(objectClass=user)(sAMAccountName={0}))";
+    private const string AccountByUserPrincipalNameFilterFormat = "(&(objectClass=user)(userPrincipalName={0}))";
+    private const string AccountByObjectGuidFilterFormat = "(&(objectClass=user)(objectGUID={0}))";
+    private const string AccountByObjectSidFilterFormat = "(&(objectClass=user)(objectSid={0}))";
+    private const string AccountByDistinguishedNameFilterFormat = "(&(objectClass=user)(distinguishedName={0}))";
 
     /// <summary>
     /// Retrieves a collection of directory service accounts with properties specified by the provided property sets.
@@ -20,7 +28,136 @@ public sealed partial class AdsiClient
     /// The collection will be empty if no accounts are found.</returns>
     public IEnumerable<DSAccount> GetAccounts(AccountPropertySets propertySets = AccountPropertySets.All)
     {
-        // Not all property sets work as secret attributes are never sent ove LDAP.
+        string[] propertiesToLoad = BuildAccountPropertiesToLoad(propertySets);
+
+        using DirectorySearcher accountSearcher = new(_domainNamingContext, AccountsFilter, propertiesToLoad, SearchScope.Subtree);
+        using SearchResultCollection searchResults = accountSearcher.FindAll();
+
+        foreach (SearchResult searchResult in searchResults)
+        {
+            var account = CreateAccount(searchResult, propertySets);
+
+            if (account != null)
+            {
+                yield return account;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Retrieves a single directory service account identified by its sAMAccountName.
+    /// </summary>
+    /// <param name="samAccountName">The sAMAccountName of the account to retrieve.</param>
+    /// <param name="propertySets">A set of flags that determines which groups of account properties to include in the result.</param>
+    /// <returns>A <see cref="DSAccount"/> object representing the matched account.</returns>
+    /// <exception cref="DirectoryObjectNotFoundException">Thrown when no account with the specified identifier is found.</exception>
+    /// <exception cref="DirectoryObjectOperationException">Thrown when the matched object is not a security principal.</exception>
+    public DSAccount GetAccount(string samAccountName, AccountPropertySets propertySets = AccountPropertySets.All)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(samAccountName);
+
+        string filter = string.Format(CultureInfo.InvariantCulture, AccountBySamAccountNameFilterFormat, EscapeLdapFilterString(samAccountName));
+        return FindSingleAccount(filter, samAccountName, propertySets);
+    }
+
+    /// <summary>
+    /// Retrieves a single directory service account identified by its userPrincipalName.
+    /// </summary>
+    /// <param name="userPrincipalName">The user principal name (UPN) of the account to retrieve.</param>
+    /// <param name="propertySets">A set of flags that determines which groups of account properties to include in the result.</param>
+    /// <returns>A <see cref="DSAccount"/> object representing the matched account.</returns>
+    /// <exception cref="DirectoryObjectNotFoundException">Thrown when no account with the specified identifier is found.</exception>
+    /// <exception cref="DirectoryObjectOperationException">Thrown when the matched object is not a security principal.</exception>
+    public DSAccount GetAccountByUpn(string userPrincipalName, AccountPropertySets propertySets = AccountPropertySets.All)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(userPrincipalName);
+
+        string filter = string.Format(CultureInfo.InvariantCulture, AccountByUserPrincipalNameFilterFormat, EscapeLdapFilterString(userPrincipalName));
+        return FindSingleAccount(filter, userPrincipalName, propertySets);
+    }
+
+    /// <summary>
+    /// Retrieves a single directory service account identified by its objectGUID.
+    /// </summary>
+    /// <param name="objectGuid">The objectGUID of the account to retrieve.</param>
+    /// <param name="propertySets">A set of flags that determines which groups of account properties to include in the result.</param>
+    /// <returns>A <see cref="DSAccount"/> object representing the matched account.</returns>
+    /// <exception cref="DirectoryObjectNotFoundException">Thrown when no account with the specified identifier is found.</exception>
+    /// <exception cref="DirectoryObjectOperationException">Thrown when the matched object is not a security principal.</exception>
+    public DSAccount GetAccount(Guid objectGuid, AccountPropertySets propertySets = AccountPropertySets.All)
+    {
+        // Guid.ToString("D") only produces hex digits and hyphens, so no LDAP filter escaping is required.
+        string filter = string.Format(CultureInfo.InvariantCulture, AccountByObjectGuidFilterFormat, objectGuid.ToString("D"));
+        return FindSingleAccount(filter, objectGuid, propertySets);
+    }
+
+    /// <summary>
+    /// Retrieves a single directory service account identified by its objectSid.
+    /// </summary>
+    /// <param name="objectSid">The security identifier (SID) of the account to retrieve.</param>
+    /// <param name="propertySets">A set of flags that determines which groups of account properties to include in the result.</param>
+    /// <returns>A <see cref="DSAccount"/> object representing the matched account.</returns>
+    /// <exception cref="DirectoryObjectNotFoundException">Thrown when no account with the specified identifier is found.</exception>
+    /// <exception cref="DirectoryObjectOperationException">Thrown when the matched object is not a security principal.</exception>
+    public DSAccount GetAccount(SecurityIdentifier objectSid, AccountPropertySets propertySets = AccountPropertySets.All)
+    {
+        ArgumentNullException.ThrowIfNull(objectSid);
+
+        // SecurityIdentifier.Value produces an SDDL string ("S-1-5-..."), so no LDAP filter escaping is required.
+        string filter = string.Format(CultureInfo.InvariantCulture, AccountByObjectSidFilterFormat, objectSid.Value);
+        return FindSingleAccount(filter, objectSid, propertySets);
+    }
+
+    /// <summary>
+    /// Retrieves a single directory service account identified by its distinguished name.
+    /// </summary>
+    /// <param name="distinguishedName">The distinguished name of the account to retrieve.</param>
+    /// <param name="propertySets">A set of flags that determines which groups of account properties to include in the result.</param>
+    /// <returns>A <see cref="DSAccount"/> object representing the matched account.</returns>
+    /// <exception cref="DirectoryObjectNotFoundException">Thrown when no account with the specified identifier is found.</exception>
+    /// <exception cref="DirectoryObjectOperationException">Thrown when the matched object is not a security principal.</exception>
+    public DSAccount GetAccount(DistinguishedName distinguishedName, AccountPropertySets propertySets = AccountPropertySets.All)
+    {
+        ArgumentNullException.ThrowIfNull(distinguishedName);
+
+        string dnString = distinguishedName.ToString();
+        string filter = string.Format(CultureInfo.InvariantCulture, AccountByDistinguishedNameFilterFormat, EscapeLdapFilterString(dnString));
+        return FindSingleAccount(filter, dnString, propertySets);
+    }
+
+    private DSAccount FindSingleAccount(string filter, object identifier, AccountPropertySets propertySets)
+    {
+        string[] propertiesToLoad = BuildAccountPropertiesToLoad(propertySets);
+
+        using DirectorySearcher accountSearcher = new(_domainNamingContext, filter, propertiesToLoad, SearchScope.Subtree);
+        accountSearcher.CacheResults = false;
+        SearchResult? searchResult = accountSearcher.FindOne();
+
+        if (searchResult == null)
+        {
+            throw new DirectoryObjectNotFoundException(identifier);
+        }
+
+        var account = CreateAccount(searchResult, propertySets);
+
+        if (account == null)
+        {
+            throw new DirectoryObjectOperationException("The object is not a security principal.", identifier);
+        }
+
+        return account;
+    }
+
+    private DSAccount? CreateAccount(SearchResult searchResult, AccountPropertySets propertySets)
+    {
+        var adsiObject = new AdsiObjectAdapter(searchResult);
+        // Secret attributes are never sent over LDAP, so the pek argument is always null.
+        return AccountFactory.CreateAccount(adsiObject, _netbiosDomainName.Value, pek: null, _kdsRootKeyResolver, propertySets);
+    }
+
+    private static string[] BuildAccountPropertiesToLoad(AccountPropertySets propertySets)
+    {
+        // Not all property sets work as secret attributes are never sent over LDAP.
         List<string> accountPropertiesToLoad = [
             CommonDirectoryAttributes.ServicePrincipalName,
             CommonDirectoryAttributes.ObjectGuid,
@@ -140,21 +277,6 @@ public sealed partial class AdsiClient
             accountPropertiesToLoad.Add(CommonDirectoryAttributes.SecurityDescriptor);
         }
 
-        using (DirectorySearcher accountSearcher = new(_domainNamingContext, AccountsFilter, accountPropertiesToLoad.ToArray(), SearchScope.Subtree))
-        {
-            using (var searchResults = accountSearcher.FindAll())
-            {
-                foreach (SearchResult searchResult in searchResults)
-                {
-                    var adsiObject = new AdsiObjectAdapter(searchResult);
-                    var account = AccountFactory.CreateAccount(adsiObject, _netbiosDomainName.Value, pek: null, _kdsRootKeyResolver, propertySets);
-
-                    if (account != null)
-                    {
-                        yield return account;
-                    }
-                }
-            }
-        }
+        return accountPropertiesToLoad.ToArray();
     }
 }

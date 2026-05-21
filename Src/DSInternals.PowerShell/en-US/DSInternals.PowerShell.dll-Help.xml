@@ -10335,7 +10335,7 @@ icacls.exe C:\Windows\Sysvol\domain\Policies\* /save C:\IFM\SYSVOL\PolicyPermiss
       <command:verb>Save</command:verb>
       <command:noun>DnsResourceRecord</command:noun>
       <maml:description>
-        <maml:para>Saves DNS resource records to DNS zone files.</maml:para>
+        <maml:para>Saves DNS resource records retrieved from Active Directory to one or more DNS zone files.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>

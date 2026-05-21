@@ -1,0 +1,5 @@
+<Project Sdk="MSTest.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\DSInternals.ADSI\DSInternals.ADSI.csproj" />
+  </ItemGroup>
+</Project>

@@ -12,7 +12,8 @@
       "DSInternals.Common.Test\\DSInternals.Common.Test.csproj",
       "DSInternals.DataStore.Test\\DSInternals.DataStore.Test.csproj",
       "DSInternals.Replication.Model.Test\\DSInternals.Replication.Model.Test.csproj",
-      "DSInternals.SAM.Test\\DSInternals.SAM.Test.csproj"
+      "DSInternals.SAM.Test\\DSInternals.SAM.Test.csproj",
+      "DSInternals.ADSI.Test\\DSInternals.ADSI.Test.csproj"
     ]
   }
 }

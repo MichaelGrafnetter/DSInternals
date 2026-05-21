@@ -8,7 +8,7 @@ schema: 2.0.0
 # Save-DnsResourceRecord
 
 ## SYNOPSIS
-Saves DNS resource records to DNS zone files.
+Saves DNS resource records retrieved from Active Directory to one or more DNS zone files.
 
 ## SYNTAX
 

@@ -8,18 +8,49 @@ schema: 2.0.0
 # Get-ADSIAccount
 
 ## SYNOPSIS
-Gets all Active Directory user accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.
+Gets one or more Active Directory accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.
 
 ## SYNTAX
 
+### All (Default)
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] [-Server <String>]
+Get-ADSIAccount [-All] [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] [-Server <String>]
  [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### ByName
+```
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] [-SamAccountName] <String>
+ [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### ByUPN
+```
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] -UserPrincipalName <String>
+ [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### BySID
+```
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] -ObjectSid <SecurityIdentifier>
+ [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### ByDN
+```
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] [-DistinguishedName] <String>
+ [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### ByGuid
+```
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] -ObjectGuid <Guid>
+ [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Gets all Active Directory user accounts from a given domain controller using ADSI/LDAP. Typically used for Credential Roaming data retrieval and NGC key auditing.
+Gets one or more Active Directory accounts from a given domain controller using ADSI/LDAP. Typically used for Credential Roaming data retrieval and NGC key auditing. A single account can be retrieved by specifying its `SamAccountName`, `UserPrincipalName`, `ObjectSid`, `DistinguishedName`, or `ObjectGuid`. When no identifier is supplied, all accounts in the target domain are returned.
 
 ## EXAMPLES
 
@@ -48,7 +79,36 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
 
 Lists weak public keys registered in Active Directory that were generated on ROCA-vulnerable TPMs.
 
+### Example 3
+```powershell
+PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' -SamAccountName 'joe'
+```
+
+Retrieves a single Active Directory user account by its `sAMAccountName` through LDAP.
+
+### Example 4
+```powershell
+PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' -UserPrincipalName 'joe@contoso.com'
+```
+
+Retrieves a single Active Directory user account by its user principal name through LDAP.
+
 ## PARAMETERS
+
+### -All
+Indicates that all accounts will be retrieved from the target domain controller. This is the default behavior when no identifier is specified.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: AllAccounts, ReturnAllAccounts
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Credential
 Specifies a user account to use when connecting to the target domain controller. The default is the current user.
@@ -62,6 +122,21 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DistinguishedName
+Specifies the distinguished name of the account that will be retrieved.
+
+```yaml
+Type: String
+Parameter Sets: ByDN
+Aliases: DN
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -80,6 +155,36 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ObjectGuid
+Specifies the object GUID of the account that will be retrieved.
+
+```yaml
+Type: Guid
+Parameter Sets: ByGuid
+Aliases: Guid
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ObjectSid
+Specifies the security identifier (SID) of the account that will be retrieved.
+
+```yaml
+Type: SecurityIdentifier
+Parameter Sets: BySID
+Aliases: SID
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -Properties
 Specifies the set of properties that will be retrieved for each account.
 
@@ -91,8 +196,23 @@ Accepted values: None, DistinguishedName, GenericAccountInfo, GenericUserInfo, G
 
 Required: False
 Position: Named
-Default value: None
+Default value: All
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SamAccountName
+Specifies the sAMAccountName of the account that will be retrieved.
+
+```yaml
+Type: String
+Parameter Sets: ByName
+Aliases: Login, SAM, AccountName, User
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
@@ -111,12 +231,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -UserPrincipalName
+Specifies the user principal name (UPN) of the account that will be retrieved.
+
+```yaml
+Type: String
+Parameter Sets: ByUPN
+Aliases: UPN
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### System.String
+
+### System.Security.Principal.SecurityIdentifier
+
+### System.Guid
 
 ## OUTPUTS
 
