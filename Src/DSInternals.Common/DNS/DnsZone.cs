@@ -46,7 +46,7 @@ public class DnsZone
     /// Indicates whether the zone is a reverse-lookup zone.
     /// </summary>
     public bool IsReverseLookupZone =>
-        string.IsNullOrEmpty(this.ZoneName) &&
+        !string.IsNullOrEmpty(this.ZoneName) &&
         (this.ZoneName.EndsWith(Ip4ReverseLookupZoneSuffix, StringComparison.OrdinalIgnoreCase) ||
          this.ZoneName.EndsWith(Ip6ReverseLookupZoneSuffix, StringComparison.OrdinalIgnoreCase));
 
@@ -68,21 +68,29 @@ public class DnsZone
     {
         ArgumentNullException.ThrowIfNull(dnsZone);
 
-        string distinguishedName = dnsZone.DistinguishedName;
+        dnsZone.ReadAttribute(CommonDirectoryAttributes.DnsIsSigned, out bool isSigned);
+
+        return Create(dnsZone.DistinguishedName, isSigned);
+    }
+
+    /// <summary>
+    /// Constructs a <see cref="DnsZone"/> from its directory distinguished name and signing state.
+    /// </summary>
+    /// <param name="distinguishedName">The distinguished name of the dnsZone object in Active Directory.</param>
+    /// <param name="isSigned">Indicates whether the zone is signed using DNSSEC.</param>
+    /// <returns>A populated <see cref="DnsZone"/> instance.</returns>
+    public static DnsZone Create(string distinguishedName, bool isSigned)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(distinguishedName);
 
         // The leading DC= RDN of the dnsZone object carries the FQDN of the zone.
         var parsedDN = new DistinguishedName(distinguishedName);
-        string zoneName = parsedDN.Components.Count > 0 ? parsedDN.Components[0].Value : null;
 
-        dnsZone.ReadAttribute(CommonDirectoryAttributes.DnsIsSigned, out bool isSigned);
-
-        var result = new DnsZone
+        return new DnsZone
         {
             DistinguishedName = distinguishedName,
-            ZoneName = zoneName,
+            ZoneName = parsedDN.Components.Count > 0 ? parsedDN.Components[0].Value : null,
             IsSigned = isSigned
         };
-
-        return result;
     }
 }

@@ -53,6 +53,22 @@ public class AdsiObjectAdapter : DirectoryObject
 
     public override void ReadAttribute(string name, out int? value) => value = this.ReadAttributeSingle<int?>(name);
 
+    // ADSI marshals Boolean-syntax attributes (e.g. isDeleted, dnsIsSigned) as System.Boolean,
+    // but some callers also read Integer-syntax attributes (e.g. adminCount) through this overload,
+    // so accept either underlying type rather than forcing a single cast.
+    public override void ReadAttribute(string name, out bool value)
+    {
+        object? raw = this.directoryEntry.Properties[name].Cast<object>().FirstOrDefault();
+        value = raw switch
+        {
+            null => false,
+            bool b => b,
+            int i => i != 0,
+            long l => l != 0L,
+            _ => Convert.ToBoolean(raw, System.Globalization.CultureInfo.InvariantCulture)
+        };
+    }
+
     public override void ReadAttribute(string name, out long? value) => value = this.ReadAttributeSingle<long?>(name);
 
     // Unicode vs. IA5 strings are handled by ADSI itself.

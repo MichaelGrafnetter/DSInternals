@@ -116,6 +116,12 @@ Gets all Active Directory user accounts from a given domain controller using ADS
 ### [Get-ADSIKdsRootKey](Get-ADSIKdsRootKey.md#get-adsikdsrootkey)
 Reads KDS Root Keys from a domain controller through the LDAP protocol.
 
+### [Get-ADSIDnsServerZone](Get-ADSIDnsServerZone.md#get-adsidnsserverzone)
+Retrieves the list of DNS zones hosted in Active Directory through LDAP.
+
+### [Get-ADSIDnsServerResourceRecord](Get-ADSIDnsServerResourceRecord.md#get-adsidnsserverresourcerecord)
+Retrieves DNS resource records from Active Directory through LDAP.
+
 ### [Get-LsaBackupKey](Get-LsaBackupKey.md#get-lsabackupkey)
 Reads the DPAPI backup keys from a domain controller through the LSARPC protocol.
 

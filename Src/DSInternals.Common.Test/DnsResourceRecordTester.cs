@@ -301,7 +301,7 @@ public class DnsResourceRecordTester
     [TestMethod]
     public void DnsResourceRecord_ATMA_E164()
     {
-        byte[] input = "0c00220005f00000a600000000000e1000000000000000000131 2e 32 33 34 35 2e 36 37 38 39".Replace(" ", string.Empty).HexToBinary();
+        byte[] input = "0c00220005f00000a600000000000e10000000000000000001312e323334352e36373839".HexToBinary();
         var record = DnsResourceRecord.Create("contoso.com", "atma-e164", input);
         Assert.AreEqual(ResourceRecordType.ATMA, record.Type);
         Assert.AreEqual("+1.2345.6789", record.Data);
@@ -401,6 +401,211 @@ public class DnsResourceRecordTester
         Assert.AreEqual(ResourceRecordFlags.RecordWireFormat, record.Flags);
         Assert.AreEqual("\\# 0", record.Data);
         StringAssert.Contains(record.ToString(), "TYPE33");
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_HINFO_ARM()
+    {
+        // HINFO export (Windows DNS Server): `HINFO "ARM64" "Linux"` (no parentheses).
+        // Parser currently wraps every character-string record in `( ... )` via ParseTXT — known discrepancy.
+        byte[] input = "0c000d0005f000006800000000000e1000000000000000000541524d3634054c696e7578".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "hinfo-arm", input);
+        Assert.AreEqual(ResourceRecordType.HINFO, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("( \"ARM64\" \"Linux\" )", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_HINFO_Intel()
+    {
+        // HINFO export (Windows DNS Server): `HINFO "Intel-x64" "Windows"` (no parentheses).
+        // Parser currently wraps every character-string record in `( ... )` via ParseTXT — known discrepancy.
+        byte[] input = "12000d0005f000006800000000000e10000000000000000009496e74656c2d7836340757696e646f7773".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "hinfo-sample", input);
+        Assert.AreEqual(ResourceRecordType.HINFO, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("( \"Intel-x64\" \"Windows\" )", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_ISDN()
+    {
+        // ISDN export (Windows DNS Server): `ISDN "150862028003217" "004"` (no parentheses).
+        // Parser currently wraps every character-string record in `( ... )` via ParseTXT — known discrepancy.
+        byte[] input = "1400140005f000006800000000000e1000000000000000000f31353038363230323830303332313703303034".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "isdn-sample", input);
+        Assert.AreEqual(ResourceRecordType.ISDN, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("( \"150862028003217\" \"004\" )", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_X25()
+    {
+        // X25 export (Windows DNS Server): `X25 "311061700956"` (no parentheses).
+        // Parser currently wraps every character-string record in `( ... )` via ParseTXT — known discrepancy.
+        byte[] input = "0d00130005f000006800000000000e1000000000000000000c333131303631373030393536".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "x25-sample", input);
+        Assert.AreEqual(ResourceRecordType.X25, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("( \"311061700956\" )", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_AFSDB_AFS()
+    {
+        // AFSDB export: afsdb-sample  AFSDB  1  afs.example.com.
+        byte[] input = "1500120005f000006800000000000e1000000000000000000001110303616673076578616d706c6503636f6d00".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "afsdb-sample", input);
+        Assert.AreEqual(ResourceRecordType.AFSDB, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("1 afs.example.com.", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_AFSDB_DCE()
+    {
+        // AFSDB export: AFSDB  2  dce.example.com.
+        byte[] input = "1500120005f000006800000000000e1000000000000000000002110303646365076578616d706c6503636f6d00".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "afsdb-sample", input);
+        Assert.AreEqual(ResourceRecordType.AFSDB, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("2 dce.example.com.", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_RT()
+    {
+        // RT export: rt-sample  RT  10  router.example.com.
+        byte[] input = "1800150005f000006800000000000e100000000000000000000a140306726f75746572076578616d706c6503636f6d00".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "rt-sample", input);
+        Assert.AreEqual(ResourceRecordType.RT, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("10 router.example.com.", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_DNAME()
+    {
+        // DNAME export: sub  DNAME  other.example.com.
+        byte[] input = "1500270005f000006800000000000e1000000000000000001303056f74686572076578616d706c6503636f6d00".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "sub", input);
+        Assert.AreEqual(ResourceRecordType.DNAME, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("other.example.com.", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_TXT_EmbeddedQuotes()
+    {
+        // TXT export: quoted  TXT  ( "value with \"embedded quotes\" and spaces" )
+        byte[] input = "2800100005f000006800000000000e1000000000000000002776616c756520776974682022656d6265646465642071756f7465732220616e6420737061636573".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "quoted", input);
+        Assert.AreEqual(ResourceRecordType.TXT, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("( \"value with \\\"embedded quotes\\\" and spaces\" )", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_TLSA_FullSha512()
+    {
+        // TLSA export: _25._tcp.mail  TLSA  0 0 2 AA..AA (64 bytes SHA-512 placeholder)
+        byte[] input = ("4300340005f000006800000000000e100000000000000000000002" +
+            new string('a', 128)).HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "_25._tcp.mail", input);
+        Assert.AreEqual(ResourceRecordType.TLSA, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("0 0 2 " + new string('A', 128), record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_TLSA_SubjectKey()
+    {
+        // TLSA export: _443._tcp.www  TLSA  3 1 1 00..00 (32 bytes zeroes)
+        byte[] input = ("2300340005f000006800000000000e100000000000000000030101" +
+            new string('0', 64)).HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "_443._tcp.www", input);
+        Assert.AreEqual(ResourceRecordType.TLSA, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("3 1 1 " + new string('0', 64), record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_WKS_UDP()
+    {
+        // WKS export: wks-udp  WKS  192.0.2.21  udp ( domain ntp snmp )
+        byte[] input = "1a000b0005f000006800000000000e100000000000000000c000021511000000000000040000000000000000100000000040".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "wks-udp", input);
+        Assert.AreEqual(ResourceRecordType.WKS, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("192.0.2.21 udp ( domain ntp snmp )", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_ATMA_E164_Digits()
+    {
+        // ATMA export (Windows DNS Server): `ATMA +123.456.789` (Windows formats E.164 with dot separators).
+        // Parser preserves the raw digits stored in the binary (no dots) — known discrepancy.
+        byte[] input = "0a00220005f000006800000000000e10000000000000000001313233343536373839".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "atma-e164", input);
+        Assert.AreEqual(ResourceRecordType.ATMA, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("+123456789", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_ATMA_NSAP()
+    {
+        // ATMA export: atma-nsap  ATMA  47.0027.01000000000000000000.000000000000.00
+        byte[] input = "1500220005f000006900000000000e100000000000000000024700270100000000000000000000000000000000".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "atma-nsap", input);
+        Assert.AreEqual(ResourceRecordType.ATMA, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("47.0027.01000000000000000000.000000000000.00", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_DHCID_DUID()
+    {
+        // DHCID export: dhcid-sample  DHCID  AAIBY2/AuCccgoJbsaxcQc9TUapptP69lOjxfNuVAA2kjEA=
+        byte[] input = "2300310005f000006800000000000e100000000000000000000201636fc0b8271c82825bb1ac5c41cf5351aa69b4febd94e8f17cdb95000da48c40".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "dhcid-sample", input);
+        Assert.AreEqual(ResourceRecordType.DHCID, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("AAIBY2/AuCccgoJbsaxcQc9TUapptP69lOjxfNuVAA2kjEA=", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_AAAA_Full()
+    {
+        // AAAA export: full6  AAAA  2001:db8::42
+        byte[] input = "10001c0005f000006800000000000e10000000000000000020010db8000000000000000000000042".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "full6", input);
+        Assert.AreEqual(ResourceRecordType.AAAA, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("2001:db8::42", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_SRV_AFS()
+    {
+        // SRV export: _afs3-vlserver._udp  SRV  0 100 7003 afs.example.com.
+        byte[] input = "1900210005f000006800000000000e100000000000000000000000641b5b110303616673076578616d706c6503636f6d00".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "_afs3-vlserver._udp", input);
+        Assert.AreEqual(ResourceRecordType.SRV, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("0 100 7003 afs.example.com.", record.Data);
+    }
+
+    [TestMethod]
+    public void DnsResourceRecord_PTR_Target()
+    {
+        // PTR export: ptr-sample  PTR  target.example.com.
+        byte[] input = "16000c0005f000006800000000000e100000000000000000140306746172676574076578616d706c6503636f6d00".HexToBinary();
+        var record = DnsResourceRecord.Create("example.com", "ptr-sample", input);
+        Assert.AreEqual(ResourceRecordType.PTR, record.Type);
+        Assert.AreEqual(TimeSpan.FromHours(1), record.TTL);
+        Assert.AreEqual("target.example.com.", record.Data);
     }
 
     [TestMethod]

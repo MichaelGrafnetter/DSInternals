@@ -178,7 +178,8 @@ AliasesToExport = @(
     'Get-ADDBFVERecoveryInformation',
     'Get-ADDBFVERecoveryInfo',
     'Get-ADDBDnsRecord',
-    'Get-ADSIDnsServerRecord'
+    'Get-ADSIDnsServerRecord',
+    'Save-DnsRecord'
 )
 
 # List of assemblies that must be loaded prior to importing this module

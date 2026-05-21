@@ -24,7 +24,7 @@ jobs:
       uses: actions/checkout@v6
 
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
       with:
         msbuild-architecture: x64 # default is x86
 
@@ -87,13 +87,13 @@ jobs:
 
     - name: Upload Test Results as Artifact
       if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: TestResults
         path: TestResults/*
 
     - name: Generate Unit Test Report
-      uses: dorny/test-reporter@v2
+      uses: dorny/test-reporter@v3
       if: ${{ !cancelled() }}
       with:
         name: MSTest
@@ -110,13 +110,13 @@ jobs:
         echo "version=$version" >> $env:GITHUB_OUTPUT
 
     - name: Upload PowerShell Module as Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: DSInternals_v${{ steps.get-module-version.outputs.version }}_debug
         path: Build/bin/DSInternals.PowerShell/Debug
 
     - name: Upload NuGet Packages as Artifacts
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: NuGet_v${{ steps.get-module-version.outputs.version }}_debug
         path: Build/package/debug/*nupkg
@@ -127,7 +127,7 @@ jobs:
         choco pack Src/DSInternals.PowerShell/Chocolatey/dsinternals-psmodule.nuspec --version=${{ steps.get-module-version.outputs.version }} --output-directory=Build/package/Chocolatey --execution-timeout=60 --confirm configuration=Debug
 
     - name: Upload Chocolatey Package as Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: Chocolatey_v${{ steps.get-module-version.outputs.version }}_debug
         path: Build/package/Chocolatey/*.nupkg

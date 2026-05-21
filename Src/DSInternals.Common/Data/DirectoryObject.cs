@@ -20,7 +20,7 @@ public abstract class DirectoryObject
         this.ReadAttribute(name, out byte[] binaryValue);
         value = (binaryValue != null) ? new Guid(binaryValue) : (Guid?)null;
     }
-    public void ReadAttribute(string name, out bool value)
+    public virtual void ReadAttribute(string name, out bool value)
     {
         this.ReadAttribute(name, out int? numericValue);
         value = numericValue.HasValue ? (numericValue.Value != 0) : false;

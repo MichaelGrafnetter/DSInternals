@@ -5323,26 +5323,26 @@ PC02         caeaa622-6c6a-4d2b-8e33-29e46df659af 782066-216356-283624-291397-40
             Where-Object Type -in SOA,NS,A,CNAME,MX,CNAME |
             Sort-Object -Property Name
 &lt;# Sample Output:
-@                               3600  IN  SOA   dc01.contoso.com. hostmaster.contoso.com. (
+@                                     IN  SOA   dc01.contoso.com. hostmaster.contoso.com. (
                                                 186          ; serial number
                                                 900          ; refresh
                                                 600          ; retry
                                                 86400        ; expire
                                                 3600       ) ; default TTL
-@                               3600  IN  NS    dc01.contoso.com.
-@                               3600  IN  NS    dc02.contoso.com.
-@                               600   IN  A     10.213.0.3
-@                               600   IN  A     10.213.0.9
-_msdcs                          3600  IN  NS    dc01.contoso.com.
-certauth.login                  3600  IN  A     10.213.0.4
-dc01                            3600  IN  A     10.213.0.3
-dc02                            3600  IN  A     10.213.0.9
-DomainDnsZones                  600   IN  A     10.213.0.9
-DomainDnsZones                  600   IN  A     10.213.0.3
-ForestDnsZones                  600   IN  A     10.213.0.9
-ForestDnsZones                  600   IN  A     10.213.0.3
-ftp                             3600  IN  CNAME www
-login                           3600  IN  A     10.213.0.4
+@                                         NS    dc01.contoso.com.
+@                                         NS    dc02.contoso.com.
+@                               600       A     10.213.0.3
+@                               600       A     10.213.0.9
+_msdcs                                    NS    dc01.contoso.com.
+certauth.login                            A     10.213.0.4
+dc01                                      A     10.213.0.3
+dc02                                      A     10.213.0.9
+DomainDnsZones                  600       A     10.213.0.9
+DomainDnsZones                  600       A     10.213.0.3
+ForestDnsZones                  600       A     10.213.0.9
+ForestDnsZones                  600       A     10.213.0.3
+ftp                                       CNAME www
+login                                     A     10.213.0.4
 #&gt;</dev:code>
         <dev:remarks>
           <maml:para>Extracts all DNS resource records from the offline Active Directory database file and displays the SOA, NS, A, CNAME, MX, and CNAME records from the contoso.com zone in a text format compatible with Windows Server and BIND zone files.</maml:para>
@@ -5356,6 +5356,10 @@ login                           3600  IN  A     10.213.0.4
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADDBDnsZone</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Save-DnsResourceRecord</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -5444,7 +5448,7 @@ login                           3600  IN  A     10.213.0.4
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>DSInternals.Common.DNS.DnsZone</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -5462,8 +5466,17 @@ login                           3600  IN  A     10.213.0.4
         <dev:code>PS C:\&gt; Get-ADDBDnsZone -DatabasePath .\ntds.dit
 
 &lt;# Sample Output:
-_msdcs.contoso.com
-contoso.com
+DistinguishedName   : DC=_msdcs.contoso.com,CN=MicrosoftDNS,DC=ForestDnsZones,DC=contoso,DC=com
+ZoneName            : _msdcs.contoso.com
+IsDsIntegrated      : True
+IsReverseLookupZone : False
+IsSigned            : False
+
+DistinguishedName   : DC=contoso.com,CN=MicrosoftDNS,DC=DomainDnsZones,DC=contoso,DC=com
+ZoneName            : contoso.com
+IsDsIntegrated      : True
+IsReverseLookupZone : False
+IsSigned            : False
 #&gt;</dev:code>
         <dev:remarks>
           <maml:para>Retrieves the DNS zones from the specified Active Directory database file.</maml:para>
@@ -5856,6 +5869,10 @@ Successfully decrypted password: VBGpKPryuiWBSyq/+CjC0WjNsnZ1xS3Hs6IqGZwa0BM=
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADReplKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIKdsRootKey</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -8405,6 +8422,10 @@ Secret Agreement
         <maml:linkText>Get-ADDBKdsRootKey</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
@@ -8430,6 +8451,18 @@ Secret Agreement
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKey, RootKey, RootKeys">
+          <maml:name>KdsRootKeys</maml:name>
+          <maml:description>
+            <maml:para>Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -8494,6 +8527,18 @@ Secret Agreement
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKey, RootKey, RootKeys">
+        <maml:name>KdsRootKeys</maml:name>
+        <maml:description>
+          <maml:para>Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+        <dev:type>
+          <maml:name>KdsRootKey[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -8610,6 +8655,513 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADKeyCredential</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-ADSIDnsServerResourceRecord</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>ADSIDnsServerResourceRecord</command:noun>
+      <maml:description>
+        <maml:para>Retrieves DNS resource records from Active Directory through LDAP.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet retrieves DNS resource records hosted in Active Directory by querying the target domain controller through LDAP.</maml:para>
+      <maml:para>Both legacy DNS records stored under the domain naming context and modern records stored in application partitions (such as DomainDnsZones and ForestDnsZones) are returned.</maml:para>
+      <maml:para>Tombstoned records and root hints are omitted by default and can be included with the corresponding switch parameters.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIDnsServerResourceRecord</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="RootHints, RootServers">
+          <maml:name>IncludeRootHints</maml:name>
+          <maml:description>
+            <maml:para>Indicates that root hints should be included in the output.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tombstones, IncludeTombstoned">
+          <maml:name>IncludeTombstones</maml:name>
+          <maml:description>
+            <maml:para>Indicates that tombstoned DNS records should be included in the output.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target domain controller. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="RootHints, RootServers">
+        <maml:name>IncludeRootHints</maml:name>
+        <maml:description>
+          <maml:para>Indicates that root hints should be included in the output.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Tombstones, IncludeTombstoned">
+        <maml:name>IncludeTombstones</maml:name>
+        <maml:description>
+          <maml:para>Indicates that tombstoned DNS records should be included in the output.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+        <maml:name>Server</maml:name>
+        <maml:description>
+          <maml:para>Specifies the target domain controller. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.DNS.DnsResourceRecord</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIDnsServerResourceRecord -Server 'lon-dc1.contoso.com' |
+            Where-Object Zone -eq 'contoso.com' |
+            Where-Object Type -in SOA,NS,A,CNAME,MX |
+            Sort-Object -Property Name</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves DNS resource records from the specified domain controller through LDAP and displays the SOA, NS, A, CNAME, and MX records from the contoso.com zone in a text format compatible with Windows Server and BIND zone files.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIDnsServerResourceRecord -Server 'lon-dc1.contoso.com' |
+            Save-DnsResourceRecord -Path '.\Zones' -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves all DNS resource records from the specified domain controller and saves them to DNS zone files in the Zones directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIDnsServerZone</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDnsResourceRecord</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Save-DnsResourceRecord</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-ADSIDnsServerZone</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>ADSIDnsServerZone</command:noun>
+      <maml:description>
+        <maml:para>Retrieves the list of DNS zones hosted in Active Directory through LDAP.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet retrieves DNS zones hosted in Active Directory by querying the target domain controller through LDAP.</maml:para>
+      <maml:para>Both legacy DNS zones stored under the domain naming context and modern zones stored in application partitions (such as DomainDnsZones and ForestDnsZones) are returned.</maml:para>
+      <maml:para>Pseudo-zones used for root hints and DNSSEC trust anchors are excluded from the results.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIDnsServerZone</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target domain controller. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+        <maml:name>Server</maml:name>
+        <maml:description>
+          <maml:para>Specifies the target domain controller. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.DNS.DnsZone</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIDnsServerZone -Server 'lon-dc1.contoso.com'
+
+&lt;# Sample Output:
+DistinguishedName   : DC=_msdcs.contoso.com,CN=MicrosoftDNS,DC=ForestDnsZones,DC=contoso,DC=com
+ZoneName            : _msdcs.contoso.com
+IsDsIntegrated      : True
+IsReverseLookupZone : False
+IsSigned            : False
+
+DistinguishedName   : DC=contoso.com,CN=MicrosoftDNS,DC=DomainDnsZones,DC=contoso,DC=com
+ZoneName            : contoso.com
+IsDsIntegrated      : True
+IsReverseLookupZone : False
+IsSigned            : False
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves the list of DNS zones from the specified domain controller.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIDnsServerResourceRecord</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDnsZone</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-ADSIKdsRootKey</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>ADSIKdsRootKey</command:noun>
+      <maml:description>
+        <maml:para>Reads KDS Root Keys from a domain controller through the LDAP protocol.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>KDS Root Keys are used to encrypt the following:</maml:para>
+      <maml:para>- SID-protected private keys in PFX certificate files</maml:para>
+      <maml:para>- BitLocker-enabled drives with SID protector</maml:para>
+      <maml:para>- Passwords of Group Managed Service Accounts (gMSA) and Delegated Managed Service Accounts (dMSA)</maml:para>
+      <maml:para>- DNSSEC key signing keys</maml:para>
+      <maml:para>- Windows LAPS passwords</maml:para>
+      <maml:para></maml:para>
+      <maml:para>KDS Root Keys are stored in the configuration partition of Active Directory. Their secret material can be retrieved by any user that is a member of the Domain Admins or Enterprise Admins group.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIKdsRootKey</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>All</maml:name>
+          <maml:description>
+            <maml:para>Indicates that all KDS Root Keys should be fetched.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the parameter is omitted, the cmdlet connects to the current user's domain.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIKdsRootKey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Id, KeyId">
+          <maml:name>RootKeyId</maml:name>
+          <maml:description>
+            <maml:para>Specifies a single KDS Root Key to be fetched.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the parameter is omitted, the cmdlet connects to the current user's domain.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>All</maml:name>
+        <maml:description>
+          <maml:para>Indicates that all KDS Root Keys should be fetched.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies a user account that has permission to perform this action. The default is the current user.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Id, KeyId">
+        <maml:name>RootKeyId</maml:name>
+        <maml:description>
+          <maml:para>Specifies a single KDS Root Key to be fetched.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+        <dev:type>
+          <maml:name>Guid</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+        <maml:name>Server</maml:name>
+        <maml:description>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the parameter is omitted, the cmdlet connects to the current user's domain.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Guid</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.Data.KdsRootKey</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIKdsRootKey -Server CONTOSO-DC</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves all KDS Root Keys from the specified domain controller through LDAP.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIKdsRootKey -Server CONTOSO-DC -RootKeyId 1c556b71-ed22-c45f-723c-ddbe199f6824</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves a single KDS Root Key by its identifier through LDAP.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADSIKdsRootKey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplKdsRootKey</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -9774,6 +10326,155 @@ icacls.exe C:\Windows\Sysvol\domain\Policies\* /save C:\IFM\SYSVOL\PolicyPermiss
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Remove-ADDBObject.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Save-DnsResourceRecord</command:name>
+      <command:verb>Save</command:verb>
+      <command:noun>DnsResourceRecord</command:noun>
+      <maml:description>
+        <maml:para>Saves DNS resource records to DNS zone files.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Saves DNS resource records retrieved from Active Directory to DNS zone files. The cmdlet creates one `.dns` file for each DNS zone in the target directory. Existing zone files are not overwritten unless the Force parameter is specified.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Save-DnsResourceRecord</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="Path, OutputPath, OutputDirectory, OutDir">
+          <maml:name>DirectoryPath</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to a target directory where DNS zone files will be saved.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>Indicates that existing DNS zone files should be overwritten.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Record, DnsRecord">
+          <maml:name>InputObject</maml:name>
+          <maml:description>
+            <maml:para>Specifies a DNS resource record to save to a DNS zone file.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">DnsResourceRecord</command:parameterValue>
+          <dev:type>
+            <maml:name>DnsResourceRecord</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="Path, OutputPath, OutputDirectory, OutDir">
+        <maml:name>DirectoryPath</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to a target directory where DNS zone files will be saved.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>Indicates that existing DNS zone files should be overwritten.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Record, DnsRecord">
+        <maml:name>InputObject</maml:name>
+        <maml:description>
+          <maml:para>Specifies a DNS resource record to save to a DNS zone file.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">DnsResourceRecord</command:parameterValue>
+        <dev:type>
+          <maml:name>DnsResourceRecord</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>DSInternals.Common.DNS.DnsResourceRecord</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBDnsResourceRecord -DatabasePath 'C:\Backup\ntds.dit' |
+            Save-DnsResourceRecord -Path '.\Zones' -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>Extracts all DNS resource records from the offline Active Directory database file and saves them to DNS zone files in the Zones directory. The cmdlet writes verbose information for each zone file that it creates.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADDBDnsResourceRecord -DatabasePath '.\ntds.dit' |
+            Where-Object Zone -eq 'contoso.com' |
+            Save-DnsResourceRecord -Path '.\Zones' -Force</dev:code>
+        <dev:remarks>
+          <maml:para>Saves records from the contoso.com zone to .\Zones\contoso.com.dns and overwrites an existing file if needed.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Save-DnsResourceRecord.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDnsResourceRecord</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBDnsZone</maml:linkText>
+        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

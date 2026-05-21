@@ -43,6 +43,21 @@ Saves records from the contoso.com zone to .\Zones\contoso.com.dns and overwrite
 
 ## PARAMETERS
 
+### -DirectoryPath
+Specifies the path to a target directory where DNS zone files will be saved.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: Path, OutputPath, OutputDirectory, OutDir
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Force
 Indicates that existing DNS zone files should be overwritten.
 
@@ -70,21 +85,6 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -DirectoryPath
-Specifies the path to a target directory where DNS zone files will be saved.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: Path, OutputPath
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

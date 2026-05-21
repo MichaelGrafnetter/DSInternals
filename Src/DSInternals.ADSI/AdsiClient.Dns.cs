@@ -1,4 +1,5 @@
 using System.DirectoryServices;
+using System.Runtime.InteropServices;
 using DSInternals.Common.Data;
 using DSInternals.Common.DNS;
 using DSInternals.Common.Schema;
@@ -53,6 +54,12 @@ public sealed partial class AdsiClient
             catch (DirectoryServicesCOMException)
             {
                 // The partition cannot be searched (e.g., not replicated to the target server). Skip it.
+                continue;
+            }
+            catch (COMException)
+            {
+                // Binding to the partition failed (e.g., its preferred DC is unreachable). Skip it.
+                // TODO: Log the error for the affected partition.
                 continue;
             }
 
@@ -111,6 +118,12 @@ public sealed partial class AdsiClient
             catch (DirectoryServicesCOMException)
             {
                 // The partition cannot be searched (e.g., not replicated to the target server). Skip it.
+                continue;
+            }
+            catch (COMException)
+            {
+                // Binding to the partition failed (e.g., its preferred DC is unreachable). Skip it.
+                // TODO: Log the error for the affected partition.
                 continue;
             }
 

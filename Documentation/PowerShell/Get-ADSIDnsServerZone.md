@@ -1,30 +1,31 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version:
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADSIDnsServerZone.md
 schema: 2.0.0
 ---
 
-# Get-ADDBDnsZone
+# Get-ADSIDnsServerZone
 
 ## SYNOPSIS
-Retrieves the list of DNS zones stored in an Active Directory database.
+Retrieves the list of DNS zones hosted in Active Directory through LDAP.
 
 ## SYNTAX
 
 ```
-Get-ADDBDnsZone -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Get-ADSIDnsServerZone [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This cmdlet retrieves the list of DNS zones that are stored in the specified Active Directory database file.
-This can be useful in some disaster recovery scenarios.
+This cmdlet retrieves DNS zones hosted in Active Directory by querying the target domain controller through LDAP.
+Both legacy DNS zones stored under the domain naming context and modern zones stored in application partitions (such as DomainDnsZones and ForestDnsZones) are returned.
+Pseudo-zones used for root hints and DNSSEC trust anchors are excluded from the results.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBDnsZone -DatabasePath .\ntds.dit
+PS C:\> Get-ADSIDnsServerZone -Server 'lon-dc1.contoso.com'
 
 <# Sample Output:
 DistinguishedName   : DC=_msdcs.contoso.com,CN=MicrosoftDNS,DC=ForestDnsZones,DC=contoso,DC=com
@@ -41,32 +42,32 @@ IsSigned            : False
 #>
 ```
 
-Retrieves the DNS zones from the specified Active Directory database file.
+Retrieves the list of DNS zones from the specified domain controller.
 
 ## PARAMETERS
 
-### -DatabasePath
-Specifies the path to a domain database, for instance, C:\Windows\NTDS\ntds.dit.
+### -Credential
+Specifies a user account to use when connecting to the target domain controller. The default is the current user.
 
 ```yaml
-Type: String
+Type: PSCredential
 Parameter Sets: (All)
-Aliases: Database, DBPath, DatabaseFilePath, DBFilePath
+Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -LogPath
-Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.
+### -Server
+Specifies the target domain controller. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Log, TransactionLogPath
+Aliases: Host, DomainController, DC, ComputerName
 
 Required: False
 Position: Named
@@ -90,5 +91,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[Get-ADDBDnsResourceRecord](Get-ADDBDnsResourceRecord.md)
-[Get-ADDBDomainController](Get-ADDBDomainController.md)
+[Get-ADSIDnsServerResourceRecord](Get-ADSIDnsServerResourceRecord.md)
+[Get-ADDBDnsZone](Get-ADDBDnsZone.md)
