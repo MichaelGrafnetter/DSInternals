@@ -113,6 +113,9 @@ Sets NT and LM hashes of an Active Directory or local account through the MS-SAM
 ### [Get-ADSIAccount](Get-ADSIAccount.md#get-adsiaccount)
 Gets all Active Directory user accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.
 
+### [Get-ADSIServiceAccount](Get-ADSIServiceAccount.md#get-adsiserviceaccount)
+Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from a domain controller through LDAP, while deriving their current passwords from KDS root keys.
+
 ### [Get-ADSIKdsRootKey](Get-ADSIKdsRootKey.md#get-adsikdsrootkey)
 Reads KDS Root Keys from a domain controller through the LDAP protocol.
 

@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added the [Save-DnsResourceRecord](PowerShell/Save-DnsResourceRecord.md#save-dnsresourcerecord) cmdlet for exporting DNS records to zone files.
 - Added the [Get-ADSIKdsRootKey](PowerShell/Get-ADSIKdsRootKey.md#get-adsikdsrootkey) cmdlet for reading KDS root keys from a domain controller through LDAP.
+- Added the [Get-ADSIServiceAccount](PowerShell/Get-ADSIServiceAccount.md#get-adsiserviceaccount) cmdlet for reading gMSAs and dMSAs from a domain controller through LDAP, with passwords derived from KDS root keys.
 - The [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlet has new parameters
   for selecting a single account (`-SamAccountName`, `-UserPrincipalName`, `-ObjectSid`,
   `-DistinguishedName`, `-ObjectGuid`), mirroring [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount)
