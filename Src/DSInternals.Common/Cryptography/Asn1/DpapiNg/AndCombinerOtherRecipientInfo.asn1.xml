@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:Sequence
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="AndCombinerOtherRecipientInfo"
+  namespace="DSInternals.Common.Cryptography.Asn1.DpapiNg">
+
+  <!--
+    AndCombinerOtherRecipientInfo ::= [4] IMPLICIT SEQUENCE {
+        oriType   OBJECT IDENTIFIER,
+        oriValue  CombinerRecipientInfo
+    }
+  -->
+  <asn:ObjectIdentifier name="OriType" />
+  <asn:AsnType name="OriValue" typeName="DSInternals.Common.Cryptography.Asn1.DpapiNg.CombinerRecipientInfo" />
+</asn:Sequence>

@@ -12,6 +12,10 @@ All notable changes to this project will be documented in this file. The format 
 - Added the [Save-DnsResourceRecord](PowerShell/Save-DnsResourceRecord.md#save-dnsresourcerecord) cmdlet for exporting DNS records to zone files.
 - Added the [Get-ADSIKdsRootKey](PowerShell/Get-ADSIKdsRootKey.md#get-adsikdsrootkey) cmdlet for reading KDS root keys from a domain controller through LDAP.
 - Added the [Get-ADSIServiceAccount](PowerShell/Get-ADSIServiceAccount.md#get-adsiserviceaccount) cmdlet for reading gMSAs and dMSAs from a domain controller through LDAP, with passwords derived from KDS root keys.
+- Added the [Get-DpapiNgPfxCertificate](PowerShell/Get-DpapiNgPfxCertificate.md#get-dpapingpfxcertificate) cmdlet for extracting SID-based DPAPI-NG certificate password protectors from PFX files, and the [Unprotect-DpapiNgPfxCertificate](PowerShell/Unprotect-DpapiNgPfxCertificate.md#unprotect-dpapingpfxcertificate) cmdlet for decrypting them either online or offline with `-KdsRootKey`.
+- Added the [Protect-DpapiNgData](PowerShell/Protect-DpapiNgData.md#protect-dpapingdata), [Unprotect-DpapiNgData](PowerShell/Unprotect-DpapiNgData.md#unprotect-dpapingdata), and [Get-DpapiNgData](PowerShell/Get-DpapiNgData.md#get-dpapingdata) cmdlets for protecting, decrypting, and parsing DPAPI-NG protected blobs.
+- Added the [New-DpapiNgNamedDescriptor](PowerShell/New-DpapiNgNamedDescriptor.md#new-dpapingnameddescriptor), [Get-DpapiNgNamedDescriptor](PowerShell/Get-DpapiNgNamedDescriptor.md#get-dpapingnameddescriptor), and [Remove-DpapiNgNamedDescriptor](PowerShell/Remove-DpapiNgNamedDescriptor.md#remove-dpapingnameddescriptor) cmdlets for managing named DPAPI-NG protection descriptors.
+- Added protection descriptor reconstruction to DPAPI-NG protected data blobs.
 - The [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlet has new parameters
   for selecting a single account (`-SamAccountName`, `-UserPrincipalName`, `-ObjectSid`,
   `-DistinguishedName`, `-ObjectGuid`), mirroring [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount)

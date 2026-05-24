@@ -31,11 +31,11 @@ public class DnsSigningKeyTester
         Assert.AreEqual("RSA", signingKey.AlgorithmName);
         Assert.AreEqual("contoso.com", signingKey.DnsZone);
         Assert.AreEqual(Guid.Parse("8F35BFB0-2E9E-41E5-B165-FEBA44D1F206"), signingKey.Guid);
-        Assert.AreEqual(kdsRootKeyId, signingKey.ProtectedKeyBlob.ProtectionKeyIdentifier.RootKeyId);
-        Assert.AreEqual(dcSid, signingKey.ProtectedKeyBlob.TargetSid);
+        Assert.AreEqual(kdsRootKeyId, signingKey.ProtectedKeyBlob.SidKeyProtectors[0].ProtectionKeyIdentifier.RootKeyId);
+        Assert.AreEqual(dcSid, signingKey.ProtectedKeyBlob.SidKeyProtectors[0].TargetSid);
 
         // Decrypt the key
-        var gke = GroupKeyEnvelope.Create(kdsRootKey, signingKey.ProtectedKeyBlob.ProtectionKeyIdentifier, signingKey.ProtectedKeyBlob.TargetSid);
+        var gke = GroupKeyEnvelope.Create(kdsRootKey, signingKey.ProtectedKeyBlob.SidKeyProtectors[0].ProtectionKeyIdentifier, signingKey.ProtectedKeyBlob.SidKeyProtectors[0].TargetSid);
         CacheMutex.WaitOne();
         ReadOnlySpan<byte> decryptedKey;
         try
@@ -62,7 +62,7 @@ public class DnsSigningKeyTester
 
         // Parse the signing key
         DnsSigningKey signingKey = DnsSigningKey.Decode(dnsZone, binaryData);
-        KdsRootKey kdsRootKey = new(signingKey.ProtectedKeyBlob.ProtectionKeyIdentifier.RootKeyId, binaryKDSRootKey);
+        KdsRootKey kdsRootKey = new(signingKey.ProtectedKeyBlob.SidKeyProtectors[0].ProtectionKeyIdentifier.RootKeyId, binaryKDSRootKey);
 
         // Assert parsed values
         Assert.IsNotNull(signingKey);
@@ -71,7 +71,7 @@ public class DnsSigningKeyTester
         Assert.AreEqual(Guid.Parse("f7953139-0209-487e-931e-fd217763b314"), signingKey.Guid);
 
         // Decrypt the key
-        var gke = GroupKeyEnvelope.Create(kdsRootKey, signingKey.ProtectedKeyBlob.ProtectionKeyIdentifier, signingKey.ProtectedKeyBlob.TargetSid);
+        var gke = GroupKeyEnvelope.Create(kdsRootKey, signingKey.ProtectedKeyBlob.SidKeyProtectors[0].ProtectionKeyIdentifier, signingKey.ProtectedKeyBlob.SidKeyProtectors[0].TargetSid);
         CacheMutex.WaitOne();
         ReadOnlySpan<byte> decryptedKey;
         try
@@ -98,7 +98,7 @@ public class DnsSigningKeyTester
 
         // Parse the signing key
         DnsSigningKey signingKey = DnsSigningKey.Decode(dnsZone, binaryData);
-        KdsRootKey kdsRootKey = new(signingKey.ProtectedKeyBlob.ProtectionKeyIdentifier.RootKeyId, binaryKDSRootKey);
+        KdsRootKey kdsRootKey = new(signingKey.ProtectedKeyBlob.SidKeyProtectors[0].ProtectionKeyIdentifier.RootKeyId, binaryKDSRootKey);
 
         // Assert parsed values
         Assert.IsNotNull(signingKey);
@@ -107,7 +107,7 @@ public class DnsSigningKeyTester
         Assert.AreEqual(Guid.Parse("ddf94e7e-0ed8-4bbb-9447-03fe66202874"), signingKey.Guid);
 
         // Decrypt the key
-        var gke = GroupKeyEnvelope.Create(kdsRootKey, signingKey.ProtectedKeyBlob.ProtectionKeyIdentifier, signingKey.ProtectedKeyBlob.TargetSid);
+        var gke = GroupKeyEnvelope.Create(kdsRootKey, signingKey.ProtectedKeyBlob.SidKeyProtectors[0].ProtectionKeyIdentifier, signingKey.ProtectedKeyBlob.SidKeyProtectors[0].TargetSid);
         CacheMutex.WaitOne();
         ReadOnlySpan<byte> decryptedKey;
         try

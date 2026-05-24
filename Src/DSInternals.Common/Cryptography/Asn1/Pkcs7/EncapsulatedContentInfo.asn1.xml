@@ -14,7 +14,7 @@
 
     ContentType ::= OBJECT IDENTIFIER
   -->
-  <asn:ObjectIdentifier name="ContentType" backingType="string" />
+  <asn:ObjectIdentifier name="ContentType" />
   <!-- Should be OctetString, but kept as AnyValue for PKCS#7 compatibility -->
   <asn:AnyValue name="Content" explicitTag="0" optional="true" />
 </asn:Sequence>

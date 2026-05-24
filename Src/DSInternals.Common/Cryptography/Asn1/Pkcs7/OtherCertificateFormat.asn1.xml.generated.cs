@@ -1,50 +1,103 @@
-﻿
 #pragma warning disable SA1028 // ignore whitespace warnings for generated code
 using System;
+using System.Formats.Asn1;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Formats.Asn1;
 
-namespace DSInternals.Common.Cryptography.Asn1.Pkcs7;
-
-[StructLayout(LayoutKind.Sequential)]
-internal partial struct OtherCertificateFormat
+namespace DSInternals.Common.Cryptography.Asn1.Pkcs7
 {
-    internal string OtherCertFormat;
-    internal ReadOnlyMemory<byte> OtherCert;
-  
-
-    internal static OtherCertificateFormat Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+    [StructLayout(LayoutKind.Sequential)]
+    internal partial struct OtherCertificateFormat
     {
-        return Decode(Asn1Tag.Sequence, encoded, ruleSet);
-    }
+        internal string OtherCertFormat;
+        internal ReadOnlyMemory<byte> OtherCert;
 
-    internal static OtherCertificateFormat Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
-    {
-        AsnReader reader = new AsnReader(encoded, ruleSet);
-        Decode(reader, expectedTag, out OtherCertificateFormat decoded);
-        reader.ThrowIfNotEmpty();
-        return decoded;
-    }
+        internal readonly void Encode(AsnWriter writer)
+        {
+            Encode(writer, Asn1Tag.Sequence);
+        }
 
-    internal static void Decode(AsnReader reader, out OtherCertificateFormat decoded)
-    {
-        if (reader == null)
-            throw new ArgumentNullException(nameof(reader));
+        internal readonly void Encode(AsnWriter writer, Asn1Tag tag)
+        {
+            writer.PushSequence(tag);
 
-        Decode(reader, Asn1Tag.Sequence, out decoded);
-    }
+            try
+            {
+                writer.WriteObjectIdentifier(OtherCertFormat);
+            }
+            catch (ArgumentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+            try
+            {
+                writer.WriteEncodedValue(OtherCert.Span);
+            }
+            catch (ArgumentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+            writer.PopSequence(tag);
+        }
 
-    internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out OtherCertificateFormat decoded)
-    {
-        if (reader == null)
-            throw new ArgumentNullException(nameof(reader));
+        internal static OtherCertificateFormat Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+        {
+            return Decode(Asn1Tag.Sequence, encoded, ruleSet);
+        }
 
-        decoded = default;
-        AsnReader sequenceReader = reader.ReadSequence(expectedTag);
-        
-        decoded.OtherCertFormat = sequenceReader.ReadObjectIdentifier();
-        decoded.OtherCert = sequenceReader.ReadEncodedValue();
-        sequenceReader.ThrowIfNotEmpty();
+        internal static OtherCertificateFormat Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+        {
+            try
+            {
+                AsnReader reader = new AsnReader(encoded, ruleSet);
+
+                DecodeCore(ref reader, expectedTag, encoded, out OtherCertificateFormat decoded);
+                reader.ThrowIfNotEmpty();
+                return decoded;
+            }
+            catch (AsnContentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+        }
+
+        internal static void Decode(ref AsnReader reader, ReadOnlyMemory<byte> rebind, out OtherCertificateFormat decoded)
+        {
+            Decode(ref reader, Asn1Tag.Sequence, rebind, out decoded);
+        }
+
+        internal static void Decode(AsnReader reader, out OtherCertificateFormat decoded)
+        {
+            Decode(ref reader, default, out decoded);
+        }
+
+        internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out OtherCertificateFormat decoded)
+        {
+            Decode(ref reader, expectedTag, default, out decoded);
+        }
+        internal static void Decode(ref AsnReader reader, Asn1Tag expectedTag, ReadOnlyMemory<byte> rebind, out OtherCertificateFormat decoded)
+        {
+            try
+            {
+                DecodeCore(ref reader, expectedTag, rebind, out decoded);
+            }
+            catch (AsnContentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+        }
+
+        private static void DecodeCore(ref AsnReader reader, Asn1Tag expectedTag, ReadOnlyMemory<byte> rebind, out OtherCertificateFormat decoded)
+        {
+            decoded = default;
+            AsnReader sequenceReader = reader.ReadSequence(expectedTag);
+            ReadOnlyMemory<byte> tmpSpan;
+
+            decoded.OtherCertFormat = sequenceReader.ReadObjectIdentifier();
+            tmpSpan = sequenceReader.ReadEncodedValue();
+            decoded.OtherCert = tmpSpan;
+
+            sequenceReader.ThrowIfNotEmpty();
+        }
     }
 }

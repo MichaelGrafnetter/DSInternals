@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-using DSInternals.Common.Cryptography.Asn1.DpapiNg;
+using DSInternals.Common.Cryptography;
 
 namespace DSInternals.Common.Data;
 

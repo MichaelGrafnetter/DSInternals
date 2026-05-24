@@ -288,7 +288,7 @@ classDiagram
     }
     class GetADSIAccountCommand {
         +Properties : AccountPropertySets
-        +KdsRootKeys : KdsRootKey[]
+        +KdsRootKey : KdsRootKey[]
     }
     class GetADSIKdsRootKeyCommand {
         +RootKeyId : Guid

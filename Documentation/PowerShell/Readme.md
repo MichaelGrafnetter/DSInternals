@@ -241,6 +241,30 @@ Calculates OrgId hash of a given password. Used by Azure Active Directory Connec
 ### [Save-DPAPIBlob](Save-DPAPIBlob.md#save-dpapiblob)
 Saves DPAPI and Credential Roaming data retrieved from Active Directory to the file system for further processing.
 
+### [Get-DpapiNgPfxCertificate](Get-DpapiNgPfxCertificate.md#get-dpapingpfxcertificate)
+Extracts the SID-based DPAPI-NG certificate password protector from a PFX file.
+
+### [Unprotect-DpapiNgPfxCertificate](Unprotect-DpapiNgPfxCertificate.md#unprotect-dpapingpfxcertificate)
+Decrypts the SID-based DPAPI-NG certificate password protector from a PFX file.
+
+### [Protect-DpapiNgData](Protect-DpapiNgData.md#protect-dpapingdata)
+Encrypts text with DPAPI-NG and returns a base64-encoded protected blob.
+
+### [Unprotect-DpapiNgData](Unprotect-DpapiNgData.md#unprotect-dpapingdata)
+Decrypts a base64-encoded DPAPI-NG protected blob.
+
+### [Get-DpapiNgData](Get-DpapiNgData.md#get-dpapingdata)
+Parses a base64-encoded DPAPI-NG protected blob.
+
+### [New-DpapiNgNamedDescriptor](New-DpapiNgNamedDescriptor.md#new-dpapingnameddescriptor)
+Registers a named DPAPI-NG protection descriptor.
+
+### [Get-DpapiNgNamedDescriptor](Get-DpapiNgNamedDescriptor.md#get-dpapingnameddescriptor)
+Gets one or more named DPAPI-NG protection descriptors.
+
+### [Remove-DpapiNgNamedDescriptor](Remove-DpapiNgNamedDescriptor.md#remove-dpapingnameddescriptor)
+Removes a named DPAPI-NG protection descriptor.
+
 ### [ConvertFrom-ADManagedPasswordBlob](ConvertFrom-ADManagedPasswordBlob.md#convertfrom-admanagedpasswordblob)
 Decodes the value of the msDS-ManagedPassword attribute of a Group Managed Service Account.
 

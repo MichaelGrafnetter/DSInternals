@@ -7,6 +7,7 @@
     "GitHub.vscode-github-actions",
     "EditorConfig.EditorConfig",
     "DavidAnson.vscode-markdownlint",
-    "MermaidChart.vscode-mermaid-chart"
+    "MermaidChart.vscode-mermaid-chart",
+    "wildboar.asn1"
   ]
 }

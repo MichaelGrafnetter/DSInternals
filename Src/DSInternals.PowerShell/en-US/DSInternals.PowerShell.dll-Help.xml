@@ -8455,8 +8455,8 @@ Secret Agreement
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKey, RootKey, RootKeys">
-          <maml:name>KdsRootKeys</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
           <maml:description>
             <maml:para>Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
           </maml:description>
@@ -8531,8 +8531,8 @@ Secret Agreement
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKey, RootKey, RootKeys">
-        <maml:name>KdsRootKeys</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+        <maml:name>KdsRootKey</maml:name>
         <maml:description>
           <maml:para>Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
         </maml:description>

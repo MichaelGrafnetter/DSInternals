@@ -1,6 +1,7 @@
-﻿using System.Formats.Asn1;
+using System.Formats.Asn1;
 using System.Security.Cryptography;
 using System.Security.Principal;
+using DSInternals.Common.Cryptography.Asn1.DpapiNg;
 
 namespace DSInternals.Common.Cryptography.Asn1.Pkcs7;
 
@@ -9,70 +10,108 @@ namespace DSInternals.Common.Cryptography.Asn1.Pkcs7;
 /// </summary>
 partial struct OtherKeyAttribute
 {
-    private const string ProtectionKeyDescriptorOid = "1.3.6.1.4.1.311.74.1";
-    private const string SidProtectorOid = "1.3.6.1.4.1.311.74.1.1";
-    private const string AndCombinerOid = "1.3.6.1.4.1.311.74.1.4";
-    private const string SddlProtectorOid = "1.3.6.1.4.1.311.74.1.5";
-    private const string WebCredentialsProtectorOid = "1.3.6.1.4.1.311.74.1.7";
-    private const string LocalProtectorOid = "1.3.6.1.4.1.311.74.1.8";
-    private const string CertificateProtectorOid = "1.3.6.1.4.1.311.74.1.11";
-    private const string ExpectedSidName = "SID";
+    internal ProtectionAlgorithmIdentifier? ProtectionAlgorithm
+    {
+        get
+        {
+            if (this.AttributeId != DpapiNgConstants.ProtectionInfo || this.AttributeValue == null)
+            {
+                return null;
+            }
+
+            return ProtectionAlgorithmIdentifier.Decode(this.AttributeValue.Value, AsnEncodingRules.DER);
+        }
+    }
+
+    /// <summary>
+    /// Gets the protection descriptor carried by this DPAPI-NG key attribute.
+    /// </summary>
+    /// <value>The formatted protection descriptor rule string.</value>
+    /// <example>
+    /// <code language="text">WEBCREDENTIALS=MyPasswordName,myweb.com</code>
+    /// </example>
+    internal string? Descriptor
+    {
+        get
+        {
+            var protectionAlgorithm = this.ProtectionAlgorithm;
+            return protectionAlgorithm.HasValue ? protectionAlgorithm.Value.Descriptor : null;
+        }
+    }
+
+    /// <summary>
+    /// Gets the SID carried by a SID-based protection descriptor.
+    /// </summary>
+    /// <value>The target SID, or <see langword="null" /> when the descriptor is not SID-based.</value>
     public SecurityIdentifier? SidProtector
     {
         get
         {
-            if (this.AttributeId != ProtectionKeyDescriptorOid || this.AttributeValue == null)
+            var protectionAlgorithm = this.ProtectionAlgorithm;
+
+            if (!protectionAlgorithm.HasValue ||
+                protectionAlgorithm.Value.Algorithm != DpapiNgConstants.SidProtected)
             {
-                // Unsupported key attribute OID or missing key attribute
                 return null;
             }
 
-            /*
-            https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-dnsp/093dba13-15c8-4848-b278-38afc5c0f5ed
+            if (!TryGetFirstValue(protectionAlgorithm.Value.Parameters, DpapiNgConstants.SidName, out string? sidString))
+            {
+                throw new CryptographicException($"Missing {DpapiNgConstants.SidName} descriptor item.");
+            }
 
-            microsoft OBJECT IDENTIFIER ::= { iso(1) identified-organization(3) dod(6) internet(1) private(4) enterprise(1) 311 }
-            msKeyProtection OBJECT IDENTIFIER := { microsoft 74 }
-            protectionInfo OBJECT IDENTIFIER ::= { msKeyProtection 1 }
-            sidProtected OBJECT IDENTIFIER ::= { protectionInfo 1 }
-            sidName UTF8 STRING ::= "SID"
-            ProtectionKeyAttribute ::= SEQUENCE {
-                protectionInfo OBJECT IDENTIFIER,
-                SEQUENCE SIZE (1) {
-                    sidProtected OBJECT IDENTIFIER,
-                    SEQUENCE SIZE (1) {
-                        SEQUENCE SIZE (1) {
-                            SEQUENCE SIZE (1) {
-                                sidName UTF8 STRING,
-                                sidString UTF8 STRING
-                            }
-                        }
+            return new SecurityIdentifier(sidString!);
+        }
+    }
+
+    /// <summary>
+    /// Gets the SDDL string carried by an SDDL-based protection descriptor.
+    /// </summary>
+    /// <value>The target SDDL string, or <see langword="null" /> when the descriptor is not SDDL-based.</value>
+    public string? SddlProtector
+    {
+        get
+        {
+            var protectionAlgorithm = this.ProtectionAlgorithm;
+
+            if (!protectionAlgorithm.HasValue ||
+                protectionAlgorithm.Value.Algorithm != DpapiNgConstants.SddlProtected)
+            {
+                return null;
+            }
+
+            if (!TryGetFirstValue(protectionAlgorithm.Value.Parameters, DpapiNgConstants.SddlName, out string? sddlString))
+            {
+                throw new CryptographicException($"Missing {DpapiNgConstants.SddlName} descriptor item.");
+            }
+
+            return sddlString;
+        }
+    }
+
+    private static bool TryGetFirstValue(ProtectionDescriptorInfo descriptorInfo, string name, out string? value)
+    {
+        if (descriptorInfo.Values != null)
+        {
+            foreach (var alternative in descriptorInfo.Values)
+            {
+                if (alternative.Values == null)
+                {
+                    continue;
+                }
+
+                foreach (var item in alternative.Values)
+                {
+                    if (string.Equals(item.Name, name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        value = item.Value;
+                        return true;
                     }
                 }
             }
-            */
-
-            var protectorReader = new AsnReader(this.AttributeValue.Value, AsnEncodingRules.DER);
-            var protector = protectorReader.ReadSequence();
-            var protectorType = protector.ReadObjectIdentifier();
-
-            if (protectorType != SidProtectorOid)
-            {
-                // Not a SID protector
-                return null;
-            }
-
-            // TODO: What is the meaning of the 3 nested sequences?
-            var sidProtector = protector.ReadSequence().ReadSequence().ReadSequence();
-            string sidName = sidProtector.ReadCharacterString(UniversalTagNumber.UTF8String);
-
-            if (sidName != "SID")
-            {
-                throw new CryptographicException($"Unexpected SID name: {sidName}. Expected: {ExpectedSidName}.");
-            }
-
-            string sidString = sidProtector.ReadCharacterString(UniversalTagNumber.UTF8String);
-            protectorReader.ThrowIfNotEmpty();
-            return new SecurityIdentifier(sidString);
         }
+
+        value = null;
+        return false;
     }
 }

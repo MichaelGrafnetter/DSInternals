@@ -9,12 +9,22 @@ namespace DSInternals.Common.Interop;
 internal static partial class NativeMethods
 {
     private const string Kernel32 = "kernel32.dll";
+    private const string User32 = "user32.dll";
 
     /// <summary>
     /// Retrieves a pseudo handle for the current process.
     /// </summary>
     [DllImport(Kernel32)]
     internal static extern SafeProcessHandle GetCurrentProcess();
+
+    [DllImport(Kernel32, ExactSpelling = true, SetLastError = true)]
+    internal static extern IntPtr LocalFree(IntPtr hMem);
+
+    [DllImport(Kernel32, ExactSpelling = true)]
+    internal static extern WindowHandle GetConsoleWindow();
+
+    [DllImport(User32, ExactSpelling = true)]
+    internal static extern WindowHandle GetForegroundWindow();
 
     /// <summary>
     /// Opens the access token associated with a process.

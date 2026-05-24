@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+  <Controls>
+    <Control>
+      <!-- Renders an System.Security.Cryptography.Oid as "FriendlyName (Value)" or just "Value". -->
+      <Name>Oid</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <ScriptBlock>if ($PSItem.FriendlyName) { '{0} ({1})' -f $PSItem.FriendlyName, $PSItem.Value } else { $PSItem.Value }</ScriptBlock>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <!-- Renders a single SID/SDDL protector inside the CngProtectedDataBlob view. -->
+      <Name>SidKeyProtector</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <PropertyName>Descriptor</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <Text>ProtectionKeyIdentifier: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>ProtectionKeyIdentifier</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine />
+                  <Text>KeyEncryptionAlgorithm: </Text>
+                  <ExpressionBinding>
+                    <PropertyName>KeyEncryptionAlgorithm</PropertyName>
+                    <CustomControlName>Oid</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine />
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+    <Control>
+      <!-- Renders a CngProtectedDataBlob; reused by both its own view and the PfxProtectedPassword view. -->
+      <Name>CngProtectedDataBlob</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>Descriptor: </Text>
+              <ExpressionBinding>
+                <PropertyName>Descriptor</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>ContentEncryptionAlgorithm: </Text>
+              <ExpressionBinding>
+                <PropertyName>ContentEncryptionAlgorithm</PropertyName>
+                <CustomControlName>Oid</CustomControlName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>SID/SDDL Protectors</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>SidKeyProtectors</PropertyName>
+                    <CustomControlName>SidKeyProtector</CustomControlName>
+                    <EnumerateCollection />
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+  </Controls>
+  <ViewDefinitions>
+    <View>
+      <Name>SidKeyProtector</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Cryptography.SidKeyProtector</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <CustomControlName>SidKeyProtector</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>CngProtectedDataBlob</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Cryptography.CngProtectedDataBlob</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <CustomControlName>CngProtectedDataBlob</CustomControlName>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+    <View>
+      <Name>PfxProtectedPassword</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.PowerShell.PfxProtectedPassword</TypeName>
+      </ViewSelectedBy>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <Text>FilePath: </Text>
+              <ExpressionBinding>
+                <PropertyName>FilePath</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>Password: </Text>
+              <ExpressionBinding>
+                <PropertyName>Password</PropertyName>
+              </ExpressionBinding>
+              <NewLine />
+              <Text>EncryptedPassword</Text>
+              <NewLine />
+              <Frame>
+                <LeftIndent>2</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>EncryptedPassword</PropertyName>
+                    <CustomControlName>CngProtectedDataBlob</CustomControlName>
+                  </ExpressionBinding>
+                </CustomItem>
+              </Frame>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

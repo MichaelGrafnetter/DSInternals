@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 using System.Text;
-using DSInternals.Common.Cryptography.Asn1.DpapiNg;
+using DSInternals.Common.Cryptography;
 
 namespace DSInternals.Common.DNS;
 

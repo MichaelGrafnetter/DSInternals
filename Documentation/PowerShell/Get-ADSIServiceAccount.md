@@ -13,7 +13,7 @@ Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service A
 ## SYNTAX
 
 ```
-Get-ADSIServiceAccount [-EffectiveTime <DateTime>] [-KdsRootKeys <KdsRootKey[]>] [-Server <String>]
+Get-ADSIServiceAccount [-EffectiveTime <DateTime>] [-KdsRootKey <KdsRootKey[]>] [-Server <String>]
  [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
@@ -23,7 +23,7 @@ Retrieves all Group Managed Service Accounts (gMSAs) and Delegated Managed Servi
 
 By default, the interval ID stored in `msDS-ManagedPasswordId` is used as-is to derive the current managed password — no password-cycle math is performed. Supplying `-EffectiveTime` instead computes the password cycle for a given point in time (past or future).
 
-The KDS root keys are normally read from the configuration naming context of the target domain controller, which typically requires Domain Admin privileges. As an alternative, the keys can be supplied explicitly using the `-KdsRootKeys` parameter, for instance when they have been retrieved through the MS-DRSR protocol or an offline ntds.dit file.
+The KDS root keys are normally read from the configuration naming context of the target domain controller, which typically requires Domain Admin privileges. As an alternative, the keys can be supplied explicitly using the `-KdsRootKey` parameter, for instance when they have been retrieved through the MS-DRSR protocol or an offline ntds.dit file.
 
 ## EXAMPLES
 
@@ -71,7 +71,7 @@ Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service A
 ### Example 3
 ```powershell
 PS C:\> $rootKeys = Get-ADDBKdsRootKey -DatabasePath 'C:\ADBackup\ntds.dit'
-PS C:\> Get-ADSIServiceAccount -Server 'lon-dc1.contoso.com' -KdsRootKeys $rootKeys
+PS C:\> Get-ADSIServiceAccount -Server 'lon-dc1.contoso.com' -KdsRootKey $rootKeys
 ```
 
 Reads KDS root keys from an offline ntds.dit file and then uses them to derive the managed passwords for all gMSAs and dMSAs on the target domain controller, bypassing the default LDAP-based lookup against the configuration naming context.
@@ -108,13 +108,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -KdsRootKeys
+### -KdsRootKey
 Provides an explicit set of KDS root keys to use when deriving managed passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.
 
 ```yaml
 Type: KdsRootKey[]
 Parameter Sets: (All)
-Aliases: KdsRootKey, RootKey, RootKeys
+Aliases: KdsRootKeys, RootKey, RootKeys
 
 Required: False
 Position: Named

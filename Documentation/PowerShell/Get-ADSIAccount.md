@@ -14,37 +14,37 @@ Gets one or more Active Directory accounts from a given domain controller using 
 
 ### All (Default)
 ```
-Get-ADSIAccount [-All] [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] [-Server <String>]
+Get-ADSIAccount [-All] [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] [-Server <String>]
  [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByName
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] [-SamAccountName] <String>
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] [-SamAccountName] <String>
  [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByUPN
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] -UserPrincipalName <String>
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] -UserPrincipalName <String>
  [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] -ObjectSid <SecurityIdentifier>
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] -ObjectSid <SecurityIdentifier>
  [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] [-DistinguishedName] <String>
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] [-DistinguishedName] <String>
  [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKeys <KdsRootKey[]>] -ObjectGuid <Guid>
+Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] -ObjectGuid <Guid>
  [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
@@ -140,13 +140,13 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -KdsRootKeys
+### -KdsRootKey
 Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.
 
 ```yaml
 Type: KdsRootKey[]
 Parameter Sets: (All)
-Aliases: KdsRootKey, RootKey, RootKeys
+Aliases: KdsRootKeys, RootKey, RootKeys
 
 Required: False
 Position: Named

@@ -105,15 +105,15 @@ public class GetADSIAccountCommand : ADSICommandBase
 
     [Parameter(Mandatory = false)]
     [ValidateNotNullOrEmpty]
-    [Alias("KdsRootKey", "RootKey", "RootKeys")]
-    public KdsRootKey[]? KdsRootKeys
+    [Alias("KdsRootKeys", "RootKey", "RootKeys")]
+    public KdsRootKey[]? KdsRootKey
     {
         get;
         set;
     }
     #endregion Parameters
 
-    protected override KdsRootKey[]? KdsRootKeysOverride => this.KdsRootKeys;
+    protected override KdsRootKey[]? KdsRootKeysOverride => this.KdsRootKey;
 
     protected override void ProcessRecord()
     {

@@ -339,6 +339,16 @@ public class GroupKeyEnvelope
         Win32ErrorCode result = NativeMethods.GetSIDKeyCacheFolder(this.TargetSecurityDescriptor, out string userStorageArea, out string sidKeyCacheFolder);
         Validator.AssertSuccess(result);
 
+        bool publicKey = this.Flags == GroupKeyEnvelopeFlags.PublicAsymmetricKey;
+        result = NativeMethods.GetSIDKeyFileName(this.RootKeyId, this.L0KeyId, publicKey, sidKeyCacheFolder, out string? sidKeyFileName);
+        Validator.AssertSuccess(result);
+
+        if (sidKeyFileName != null && File.Exists(sidKeyFileName))
+        {
+            // The key is already cached.
+            return;
+        }
+
         byte[] binarySidKey = this.ToByteArray();
 
         result = NativeMethods.WriteSIDKeyInCache(binarySidKey, this.TargetSecurityDescriptor, sidKeyCacheFolder, userStorageArea);

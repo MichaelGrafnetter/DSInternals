@@ -12,6 +12,6 @@
         certValue   [0] EXPLICIT BAG-TYPE.&Type ({CertTypes}{@certId})
     }
   -->
-  <asn:ObjectIdentifier name="CertId" backingType="string" />
+  <asn:ObjectIdentifier name="CertId" />
   <asn:AnyValue name="CertValue" explicitTag="0" />
 </asn:Sequence>

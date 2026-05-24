@@ -1,92 +1,162 @@
-﻿
 #pragma warning disable SA1028 // ignore whitespace warnings for generated code
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Formats.Asn1;
 
-namespace DSInternals.Common.Cryptography.Asn1.Pkcs7;
-
-[StructLayout(LayoutKind.Sequential)]
-internal partial struct OriginatorInfo
+namespace DSInternals.Common.Cryptography.Asn1.Pkcs7
 {
-    internal DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice[] CertificateSet;
-    internal ReadOnlyMemory<byte>[] RevocationInfoChoices;
-  
-
-    internal static OriginatorInfo Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+    [StructLayout(LayoutKind.Sequential)]
+    internal partial struct OriginatorInfo
     {
-        return Decode(Asn1Tag.Sequence, encoded, ruleSet);
-    }
+        internal DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice[]? CertificateSet;
+        internal ReadOnlyMemory<byte>[]? RevocationInfoChoices;
 
-    internal static OriginatorInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
-    {
-        AsnReader reader = new AsnReader(encoded, ruleSet);
-        Decode(reader, expectedTag, out OriginatorInfo decoded);
-        reader.ThrowIfNotEmpty();
-        return decoded;
-    }
-
-    internal static void Decode(AsnReader reader, out OriginatorInfo decoded)
-    {
-        if (reader == null)
-            throw new ArgumentNullException(nameof(reader));
-
-        Decode(reader, Asn1Tag.Sequence, out decoded);
-    }
-
-    internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out OriginatorInfo decoded)
-    {
-        if (reader == null)
-            throw new ArgumentNullException(nameof(reader));
-
-        decoded = default;
-        AsnReader sequenceReader = reader.ReadSequence(expectedTag);
-        AsnReader collectionReader;
-        
-
-        if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
+        internal readonly void Encode(AsnWriter writer)
         {
-
-            // Decode SEQUENCE OF for CertificateSet
-            {
-                collectionReader = sequenceReader.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, 0));
-                var tmpList = new List<DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice>();
-                DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice tmpItem;
-
-                while (collectionReader.HasData)
-                {
-                    DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice.Decode(collectionReader, out tmpItem);
-                    tmpList.Add(tmpItem);
-                }
-
-                decoded.CertificateSet = tmpList.ToArray();
-            }
-
+            Encode(writer, Asn1Tag.Sequence);
         }
 
-
-        if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
+        internal readonly void Encode(AsnWriter writer, Asn1Tag tag)
         {
+            writer.PushSequence(tag);
 
-            // Decode SEQUENCE OF for RevocationInfoChoices
+
+            if (CertificateSet != null)
             {
-                collectionReader = sequenceReader.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
-                var tmpList = new List<ReadOnlyMemory<byte>>();
-                ReadOnlyMemory<byte> tmpItem;
 
-                while (collectionReader.HasData)
+                writer.PushSetOf(new Asn1Tag(TagClass.ContextSpecific, 0));
+                for (int i = 0; i < CertificateSet.Length; i++)
                 {
-                    tmpItem = collectionReader.ReadEncodedValue();
-                    tmpList.Add(tmpItem);
+                    CertificateSet[i].Encode(writer);
                 }
+                writer.PopSetOf(new Asn1Tag(TagClass.ContextSpecific, 0));
 
-                decoded.RevocationInfoChoices = tmpList.ToArray();
             }
 
+
+            if (RevocationInfoChoices != null)
+            {
+
+                writer.PushSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
+                for (int i = 0; i < RevocationInfoChoices.Length; i++)
+                {
+                    try
+                    {
+                        writer.WriteEncodedValue(RevocationInfoChoices[i].Span);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        throw new CryptographicException("ASN1 corrupted data.", e);
+                    }
+                }
+                writer.PopSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
+
+            }
+
+            writer.PopSequence(tag);
         }
 
-        sequenceReader.ThrowIfNotEmpty();
+        internal static OriginatorInfo Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+        {
+            return Decode(Asn1Tag.Sequence, encoded, ruleSet);
+        }
+
+        internal static OriginatorInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+        {
+            try
+            {
+                AsnReader reader = new AsnReader(encoded, ruleSet);
+
+                DecodeCore(ref reader, expectedTag, encoded, out OriginatorInfo decoded);
+                reader.ThrowIfNotEmpty();
+                return decoded;
+            }
+            catch (AsnContentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+        }
+
+        internal static void Decode(ref AsnReader reader, ReadOnlyMemory<byte> rebind, out OriginatorInfo decoded)
+        {
+            Decode(ref reader, Asn1Tag.Sequence, rebind, out decoded);
+        }
+
+        internal static void Decode(AsnReader reader, out OriginatorInfo decoded)
+        {
+            Decode(ref reader, default, out decoded);
+        }
+
+        internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out OriginatorInfo decoded)
+        {
+            Decode(ref reader, expectedTag, default, out decoded);
+        }
+        internal static void Decode(ref AsnReader reader, Asn1Tag expectedTag, ReadOnlyMemory<byte> rebind, out OriginatorInfo decoded)
+        {
+            try
+            {
+                DecodeCore(ref reader, expectedTag, rebind, out decoded);
+            }
+            catch (AsnContentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+        }
+
+        private static void DecodeCore(ref AsnReader reader, Asn1Tag expectedTag, ReadOnlyMemory<byte> rebind, out OriginatorInfo decoded)
+        {
+            decoded = default;
+            AsnReader sequenceReader = reader.ReadSequence(expectedTag);
+            AsnReader collectionReader;
+            ReadOnlyMemory<byte> tmpSpan;
+
+
+            if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
+            {
+
+                // Decode SEQUENCE OF for CertificateSet
+                {
+                    collectionReader = sequenceReader.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, 0));
+                    var tmpList = new List<DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice>();
+                    DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice tmpItem;
+
+                    while (collectionReader.HasData)
+                    {
+                        DSInternals.Common.Cryptography.Asn1.Pkcs7.CertificateChoice.Decode(ref collectionReader, rebind, out tmpItem);
+                        tmpList.Add(tmpItem);
+                    }
+
+                    decoded.CertificateSet = tmpList.ToArray();
+                }
+
+            }
+
+
+            if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
+            {
+
+                // Decode SEQUENCE OF for RevocationInfoChoices
+                {
+                    collectionReader = sequenceReader.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
+                    var tmpList = new List<ReadOnlyMemory<byte>>();
+                    ReadOnlyMemory<byte> tmpItem;
+
+                    while (collectionReader.HasData)
+                    {
+                        tmpSpan = collectionReader.ReadEncodedValue();
+                        tmpItem = tmpSpan;
+                        tmpList.Add(tmpItem);
+                    }
+
+                    decoded.RevocationInfoChoices = tmpList.ToArray();
+                }
+
+            }
+
+
+            sequenceReader.ThrowIfNotEmpty();
+        }
     }
 }

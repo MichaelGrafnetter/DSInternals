@@ -70,15 +70,7 @@ public class LapsPasswordInformation
 
         if (rootKeyResolver != null)
         {
-            Guid rootKeyId = encryptedPassword.EncryptedBlob.ProtectionKeyIdentifier.RootKeyId;
-            KdsRootKey? rootKey = rootKeyResolver.GetKdsRootKey(rootKeyId);
-
-            if (rootKey != null)
-            {
-                rootKeyFound = true;
-                var gke = GroupKeyEnvelope.Create(rootKey, encryptedPassword.EncryptedBlob.ProtectionKeyIdentifier, encryptedPassword.EncryptedBlob.TargetSid);
-                gke.WriteToCache();
-            }
+            rootKeyFound = encryptedPassword.EncryptedBlob.CacheGroupKey(rootKeyResolver);
         }
 
         // Decrypt the data using the native Win32 API, which uses the pre-cached group keys if available.
