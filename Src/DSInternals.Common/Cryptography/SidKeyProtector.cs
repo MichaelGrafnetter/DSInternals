@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using System.Security.Principal;
-using DSInternals.Common.Cryptography.Asn1.DpapiNg;
 using DSInternals.Common.Data;
 
 namespace DSInternals.Common.Cryptography;

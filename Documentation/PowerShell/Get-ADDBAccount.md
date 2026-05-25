@@ -412,9 +412,9 @@ Exports NT and LM password hashes from an Active Directory database to a pwdump 
 ```powershell
 PS C:\> Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
                           -BootKey 0be7a2afe1713642182e9b96f73a75da |
-            Save-DPAPIBlob -DirectoryPath '.\Output'
+            Save-DpapiBlob -DirectoryPath '.\Output'
 PS C:\> Get-ADDBAccount -All -DatabasePath '.\ADBackup\Active Directory\ntds.dit' -Properties RoamedCredentials |
-            Save-DPAPIBlob -DirectoryPath '.\Output'
+            Save-DpapiBlob -DirectoryPath '.\Output'
 ```
 
 Extracts DPAPI backup keys and roamed credentials (certificates, private keys, and DPAPI master keys) from an Active Directory database file and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.
@@ -647,7 +647,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Get-ADReplAccount](Get-ADDBAccount.md)
 [Get-ADSIAccount](Get-ADSIAccount.md)
 [Test-PasswordQuality](Test-PasswordQuality.md)
-[Save-DPAPIBlob](Save-DPAPIBlob.md)
+[Save-DpapiBlob](Save-DpapiBlob.md)
 [Get-ADKeyCredential](Get-ADKeyCredential.md)
 [Set-ADDBPrimaryGroup](Set-ADDBPrimaryGroup.md)
 [Add-ADDBSidHistory](Add-ADDBSidHistory.md)

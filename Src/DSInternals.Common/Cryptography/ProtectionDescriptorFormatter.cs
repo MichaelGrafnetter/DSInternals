@@ -3,7 +3,7 @@ using System.Security.Principal;
 using System.Text;
 using DSInternals.Common;
 
-namespace DSInternals.Common.Cryptography.Asn1.DpapiNg;
+namespace DSInternals.Common.Cryptography;
 
 /// <summary>
 /// Formats CNG DPAPI-NG protection descriptor rule strings.

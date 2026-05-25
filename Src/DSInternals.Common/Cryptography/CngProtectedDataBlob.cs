@@ -359,7 +359,7 @@ public class CngProtectedDataBlob
             return default;
         }
 
-        var gcmParameters = GCMParameters.Decode(algorithmIdentifier.Parameters.Value, AsnEncodingRules.DER);
+        var gcmParameters = DSInternals.Common.Cryptography.Asn1.X509.GCMParameters.Decode(algorithmIdentifier.Parameters.Value, AsnEncodingRules.DER);
         return gcmParameters.AesNonce;
     }
 }

@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace DSInternals.Common.Cryptography.Asn1.DpapiNg;
+namespace DSInternals.Common.Cryptography;
 
 internal static class DpapiNgConstants
 {

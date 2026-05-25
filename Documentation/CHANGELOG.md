@@ -15,12 +15,19 @@ All notable changes to this project will be documented in this file. The format 
 - Added the [Get-DpapiNgPfxCertificate](PowerShell/Get-DpapiNgPfxCertificate.md#get-dpapingpfxcertificate) cmdlet for extracting SID-based DPAPI-NG certificate password protectors from PFX files, and the [Unprotect-DpapiNgPfxCertificate](PowerShell/Unprotect-DpapiNgPfxCertificate.md#unprotect-dpapingpfxcertificate) cmdlet for decrypting them either online or offline with `-KdsRootKey`.
 - Added the [Protect-DpapiNgData](PowerShell/Protect-DpapiNgData.md#protect-dpapingdata), [Unprotect-DpapiNgData](PowerShell/Unprotect-DpapiNgData.md#unprotect-dpapingdata), and [Get-DpapiNgData](PowerShell/Get-DpapiNgData.md#get-dpapingdata) cmdlets for protecting, decrypting, and parsing DPAPI-NG protected blobs.
 - Added the [New-DpapiNgNamedDescriptor](PowerShell/New-DpapiNgNamedDescriptor.md#new-dpapingnameddescriptor), [Get-DpapiNgNamedDescriptor](PowerShell/Get-DpapiNgNamedDescriptor.md#get-dpapingnameddescriptor), and [Remove-DpapiNgNamedDescriptor](PowerShell/Remove-DpapiNgNamedDescriptor.md#remove-dpapingnameddescriptor) cmdlets for managing named DPAPI-NG protection descriptors.
+- Added the [Get-DpapiNgSidKeyIdentifier](PowerShell/Get-DpapiNgSidKeyIdentifier.md#get-dpapingsidkeyidentifier) cmdlet for parsing the `KDSK` Protection Key Identifier blob emitted by DPAPI-NG (e.g. the `KeyId` field in Microsoft-Windows-Crypto-DPAPI ETW events).
+- Added the [Save-DpapiNgSidKey](PowerShell/Save-DpapiNgSidKey.md#save-dpapingsidkey) cmdlet for deriving a SID-protected DPAPI-NG group key from a KDS root key and seeding it into the local SID key cache so subsequent DPAPI-NG decryption can proceed offline.
 - Added protection descriptor reconstruction to DPAPI-NG protected data blobs.
 - The [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlet has new parameters
   for selecting a single account (`-SamAccountName`, `-UserPrincipalName`, `-ObjectSid`,
   `-DistinguishedName`, `-ObjectGuid`), mirroring [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount)
   and [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount). The default behavior of
   returning all accounts is preserved; the new `-All` switch can also be used to request it explicitly.
+
+### Changed
+
+- Renamed the `Save-DPAPIBlob` cmdlet to [Save-DpapiBlob](PowerShell/Save-DpapiBlob.md#save-dpapiblob) for consistent casing with the other DPAPI cmdlets. PowerShell is case-insensitive, so existing scripts continue to work.
+- The `-Encoding` parameter on [Protect-DpapiNgData](PowerShell/Protect-DpapiNgData.md#protect-dpapingdata) and [Unprotect-DpapiNgData](PowerShell/Unprotect-DpapiNgData.md#unprotect-dpapingdata) now offers tab completion and accepts strings such as `UTF8`, `Unicode`, or `ASCII` in addition to `System.Text.Encoding` instances.
 
 ### Fixed
 
@@ -405,7 +412,7 @@ This is a PowerShell-only release.
 
 ### Fixed
 
-- The [Save-DPAPIBlob](PowerShell/Save-DPAPIBlob.md#save-dpapiblob) cmdlet now saves roamed CNG keys in proper format.
+- The [Save-DpapiBlob](PowerShell/Save-DpapiBlob.md#save-dpapiblob) cmdlet now saves roamed CNG keys in proper format.
 - Fixed an issue with the [Set-ADDBAccountPassword](PowerShell/Set-ADDBAccountPassword.md#set-addbaccountpassword) and [Set-ADDBAccountPasswordHash](PowerShell/Set-ADDBAccountPasswordHash.md#set-addbaccountpasswordhash) cmdlets, which, under rare circumstances, could incorrectly modify replication metadata. Unfortunately, the documentation does not say that [PROPERTY_META_DATA_EXT_VECTOR](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-drsr/22bccd51-1e7d-4502-aef8-b84da983f94f) must be sorted.
 
 ## [4.0] - 2019-12-04
@@ -530,8 +537,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 - [Module] The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount), [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) and [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlets now display linked credentials.
 - [Module] Databases from Windows Server 2016 can now be read on non-DCs.
 - [Module] Added the [ConvertTo-KerberosKey](PowerShell/ConvertTo-KerberosKey.md#convertto-kerberoskey) cmdlet for key generation.
-- [Module] The [Save-DPAPIBlob](PowerShell/Save-DPAPIBlob.md#save-dpapiblob) now generates scripts for mimikatz.
-- [Module] The [Save-DPAPIBlob](PowerShell/Save-DPAPIBlob.md#save-dpapiblob) cmdlet now accepts pipeline input from both Get-ADDBBackupKey and ADDBAccount cmdlets.
+- [Module] The [Save-DpapiBlob](PowerShell/Save-DpapiBlob.md#save-dpapiblob) now generates scripts for mimikatz.
+- [Module] The [Save-DpapiBlob](PowerShell/Save-DpapiBlob.md#save-dpapiblob) cmdlet now accepts pipeline input from both Get-ADDBBackupKey and ADDBAccount cmdlets.
 - [Module] Added Views [JohnNTHistory](PowerShell/Readme.md#john-the-ripper), [HashcatNTHistory](PowerShell/Readme.md#hashcat) and [NTHashHistory](PowerShell/Readme.md#other-formats).
 - [Module] The [Get-ADDBDomainController](PowerShell/Get-ADDBDomainController.md#get-addbdomaincontroller) now displays domain and forest functional levels.
 - [Module] The [Set-ADDBDomainController](PowerShell/Set-ADDBDomainController.md#set-addbdomaincontroller) can now be used to modify backup expiration.
@@ -656,7 +663,7 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 - Added the [ConvertFrom-ADManagedPasswordBlob](PowerShell/ConvertFrom-ADManagedPasswordBlob.md#convertfrom-admanagedpasswordblob) cmdlet
 - Added the [Get-ADDBBackupKey](PowerShell/Get-ADDBBackupKey.md#get-addbbackupkey) cmdlet
 - Added the [Get-ADReplBackupKey](PowerShell/Get-ADReplBackupKey.md#get-adreplbackupkey) cmdlet
-- Added the [Save-DPAPIBlob](PowerShell/Save-DPAPIBlob.md#save-dpapiblob) cmdlet
+- Added the [Save-DpapiBlob](PowerShell/Save-DpapiBlob.md#save-dpapiblob) cmdlet
 - Added the [HashcatLM](PowerShell/Readme.md#hashcat) view
 
 ## 2.7 - 2015-09-30

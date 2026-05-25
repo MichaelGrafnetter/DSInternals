@@ -4,7 +4,7 @@ using System.Formats.Asn1;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
-namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
+namespace DSInternals.Common.Cryptography.Asn1.X509
 {
     [StructLayout(LayoutKind.Sequential)]
     internal partial struct GCMParameters

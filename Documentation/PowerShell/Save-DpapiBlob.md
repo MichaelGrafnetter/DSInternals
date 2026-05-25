@@ -1,11 +1,11 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Save-DPAPIBlob.md
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Save-DpapiBlob.md
 schema: 2.0.0
 ---
 
-# Save-DPAPIBlob
+# Save-DpapiBlob
 
 ## SYNOPSIS
 Saves DPAPI and Credential Roaming data retrieved from Active Directory to the file system for further processing.
@@ -14,12 +14,12 @@ Saves DPAPI and Credential Roaming data retrieved from Active Directory to the f
 
 ### FromObject
 ```
-Save-DPAPIBlob -DPAPIObject <DPAPIObject> [-DirectoryPath] <String> [<CommonParameters>]
+Save-DpapiBlob -DPAPIObject <DPAPIObject> [-DirectoryPath] <String> [<CommonParameters>]
 ```
 
 ### FromAccount
 ```
-Save-DPAPIBlob -Account <DSAccount> [-DirectoryPath] <String> [<CommonParameters>]
+Save-DpapiBlob -Account <DSAccount> [-DirectoryPath] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,9 +33,9 @@ Supports DPAPI backup keys returned by the Get-ADReplBackupKey, Get-ADDBBackupKe
 ```powershell
 PS C:\> Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
                           -BootKey 0be7a2afe1713642182e9b96f73a75da |
-             Save-DPAPIBlob -DirectoryPath '.\Output'
+             Save-DpapiBlob -DirectoryPath '.\Output'
 PS C:\> Get-ADDBAccount -All -DatabasePath '.\ADBackup\Active Directory\ntds.dit' |
-             Save-DPAPIBlob -DirectoryPath '.\Output'
+             Save-DpapiBlob -DirectoryPath '.\Output'
 PS C:\> Get-ChildItem -Path '.\Output' -Recurse -File |
             Foreach-Object { $PSItem.FullName.Replace((Resolve-Path -Path '.\Output'), '') }
 <# Sample Output:
@@ -102,16 +102,16 @@ Extracts DPAPI backup keys and roamed credentials (certificates, private keys, a
 
 ### Example 2
 ```powershell
-PS C:\> Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
-PS C:\> Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DpapiBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' | Save-DpapiBlob -DirectoryPath '.\Output'
 ```
 
 Replicates all DPAPI backup keys and roamed credentials (certificates, private keys, and DPAPI master keys) from the target Active Directory domain controller and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.
 
 ### Example 3
 ```powershell
-PS C:\> Get-LsaBackupKey -ComputerName 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
-PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-LsaBackupKey -ComputerName 'lon-dc1.contoso.com' | Save-DpapiBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DpapiBlob -DirectoryPath '.\Output'
 ```
 
 Retrieves DPAPI backup keys from the target domain controller through the MS-LSAD protocol. Also retrieves roamed credentials (certificates, private keys, and DPAPI master keys) from this domain controller through LDAP and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.

@@ -1,0 +1,148 @@
+---
+external help file: DSInternals.PowerShell.dll-Help.xml
+Module Name: DSInternals
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Save-DpapiNgSidKey.md
+schema: 2.0.0
+---
+
+# Save-DpapiNgSidKey
+
+## SYNOPSIS
+Derives a SID-protected DPAPI-NG group key from a KDS root key and writes it to the local SID key cache.
+
+## SYNTAX
+
+### ParsedIdentifier (Default)
+```
+Save-DpapiNgSidKey [-Identifier] <ProtectionKeyIdentifier> [-KdsRootKey] <KdsRootKey[]> [-Sid] <SecurityIdentifier> [<CommonParameters>]
+```
+
+### IdentifierBlob
+```
+Save-DpapiNgSidKey [-IdentifierBlob] <Byte[]> [-KdsRootKey] <KdsRootKey[]> [-Sid] <SecurityIdentifier> [<CommonParameters>]
+```
+
+## DESCRIPTION
+
+This cmdlet derives a SID-bound group key from the KDS root key whose identifier matches the supplied `ProtectionKeyIdentifier` and writes the resulting `KDSK` Group Key Envelope to the local SID key cache. The native DPAPI-NG implementation consults this cache during decryption, so seeding it offline allows subsequent DPAPI-NG operations (e.g. `Unprotect-DpapiNgData` or `Unprotect-DpapiNgPfxCertificate`) to succeed without contacting a domain controller.
+
+The `-KdsRootKey` parameter accepts an array of candidate root keys; the cmdlet picks the one whose `KeyId` matches the root key identifier embedded in the `KDSK` blob. The identifier can be supplied either as a parsed `ProtectionKeyIdentifier` (via `-Identifier`) or as the raw `KDSK` byte array (via `-IdentifierBlob`, which also accepts a hex string).
+
+The cmdlet does not return any output. Use the `-Verbose` switch to see the full path to the cache file that holds the envelope.
+
+## EXAMPLES
+
+### Example 1
+```powershell
+PS C:\> $rootKeys = Get-ADDBKdsRootKey -DatabasePath '.\ntds.dit' -BootKey 0be7a2afe1713642182e9b96f73a75da
+PS C:\> $keyId = Get-DpapiNgSidKeyIdentifier -Blob $etwEvent.KeyId
+PS C:\> Save-DpapiNgSidKey -Identifier $keyId -KdsRootKey $rootKeys -Sid 'S-1-5-21-3288850392-3299536932-2614793081-516'
+```
+
+Reconstructs a SID-protected group key for the domain controllers group and seeds it into the local SID key cache so subsequent DPAPI-NG decryption can proceed offline. The cmdlet selects the root key whose `KeyId` matches the identifier from the array of candidates.
+
+### Example 2
+```powershell
+PS C:\> Save-DpapiNgSidKey -IdentifierBlob '010000004B44534B...' -KdsRootKey $rootKeys -Sid $sid
+```
+
+Passes the `KDSK` Protection Key Identifier as a hex string. The cmdlet converts it to bytes via `[AcceptHexString]` and parses the result into a `ProtectionKeyIdentifier`.
+
+### Example 3
+```powershell
+PS C:\> Save-DpapiNgSidKey -IdentifierBlob $etwEvent.KeyId -KdsRootKey $rootKeys -Sid $sid
+```
+
+Passes the raw `KDSK` blob (a `byte[]`) directly, e.g. as captured from a Microsoft-Windows-Crypto-DPAPI ETW event.
+
+## PARAMETERS
+
+### -Identifier
+Specifies the parsed DPAPI-NG protection key identifier (`KDSK` blob) whose L0/L1/L2 cycle and root key identifier describe the group key to be derived. Typically obtained from `Get-DpapiNgSidKeyIdentifier`.
+
+```yaml
+Type: ProtectionKeyIdentifier
+Parameter Sets: ParsedIdentifier
+Aliases: ProtectionKeyIdentifier, KeyIdentifier, KeyId
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IdentifierBlob
+Specifies the raw `KDSK` Protection Key Identifier blob as a byte array. Also accepts a hex-encoded string, which is converted to bytes via `[AcceptHexString]`.
+
+```yaml
+Type: Byte[]
+Parameter Sets: IdentifierBlob
+Aliases: ProtectionKeyIdentifierBlob, KeyIdentifierBlob, KeyIdBlob, Blob
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -KdsRootKey
+Specifies one or more candidate KDS root keys. The cmdlet selects the key whose `KeyId` matches the supplied `Identifier`.
+
+```yaml
+Type: KdsRootKey[]
+Parameter Sets: (All)
+Aliases: KdsRootKeys, RootKey, RootKeys
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Sid
+Specifies the Security Identifier of the principal that is authorized to derive the group key.
+
+```yaml
+Type: SecurityIdentifier
+Parameter Sets: (All)
+Aliases: TargetSid, ObjectSid
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+## INPUTS
+
+### DSInternals.Common.Data.ProtectionKeyIdentifier
+
+### System.Byte[]
+
+### DSInternals.Common.Data.KdsRootKey
+
+### System.Security.Principal.SecurityIdentifier
+
+## OUTPUTS
+
+### None
+
+## NOTES
+
+Alias: `Save-CngDpapiSidKey`
+
+## RELATED LINKS
+
+[Get-DpapiNgSidKeyIdentifier](Get-DpapiNgSidKeyIdentifier.md)
+[Get-ADDBKdsRootKey](Get-ADDBKdsRootKey.md)
+[Get-ADReplKdsRootKey](Get-ADReplKdsRootKey.md)
+[Get-ADSIKdsRootKey](Get-ADSIKdsRootKey.md)
+[Unprotect-DpapiNgData](Unprotect-DpapiNgData.md)
+[Unprotect-DpapiNgPfxCertificate](Unprotect-DpapiNgPfxCertificate.md)

@@ -66,7 +66,7 @@ Accept wildcard characters: False
 
 ### -Encoding
 Specifies the text encoding to use when returning decrypted data as a string.
-Supply a `System.Text.Encoding` instance, such as `[System.Text.Encoding]::Unicode`.
+Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::Unicode`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.
 
 ```yaml
 Type: System.Text.Encoding

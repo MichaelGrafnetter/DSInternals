@@ -101,4 +101,35 @@
       </MemberSet>
     </Members>
   </Type>
+  <Type>
+    <Name>DSInternals.Common.Data.KdsRootKey</Name>
+    <Members>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <NoteProperty>
+            <Name>SerializationDepth</Name>
+            <Value>1</Value>
+          </NoteProperty>
+        </Members>
+      </MemberSet>
+    </Members>
+    <TypeConverter>
+      <TypeName>DSInternals.PowerShell.KdsRootKeyDeserializer</TypeName>
+    </TypeConverter>
+  </Type>
+  <Type>
+    <Name>Deserialized.DSInternals.Common.Data.KdsRootKey</Name>
+    <Members>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <NoteProperty>
+            <Name>TargetTypeForDeserialization</Name>
+            <Value>DSInternals.Common.Data.KdsRootKey</Value>
+          </NoteProperty>
+        </Members>
+      </MemberSet>
+    </Members>
+  </Type>
 </Types>

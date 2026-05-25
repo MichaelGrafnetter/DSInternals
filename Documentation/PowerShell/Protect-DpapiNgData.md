@@ -110,7 +110,7 @@ Accept wildcard characters: False
 
 ### -Encoding
 Specifies the text encoding used to convert `Cleartext` to bytes before encryption.
-Supply a `System.Text.Encoding` instance, such as `[System.Text.Encoding]::UTF8`.
+Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::UTF8`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.
 
 ```yaml
 Type: System.Text.Encoding

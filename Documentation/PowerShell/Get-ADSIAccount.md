@@ -56,8 +56,8 @@ Gets one or more Active Directory accounts from a given domain controller using 
 
 ### Example 1
 ```powershell
-PS C:\> Get-LsaBackupKey -ComputerName 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
-PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-LsaBackupKey -ComputerName 'lon-dc1.contoso.com' | Save-DpapiBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DpapiBlob -DirectoryPath '.\Output'
 ```
 
 Retrieves DPAPI backup keys from the target domain controller through the MS-LSAD protocol. Also retrieves roamed credentials (certificates, private keys, and DPAPI master keys) from this domain controller through LDAP and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.
@@ -271,5 +271,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Get-ADDBAccount](Get-ADDBAccount.md)
 [Get-ADReplAccount](Get-ADReplAccount.md)
-[Save-DPAPIBlob](Save-DPAPIBlob.md)
+[Save-DpapiBlob](Save-DpapiBlob.md)
 [Get-ADKeyCredential](Get-ADKeyCredential.md)

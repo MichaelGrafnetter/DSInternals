@@ -18,7 +18,7 @@ Get-ADDBBackupKey -BootKey <Byte[]> -DatabasePath <String> [-LogPath <String>] [
 
 ## DESCRIPTION
 
-Reads and decrypts Data Protection API (DPAPI) backup keys from an Active Directory database file. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.
+Reads and decrypts Data Protection API (DPAPI) backup keys from an Active Directory database file. The output can be saved to the file system using the Save-DpapiBlob cmdlet.
 
 DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of the user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.
 
@@ -70,7 +70,7 @@ Extracts the boot key (AKA SysKey or system key) from a backup of the SYSTEM reg
 ```powershell
 PS C:\> Get-ADDBBackupKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit' `
                           -BootKey 0be7a2afe1713642182e9b96f73a75da |
-             Save-DPAPIBlob -DirectoryPath '.\Output'
+             Save-DpapiBlob -DirectoryPath '.\Output'
 PS C:\> Get-ChildItem -Path '.\Output' | Select-Object -ExpandProperty Name
 <# Sample Output:
 kiwiscript.txt
@@ -145,6 +145,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[Save-DPAPIBlob](Save-DPAPIBlob.md)
+[Save-DpapiBlob](Save-DpapiBlob.md)
 [Get-ADReplBackupKey](Get-ADReplBackupKey.md)
 [Get-LsaBackupKey](Get-LsaBackupKey.md)

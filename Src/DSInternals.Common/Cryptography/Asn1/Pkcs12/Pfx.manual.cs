@@ -1,7 +1,6 @@
 using System.Formats.Asn1;
 using System.Security.Cryptography;
 using DSInternals.Common.Cryptography;
-using DSInternals.Common.Cryptography.Asn1.DpapiNg;
 using Pkcs7 = DSInternals.Common.Cryptography.Asn1.Pkcs7;
 using Windows.Win32;
 

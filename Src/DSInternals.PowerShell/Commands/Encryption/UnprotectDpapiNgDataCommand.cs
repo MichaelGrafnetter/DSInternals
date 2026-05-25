@@ -48,7 +48,9 @@ public class UnprotectDpapiNgDataCommand : PSCmdlet
 
     [Parameter(Mandatory = false, ParameterSetName = OnlineParameterSetName)]
     [Parameter(Mandatory = false, ParameterSetName = OfflineParameterSetName)]
-    [ValidateNotNullOrEmpty]
+    [ValidateNotNull]
+    [ArgumentCompleter(typeof(EncodingArgumentCompleter))]
+    [EncodingTransformation]
     public Encoding? Encoding
     {
         get;

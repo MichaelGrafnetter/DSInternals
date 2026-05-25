@@ -366,7 +366,7 @@ classDiagram
         +SystemHiveFilePath : string
         +Online : SwitchParameter
     }
-    class SaveDPAPIBlobCmdlet {
+    class SaveDpapiBlobCommand {
         +DPAPIObject : DPAPIObject
         +Account : DSAccount
         +DirectoryPath : string
@@ -382,7 +382,7 @@ classDiagram
         +WeakPasswordHashesSortedFilePath : string
     }
     PSCmdletEx <|-- GetBootKeyCommand
-    PSCmdletEx <|-- SaveDPAPIBlobCmdlet
+    PSCmdletEx <|-- SaveDpapiBlobCommand
     PSCmdletEx <|-- TestPasswordQualityCommand
 
     class ConvertToKerberosKeyCommand {

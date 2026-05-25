@@ -238,7 +238,7 @@ Calculates OrgId hash of a given password. Used by Azure Active Directory Connec
 
 ## Cmdlets for Credential Decryption
 
-### [Save-DPAPIBlob](Save-DPAPIBlob.md#save-dpapiblob)
+### [Save-DpapiBlob](Save-DpapiBlob.md#save-dpapiblob)
 Saves DPAPI and Credential Roaming data retrieved from Active Directory to the file system for further processing.
 
 ### [Get-DpapiNgPfxCertificate](Get-DpapiNgPfxCertificate.md#get-dpapingpfxcertificate)
@@ -255,6 +255,12 @@ Decrypts a base64-encoded DPAPI-NG protected blob.
 
 ### [Get-DpapiNgData](Get-DpapiNgData.md#get-dpapingdata)
 Parses a base64-encoded DPAPI-NG protected blob.
+
+### [Get-DpapiNgSidKeyIdentifier](Get-DpapiNgSidKeyIdentifier.md#get-dpapingsidkeyidentifier)
+Parses a SID-protected DPAPI-NG Protection Key Identifier (`KDSK`) blob.
+
+### [Save-DpapiNgSidKey](Save-DpapiNgSidKey.md#save-dpapingsidkey)
+Derives a SID-protected DPAPI-NG group key from a KDS root key and writes it to the local SID key cache.
 
 ### [New-DpapiNgNamedDescriptor](New-DpapiNgNamedDescriptor.md#new-dpapingnameddescriptor)
 Registers a named DPAPI-NG protection descriptor.

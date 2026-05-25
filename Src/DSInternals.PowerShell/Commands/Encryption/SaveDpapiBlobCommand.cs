@@ -3,9 +3,9 @@ using System.Management.Automation;
 using DSInternals.Common.Data;
 
 namespace DSInternals.PowerShell.Commands;
-[Cmdlet(VerbsData.Save, "DPAPIBlob")]
+[Cmdlet(VerbsData.Save, "DpapiBlob")]
 [OutputType("None")]
-public class SaveDPAPIBlobCmdlet : PSCmdletEx
+public class SaveDpapiBlobCommand : PSCmdletEx
 {
     private const string VerboseMessageFormat = "Creating DPAPI file {0}.";
     private const string AccountParameterSet = "FromAccount";

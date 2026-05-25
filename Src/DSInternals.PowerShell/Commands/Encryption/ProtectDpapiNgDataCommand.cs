@@ -66,6 +66,8 @@ public class ProtectDpapiNgDataCommand : PSCmdlet
 
     [Parameter]
     [ValidateNotNull]
+    [ArgumentCompleter(typeof(EncodingArgumentCompleter))]
+    [EncodingTransformation]
     public Encoding Encoding
     {
         get;

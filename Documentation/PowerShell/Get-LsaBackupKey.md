@@ -18,7 +18,7 @@ Get-LsaBackupKey [[-ComputerName] <String>] [<CommonParameters>]
 
 ## DESCRIPTION
 
-Reads the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-LSAD (AKA LSARPC) protocol. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.
+Reads the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-LSAD (AKA LSARPC) protocol. The output can be saved to the file system using the Save-DpapiBlob cmdlet.
 
 DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of the user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.
 
@@ -50,7 +50,7 @@ Displays the DPAPI domain backup keys.
 
 ### Example 2
 ```powershell
-PS C:\> Get-LsaBackupKey -ComputerName LON-DC1 | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-LsaBackupKey -ComputerName LON-DC1 | Save-DpapiBlob -DirectoryPath '.\Output'
 PS C:\> Get-ChildItem -Path '.\Output' | Select-Object -ExpandProperty Name
 <# Sample Output:
 kiwiscript.txt
@@ -100,6 +100,6 @@ Administrative permissions on the target domain controller (DC) are required in 
 
 ## RELATED LINKS
 
-[Save-DPAPIBlob](Save-DPAPIBlob.md)
+[Save-DpapiBlob](Save-DpapiBlob.md)
 [Get-ADDBBackupKey](Get-ADDBBackupKey.md)
 [Get-ADReplBackupKey](Get-ADReplBackupKey.md)

@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
@@ -9,13 +9,25 @@ using Windows.Win32.Security;
 namespace DSInternals.Common.Data;
 
 /// <summary>
-/// Group Key Envelope
+/// Represents a Group Key Envelope (<c>KDSK</c>), a structure used by Windows DPAPI-NG to
+/// transport the L1 and L2 seed keys (or the group public key) derived from a KDS root key.
 /// </summary>
 /// <remarks>https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gkdi/192c061c-e740-4aa0-ab1d-6954fb3e58f7</remarks>
 public class GroupKeyEnvelope
 {
+    /// <summary>
+    /// ASCII magic value (<c>KDSK</c>) that identifies a Group Key Envelope structure.
+    /// </summary>
     private const string KdsKeyMagic = "KDSK";
+
+    /// <summary>
+    /// Expected version of the Group Key Envelope structure.
+    /// </summary>
     private const int ExpectedVersion = 1;
+
+    /// <summary>
+    /// Size of the fixed-length header of the Group Key Envelope structure, in bytes.
+    /// </summary>
     private const int StructureHeaderLength = 16 * sizeof(int) + 16;
 
     /// <summary>
@@ -132,6 +144,9 @@ public class GroupKeyEnvelope
         private set;
     }
 
+    /// <summary>
+    /// Flags indicating whether the envelope carries a private key, a public key, or a symmetric key.
+    /// </summary>
     public GroupKeyEnvelopeFlags Flags
     {
         get;
@@ -156,17 +171,31 @@ public class GroupKeyEnvelope
         private set;
     } = Data.KdsRootKey.DefaultPrivateKeyLength;
 
+    /// <summary>
+    /// The self-relative security descriptor of the principal that is allowed to derive the key.
+    /// </summary>
     public byte[] TargetSecurityDescriptor
     {
         get;
         private set;
     }
 
+    /// <summary>
+    /// Initializes a new, empty <see cref="GroupKeyEnvelope"/> instance.
+    /// </summary>
+    /// <remarks>
+    /// Private to force callers through the parsing constructor or the <see cref="Create(KdsRootKey, ProtectionKeyIdentifier, SecurityIdentifier)"/> factory methods.
+    /// </remarks>
     private GroupKeyEnvelope()
     {
         // Private constructor to prevent instantiation without parameters.
     }
 
+    /// <summary>
+    /// Initializes a new <see cref="GroupKeyEnvelope"/> instance by parsing a binary <c>KDSK</c> blob.
+    /// </summary>
+    /// <param name="blob">The raw bytes of the Group Key Envelope structure.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The blob is too short or has an invalid version or magic value.</exception>
     public GroupKeyEnvelope(byte[] blob)
     {
         Validator.AssertMinLength(blob, StructureHeaderLength, nameof(blob));
@@ -272,6 +301,15 @@ public class GroupKeyEnvelope
         }
     }
 
+    /// <summary>
+    /// Creates a new <see cref="GroupKeyEnvelope"/> derived from a KDS root key and identified
+    /// by a <see cref="ProtectionKeyIdentifier"/>, scoped to the supplied SID.
+    /// </summary>
+    /// <param name="rootKey">The KDS root key that the envelope's key is derived from.</param>
+    /// <param name="keyIdentifier">The protection key identifier whose L0/L1/L2 cycle is being enveloped.</param>
+    /// <param name="targetSID">The SID of the principal that is allowed to derive the key.</param>
+    /// <returns>The constructed Group Key Envelope.</returns>
+    /// <exception cref="ArgumentException">The supplied root key does not match the key identifier.</exception>
     public static GroupKeyEnvelope Create(KdsRootKey rootKey, ProtectionKeyIdentifier keyIdentifier, SecurityIdentifier targetSID)
     {
         ArgumentNullException.ThrowIfNull(rootKey);
@@ -292,6 +330,17 @@ public class GroupKeyEnvelope
         );
     }
 
+    /// <summary>
+    /// Creates a new <see cref="GroupKeyEnvelope"/> derived from a KDS root key for the given L0/L1/L2 cycle and target SID.
+    /// </summary>
+    /// <param name="rootKey">The KDS root key that the envelope's key is derived from.</param>
+    /// <param name="l0KeyId">The L0 index of the key being enveloped.</param>
+    /// <param name="l1KeyId">The L1 index of the key being enveloped.</param>
+    /// <param name="l2KeyId">The L2 index of the key being enveloped.</param>
+    /// <param name="targetSID">The SID of the principal that is allowed to derive the key.</param>
+    /// <param name="domain">DNS name of the Active Directory domain that issued the key.</param>
+    /// <param name="forest">DNS name of the Active Directory forest that issued the key.</param>
+    /// <returns>The constructed Group Key Envelope.</returns>
     public static GroupKeyEnvelope Create(KdsRootKey rootKey, int l0KeyId, int l1KeyId, int l2KeyId, SecurityIdentifier targetSID, string domain, string forest)
     {
         ArgumentNullException.ThrowIfNull(targetSID);
@@ -300,6 +349,17 @@ public class GroupKeyEnvelope
         return Create(rootKey, l0KeyId, l1KeyId, l2KeyId, targetSecurityDescriptor, domain, forest);
     }
 
+    /// <summary>
+    /// Creates a new <see cref="GroupKeyEnvelope"/> derived from a KDS root key for the given L0/L1/L2 cycle and target security descriptor.
+    /// </summary>
+    /// <param name="rootKey">The KDS root key that the envelope's key is derived from.</param>
+    /// <param name="l0KeyId">The L0 index of the key being enveloped.</param>
+    /// <param name="l1KeyId">The L1 index of the key being enveloped.</param>
+    /// <param name="l2KeyId">The L2 index of the key being enveloped.</param>
+    /// <param name="targetSecurityDescriptor">The self-relative security descriptor of the principal that is allowed to derive the key.</param>
+    /// <param name="domainName">DNS name of the Active Directory domain that issued the key.</param>
+    /// <param name="forestName">DNS name of the Active Directory forest that issued the key.</param>
+    /// <returns>The constructed Group Key Envelope.</returns>
     public static GroupKeyEnvelope Create(KdsRootKey rootKey, int l0KeyId, int l1KeyId, int l2KeyId, byte[] targetSecurityDescriptor, string domainName, string forestName)
     {
         ArgumentNullException.ThrowIfNull(rootKey);
@@ -329,7 +389,12 @@ public class GroupKeyEnvelope
         return envelope;
     }
 
-    public void WriteToCache()
+    /// <summary>
+    /// Writes this envelope into the local SID key cache that the native DPAPI-NG implementation consults during decryption.
+    /// </summary>
+    /// <returns>The full path to the cache file that holds the envelope.</returns>
+    /// <exception cref="InvalidOperationException">The <see cref="TargetSecurityDescriptor"/> has not been populated.</exception>
+    public string WriteToCache()
     {
         if (this.TargetSecurityDescriptor == null)
         {
@@ -346,15 +411,21 @@ public class GroupKeyEnvelope
         if (sidKeyFileName != null && File.Exists(sidKeyFileName))
         {
             // The key is already cached.
-            return;
+            return sidKeyFileName;
         }
 
         byte[] binarySidKey = this.ToByteArray();
 
         result = NativeMethods.WriteSIDKeyInCache(binarySidKey, this.TargetSecurityDescriptor, sidKeyCacheFolder, userStorageArea);
         Validator.AssertSuccess(result);
+
+        return sidKeyFileName;
     }
 
+    /// <summary>
+    /// Serializes this envelope into its on-the-wire <c>KDSK</c> binary representation.
+    /// </summary>
+    /// <returns>The serialized Group Key Envelope.</returns>
     public byte[] ToByteArray()
     {
         int structSize = StructureHeaderLength +
@@ -436,17 +507,30 @@ public class GroupKeyEnvelope
         return buffer;
     }
 
+    /// <summary>
+    /// Deletes all SID-protected group keys cached on the local machine by the current user.
+    /// </summary>
     public static void DeleteAllCachedKeys()
     {
         Win32ErrorCode result = NativeMethods.DeleteAllCachedKeys();
         Validator.AssertSuccess(result);
     }
 
+    /// <summary>
+    /// Returns the on-the-wire length, in bytes, of a UTF-16 string with a trailing null terminator.
+    /// </summary>
+    /// <param name="str">The string whose serialized length is being computed. <see langword="null"/> is treated as an empty string.</param>
+    /// <returns>The number of bytes the string occupies when serialized, including the null terminator.</returns>
     private static int GetStringLength(string str)
     {
         return ((str?.Length ?? 0) + 1) * sizeof(char); // +1 for the null terminator
     }
 
+    /// <summary>
+    /// Builds a self-relative security descriptor that the SID key cache uses to authorize derivation of a SID-scoped group key.
+    /// </summary>
+    /// <param name="targetSID">The SID of the principal that is allowed to derive the key.</param>
+    /// <returns>The self-relative security descriptor as a byte array.</returns>
     /// <remarks>This method returns slightly different results than the managed ACLs.</remarks>
     public static unsafe byte[] ConvertSidToSecurityDescriptor(SecurityIdentifier targetSID)
     {

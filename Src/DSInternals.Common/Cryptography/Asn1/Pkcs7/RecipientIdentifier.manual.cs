@@ -1,5 +1,3 @@
-using DSInternals.Common.Cryptography.Asn1.DpapiNg;
-
 namespace DSInternals.Common.Cryptography.Asn1.Pkcs7;
 
 internal partial struct RecipientIdentifier

@@ -4,13 +4,13 @@ using System.Formats.Asn1;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
-namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
+namespace DSInternals.Common.Cryptography.Asn1.X509
 {
     [StructLayout(LayoutKind.Sequential)]
     internal partial struct Aes256GcmAlgorithmIdentifier
     {
         internal string Algorithm;
-        internal DSInternals.Common.Cryptography.Asn1.DpapiNg.GCMParameters Parameters;
+        internal DSInternals.Common.Cryptography.Asn1.X509.GCMParameters Parameters;
 
         internal readonly void Encode(AsnWriter writer)
         {
@@ -86,7 +86,7 @@ namespace DSInternals.Common.Cryptography.Asn1.DpapiNg
             AsnReader sequenceReader = reader.ReadSequence(expectedTag);
 
             decoded.Algorithm = sequenceReader.ReadObjectIdentifier();
-            DSInternals.Common.Cryptography.Asn1.DpapiNg.GCMParameters.Decode(ref sequenceReader, rebind, out decoded.Parameters);
+            DSInternals.Common.Cryptography.Asn1.X509.GCMParameters.Decode(ref sequenceReader, rebind, out decoded.Parameters);
 
             sequenceReader.ThrowIfNotEmpty();
         }
