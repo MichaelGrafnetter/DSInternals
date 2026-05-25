@@ -166,18 +166,13 @@ public static class DpapiNg
     /// <param name="machine">Specifies whether to query the machine registry hive.</param>
     /// <returns>The DPAPI-NG protection descriptor rule string.</returns>
     /// <exception cref="ArgumentException">The <paramref name="name" /> parameter is <see langword="null" /> or empty.</exception>
-    /// <exception cref="KeyNotFoundException">No descriptor is registered with the specified <paramref name="name" />.</exception>
+    /// <exception cref="System.ComponentModel.Win32Exception">No descriptor is registered with the specified <paramref name="name" />, or another native error occurred.</exception>
     public static string QueryDescriptor(string name, bool machine = false)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
 
         Win32ErrorCode resultCode = NativeMethods.NCryptQueryProtectionDescriptorName(name, machine, out string descriptor);
         Validator.AssertSuccess(resultCode);
-
-        if (string.IsNullOrEmpty(descriptor))
-        {
-            throw new KeyNotFoundException($"No DPAPI-NG protection descriptor registered with name '{name}'.");
-        }
 
         return descriptor;
     }

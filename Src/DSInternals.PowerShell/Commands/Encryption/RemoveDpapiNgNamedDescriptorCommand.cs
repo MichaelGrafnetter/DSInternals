@@ -1,5 +1,7 @@
+using System.ComponentModel;
 using System.Management.Automation;
 using DSInternals.Common.Cryptography;
+using DSInternals.Common.Interop;
 
 namespace DSInternals.PowerShell.Commands;
 
@@ -34,7 +36,7 @@ public class RemoveDpapiNgNamedDescriptorCommand : PSCmdlet
         bool deleted = DpapiNg.DeleteDescriptor(this.Name, this.Machine.IsPresent);
         if (!deleted)
         {
-            var exception = new KeyNotFoundException($"No DPAPI-NG protection descriptor registered with name '{this.Name}'.");
+            var exception = new Win32Exception((int)Win32ErrorCode.FILE_NOT_FOUND);
             var error = new ErrorRecord(exception, "RemoveDpapiNgNamedDescriptor_NotFound", ErrorCategory.ObjectNotFound, this.Name);
             this.WriteError(error);
         }

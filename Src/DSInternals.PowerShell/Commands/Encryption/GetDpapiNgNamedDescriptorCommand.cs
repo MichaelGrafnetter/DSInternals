@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Management.Automation;
 using DSInternals.Common.Cryptography;
 
@@ -38,9 +39,9 @@ public class GetDpapiNgNamedDescriptorCommand : PSCmdlet
                 this.WriteObject(new KeyValuePair<string, string>(this.Name, descriptor));
             }
         }
-        catch (KeyNotFoundException ex)
+        catch (Win32Exception ex)
         {
-            var error = new ErrorRecord(ex, "GetDpapiNgNamedDescriptor_NotFound", ErrorCategory.ObjectNotFound, this.Name);
+            var error = new ErrorRecord(ex, "GetDpapiNgNamedDescriptor_Failed", ErrorCategory.ObjectNotFound, this.Name);
             this.WriteError(error);
         }
     }

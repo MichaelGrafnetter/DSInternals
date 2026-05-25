@@ -19,9 +19,8 @@ Describe 'KdsRootKey CLI XML Serialization' {
         $deserializedKey = Import-Clixml -Path $exportPath
     }
 
-    It 'preserves the deserialized type name' {
-        $deserializedKey.PSObject.TypeNames |
-            Should -Contain 'Deserialized.DSInternals.Common.Data.KdsRootKey'
+    It 'rehydrates to a live KdsRootKey instance' {
+        $deserializedKey | Should -BeOfType ([DSInternals.Common.Data.KdsRootKey])
     }
 
     It 'round-trips the KeyId' {
