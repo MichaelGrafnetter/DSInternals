@@ -513,6 +513,13 @@ public class GroupKeyEnvelope
     public static void DeleteAllCachedKeys()
     {
         Win32ErrorCode result = NativeMethods.DeleteAllCachedKeys();
+
+        // FILE_NOT_FOUND is returned when there is nothing cached to delete, which we treat as success.
+        if (result == Win32ErrorCode.FILE_NOT_FOUND)
+        {
+            return;
+        }
+
         Validator.AssertSuccess(result);
     }
 
