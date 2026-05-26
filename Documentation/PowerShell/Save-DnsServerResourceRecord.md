@@ -1,11 +1,11 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Save-DnsResourceRecord.md
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Save-DnsServerResourceRecord.md
 schema: 2.0.0
 ---
 
-# Save-DnsResourceRecord
+# Save-DnsServerResourceRecord
 
 ## SYNOPSIS
 Saves DNS resource records retrieved from Active Directory to one or more DNS zone files.
@@ -13,7 +13,7 @@ Saves DNS resource records retrieved from Active Directory to one or more DNS zo
 ## SYNTAX
 
 ```
-Save-DnsResourceRecord -InputObject <DnsResourceRecord> [-DirectoryPath] <String> [-Force] [<CommonParameters>]
+Save-DnsServerResourceRecord -InputObject <DnsResourceRecord> [-DirectoryPath] <String> [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,8 +25,8 @@ Existing zone files are not overwritten unless the Force parameter is specified.
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBDnsResourceRecord -DatabasePath 'C:\Backup\ntds.dit' |
-            Save-DnsResourceRecord -Path '.\Zones' -Verbose
+PS C:\> Get-ADDBDnsServerResourceRecord -DatabasePath 'C:\Backup\ntds.dit' |
+            Save-DnsServerResourceRecord -Path '.\Zones' -Verbose
 ```
 
 Extracts all DNS resource records from the offline Active Directory database file and saves them to DNS zone files in the Zones directory.
@@ -34,9 +34,9 @@ The cmdlet writes verbose information for each zone file that it creates.
 
 ### Example 2
 ```powershell
-PS C:\> Get-ADDBDnsResourceRecord -DatabasePath '.\ntds.dit' |
+PS C:\> Get-ADDBDnsServerResourceRecord -DatabasePath '.\ntds.dit' |
             Where-Object Zone -eq 'contoso.com' |
-            Save-DnsResourceRecord -Path '.\Zones' -Force
+            Save-DnsServerResourceRecord -Path '.\Zones' -Force
 ```
 
 Saves records from the contoso.com zone to .\Zones\contoso.com.dns and overwrites an existing file if needed.
@@ -103,5 +103,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[Get-ADDBDnsResourceRecord](Get-ADDBDnsResourceRecord.md)
-[Get-ADDBDnsZone](Get-ADDBDnsZone.md)
+[Get-ADDBDnsServerResourceRecord](Get-ADDBDnsServerResourceRecord.md)
+[Get-ADDBDnsServerZone](Get-ADDBDnsServerZone.md)

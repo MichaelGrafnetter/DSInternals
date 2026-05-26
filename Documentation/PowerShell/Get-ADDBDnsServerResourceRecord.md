@@ -1,11 +1,11 @@
 ---
 external help file: DSInternals.PowerShell.dll-Help.xml
 Module Name: DSInternals
-online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBDnsResourceRecord.md
+online version: https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADDBDnsServerResourceRecord.md
 schema: 2.0.0
 ---
 
-# Get-ADDBDnsResourceRecord
+# Get-ADDBDnsServerResourceRecord
 
 ## SYNOPSIS
 Retrieves DNS resource records from an Active Directory database.
@@ -13,7 +13,7 @@ Retrieves DNS resource records from an Active Directory database.
 ## SYNTAX
 
 ```
-Get-ADDBDnsResourceRecord [-IncludeTombstones] [-IncludeRootHints] -DatabasePath <String> [-LogPath <String>]
+Get-ADDBDnsServerResourceRecord [-IncludeTombstones] [-IncludeRootHints] -DatabasePath <String> [-LogPath <String>]
  [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ The output can include tombstoned records and root hints if specified.
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBDnsResourceRecord -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit' |
+PS C:\> Get-ADDBDnsServerResourceRecord -DatabasePath 'C:\IFM Backup\Active Directory\ntds.dit' |
             Where-Object Zone -eq 'contoso.com' |
             Where-Object Type -in SOA,NS,A,CNAME,MX,CNAME |
             Sort-Object -Property Name
@@ -132,6 +132,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[Get-ADDBDnsZone](Get-ADDBDnsZone.md)
-[Save-DnsResourceRecord](Save-DnsResourceRecord.md)
+[Get-ADDBDnsServerZone](Get-ADDBDnsServerZone.md)
+[Save-DnsServerResourceRecord](Save-DnsServerResourceRecord.md)
 [Get-ADDBDomainController](Get-ADDBDomainController.md)

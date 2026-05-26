@@ -92,4 +92,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Get-ADSIDnsServerResourceRecord](Get-ADSIDnsServerResourceRecord.md)
-[Get-ADDBDnsZone](Get-ADDBDnsZone.md)
+[Get-ADDBDnsServerZone](Get-ADDBDnsServerZone.md)

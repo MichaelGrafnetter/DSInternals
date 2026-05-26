@@ -3,10 +3,10 @@ using DSInternals.DataStore;
 
 namespace DSInternals.PowerShell.Commands;
 
-[Cmdlet(VerbsCommon.Get, "ADDBDnsResourceRecord")]
-[Alias("Get-ADDBDnsRecord")]
+[Cmdlet(VerbsCommon.Get, "ADDBDnsServerResourceRecord")]
+[Alias("Get-ADDBDnsResourceRecord", "Get-ADDBDnsRecord")]
 [OutputType(typeof(DSInternals.Common.DNS.DnsResourceRecord))]
-public class GetADDBDnsResourceRecordCommand : ADDBCommandBase
+public class GetADDBDnsServerResourceRecordCommand : ADDBCommandBase
 {
     [Parameter(Mandatory = false)]
     [Alias("Tombstones", "IncludeTombstoned")]

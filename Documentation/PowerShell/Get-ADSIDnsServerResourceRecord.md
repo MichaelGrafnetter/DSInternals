@@ -37,7 +37,7 @@ Retrieves DNS resource records from the specified domain controller through LDAP
 ### Example 2
 ```powershell
 PS C:\> Get-ADSIDnsServerResourceRecord -Server 'lon-dc1.contoso.com' |
-            Save-DnsResourceRecord -Path '.\Zones' -Verbose
+            Save-DnsServerResourceRecord -Path '.\Zones' -Verbose
 ```
 
 Retrieves all DNS resource records from the specified domain controller and saves them to DNS zone files in the Zones directory.
@@ -120,5 +120,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Get-ADSIDnsServerZone](Get-ADSIDnsServerZone.md)
-[Get-ADDBDnsResourceRecord](Get-ADDBDnsResourceRecord.md)
-[Save-DnsResourceRecord](Save-DnsResourceRecord.md)
+[Get-ADDBDnsServerResourceRecord](Get-ADDBDnsServerResourceRecord.md)
+[Save-DnsServerResourceRecord](Save-DnsServerResourceRecord.md)

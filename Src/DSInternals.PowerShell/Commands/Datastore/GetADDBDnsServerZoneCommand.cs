@@ -4,9 +4,10 @@ using DSInternals.DataStore;
 
 namespace DSInternals.PowerShell.Commands;
 
-[Cmdlet(VerbsCommon.Get, "ADDBDnsZone")]
+[Cmdlet(VerbsCommon.Get, "ADDBDnsServerZone")]
+[Alias("Get-ADDBDnsZone")]
 [OutputType(typeof(DnsZone))]
-public class GetADDBDnsZoneCommand : ADDBCommandBase
+public class GetADDBDnsServerZoneCommand : ADDBCommandBase
 {
     protected override void BeginProcessing()
     {

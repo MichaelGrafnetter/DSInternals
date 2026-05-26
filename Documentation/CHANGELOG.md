@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Added
 
-- Added the [Save-DnsResourceRecord](PowerShell/Save-DnsResourceRecord.md#save-dnsresourcerecord) cmdlet for exporting DNS records to zone files.
+- Added the [Save-DnsServerResourceRecord](PowerShell/Save-DnsServerResourceRecord.md#save-dnsserverresourcerecord) cmdlet for exporting DNS records to zone files.
 - Added the [Get-ADSIKdsRootKey](PowerShell/Get-ADSIKdsRootKey.md#get-adsikdsrootkey) cmdlet for reading KDS root keys from a domain controller through LDAP.
 - Added the [Get-ADSIServiceAccount](PowerShell/Get-ADSIServiceAccount.md#get-adsiserviceaccount) cmdlet for reading gMSAs and dMSAs from a domain controller through LDAP, with passwords derived from KDS root keys.
 - Added the [Get-DpapiNgPfxCertificate](PowerShell/Get-DpapiNgPfxCertificate.md#get-dpapingpfxcertificate) cmdlet for extracting SID-based DPAPI-NG certificate password protectors from PFX files, and the [Unprotect-DpapiNgPfxCertificate](PowerShell/Unprotect-DpapiNgPfxCertificate.md#unprotect-dpapingpfxcertificate) cmdlet for decrypting them either online or offline with `-KdsRootKey`.
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Changed
 
+- Renamed the `Get-ADDBDnsResourceRecord` cmdlet to [Get-ADDBDnsServerResourceRecord](PowerShell/Get-ADDBDnsServerResourceRecord.md#get-addbdnsserverresourcerecord), the `Save-DnsResourceRecord` cmdlet to [Save-DnsServerResourceRecord](PowerShell/Save-DnsServerResourceRecord.md#save-dnsserverresourcerecord), and the `Get-ADDBDnsZone` cmdlet to [Get-ADDBDnsServerZone](PowerShell/Get-ADDBDnsServerZone.md#get-addbdnsserverzone) for naming consistency with [Get-ADSIDnsServerResourceRecord](PowerShell/Get-ADSIDnsServerResourceRecord.md#get-adsidnsserverresourcerecord) and [Get-ADSIDnsServerZone](PowerShell/Get-ADSIDnsServerZone.md#get-adsidnsserverzone). The previous names are preserved as aliases.
 - Renamed the `Save-DPAPIBlob` cmdlet to [Save-DpapiBlob](PowerShell/Save-DpapiBlob.md#save-dpapiblob) for consistent casing with the other DPAPI cmdlets. PowerShell is case-insensitive, so existing scripts continue to work.
 - The `-Encoding` parameter on [Protect-DpapiNgData](PowerShell/Protect-DpapiNgData.md#protect-dpapingdata) and [Unprotect-DpapiNgData](PowerShell/Unprotect-DpapiNgData.md#unprotect-dpapingdata) now offers tab completion and accepts strings such as `UTF8`, `Unicode`, or `ASCII` in addition to `System.Text.Encoding` instances.
 
@@ -195,7 +196,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Added
 
-- Added the [Get-ADDBDnsZone](PowerShell/Get-ADDBDnsZone.md#get-addbdnszone) cmdlet for reading the list of AD-integrated DNS zones from a `ntds.dit` file.
+- Added the [Get-ADDBDnsZone](PowerShell/Get-ADDBDnsServerZone.md#get-addbdnsserverzone) cmdlet for reading the list of AD-integrated DNS zones from a `ntds.dit` file.
 - The [New-ADDBRestoreFromMediaScript](PowerShell/New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript) cmdlet has a new parameter called `-SkipDNSServer`, which prevents the DNS Server role from being installed on the restored domain controller.
 
 ## [5.0] - 2025-03-03
@@ -203,7 +204,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
 
 - Added the [Get-ADDBBitLockerRecoveryInformation](PowerShell/Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation) cmdlet for retrieving BitLocker recovery keys from `ntds.dit` files.
-- Added the [Get-ADDBDnsResourceRecord](PowerShell/Get-ADDBDnsResourceRecord.md#get-addbdnsresourcerecord) cmdlet for retrieving DNS resource records from `ntds.dit` files.
+- Added the [Get-ADDBDnsResourceRecord](PowerShell/Get-ADDBDnsServerResourceRecord.md#get-addbdnsserverresourcerecord) cmdlet for retrieving DNS resource records from `ntds.dit` files.
 - The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount), [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount), and [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlets have a new parameter called `-Properties` for specifying the properties to be fetched, which greatly increases the performance.
 - The [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) and [Get-ADReplAccount](PowerShell/Get-ADReplAccount.md#get-adreplaccount) cmdlets have a new parameter called `-ExportFormat`, which replaces the `Format-Custom` cmdlet when exporting data to `hashcat`, `pwdump`, and other formats.
 - Legacy LAPS and Windows LAPS cleartext passwords can now be extracted from `ntds.dit` files using the [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount) cmdlet.

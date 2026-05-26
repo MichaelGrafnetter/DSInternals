@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-ADDBDnsZone
+# Get-ADDBDnsServerZone
 
 ## SYNOPSIS
 Retrieves the list of DNS zones stored in an Active Directory database.
@@ -13,7 +13,7 @@ Retrieves the list of DNS zones stored in an Active Directory database.
 ## SYNTAX
 
 ```
-Get-ADDBDnsZone -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
+Get-ADDBDnsServerZone -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,7 +24,7 @@ This can be useful in some disaster recovery scenarios.
 
 ### Example 1
 ```powershell
-PS C:\> Get-ADDBDnsZone -DatabasePath .\ntds.dit
+PS C:\> Get-ADDBDnsServerZone -DatabasePath .\ntds.dit
 
 <# Sample Output:
 DistinguishedName   : DC=_msdcs.contoso.com,CN=MicrosoftDNS,DC=ForestDnsZones,DC=contoso,DC=com
@@ -90,5 +90,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[Get-ADDBDnsResourceRecord](Get-ADDBDnsResourceRecord.md)
+[Get-ADDBDnsServerResourceRecord](Get-ADDBDnsServerResourceRecord.md)
 [Get-ADDBDomainController](Get-ADDBDomainController.md)

@@ -5,10 +5,10 @@ using DSInternals.Common.DNS;
 
 namespace DSInternals.PowerShell.Commands;
 
-[Cmdlet(VerbsData.Save, "DnsResourceRecord")]
-[Alias("Save-DnsRecord")]
+[Cmdlet(VerbsData.Save, "DnsServerResourceRecord")]
+[Alias("Save-DnsResourceRecord", "Save-DnsRecord")]
 [OutputType("None")]
-public class SaveDnsResourceRecordCommand : PSCmdletEx
+public class SaveDnsServerResourceRecordCommand : PSCmdletEx
 {
     private const string ZoneFileExtension = ".dns";
     private const string ZoneApexName = "@";

@@ -139,10 +139,10 @@ CmdletsToExport = @(
     'Save-DpapiNgSidKey',
     'Clear-DpapiNgSidKeyCache',
     'Unlock-ADDBAccount',
-    'Get-ADDBDnsResourceRecord',
-    'Get-ADDBDnsZone',
+    'Get-ADDBDnsServerResourceRecord',
+    'Get-ADDBDnsServerZone',
     'Set-ADDBAccountControl',
-    'Save-DnsResourceRecord',
+    'Save-DnsServerResourceRecord',
     'Get-ADDBTrust'
     # Intentionally excluded: 'Add-ADDBSidHistory'
 )
@@ -206,8 +206,11 @@ AliasesToExport = @(
     'Get-ADSIDelegatedManagedServiceAccount',
     'Get-ADDBFVERecoveryInformation',
     'Get-ADDBFVERecoveryInfo',
+    'Get-ADDBDnsResourceRecord',
     'Get-ADDBDnsRecord',
+    'Get-ADDBDnsZone',
     'Get-ADSIDnsServerRecord',
+    'Save-DnsResourceRecord',
     'Save-DnsRecord'
 )
 

@@ -63,10 +63,10 @@ Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service A
 ### [Get-ADDBBitLockerRecoveryInformation](Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation)
 Reads BitLocker recovery passwords from a ntds.dit file.
 
-### [Get-ADDBDnsResourceRecord](Get-ADDBDnsResourceRecord.md#get-addbdnsresourcerecord)
+### [Get-ADDBDnsServerResourceRecord](Get-ADDBDnsServerResourceRecord.md#get-addbdnsserverresourcerecord)
 Retrieves DNS resource records from an Active Directory database.
 
-### [Get-ADDBDnsZone](Get-ADDBDnsZone.md#get-addbdnszone)
+### [Get-ADDBDnsServerZone](Get-ADDBDnsServerZone.md#get-addbdnsserverzone)
 Retrieves the list of DNS zones stored in an Active Directory database.
 
 ### [Get-ADDBDomainController](Get-ADDBDomainController.md#get-addbdomaincontroller)
@@ -300,7 +300,7 @@ Generates a PowerShell script that can be used to restore a domain controller fr
 ### [Test-PasswordQuality](Test-PasswordQuality.md#test-passwordquality)
 Performs AD audit, including checks for weak, duplicate, default and empty passwords. Accepts input from the [Get-ADReplAccount](Get-ADReplAccount.md#get-adreplaccount) and [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount) cmdlets.
 
-### [Save-DnsResourceRecord](Save-DnsResourceRecord.md#save-dnsresourcerecord)
+### [Save-DnsServerResourceRecord](Save-DnsServerResourceRecord.md#save-dnsserverresourcerecord)
 Saves DNS resource records retrieved from Active Directory to one or more DNS zone files.
 
 ### [ConvertTo-Hex](ConvertTo-Hex.md#convertto-hex)

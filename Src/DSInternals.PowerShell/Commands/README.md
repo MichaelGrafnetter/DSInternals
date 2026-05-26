@@ -105,11 +105,11 @@ classDiagram
         +RootKeyId : Guid
         +All : SwitchParameter
     }
-    class GetADDBDnsResourceRecordCommand {
+    class GetADDBDnsServerResourceRecordCommand {
         +IncludeTombstones : SwitchParameter
         +IncludeRootHints : SwitchParameter
     }
-    class GetADDBDnsZoneCommand
+    class GetADDBDnsServerZoneCommand
     class GetADDBIndexCommand
     class SetADDBBootKeyCommand {
         +OldBootKey : byte[]
@@ -137,8 +137,8 @@ classDiagram
     ADDBCommandBase <|-- GetADDBServiceAccountCommand
     ADDBCommandBase <|-- GetADDBTrustCommand
     ADDBCommandBase <|-- GetADDBKdsRootKeyCommand
-    ADDBCommandBase <|-- GetADDBDnsResourceRecordCommand
-    ADDBCommandBase <|-- GetADDBDnsZoneCommand
+    ADDBCommandBase <|-- GetADDBDnsServerResourceRecordCommand
+    ADDBCommandBase <|-- GetADDBDnsServerZoneCommand
     ADDBCommandBase <|-- GetADDBIndexCommand
     ADDBCommandBase <|-- SetADDBBootKeyCommand
     ADDBCommandBase <|-- SetADDBDomainControllerCommand
