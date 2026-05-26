@@ -20,31 +20,31 @@ Get-ADSIAccount [-All] [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRoot
 
 ### ByName
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] [-SamAccountName] <String>
+Get-ADSIAccount [-SamAccountName] <String> [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>]
  [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByUPN
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] -UserPrincipalName <String>
+Get-ADSIAccount -UserPrincipalName <String> [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>]
  [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### BySID
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] -ObjectSid <SecurityIdentifier>
- [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+Get-ADSIAccount -ObjectSid <SecurityIdentifier> [-Properties <AccountPropertySets>]
+ [-KdsRootKey <KdsRootKey[]>] [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByDN
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] [-DistinguishedName] <String>
+Get-ADSIAccount [-DistinguishedName] <String> [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>]
  [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### ByGuid
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] -ObjectGuid <Guid>
+Get-ADSIAccount -ObjectGuid <Guid> [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>]
  [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 

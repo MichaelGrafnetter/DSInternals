@@ -19,7 +19,8 @@ Protect-DpapiNgData [-Descriptor] <String> [-Cleartext] <String> [-Encoding <Enc
 
 ### NamedDescriptor
 ```
-Protect-DpapiNgData [-NamedDescriptor] <String> [-Cleartext] <String> [-Machine] [-Encoding <Encoding>] [<CommonParameters>]
+Protect-DpapiNgData [-NamedDescriptor] <String> [-Machine] [-Cleartext] <String> [-Encoding <Encoding>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -48,17 +49,48 @@ Protects text by using a named descriptor registered in the local machine hive.
 
 ## PARAMETERS
 
+### -Cleartext
+Specifies the text to protect.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Descriptor
 Specifies the DPAPI-NG protection descriptor rule string.
 
 ```yaml
 Type: String
 Parameter Sets: Descriptor
-Aliases: None
+Aliases:
 
 Required: True
 Position: 0
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Encoding
+Specifies the text encoding used to convert `Cleartext` to bytes before encryption.
+Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::UTF8`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.
+
+```yaml
+Type: Encoding
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: [System.Text.Encoding]::Unicode
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -69,7 +101,7 @@ Indicates that the named descriptor should be resolved from the local machine re
 ```yaml
 Type: SwitchParameter
 Parameter Sets: NamedDescriptor
-Aliases: None
+Aliases:
 
 Required: False
 Position: Named
@@ -84,42 +116,11 @@ Specifies the name of a registered DPAPI-NG protection descriptor.
 ```yaml
 Type: String
 Parameter Sets: NamedDescriptor
-Aliases: None
+Aliases:
 
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Cleartext
-Specifies the text to protect.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: None
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Encoding
-Specifies the text encoding used to convert `Cleartext` to bytes before encryption.
-Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::UTF8`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.
-
-```yaml
-Type: System.Text.Encoding
-Parameter Sets: (All)
-Aliases: None
-
-Required: False
-Position: Named
-Default value: [System.Text.Encoding]::Unicode
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

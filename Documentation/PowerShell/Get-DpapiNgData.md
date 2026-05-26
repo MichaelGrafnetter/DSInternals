@@ -61,8 +61,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.Byte[]
 
-### System.String
-
 ## OUTPUTS
 
 ### DSInternals.Common.Cryptography.CngProtectedDataBlob

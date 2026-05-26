@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added the [New-DpapiNgNamedDescriptor](PowerShell/New-DpapiNgNamedDescriptor.md#new-dpapingnameddescriptor), [Get-DpapiNgNamedDescriptor](PowerShell/Get-DpapiNgNamedDescriptor.md#get-dpapingnameddescriptor), and [Remove-DpapiNgNamedDescriptor](PowerShell/Remove-DpapiNgNamedDescriptor.md#remove-dpapingnameddescriptor) cmdlets for managing named DPAPI-NG protection descriptors.
 - Added the [Get-DpapiNgSidKeyIdentifier](PowerShell/Get-DpapiNgSidKeyIdentifier.md#get-dpapingsidkeyidentifier) cmdlet for parsing the `KDSK` Protection Key Identifier blob emitted by DPAPI-NG (e.g. the `KeyId` field in Microsoft-Windows-Crypto-DPAPI ETW events).
 - Added the [Save-DpapiNgSidKey](PowerShell/Save-DpapiNgSidKey.md#save-dpapingsidkey) cmdlet for deriving a SID-protected DPAPI-NG group key from a KDS root key and seeding it into the local SID key cache so subsequent DPAPI-NG decryption can proceed offline.
+- Added the [Clear-DpapiNgSidKeyCache](PowerShell/Clear-DpapiNgSidKeyCache.md#clear-dpapingsidkeycache) cmdlet for purging the calling user's local cache of KDS root key derived DPAPI-NG group keys.
 - Added protection descriptor reconstruction to DPAPI-NG protected data blobs.
 - The [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlet has new parameters
   for selecting a single account (`-SamAccountName`, `-UserPrincipalName`, `-ObjectSid`,

@@ -57,8 +57,8 @@ public class SaveDpapiNgSidKeyCommand : PSCmdlet
         Position = 2
     )]
     [ValidateNotNull]
-    [Alias("TargetSid", "ObjectSid")]
-    public SecurityIdentifier Sid
+    [Alias("Sid", "TargetSid", "ObjectSid")]
+    public SecurityIdentifier SecurityIdentifier
     {
         get;
         set;
@@ -79,7 +79,7 @@ public class SaveDpapiNgSidKeyCommand : PSCmdlet
                 throw new ArgumentException("None of the supplied KDS root keys matches the protection key identifier.", nameof(this.KdsRootKey));
             }
 
-            GroupKeyEnvelope envelope = GroupKeyEnvelope.Create(matchingRootKey, identifier, this.Sid);
+            GroupKeyEnvelope envelope = GroupKeyEnvelope.Create(matchingRootKey, identifier, this.SecurityIdentifier);
             string cachedFilePath = envelope.WriteToCache();
             this.WriteVerbose($"Saved DPAPI-NG SID key to '{cachedFilePath}'.");
         }

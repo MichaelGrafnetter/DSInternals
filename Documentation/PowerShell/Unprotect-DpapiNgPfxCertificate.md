@@ -19,7 +19,8 @@ Unprotect-DpapiNgPfxCertificate [-Path] <String> [-KdsRootKey <KdsRootKey[]>] [<
 
 ### InputObject
 ```
-Unprotect-DpapiNgPfxCertificate [-InputObject] <PfxProtectedPassword> [-KdsRootKey <KdsRootKey[]>] [<CommonParameters>]
+Unprotect-DpapiNgPfxCertificate [-InputObject] <PfxProtectedPassword> [-KdsRootKey <KdsRootKey[]>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -61,21 +62,6 @@ Pipes a previously parsed `PfxProtectedPassword` into the decryption cmdlet.
 
 ## PARAMETERS
 
-### -Path
-Specifies the path to the PFX file to load and decrypt.
-
-```yaml
-Type: String
-Parameter Sets: Path
-Aliases: FilePath, FullName, PfxPath
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByValue, ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### -InputObject
 Specifies an already-loaded `PfxProtectedPassword` to decrypt.
 
@@ -103,6 +89,21 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Path
+Specifies the path to the PFX file to load and decrypt.
+
+```yaml
+Type: String
+Parameter Sets: Path
+Aliases: FilePath, FullName, PfxPath
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 

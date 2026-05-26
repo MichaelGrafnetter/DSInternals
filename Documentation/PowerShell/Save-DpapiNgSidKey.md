@@ -14,12 +14,14 @@ Derives a SID-protected DPAPI-NG group key from a KDS root key and writes it to 
 
 ### ParsedIdentifier (Default)
 ```
-Save-DpapiNgSidKey [-Identifier] <ProtectionKeyIdentifier> [-KdsRootKey] <KdsRootKey[]> [-Sid] <SecurityIdentifier> [<CommonParameters>]
+Save-DpapiNgSidKey [-Identifier] <ProtectionKeyIdentifier> [-KdsRootKey] <KdsRootKey[]>
+ [-SecurityIdentifier] <SecurityIdentifier> [<CommonParameters>]
 ```
 
 ### IdentifierBlob
 ```
-Save-DpapiNgSidKey [-IdentifierBlob] <Byte[]> [-KdsRootKey] <KdsRootKey[]> [-Sid] <SecurityIdentifier> [<CommonParameters>]
+Save-DpapiNgSidKey [-IdentifierBlob] <Byte[]> [-KdsRootKey] <KdsRootKey[]>
+ [-SecurityIdentifier] <SecurityIdentifier> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -102,13 +104,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Sid
+### -SecurityIdentifier
 Specifies the Security Identifier of the principal that is authorized to derive the group key.
 
 ```yaml
 Type: SecurityIdentifier
 Parameter Sets: (All)
-Aliases: TargetSid, ObjectSid
+Aliases: Sid, TargetSid, ObjectSid
 
 Required: True
 Position: 2
@@ -122,13 +124,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### DSInternals.Common.Data.ProtectionKeyIdentifier
-
-### System.Byte[]
-
-### DSInternals.Common.Data.KdsRootKey
-
-### System.Security.Principal.SecurityIdentifier
+### None
 
 ## OUTPUTS
 
@@ -140,6 +136,7 @@ Alias: `Save-CngDpapiSidKey`
 
 ## RELATED LINKS
 
+[Clear-DpapiNgSidKeyCache](Clear-DpapiNgSidKeyCache.md)
 [Get-DpapiNgSidKeyIdentifier](Get-DpapiNgSidKeyIdentifier.md)
 [Get-ADDBKdsRootKey](Get-ADDBKdsRootKey.md)
 [Get-ADReplKdsRootKey](Get-ADReplKdsRootKey.md)

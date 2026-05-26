@@ -45,7 +45,7 @@ Specifies the DPAPI-NG protection descriptor rule string.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: None
+Aliases:
 
 Required: True
 Position: 1
@@ -60,7 +60,7 @@ Indicates that the descriptor should be registered in the local machine registry
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: None
+Aliases:
 
 Required: False
 Position: Named
@@ -75,7 +75,7 @@ Specifies the named descriptor display name.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: None
+Aliases:
 
 Required: True
 Position: 0
@@ -89,7 +89,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### System.String
 
 ## OUTPUTS
 

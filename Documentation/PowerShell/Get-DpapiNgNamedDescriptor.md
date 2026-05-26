@@ -54,7 +54,7 @@ Indicates that descriptors should be queried from the local machine registry hiv
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: None
+Aliases:
 
 Required: False
 Position: Named
@@ -74,7 +74,7 @@ Aliases: Key
 Required: False
 Position: 0
 Default value: None
-Accept pipeline input: True (ByValue, ByPropertyName)
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
@@ -87,7 +87,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Collections.Generic.KeyValuePair\[System.String,System.String\]
+### System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]
 
 ## NOTES
 

@@ -21,7 +21,7 @@ Get-ADSIServiceAccount [-EffectiveTime <DateTime>] [-KdsRootKey <KdsRootKey[]>] 
 
 Retrieves all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from the target domain controller using ADSI/LDAP. Managed passwords are derived from the available KDS root keys and the gMSA / dMSA password identifier metadata.
 
-By default, the interval ID stored in `msDS-ManagedPasswordId` is used as-is to derive the current managed password — no password-cycle math is performed. Supplying `-EffectiveTime` instead computes the password cycle for a given point in time (past or future).
+By default, the interval ID stored in `msDS-ManagedPasswordId` is used as-is to derive the current managed password - no password-cycle math is performed. Supplying `-EffectiveTime` instead computes the password cycle for a given point in time (past or future).
 
 The KDS root keys are normally read from the configuration naming context of the target domain controller, which typically requires Domain Admin privileges. As an alternative, the keys can be supplied explicitly using the `-KdsRootKey` parameter, for instance when they have been retrieved through the MS-DRSR protocol or an offline ntds.dit file.
 

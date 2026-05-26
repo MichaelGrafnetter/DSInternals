@@ -262,6 +262,9 @@ Parses a SID-protected DPAPI-NG Protection Key Identifier (`KDSK`) blob.
 ### [Save-DpapiNgSidKey](Save-DpapiNgSidKey.md#save-dpapingsidkey)
 Derives a SID-protected DPAPI-NG group key from a KDS root key and writes it to the local SID key cache.
 
+### [Clear-DpapiNgSidKeyCache](Clear-DpapiNgSidKeyCache.md#clear-dpapingsidkeycache)
+Deletes all KDS root key derived DPAPI-NG group keys cached on the local machine by the current user.
+
 ### [New-DpapiNgNamedDescriptor](New-DpapiNgNamedDescriptor.md#new-dpapingnameddescriptor)
 Registers a named DPAPI-NG protection descriptor.
 

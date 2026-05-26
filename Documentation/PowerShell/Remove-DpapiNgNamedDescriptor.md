@@ -45,7 +45,7 @@ Indicates that the descriptor should be removed from the local machine registry 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: None
+Aliases:
 
 Required: False
 Position: Named
@@ -65,7 +65,7 @@ Aliases: Key
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: True (ByValue, ByPropertyName)
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 

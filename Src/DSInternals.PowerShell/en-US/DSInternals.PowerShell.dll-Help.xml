@@ -1357,6 +1357,136 @@ PS C:\&gt; Start-Service -Name ntds</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Clear-DpapiNgSidKeyCache</command:name>
+      <command:verb>Clear</command:verb>
+      <command:noun>DpapiNgSidKeyCache</command:noun>
+      <maml:description>
+        <maml:para>Deletes all KDS root key derived DPAPI-NG group keys cached on the local machine by the current user.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet purges the calling user's local DPAPI-NG SID key cache by invoking the `kdscli!DeleteAllCachedKeys` API. After the cache is cleared, subsequent DPAPI-NG decryption operations will need to re-derive the required group keys from the corresponding KDS root keys, either by contacting a domain controller or by re-seeding the cache with `Save-DpapiNgSidKey`.</maml:para>
+      <maml:para>This is typically useful when testing offline DPAPI-NG recovery scenarios, where stale cached keys would otherwise mask the effect of newly seeded keys.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Clear-DpapiNgSidKeyCache</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Aliases: `Remove-DpapiNgSidKey`, `Clear-CngDpapiSidKeyCache`, `Remove-CngDpapiSidKey`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Clear-DpapiNgSidKeyCache</dev:code>
+        <dev:remarks>
+          <maml:para>Deletes all cached KDS root key derived DPAPI-NG group keys for the current user, prompting for confirmation.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Clear-DpapiNgSidKeyCache -Confirm:$false</dev:code>
+        <dev:remarks>
+          <maml:para>Deletes all cached KDS root key derived DPAPI-NG group keys without prompting.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Clear-DpapiNgSidKeyCache.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Save-DpapiNgSidKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-DpapiNgSidKeyIdentifier</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Unprotect-DpapiNgData</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Unprotect-DpapiNgPfxCertificate</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>ConvertFrom-ADManagedPasswordBlob</command:name>
       <command:verb>ConvertFrom</command:verb>
       <command:noun>ADManagedPasswordBlob</command:noun>
@@ -8434,13 +8564,452 @@ Secret Agreement
       <command:verb>Get</command:verb>
       <command:noun>ADSIAccount</command:noun>
       <maml:description>
-        <maml:para>Gets all Active Directory user accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.</maml:para>
+        <maml:para>Gets one or more Active Directory accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Gets all Active Directory user accounts from a given domain controller using ADSI/LDAP. Typically used for Credential Roaming data retrieval and NGC key auditing.</maml:para>
+      <maml:para>Gets one or more Active Directory accounts from a given domain controller using ADSI/LDAP. Typically used for Credential Roaming data retrieval and NGC key auditing. A single account can be retrieved by specifying its `SamAccountName`, `UserPrincipalName`, `ObjectSid`, `DistinguishedName`, or `ObjectGuid`. When no identifier is supplied, all accounts in the target domain are returned.</maml:para>
     </maml:description>
     <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIAccount</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="AllAccounts, ReturnAllAccounts">
+          <maml:name>All</maml:name>
+          <maml:description>
+            <maml:para>Indicates that all accounts will be retrieved from the target domain controller. This is the default behavior when no identifier is specified.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Property, PropertySets, PropertySet">
+          <maml:name>Properties</maml:name>
+          <maml:description>
+            <maml:para>Specifies the set of properties that will be retrieved for each account.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DistinguishedName</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericAccountInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericUserInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericComputerInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityDescriptor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SupplementalCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Secrets</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">KeyCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RoamedCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LegacyLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ManagedBy</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Manager</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">All</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AccountPropertySets</command:parameterValue>
+          <dev:type>
+            <maml:name>AccountPropertySets</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>All</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIAccount</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="DN">
+          <maml:name>DistinguishedName</maml:name>
+          <maml:description>
+            <maml:para>Specifies the distinguished name of the account that will be retrieved.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Property, PropertySets, PropertySet">
+          <maml:name>Properties</maml:name>
+          <maml:description>
+            <maml:para>Specifies the set of properties that will be retrieved for each account.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DistinguishedName</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericAccountInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericUserInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericComputerInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityDescriptor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SupplementalCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Secrets</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">KeyCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RoamedCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LegacyLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ManagedBy</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Manager</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">All</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AccountPropertySets</command:parameterValue>
+          <dev:type>
+            <maml:name>AccountPropertySets</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>All</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIAccount</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
+          <maml:name>ObjectGuid</maml:name>
+          <maml:description>
+            <maml:para>Specifies the object GUID of the account that will be retrieved.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+          <dev:type>
+            <maml:name>Guid</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Property, PropertySets, PropertySet">
+          <maml:name>Properties</maml:name>
+          <maml:description>
+            <maml:para>Specifies the set of properties that will be retrieved for each account.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DistinguishedName</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericAccountInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericUserInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericComputerInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityDescriptor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SupplementalCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Secrets</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">KeyCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RoamedCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LegacyLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ManagedBy</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Manager</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">All</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AccountPropertySets</command:parameterValue>
+          <dev:type>
+            <maml:name>AccountPropertySets</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>All</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIAccount</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="SID">
+          <maml:name>ObjectSid</maml:name>
+          <maml:description>
+            <maml:para>Specifies the security identifier (SID) of the account that will be retrieved.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
+          <dev:type>
+            <maml:name>SecurityIdentifier</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Property, PropertySets, PropertySet">
+          <maml:name>Properties</maml:name>
+          <maml:description>
+            <maml:para>Specifies the set of properties that will be retrieved for each account.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DistinguishedName</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericAccountInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericUserInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericComputerInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityDescriptor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SupplementalCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Secrets</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">KeyCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RoamedCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LegacyLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ManagedBy</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Manager</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">All</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AccountPropertySets</command:parameterValue>
+          <dev:type>
+            <maml:name>AccountPropertySets</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>All</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIAccount</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Login, SAM, AccountName, User">
+          <maml:name>SamAccountName</maml:name>
+          <maml:description>
+            <maml:para>Specifies the sAMAccountName of the account that will be retrieved.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Property, PropertySets, PropertySet">
+          <maml:name>Properties</maml:name>
+          <maml:description>
+            <maml:para>Specifies the set of properties that will be retrieved for each account.</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DistinguishedName</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericAccountInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericUserInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericComputerInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GenericInfo</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityDescriptor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHash</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashes</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NTHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LMHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordHashHistory</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SupplementalCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Secrets</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">KeyCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RoamedCredentials</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LegacyLAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LAPS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ManagedBy</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Manager</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">All</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">AccountPropertySets</command:parameterValue>
+          <dev:type>
+            <maml:name>AccountPropertySets</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>All</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-ADSIAccount</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
@@ -8502,7 +9071,7 @@ Secret Agreement
             <maml:name>AccountPropertySets</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>All</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
           <maml:name>Server</maml:name>
@@ -8516,9 +9085,33 @@ Secret Agreement
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="UPN">
+          <maml:name>UserPrincipalName</maml:name>
+          <maml:description>
+            <maml:para>Specifies the user principal name (UPN) of the account that will be retrieved.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="AllAccounts, ReturnAllAccounts">
+        <maml:name>All</maml:name>
+        <maml:description>
+          <maml:para>Indicates that all accounts will be retrieved from the target domain controller. This is the default behavior when no identifier is specified.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:description>
@@ -8527,6 +9120,18 @@ Secret Agreement
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="DN">
+        <maml:name>DistinguishedName</maml:name>
+        <maml:description>
+          <maml:para>Specifies the distinguished name of the account that will be retrieved.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -8543,6 +9148,30 @@ Secret Agreement
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Guid">
+        <maml:name>ObjectGuid</maml:name>
+        <maml:description>
+          <maml:para>Specifies the object GUID of the account that will be retrieved.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Guid</command:parameterValue>
+        <dev:type>
+          <maml:name>Guid</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="SID">
+        <maml:name>ObjectSid</maml:name>
+        <maml:description>
+          <maml:para>Specifies the security identifier (SID) of the account that will be retrieved.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
+        <dev:type>
+          <maml:name>SecurityIdentifier</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Property, PropertySets, PropertySet">
         <maml:name>Properties</maml:name>
         <maml:description>
@@ -8551,6 +9180,18 @@ Secret Agreement
         <command:parameterValue required="true" variableLength="false">AccountPropertySets</command:parameterValue>
         <dev:type>
           <maml:name>AccountPropertySets</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>All</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Login, SAM, AccountName, User">
+        <maml:name>SamAccountName</maml:name>
+        <maml:description>
+          <maml:para>Specifies the sAMAccountName of the account that will be retrieved.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -8567,11 +9208,39 @@ Secret Agreement
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="UPN">
+        <maml:name>UserPrincipalName</maml:name>
+        <maml:description>
+          <maml:para>Specifies the user principal name (UPN) of the account that will be retrieved.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None</maml:name>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Security.Principal.SecurityIdentifier</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Guid</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -8635,6 +9304,20 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
           <maml:para>Lists weak public keys registered in Active Directory that were generated on ROCA-vulnerable TPMs.</maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' -SamAccountName 'joe'</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves a single Active Directory user account by its `sAMAccountName` through LDAP.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' -UserPrincipalName 'joe@contoso.com'</dev:code>
+        <dev:remarks>
+          <maml:para>Retrieves a single Active Directory user account by its user principal name through LDAP.</maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
@@ -8669,9 +9352,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This cmdlet retrieves DNS resource records hosted in Active Directory by querying the target domain controller through LDAP.</maml:para>
-      <maml:para>Both legacy DNS records stored under the domain naming context and modern records stored in application partitions (such as DomainDnsZones and ForestDnsZones) are returned.</maml:para>
-      <maml:para>Tombstoned records and root hints are omitted by default and can be included with the corresponding switch parameters.</maml:para>
+      <maml:para>This cmdlet retrieves DNS resource records hosted in Active Directory by querying the target domain controller through LDAP. Both legacy DNS records stored under the domain naming context and modern records stored in application partitions (such as DomainDnsZones and ForestDnsZones) are returned. Tombstoned records and root hints are omitted by default and can be included with the corresponding switch parameters.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -8821,6 +9502,10 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADSIDnsServerResourceRecord.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Get-ADSIDnsServerZone</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -8844,9 +9529,7 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This cmdlet retrieves DNS zones hosted in Active Directory by querying the target domain controller through LDAP.</maml:para>
-      <maml:para>Both legacy DNS zones stored under the domain naming context and modern zones stored in application partitions (such as DomainDnsZones and ForestDnsZones) are returned.</maml:para>
-      <maml:para>Pseudo-zones used for root hints and DNSSEC trust anchors are excluded from the results.</maml:para>
+      <maml:para>This cmdlet retrieves DNS zones hosted in Active Directory by querying the target domain controller through LDAP. Both legacy DNS zones stored under the domain naming context and modern zones stored in application partitions (such as DomainDnsZones and ForestDnsZones) are returned. Pseudo-zones used for root hints and DNSSEC trust anchors are excluded from the results.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -8952,6 +9635,10 @@ IsSigned            : False
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADSIDnsServerZone.md</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADSIDnsServerResourceRecord</maml:linkText>
         <maml:uri></maml:uri>
@@ -9168,6 +9855,218 @@ IsSigned            : False
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Get-ADSIServiceAccount</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>ADSIServiceAccount</command:noun>
+      <maml:description>
+        <maml:para>Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from a domain controller through LDAP, while deriving their current passwords from KDS root keys.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Retrieves all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from the target domain controller using ADSI/LDAP. Managed passwords are derived from the available KDS root keys and the gMSA / dMSA password identifier metadata.</maml:para>
+      <maml:para>By default, the interval ID stored in `msDS-ManagedPasswordId` is used as-is to derive the current managed password - no password-cycle math is performed. Supplying `-EffectiveTime` instead computes the password cycle for a given point in time (past or future).</maml:para>
+      <maml:para>The KDS root keys are normally read from the configuration naming context of the target domain controller, which typically requires Domain Admin privileges. As an alternative, the keys can be supplied explicitly using the `-KdsRootKey` parameter, for instance when they have been retrieved through the MS-DRSR protocol or an offline ntds.dit file.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-ADSIServiceAccount</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="EffectiveDate, PasswordLastSet, PwdLastSet, Date, Time, d, t">
+          <maml:name>EffectiveTime</maml:name>
+          <maml:description>
+            <maml:para>Specifies the date and time at which the generated credentials should be valid. When omitted, passwords are derived directly from the `msDS-ManagedPasswordId` and `msDS-ManagedPasswordPreviousId` attributes stored on each account, with no password-cycle math.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
+          <dev:type>
+            <maml:name>DateTime</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Provides an explicit set of KDS root keys to use when deriving managed passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+          <maml:name>Server</maml:name>
+          <maml:description>
+            <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies a user account to use when connecting to the target domain controller. The default is the current user.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="EffectiveDate, PasswordLastSet, PwdLastSet, Date, Time, d, t">
+        <maml:name>EffectiveTime</maml:name>
+        <maml:description>
+          <maml:para>Specifies the date and time at which the generated credentials should be valid. When omitted, passwords are derived directly from the `msDS-ManagedPasswordId` and `msDS-ManagedPasswordPreviousId` attributes stored on each account, with no password-cycle math.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
+        <dev:type>
+          <maml:name>DateTime</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+        <maml:name>KdsRootKey</maml:name>
+        <maml:description>
+          <maml:para>Provides an explicit set of KDS root keys to use when deriving managed passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+        <dev:type>
+          <maml:name>KdsRootKey[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Host, DomainController, DC, ComputerName">
+        <maml:name>Server</maml:name>
+        <maml:description>
+          <maml:para>Specifies the target computer for the operation. Enter a fully qualified domain name (FQDN), a NetBIOS name, or an IP address. When the remote computer is in a different domain than the local computer, the fully qualified domain name is required.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.Data.GroupManagedServiceAccount</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIServiceAccount -Server 'lon-dc1.contoso.com'
+&lt;# Sample Output:
+DistinguishedName: CN=svc_adfs,CN=Managed Service Accounts,DC=contoso,DC=com
+Sid: S-1-5-21-2468531440-3719951020-3687476655-1109
+Guid: 53c845f7-d9cd-471b-a364-e733641dcc86
+SamAccountName: svc_adfs$
+Description: ADFS Service Account
+Enabled: True
+Deleted: False
+UserAccountControl: WorkstationAccount
+SupportedEncryptionTypes: RC4_HMAC, AES128_CTS_HMAC_SHA1_96, AES256_CTS_HMAC_SHA1_96
+ServicePrincipalName: {http/login.contoso.com, host/login.contoso.com}
+WhenCreated: 9/9/2023 5:02:05 PM
+PasswordLastSet: 9/9/2023 5:02:06 PM
+ManagedPasswordInterval: 30
+ManagedPasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=9/9/2023 10:00:00 AM (L0=361, L1=26, L2=24)
+ManagedPasswordPreviousId:
+KDS Derived Secrets (Calculated)
+  EffectivePasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=9/9/2023 10:00:00 AM (L0=361, L1=26, L2=24)
+  NTHash: 0b5fbfb646dd7bce4f160ad69edb86ba
+  Kerberos Keys
+    AES256_CTS_HMAC_SHA1_96
+      Key: 5dcc418cd0a30453b267e6e5b158be4b4d80d23fd72a6ae4d5bd07f023517117
+      Iterations: 4096
+    AES128_CTS_HMAC_SHA1_96
+      Key: 8e1e66438a15d764ae2242eefd15e09a
+      Iterations: 4096
+#&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from the target domain controller, while deriving their current passwords from KDS root keys.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-ADSIServiceAccount -Server 'lon-dc1.contoso.com' -EffectiveTime (Get-Date).AddMonths(1)</dev:code>
+        <dev:remarks>
+          <maml:para>Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from the target domain controller, while deriving their future passwords from KDS root keys.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $rootKeys = Get-ADDBKdsRootKey -DatabasePath 'C:\ADBackup\ntds.dit'
+PS C:\&gt; Get-ADSIServiceAccount -Server 'lon-dc1.contoso.com' -KdsRootKey $rootKeys</dev:code>
+        <dev:remarks>
+          <maml:para>Reads KDS root keys from an offline ntds.dit file and then uses them to derive the managed passwords for all gMSAs and dMSAs on the target domain controller, bypassing the default LDAP-based lookup against the configuration naming context.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-ADSIServiceAccount.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBServiceAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Get-BootKey</command:name>
       <command:verb>Get</command:verb>
       <command:noun>BootKey</command:noun>
@@ -9302,6 +10201,444 @@ PS C:\&gt; $key = Get-BootKey -SystemHiveFilePath C:\RegBackup\SYSTEM.hiv</dev:c
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Set-ADDBBootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-DpapiNgData</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>DpapiNgData</command:noun>
+      <maml:description>
+        <maml:para>Parses DPAPI-NG protected data.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet parses a DPAPI-NG protected blob and returns a `CngProtectedDataBlob` object. The `Blob` parameter accepts either a byte array or a base64-encoded `CngProtectedDataBlob`.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-DpapiNgData</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="CngProtectedDataBlob, ProtectedBlob">
+          <maml:name>Blob</maml:name>
+          <maml:description>
+            <maml:para>Specifies the DPAPI-NG protected blob as a byte array or base64 string.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="CngProtectedDataBlob, ProtectedBlob">
+        <maml:name>Blob</maml:name>
+        <maml:description>
+          <maml:para>Specifies the DPAPI-NG protected blob as a byte array or base64 string.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Byte[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Byte[]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.Cryptography.CngProtectedDataBlob</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `Get-CngDpapiData`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-DpapiNgData -Blob $blob</dev:code>
+        <dev:remarks>
+          <maml:para>Parses a base64-encoded DPAPI-NG protected blob.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-DpapiNgData -Blob $blob | Select-Object -ExpandProperty SidKeyProtectors</dev:code>
+        <dev:remarks>
+          <maml:para>Displays the SID and SDDL protectors collected from the blob.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-DpapiNgData.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Protect-DpapiNgData</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Unprotect-DpapiNgData</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-DpapiNgNamedDescriptor</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>DpapiNgNamedDescriptor</command:noun>
+      <maml:description>
+        <maml:para>Gets one or more named DPAPI-NG protection descriptors.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet returns named DPAPI-NG protection descriptors from the current user's descriptor registry hive. When the `Name` parameter is supplied, the descriptor is resolved through the NCrypt DPAPI-NG API. Without `Name`, the cmdlet enumerates all descriptor registry values. When the `Machine` switch is supplied, the cmdlet queries or enumerates the local machine descriptor registry hive.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-DpapiNgNamedDescriptor</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Key">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies the named descriptor display name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Machine</maml:name>
+          <maml:description>
+            <maml:para>Indicates that descriptors should be queried from the local machine registry hive.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Machine</maml:name>
+        <maml:description>
+          <maml:para>Indicates that descriptors should be queried from the local machine registry hive.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Key">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Specifies the named descriptor display name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `Get-CngDpapiNamedDescriptor`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-DpapiNgNamedDescriptor</dev:code>
+        <dev:remarks>
+          <maml:para>Returns all named DPAPI-NG protection descriptors registered for the current user.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-DpapiNgNamedDescriptor -Name 'LocalUser'</dev:code>
+        <dev:remarks>
+          <maml:para>Returns the descriptor rule string registered under the `LocalUser` name.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-DpapiNgNamedDescriptor -Machine</dev:code>
+        <dev:remarks>
+          <maml:para>Returns all named DPAPI-NG protection descriptors registered in the local machine hive.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-DpapiNgNamedDescriptor.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-DpapiNgNamedDescriptor</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Remove-DpapiNgNamedDescriptor</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-DpapiNgPfxCertificate</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>DpapiNgPfxCertificate</command:noun>
+      <maml:description>
+        <maml:para>Extracts the SID-based DPAPI-NG certificate password protector from a PFX file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet parses a PKCS #12 PFX file and returns the SID-protected certificate password metadata. The returned object contains the PFX file path and the DPAPI-NG encrypted certificate password protector.</maml:para>
+      <maml:para>To decrypt the protected password, pipe the returned object to Unprotect-DpapiNgPfxCertificate (Unprotect-DpapiNgPfxCertificate.md#unprotect-dpapingpfxcertificate).</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-DpapiNgPfxCertificate</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="FilePath, FullName, PfxPath">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to the PFX file.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="FilePath, FullName, PfxPath">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to the PFX file.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.PowerShell.PfxProtectedPassword</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `Get-CngDpapiPfxCertificate`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-DpapiNgPfxCertificate -Path .\Certificate.pfx |
+            Select-Object FilePath, @{ Name = 'Descriptor'; Expression = { $_.EncryptedPassword.Descriptor } }</dev:code>
+        <dev:remarks>
+          <maml:para>Reads a SID-protected PFX file and displays the source path and protection descriptor.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-DpapiNgPfxCertificate.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Unprotect-DpapiNgPfxCertificate</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-DpapiNgSidKeyIdentifier</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>DpapiNgSidKeyIdentifier</command:noun>
+      <maml:description>
+        <maml:para>Parses a SID-protected DPAPI-NG KeyId blob.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet parses a DPAPI-NG Protection Key Identifier (`KDSK`) blob and returns a `ProtectionKeyIdentifier` object. Such blobs are emitted by the Windows DPAPI-NG implementation when SID-based protectors are used and can be observed, for example, in the `KeyId` field of Microsoft-Windows-Crypto-DPAPI events. They identify the KDS root key and the L0/L1/L2 key cycle that was used to derive a group key.</maml:para>
+      <maml:para>The `Blob` parameter accepts either a byte array or a hexadecimal string, matching the encoding used in the `KeyId` field of Microsoft-Windows-Crypto-DPAPI events.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-DpapiNgSidKeyIdentifier</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="KeyId, ProtectionKeyIdentifier, KeyIdentifier">
+          <maml:name>Blob</maml:name>
+          <maml:description>
+            <maml:para>Specifies the DPAPI-NG Protection Key Identifier as a byte array or a hexadecimal string.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="KeyId, ProtectionKeyIdentifier, KeyIdentifier">
+        <maml:name>Blob</maml:name>
+        <maml:description>
+          <maml:para>Specifies the DPAPI-NG Protection Key Identifier as a byte array or a hexadecimal string.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Byte[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Byte[]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.Common.Data.ProtectionKeyIdentifier</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `Get-CngDpapiSidKeyIdentifier`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-DpapiNgSidKeyIdentifier -Blob $keyId</dev:code>
+        <dev:remarks>
+          <maml:para>Parses a 132-byte (or longer) `KDSK` Protection Key Identifier and returns its fields.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; '010000004B44534B...' | Get-DpapiNgSidKeyIdentifier</dev:code>
+        <dev:remarks>
+          <maml:para>Parses a hexadecimal `KDSK` blob piped from another command. The `KeyId` alias on the parameter allows consumption of events whose property is named `KeyId`.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Get-DpapiNgSidKeyIdentifier.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-DpapiNgData</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIKdsRootKey</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -10038,6 +11375,378 @@ icacls.exe C:\Windows\Sysvol\domain\Policies\* /save C:\IFM\SYSVOL\PolicyPermiss
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>New-DpapiNgNamedDescriptor</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>DpapiNgNamedDescriptor</command:noun>
+      <maml:description>
+        <maml:para>Registers a named DPAPI-NG protection descriptor.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet registers or updates a named DPAPI-NG protection descriptor in the current user's descriptor registry hive. When the `Machine` switch is supplied, the descriptor is registered in the local machine descriptor registry hive and can be queried with the DPAPI-NG machine key flag.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-DpapiNgNamedDescriptor</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies the named descriptor display name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>Descriptor</maml:name>
+          <maml:description>
+            <maml:para>Specifies the DPAPI-NG protection descriptor rule string.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Machine</maml:name>
+          <maml:description>
+            <maml:para>Indicates that the descriptor should be registered in the local machine registry hive.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>Descriptor</maml:name>
+        <maml:description>
+          <maml:para>Specifies the DPAPI-NG protection descriptor rule string.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Machine</maml:name>
+        <maml:description>
+          <maml:para>Indicates that the descriptor should be registered in the local machine registry hive.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Specifies the named descriptor display name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `New-CngDpapiNamedDescriptor`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; New-DpapiNgNamedDescriptor -Name 'LocalUser' -Descriptor 'LOCAL=user'</dev:code>
+        <dev:remarks>
+          <maml:para>Registers a named descriptor for the current user.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; New-DpapiNgNamedDescriptor -Name 'LocalMachine' -Descriptor 'LOCAL=machine' -Machine</dev:code>
+        <dev:remarks>
+          <maml:para>Registers a named descriptor in the local machine hive.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/New-DpapiNgNamedDescriptor.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-DpapiNgNamedDescriptor</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Remove-DpapiNgNamedDescriptor</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Protect-DpapiNgData</command:name>
+      <command:verb>Protect</command:verb>
+      <command:noun>DpapiNgData</command:noun>
+      <maml:description>
+        <maml:para>Encrypts text with DPAPI-NG.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet protects the supplied plaintext with DPAPI-NG and returns the protected binary blob as a base64 string. Use `Descriptor` to supply a protection descriptor rule string directly, or `NamedDescriptor` to use a registered named descriptor. When `NamedDescriptor` is used, the `Machine` switch resolves the descriptor in the local machine descriptor registry hive.</maml:para>
+      <maml:para>The cleartext is encoded as UTF-16 little-endian before encryption by default. Supply `Encoding` to use a different text encoding.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Protect-DpapiNgData</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+          <maml:name>Descriptor</maml:name>
+          <maml:description>
+            <maml:para>Specifies the DPAPI-NG protection descriptor rule string.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+          <maml:name>Cleartext</maml:name>
+          <maml:description>
+            <maml:para>Specifies the text to protect.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Encoding</maml:name>
+          <maml:description>
+            <maml:para>Specifies the text encoding used to convert `Cleartext` to bytes before encryption. Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::UTF8`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+          <dev:type>
+            <maml:name>Encoding</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Text.Encoding]::Unicode</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Protect-DpapiNgData</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+          <maml:name>NamedDescriptor</maml:name>
+          <maml:description>
+            <maml:para>Specifies the name of a registered DPAPI-NG protection descriptor.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+          <maml:name>Cleartext</maml:name>
+          <maml:description>
+            <maml:para>Specifies the text to protect.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Encoding</maml:name>
+          <maml:description>
+            <maml:para>Specifies the text encoding used to convert `Cleartext` to bytes before encryption. Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::UTF8`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+          <dev:type>
+            <maml:name>Encoding</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Text.Encoding]::Unicode</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Machine</maml:name>
+          <maml:description>
+            <maml:para>Indicates that the named descriptor should be resolved from the local machine registry hive.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+        <maml:name>Cleartext</maml:name>
+        <maml:description>
+          <maml:para>Specifies the text to protect.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+        <maml:name>Descriptor</maml:name>
+        <maml:description>
+          <maml:para>Specifies the DPAPI-NG protection descriptor rule string.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Encoding</maml:name>
+        <maml:description>
+          <maml:para>Specifies the text encoding used to convert `Cleartext` to bytes before encryption. Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::UTF8`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+        <dev:type>
+          <maml:name>Encoding</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Text.Encoding]::Unicode</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Machine</maml:name>
+        <maml:description>
+          <maml:para>Indicates that the named descriptor should be resolved from the local machine registry hive.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+        <maml:name>NamedDescriptor</maml:name>
+        <maml:description>
+          <maml:para>Specifies the name of a registered DPAPI-NG protection descriptor.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `Protect-CngDpapiData`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Protect-DpapiNgData -Descriptor 'LOCAL=user' -Cleartext 'Secret'</dev:code>
+        <dev:remarks>
+          <maml:para>Protects text for the current user and returns a base64-encoded DPAPI-NG blob.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Protect-DpapiNgData -NamedDescriptor 'LocalMachine' -Machine -Cleartext 'Secret'</dev:code>
+        <dev:remarks>
+          <maml:para>Protects text by using a named descriptor registered in the local machine hive.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Protect-DpapiNgData.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-DpapiNgData</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Unprotect-DpapiNgData</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-DpapiNgNamedDescriptor</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Remove-ADDBObject</command:name>
       <command:verb>Remove</command:verb>
       <command:noun>ADDBObject</command:noun>
@@ -10331,6 +12040,174 @@ icacls.exe C:\Windows\Sysvol\domain\Policies\* /save C:\IFM\SYSVOL\PolicyPermiss
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Remove-DpapiNgNamedDescriptor</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>DpapiNgNamedDescriptor</command:noun>
+      <maml:description>
+        <maml:para>Removes a named DPAPI-NG protection descriptor.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet removes a named DPAPI-NG protection descriptor from the current user's descriptor registry hive. When the `Machine` switch is supplied, the descriptor is removed from the local machine descriptor registry hive.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-DpapiNgNamedDescriptor</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Key">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies the named descriptor display name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Machine</maml:name>
+          <maml:description>
+            <maml:para>Indicates that the descriptor should be removed from the local machine registry hive.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Machine</maml:name>
+        <maml:description>
+          <maml:para>Indicates that the descriptor should be removed from the local machine registry hive.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="Key">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Specifies the named descriptor display name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `Remove-CngDpapiNamedDescriptor`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Remove-DpapiNgNamedDescriptor -Name 'LocalUser'</dev:code>
+        <dev:remarks>
+          <maml:para>Removes a named descriptor from the current user's descriptor hive.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Remove-DpapiNgNamedDescriptor -Name 'LocalMachine' -Machine</dev:code>
+        <dev:remarks>
+          <maml:para>Removes a named descriptor from the local machine descriptor hive.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Remove-DpapiNgNamedDescriptor.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>New-DpapiNgNamedDescriptor</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-DpapiNgNamedDescriptor</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Save-DnsResourceRecord</command:name>
       <command:verb>Save</command:verb>
       <command:noun>DnsResourceRecord</command:noun>
@@ -10482,7 +12359,7 @@ icacls.exe C:\Windows\Sysvol\domain\Policies\* /save C:\IFM\SYSVOL\PolicyPermiss
     <command:details>
       <command:name>Save-DpapiBlob</command:name>
       <command:verb>Save</command:verb>
-      <command:noun>DPAPIBlob</command:noun>
+      <command:noun>DpapiBlob</command:noun>
       <maml:description>
         <maml:para>Saves DPAPI and Credential Roaming data retrieved from Active Directory to the file system for further processing.</maml:para>
       </maml:description>
@@ -10733,6 +12610,235 @@ PS C:\&gt; Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DpapiBlob -Direc
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADSIAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Save-DpapiNgSidKey</command:name>
+      <command:verb>Save</command:verb>
+      <command:noun>DpapiNgSidKey</command:noun>
+      <maml:description>
+        <maml:para>Derives a SID-protected DPAPI-NG group key from a KDS root key and writes it to the local SID key cache.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet derives a SID-bound group key from the KDS root key whose identifier matches the supplied `ProtectionKeyIdentifier` and writes the resulting `KDSK` Group Key Envelope to the local SID key cache. The native DPAPI-NG implementation consults this cache during decryption, so seeding it offline allows subsequent DPAPI-NG operations (e.g. `Unprotect-DpapiNgData` or `Unprotect-DpapiNgPfxCertificate`) to succeed without contacting a domain controller.</maml:para>
+      <maml:para>The `-KdsRootKey` parameter accepts an array of candidate root keys; the cmdlet picks the one whose `KeyId` matches the root key identifier embedded in the `KDSK` blob. The identifier can be supplied either as a parsed `ProtectionKeyIdentifier` (via `-Identifier`) or as the raw `KDSK` byte array (via `-IdentifierBlob`, which also accepts a hex string).</maml:para>
+      <maml:para>The cmdlet does not return any output. Use the `-Verbose` switch to see the full path to the cache file that holds the envelope.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Save-DpapiNgSidKey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="ProtectionKeyIdentifier, KeyIdentifier, KeyId">
+          <maml:name>Identifier</maml:name>
+          <maml:description>
+            <maml:para>Specifies the parsed DPAPI-NG protection key identifier (`KDSK` blob) whose L0/L1/L2 cycle and root key identifier describe the group key to be derived. Typically obtained from `Get-DpapiNgSidKeyIdentifier`.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">ProtectionKeyIdentifier</command:parameterValue>
+          <dev:type>
+            <maml:name>ProtectionKeyIdentifier</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Specifies one or more candidate KDS root keys. The cmdlet selects the key whose `KeyId` matches the supplied `Identifier`.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Sid, TargetSid, ObjectSid">
+          <maml:name>SecurityIdentifier</maml:name>
+          <maml:description>
+            <maml:para>Specifies the Security Identifier of the principal that is authorized to derive the group key.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
+          <dev:type>
+            <maml:name>SecurityIdentifier</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Save-DpapiNgSidKey</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="ProtectionKeyIdentifierBlob, KeyIdentifierBlob, KeyIdBlob, Blob">
+          <maml:name>IdentifierBlob</maml:name>
+          <maml:description>
+            <maml:para>Specifies the raw `KDSK` Protection Key Identifier blob as a byte array. Also accepts a hex-encoded string, which is converted to bytes via `[AcceptHexString]`.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Specifies one or more candidate KDS root keys. The cmdlet selects the key whose `KeyId` matches the supplied `Identifier`.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Sid, TargetSid, ObjectSid">
+          <maml:name>SecurityIdentifier</maml:name>
+          <maml:description>
+            <maml:para>Specifies the Security Identifier of the principal that is authorized to derive the group key.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
+          <dev:type>
+            <maml:name>SecurityIdentifier</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="ProtectionKeyIdentifier, KeyIdentifier, KeyId">
+        <maml:name>Identifier</maml:name>
+        <maml:description>
+          <maml:para>Specifies the parsed DPAPI-NG protection key identifier (`KDSK` blob) whose L0/L1/L2 cycle and root key identifier describe the group key to be derived. Typically obtained from `Get-DpapiNgSidKeyIdentifier`.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">ProtectionKeyIdentifier</command:parameterValue>
+        <dev:type>
+          <maml:name>ProtectionKeyIdentifier</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="ProtectionKeyIdentifierBlob, KeyIdentifierBlob, KeyIdBlob, Blob">
+        <maml:name>IdentifierBlob</maml:name>
+        <maml:description>
+          <maml:para>Specifies the raw `KDSK` Protection Key Identifier blob as a byte array. Also accepts a hex-encoded string, which is converted to bytes via `[AcceptHexString]`.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Byte[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="KdsRootKeys, RootKey, RootKeys">
+        <maml:name>KdsRootKey</maml:name>
+        <maml:description>
+          <maml:para>Specifies one or more candidate KDS root keys. The cmdlet selects the key whose `KeyId` matches the supplied `Identifier`.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+        <dev:type>
+          <maml:name>KdsRootKey[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Sid, TargetSid, ObjectSid">
+        <maml:name>SecurityIdentifier</maml:name>
+        <maml:description>
+          <maml:para>Specifies the Security Identifier of the principal that is authorized to derive the group key.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">SecurityIdentifier</command:parameterValue>
+        <dev:type>
+          <maml:name>SecurityIdentifier</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `Save-CngDpapiSidKey`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $rootKeys = Get-ADDBKdsRootKey -DatabasePath '.\ntds.dit' -BootKey 0be7a2afe1713642182e9b96f73a75da
+PS C:\&gt; $keyId = Get-DpapiNgSidKeyIdentifier -Blob $etwEvent.KeyId
+PS C:\&gt; Save-DpapiNgSidKey -Identifier $keyId -KdsRootKey $rootKeys -Sid 'S-1-5-21-3288850392-3299536932-2614793081-516'</dev:code>
+        <dev:remarks>
+          <maml:para>Reconstructs a SID-protected group key for the domain controllers group and seeds it into the local SID key cache so subsequent DPAPI-NG decryption can proceed offline. The cmdlet selects the root key whose `KeyId` matches the identifier from the array of candidates.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Save-DpapiNgSidKey -IdentifierBlob '010000004B44534B...' -KdsRootKey $rootKeys -Sid $sid</dev:code>
+        <dev:remarks>
+          <maml:para>Passes the `KDSK` Protection Key Identifier as a hex string. The cmdlet converts it to bytes via `[AcceptHexString]` and parses the result into a `ProtectionKeyIdentifier`.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Save-DpapiNgSidKey -IdentifierBlob $etwEvent.KeyId -KdsRootKey $rootKeys -Sid $sid</dev:code>
+        <dev:remarks>
+          <maml:para>Passes the raw `KDSK` blob (a `byte[]`) directly, e.g. as captured from a Microsoft-Windows-Crypto-DPAPI ETW event.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Save-DpapiNgSidKey.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Clear-DpapiNgSidKeyCache</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-DpapiNgSidKeyIdentifier</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Unprotect-DpapiNgData</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Unprotect-DpapiNgPfxCertificate</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -15122,6 +17228,360 @@ These groups of accounts have the same passwords:
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-ADDBAccount</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Unprotect-DpapiNgData</command:name>
+      <command:verb>Unprotect</command:verb>
+      <command:noun>DpapiNgData</command:noun>
+      <maml:description>
+        <maml:para>Decrypts DPAPI-NG protected data.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet decrypts a DPAPI-NG protected blob. The `Blob` parameter accepts either a byte array or a base64-encoded `CngProtectedDataBlob`.</maml:para>
+      <maml:para>By default, the cmdlet returns the decrypted data as a hexadecimal string. When `Encoding` is supplied, the cmdlet decodes the decrypted bytes and returns the decoded string. When `KdsRootKey` is supplied, the cmdlet derives and caches the matching SID group key before decrypting the blob, which enables offline decryption for SID-protected data.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Unprotect-DpapiNgData</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="CngProtectedDataBlob, ProtectedBlob">
+          <maml:name>Blob</maml:name>
+          <maml:description>
+            <maml:para>Specifies the DPAPI-NG protected blob as a byte array or base64 string.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Byte[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Encoding</maml:name>
+          <maml:description>
+            <maml:para>Specifies the text encoding to use when returning decrypted data as a string. Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::Unicode`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+          <dev:type>
+            <maml:name>Encoding</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Specifies the KDS root keys used to decrypt SID-protected data offline.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="CngProtectedDataBlob, ProtectedBlob">
+        <maml:name>Blob</maml:name>
+        <maml:description>
+          <maml:para>Specifies the DPAPI-NG protected blob as a byte array or base64 string.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Byte[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Byte[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Encoding</maml:name>
+        <maml:description>
+          <maml:para>Specifies the text encoding to use when returning decrypted data as a string. Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::Unicode`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+        <dev:type>
+          <maml:name>Encoding</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+        <maml:name>KdsRootKey</maml:name>
+        <maml:description>
+          <maml:para>Specifies the KDS root keys used to decrypt SID-protected data offline.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+        <dev:type>
+          <maml:name>KdsRootKey[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Byte[]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `Unprotect-CngDpapiData`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $blob = Protect-DpapiNgData -Descriptor 'LOCAL=user' -Cleartext 'Secret'
+PS C:\&gt; Unprotect-DpapiNgData -Blob $blob -Encoding ([System.Text.Encoding]::Unicode)</dev:code>
+        <dev:remarks>
+          <maml:para>Decrypts a protected blob and returns the cleartext as a string.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $rootKeys = Get-ADDBKdsRootKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
+PS C:\&gt; Unprotect-DpapiNgData -Blob $blob -KdsRootKey $rootKeys -Encoding ([System.Text.Encoding]::Unicode)</dev:code>
+        <dev:remarks>
+          <maml:para>Uses KDS root keys from an offline Active Directory database to decrypt SID-protected data.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Unprotect-DpapiNgData.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-DpapiNgData</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Protect-DpapiNgData</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Unprotect-DpapiNgPfxCertificate</command:name>
+      <command:verb>Unprotect</command:verb>
+      <command:noun>DpapiNgPfxCertificate</command:noun>
+      <maml:description>
+        <maml:para>Decrypts the SID-based DPAPI-NG certificate password protector from a PFX file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This cmdlet decrypts the SID-protected certificate password embedded in a PKCS #12 PFX file and returns the populated `PfxProtectedPassword` object with the cleartext password attached.</maml:para>
+      <maml:para>When the `KdsRootKey` parameter is not supplied, decryption is attempted online by using the current security context. When `KdsRootKey` is supplied, the cmdlet uses the matching KDS root key to derive and cache the SID group key before decrypting the certificate password offline.</maml:para>
+      <maml:para>The input can be supplied either as a file `Path` or as a `PfxProtectedPassword` object (typically piped from Get-DpapiNgPfxCertificate (Get-DpapiNgPfxCertificate.md#get-dpapingpfxcertificate)).</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Unprotect-DpapiNgPfxCertificate</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="ProtectedPassword">
+          <maml:name>InputObject</maml:name>
+          <maml:description>
+            <maml:para>Specifies an already-loaded `PfxProtectedPassword` to decrypt.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PfxProtectedPassword</command:parameterValue>
+          <dev:type>
+            <maml:name>PfxProtectedPassword</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Specifies KDS root keys that can be used to decrypt the protected certificate password offline.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Unprotect-DpapiNgPfxCertificate</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="FilePath, FullName, PfxPath">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Specifies the path to the PFX file to load and decrypt.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+          <maml:name>KdsRootKey</maml:name>
+          <maml:description>
+            <maml:para>Specifies KDS root keys that can be used to decrypt the protected certificate password offline.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+          <dev:type>
+            <maml:name>KdsRootKey[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="ProtectedPassword">
+        <maml:name>InputObject</maml:name>
+        <maml:description>
+          <maml:para>Specifies an already-loaded `PfxProtectedPassword` to decrypt.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PfxProtectedPassword</command:parameterValue>
+        <dev:type>
+          <maml:name>PfxProtectedPassword</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="KdsRootKeys, RootKey, RootKeys">
+        <maml:name>KdsRootKey</maml:name>
+        <maml:description>
+          <maml:para>Specifies KDS root keys that can be used to decrypt the protected certificate password offline.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">KdsRootKey[]</command:parameterValue>
+        <dev:type>
+          <maml:name>KdsRootKey[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="FilePath, FullName, PfxPath">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>Specifies the path to the PFX file to load and decrypt.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>DSInternals.PowerShell.PfxProtectedPassword</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>DSInternals.PowerShell.PfxProtectedPassword</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Alias: `Unprotect-CngDpapiPfxCertificate`</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Unprotect-DpapiNgPfxCertificate -Path .\Certificate.pfx |
+            Select-Object FilePath, Password</dev:code>
+        <dev:remarks>
+          <maml:para>Decrypts the SID-protected certificate password by using the current security context.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; $rootKeys = Get-ADDBKdsRootKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
+PS C:\&gt; Unprotect-DpapiNgPfxCertificate -Path .\Certificate.pfx -KdsRootKey $rootKeys |
+            Select-Object FilePath, Password</dev:code>
+        <dev:remarks>
+          <maml:para>Uses KDS root keys from an offline Active Directory database to decrypt the protected certificate password.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-DpapiNgPfxCertificate -Path .\Certificate.pfx |
+            Unprotect-DpapiNgPfxCertificate |
+            Select-Object FilePath, Password</dev:code>
+        <dev:remarks>
+          <maml:para>Pipes a previously parsed `PfxProtectedPassword` into the decryption cmdlet.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/MichaelGrafnetter/DSInternals/blob/master/Documentation/PowerShell/Unprotect-DpapiNgPfxCertificate.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-DpapiNgPfxCertificate</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADDBKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADReplKdsRootKey</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-ADSIKdsRootKey</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>

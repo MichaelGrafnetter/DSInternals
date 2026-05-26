@@ -69,9 +69,9 @@ Specifies the text encoding to use when returning decrypted data as a string.
 Accepts a `System.Text.Encoding` instance (such as `[System.Text.Encoding]::Unicode`) or one of the following well-known encoding names, which are also offered through tab completion: `ASCII`, `BigEndianUnicode`, `Unicode`, `UTF32`, `UTF7`, `UTF8`.
 
 ```yaml
-Type: System.Text.Encoding
+Type: Encoding
 Parameter Sets: (All)
-Aliases: None
+Aliases:
 
 Required: False
 Position: Named
@@ -101,8 +101,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.Byte[]
-
-### System.String
 
 ## OUTPUTS
 
