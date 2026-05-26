@@ -1,6 +1,9 @@
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using DSInternals.Common.Cryptography;
+using DSInternals.Common.Data;
 
 namespace DSInternals.Common.DNS;
 
@@ -8,8 +11,9 @@ namespace DSInternals.Common.DNS;
 /// Represents a DNSSEC signing key extracted from an Active Directory-integrated DNS zone.
 /// </summary>
 /// <remarks>
-/// Wraps the Exported Key Pair structure used to persist a Zone Signing Key (ZSK)
-/// on the DNS zone object in Active Directory, with the private key material protected by DPAPI-NG.
+/// Wraps the Exported Key Pair structure used to persist a Zone Signing Key (ZSK) or
+/// Key Signing Key (KSK) on the DNS zone object in Active Directory, with the private
+/// key material protected by DPAPI-NG.
 /// </remarks>
 public class DnsSigningKey
 {
@@ -37,6 +41,17 @@ public class DnsSigningKey
     /// The DPAPI-NG-protected blob containing the private key material.
     /// </summary>
     public CngProtectedDataBlob ProtectedKeyBlob { get; private set; }
+
+    /// <summary>
+    /// The status of the most recent attempt to decrypt the private key blob.
+    /// </summary>
+    public DnsDecryptionStatus DecryptionStatus { get; private set; } = DnsDecryptionStatus.NotAttempted;
+
+    /// <summary>
+    /// The decrypted private key material in CNG blob format (e.g. <c>RSA2</c> for RSA, <c>ECK2</c> for ECDSA).
+    /// <see langword="null"/> when <see cref="DecryptionStatus"/> is not <see cref="DnsDecryptionStatus.Success"/>.
+    /// </summary>
+    public byte[] DecryptedKey { get; private set; }
 
     /// <summary>
     /// Deserializes a DNS signing key from the specified binary data.
@@ -100,6 +115,92 @@ public class DnsSigningKey
         result.ProtectedKeyBlob = CngProtectedDataBlob.Decode(protectedKeyBlob.ToArray());
 
         return result;
+    }
+
+    /// <summary>
+    /// Attempts to decrypt the private key blob using the supplied KDS root key resolver and
+    /// populates <see cref="DecryptionStatus"/> and, on success, <see cref="DecryptedKey"/>.
+    /// </summary>
+    /// <param name="rootKeyResolver">A resolver capable of producing the KDS root key referenced by the blob's
+    /// protection key identifier. May be <see langword="null"/> to leave the key undecrypted.</param>
+    public void TryDecrypt(IKdsRootKeyResolver rootKeyResolver)
+    {
+        if (rootKeyResolver is null)
+        {
+            this.DecryptionStatus = DnsDecryptionStatus.NotAttempted;
+            return;
+        }
+
+        bool rootKeyFound;
+        try
+        {
+            rootKeyFound = this.ProtectedKeyBlob.CacheGroupKey(rootKeyResolver);
+        }
+        catch (CryptographicException)
+        {
+            this.DecryptionStatus = DnsDecryptionStatus.Error;
+            return;
+        }
+
+        bool decryptOk = this.ProtectedKeyBlob.TryDecrypt(out ReadOnlySpan<byte> cleartext);
+
+        if (decryptOk && cleartext.Length > 0)
+        {
+            this.DecryptedKey = cleartext.ToArray();
+            this.DecryptionStatus = DnsDecryptionStatus.Success;
+        }
+        else
+        {
+            this.DecryptionStatus = rootKeyFound ? DnsDecryptionStatus.Error : DnsDecryptionStatus.Unauthorized;
+        }
+    }
+
+    /// <summary>
+    /// Builds the conventional file name used by <see cref="Save"/> for exporting this key:
+    /// <c>{zone}_{guid}.pvk</c>.
+    /// </summary>
+    /// <returns>A file name with invalid path characters in the zone name replaced by underscores.</returns>
+    public string GetFileName()
+    {
+        // Replace any characters that are invalid in a file name (in the zone part) with underscores.
+        var sanitizedZone = new StringBuilder(string.IsNullOrEmpty(this.DnsZone) ? "_" : this.DnsZone);
+        foreach (char invalid in Path.GetInvalidFileNameChars())
+        {
+            sanitizedZone.Replace(invalid, '_');
+        }
+
+        return $"{sanitizedZone}_{this.Guid:D}.pvk";
+    }
+
+    /// <summary>
+    /// Writes the decrypted private key blob (CNG blob format) to a file under <paramref name="directoryPath"/>
+    /// using the file name from <see cref="GetFileName"/>.
+    /// </summary>
+    /// <param name="directoryPath">The target directory. Created if it does not already exist.</param>
+    /// <param name="overwrite">When <see langword="true"/>, an existing file at the target path is overwritten.</param>
+    /// <returns>The full path of the written file.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="directoryPath"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">The key has not been decrypted successfully.</exception>
+    /// <exception cref="IOException">A file already exists at the target path and <paramref name="overwrite"/> is <see langword="false"/>.</exception>
+    public string Save(string directoryPath, bool overwrite = false)
+    {
+        ArgumentNullException.ThrowIfNull(directoryPath);
+
+        if (this.DecryptionStatus != DnsDecryptionStatus.Success || this.DecryptedKey == null)
+        {
+            throw new InvalidOperationException($"The signing key {this.Guid} has not been decrypted (status: {this.DecryptionStatus}).");
+        }
+
+        Directory.CreateDirectory(directoryPath);
+        string path = Path.Combine(directoryPath, this.GetFileName());
+
+        if (!overwrite && File.Exists(path))
+        {
+            throw new IOException($"The file '{path}' already exists.");
+        }
+
+        File.WriteAllBytes(path, this.DecryptedKey);
+        return path;
     }
 
     /// <summary>

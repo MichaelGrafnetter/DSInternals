@@ -1,12 +1,11 @@
-﻿using System.Management.Automation;
-using DSInternals.DataStore;
+using System.Management.Automation;
 
 namespace DSInternals.PowerShell.Commands;
 
 [Cmdlet(VerbsCommon.Get, "ADDBDnsServerResourceRecord")]
 [Alias("Get-ADDBDnsResourceRecord", "Get-ADDBDnsRecord")]
 [OutputType(typeof(DSInternals.Common.DNS.DnsResourceRecord))]
-public class GetADDBDnsServerResourceRecordCommand : ADDBCommandBase
+public class GetADDBDnsServerResourceRecordCommand : ADDBDnsCommandBase
 {
     [Parameter(Mandatory = false)]
     [Alias("Tombstones", "IncludeTombstoned")]
@@ -24,21 +23,24 @@ public class GetADDBDnsServerResourceRecordCommand : ADDBCommandBase
         set;
     }
 
-    protected override void BeginProcessing()
+    [Parameter(Mandatory = false)]
+    [Alias("TrustAnchors")]
+    public SwitchParameter IncludeTrustAnchors
     {
-        base.BeginProcessing();
+        get;
+        set;
+    }
 
-        using (var directoryAgent = new DirectoryAgent(this.DirectoryContext))
+    protected override void ProcessRecord()
+    {
+        // Invert the selection logic
+        bool skipRootHints = !this.IncludeRootHints.IsPresent;
+        bool skipTombstones = !this.IncludeTombstones.IsPresent;
+        bool skipTrustAnchors = !this.IncludeTrustAnchors.IsPresent;
+
+        foreach (var dnsRecord in this.DirectoryAgent.GetDnsRecords(skipRootHints, skipTombstones, skipTrustAnchors, this.ZoneName))
         {
-            // Invert the selection logic
-            bool skipRootHints = !this.IncludeRootHints.IsPresent;
-            bool skipTombstones = !this.IncludeTombstones.IsPresent;
-
-            foreach (var dnsRecord in directoryAgent.GetDnsRecords(skipRootHints, skipTombstones))
-            {
-                this.WriteObject(dnsRecord);
-            }
+            this.WriteObject(dnsRecord);
         }
-        // TODO: Exception handling
     }
 }

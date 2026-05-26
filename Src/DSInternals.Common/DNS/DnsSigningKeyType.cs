@@ -3,12 +3,12 @@ namespace DSInternals.Common.DNS;
 public enum DnsSigningKeyType : uint
 {
     /// <summary>
-    /// Zone Signing Key
+    /// Zone Signing Key (ZSK).
     /// </summary>
-    ZSK = 0,
+    ZoneSigningKey = 0,
 
     /// <summary>
-    /// Key Signing Key
+    /// Key Signing Key (KSK).
     /// </summary>
-    KSK = 1
+    KeySigningKey = 1
 }

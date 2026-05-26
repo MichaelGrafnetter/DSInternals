@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Windows.Win32;
 
 namespace DSInternals.Common.DNS;
@@ -9,43 +8,42 @@ namespace DSInternals.Common.DNS;
 /// <remarks>
 /// The underlying value matches the 1-byte algorithm identifier on the DNS wire format (RFC 4034 Appendix A.1).
 /// </remarks>
-[SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "Identifier names are copied from Windows header files.")]
 public enum DnsSigningAlgorithm : byte
 {
     /// <summary>
     /// RSA/MD5 (RFC 4034; deprecated by RFC 6944, must not be used).
     /// </summary>
-    RSA_MD5 = (byte)PInvoke.DNSSEC_ALGORITHM_RSAMD5,
+    RsaMd5 = (byte)PInvoke.DNSSEC_ALGORITHM_RSAMD5,
 
     /// <summary>
     /// RSA/SHA-1 (RFC 4034).
     /// </summary>
-    RSA_SHA1 = (byte)PInvoke.DNSSEC_ALGORITHM_RSASHA1,
+    RsaSha1 = (byte)PInvoke.DNSSEC_ALGORITHM_RSASHA1,
 
     /// <summary>
     /// RSA/SHA-1 with NSEC3 hashed authenticated denial of existence (RFC 5155).
     /// </summary>
-    RSA_SHA1_NSEC3 = (byte)PInvoke.DNSSEC_ALGORITHM_RSASHA1_NSEC3,
+    RsaNSec3Sha1 = (byte)PInvoke.DNSSEC_ALGORITHM_RSASHA1_NSEC3,
 
     /// <summary>
     /// RSA/SHA-256 (RFC 5702).
     /// </summary>
-    RSA_SHA256 = (byte)PInvoke.DNSSEC_ALGORITHM_RSASHA256,
+    RsaSha256 = (byte)PInvoke.DNSSEC_ALGORITHM_RSASHA256,
 
     /// <summary>
     /// RSA/SHA-512 (RFC 5702).
     /// </summary>
-    RSA_SHA512 = (byte)PInvoke.DNSSEC_ALGORITHM_RSASHA512,
+    RsaSha512 = (byte)PInvoke.DNSSEC_ALGORITHM_RSASHA512,
 
     /// <summary>
     /// ECDSA Curve P-256 with SHA-256 (RFC 6605).
     /// </summary>
-    P256_SHA256 = (byte)PInvoke.DNSSEC_ALGORITHM_ECDSAP256_SHA256,
+    EcDsaP256Sha256 = (byte)PInvoke.DNSSEC_ALGORITHM_ECDSAP256_SHA256,
 
     /// <summary>
     /// ECDSA Curve P-384 with SHA-384 (RFC 6605).
     /// </summary>
-    P384_SHA384 = (byte)PInvoke.DNSSEC_ALGORITHM_ECDSAP384_SHA384,
+    EcDsaP384Sha384 = (byte)PInvoke.DNSSEC_ALGORITHM_ECDSAP384_SHA384,
 
     /// <summary>
     /// Reserved algorithm identifier indicating that no signing algorithm is in use.

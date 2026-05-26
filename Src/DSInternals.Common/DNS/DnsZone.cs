@@ -15,6 +15,17 @@ public class DnsZone
     private const string Ip6ReverseLookupZoneSuffix = ".ip6.arpa";
 
     /// <summary>
+    /// The FQDN of the pseudo-zone that holds the DNS root hints (cached NS records
+    /// for the DNS root, not a real signable zone).
+    /// </summary>
+    public const string RootHintsZoneName = "RootDNSServers";
+
+    /// <summary>
+    /// The FQDN of the pseudo-zone that holds DNSSEC trust anchors.
+    /// </summary>
+    public const string TrustAnchorsZoneName = "..TrustAnchors";
+
+    /// <summary>
     /// The distinguished name of the DNS zone object in Active Directory.
     /// </summary>
     public string DistinguishedName
@@ -60,6 +71,28 @@ public class DnsZone
     }
 
     /// <summary>
+    /// Indicates whether the zone is signed using NSEC3 (rather than NSEC) for authenticated denial of existence.
+    /// </summary>
+    public bool SignWithNSEC3
+    {
+        get;
+        private set;
+    }
+
+    /// <summary>
+    /// The current NSEC3 salt value used when signing the zone with NSEC3.
+    /// </summary>
+    /// <remarks>
+    /// This is the salt currently in effect on the zone. The user-configured salt is stored
+    /// separately in the msDNS-NSEC3UserSalt attribute.
+    /// </remarks>
+    public byte[]? NSEC3CurrentSalt
+    {
+        get;
+        private set;
+    }
+
+    /// <summary>
     /// Constructs a <see cref="DnsZone"/> from a directory object representing a dnsZone container.
     /// </summary>
     /// <param name="dnsZone">The directory object backing the AD-integrated DNS zone.</param>
@@ -69,8 +102,13 @@ public class DnsZone
         ArgumentNullException.ThrowIfNull(dnsZone);
 
         dnsZone.ReadAttribute(CommonDirectoryAttributes.DnsIsSigned, out bool isSigned);
+        dnsZone.ReadAttribute(CommonDirectoryAttributes.DnsSignWithNSEC3, out bool signWithNSEC3);
 
-        return Create(dnsZone.DistinguishedName, isSigned);
+        // msDNS-NSEC3CurrentSalt has DirectoryString syntax and stores the salt as a hex string (e.g. "879006FFA707C0F7").
+        dnsZone.ReadAttribute(CommonDirectoryAttributes.DnsNSEC3CurrentSalt, out string? nsec3CurrentSaltHex);
+        byte[]? nsec3CurrentSalt = nsec3CurrentSaltHex.HexToBinary();
+
+        return Create(dnsZone.DistinguishedName, isSigned, signWithNSEC3, nsec3CurrentSalt);
     }
 
     /// <summary>
@@ -78,8 +116,10 @@ public class DnsZone
     /// </summary>
     /// <param name="distinguishedName">The distinguished name of the dnsZone object in Active Directory.</param>
     /// <param name="isSigned">Indicates whether the zone is signed using DNSSEC.</param>
+    /// <param name="signWithNSEC3">Indicates whether the zone is signed using NSEC3.</param>
+    /// <param name="nsec3CurrentSalt">The current NSEC3 salt value in effect on the zone.</param>
     /// <returns>A populated <see cref="DnsZone"/> instance.</returns>
-    public static DnsZone Create(string distinguishedName, bool isSigned)
+    public static DnsZone Create(string distinguishedName, bool isSigned = false, bool signWithNSEC3 = false, byte[]? nsec3CurrentSalt = null)
     {
         ArgumentException.ThrowIfNullOrEmpty(distinguishedName);
 
@@ -90,7 +130,9 @@ public class DnsZone
         {
             DistinguishedName = distinguishedName,
             ZoneName = parsedDN.Components.Count > 0 ? parsedDN.Components[0].Value : null,
-            IsSigned = isSigned
+            IsSigned = isSigned,
+            SignWithNSEC3 = signWithNSEC3,
+            NSEC3CurrentSalt = nsec3CurrentSalt
         };
     }
 }

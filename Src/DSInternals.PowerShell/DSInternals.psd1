@@ -67,7 +67,9 @@ FormatsToProcess = @(
     'Views\DSInternals.CngProtectedDataBlob.format.ps1xml',
     'Views\DSInternals.SamDomainPasswordInformation.format.ps1xml',
     'Views\DSInternals.LsaPolicyInformation.format.ps1xml',
+    'Views\DSInternals.DnsZone.format.ps1xml',
     'Views\DSInternals.DnsResourceRecord.format.ps1xml',
+    'Views\DSInternals.DnsSigningKeyDescriptor.format.ps1xml',
     'Views\DSInternals.TrustedDomain.format.ps1xml'
 )
 
@@ -120,6 +122,8 @@ CmdletsToExport = @(
     'Get-ADSIServiceAccount',
     'Get-ADSIDnsServerResourceRecord',
     'Get-ADSIDnsServerZone',
+    'Get-ADSIDnsServerSigningKey',
+    'Export-ADSIDnsServerSigningKey',
     'Get-ADSIKdsRootKey',
     'Enable-ADDBAccount',
     'Disable-ADDBAccount',
@@ -141,6 +145,8 @@ CmdletsToExport = @(
     'Unlock-ADDBAccount',
     'Get-ADDBDnsServerResourceRecord',
     'Get-ADDBDnsServerZone',
+    'Get-ADDBDnsServerSigningKey',
+    'Export-ADDBDnsServerSigningKey',
     'Set-ADDBAccountControl',
     'Save-DnsServerResourceRecord',
     'Get-ADDBTrust'
@@ -209,7 +215,11 @@ AliasesToExport = @(
     'Get-ADDBDnsResourceRecord',
     'Get-ADDBDnsRecord',
     'Get-ADDBDnsZone',
+    'Get-ADDBDnsSigningKey',
+    'Export-ADDBDnsSigningKey',
     'Get-ADSIDnsServerRecord',
+    'Get-ADSIDnsSigningKey',
+    'Export-ADSIDnsSigningKey',
     'Save-DnsResourceRecord',
     'Save-DnsRecord'
 )

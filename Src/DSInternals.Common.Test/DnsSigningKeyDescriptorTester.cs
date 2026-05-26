@@ -16,14 +16,19 @@ public class DnsSigningKeyDescriptorTester
         Assert.IsNotNull(descriptor);
         Assert.AreEqual(dnsZone, descriptor.ZoneName);
         Assert.AreEqual(256, descriptor.KeyLength);
-        Assert.AreEqual(DnsSigningAlgorithm.P256_SHA256, descriptor.CryptoAlgorithm);
+        Assert.AreEqual(DnsSigningAlgorithm.EcDsaP256Sha256, descriptor.CryptoAlgorithm);
         Assert.AreEqual(Guid.Parse("{E6EB8329-330C-4DD3-9989-2827434CB3D5}"), descriptor.KeyId);
         Assert.AreEqual(Guid.Parse("{F91D2384-895D-45A2-ADF9-F037624A107F}"), descriptor.ActiveKey);
         Assert.AreEqual(Guid.Parse("{DDF94E7E-0ED8-4BBB-9447-03FE66202874}"), descriptor.StandbyKey);
         Assert.IsNull(descriptor.NextKey);
         Assert.AreEqual("Microsoft Software Key Storage Provider", descriptor.KeyStorageProvider);
-        Assert.AreEqual(DnsSigningKeyType.KSK, descriptor.KeyType);
+        Assert.AreEqual(DnsSigningKeyType.KeySigningKey, descriptor.KeyType);
         Assert.AreEqual(TimeSpan.FromDays(755), descriptor.RolloverPeriod);
+
+        // The KSK has not rolled over yet (zero FILETIME) and does not track a next key generation time.
+        Assert.IsNull(descriptor.LastRolloverTime);
+        Assert.IsNotNull(descriptor.NextRolloverTime);
+        Assert.IsNull(descriptor.NextKeyGenerationTime);
     }
 
     [TestMethod]
@@ -38,13 +43,18 @@ public class DnsSigningKeyDescriptorTester
         Assert.IsNotNull(descriptor);
         Assert.AreEqual(dnsZone, descriptor.ZoneName);
         Assert.AreEqual(1024, descriptor.KeyLength);
-        Assert.AreEqual(DnsSigningAlgorithm.RSA_SHA256, descriptor.CryptoAlgorithm);
+        Assert.AreEqual(DnsSigningAlgorithm.RsaSha256, descriptor.CryptoAlgorithm);
         Assert.AreEqual(Guid.Parse("{2E8C3148-04B3-462D-AE45-D87FE631FCEE}"), descriptor.KeyId);
         Assert.AreEqual(Guid.Parse("{7488D063-5BEB-4962-911B-BAACCF1BB91D}"), descriptor.ActiveKey);
         Assert.AreEqual(Guid.Parse("{1C3737EA-F9A4-4902-B6A1-DEBC6227E627}"), descriptor.NextKey);
         Assert.IsNull(descriptor.StandbyKey);
         Assert.AreEqual("Microsoft Software Key Storage Provider", descriptor.KeyStorageProvider);
-        Assert.AreEqual(DnsSigningKeyType.ZSK, descriptor.KeyType);
+        Assert.AreEqual(DnsSigningKeyType.ZoneSigningKey, descriptor.KeyType);
         Assert.AreEqual(TimeSpan.FromDays(90), descriptor.RolloverPeriod);
+
+        // The ZSK blob carries a non-zero next key generation time, which must now be surfaced.
+        Assert.IsNotNull(descriptor.LastRolloverTime);
+        Assert.IsNotNull(descriptor.NextRolloverTime);
+        Assert.IsNotNull(descriptor.NextKeyGenerationTime);
     }
 }

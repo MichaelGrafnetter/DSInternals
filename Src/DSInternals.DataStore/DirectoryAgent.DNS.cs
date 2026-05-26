@@ -1,4 +1,6 @@
-﻿using DSInternals.Common.Data;
+#nullable enable
+
+using DSInternals.Common.Data;
 using DSInternals.Common.DNS;
 using DSInternals.Common.Schema;
 
@@ -6,10 +8,7 @@ namespace DSInternals.DataStore;
 
 public partial class DirectoryAgent : IDisposable
 {
-    private const string RootHintsZoneName = "RootDNSServers";
-    private const string TrustAnchorsZoneName = "..TrustAnchors";
-
-    public IEnumerable<DnsResourceRecord> GetDnsRecords(bool skipRootHints = true, bool skipTombstoned = true, bool skipTrustAnchors = true)
+    public IEnumerable<DnsResourceRecord> GetDnsRecords(bool skipRootHints = true, bool skipTombstoned = true, bool skipTrustAnchors = true, string? zoneName = null)
     {
         DNTag? dnsNodeCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsNode);
 
@@ -19,6 +18,7 @@ public partial class DirectoryAgent : IDisposable
             yield break;
         }
 
+        // TODO: Consider a containerized search when a zone name is specified, to avoid iterating over all DNS nodes in the partition.
         foreach (var node in this.FindObjectsByCategory(dnsNodeCategory.Value, includeReadOnly: true))
         {
             if (skipTombstoned)
@@ -48,6 +48,11 @@ public partial class DirectoryAgent : IDisposable
             // Parent DNS zone is the second RDN in the node distinguished name.
             string zone = parsedDN.Components[1].Value;
 
+            if (zoneName != null && !string.Equals(zone, zoneName, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             foreach (var binaryRecord in records)
             {
                 var record = DnsResourceRecord.Create(zone, name, binaryRecord);
@@ -58,7 +63,7 @@ public partial class DirectoryAgent : IDisposable
                     continue;
                 }
 
-                if (record.Zone == TrustAnchorsZoneName && skipTrustAnchors)
+                if (record.Zone == DnsZone.TrustAnchorsZoneName && skipTrustAnchors)
                 {
                     // Skip DNSSEC trust anchors
                     continue;
@@ -69,7 +74,7 @@ public partial class DirectoryAgent : IDisposable
         }
     }
 
-    public IEnumerable<DnsZone> GetDnsZones()
+    public IEnumerable<DnsZone> GetDnsZones(string? zoneName = null)
     {
         DNTag? dnsZoneCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsZone);
 
@@ -83,14 +88,27 @@ public partial class DirectoryAgent : IDisposable
         {
             zone.ReadAttribute(CommonDirectoryAttributes.DomainComponent, out string fqdn);
 
-            if (fqdn != RootHintsZoneName && fqdn != TrustAnchorsZoneName)
+            if (zoneName != null)
             {
-                yield return DnsZone.Create(zone);
+                if (!string.Equals(fqdn, zoneName, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
             }
+            else if (fqdn == DnsZone.RootHintsZoneName || fqdn == DnsZone.TrustAnchorsZoneName)
+            {
+                continue;
+            }
+
+            yield return DnsZone.Create(zone);
         }
     }
 
-    public IEnumerable<DnsSigningKey> GetDnsSigningKeys()
+    /// <summary>
+    /// Retrieves DNSSEC signing key descriptors (msDNS-SigningKeyDescriptors) from
+    /// every AD-integrated DNS zone in the database. No private key material is read or decrypted.
+    /// </summary>
+    public IEnumerable<DnsSigningKeyDescriptor> GetDnsSigningKeyDescriptors(string? zoneName = null)
     {
         DNTag? dnsZoneCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsZone);
 
@@ -102,22 +120,80 @@ public partial class DirectoryAgent : IDisposable
 
         foreach (var zone in this.FindObjectsByCategory(dnsZoneCategory.Value, includeReadOnly: true))
         {
-            // Check if the current DNS zone has signing keys
-            zone.ReadAttribute(CommonDirectoryAttributes.DnsSigningKeys, out byte[][]? signingKeys);
+            zone.ReadAttribute(CommonDirectoryAttributes.DomainComponent, out string fqdn);
 
-            if (signingKeys != null)
+            if (zoneName != null)
             {
-                zone.ReadAttribute(CommonDirectoryAttributes.DomainComponent, out string fqdn);
-                // TODO: Consider fetching the msDNS-IsSigned and msDNS-SigningKeyDescriptors attributes
-
-                foreach (var signingKey in signingKeys)
+                if (!string.Equals(fqdn, zoneName, StringComparison.OrdinalIgnoreCase))
                 {
-                    var dnsSigningKey = DnsSigningKey.Decode(fqdn, signingKey);
-
-                    // TODO: Fetch KDS root keys and decrypt
-
-                    yield return dnsSigningKey;
+                    continue;
                 }
+            }
+            else if (fqdn == DnsZone.RootHintsZoneName || fqdn == DnsZone.TrustAnchorsZoneName)
+            {
+                continue;
+            }
+
+            zone.ReadAttribute(CommonDirectoryAttributes.DnsSigningKeyDescriptors, out byte[][] descriptors);
+            if (descriptors == null)
+            {
+                continue;
+            }
+
+            foreach (byte[] binaryDescriptor in descriptors)
+            {
+                yield return DnsSigningKeyDescriptor.Decode(fqdn, binaryDescriptor);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Retrieves DNSSEC signing keys (msDNS-SigningKeys) from every AD-integrated DNS zone in
+    /// the database and attempts to decrypt each private key using KDS root keys read from the
+    /// same database.
+    /// </summary>
+    public IEnumerable<DnsSigningKey> GetDnsSigningKeys(string? zoneName = null)
+    {
+        DNTag? dnsZoneCategory = this.context.Schema.FindObjectCategory(CommonDirectoryClasses.DnsZone);
+
+        if (!dnsZoneCategory.HasValue)
+        {
+            // This must be some initial AD schema or ADAM schema, which does not support DNS records.
+            yield break;
+        }
+
+        IKdsRootKeyResolver? rootKeyResolver = null;
+
+        foreach (var zone in this.FindObjectsByCategory(dnsZoneCategory.Value, includeReadOnly: true))
+        {
+            zone.ReadAttribute(CommonDirectoryAttributes.DomainComponent, out string fqdn);
+
+            if (zoneName != null)
+            {
+                if (!string.Equals(fqdn, zoneName, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+            }
+            else if (fqdn == DnsZone.RootHintsZoneName || fqdn == DnsZone.TrustAnchorsZoneName)
+            {
+                continue;
+            }
+
+            zone.ReadAttribute(CommonDirectoryAttributes.DnsSigningKeys, out byte[][] signingKeys);
+            if (signingKeys == null)
+            {
+                continue;
+            }
+
+            // Lazily build the KDS root key resolver on first signed zone.
+            rootKeyResolver ??= new KdsRootKeyCache(new DatastoreRootKeyResolver(this.context));
+
+            foreach (byte[] binaryKey in signingKeys)
+            {
+                var signingKey = DnsSigningKey.Decode(fqdn, binaryKey);
+                signingKey.TryDecrypt(rootKeyResolver);
+                yield return signingKey;
             }
         }
     }

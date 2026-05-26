@@ -90,9 +90,20 @@ public class DnsSigningKeyDescriptor
     }
 
     /// <summary>
-    /// The duration between scheduled key rollovers.
+    /// The duration between scheduled key rollovers, or <see langword="null"/> when automatic rollovers are disabled
+    /// (the raw <c>dwRolloverPeriod</c> field equals <c>0xFFFFFFFF</c>).
     /// </summary>
-    public TimeSpan RolloverPeriod
+    public TimeSpan? RolloverPeriod
+    {
+        get;
+        private set;
+    }
+
+    /// <summary>
+    /// Indicates whether automatic key rollovers are enabled for this signing key descriptor.
+    /// </summary>
+    /// <remarks>Mapped from the raw <c>dwRolloverPeriod</c> sentinel value <c>0xFFFFFFFF</c>, which disables rollovers.</remarks>
+    public bool IsRolloverEnabled
     {
         get;
         private set;
@@ -117,27 +128,31 @@ public class DnsSigningKeyDescriptor
     }
 
     /// <summary>
-    /// The time at which the last rollover event was performed.
+    /// The time at which the last rollover event was performed, or <see langword="null"/>
+    /// when no rollover has occurred yet (the raw FILETIME field is zero).
     /// </summary>
-    public DateTime LastRolloverTime
+    public DateTime? LastRolloverTime
     {
         get;
         private set;
     }
 
     /// <summary>
-    /// The time at which the next rollover action must take place.
+    /// The time at which the next rollover action must take place, or <see langword="null"/>
+    /// when no rollover is scheduled (e.g. automatic rollovers are disabled and the raw
+    /// FILETIME field is zero).
     /// </summary>
-    public DateTime NextRolloverTime
+    public DateTime? NextRolloverTime
     {
         get;
         private set;
     }
 
     /// <summary>
-    /// The time at which the next key was added to the zone.
+    /// The time at which the next key was added to the zone, or <see langword="null"/> when
+    /// no such time is set (the raw FILETIME field is zero, e.g. for a key signing key).
     /// </summary>
-    public DateTime NextKeyGenerationTime
+    public DateTime? NextKeyGenerationTime
     {
         get;
         private set;
@@ -306,14 +321,15 @@ public class DnsSigningKeyDescriptor
         descriptor.DnsKeySignatureValidityPeriod = TimeSpan.FromSeconds(part2.DNSKEYSignatureValidityPeriod);
         descriptor.DSSignatureValidityPeriod = TimeSpan.FromSeconds(part2.DSSignatureValidityPeriod);
         descriptor.ZoneSignatureValidityPeriod = TimeSpan.FromSeconds(part2.StandardSignatureValidityPeriod);
-        descriptor.RolloverPeriod = TimeSpan.FromSeconds(part2.RolloverPeriod);
-        descriptor.LastRolloverTime = DateTime.FromFileTimeUtc(part2.LastRolloverTime);
-        descriptor.NextRolloverTime = DateTime.FromFileTimeUtc(part2.NextRolloverTime);
+        descriptor.IsRolloverEnabled = part2.RolloverPeriod != uint.MaxValue; // 0xFFFFFFFF disables automatic rollovers.
+        descriptor.RolloverPeriod = descriptor.IsRolloverEnabled ? TimeSpan.FromSeconds(part2.RolloverPeriod) : null;
+        descriptor.LastRolloverTime = part2.LastRolloverTime == 0 ? null : DateTime.FromFileTimeUtc(part2.LastRolloverTime);
+        descriptor.NextRolloverTime = part2.NextRolloverTime == 0 ? null : DateTime.FromFileTimeUtc(part2.NextRolloverTime);
         descriptor.CurrentState = part2.State;
         descriptor.RolloverType = part2.RolloverType;
         descriptor.CurrentRolloverStatus = part2.CurrentRolloverStatus;
         descriptor.NextRolloverAction = part2.NextRolloverAction;
-        DateTime nextKeyGenerationTime = DateTime.FromFileTimeUtc(part2.NextKeyGenerationTime);
+        descriptor.NextKeyGenerationTime = part2.NextKeyGenerationTime == 0 ? null : DateTime.FromFileTimeUtc(part2.NextKeyGenerationTime);
 
         // Read pwszActiveKey (variable)
         (string? activeKeyName, int? activeKeyLength) = ParseUnicodeString(binaryData.Slice(currentOffset), GuidStringLengthInBytes);
@@ -446,7 +462,7 @@ public class DnsSigningKeyDescriptor
         /// <summary>
         /// The number of seconds between scheduled key rollovers, or 0xFFFFFFFF to disable automatic key rollovers.
         /// </summary>
-        public int RolloverPeriod;
+        public uint RolloverPeriod;
 
         /// <summary>
         /// This value describes the next key rollover action that the DNS server will take for this signing key descriptor.

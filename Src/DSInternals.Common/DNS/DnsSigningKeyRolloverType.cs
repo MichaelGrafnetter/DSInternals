@@ -11,7 +11,7 @@ public enum DnsSigningKeyRolloverType : uint
     /// <remarks>
     /// Corresponds to DNS_ROLLOVER_TYPE_PREPUBLISH.
     /// </remarks>
-    Prepublish = 0x00000000,
+    PrePublish = 0x00000000,
 
     /// <summary>
     /// A method of key rollover in which data is signed by both old and new keys simultaneously for a period of time.
