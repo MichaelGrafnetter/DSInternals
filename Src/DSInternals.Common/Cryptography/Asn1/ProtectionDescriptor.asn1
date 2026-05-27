@@ -1,0 +1,317 @@
+DPAPING-ProtectionDescriptor
+DEFINITIONS IMPLICIT TAGS ::=
+BEGIN
+
+-- ASN.1 structures used to recover DPAPI-NG protection descriptors from
+-- CMS RecipientInfo values.
+--
+-- A descriptor string such as:
+--
+--     SID=S-1-5-... AND LOCAL=user OR SDDL=...
+--
+-- is encoded as:
+--
+--     ProtectionDescriptorInfo ::= SEQUENCE OF OrAlternative
+--     OrAlternative            ::= SEQUENCE OF DescriptorItem
+--
+-- Outer sequence entries are OR alternatives. Items inside one alternative
+-- are AND-combined protectors.
+
+-- Microsoft key-protection OID arc.
+microsoft OBJECT IDENTIFIER ::=
+    { iso(1) identified-organization(3) dod(6) internet(1)
+      private(4) enterprise(1) 311 }
+
+msKeyProtection OBJECT IDENTIFIER ::= { microsoft 74 }
+protectionInfo  OBJECT IDENTIFIER ::= { msKeyProtection 1 }
+
+sidProtected             OBJECT IDENTIFIER ::= { protectionInfo 1 }
+-- { protectionInfo 2 } is not used here.
+keyProtected             OBJECT IDENTIFIER ::= { protectionInfo 3 }
+andCombinerProtected     OBJECT IDENTIFIER ::= { protectionInfo 4 }
+sddlProtected            OBJECT IDENTIFIER ::= { protectionInfo 5 }
+msidcrlProtected         OBJECT IDENTIFIER ::= { protectionInfo 6 }
+webCredentialsProtected  OBJECT IDENTIFIER ::= { protectionInfo 7 }
+localProtected           OBJECT IDENTIFIER ::= { protectionInfo 8 }
+draCertificateProtected  OBJECT IDENTIFIER ::= { protectionInfo 9 }
+vaultCredentialsProtected OBJECT IDENTIFIER ::= { protectionInfo 10 }
+certificateProtected     OBJECT IDENTIFIER ::= { protectionInfo 11 }
+keyFileProtected         OBJECT IDENTIFIER ::= { protectionInfo 12 }
+
+-- Algorithms observed/required by the combiner form.
+nistAlgorithm OBJECT IDENTIFIER ::=
+    { joint-iso-itu-t(2) country(16) us(840) organization(1)
+      gov(101) csor(3) 4 }
+aes       OBJECT IDENTIFIER ::= { nistAlgorithm 1 }
+hashAlgs  OBJECT IDENTIFIER ::= { nistAlgorithm 2 }
+
+id-aes256-wrap OBJECT IDENTIFIER ::= { aes 45 }
+id-aes256-GCM  OBJECT IDENTIFIER ::= { aes 46 }
+id-sha256      OBJECT IDENTIFIER ::= { hashAlgs 1 }
+
+-- CMS / PKCS #7 content OIDs present around the descriptor recipients.
+rsadsi OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) 113549 }
+pkcs   OBJECT IDENTIFIER ::= { rsadsi 1 }
+pkcs1  OBJECT IDENTIFIER ::= { pkcs 1 }
+pkcs7  OBJECT IDENTIFIER ::= { pkcs 7 }
+
+rsaEncryption    OBJECT IDENTIFIER ::= { pkcs1 1 }
+id-data          OBJECT IDENTIFIER ::= { pkcs7 1 }
+id-envelopedData OBJECT IDENTIFIER ::= { pkcs7 3 }
+
+-- Encoders may apply implementation-specific limits to OR alternatives and
+-- AND-combined items.
+ProtectionDescriptorInfo ::= SEQUENCE SIZE (1..MAX) OF OrAlternative
+
+OrAlternative ::= SEQUENCE SIZE (1..MAX) OF DescriptorItem
+
+DescriptorItem ::= SEQUENCE {
+    name   UTF8String,
+    value  UTF8String
+}
+
+-- Well-known DescriptorItem.name values used by the providers.
+sidName            UTF8String ::= "SID"
+sddlName           UTF8String ::= "SDDL"
+localName          UTF8String ::= "LOCAL"
+msidcrlName        UTF8String ::= "MSIDCRL"
+webCredentialsName UTF8String ::= "WEBCREDENTIALS"
+vaultCredentialsName UTF8String ::= "VAULTCREDENTIALS"
+certificateName    UTF8String ::= "CERTIFICATE"
+draCertificateName UTF8String ::= "DRACERTIFICATE"
+keyFileName        UTF8String ::= "KEYFILE"
+
+-- CMS KEKIdentifier.otherKeyAttribute when the attribute OID is
+-- protectionInfo (1.3.6.1.4.1.311.74.1). The value is decoded as
+-- ProtectionAlgorithmIdentifier, then decodes parameters as
+-- ProtectionDescriptorInfo.
+ProtectionKeyAttribute ::= SEQUENCE {
+    keyAttrId  OBJECT IDENTIFIER, -- MUST be protectionInfo
+    keyAttr    ProtectionAlgorithmIdentifier
+}
+
+ProtectionAlgorithmIdentifier ::= SEQUENCE {
+    algorithm   OBJECT IDENTIFIER,
+        -- One of sidProtected, sddlProtected, msidcrlProtected,
+        -- webCredentialsProtected, localProtected, vaultCredentialsProtected,
+        -- certificateProtected, draCertificateProtected, keyProtected, or
+        -- keyFileProtected. Some decoders may not enforce name/algorithm
+        -- consistency while reconstructing a descriptor string.
+    parameters  ProtectionDescriptorInfo
+}
+
+-- The documented single-SID shape is therefore:
+--
+-- ProtectionKeyAttribute {
+--   keyAttrId = protectionInfo,
+--   keyAttr = {
+--     algorithm = sidProtected,
+--     parameters = {
+--       { { name = "SID", value = "S-1-..." } }
+--     }
+--   }
+-- }
+--
+-- A single LOCAL=machine protector has the same shape, with:
+--
+--   keyAttr.algorithm = localProtected
+--   keyAttr.parameters = {
+--     { { name = "LOCAL", value = "machine" } }
+--   }
+--
+-- A single SDDL=... protector also has the same shape, with:
+--
+--   keyAttr.algorithm = sddlProtected
+--   keyAttr.parameters = {
+--     { { name = "SDDL", value = "O:S-1-5-..." } }
+--   }
+
+-- CMS envelope types used by NCryptProtectSecret. These cover both supplied
+-- instance trees:
+--
+-- * OR is represented by EnvelopedData.recipientInfos containing multiple
+--   KEKRecipientInfo values.
+-- * AND is represented by a single OtherRecipientInfo whose oriType is
+--   andCombinerProtected and whose oriValue is CombinerRecipientInfo.
+ContentInfo ::= SEQUENCE {
+    contentType  ContentType,
+    content      [0] EXPLICIT ANY DEFINED BY contentType OPTIONAL
+}
+
+ContentType ::= OBJECT IDENTIFIER
+
+EnvelopedData ::= SEQUENCE {
+    version               CMSVersion,
+    originatorInfo        [0] IMPLICIT OriginatorInfo OPTIONAL,
+    recipientInfos        RecipientInfos,
+    encryptedContentInfo  EncryptedContentInfo,
+    unprotectedAttrs      [1] IMPLICIT UnprotectedAttributes OPTIONAL
+}
+
+OriginatorInfo ::= SEQUENCE {
+    certs  [0] IMPLICIT ANY OPTIONAL,
+    crls   [1] IMPLICIT ANY OPTIONAL
+}
+
+RecipientInfos ::= SET SIZE (1..MAX) OF RecipientInfo
+
+EncryptedContentInfo ::= SEQUENCE {
+    contentType                 ContentType,
+    contentEncryptionAlgorithm  ContentEncryptionAlgorithmIdentifier,
+    encryptedContent            [0] IMPLICIT EncryptedContent OPTIONAL
+}
+
+ContentEncryptionAlgorithmIdentifier ::= AlgorithmIdentifier
+EncryptedContent ::= OCTET STRING
+UnprotectedAttributes ::= SET SIZE (1..MAX) OF ANY
+
+GCMParameters ::= SEQUENCE {
+    aes-nonce   OCTET STRING,
+    aes-ICVlen  INTEGER OPTIONAL
+}
+
+Aes256GcmAlgorithmIdentifier ::= SEQUENCE {
+    algorithm   OBJECT IDENTIFIER, -- id-aes256-GCM
+    parameters  GCMParameters
+}
+
+-- Reduced CMS recipient types included here so the DPAPI-NG-specific wrappers
+-- below are self-contained.
+CMSVersion ::= INTEGER
+EncryptedKey ::= OCTET STRING
+
+AlgorithmIdentifier ::= SEQUENCE {
+    algorithm   OBJECT IDENTIFIER,
+    parameters  ANY OPTIONAL
+}
+
+RecipientInfo ::= CHOICE {
+    ktri   KeyTransRecipientInfo,
+    kari   [1] KeyAgreeRecipientInfo,
+    kekri  [2] KEKRecipientInfo,
+    ori    [4] OtherRecipientInfo
+}
+
+OtherRecipientInfo ::= SEQUENCE {
+    oriType   OBJECT IDENTIFIER,
+    oriValue  ANY DEFINED BY oriType
+}
+
+OtherKeyAttribute ::= SEQUENCE {
+    keyAttrId  OBJECT IDENTIFIER,
+    keyAttr    ANY DEFINED BY keyAttrId OPTIONAL
+}
+
+KEKRecipientInfo ::= SEQUENCE {
+    version                 CMSVersion, -- MUST be 4 for encoded samples
+    kekid                   KEKIdentifier,
+    keyEncryptionAlgorithm  AlgorithmIdentifier,
+    encryptedKey            EncryptedKey
+}
+
+KEKIdentifier ::= SEQUENCE {
+    keyIdentifier  OCTET STRING,
+    date           GeneralizedTime OPTIONAL,
+    other          ProtectionKeyAttribute OPTIONAL
+}
+
+-- OtherRecipientInfo where oriType is andCombinerProtected. This is emitted
+-- for descriptor AND groups. oriValue is decoded with
+-- ASN1_NCRYPT_CMS_COMBINER_RECIPIENT_INFO.
+AndCombinerOtherRecipientInfo ::= [4] IMPLICIT SEQUENCE {
+    oriType   OBJECT IDENTIFIER, -- andCombinerProtected
+    oriValue  CombinerRecipientInfo
+}
+
+CombinerRecipientInfo ::= SEQUENCE {
+    version                 CMSVersion, -- encoder writes 0
+    recipientInfos          SEQUENCE SIZE (1..MAX) OF RecipientInfo,
+    keyDerivationAlgorithm  AlgorithmIdentifier, -- id-sha256
+    keyEncryptionAlgorithm  AlgorithmIdentifier, -- id-aes256-wrap
+    encryptedKey            EncryptedKey
+}
+
+-- OtherRecipientInfo where oriType is draCertificateProtected. The oriValue
+-- is a DER-encoded RecipientInfo carrying KeyTransRecipientInfo or
+-- KeyAgreeRecipientInfo. Its recipient identifier maps to
+-- a DRACERTIFICATE=KeyId:... or DRACERTIFICATE=IssuerAndSerial:... string.
+DraCertificateOtherRecipientInfo ::= [4] IMPLICIT SEQUENCE {
+    oriType   OBJECT IDENTIFIER, -- draCertificateProtected
+    oriValue  RecipientInfo
+}
+
+KeyTransRecipientInfo ::= SEQUENCE {
+    version                 CMSVersion,
+    rid                     RecipientIdentifier,
+    keyEncryptionAlgorithm  AlgorithmIdentifier,
+    encryptedKey            EncryptedKey
+}
+
+-- A bare certificate recipient, as opposed to a DPAPI-NG KEK recipient, is:
+--
+-- KeyTransRecipientInfo {
+--   version = 2,
+--   rid = subjectKeyIdentifier [0] OCTET STRING,
+--   keyEncryptionAlgorithm = { rsaEncryption, NULL },
+--   encryptedKey = OCTET STRING
+-- }
+--
+-- Certificate recipients map back into descriptor strings when wrapped in
+-- draCertificateProtected OtherRecipientInfo; direct KeyTransRecipientInfo or
+-- KeyAgreeRecipientInfo values do not carry a protection descriptor string.
+
+RecipientIdentifier ::= CHOICE {
+    issuerAndSerialNumber  IssuerAndSerialNumber,
+    subjectKeyIdentifier   [0] SubjectKeyIdentifier
+}
+
+SubjectKeyIdentifier ::= OCTET STRING
+
+IssuerAndSerialNumber ::= SEQUENCE {
+    issuer        Name,
+    serialNumber  CertificateSerialNumber
+}
+
+Name ::= ANY
+CertificateSerialNumber ::= INTEGER
+
+KeyAgreeRecipientInfo ::= SEQUENCE {
+    version                 CMSVersion,
+    originator              [0] EXPLICIT OriginatorIdentifierOrKey,
+    ukm                     [1] EXPLICIT UserKeyingMaterial OPTIONAL,
+    keyEncryptionAlgorithm  AlgorithmIdentifier,
+    recipientEncryptedKeys  RecipientEncryptedKeys
+}
+
+OriginatorIdentifierOrKey ::= CHOICE {
+    issuerAndSerialNumber  IssuerAndSerialNumber,
+    subjectKeyIdentifier   [0] SubjectKeyIdentifier,
+    originatorKey          [1] OriginatorPublicKey
+}
+
+OriginatorPublicKey ::= SEQUENCE {
+    algorithm  AlgorithmIdentifier,
+    publicKey  BIT STRING
+}
+
+UserKeyingMaterial ::= OCTET STRING
+
+RecipientEncryptedKeys ::= SEQUENCE OF RecipientEncryptedKey
+
+RecipientEncryptedKey ::= SEQUENCE {
+    rid           KeyAgreeRecipientIdentifier,
+    encryptedKey  EncryptedKey
+}
+
+KeyAgreeRecipientIdentifier ::= CHOICE {
+    issuerAndSerialNumber  IssuerAndSerialNumber,
+    rKeyId                 [0] RecipientKeyIdentifier
+}
+
+RecipientKeyIdentifier ::= SEQUENCE {
+    subjectKeyIdentifier  SubjectKeyIdentifier,
+    date                  GeneralizedTime OPTIONAL,
+    other                 OtherKeyAttribute OPTIONAL
+}
+
+END

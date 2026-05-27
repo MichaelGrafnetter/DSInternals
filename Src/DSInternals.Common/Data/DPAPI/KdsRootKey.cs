@@ -214,6 +214,51 @@ public class KdsRootKey
         this.SecretAgreementPrivateKeyLength = DefaultPrivateKeyLength;
     }
 
+    /// <summary>
+    /// Initializes a new <see cref="KdsRootKey"/> instance from explicit property values.
+    /// </summary>
+    /// <remarks>
+    /// Intended for rehydrating instances that were serialized via <c>Export-Clixml</c> or another
+    /// property-based serializer. Pass <see langword="null"/> for any string or byte-array argument
+    /// to fall back to the default associated with that property.
+    /// </remarks>
+    /// <param name="keyId">The unique identifier of the root key.</param>
+    /// <param name="keyValue">The KDS root key value.</param>
+    /// <param name="domainController">DN of the domain controller that generated the key.</param>
+    /// <param name="creationTime">Time at which the key was created.</param>
+    /// <param name="effectiveTime">Time after which the key may be used.</param>
+    /// <param name="kdfAlgorithm">Name of the key derivation algorithm.</param>
+    /// <param name="rawKdfParameters">Binary parameters for the key derivation algorithm.</param>
+    /// <param name="secretAgreementAlgorithm">Name of the secret agreement algorithm.</param>
+    /// <param name="secretAgreementParameters">Binary parameters for the secret agreement algorithm.</param>
+    /// <param name="publicKeyLength">Length of the secret agreement public key, in bits.</param>
+    /// <param name="privateKeyLength">Length of the secret agreement private key, in bits.</param>
+    public KdsRootKey(
+        Guid keyId,
+        byte[] keyValue,
+        string domainController,
+        DateTime? creationTime,
+        DateTime? effectiveTime,
+        string kdfAlgorithm,
+        byte[] rawKdfParameters,
+        string secretAgreementAlgorithm,
+        byte[] secretAgreementParameters,
+        int publicKeyLength,
+        int privateKeyLength)
+    {
+        this.KeyId = keyId;
+        this.KeyValue = keyValue ?? throw new ArgumentNullException(nameof(keyValue));
+        this.DomainController = domainController;
+        this.CreationTime = creationTime;
+        this.EffectiveTime = effectiveTime;
+        this.KdfAlgorithm = kdfAlgorithm ?? DefaultKdfAlgorithm;
+        this.RawKdfParameters = rawKdfParameters ?? DefaultKdfParameters;
+        this.SecretAgreementAlgorithm = secretAgreementAlgorithm ?? DefaultSecretAgreementAlgorithm;
+        this.SecretAgreementParameters = secretAgreementParameters ?? DefaultSecretAgreementParameters;
+        this.SecretAgreementPublicKeyLength = publicKeyLength > 0 ? publicKeyLength : DefaultPublicKeyLength;
+        this.SecretAgreementPrivateKeyLength = privateKeyLength > 0 ? privateKeyLength : DefaultPrivateKeyLength;
+    }
+
     public (byte[] l1Key, byte[] l2Key) ComputeSidPrivateKey(
         byte[] securityDescriptor,
         int l0KeyId,

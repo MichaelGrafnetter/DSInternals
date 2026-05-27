@@ -281,7 +281,15 @@ public class GroupManagedServiceAccount
         this.WhenCreated = whenCreated ?? DateTime.MinValue;
     }
 
-    public void CalculatePassword(KdsRootKey kdsRootKey, DateTime effectiveTime)
+    /// <summary>
+    /// Calculates the effective managed password from the supplied KDS root key.
+    /// </summary>
+    /// <param name="kdsRootKey">The KDS root key used to derive the password.</param>
+    /// <param name="effectiveTime">
+    /// The point in time for which the password cycle should be computed. When <see langword="null"/>,
+    /// the interval ID stored in <see cref="ManagedPasswordId"/> is used as-is.
+    /// </param>
+    public void CalculatePassword(KdsRootKey kdsRootKey, DateTime? effectiveTime)
     {
         if (kdsRootKey == null)
         {
@@ -293,10 +301,23 @@ public class GroupManagedServiceAccount
             throw new InvalidOperationException("The SID is not set for this gMSA.");
         }
 
-        // Calculate and cache the effective managed password cycle
-        DateTime previousPasswordChange = this.PasswordLastSet ?? this.WhenCreated;
-        (int l0KeyId, int l1KeyId, int l2KeyId) = GetIntervalId(previousPasswordChange, effectiveTime, this.ManagedPasswordInterval ?? DefaultManagedPasswordInterval);
-        this.EffectivePasswordId = new ProtectionKeyIdentifier(kdsRootKey.KeyId, l0KeyId, l1KeyId, l2KeyId);
+        if (effectiveTime.HasValue)
+        {
+            // Calculate and cache the effective managed password cycle
+            DateTime previousPasswordChange = this.PasswordLastSet ?? this.WhenCreated;
+            (int l0KeyId, int l1KeyId, int l2KeyId) = GetIntervalId(previousPasswordChange, effectiveTime.Value, this.ManagedPasswordInterval ?? DefaultManagedPasswordInterval);
+            this.EffectivePasswordId = new ProtectionKeyIdentifier(kdsRootKey.KeyId, l0KeyId, l1KeyId, l2KeyId);
+        }
+        else
+        {
+            // No effective time was supplied — reuse the interval ID stored on the account.
+            if (!this.ManagedPasswordId.HasValue)
+            {
+                throw new InvalidOperationException("The ManagedPasswordId is not set for this gMSA.");
+            }
+
+            this.EffectivePasswordId = this.ManagedPasswordId;
+        }
 
         // Calculate and cache the effective managed password
         byte[] managedPassword = CalculateManagedPassword(this.Sid, this.EffectivePasswordId.Value, kdsRootKey);

@@ -1,93 +1,178 @@
-﻿
 #pragma warning disable SA1028 // ignore whitespace warnings for generated code
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Formats.Asn1;
 
-namespace DSInternals.Common.Cryptography.Asn1.Pkcs7;
-
-[StructLayout(LayoutKind.Sequential)]
-internal partial struct SignerInfo
+namespace DSInternals.Common.Cryptography.Asn1.Pkcs7
 {
-    internal int Version;
-    internal DSInternals.Common.Cryptography.Asn1.Pkcs7.SignerIdentifier Sid;
-    internal DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier DigestAlgorithm;
-    internal ReadOnlyMemory<byte>? SignedAttributes;
-    internal DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier SignatureAlgorithm;
-    internal ReadOnlyMemory<byte> SignatureValue;
-    internal DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute[] UnsignedAttributes;
-  
-
-    internal static SignerInfo Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+    [StructLayout(LayoutKind.Sequential)]
+    internal partial struct SignerInfo
     {
-        return Decode(Asn1Tag.Sequence, encoded, ruleSet);
-    }
+        internal int Version;
+        internal DSInternals.Common.Cryptography.Asn1.Pkcs7.SignerIdentifier Sid;
+        internal DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier DigestAlgorithm;
+        internal ReadOnlyMemory<byte>? SignedAttributes;
+        internal DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier SignatureAlgorithm;
+        internal ReadOnlyMemory<byte> SignatureValue;
+        internal DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute[]? UnsignedAttributes;
 
-    internal static SignerInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
-    {
-        AsnReader reader = new AsnReader(encoded, ruleSet);
-        Decode(reader, expectedTag, out SignerInfo decoded);
-        reader.ThrowIfNotEmpty();
-        return decoded;
-    }
-
-    internal static void Decode(AsnReader reader, out SignerInfo decoded)
-    {
-        if (reader == null)
-            throw new ArgumentNullException(nameof(reader));
-
-        Decode(reader, Asn1Tag.Sequence, out decoded);
-    }
-
-    internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out SignerInfo decoded)
-    {
-        if (reader == null)
-            throw new ArgumentNullException(nameof(reader));
-
-        decoded = default;
-        AsnReader sequenceReader = reader.ReadSequence(expectedTag);
-        AsnReader collectionReader;
-        
-
-        if (!sequenceReader.TryReadInt32(out decoded.Version))
+        internal readonly void Encode(AsnWriter writer)
         {
-            sequenceReader.ThrowIfNotEmpty();
+            Encode(writer, Asn1Tag.Sequence);
         }
 
-        DSInternals.Common.Cryptography.Asn1.Pkcs7.SignerIdentifier.Decode(sequenceReader, out decoded.Sid);
-        DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(sequenceReader, out decoded.DigestAlgorithm);
-
-        if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
+        internal readonly void Encode(AsnWriter writer, Asn1Tag tag)
         {
-            decoded.SignedAttributes = sequenceReader.ReadEncodedValue();
-        }
+            writer.PushSequence(tag);
 
-        DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(sequenceReader, out decoded.SignatureAlgorithm);
-        decoded.SignatureValue = sequenceReader.ReadOctetString();
-    
+            writer.WriteInteger(Version);
+            Sid.Encode(writer);
+            DigestAlgorithm.Encode(writer);
 
-        if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
-        {
-
-            // Decode SEQUENCE OF for UnsignedAttributes
+            if (SignedAttributes.HasValue)
             {
-                collectionReader = sequenceReader.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
-                var tmpList = new List<DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute>();
-                DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute tmpItem;
-
-                while (collectionReader.HasData)
+                // Validator for tag constraint for SignedAttributes
                 {
-                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(collectionReader, out tmpItem);
-                    tmpList.Add(tmpItem);
+                    if (!Asn1Tag.TryDecode(SignedAttributes.Value.Span, out Asn1Tag validateTag, out _) ||
+                        !validateTag.HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
+                    {
+                        throw new CryptographicException();
+                    }
                 }
 
-                decoded.UnsignedAttributes = tmpList.ToArray();
+                try
+                {
+                    writer.WriteEncodedValue(SignedAttributes.Value.Span);
+                }
+                catch (ArgumentException e)
+                {
+                    throw new CryptographicException("ASN1 corrupted data.", e);
+                }
             }
 
+            SignatureAlgorithm.Encode(writer);
+            writer.WriteOctetString(SignatureValue.Span);
+
+            if (UnsignedAttributes != null)
+            {
+
+                writer.PushSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
+                for (int i = 0; i < UnsignedAttributes.Length; i++)
+                {
+                    UnsignedAttributes[i].Encode(writer);
+                }
+                writer.PopSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
+
+            }
+
+            writer.PopSequence(tag);
         }
 
-        sequenceReader.ThrowIfNotEmpty();
+        internal static SignerInfo Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+        {
+            return Decode(Asn1Tag.Sequence, encoded, ruleSet);
+        }
+
+        internal static SignerInfo Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+        {
+            try
+            {
+                AsnReader reader = new AsnReader(encoded, ruleSet);
+
+                DecodeCore(ref reader, expectedTag, encoded, out SignerInfo decoded);
+                reader.ThrowIfNotEmpty();
+                return decoded;
+            }
+            catch (AsnContentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+        }
+
+        internal static void Decode(ref AsnReader reader, ReadOnlyMemory<byte> rebind, out SignerInfo decoded)
+        {
+            Decode(ref reader, Asn1Tag.Sequence, rebind, out decoded);
+        }
+
+        internal static void Decode(AsnReader reader, out SignerInfo decoded)
+        {
+            Decode(ref reader, default, out decoded);
+        }
+
+        internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out SignerInfo decoded)
+        {
+            Decode(ref reader, expectedTag, default, out decoded);
+        }
+        internal static void Decode(ref AsnReader reader, Asn1Tag expectedTag, ReadOnlyMemory<byte> rebind, out SignerInfo decoded)
+        {
+            try
+            {
+                DecodeCore(ref reader, expectedTag, rebind, out decoded);
+            }
+            catch (AsnContentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+        }
+
+        private static void DecodeCore(ref AsnReader reader, Asn1Tag expectedTag, ReadOnlyMemory<byte> rebind, out SignerInfo decoded)
+        {
+            decoded = default;
+            AsnReader sequenceReader = reader.ReadSequence(expectedTag);
+            AsnReader collectionReader;
+            ReadOnlyMemory<byte> tmpSpan;
+
+
+            if (!sequenceReader.TryReadInt32(out decoded.Version))
+            {
+                sequenceReader.ThrowIfNotEmpty();
+            }
+
+            DSInternals.Common.Cryptography.Asn1.Pkcs7.SignerIdentifier.Decode(ref sequenceReader, rebind, out decoded.Sid);
+            DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(ref sequenceReader, rebind, out decoded.DigestAlgorithm);
+
+            if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
+            {
+                tmpSpan = sequenceReader.ReadEncodedValue();
+                decoded.SignedAttributes = tmpSpan;
+            }
+
+            DSInternals.Common.Cryptography.Asn1.X509.AlgorithmIdentifier.Decode(ref sequenceReader, rebind, out decoded.SignatureAlgorithm);
+
+            if (sequenceReader.TryReadPrimitiveOctetString(out tmpSpan))
+            {
+                decoded.SignatureValue = tmpSpan;
+            }
+            else
+            {
+                decoded.SignatureValue = sequenceReader.ReadOctetString();
+            }
+
+
+            if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
+            {
+
+                // Decode SEQUENCE OF for UnsignedAttributes
+                {
+                    collectionReader = sequenceReader.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
+                    var tmpList = new List<DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute>();
+                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute tmpItem;
+
+                    while (collectionReader.HasData)
+                    {
+                        DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(ref collectionReader, rebind, out tmpItem);
+                        tmpList.Add(tmpItem);
+                    }
+
+                    decoded.UnsignedAttributes = tmpList.ToArray();
+                }
+
+            }
+
+
+            sequenceReader.ThrowIfNotEmpty();
+        }
     }
 }

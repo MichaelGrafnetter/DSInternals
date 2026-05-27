@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:Sequence
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="GCMParameters"
+  namespace="DSInternals.Common.Cryptography.Asn1.X509">
+
+  <!--
+    GCMParameters ::= SEQUENCE {
+        aes-nonce   OCTET STRING,
+        aes-ICVlen  INTEGER OPTIONAL
+    }
+  -->
+  <asn:OctetString name="AesNonce" />
+  <asn:Integer name="AesIcvLen" backingType="int" optional="true" />
+</asn:Sequence>

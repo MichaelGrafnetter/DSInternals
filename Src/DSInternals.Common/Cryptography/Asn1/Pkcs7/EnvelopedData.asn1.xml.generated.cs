@@ -1,106 +1,170 @@
-﻿
 #pragma warning disable SA1028 // ignore whitespace warnings for generated code
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Formats.Asn1;
 
-namespace DSInternals.Common.Cryptography.Asn1.Pkcs7;
-
-[StructLayout(LayoutKind.Sequential)]
-internal partial struct EnvelopedData
+namespace DSInternals.Common.Cryptography.Asn1.Pkcs7
 {
-    internal int Version;
-    internal DSInternals.Common.Cryptography.Asn1.Pkcs7.OriginatorInfo? OriginatorInfo;
-    internal DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo[] RecipientInfos;
-    internal DSInternals.Common.Cryptography.Asn1.Pkcs7.EncryptedContentInfo EncryptedContentInfo;
-    internal DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute[] UnprotectedAttributes;
-  
-
-    internal static EnvelopedData Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+    [StructLayout(LayoutKind.Sequential)]
+    internal partial struct EnvelopedData
     {
-        return Decode(Asn1Tag.Sequence, encoded, ruleSet);
-    }
+        internal int Version;
+        internal DSInternals.Common.Cryptography.Asn1.Pkcs7.OriginatorInfo? OriginatorInfo;
+        internal DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo[] RecipientInfos;
+        internal DSInternals.Common.Cryptography.Asn1.Pkcs7.EncryptedContentInfo EncryptedContentInfo;
+        internal DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute[]? UnprotectedAttributes;
 
-    internal static EnvelopedData Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
-    {
-        AsnReader reader = new AsnReader(encoded, ruleSet);
-        Decode(reader, expectedTag, out EnvelopedData decoded);
-        reader.ThrowIfNotEmpty();
-        return decoded;
-    }
-
-    internal static void Decode(AsnReader reader, out EnvelopedData decoded)
-    {
-        if (reader == null)
-            throw new ArgumentNullException(nameof(reader));
-
-        Decode(reader, Asn1Tag.Sequence, out decoded);
-    }
-
-    internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out EnvelopedData decoded)
-    {
-        if (reader == null)
-            throw new ArgumentNullException(nameof(reader));
-
-        decoded = default;
-        AsnReader sequenceReader = reader.ReadSequence(expectedTag);
-        AsnReader collectionReader;
-        
-
-        if (!sequenceReader.TryReadInt32(out decoded.Version))
+        internal readonly void Encode(AsnWriter writer)
         {
-            sequenceReader.ThrowIfNotEmpty();
+            Encode(writer, Asn1Tag.Sequence);
         }
 
-
-        if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
+        internal readonly void Encode(AsnWriter writer, Asn1Tag tag)
         {
-            DSInternals.Common.Cryptography.Asn1.Pkcs7.OriginatorInfo tmpOriginatorInfo;
-            DSInternals.Common.Cryptography.Asn1.Pkcs7.OriginatorInfo.Decode(sequenceReader, new Asn1Tag(TagClass.ContextSpecific, 0), out tmpOriginatorInfo);
-            decoded.OriginatorInfo = tmpOriginatorInfo;
+            writer.PushSequence(tag);
 
-        }
+            writer.WriteInteger(Version);
 
-
-        // Decode SEQUENCE OF for RecipientInfos
-        {
-            collectionReader = sequenceReader.ReadSetOf();
-            var tmpList = new List<DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo>();
-            DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo tmpItem;
-
-            while (collectionReader.HasData)
+            if (OriginatorInfo.HasValue)
             {
-                DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo.Decode(collectionReader, out tmpItem);
-                tmpList.Add(tmpItem);
+                OriginatorInfo.Value.Encode(writer, new Asn1Tag(TagClass.ContextSpecific, 0));
             }
 
-            decoded.RecipientInfos = tmpList.ToArray();
+
+            writer.PushSetOf();
+            for (int i = 0; i < RecipientInfos.Length; i++)
+            {
+                RecipientInfos[i].Encode(writer);
+            }
+            writer.PopSetOf();
+
+            EncryptedContentInfo.Encode(writer);
+
+            if (UnprotectedAttributes != null)
+            {
+
+                writer.PushSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
+                for (int i = 0; i < UnprotectedAttributes.Length; i++)
+                {
+                    UnprotectedAttributes[i].Encode(writer);
+                }
+                writer.PopSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
+
+            }
+
+            writer.PopSequence(tag);
         }
 
-        DSInternals.Common.Cryptography.Asn1.Pkcs7.EncryptedContentInfo.Decode(sequenceReader, out decoded.EncryptedContentInfo);
-
-        if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
+        internal static EnvelopedData Decode(ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
         {
+            return Decode(Asn1Tag.Sequence, encoded, ruleSet);
+        }
 
-            // Decode SEQUENCE OF for UnprotectedAttributes
+        internal static EnvelopedData Decode(Asn1Tag expectedTag, ReadOnlyMemory<byte> encoded, AsnEncodingRules ruleSet)
+        {
+            try
             {
-                collectionReader = sequenceReader.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
-                var tmpList = new List<DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute>();
-                DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute tmpItem;
+                AsnReader reader = new AsnReader(encoded, ruleSet);
+
+                DecodeCore(ref reader, expectedTag, encoded, out EnvelopedData decoded);
+                reader.ThrowIfNotEmpty();
+                return decoded;
+            }
+            catch (AsnContentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+        }
+
+        internal static void Decode(ref AsnReader reader, ReadOnlyMemory<byte> rebind, out EnvelopedData decoded)
+        {
+            Decode(ref reader, Asn1Tag.Sequence, rebind, out decoded);
+        }
+
+        internal static void Decode(AsnReader reader, out EnvelopedData decoded)
+        {
+            Decode(ref reader, default, out decoded);
+        }
+
+        internal static void Decode(AsnReader reader, Asn1Tag expectedTag, out EnvelopedData decoded)
+        {
+            Decode(ref reader, expectedTag, default, out decoded);
+        }
+        internal static void Decode(ref AsnReader reader, Asn1Tag expectedTag, ReadOnlyMemory<byte> rebind, out EnvelopedData decoded)
+        {
+            try
+            {
+                DecodeCore(ref reader, expectedTag, rebind, out decoded);
+            }
+            catch (AsnContentException e)
+            {
+                throw new CryptographicException("ASN1 corrupted data.", e);
+            }
+        }
+
+        private static void DecodeCore(ref AsnReader reader, Asn1Tag expectedTag, ReadOnlyMemory<byte> rebind, out EnvelopedData decoded)
+        {
+            decoded = default;
+            AsnReader sequenceReader = reader.ReadSequence(expectedTag);
+            AsnReader collectionReader;
+
+
+            if (!sequenceReader.TryReadInt32(out decoded.Version))
+            {
+                sequenceReader.ThrowIfNotEmpty();
+            }
+
+
+            if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 0)))
+            {
+                DSInternals.Common.Cryptography.Asn1.Pkcs7.OriginatorInfo tmpOriginatorInfo;
+                DSInternals.Common.Cryptography.Asn1.Pkcs7.OriginatorInfo.Decode(ref sequenceReader, new Asn1Tag(TagClass.ContextSpecific, 0), rebind, out tmpOriginatorInfo);
+                decoded.OriginatorInfo = tmpOriginatorInfo;
+
+            }
+
+
+            // Decode SEQUENCE OF for RecipientInfos
+            {
+                collectionReader = sequenceReader.ReadSetOf();
+                var tmpList = new List<DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo>();
+                DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo tmpItem;
 
                 while (collectionReader.HasData)
                 {
-                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(collectionReader, out tmpItem);
+                    DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo.Decode(ref collectionReader, rebind, out tmpItem);
                     tmpList.Add(tmpItem);
                 }
 
-                decoded.UnprotectedAttributes = tmpList.ToArray();
+                decoded.RecipientInfos = tmpList.ToArray();
             }
 
-        }
+            DSInternals.Common.Cryptography.Asn1.Pkcs7.EncryptedContentInfo.Decode(ref sequenceReader, rebind, out decoded.EncryptedContentInfo);
 
-        sequenceReader.ThrowIfNotEmpty();
+            if (sequenceReader.HasData && sequenceReader.PeekTag().HasSameClassAndValue(new Asn1Tag(TagClass.ContextSpecific, 1)))
+            {
+
+                // Decode SEQUENCE OF for UnprotectedAttributes
+                {
+                    collectionReader = sequenceReader.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, 1));
+                    var tmpList = new List<DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute>();
+                    DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute tmpItem;
+
+                    while (collectionReader.HasData)
+                    {
+                        DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute.Decode(ref collectionReader, rebind, out tmpItem);
+                        tmpList.Add(tmpItem);
+                    }
+
+                    decoded.UnprotectedAttributes = tmpList.ToArray();
+                }
+
+            }
+
+
+            sequenceReader.ThrowIfNotEmpty();
+        }
     }
 }

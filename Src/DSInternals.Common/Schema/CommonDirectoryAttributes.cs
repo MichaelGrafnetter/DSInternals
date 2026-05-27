@@ -151,7 +151,11 @@ public static class CommonDirectoryAttributes
     public const string WindowsLapsCurrentPasswordVersion = "msLAPS-CurrentPasswordVersion";
     public const string DnsRecord = "dnsRecord";
     public const string DnsTombstoned = "dNSTombstoned";
+    public const string DnsIsSigned = "msDNS-IsSigned";
     public const string DnsSigningKeys = "msDNS-SigningKeys";
+    public const string DnsSigningKeyDescriptors = "msDNS-SigningKeyDescriptors";
+    public const string DnsSignWithNSEC3 = "msDNS-SignWithNSEC3";
+    public const string DnsNSEC3CurrentSalt = "msDNS-NSEC3CurrentSalt";
 
     public static AttributeType? Translate(string ldapDisplayName)
     {
@@ -290,6 +294,11 @@ public static class CommonDirectoryAttributes
             FVERecoveryPassword => AttributeType.FVERecoveryPassword,
             DnsRecord => AttributeType.DnsRecord,
             DnsTombstoned => AttributeType.DnsTombstoned,
+            DnsIsSigned => AttributeType.MSDNSIsSigned,
+            DnsSigningKeys => AttributeType.MSDNSSigningKeys,
+            DnsSigningKeyDescriptors => AttributeType.MSDNSSigningKeyDescriptors,
+            DnsSignWithNSEC3 => AttributeType.MSDNSSignWithNSEC3,
+            DnsNSEC3CurrentSalt => AttributeType.MSDNSNSEC3CurrentSalt,
             _ => null
         };
     }

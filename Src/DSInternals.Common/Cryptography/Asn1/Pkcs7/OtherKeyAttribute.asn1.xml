@@ -12,6 +12,6 @@
         keyAttr ANY DEFINED BY keyAttrId OPTIONAL
     }
   -->
-  <asn:ObjectIdentifier name="AttributeId" backingType="string" />
+  <asn:ObjectIdentifier name="AttributeId" />
   <asn:AnyValue name="AttributeValue" optional="true" />
 </asn:Sequence>

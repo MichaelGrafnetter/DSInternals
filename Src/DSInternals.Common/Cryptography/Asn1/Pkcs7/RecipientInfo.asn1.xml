@@ -18,6 +18,7 @@
   <asn:AsnType name="KeyTransRecipientInfo" typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.KeyTransRecipientInfo" />
   <asn:AsnType name="KeyAgreeRecipientInfo" typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.KeyAgreeRecipientInfo" implicitTag="1" />
   <asn:AsnType name="KEKRecipientInfo" typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.KEKRecipientInfo" implicitTag="2" />
-  <!-- By not declaring the rest of the types here we get an ASN deserialization
-       error for unsupported recipient types -->
+  <asn:AsnType name="OtherRecipientInfo" typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.OtherRecipientInfo" implicitTag="4" />
+  <!-- By not declaring PasswordRecipientInfo here we get an ASN deserialization
+       error for that unsupported recipient type -->
 </asn:Choice>

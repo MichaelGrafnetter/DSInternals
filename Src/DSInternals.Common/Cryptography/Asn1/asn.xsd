@@ -1,4 +1,4 @@
-﻿<xs:schema id="asn"
+<xs:schema id="asn"
     targetNamespace="http://schemas.dot.net/asnxml/201808/"
     elementFormDefault="qualified"
     xmlns="http://schemas.dot.net/asnxml/201808/"
@@ -20,6 +20,10 @@
     </xs:complexType>
   </xs:element>
 
+  <xs:element name="SequenceOf" type="RootCollectionType" />
+
+  <xs:element name="SetOf" type="RootCollectionType" />
+
   <xs:complexType name="TypeDefType">
     <xs:sequence>
       <xs:choice minOccurs="1" maxOccurs="unbounded">
@@ -30,7 +34,7 @@
         <xs:element name="BitString" type="FieldBase" />
         <xs:element name="NamedBitList" type="EnumerationType" />
         <xs:element name="OctetString" type="FieldBase" />
-        <xs:element name="ObjectIdentifier" type="ObjectIdentifierType" />
+        <xs:element name="ObjectIdentifier" type="FieldBase" />
         <xs:element name="Enumerated" type="EnumerationType" />
         <xs:element name="UTF8String" type="FieldBase" />
         <xs:element name="SequenceOf" type="CollectionType" />
@@ -46,6 +50,16 @@
     </xs:sequence>
     <xs:attribute name="name" use="required" type="xs:NCName" />
     <xs:attribute name="namespace" use="required" type="QualifiedName" />
+    <xs:attribute name="rebind" use="optional" type="xs:boolean" default="true" />
+    <xs:attribute name="emitType" use="optional" default="struct">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="struct" />
+          <xs:enumeration value="ref" />
+          <xs:enumeration value="both" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="FieldBase">
@@ -60,12 +74,14 @@
     <xs:complexContent>
       <xs:extension base="FieldBase">
         <xs:attribute name="typeName" use="required" type="QualifiedName" />
+        <xs:attribute name="valueTypeName" use="optional" type="QualifiedName" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="ExternalCollectionTypeRef">
     <xs:attribute name="typeName" use="required" type="QualifiedName" />
+    <xs:attribute name="valueTypeName" use="optional" type="QualifiedName" />
   </xs:complexType>
 
   <xs:complexType name="AnyValueType">
@@ -97,36 +113,9 @@
     <xs:attribute name="backingType" default="BigInteger">
       <xs:simpleType>
         <xs:restriction base="xs:string">
-          <xs:enumeration value="byte" />
           <xs:enumeration value="int" />
           <xs:enumeration value="BigInteger" />
           <xs:enumeration value="ReadOnlyMemory" />
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-  </xs:complexType>
-
-  <xs:complexType name="ObjectIdentifierType">
-    <xs:complexContent>
-      <xs:extension base="FieldBase">
-        <xs:attribute name="backingType" default="Oid">
-          <xs:simpleType>
-            <xs:restriction base="xs:string">
-              <xs:enumeration value="Oid" />
-              <xs:enumeration value="string" />
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:attribute>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <xs:complexType name="ObjectIdentifierCollectionType">
-    <xs:attribute name="backingType" default="Oid">
-      <xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="Oid" />
-          <xs:enumeration value="string" />
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -156,7 +145,7 @@
             <xs:element name="BitString"/>
             <xs:element name="NamedBitList" type="EnumerationCollectionType" />
             <xs:element name="OctetString"/>
-            <xs:element name="ObjectIdentifier" type="ObjectIdentifierCollectionType" />
+            <xs:element name="ObjectIdentifier"/>
             <xs:element name="Enumerated"/>
             <xs:element name="UTF8String"/>
             <xs:element name="PrintableString"/>
@@ -168,10 +157,19 @@
             <xs:element name="BMPString"/>
           </xs:choice>
         </xs:sequence>
+        <xs:attribute name="valueName" use="optional" type="xs:NCName" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
+
+  <xs:complexType name="RootCollectionType">
+    <xs:complexContent>
+      <xs:extension base="CollectionType">
+        <xs:attribute name="namespace" use="required" type="QualifiedName" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   <xs:complexType name="UtcTimeType">
     <xs:complexContent>
       <xs:extension base="FieldBase">

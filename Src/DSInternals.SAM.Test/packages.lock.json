@@ -65,9 +65,9 @@
       },
       "Polyfill": {
         "type": "Direct",
-        "requested": "[9.7.7, )",
-        "resolved": "9.7.7",
-        "contentHash": "L4iI95ONeG95Wc5ViCGL5Z47yA53NCX1tP5W6ddlaF9h/C/tYR6i56GZkH/33d2H9+jwhF22nL4olnO5efmoFw=="
+        "requested": "[10.5.1, )",
+        "resolved": "10.5.1",
+        "contentHash": "DF5KHoVwE0496LDadwin55TLKtmwCXlCAxpFUYkXudIe9iJq09Dlbilxr46T0uP1g9RWHRwy1MPeKIa7b4WirA=="
       },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
@@ -267,7 +267,7 @@
       "dsinternals.sam": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[6.4.0, )"
+          "DSInternals.Common": "[6.5.0, )"
         }
       },
       "System.Buffers": {
@@ -547,7 +547,7 @@
       "dsinternals.sam": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[6.4.0, )"
+          "DSInternals.Common": "[6.5.0, )"
         }
       },
       "System.Buffers": {
@@ -788,7 +788,7 @@
       "dsinternals.sam": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[6.4.0, )"
+          "DSInternals.Common": "[6.5.0, )"
         }
       },
       "System.Buffers": {

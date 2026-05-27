@@ -351,8 +351,8 @@ Replicates all Active Directory accounts from the target domain controller and e
 
 ### Example 6
 ```powershell
-PS C:\> Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
-PS C:\> Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' -Properties RoamedCredentials | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DpapiBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADReplAccount -All -Server 'lon-dc1.adatum.com' -Properties RoamedCredentials | Save-DpapiBlob -DirectoryPath '.\Output'
 ```
 
 Replicates all DPAPI backup keys and roamed credentials (certificates, private keys, and DPAPI master keys) from the target Active Directory domain controller and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.
@@ -567,4 +567,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Get-ADDBAccount](Get-ADDBAccount.md)
 [Get-ADSIAccount](Get-ADSIAccount.md)
 [Test-PasswordQuality](Test-PasswordQuality.md)
-[Save-DPAPIBlob](Save-DPAPIBlob.md)
+[Save-DpapiBlob](Save-DpapiBlob.md)

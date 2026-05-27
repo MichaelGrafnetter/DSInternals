@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:Sequence
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="Aes256GcmAlgorithmIdentifier"
+  namespace="DSInternals.Common.Cryptography.Asn1.X509">
+
+  <!--
+    Aes256GcmAlgorithmIdentifier ::= SEQUENCE {
+        algorithm   OBJECT IDENTIFIER,
+        parameters  GCMParameters
+    }
+  -->
+  <asn:ObjectIdentifier name="Algorithm" />
+  <asn:AsnType name="Parameters" typeName="DSInternals.Common.Cryptography.Asn1.X509.GCMParameters" />
+</asn:Sequence>

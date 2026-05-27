@@ -63,11 +63,17 @@ Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service A
 ### [Get-ADDBBitLockerRecoveryInformation](Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation)
 Reads BitLocker recovery passwords from a ntds.dit file.
 
-### [Get-ADDBDnsResourceRecord](Get-ADDBDnsResourceRecord.md#get-addbdnsresourcerecord)
+### [Get-ADDBDnsServerResourceRecord](Get-ADDBDnsServerResourceRecord.md#get-addbdnsserverresourcerecord)
 Retrieves DNS resource records from an Active Directory database.
 
-### [Get-ADDBDnsZone](Get-ADDBDnsZone.md#get-addbdnszone)
+### [Get-ADDBDnsServerZone](Get-ADDBDnsServerZone.md#get-addbdnsserverzone)
 Retrieves the list of DNS zones stored in an Active Directory database.
+
+### [Get-ADDBDnsServerSigningKey](Get-ADDBDnsServerSigningKey.md#get-addbdnsserversigningkey)
+Retrieves DNSSEC signing key descriptors from an Active Directory database.
+
+### [Export-ADDBDnsServerSigningKey](Export-ADDBDnsServerSigningKey.md#export-addbdnsserversigningkey)
+Exports DNSSEC signing key private keys from an Active Directory database to files.
 
 ### [Get-ADDBDomainController](Get-ADDBDomainController.md#get-addbdomaincontroller)
 Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name, and DC site.
@@ -89,38 +95,64 @@ Physically removes the specified object from a ntds.dit file, making it semantic
 
 ## Cmdlets for Online Active Directory Operations
 
-### [Get-ADReplAccount](Get-ADReplAccount.md#get-adreplaccount)
+### Directory Replication Service (MS-DRSR)
+
+#### [Get-ADReplAccount](Get-ADReplAccount.md#get-adreplaccount)
 Reads one or more accounts through the MS-DRSR protocol, including secret attributes.
 
-### [Get-ADReplBackupKey](Get-ADReplBackupKey.md#get-adreplbackupkey)
+#### [Get-ADReplBackupKey](Get-ADReplBackupKey.md#get-adreplbackupkey)
 Reads the DPAPI backup keys from a domain controller through the MS-DRSR protocol.
 
-### [Get-ADReplKdsRootKey](Get-ADReplKdsRootKey.md#get-adreplkdsrootkey)
+#### [Get-ADReplKdsRootKey](Get-ADReplKdsRootKey.md#get-adreplkdsrootkey)
 Fetches the specified KDS Root Key through the MS-DRSR protocol.
 
-### [Add-ADReplNgcKey](Add-ADReplNgcKey.md#add-adreplngckey)
+#### [Add-ADReplNgcKey](Add-ADReplNgcKey.md#add-adreplngckey)
 Composes and updates the msDS-KeyCredentialLink value on an object through the MS-DRSR protocol.
 
-### [Add-ADReplSidHistory](Add-ADReplSidHistory.md#add-adreplsidhistory)
+#### [Add-ADReplSidHistory](Add-ADReplSidHistory.md#add-adreplsidhistory)
 Adds SID history from a source principal to a destination principal through the MS-DRSR protocol.
 
-### [Get-SamPasswordPolicy](Get-SamPasswordPolicy.md#get-sampasswordpolicy)
+### Security Account Manager (MS-SAMR)
+
+#### [Get-SamPasswordPolicy](Get-SamPasswordPolicy.md#get-sampasswordpolicy)
 Queries Active Directory for the default password policy.
 
-### [Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md#set-samaccountpasswordhash)
+#### [Set-SamAccountPasswordHash](Set-SamAccountPasswordHash.md#set-samaccountpasswordhash)
 Sets NT and LM hashes of an Active Directory or local account through the MS-SAMR protocol.
 
-### [Get-ADSIAccount](Get-ADSIAccount.md#get-adsiaccount)
-Gets all Active Directory user accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.
+### Local Security Authority (MS-LSAD)
 
-### [Get-LsaBackupKey](Get-LsaBackupKey.md#get-lsabackupkey)
+#### [Get-LsaBackupKey](Get-LsaBackupKey.md#get-lsabackupkey)
 Reads the DPAPI backup keys from a domain controller through the LSARPC protocol.
 
-### [Get-LsaPolicyInformation](Get-LsaPolicyInformation.md#get-lsapolicyinformation)
+#### [Get-LsaPolicyInformation](Get-LsaPolicyInformation.md#get-lsapolicyinformation)
 Retrieves AD-related information from the Local Security Authority Policy of the local computer or a remote one.
 
-### [Set-LsaPolicyInformation](Set-LsaPolicyInformation.md#set-lsapolicyinformation)
+#### [Set-LsaPolicyInformation](Set-LsaPolicyInformation.md#set-lsapolicyinformation)
 Configures AD-related Local Security Authority Policies of the local computer or a remote one.
+
+### Lightweight Directory Access Protocol (LDAP/ADSI)
+
+#### [Get-ADSIAccount](Get-ADSIAccount.md#get-adsiaccount)
+Gets one or more Active Directory accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.
+
+#### [Get-ADSIServiceAccount](Get-ADSIServiceAccount.md#get-adsiserviceaccount)
+Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from a domain controller through LDAP, while deriving their current passwords from KDS root keys.
+
+#### [Get-ADSIKdsRootKey](Get-ADSIKdsRootKey.md#get-adsikdsrootkey)
+Reads KDS Root Keys from a domain controller through the LDAP protocol.
+
+#### [Get-ADSIDnsServerZone](Get-ADSIDnsServerZone.md#get-adsidnsserverzone)
+Retrieves the list of DNS zones hosted in Active Directory through LDAP.
+
+#### [Get-ADSIDnsServerResourceRecord](Get-ADSIDnsServerResourceRecord.md#get-adsidnsserverresourcerecord)
+Retrieves DNS resource records from Active Directory through LDAP.
+
+#### [Get-ADSIDnsServerSigningKey](Get-ADSIDnsServerSigningKey.md#get-adsidnsserversigningkey)
+Retrieves DNSSEC signing key descriptors from Active Directory through LDAP.
+
+#### [Export-ADSIDnsServerSigningKey](Export-ADSIDnsServerSigningKey.md#export-adsidnsserversigningkey)
+Exports DNSSEC signing key private keys from Active Directory through LDAP to files.
 
 ## Password Hash Export Formats
 
@@ -224,9 +256,44 @@ Calculates LM hash of a given password.
 ### [ConvertTo-OrgIdHash](ConvertTo-OrgIdHash.md#convertto-orgidhash)
 Calculates OrgId hash of a given password. Used by Azure Active Directory Connect.
 
-## Cmdlets for Credential Decryption
+## Cmdlets for DPAPI-NG / CNG DPAPI Operations
 
-### [Save-DPAPIBlob](Save-DPAPIBlob.md#save-dpapiblob)
+### [Get-DpapiNgPfxCertificate](Get-DpapiNgPfxCertificate.md#get-dpapingpfxcertificate)
+Extracts the SID-based DPAPI-NG certificate password protector from a PFX file.
+
+### [Unprotect-DpapiNgPfxCertificate](Unprotect-DpapiNgPfxCertificate.md#unprotect-dpapingpfxcertificate)
+Decrypts the SID-based DPAPI-NG certificate password protector from a PFX file.
+
+### [Protect-DpapiNgData](Protect-DpapiNgData.md#protect-dpapingdata)
+Encrypts text with DPAPI-NG.
+
+### [Unprotect-DpapiNgData](Unprotect-DpapiNgData.md#unprotect-dpapingdata)
+Decrypts DPAPI-NG protected data.
+
+### [Get-DpapiNgData](Get-DpapiNgData.md#get-dpapingdata)
+Parses DPAPI-NG protected data.
+
+### [Get-DpapiNgSidKeyIdentifier](Get-DpapiNgSidKeyIdentifier.md#get-dpapingsidkeyidentifier)
+Parses a SID-protected DPAPI-NG KeyId blob.
+
+### [Save-DpapiNgSidKey](Save-DpapiNgSidKey.md#save-dpapingsidkey)
+Derives a SID-protected DPAPI-NG group key from a KDS root key and writes it to the local SID key cache.
+
+### [Clear-DpapiNgSidKeyCache](Clear-DpapiNgSidKeyCache.md#clear-dpapingsidkeycache)
+Deletes all KDS root key derived DPAPI-NG group keys cached on the local machine by the current user.
+
+### [New-DpapiNgNamedDescriptor](New-DpapiNgNamedDescriptor.md#new-dpapingnameddescriptor)
+Registers a named DPAPI-NG protection descriptor.
+
+### [Get-DpapiNgNamedDescriptor](Get-DpapiNgNamedDescriptor.md#get-dpapingnameddescriptor)
+Gets one or more named DPAPI-NG protection descriptors.
+
+### [Remove-DpapiNgNamedDescriptor](Remove-DpapiNgNamedDescriptor.md#remove-dpapingnameddescriptor)
+Removes a named DPAPI-NG protection descriptor.
+
+## Cmdlets for Credential Decoding
+
+### [Save-DpapiBlob](Save-DpapiBlob.md#save-dpapiblob)
 Saves DPAPI and Credential Roaming data retrieved from Active Directory to the file system for further processing.
 
 ### [ConvertFrom-ADManagedPasswordBlob](ConvertFrom-ADManagedPasswordBlob.md#convertfrom-admanagedpasswordblob)
@@ -247,10 +314,15 @@ Decodes a password from the format used in unattend.xml files.
 ### [ConvertTo-UnicodePassword](ConvertTo-UnicodePassword.md#convertto-unicodepassword)
 Converts a password to the format used in unattend.xml or *.ldif files.
 
-## Miscellaneous Cmdlets
+## Cmdlets for Disaster Recovery
 
 ### [New-ADDBRestoreFromMediaScript](New-ADDBRestoreFromMediaScript.md#new-addbrestorefrommediascript)
 Generates a PowerShell script that can be used to restore a domain controller from an IFM-equivalent backup (i.e. ntds.dit + SYSVOL).
+
+### [Save-DnsServerResourceRecord](Save-DnsServerResourceRecord.md#save-dnsserverresourcerecord)
+Saves DNS resource records retrieved from Active Directory to one or more DNS zone files.
+
+## Miscellaneous Cmdlets
 
 ### [Test-PasswordQuality](Test-PasswordQuality.md#test-passwordquality)
 Performs AD audit, including checks for weak, duplicate, default and empty passwords. Accepts input from the [Get-ADReplAccount](Get-ADReplAccount.md#get-adreplaccount) and [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount) cmdlets.

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration><!-- xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+  <ViewDefinitions>
+    <View>
+      <Name>ProtectionKeyIdentifier</Name>
+      <ViewSelectedBy>
+        <TypeName>DSInternals.Common.Data.ProtectionKeyIdentifier</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <PropertyName>RootKeyId</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>ForestName</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>DomainName</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>L0KeyId</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>L1KeyId</PropertyName>
+              </ListItem>
+              <ListItem>
+                <PropertyName>L2KeyId</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>PublicKey</Label>
+                <ScriptBlock>if ($null -ne $PSItem.PublicKey) { ConvertTo-Hex $PSItem.PublicKey.ToArray() }</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <PropertyName>Flags</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

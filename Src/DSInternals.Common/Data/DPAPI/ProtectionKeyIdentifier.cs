@@ -171,6 +171,12 @@ public struct ProtectionKeyIdentifier
         return $"RootKey={this.RootKeyId}, Cycle={cycle} (L0={this.L0KeyId}, L1={this.L1KeyId}, L2={this.L2KeyId})";
     }
 
+    /// <summary>
+    /// Implicitly parses a raw <c>KDSK</c> blob into a <see cref="ProtectionKeyIdentifier"/>.
+    /// </summary>
+    /// <param name="blob">The raw bytes of the Protection Key Identifier structure.</param>
+    public static implicit operator ProtectionKeyIdentifier(byte[] blob) => new(blob);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     unsafe private static string ParseUnicodeString(ReadOnlySpan<byte> buffer)
     {

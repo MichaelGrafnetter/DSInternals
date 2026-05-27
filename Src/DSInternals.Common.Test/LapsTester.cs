@@ -23,7 +23,7 @@ public class LapsTester
         var encryptedLaps = new LapsEncryptedPassword(encryptedPassword);
         Assert.AreEqual(2024, encryptedLaps.UpdateTimeStamp.Year);
 
-        var rootKey = new KdsRootKey(encryptedLaps.EncryptedBlob.ProtectionKeyIdentifier.RootKeyId, rootKeyValue);
+        var rootKey = new KdsRootKey(encryptedLaps.EncryptedBlob.SidKeyProtectors[0].ProtectionKeyIdentifier.RootKeyId, rootKeyValue);
         var rootKeyResolver = new StaticKdsRootKeyResolver(rootKey);
 
         // Try to decrypt the password
@@ -50,15 +50,14 @@ public class LapsTester
         var laps = new LapsEncryptedPassword(encryptedPassword);
         Assert.AreEqual(2025, laps.UpdateTimeStamp.Year);
 
-        var rootKey = new KdsRootKey(laps.EncryptedBlob.ProtectionKeyIdentifier.RootKeyId, rootKeyValue);
+        var rootKey = new KdsRootKey(laps.EncryptedBlob.SidKeyProtectors[0].ProtectionKeyIdentifier.RootKeyId, rootKeyValue);
 
         // Calculate the group keys and save them to cache
-        var gke = GroupKeyEnvelope.Create(rootKey, laps.EncryptedBlob.ProtectionKeyIdentifier, laps.EncryptedBlob.TargetSid);
         CacheMutex.WaitOne();
         LapsClearTextPassword? cleartextLaps;
         try
         {
-            gke.WriteToCache();
+            Assert.IsTrue(laps.EncryptedBlob.CacheGroupKey(new[] { rootKey }));
             cleartextLaps = laps.Decrypt();
         }
         finally

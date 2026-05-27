@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:SequenceOf
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="AuthenticatedSafe"
+  namespace="DSInternals.Common.Cryptography.Asn1.Pkcs12">
+
+  <!--
+    https://www.rfc-editor.org/rfc/rfc7292#section-4
+
+    AuthenticatedSafe ::= SEQUENCE OF ContentInfo
+  -->
+  <asn:AsnType typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.ContentInfo" />
+</asn:SequenceOf>

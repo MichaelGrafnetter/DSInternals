@@ -13,7 +13,7 @@
         bagAttributes  SET OF PKCS12Attribute OPTIONAL
     }
   -->
-  <asn:ObjectIdentifier name="BagId" backingType="string" />
+  <asn:ObjectIdentifier name="BagId" />
   <asn:AnyValue name="BagValue" explicitTag="0" />
   <asn:SetOf name="BagAttributes" optional="true">
     <asn:AsnType typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.Attribute" />

@@ -18,7 +18,7 @@ Get-ADReplBackupKey [-Domain <String>] -Server <String> [-Credential <PSCredenti
 
 ## DESCRIPTION
 
-Replicates the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-DRSR protocol. The output can be saved to the file system using the Save-DPAPIBlob cmdlet.
+Replicates the Data Protection API (DPAPI) backup keys from an Active Directory domain controller through the MS-DRSR protocol. The output can be saved to the file system using the Save-DpapiBlob cmdlet.
 
 DPAPI is used by several components of Windows to securely store passwords, encryption keys and other sensitive data. When DPAPI is used in an Active Directory domain environment, a copy of the user's master key is encrypted with a so-called DPAPI Domain Backup Key that is known to all domain controllers. Windows Server 2000 DCs use a symmetric key and newer systems use a public/private key pair. If the user password is reset and the original master key is rendered inaccessible to the user, the user's access to the master key is automatically restored using the backup key.
 
@@ -66,7 +66,7 @@ Replicates all DPAPI backup keys from the target Active Directory domain control
 
 ### Example 2
 ```powershell
-PS C:\> Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADReplBackupKey -Server 'lon-dc1.adatum.com' | Save-DpapiBlob -DirectoryPath '.\Output'
 PS C:\> Get-ChildItem -Path '.\Output' | Select-Object -ExpandProperty Name
 <# Sample Output:
 kiwiscript.txt
@@ -141,6 +141,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[Save-DPAPIBlob](Save-DPAPIBlob.md)
+[Save-DpapiBlob](Save-DpapiBlob.md)
 [Get-ADDBBackupKey](Get-ADDBBackupKey.md)
 [Get-LsaBackupKey](Get-LsaBackupKey.md)

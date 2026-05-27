@@ -12,6 +12,6 @@
         otherCert ANY DEFINED BY otherCertFormat
     }
   -->
-  <asn:ObjectIdentifier name="OtherCertFormat" backingType="string" />
+  <asn:ObjectIdentifier name="OtherCertFormat" />
   <asn:AnyValue name="OtherCert" />
 </asn:Sequence>

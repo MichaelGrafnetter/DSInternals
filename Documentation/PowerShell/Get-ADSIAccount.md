@@ -8,25 +8,56 @@ schema: 2.0.0
 # Get-ADSIAccount
 
 ## SYNOPSIS
-Gets all Active Directory user accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.
+Gets one or more Active Directory accounts from a given domain controller using ADSI. Typically used for Credential Roaming data retrieval through LDAP.
 
 ## SYNTAX
 
+### All (Default)
 ```
-Get-ADSIAccount [-Properties <AccountPropertySets>] [-Server <String>] [-Credential <PSCredential>]
- [<CommonParameters>]
+Get-ADSIAccount [-All] [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>] [-Server <String>]
+ [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### ByName
+```
+Get-ADSIAccount [-SamAccountName] <String> [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>]
+ [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### ByUPN
+```
+Get-ADSIAccount -UserPrincipalName <String> [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>]
+ [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### BySID
+```
+Get-ADSIAccount -ObjectSid <SecurityIdentifier> [-Properties <AccountPropertySets>]
+ [-KdsRootKey <KdsRootKey[]>] [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### ByDN
+```
+Get-ADSIAccount [-DistinguishedName] <String> [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>]
+ [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### ByGuid
+```
+Get-ADSIAccount -ObjectGuid <Guid> [-Properties <AccountPropertySets>] [-KdsRootKey <KdsRootKey[]>]
+ [-Server <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Gets all Active Directory user accounts from a given domain controller using ADSI/LDAP. Typically used for Credential Roaming data retrieval and NGC key auditing.
+Gets one or more Active Directory accounts from a given domain controller using ADSI/LDAP. Typically used for Credential Roaming data retrieval and NGC key auditing. A single account can be retrieved by specifying its `SamAccountName`, `UserPrincipalName`, `ObjectSid`, `DistinguishedName`, or `ObjectGuid`. When no identifier is supplied, all accounts in the target domain are returned.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-LsaBackupKey -ComputerName 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
-PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DPAPIBlob -DirectoryPath '.\Output'
+PS C:\> Get-LsaBackupKey -ComputerName 'lon-dc1.contoso.com' | Save-DpapiBlob -DirectoryPath '.\Output'
+PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' | Save-DpapiBlob -DirectoryPath '.\Output'
 ```
 
 Retrieves DPAPI backup keys from the target domain controller through the MS-LSAD protocol. Also retrieves roamed credentials (certificates, private keys, and DPAPI master keys) from this domain controller through LDAP and saves them to the Output directory. Also creates a file called kiwiscript.txt that contains mimikatz commands needed to decrypt the private keys.
@@ -48,7 +79,86 @@ NGC   False  AD      1966d4da-14da-4581-a7a7-5e8e07e93ad9 2019-08-01 CN=Jane Doe
 
 Lists weak public keys registered in Active Directory that were generated on ROCA-vulnerable TPMs.
 
+### Example 3
+```powershell
+PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' -SamAccountName 'joe'
+```
+
+Retrieves a single Active Directory user account by its `sAMAccountName` through LDAP.
+
+### Example 4
+```powershell
+PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' -UserPrincipalName 'joe@contoso.com'
+```
+
+Retrieves a single Active Directory user account by its user principal name through LDAP.
+
+### Example 5
+```powershell
+PS C:\> Get-ADSIAccount -SamAccountName 'CONTOSO-DC$'
+
+<# Sample Output:
+DistinguishedName: CN=CONTOSO-DC,OU=Domain Controllers,DC=contoso,DC=com
+SamAccountName: CONTOSO-DC$
+Enabled: True
+Deleted: False
+Sid: S-1-5-21-3288850392-3299536932-2614793081-1001
+Guid: 21c7a90a-a253-4824-a06a-27ef04c8e25c
+SamAccountType: Computer
+UserAccountControl: ServerAccount, TrustedForDelegation
+DNSHostName: CONTOSO-DC.contoso.com
+OperatingSystem: Windows Server 2025 Standard
+OperatingSystemVersion: 10.0 (26100)
+Description:
+PrimaryGroupId: 516
+SidHistory:
+SupportedEncryptionTypes: RC4_HMAC, AES128_CTS_HMAC_SHA1_96, AES256_CTS_HMAC_SHA1_96
+ServicePrincipalName: {Dfsr-12F9A27C-BF97-4787-9364-D31B6C55EB04/CONTOSO-DC.contoso.com, ldap/CONTOSO-DC.contoso.com/ForestDnsZones.contoso.com, ldap/CONTOSO-DC.contoso.com/DomainDnsZones.contoso.com, TERMSRV/CONTOSO-DC...}
+LastLogonDate: 5/27/2026 10:50:25 AM
+PasswordLastSet: 5/8/2026 7:21:59 PM
+SecurityDescriptor: DiscretionaryAclPresent, SystemAclPresent, DiscretionaryAclAutoInherited, SystemAclAutoInherited, SelfRelative
+LAPS
+  Password: StoodRaidBaker, Expires: 5/27/2026 2:42:55 PM
+  Password: WagonPulpDebt, Expires:
+  Password: EarthSmogTidy, Expires:
+  Password: PropsSlawFox, Expires:
+  Password: YummyPennyTrout, Expires:
+  Password: CrampGladBadge, Expires:
+  Password: HelpSalsaClean, Expires:
+  Password: JulyFoeUntie, Expires:
+  Password: GreenSushiSnub, Expires:
+  Password: WagonCauseRadar, Expires:
+  Password: PerchDarnOpt, Expires:
+  Password: DodgeLunarDad, Expires:
+  Password: ImageCorkSilo, Expires:
+Key Credentials
+Secrets
+  NTHash:
+  LMHash:
+  NTHashHistory:
+  LMHashHistory:
+  SupplementalCredentials:
+#>
+```
+
+Retrieves a single computer account (a domain controller) by its `sAMAccountName` through LDAP and displays its Windows LAPS password history.
+
 ## PARAMETERS
+
+### -All
+Indicates that all accounts will be retrieved from the target domain controller. This is the default behavior when no identifier is specified.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: AllAccounts, ReturnAllAccounts
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Credential
 Specifies a user account to use when connecting to the target domain controller. The default is the current user.
@@ -65,6 +175,66 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DistinguishedName
+Specifies the distinguished name of the account that will be retrieved.
+
+```yaml
+Type: String
+Parameter Sets: ByDN
+Aliases: DN
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -KdsRootKey
+Provides an explicit set of KDS root keys to use when decrypting Windows LAPS passwords. When this parameter is specified, the supplied keys override the default LDAP-based lookup against the configuration naming context.
+
+```yaml
+Type: KdsRootKey[]
+Parameter Sets: (All)
+Aliases: KdsRootKeys, RootKey, RootKeys
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ObjectGuid
+Specifies the object GUID of the account that will be retrieved.
+
+```yaml
+Type: Guid
+Parameter Sets: ByGuid
+Aliases: Guid
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ObjectSid
+Specifies the security identifier (SID) of the account that will be retrieved.
+
+```yaml
+Type: SecurityIdentifier
+Parameter Sets: BySID
+Aliases: SID
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -Properties
 Specifies the set of properties that will be retrieved for each account.
 
@@ -76,8 +246,23 @@ Accepted values: None, DistinguishedName, GenericAccountInfo, GenericUserInfo, G
 
 Required: False
 Position: Named
-Default value: None
+Default value: All
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SamAccountName
+Specifies the sAMAccountName of the account that will be retrieved.
+
+```yaml
+Type: String
+Parameter Sets: ByName
+Aliases: Login, SAM, AccountName, User
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
@@ -96,12 +281,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -UserPrincipalName
+Specifies the user principal name (UPN) of the account that will be retrieved.
+
+```yaml
+Type: String
+Parameter Sets: ByUPN
+Aliases: UPN
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### System.String
+
+### System.Security.Principal.SecurityIdentifier
+
+### System.Guid
 
 ## OUTPUTS
 
@@ -117,5 +321,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 [Get-ADDBAccount](Get-ADDBAccount.md)
 [Get-ADReplAccount](Get-ADReplAccount.md)
-[Save-DPAPIBlob](Save-DPAPIBlob.md)
+[Save-DpapiBlob](Save-DpapiBlob.md)
 [Get-ADKeyCredential](Get-ADKeyCredential.md)

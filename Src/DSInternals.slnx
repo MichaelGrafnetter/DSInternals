@@ -28,6 +28,7 @@
   <Project Path="DSInternals.Replication.Model.Test/DSInternals.Replication.Model.Test.csproj" />
   <Project Path="DSInternals.Replication.Test/DSInternals.Replication.Test.csproj" />
   <Project Path="DSInternals.SAM.Test/DSInternals.SAM.Test.csproj" />
+  <Project Path="DSInternals.ADSI.Test/DSInternals.ADSI.Test.csproj" />
 
   <!-- Additional files -->
   <Folder Name="/Config/">

@@ -25,8 +25,7 @@ Encrypts a password using the AES key that was used by Group Policy Preferences 
 ```powershell
 PS C:\> $password = Read-Host -AsSecureString -Prompt 'Enter password'
 PS C:\> ConvertTo-GPPrefPassword -Password $password
-<#
-Sample Output:
+<# Sample Output:
 v9NWtCCOKEUHkZBxakMd6HLzo4+DzuizXP83EaImqF8
 #>
 ```

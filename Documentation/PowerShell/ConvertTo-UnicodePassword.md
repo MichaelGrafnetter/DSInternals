@@ -36,8 +36,7 @@ Converts a password to the Base64-encoded Unicode format suitable for use in LDI
 ```powershell
 PS C:\> $password = Read-Host -AsSecureString -Prompt 'Enter password'
 PS C:\> ConvertTo-UnicodePassword -Password $password -IsUnattendPassword
-<#
-Sample Output:
+<# Sample Output:
 UABhAHMAcwB3ADAAcgBkAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIAUABhAHMAcwB3AG8AcgBkAA==
 #>
 ```

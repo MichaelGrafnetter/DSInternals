@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:SequenceOf
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="ProtectionDescriptorInfo"
+  namespace="DSInternals.Common.Cryptography.Asn1.DpapiNg">
+
+  <!--
+    ProtectionDescriptorInfo ::= SEQUENCE SIZE (1..MAX) OF OrAlternative
+  -->
+  <asn:AsnType typeName="DSInternals.Common.Cryptography.Asn1.DpapiNg.OrAlternative" />
+</asn:SequenceOf>

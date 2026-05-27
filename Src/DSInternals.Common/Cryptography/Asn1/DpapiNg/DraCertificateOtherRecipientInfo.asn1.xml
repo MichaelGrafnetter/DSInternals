@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<asn:Sequence
+  xmlns:asn="http://schemas.dot.net/asnxml/201808/"
+  name="DraCertificateOtherRecipientInfo"
+  namespace="DSInternals.Common.Cryptography.Asn1.DpapiNg">
+
+  <!--
+    DraCertificateOtherRecipientInfo ::= [4] IMPLICIT SEQUENCE {
+        oriType   OBJECT IDENTIFIER,
+        oriValue  RecipientInfo
+    }
+  -->
+  <asn:ObjectIdentifier name="OriType" />
+  <asn:AsnType name="OriValue" typeName="DSInternals.Common.Cryptography.Asn1.Pkcs7.RecipientInfo" />
+</asn:Sequence>
