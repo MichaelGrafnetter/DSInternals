@@ -52,8 +52,9 @@ public class DnsSigningKeyDescriptorTester
         Assert.AreEqual(DnsSigningKeyType.ZoneSigningKey, descriptor.KeyType);
         Assert.AreEqual(TimeSpan.FromDays(90), descriptor.RolloverPeriod);
 
-        // The ZSK blob carries a non-zero next key generation time, which must now be surfaced.
-        Assert.IsNotNull(descriptor.LastRolloverTime);
+        // The ZSK has not rolled over yet (zero FILETIME), but unlike a KSK it pre-generates the
+        // next key, so the next key generation time is surfaced alongside the scheduled rollover.
+        Assert.IsNull(descriptor.LastRolloverTime);
         Assert.IsNotNull(descriptor.NextRolloverTime);
         Assert.IsNotNull(descriptor.NextKeyGenerationTime);
     }
