@@ -71,6 +71,23 @@ public class AdsiObjectAdapter : DirectoryObject
 
     public override void ReadAttribute(string name, out long? value) => value = this.ReadAttributeSingle<long?>(name);
 
+    // ADSI has already converted attribute values to their native CLR types, so the asGeneralizedTime
+    // hint (used by the datastore reader to interpret raw numeric columns) does not apply here:
+    // GeneralizedTime/UTC syntax attributes (e.g. whenCreated) arrive as System.DateTime, while
+    // Interval/LargeInteger syntax attributes (e.g. pwdLastSet) arrive as a FILETIME Int64.
+    public override void ReadAttribute(string name, out DateTime? value, bool asGeneralizedTime)
+    {
+        object? raw = this.directoryEntry.Properties[name].Cast<object>().FirstOrDefault();
+        value = raw switch
+        {
+            null => null,
+            DateTime dt => dt,
+            long fileTime => fileTime > 0 ? DateTime.FromFileTime(fileTime) : null,
+            int fileTime => fileTime > 0 ? DateTime.FromFileTime(fileTime) : null,
+            _ => Convert.ToDateTime(raw, System.Globalization.CultureInfo.InvariantCulture)
+        };
+    }
+
     // Unicode vs. IA5 strings are handled by ADSI itself.
     public override void ReadAttribute(string name, out string? value, bool unicode = true) => value = this.ReadAttributeSingle<string>(name);
 

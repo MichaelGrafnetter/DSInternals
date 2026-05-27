@@ -24,8 +24,7 @@ Decrypts a password that was encrypted using Group Policy Preferences (GPP). GPP
 ### Example 1
 ```powershell
 PS C:\> ConvertFrom-GPPrefPassword -EncryptedPassword 'v9NWtCCOKEUHkZBxakMd6HLzo4+DzuizXP83EaImqF8'
-<#
-Output:
+<# Sample Output:
 Pa$$w0rd
 #>
 ```

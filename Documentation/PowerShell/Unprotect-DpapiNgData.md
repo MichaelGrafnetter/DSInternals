@@ -34,18 +34,25 @@ When `KdsRootKey` is supplied, the cmdlet derives and caches the matching SID gr
 ### Example 1
 ```powershell
 PS C:\> $blob = Protect-DpapiNgData -Descriptor 'LOCAL=user' -Cleartext 'Secret'
-PS C:\> Unprotect-DpapiNgData -Blob $blob -Encoding ([System.Text.Encoding]::Unicode)
+PS C:\> Unprotect-DpapiNgData -Blob $blob -Encoding Unicode
+
+<# Sample Output:
+Secret
+#>
 ```
 
 Decrypts a protected blob and returns the cleartext as a string.
 
 ### Example 2
 ```powershell
-PS C:\> $rootKeys = Get-ADDBKdsRootKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
-PS C:\> Unprotect-DpapiNgData -Blob $blob -KdsRootKey $rootKeys -Encoding ([System.Text.Encoding]::Unicode)
+PS C:\> Unprotect-DpapiNgData -Blob MIIBfgYJKoZIhvcNAQcDoIIBbzCCAWsCAQIxggEdooIBGQIBBDCB3ASBhAEAAABLRFNLAgAAAGwBAAAFAAAAAgAAAHFrVRwi7V/EcjzdvhmfaCQgAAAAGAAAABgAAADbXiCq9P/fSJ7/N+Pp/iN2B2WtpCgvzrvj0JscdeyQBGMAbwBuAHQAbwBzAG8ALgBjAG8AbQAAAGMAbwBuAHQAbwBzAG8ALgBjAG8AbQAAADBTBgkrBgEEAYI3SgEwRgYKKwYBBAGCN0oBATA4MDYwNAwDU0lEDC1TLTEtNS0yMS0zMjg4ODUwMzkyLTMyOTk1MzY5MzItMjYxNDc5MzA4MS01MTIwCwYJYIZIAWUDBAEtBCi/OCkpzyD9YKVGwFhAA7VGmfakng2fpmvMiG/DW4248BSlBDcfIFn+MEUGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMSAygtw55Qk5YcNtiAgEQgBiOh95J+ZwmKUL129c4D7lis40RYNLIs9g= -Encoding UTF8 -KdsRootKey (Get-ADDBKdsRootKey -DatabasePath '.\ntds.dit')
+
+<# Sample Output:
+Pa$$w0rd
+#>
 ```
 
-Uses KDS root keys from an offline Active Directory database to decrypt SID-protected data.
+Decrypts a SID-protected blob offline by deriving the matching group key from a KDS root key read from an offline ntds.dit database, then returns the cleartext decoded as UTF-8.
 
 ## PARAMETERS
 

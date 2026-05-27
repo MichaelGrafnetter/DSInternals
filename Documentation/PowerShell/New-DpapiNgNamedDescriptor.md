@@ -21,6 +21,11 @@ New-DpapiNgNamedDescriptor [-Name] <String> [-Descriptor] <String> [-Machine] [<
 This cmdlet registers or updates a named DPAPI-NG protection descriptor in the current user's descriptor registry hive.
 When the `Machine` switch is supplied, the descriptor is registered in the local machine descriptor registry hive and can be queried with the DPAPI-NG machine key flag.
 
+The named descriptors are stored as `REG_SZ` registry values, where the value name is the descriptor display name and the value data is the protection descriptor rule string, under the following key:
+
+- Current user: `HKCU:\Software\Microsoft\Cryptography\NProtect\NamedDescriptors`
+- Local machine (`-Machine`): `HKLM:\Software\Microsoft\Cryptography\NProtect\NamedDescriptors`
+
 ## EXAMPLES
 
 ### Example 1
@@ -36,6 +41,20 @@ PS C:\> New-DpapiNgNamedDescriptor -Name 'LocalMachine' -Descriptor 'LOCAL=machi
 ```
 
 Registers a named descriptor in the local machine hive.
+
+### Example 3
+```powershell
+PS C:\> New-DpapiNgNamedDescriptor -Name 'OracleConnectionStringProtector' -Descriptor 'SID=S-1-5-21-3288850392-3299536932-2614793081-1171 OR LOCAL=machine' -Machine
+```
+
+Registers a SID-based named descriptor in the local machine hive that allows decryption by a specific account SID or by the local machine. The cmdlet produces no output; use [Get-DpapiNgNamedDescriptor](Get-DpapiNgNamedDescriptor.md) with the `-Machine` switch to list the registered descriptors.
+
+### Example 4
+```powershell
+PS C:\> New-DpapiNgNamedDescriptor -Name 'DomainAdmins' -Descriptor 'SID=S-1-5-21-3288850392-3299536932-2614793081-512' -Machine
+```
+
+Registers a SID-based named descriptor in the local machine hive that restricts decryption to members of the Domain Admins group.
 
 ## PARAMETERS
 

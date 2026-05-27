@@ -35,17 +35,28 @@ The cleartext is encoded as UTF-16 little-endian before encryption by default. S
 
 ### Example 1
 ```powershell
-PS C:\> Protect-DpapiNgData -Descriptor 'LOCAL=user' -Cleartext 'Secret'
+PS C:\> Protect-DpapiNgData -Descriptor 'LOCAL=user' -Cleartext 'Pa$$w0rd'
 ```
 
 Protects text for the current user and returns a base64-encoded DPAPI-NG blob.
 
 ### Example 2
 ```powershell
-PS C:\> Protect-DpapiNgData -NamedDescriptor 'LocalMachine' -Machine -Cleartext 'Secret'
+PS C:\> Protect-DpapiNgData -NamedDescriptor 'LocalMachine' -Machine -Cleartext 'Pa$$w0rd'
 ```
 
 Protects text by using a named descriptor registered in the local machine hive.
+
+### Example 3
+```powershell
+PS C:\> Protect-DpapiNgData -Descriptor 'SID=S-1-5-21-3288850392-3299536932-2614793081-512' -Cleartext 'Pa$$w0rd' -Encoding UTF8
+
+<# Sample Output:
+MIIBfgYJKoZIhvcNAQcDoIIBbzCCAWsCAQIxggEdooIBGQIBBDCB3ASBhAEAAABLRFNLAgAAAGwBAAAFAAAAAgAAAHFrVRwi7V/EcjzdvhmfaCQgAAAAGAAAABgAAADbXiCq9P/fSJ7/N+Pp/iN2B2WtpCgvzrvj0JscdeyQBGMAbwBuAHQAbwBzAG8ALgBjAG8AbQAAAGMAbwBuAHQAbwBzAG8ALgBjAG8AbQAAADBTBgkrBgEEAYI3SgEwRgYKKwYBBAGCN0oBATA4MDYwNAwDU0lEDC1TLTEtNS0yMS0zMjg4ODUwMzkyLTMyOTk1MzY5MzItMjYxNDc5MzA4MS01MTIwCwYJYIZIAWUDBAEtBCi/OCkpzyD9YKVGwFhAA7VGmfakng2fpmvMiG/DW4248BSlBDcfIFn+MEUGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMSAygtw55Qk5YcNtiAgEQgBiOh95J+ZwmKUL129c4D7lis40RYNLIs9g=
+#>
+```
+
+Encrypts the UTF-8 encoded text so that only a holder of the specified SID-bound group key (here, the Domain Admins group) can decrypt it, and returns the protected blob as a base64 string.
 
 ## PARAMETERS
 

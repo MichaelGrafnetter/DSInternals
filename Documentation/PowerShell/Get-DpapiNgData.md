@@ -25,17 +25,19 @@ The `Blob` parameter accepts either a byte array or a base64-encoded `CngProtect
 
 ### Example 1
 ```powershell
-PS C:\> Get-DpapiNgData -Blob $blob
+PS C:\> Get-DpapiNgData -Blob MIIBfgYJKoZIhvcNAQcDoIIBbzCCAWsCAQIxggEdooIBGQIBBDCB3ASBhAEAAABLRFNLAgAAAGwBAAAFAAAAAgAAAHFrVRwi7V/EcjzdvhmfaCQgAAAAGAAAABgAAADbXiCq9P/fSJ7/N+Pp/iN2B2WtpCgvzrvj0JscdeyQBGMAbwBuAHQAbwBzAG8ALgBjAG8AbQAAAGMAbwBuAHQAbwBzAG8ALgBjAG8AbQAAADBTBgkrBgEEAYI3SgEwRgYKKwYBBAGCN0oBATA4MDYwNAwDU0lEDC1TLTEtNS0yMS0zMjg4ODUwMzkyLTMyOTk1MzY5MzItMjYxNDc5MzA4MS01MTIwCwYJYIZIAWUDBAEtBCi/OCkpzyD9YKVGwFhAA7VGmfakng2fpmvMiG/DW4248BSlBDcfIFn+MEUGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMSAygtw55Qk5YcNtiAgEQgBiOh95J+ZwmKUL129c4D7lis40RYNLIs9g=
+
+<# Sample Output:
+Descriptor: SID=S-1-5-21-3288850392-3299536932-2614793081-512
+ContentEncryptionAlgorithm: aes256gcm (2.16.840.1.101.3.4.1.46)
+SID/SDDL Protectors
+  SID=S-1-5-21-3288850392-3299536932-2614793081-512
+    ProtectionKeyIdentifier: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=5/27/2026 6:00:00 AM (L0=364, L1=5, L2=2)
+    KeyEncryptionAlgorithm: aes256wrap (2.16.840.1.101.3.4.1.45)
+#>
 ```
 
-Parses a base64-encoded DPAPI-NG protected blob.
-
-### Example 2
-```powershell
-PS C:\> Get-DpapiNgData -Blob $blob | Select-Object -ExpandProperty SidKeyProtectors
-```
-
-Displays the SID and SDDL protectors collected from the blob.
+Parses a base64-encoded blob produced by [Protect-DpapiNgData](Protect-DpapiNgData.md) and displays its protection descriptor, content encryption algorithm, and the SID protector with its associated KDS protection key identifier. No decryption is performed.
 
 ## PARAMETERS
 

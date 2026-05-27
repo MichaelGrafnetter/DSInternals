@@ -96,7 +96,7 @@ public abstract class DirectoryObject
         value = (TrustType?)numericValue;
     }
 
-    public void ReadAttribute(string name, out DateTime? value, bool asGeneralizedTime)
+    public virtual void ReadAttribute(string name, out DateTime? value, bool asGeneralizedTime)
     {
         value = null;
         this.ReadAttribute(name, out long? timestamp);

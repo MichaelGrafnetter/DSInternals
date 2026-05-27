@@ -27,11 +27,35 @@ To decrypt the protected password, pipe the returned object to [Unprotect-DpapiN
 
 ### Example 1
 ```powershell
-PS C:\> Get-DpapiNgPfxCertificate -Path .\Certificate.pfx |
-            Select-Object FilePath, @{ Name = 'Descriptor'; Expression = { $_.EncryptedPassword.Descriptor } }
+PS C:\> Get-Item -Path C:\Certificates\*.pfx | Get-DpapiNgPfxCertificate
+
+<# Sample Output:
+FilePath: C:\Certificates\ContosoWildcard.pfx
+Password:
+EncryptedPassword
+  Descriptor: SID=S-1-5-21-3288850392-3299536932-2614793081-519 OR SID=S-1-5-21-3288850392-3299536932-2614793081-512
+  ContentEncryptionAlgorithm: aes256gcm (2.16.840.1.101.3.4.1.46)
+  SID/SDDL Protectors
+    SID=S-1-5-21-3288850392-3299536932-2614793081-519
+      ProtectionKeyIdentifier: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=5/22/2026 6:00:00 AM (L0=364, L1=4, L2=22)
+      KeyEncryptionAlgorithm: aes256wrap (2.16.840.1.101.3.4.1.45)
+    SID=S-1-5-21-3288850392-3299536932-2614793081-512
+      ProtectionKeyIdentifier: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=5/22/2026 6:00:00 AM (L0=364, L1=4, L2=22)
+      KeyEncryptionAlgorithm: aes256wrap (2.16.840.1.101.3.4.1.45)
+
+FilePath: C:\Certificates\ContosoWebServer.pfx
+Password:
+EncryptedPassword
+  Descriptor: SID=S-1-5-21-3288850392-3299536932-2614793081-512
+  ContentEncryptionAlgorithm: aes256gcm (2.16.840.1.101.3.4.1.46)
+  SID/SDDL Protectors
+    SID=S-1-5-21-3288850392-3299536932-2614793081-512
+      ProtectionKeyIdentifier: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=5/22/2026 6:00:00 AM (L0=364, L1=4, L2=22)
+      KeyEncryptionAlgorithm: aes256wrap (2.16.840.1.101.3.4.1.45)
+#>
 ```
 
-Reads a SID-protected PFX file and displays the source path and protection descriptor.
+Enumerates all PFX files in the `C:\Certificates` directory and displays their SID-based protection metadata. The `Password` field is empty because the protected password has not been decrypted yet; pipe the result to [Unprotect-DpapiNgPfxCertificate](Unprotect-DpapiNgPfxCertificate.md) to recover it.
 
 ## PARAMETERS
 

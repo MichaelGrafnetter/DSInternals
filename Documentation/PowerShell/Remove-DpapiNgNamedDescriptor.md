@@ -21,6 +21,11 @@ Remove-DpapiNgNamedDescriptor [-Name] <String> [-Machine] [-WhatIf] [-Confirm] [
 This cmdlet removes a named DPAPI-NG protection descriptor from the current user's descriptor registry hive.
 When the `Machine` switch is supplied, the descriptor is removed from the local machine descriptor registry hive.
 
+The named descriptors are stored as `REG_SZ` registry values, where the value name is the descriptor display name and the value data is the protection descriptor rule string, under the following key:
+
+- Current user: `HKCU:\Software\Microsoft\Cryptography\NProtect\NamedDescriptors`
+- Local machine (`-Machine`): `HKLM:\Software\Microsoft\Cryptography\NProtect\NamedDescriptors`
+
 ## EXAMPLES
 
 ### Example 1

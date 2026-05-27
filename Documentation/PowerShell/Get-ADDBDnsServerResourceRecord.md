@@ -13,8 +13,8 @@ Retrieves DNS resource records from an Active Directory database.
 ## SYNTAX
 
 ```
-Get-ADDBDnsServerResourceRecord [-IncludeTombstones] [-IncludeRootHints] -DatabasePath <String> [-LogPath <String>]
- [<CommonParameters>]
+Get-ADDBDnsServerResourceRecord [-IncludeTombstones] [-IncludeRootHints] [-IncludeTrustAnchors]
+ [-ZoneName <String>] -DatabasePath <String> [-LogPath <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -102,6 +102,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -IncludeTrustAnchors
+Indicates that DNSSEC trust anchor records should be included in the output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: TrustAnchors
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -LogPath
 Specifies the path to a directory where the transaction log files are located. For instance, C:\Windows\NTDS. The default log directory is the one that contains the database file itself.
 
@@ -117,12 +132,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ZoneName
+Restricts the output to records belonging to the DNS zone with the specified name. The value is matched case-insensitively against the zone's fully qualified domain name (FQDN).
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: Zone, DnsZone
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### System.String
 
 ## OUTPUTS
 

@@ -23,7 +23,7 @@ Retrieves all Group Managed Service Accounts (gMSAs) and Delegated Managed Servi
 
 By default, the interval ID stored in `msDS-ManagedPasswordId` is used as-is to derive the current managed password - no password-cycle math is performed. Supplying `-EffectiveTime` instead computes the password cycle for a given point in time (past or future).
 
-The KDS root keys are normally read from the configuration naming context of the target domain controller, which typically requires Domain Admin privileges. As an alternative, the keys can be supplied explicitly using the `-KdsRootKey` parameter, for instance when they have been retrieved through the MS-DRSR protocol or an offline ntds.dit file.
+The KDS root keys are normally read from the configuration naming context of the target domain controller, which typically requires Enterprise Admin privileges. As an alternative, the keys can be supplied explicitly using the `-KdsRootKey` parameter, for instance when they have been retrieved through the MS-DRSR protocol or an offline ntds.dit file.
 
 ## EXAMPLES
 
@@ -41,20 +41,23 @@ Deleted: False
 UserAccountControl: WorkstationAccount
 SupportedEncryptionTypes: RC4_HMAC, AES128_CTS_HMAC_SHA1_96, AES256_CTS_HMAC_SHA1_96
 ServicePrincipalName: {http/login.contoso.com, host/login.contoso.com}
-WhenCreated: 9/9/2023 5:02:05 PM
-PasswordLastSet: 9/9/2023 5:02:06 PM
+WhenCreated: 7/17/2025 8:13:54 AM
+PasswordLastSet: 4/13/2026 8:57:29 AM
 ManagedPasswordInterval: 30
-ManagedPasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=9/9/2023 10:00:00 AM (L0=361, L1=26, L2=24)
-ManagedPasswordPreviousId:
+ManagedPasswordId: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=4/13/2026 2:00:00 AM (L0=364, L1=1, L2=24)
+ManagedPasswordPreviousId: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=3/14/2026 1:00:00 AM (L0=363, L1=31, L2=16)
 KDS Derived Secrets (Calculated)
-  EffectivePasswordId: RootKey=7dc95c96-fa85-183a-dff5-f70696bf0b11, Cycle=9/9/2023 10:00:00 AM (L0=361, L1=26, L2=24)
-  NTHash: 0b5fbfb646dd7bce4f160ad69edb86ba
+  EffectivePasswordId: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=4/13/2026 2:00:00 AM (L0=364, L1=1, L2=24)
+  NTHash: ddb248366d7ae6cd553fd420b0ac4b6c
   Kerberos Keys
     AES256_CTS_HMAC_SHA1_96
-      Key: 5dcc418cd0a30453b267e6e5b158be4b4d80d23fd72a6ae4d5bd07f023517117
+      Key: 05b9ce27af24b186786a29415505b134891bf2e80d2ea30dab378e8fb34111cf
       Iterations: 4096
     AES128_CTS_HMAC_SHA1_96
-      Key: 8e1e66438a15d764ae2242eefd15e09a
+      Key: 3489a4a66a3b89bd4d36ab601b00cb79
+      Iterations: 4096
+    RC4_HMAC_NT
+      Key: ddb248366d7ae6cd553fd420b0ac4b6c
       Iterations: 4096
 #>
 ```

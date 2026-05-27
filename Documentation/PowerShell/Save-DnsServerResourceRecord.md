@@ -13,7 +13,8 @@ Saves DNS resource records retrieved from Active Directory to one or more DNS zo
 ## SYNTAX
 
 ```
-Save-DnsServerResourceRecord -InputObject <DnsResourceRecord> [-DirectoryPath] <String> [-Force] [<CommonParameters>]
+Save-DnsServerResourceRecord -InputObject <DnsResourceRecord> [-DirectoryPath] <String> [-Force]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION

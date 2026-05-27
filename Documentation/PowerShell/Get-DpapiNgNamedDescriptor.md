@@ -23,28 +23,39 @@ When the `Name` parameter is supplied, the descriptor is resolved through the NC
 Without `Name`, the cmdlet enumerates all descriptor registry values.
 When the `Machine` switch is supplied, the cmdlet queries or enumerates the local machine descriptor registry hive.
 
+The named descriptors are stored as `REG_SZ` registry values, where the value name is the descriptor display name and the value data is the protection descriptor rule string, under the following key:
+
+- Current user: `HKCU:\Software\Microsoft\Cryptography\NProtect\NamedDescriptors`
+- Local machine (`-Machine`): `HKLM:\Software\Microsoft\Cryptography\NProtect\NamedDescriptors`
+
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-DpapiNgNamedDescriptor
-```
-
-Returns all named DPAPI-NG protection descriptors registered for the current user.
-
-### Example 2
-```powershell
-PS C:\> Get-DpapiNgNamedDescriptor -Name 'LocalUser'
-```
-
-Returns the descriptor rule string registered under the `LocalUser` name.
-
-### Example 3
-```powershell
 PS C:\> Get-DpapiNgNamedDescriptor -Machine
+
+<# Sample Output:
+Key                             Value
+---                             -----
+OracleConnectionStringProtector SID=S-1-5-21-3288850392-3299536932-2614793081-1171 OR LOCAL=machine
+DomainAdmins                    SID=S-1-5-21-3288850392-3299536932-2614793081-512
+#>
 ```
 
 Returns all named DPAPI-NG protection descriptors registered in the local machine hive.
+
+### Example 2
+```powershell
+PS C:\> Get-DpapiNgNamedDescriptor -Machine -Name OracleConnectionStringProtector
+
+<# Sample Output:
+Key                             Value
+---                             -----
+OracleConnectionStringProtector SID=S-1-5-21-3288850392-3299536932-2614793081-1171 OR LOCAL=machine
+#>
+```
+
+Resolves a single named descriptor from the local machine hive by its name.
 
 ## PARAMETERS
 

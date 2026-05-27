@@ -24,8 +24,7 @@ Decodes a Base64-encoded Unicode password from the format used in Windows unatte
 ### Example 1
 ```powershell
 PS C:\> ConvertFrom-UnicodePassword -UnicodePassword 'UABhAHMAcwB3ADAAcgBkAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIAUABhAHMAcwB3AG8AcgBkAA=='
-<#
-Output:
+<# Sample Output:
 Passw0rd
 #>
 ```

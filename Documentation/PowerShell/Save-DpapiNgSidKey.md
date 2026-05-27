@@ -26,7 +26,7 @@ Save-DpapiNgSidKey [-IdentifierBlob] <Byte[]> [-KdsRootKey] <KdsRootKey[]>
 
 ## DESCRIPTION
 
-This cmdlet derives a SID-bound group key from the KDS root key whose identifier matches the supplied `ProtectionKeyIdentifier` and writes the resulting `KDSK` Group Key Envelope to the local SID key cache. The native DPAPI-NG implementation consults this cache during decryption, so seeding it offline allows subsequent DPAPI-NG operations (e.g. `Unprotect-DpapiNgData` or `Unprotect-DpapiNgPfxCertificate`) to succeed without contacting a domain controller.
+This cmdlet derives a SID-bound group key from the KDS root key whose identifier matches the supplied `ProtectionKeyIdentifier` and writes the resulting `KDSK` Group Key Envelope to the local SID key cache. The native DPAPI-NG implementation consults this cache during decryption, so seeding it offline allows subsequent DPAPI-NG operations (e.g. `Unprotect-DpapiNgData`, `Unprotect-DpapiNgPfxCertificate`, or `manage-bde -unlock -sid`) to succeed without contacting a domain controller.
 
 The `-KdsRootKey` parameter accepts an array of candidate root keys; the cmdlet picks the one whose `KeyId` matches the root key identifier embedded in the `KDSK` blob. The identifier can be supplied either as a parsed `ProtectionKeyIdentifier` (via `-Identifier`) or as the raw `KDSK` byte array (via `-IdentifierBlob`, which also accepts a hex string).
 
@@ -36,8 +36,8 @@ The cmdlet does not return any output. Use the `-Verbose` switch to see the full
 
 ### Example 1
 ```powershell
-PS C:\> $rootKeys = Get-ADDBKdsRootKey -DatabasePath '.\ntds.dit' -BootKey 0be7a2afe1713642182e9b96f73a75da
-PS C:\> $keyId = Get-DpapiNgSidKeyIdentifier -Blob $etwEvent.KeyId
+PS C:\> $rootKeys = Get-ADDBKdsRootKey -DatabasePath '.\ntds.dit'
+PS C:\> $keyId = Get-DpapiNgSidKeyIdentifier -Blob '010000004B44534B020000006C010000040000001C000000716B551C22ED5FC4723CDDBE199F682420000000180000001800000068838DA438D3C1CA36707F12B46B37776E0A3DB46ADB3DB2199D29E01976FCAE63006F006E0074006F0073006F002E0063006F006D00000063006F006E0074006F0073006F002E0063006F006D000000'
 PS C:\> Save-DpapiNgSidKey -Identifier $keyId -KdsRootKey $rootKeys -Sid 'S-1-5-21-3288850392-3299536932-2614793081-516'
 ```
 
@@ -45,17 +45,30 @@ Reconstructs a SID-protected group key for the domain controllers group and seed
 
 ### Example 2
 ```powershell
-PS C:\> Save-DpapiNgSidKey -IdentifierBlob '010000004B44534B...' -KdsRootKey $rootKeys -Sid $sid
+PS C:\> Save-DpapiNgSidKey -IdentifierBlob '010000004B44534B020000006C010000040000001C000000716B551C22ED5FC4723CDDBE199F682420000000180000001800000068838DA438D3C1CA36707F12B46B37776E0A3DB46ADB3DB2199D29E01976FCAE63006F006E0074006F0073006F002E0063006F006D00000063006F006E0074006F0073006F002E0063006F006D000000' -KdsRootKey (Get-ADDBKdsRootKey -DatabasePath '.\ntds.dit') -Sid 'S-1-5-21-3288850392-3299536932-2614793081-516'
 ```
 
 Passes the `KDSK` Protection Key Identifier as a hex string. The cmdlet converts it to bytes via `[AcceptHexString]` and parses the result into a `ProtectionKeyIdentifier`.
 
-### Example 3
+### Example 4
 ```powershell
-PS C:\> Save-DpapiNgSidKey -IdentifierBlob $etwEvent.KeyId -KdsRootKey $rootKeys -Sid $sid
+PS C:\> Save-DpapiNgSidKey -Identifier $keyId -KdsRootKey (Import-Clixml -Path .\KdsRootKeys.xml) -SecurityIdentifier S-1-5-21-3288850392-3299536932-2614793081-512 -Verbose
+
+<# Sample Output:
+VERBOSE: Saved DPAPI-NG SID key to 'C:\Users\John\AppData\Local\Microsoft\Crypto\KdsKey\b45c216c6b4390a526c9265a7926be9c9156980c7b2cb06c4f1a39acf0429765\PrivateKey\364-1c556b71-ed22-c45f-723c-ddbe199f6824'.
+#>
+
+PS C:\> manage-bde.exe -unlock e: -sid S-1-5-21-3288850392-3299536932-2614793081-512
+
+<# Sample Output:
+BitLocker Drive Encryption: Configuration Tool version 10.0.26100
+Copyright (C) 2013 Microsoft Corporation. All rights reserved.
+
+A SID-based Identity protector successfully unlocked the volume E:.
+#>
 ```
 
-Passes the raw `KDSK` blob (a `byte[]`) directly, e.g. as captured from a Microsoft-Windows-Crypto-DPAPI ETW event.
+Reconstructs the symmetric group key for a BitLocker SID-based Identity protector and seeds it into the local SID key cache. The KDS root key is loaded from a `Clixml` export (for example, captured earlier with `Get-ADSIKdsRootKey | Export-Clixml`). Once the key is cached, `manage-bde.exe -unlock -sid` succeeds offline; without the cached key the same command fails with *"A SID-based Identity protector failed to unlock volume E:."*
 
 ## PARAMETERS
 

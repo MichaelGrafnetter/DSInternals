@@ -36,29 +36,79 @@ The input can be supplied either as a file `Path` or as a `PfxProtectedPassword`
 
 ### Example 1
 ```powershell
-PS C:\> Unprotect-DpapiNgPfxCertificate -Path .\Certificate.pfx |
+PS C:\> Unprotect-DpapiNgPfxCertificate -Path C:\Certificates\ContosoWildcard.pfx |
             Select-Object FilePath, Password
+
+<# Sample Output:
+FilePath                            Password
+--------                            --------
+C:\Certificates\ContosoWildcard.pfx 7+qwxfTcEBB2ySg5UipSl4fskvjwF6pqf4DEvlB0q7M=
+#>
 ```
 
 Decrypts the SID-protected certificate password by using the current security context.
 
 ### Example 2
 ```powershell
-PS C:\> $rootKeys = Get-ADDBKdsRootKey -DatabasePath '.\ADBackup\Active Directory\ntds.dit'
-PS C:\> Unprotect-DpapiNgPfxCertificate -Path .\Certificate.pfx -KdsRootKey $rootKeys |
+PS C:\> $rootKeys = Get-ADDBKdsRootKey -DatabasePath '.\ntds.dit'
+PS C:\> Unprotect-DpapiNgPfxCertificate -Path C:\Certificates\ContosoWildcard.pfx -KdsRootKey $rootKeys |
             Select-Object FilePath, Password
+
+<# Sample Output:
+FilePath                            Password
+--------                            --------
+C:\Certificates\ContosoWildcard.pfx 7+qwxfTcEBB2ySg5UipSl4fskvjwF6pqf4DEvlB0q7M=
+#>
 ```
 
 Uses KDS root keys from an offline Active Directory database to decrypt the protected certificate password.
 
 ### Example 3
 ```powershell
-PS C:\> Get-DpapiNgPfxCertificate -Path .\Certificate.pfx |
+PS C:\> Get-DpapiNgPfxCertificate -Path C:\Certificates\ContosoWildcard.pfx |
             Unprotect-DpapiNgPfxCertificate |
             Select-Object FilePath, Password
+
+<# Sample Output:
+FilePath                            Password
+--------                            --------
+C:\Certificates\ContosoWildcard.pfx 7+qwxfTcEBB2ySg5UipSl4fskvjwF6pqf4DEvlB0q7M=
+#>
 ```
 
 Pipes a previously parsed `PfxProtectedPassword` into the decryption cmdlet.
+
+### Example 4
+```powershell
+PS C:\> Get-Item -Path C:\Certificates\*.pfx | Unprotect-DpapiNgPfxCertificate
+
+<# Sample Output:
+FilePath: C:\Certificates\ContosoWildcard.pfx
+Password: 7+qwxfTcEBB2ySg5UipSl4fskvjwF6pqf4DEvlB0q7M=
+EncryptedPassword
+  Descriptor: SID=S-1-5-21-3288850392-3299536932-2614793081-519 OR SID=S-1-5-21-3288850392-3299536932-2614793081-512
+  ContentEncryptionAlgorithm: aes256gcm (2.16.840.1.101.3.4.1.46)
+  SID/SDDL Protectors
+    SID=S-1-5-21-3288850392-3299536932-2614793081-519
+      ProtectionKeyIdentifier: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=5/22/2026 6:00:00 AM (L0=364, L1=4, L2=22)
+      KeyEncryptionAlgorithm: aes256wrap (2.16.840.1.101.3.4.1.45)
+    SID=S-1-5-21-3288850392-3299536932-2614793081-512
+      ProtectionKeyIdentifier: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=5/22/2026 6:00:00 AM (L0=364, L1=4, L2=22)
+      KeyEncryptionAlgorithm: aes256wrap (2.16.840.1.101.3.4.1.45)
+
+FilePath: C:\Certificates\ContosoWebServer.pfx
+Password: SUUlfn+1+S/9cmak+Rnd7tBK6yRSQWTAOMOXx8wCMZM=
+EncryptedPassword
+  Descriptor: SID=S-1-5-21-3288850392-3299536932-2614793081-512
+  ContentEncryptionAlgorithm: aes256gcm (2.16.840.1.101.3.4.1.46)
+  SID/SDDL Protectors
+    SID=S-1-5-21-3288850392-3299536932-2614793081-512
+      ProtectionKeyIdentifier: RootKey=1c556b71-ed22-c45f-723c-ddbe199f6824, Cycle=5/22/2026 6:00:00 AM (L0=364, L1=4, L2=22)
+      KeyEncryptionAlgorithm: aes256wrap (2.16.840.1.101.3.4.1.45)
+#>
+```
+
+Enumerates all PFX files in the `C:\Certificates` directory and decrypts their SID-protected passwords by using the current security context. In contrast to [Get-DpapiNgPfxCertificate](Get-DpapiNgPfxCertificate.md), the `Password` field now holds the recovered cleartext.
 
 ## PARAMETERS
 

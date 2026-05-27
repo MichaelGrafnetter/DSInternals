@@ -93,6 +93,56 @@ PS C:\> Get-ADSIAccount -Server 'lon-dc1.contoso.com' -UserPrincipalName 'joe@co
 
 Retrieves a single Active Directory user account by its user principal name through LDAP.
 
+### Example 5
+```powershell
+PS C:\> Get-ADSIAccount -SamAccountName 'CONTOSO-DC$'
+
+<# Sample Output:
+DistinguishedName: CN=CONTOSO-DC,OU=Domain Controllers,DC=contoso,DC=com
+SamAccountName: CONTOSO-DC$
+Enabled: True
+Deleted: False
+Sid: S-1-5-21-3288850392-3299536932-2614793081-1001
+Guid: 21c7a90a-a253-4824-a06a-27ef04c8e25c
+SamAccountType: Computer
+UserAccountControl: ServerAccount, TrustedForDelegation
+DNSHostName: CONTOSO-DC.contoso.com
+OperatingSystem: Windows Server 2025 Standard
+OperatingSystemVersion: 10.0 (26100)
+Description:
+PrimaryGroupId: 516
+SidHistory:
+SupportedEncryptionTypes: RC4_HMAC, AES128_CTS_HMAC_SHA1_96, AES256_CTS_HMAC_SHA1_96
+ServicePrincipalName: {Dfsr-12F9A27C-BF97-4787-9364-D31B6C55EB04/CONTOSO-DC.contoso.com, ldap/CONTOSO-DC.contoso.com/ForestDnsZones.contoso.com, ldap/CONTOSO-DC.contoso.com/DomainDnsZones.contoso.com, TERMSRV/CONTOSO-DC...}
+LastLogonDate: 5/27/2026 10:50:25 AM
+PasswordLastSet: 5/8/2026 7:21:59 PM
+SecurityDescriptor: DiscretionaryAclPresent, SystemAclPresent, DiscretionaryAclAutoInherited, SystemAclAutoInherited, SelfRelative
+LAPS
+  Password: StoodRaidBaker, Expires: 5/27/2026 2:42:55 PM
+  Password: WagonPulpDebt, Expires:
+  Password: EarthSmogTidy, Expires:
+  Password: PropsSlawFox, Expires:
+  Password: YummyPennyTrout, Expires:
+  Password: CrampGladBadge, Expires:
+  Password: HelpSalsaClean, Expires:
+  Password: JulyFoeUntie, Expires:
+  Password: GreenSushiSnub, Expires:
+  Password: WagonCauseRadar, Expires:
+  Password: PerchDarnOpt, Expires:
+  Password: DodgeLunarDad, Expires:
+  Password: ImageCorkSilo, Expires:
+Key Credentials
+Secrets
+  NTHash:
+  LMHash:
+  NTHashHistory:
+  LMHashHistory:
+  SupplementalCredentials:
+#>
+```
+
+Retrieves a single computer account (a domain controller) by its `sAMAccountName` through LDAP and displays its Windows LAPS password history.
+
 ## PARAMETERS
 
 ### -All
