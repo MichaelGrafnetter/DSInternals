@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [7.0] - 2026-05-28
+
 ### Added
 
 - Added the [Save-DnsServerResourceRecord](PowerShell/Save-DnsServerResourceRecord.md#save-dnsserverresourcerecord) cmdlet for exporting DNS records to zone files.
@@ -15,10 +17,9 @@ All notable changes to this project will be documented in this file. The format 
 - Added the [Get-DpapiNgPfxCertificate](PowerShell/Get-DpapiNgPfxCertificate.md#get-dpapingpfxcertificate) cmdlet for extracting SID-based DPAPI-NG certificate password protectors from PFX files, and the [Unprotect-DpapiNgPfxCertificate](PowerShell/Unprotect-DpapiNgPfxCertificate.md#unprotect-dpapingpfxcertificate) cmdlet for decrypting them either online or offline with `-KdsRootKey`.
 - Added the [Protect-DpapiNgData](PowerShell/Protect-DpapiNgData.md#protect-dpapingdata), [Unprotect-DpapiNgData](PowerShell/Unprotect-DpapiNgData.md#unprotect-dpapingdata), and [Get-DpapiNgData](PowerShell/Get-DpapiNgData.md#get-dpapingdata) cmdlets for protecting, decrypting, and parsing DPAPI-NG protected blobs.
 - Added the [New-DpapiNgNamedDescriptor](PowerShell/New-DpapiNgNamedDescriptor.md#new-dpapingnameddescriptor), [Get-DpapiNgNamedDescriptor](PowerShell/Get-DpapiNgNamedDescriptor.md#get-dpapingnameddescriptor), and [Remove-DpapiNgNamedDescriptor](PowerShell/Remove-DpapiNgNamedDescriptor.md#remove-dpapingnameddescriptor) cmdlets for managing named DPAPI-NG protection descriptors.
-- Added the [Get-DpapiNgSidKeyIdentifier](PowerShell/Get-DpapiNgSidKeyIdentifier.md#get-dpapingsidkeyidentifier) cmdlet for parsing the `KDSK` Protection Key Identifier blob emitted by DPAPI-NG (e.g. the `KeyId` field in Microsoft-Windows-Crypto-DPAPI ETW events).
+- Added the [Get-DpapiNgSidKeyIdentifier](PowerShell/Get-DpapiNgSidKeyIdentifier.md#get-dpapingsidkeyidentifier) cmdlet for parsing the `KDSK` Protection Key Identifier blob emitted by DPAPI-NG (e.g. the `KeyId` field in Microsoft-Windows-Crypto-NCrypt ETW events).
 - Added the [Save-DpapiNgSidKey](PowerShell/Save-DpapiNgSidKey.md#save-dpapingsidkey) cmdlet for deriving a SID-protected DPAPI-NG group key from a KDS root key and seeding it into the local SID key cache so subsequent DPAPI-NG decryption can proceed offline.
 - Added the [Clear-DpapiNgSidKeyCache](PowerShell/Clear-DpapiNgSidKeyCache.md#clear-dpapingsidkeycache) cmdlet for purging the calling user's local cache of KDS root key derived DPAPI-NG group keys.
-- Added protection descriptor reconstruction to DPAPI-NG protected data blobs.
 - The [Get-ADSIAccount](PowerShell/Get-ADSIAccount.md#get-adsiaccount) cmdlet has new parameters
   for selecting a single account (`-SamAccountName`, `-UserPrincipalName`, `-ObjectSid`,
   `-DistinguishedName`, `-ObjectGuid`), mirroring [Get-ADDBAccount](PowerShell/Get-ADDBAccount.md#get-addbaccount)
@@ -30,11 +31,9 @@ All notable changes to this project will be documented in this file. The format 
 - **Breaking (`DSInternals.Replication` library):** Replaced the custom `ReplicationProgressHandler` delegate with the standard `IProgress<ReplicationProgress>` interface on `DirectoryReplicationClient.GetAccounts`, `ReplicateAllObjects`, and `FetchFullSchema`. The methods also accept an optional `CancellationToken` so long-running replication can be cooperatively cancelled between cycles. External consumers must migrate from the delegate to `IProgress<ReplicationProgress>`.
 - Renamed the `Get-ADDBDnsResourceRecord` cmdlet to [Get-ADDBDnsServerResourceRecord](PowerShell/Get-ADDBDnsServerResourceRecord.md#get-addbdnsserverresourcerecord), the `Save-DnsResourceRecord` cmdlet to [Save-DnsServerResourceRecord](PowerShell/Save-DnsServerResourceRecord.md#save-dnsserverresourcerecord), and the `Get-ADDBDnsZone` cmdlet to [Get-ADDBDnsServerZone](PowerShell/Get-ADDBDnsServerZone.md#get-addbdnsserverzone) for naming consistency with [Get-ADSIDnsServerResourceRecord](PowerShell/Get-ADSIDnsServerResourceRecord.md#get-adsidnsserverresourcerecord) and [Get-ADSIDnsServerZone](PowerShell/Get-ADSIDnsServerZone.md#get-adsidnsserverzone). The previous names are preserved as aliases.
 - Renamed the `Save-DPAPIBlob` cmdlet to [Save-DpapiBlob](PowerShell/Save-DpapiBlob.md#save-dpapiblob) for consistent casing with the other DPAPI cmdlets. PowerShell is case-insensitive, so existing scripts continue to work.
-- The `-Encoding` parameter on [Protect-DpapiNgData](PowerShell/Protect-DpapiNgData.md#protect-dpapingdata) and [Unprotect-DpapiNgData](PowerShell/Unprotect-DpapiNgData.md#unprotect-dpapingdata) now offers tab completion and accepts strings such as `UTF8`, `Unicode`, or `ASCII` in addition to `System.Text.Encoding` instances.
 
 ### Fixed
 
-- WKS resource records now emit lowercase `tcp`/`udp` and translate port numbers to IANA service names (e.g. `25` → `smtp`) using the system `services` file, with a fallback to the numeric port.
 - Fixed intermittent `CRC check failed.` errors during replication caused by the RPC session key being renegotiated mid-replication. `DrsConnection` now raises a `SessionKeyChanged` event and the secret decryptor follows the current key while retaining previously seen keys, so accounts encrypted under either key still decrypt ([#136](https://github.com/MichaelGrafnetter/DSInternals/issues/136)).
 - `DSAccount.SupportsKerberosAESEncryption` now returns `true` when the `msDS-SupportedEncryptionTypes` attribute is unset, matching the behaviour of modern DCs that honour `DefaultDomainSupportedEncTypes`. This removes false-positive Kerberoastable findings from [Test-PasswordQuality](PowerShell/Test-PasswordQuality.md#test-passwordquality) for accounts that have never had the attribute explicitly configured ([#220](https://github.com/MichaelGrafnetter/DSInternals/issues/220)).
 - Fixed silent truncation of results in multi-object ADSI cmdlets. Paging is now enabled so the cmdlets return every matching object.
@@ -760,7 +759,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.5...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v7.0...HEAD
+[7.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.5...v7.0
 [6.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.4...v6.5
 [6.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.3...v6.4
 [6.3]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.2...v6.3

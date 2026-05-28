@@ -17,80 +17,88 @@ The DSInternals PowerShell Module exposes several internal features of Active Di
 
 ## Cmdlets for Offline Active Directory Operations
 
-### [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount)
+### Read-Only Operations
+
+#### [Get-ADDBAccount](Get-ADDBAccount.md#get-addbaccount)
 Reads one or more accounts from a ntds.dit file, including secret attributes.
 
-### [Enable-ADDBAccount](Enable-ADDBAccount.md#enable-addbaccount)
+#### [Get-ADDBTrust](Get-ADDBTrust.md#get-addbtrust)
+Reads inter-domain trust objects from a ntds.dit and decrypts the trust passwords.
+
+#### [Get-ADDBBackupKey](Get-ADDBBackupKey.md#get-addbbackupkey)
+Reads the DPAPI backup keys from a ntds.dit file.
+
+#### [Get-ADDBKdsRootKey](Get-ADDBKdsRootKey.md#get-addbkdsrootkey)
+Reads KDS Root Keys from a ntds.dit file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
+
+#### [Get-ADDBServiceAccount](Get-ADDBServiceAccount.md#get-addbserviceaccount)
+Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
+
+#### [Get-ADDBBitLockerRecoveryInformation](Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation)
+Reads BitLocker recovery passwords from a ntds.dit file.
+
+#### [Get-ADDBDnsServerResourceRecord](Get-ADDBDnsServerResourceRecord.md#get-addbdnsserverresourcerecord)
+Retrieves DNS resource records from an Active Directory database.
+
+#### [Get-ADDBDnsServerZone](Get-ADDBDnsServerZone.md#get-addbdnsserverzone)
+Retrieves the list of DNS zones stored in an Active Directory database.
+
+#### [Get-ADDBDnsServerSigningKey](Get-ADDBDnsServerSigningKey.md#get-addbdnsserversigningkey)
+Retrieves DNSSEC signing key descriptors from an Active Directory database.
+
+#### [Export-ADDBDnsServerSigningKey](Export-ADDBDnsServerSigningKey.md#export-addbdnsserversigningkey)
+Exports DNSSEC signing key private keys from an Active Directory database to files.
+
+#### [Get-ADDBDomainController](Get-ADDBDomainController.md#get-addbdomaincontroller)
+Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name, and DC site.
+
+#### [Get-ADDBSchemaAttribute](Get-ADDBSchemaAttribute.md#get-addbschemaattribute)
+Reads AD schema from a ntds.dit file, including datatable column names.
+
+#### [Get-BootKey](Get-BootKey.md#get-bootkey)
+Reads the Boot Key (AKA SysKey or System Key) from an online or offline SYSTEM registry hive.
+
+### Direct Database Modification (Advanced)
+
+> [!WARNING]
+> Features exposed through these commands are not supported by Microsoft.
+> Improper use might cause irreversible damage to domain controllers.
+
+#### [Enable-ADDBAccount](Enable-ADDBAccount.md#enable-addbaccount)
 Enables an Active Directory account in an offline ntds.dit file.
 
-### [Disable-ADDBAccount](Disable-ADDBAccount.md#disable-addbaccount)
+#### [Disable-ADDBAccount](Disable-ADDBAccount.md#disable-addbaccount)
 Disables an Active Directory account in an offline ntds.dit file.
 
-### [Unlock-ADDBAccount](Unlock-ADDBAccount.md#unlock-addbaccount)
+#### [Unlock-ADDBAccount](Unlock-ADDBAccount.md#unlock-addbaccount)
 Unlocks an Active Directory account in an offline ntds.dit file.
 
-### [Set-ADDBAccountControl](Set-ADDBAccountControl.md#set-addbaccountcontrol)
+#### [Set-ADDBAccountControl](Set-ADDBAccountControl.md#set-addbaccountcontrol)
 Modifies user account control values for an Active Directory account in an offline ntds.dit file.
 
-### [Add-ADDBSidHistory](Add-ADDBSidHistory.md#add-addbsidhistory)
+#### [Add-ADDBSidHistory](Add-ADDBSidHistory.md#add-addbsidhistory)
 Adds one or more values to the sIDHistory attribute of an object in a ntds.dit file.
 
 > [!WARNING]
 > This cmdlet has been removed from the DSInternals PowerShell module.
 > Information in this topic is provided for reference purposes only.
 
-### [Set-ADDBAccountPassword](Set-ADDBAccountPassword.md#set-addbaccountpassword)
+#### [Set-ADDBAccountPassword](Set-ADDBAccountPassword.md#set-addbaccountpassword)
 Sets the password for a user, computer, or service account stored in a ntds.dit file.
 
-### [Set-ADDBAccountPasswordHash](Set-ADDBAccountPasswordHash.md#set-addbaccountpasswordhash)
+#### [Set-ADDBAccountPasswordHash](Set-ADDBAccountPasswordHash.md#set-addbaccountpasswordhash)
 Sets the password hash for a user, computer, or service account stored in a ntds.dit file.
 
-### [Set-ADDBPrimaryGroup](Set-ADDBPrimaryGroup.md#set-addbprimarygroup)
+#### [Set-ADDBPrimaryGroup](Set-ADDBPrimaryGroup.md#set-addbprimarygroup)
 Modifies the primaryGroupId attribute of an object in a ntds.dit file.
 
-### [Get-ADDBTrust](Get-ADDBTrust.md#get-addbtrust)
-Reads inter-domain trust objects from a ntds.dit and decrypts the trust passwords.
-
-### [Get-ADDBBackupKey](Get-ADDBBackupKey.md#get-addbbackupkey)
-Reads the DPAPI backup keys from a ntds.dit file.
-
-### [Get-ADDBKdsRootKey](Get-ADDBKdsRootKey.md#get-addbkdsrootkey)
-Reads KDS Root Keys from a ntds.dit file. Can be used to aid DPAPI-NG decryption, e.g. SID-protected PFX files.
-
-### [Get-ADDBServiceAccount](Get-ADDBServiceAccount.md#get-addbserviceaccount)
-Reads all Group Managed Service Accounts (gMSAs) and Delegated Managed Service Accounts (dMSAs) from a ntds.dit file, while deriving their current passwords from KDS root keys.
-
-### [Get-ADDBBitLockerRecoveryInformation](Get-ADDBBitLockerRecoveryInformation.md#get-addbbitlockerrecoveryinformation)
-Reads BitLocker recovery passwords from a ntds.dit file.
-
-### [Get-ADDBDnsServerResourceRecord](Get-ADDBDnsServerResourceRecord.md#get-addbdnsserverresourcerecord)
-Retrieves DNS resource records from an Active Directory database.
-
-### [Get-ADDBDnsServerZone](Get-ADDBDnsServerZone.md#get-addbdnsserverzone)
-Retrieves the list of DNS zones stored in an Active Directory database.
-
-### [Get-ADDBDnsServerSigningKey](Get-ADDBDnsServerSigningKey.md#get-addbdnsserversigningkey)
-Retrieves DNSSEC signing key descriptors from an Active Directory database.
-
-### [Export-ADDBDnsServerSigningKey](Export-ADDBDnsServerSigningKey.md#export-addbdnsserversigningkey)
-Exports DNSSEC signing key private keys from an Active Directory database to files.
-
-### [Get-ADDBDomainController](Get-ADDBDomainController.md#get-addbdomaincontroller)
-Reads information about the originating DC from a ntds.dit file, including domain name, domain SID, DC name, and DC site.
-
-### [Set-ADDBDomainController](Set-ADDBDomainController.md#set-addbdomaincontroller)
+#### [Set-ADDBDomainController](Set-ADDBDomainController.md#set-addbdomaincontroller)
 Writes information about the DC to a ntds.dit file, including the highest committed USN and database epoch.
 
-### [Get-ADDBSchemaAttribute](Get-ADDBSchemaAttribute.md#get-addbschemaattribute)
-Reads AD schema from a ntds.dit file, including datatable column names.
-
-### [Get-BootKey](Get-BootKey.md#get-bootkey)
-Reads the Boot Key (AKA SysKey or System Key) from an online or offline SYSTEM registry hive.
-
-### [Set-ADDBBootKey](Set-ADDBBootKey.md#set-addbbootkey)
+#### [Set-ADDBBootKey](Set-ADDBBootKey.md#set-addbbootkey)
 Re-encrypts a ntds.dit file with a new BootKey/SysKey.
 
-### [Remove-ADDBObject](Remove-ADDBObject.md#remove-addbobject)
+#### [Remove-ADDBObject](Remove-ADDBObject.md#remove-addbobject)
 Physically removes the specified object from a ntds.dit file, making it semantically inconsistent. Highly experimental!
 
 ## Cmdlets for Online Active Directory Operations

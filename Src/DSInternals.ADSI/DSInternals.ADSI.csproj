@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>6.5</Version>
+    <Version>7.0</Version>
     <AssemblyTitle>DSInternals ADSI Library</AssemblyTitle>
     <Nullable>enable</Nullable>
   </PropertyGroup>

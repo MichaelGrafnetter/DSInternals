@@ -20,11 +20,11 @@ Get-DpapiNgSidKeyIdentifier [-Blob] <Byte[]> [<CommonParameters>]
 
 This cmdlet parses a DPAPI-NG Protection Key Identifier (`KDSK`) blob and returns a `ProtectionKeyIdentifier` object.
 Such blobs are emitted by the Windows DPAPI-NG implementation when SID-based protectors are used
-and can be observed, for example, in the `KeyId` field of Microsoft-Windows-Crypto-DPAPI events.
+and can be observed, for example, in the `KeyId` field of Microsoft-Windows-Crypto-NCrypt events.
 They identify the KDS root key and the L0/L1/L2 key cycle that was used to derive a group key.
 
 The `Blob` parameter accepts either a byte array or a hexadecimal string, matching the encoding
-used in the `KeyId` field of Microsoft-Windows-Crypto-DPAPI events.
+used in the `KeyId` field of Microsoft-Windows-Crypto-NCrypt events.
 
 ## EXAMPLES
 

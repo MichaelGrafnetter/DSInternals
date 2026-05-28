@@ -26,7 +26,8 @@ The DSInternals project consists of these two parts:
   - [Extracting credential roaming data](../Documentation/PowerShell/Save-DPAPIBlob.md#save-dpapiblob) and DPAPI domain backup keys, either online through [directory replication](../Documentation/PowerShell/Get-ADReplBackupKey.md#get-adreplbackupkey), [LSARPC](../Documentation/PowerShell/Get-LsaBackupKey.md#get-lsabackupkey), and [offline from ntds.dit](../Documentation/PowerShell/Get-ADDBBackupKey.md#get-addbbackupkey).
   - Password hash calculation, including [NT hash](../Documentation/PowerShell/ConvertTo-NTHash.md#convertto-nthash), [LM hash](../Documentation/PowerShell/ConvertTo-LMHash.md#convertto-lmhash), and [kerberos keys](../Documentation/PowerShell/ConvertTo-KerberosKey.md#convertto-kerberoskey).
 
-> DISCLAIMER: Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
+> [!WARNING]
+> Features exposed through these tools are not supported by Microsoft. Improper use might cause irreversible damage to domain controllers or negatively impact domain security.
 
 ## Author
 

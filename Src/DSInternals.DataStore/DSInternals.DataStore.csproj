@@ -2,11 +2,13 @@
   <PropertyGroup>
     <!-- NuGet package metadata -->
     <IsPackable>true</IsPackable>
-    <Version>6.5</Version>
+    <Version>7.0</Version>
     <AssemblyTitle>DSInternals DataStore Library</AssemblyTitle>
     <Title>$(AssemblyTitle)</Title>
     <Description>DSInternals DataStore is an advanced framework for offline ntds.dit file manipulation. It can be used to extract password hashes from Active Directory backups or to modify the sIDHistory and primaryGroupId attributes.</Description>
-    <PackageReleaseNotes>- Updated assembly dependencies.</PackageReleaseNotes>
+    <PackageReleaseNotes>- More DNS zone properties are now retrieved from ntds.dit files.
+- Added zone filtering when retrieving DNS resource records.
+- Added support for exporting DNS signing keys from ntds.dit files.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security NTDS AD Identity Active Directory</PackageTags>
     <!-- Create XML documentation file -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

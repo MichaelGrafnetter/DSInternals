@@ -12,7 +12,7 @@ RootModule = if ($PSEdition -eq 'Core') {
 }
 
 # Version number of this module.
-ModuleVersion = '6.5'
+ModuleVersion = '7.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -309,10 +309,14 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
-- Added the -UseNamedPipe parameter to the Get-SamPasswordPolicy cmdlet.
-- Improved MS-SAMR authentication fallback for localhost and missing SPN scenarios.
-- Fixed Get-ADReplAccount failure on domains with non-ASCII site names (e.g. German umlauts).
-- Fixed a missing throw in SafeUnicodeSecureStringPointer that silently ignored invalid password byte arrays.
+- Added the Protect-DpapiNgData, Unprotect-DpapiNgData, and Get-DpapiNgData cmdlets for encrypting, decrypting, and parsing DPAPI-NG protected blobs.
+- Added the New-DpapiNgNamedDescriptor, Get-DpapiNgNamedDescriptor, and Remove-DpapiNgNamedDescriptor cmdlets for managing named DPAPI-NG protection descriptors.
+- Added the Get-DpapiNgPfxCertificate and Unprotect-DpapiNgPfxCertificate cmdlets for extracting and decrypting SID-based DPAPI-NG certificate password protectors from PFX files, either online or offline with -KdsRootKey.
+- Added the Get-DpapiNgSidKeyIdentifier, Save-DpapiNgSidKey, and Clear-DpapiNgSidKeyCache cmdlets for managing the local cache of KDS root key derived DPAPI-NG group keys, enabling offline decryption.
+- Added the Save-DnsServerResourceRecord cmdlet for exporting DNS records to zone files.
+- Added the Get-ADSIKdsRootKey cmdlet for reading KDS root keys through LDAP.
+- Added the Get-ADSIServiceAccount cmdlet for reading gMSAs and dMSAs through LDAP with passwords derived from KDS root keys.
+- Fixed intermittent "CRC check failed." errors during replication caused by RPC session key renegotiation mid-replication.
 "@
     } # End of PSData hashtable
 
