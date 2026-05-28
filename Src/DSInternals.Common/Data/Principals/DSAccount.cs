@@ -167,7 +167,11 @@ public class DSAccount
         {
             if (!this.SupportedEncryptionTypes.HasValue)
             {
-                return false;
+                // An unset msDS-SupportedEncryptionTypes attribute means the account
+                // inherits the domain default. Since KB5021131, DCs honour the
+                // DefaultDomainSupportedEncTypes setting, which includes AES on all
+                // currently supported Windows Server versions.
+                return true;
             }
 
             return this.SupportedEncryptionTypes.Value.HasFlag(Data.SupportedEncryptionTypes.AES128_CTS_HMAC_SHA1_96) ||
