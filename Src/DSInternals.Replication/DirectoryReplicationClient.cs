@@ -58,6 +58,7 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     private readonly Lazy<(string DomainNamingContext, string NetBIOSDomainName)> _domainInfo;
     private readonly Lazy<string[]> _namingContexts;
     private readonly Lazy<DirectorySecretDecryptor> _secretDecryptor;
+    private EventHandler<SessionKeyChangedEventArgs> _sessionKeyChangedHandler;
 
     /// <summary>
     /// The domain naming context of the connected server.
@@ -121,7 +122,17 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
         // Lazily fetch domain info, naming contexts, and the secret decryptor on first access.
         this._domainInfo = new Lazy<(string, string)>(this.LoadDomainInfo);
         this._namingContexts = new Lazy<string[]>(() => this._drsConnection.ListNamingContexts());
-        this._secretDecryptor = new Lazy<DirectorySecretDecryptor>(() => new ReplicationSecretDecryptor(this._drsConnection.SessionKey));
+        this._secretDecryptor = new Lazy<DirectorySecretDecryptor>(() =>
+        {
+            var decryptor = new ReplicationSecretDecryptor(this._drsConnection.SessionKey);
+
+            // The RPC session key can be renegotiated mid-replication. Forward those changes to the
+            // decryptor so it always tries the current key (while retaining the previous ones).
+            this._sessionKeyChangedHandler = (sender, e) => decryptor.ChangeSessionKey(e.SessionKey);
+            this._drsConnection.SessionKeyChanged += this._sessionKeyChangedHandler;
+
+            return decryptor;
+        });
     }
 
     /// <summary>
@@ -512,6 +523,12 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
 
         if (this._drsConnection != null)
         {
+            if (this._sessionKeyChangedHandler != null)
+            {
+                this._drsConnection.SessionKeyChanged -= this._sessionKeyChangedHandler;
+                this._sessionKeyChangedHandler = null;
+            }
+
             this._drsConnection.Dispose();
             this._drsConnection = null;
         }

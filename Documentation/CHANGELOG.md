@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - WKS resource records now emit lowercase `tcp`/`udp` and translate port numbers to IANA service names (e.g. `25` → `smtp`) using the system `services` file, with a fallback to the numeric port.
+- Fixed intermittent `CRC check failed.` errors during replication caused by the RPC session key being renegotiated mid-replication. `DrsConnection` now raises a `SessionKeyChanged` event and the secret decryptor follows the current key while retaining previously seen keys, so accounts encrypted under either key still decrypt ([#136](https://github.com/MichaelGrafnetter/DSInternals/issues/136)).
 
 ## [6.5] - 2026-05-16
 
