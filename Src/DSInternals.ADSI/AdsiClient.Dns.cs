@@ -229,7 +229,8 @@ public sealed partial class AdsiClient
         {
             using var searcher = new DirectorySearcher(partition, filter, propertiesToLoad, SearchScope.Subtree)
             {
-                CacheResults = false
+                CacheResults = false,
+                PageSize = LdapPageSize
             };
 
             SearchResultCollection results;

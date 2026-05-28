@@ -48,7 +48,8 @@ public sealed partial class AdsiClient
             ServiceAccountProperties,
             SearchScope.Subtree)
         {
-            CacheResults = false
+            CacheResults = false,
+            PageSize = LdapPageSize
         };
 
         using var searchResults = serviceAccountSearcher.FindAll();

@@ -10,6 +10,18 @@ namespace DSInternals.ADSI;
 
 public sealed partial class AdsiClient : IDisposable
 {
+    /// <summary>
+    /// Page size used by every multi-object <see cref="DirectorySearcher"/> in this assembly.
+    /// </summary>
+    /// <remarks>
+    /// Matches the default AD DS <c>MaxPageSize</c> LDAP policy; the server clamps to a lower
+    /// value if its policy is smaller. Setting <see cref="DirectorySearcher.PageSize"/> to a
+    /// positive value is what actually enables LDAP paging — leaving it at the default of <c>0</c>
+    /// disables paging and causes <see cref="DirectorySearcher.FindAll"/> results to be silently
+    /// truncated at the server's <c>MaxPageSize</c>.
+    /// </remarks>
+    internal const int LdapPageSize = 1000;
+
     private DirectoryContext _directoryContext;
     private DirectoryEntry _domainNamingContext;
     private DirectoryEntry _configurationNamingContext;

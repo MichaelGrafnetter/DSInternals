@@ -78,9 +78,11 @@ public sealed class AdsiKdsRootKeyResolver : IKdsRootKeyResolver
             _configurationNamingContext,
             KdsRootKeyFilter,
             KdsRootKeyProperties,
-            SearchScope.Subtree);
-
-        rootKeySearcher.CacheResults = false;
+            SearchScope.Subtree)
+        {
+            CacheResults = false,
+            PageSize = AdsiClient.LdapPageSize
+        };
 
         using var results = rootKeySearcher.FindAll();
 

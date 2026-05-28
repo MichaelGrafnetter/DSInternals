@@ -30,7 +30,11 @@ public sealed partial class AdsiClient
     {
         string[] propertiesToLoad = BuildAccountPropertiesToLoad(propertySets);
 
-        using DirectorySearcher accountSearcher = new(_domainNamingContext, AccountsFilter, propertiesToLoad, SearchScope.Subtree);
+        using DirectorySearcher accountSearcher = new(_domainNamingContext, AccountsFilter, propertiesToLoad, SearchScope.Subtree)
+        {
+            CacheResults = false,
+            PageSize = LdapPageSize
+        };
         using SearchResultCollection searchResults = accountSearcher.FindAll();
 
         foreach (SearchResult searchResult in searchResults)
