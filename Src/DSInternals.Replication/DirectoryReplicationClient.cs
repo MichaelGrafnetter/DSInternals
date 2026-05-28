@@ -150,14 +150,15 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     /// Retrieves all accounts from the specified domain partition.
     /// </summary>
     /// <param name="domainNamingContext">The distinguished name of the domain partition.</param>
-    /// <param name="progressReporter">The progress reporter to report replication progress.</param>
+    /// <param name="progress">Optional progress reporter invoked after each replication cycle.</param>
     /// <param name="propertySets">The set of properties to retrieve for each account.</param>
+    /// <param name="cancellationToken">Token used to cooperatively cancel the replication between cycles.</param>
     /// <returns>An enumerable collection of directory service accounts.</returns>
-    public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, ReplicationProgressHandler progressReporter = null, AccountPropertySets propertySets = AccountPropertySets.All)
+    public IEnumerable<DSAccount> GetAccounts(string domainNamingContext, IProgress<ReplicationProgress> progress = null, AccountPropertySets propertySets = AccountPropertySets.All, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(domainNamingContext);
 
-        return ReplicateAllObjects(domainNamingContext, progressReporter)
+        return ReplicateAllObjects(domainNamingContext, progress, cancellationToken)
             .Select(dsObject => AccountFactory.CreateAccount(dsObject, this.NetBIOSDomainName, _secretDecryptor.Value, _rootKeyResolver, propertySets))
             .Where(account => account != null); // CreateAccount returns null for other object types
     }
@@ -166,9 +167,10 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     /// Retrieves all directory objects from the specified naming context.
     /// </summary>
     /// <param name="namingContext">Partition to replicate.</param>
-    /// <param name="progressReporter">Progress reporter for replication progress.</param>
+    /// <param name="progress">Optional progress reporter invoked after each replication cycle.</param>
+    /// <param name="cancellationToken">Token used to cooperatively cancel the replication between cycles.</param>
     /// <returns>An enumerable collection of directory service objects.</returns>
-    public IEnumerable<ReplicaObject> ReplicateAllObjects(string namingContext, ReplicationProgressHandler progressReporter = null)
+    public IEnumerable<ReplicaObject> ReplicateAllObjects(string namingContext, IProgress<ReplicationProgress> progress = null, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(namingContext);
         ReplicationCookie currentCookie = new(namingContext);
@@ -177,15 +179,15 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
 
         do
         {
+            // Check for cancellation between replication cycles (the native DRS call itself is not interruptible).
+            cancellationToken.ThrowIfCancellationRequested();
+
             // Perform one replication cycle
             result = this._drsConnection.ReplicateAllObjects(currentCookie);
 
             // Report replication progress
-            if (progressReporter != null)
-            {
-                processedObjectCount += result.Objects.Count;
-                progressReporter(result.Cookie, processedObjectCount, result.TotalObjectCount);
-            }
+            processedObjectCount += result.Objects.Count;
+            progress?.Report(new ReplicationProgress(result.Cookie, processedObjectCount, result.TotalObjectCount));
 
             // Pass-through the returned objects
             foreach (var obj in result.Objects)
@@ -451,8 +453,9 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
     /// <summary>
     /// Replicates the entire schema partition.
     /// </summary>
-    /// <param name="progressReporter">Replication progress reporter.</param>
-    public void FetchFullSchema(ReplicationProgressHandler progressReporter = null)
+    /// <param name="progress">Optional progress reporter invoked after each replication cycle.</param>
+    /// <param name="cancellationToken">Token used to cooperatively cancel the replication between cycles.</param>
+    public void FetchFullSchema(IProgress<ReplicationProgress> progress = null, CancellationToken cancellationToken = default)
     {
         if (_isFullSchemaLoaded)
         {
@@ -470,15 +473,15 @@ public class DirectoryReplicationClient : IDisposable, IKdsRootKeyResolver
 
         do
         {
+            // Check for cancellation between replication cycles (the native DRS call itself is not interruptible).
+            cancellationToken.ThrowIfCancellationRequested();
+
             // Perform one replication cycle
             result = this._drsConnection.ReplicateAllObjects(currentCookie);
 
             // Report replication progress
-            if (progressReporter != null)
-            {
-                processedObjectCount += result.Objects.Count;
-                progressReporter(result.Cookie, processedObjectCount, result.TotalObjectCount);
-            }
+            processedObjectCount += result.Objects.Count;
+            progress?.Report(new ReplicationProgress(result.Cookie, processedObjectCount, result.TotalObjectCount));
 
             // Merge the prefix tables
             if (result.PrefixTable != null)

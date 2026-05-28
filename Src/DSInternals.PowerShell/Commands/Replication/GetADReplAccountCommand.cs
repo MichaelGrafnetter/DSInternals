@@ -2,7 +2,6 @@
 using System.Security.Principal;
 using DSInternals.Common.Data;
 using DSInternals.Replication;
-using DSInternals.Replication.Model;
 
 namespace DSInternals.PowerShell.Commands;
 
@@ -110,38 +109,67 @@ public class GetADReplAccountCommand : ADReplPrincipalCommandBase
             this.ReturnSingleAccount();
         }
     }
+
+    protected override void StopProcessing()
+    {
+        _cancellationTokenSource.Cancel();
+        base.StopProcessing();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _cancellationTokenSource.Dispose();
+        }
+
+        base.Dispose(disposing);
+    }
     #endregion Cmdlet Overrides
+
+    #region Cancellation
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
+    #endregion Cancellation
 
     #region Helper Methods
 
     protected void ReturnAllAccounts()
     {
         // Write the initial progress
-        var progress = new ProgressRecord(1, "Account Replication", "Replicating Active Directory objects.");
-        progress.PercentComplete = 0;
-        this.WriteProgress(progress);
+        var progressRecord = new ProgressRecord(1, "Account Replication", "Replicating Active Directory objects.");
+        progressRecord.PercentComplete = 0;
+        this.WriteProgress(progressRecord);
 
         // Update the progress after each replication cycle
-        ReplicationProgressHandler progressReporter = (ReplicationCookie cookie, int processedObjectCount, int totalObjectCount) =>
+        IProgress<ReplicationProgress> progress = new SynchronousProgress<ReplicationProgress>(report =>
         {
-            int percentComplete = (int)(((double)processedObjectCount / (double)totalObjectCount) * 100);
+            int percentComplete = (int)(((double)report.ProcessedObjectCount / (double)report.TotalObjectCount) * 100);
             // AD's object count estimate is sometimes lower than the actual count, so we cap the value to 100%.
-            progress.PercentComplete = Math.Min(percentComplete, 100);
-            this.WriteProgress(progress);
-        };
+            progressRecord.PercentComplete = Math.Min(percentComplete, 100);
+            this.WriteProgress(progressRecord);
+        });
 
         // Automatically infer domain name if no value is provided
         string domainNamingContext = this.NamingContext ?? this.ReplicationClient.DomainNamingContext;
 
-        // Replicate all accounts
-        foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progressReporter, this.Properties))
+        try
         {
-            this.WriteObject(account);
+            // Replicate all accounts
+            foreach (var account in this.ReplicationClient.GetAccounts(domainNamingContext, progress, this.Properties, _cancellationTokenSource.Token))
+            {
+                this.WriteObject(account);
+            }
         }
-
-        // Write progress completed
-        progress.RecordType = ProgressRecordType.Completed;
-        this.WriteProgress(progress);
+        catch (OperationCanceledException)
+        {
+            // The pipeline is stopping (e.g. Ctrl+C). Fall through to a clean progress completion.
+        }
+        finally
+        {
+            // Write progress completed
+            progressRecord.RecordType = ProgressRecordType.Completed;
+            this.WriteProgress(progressRecord);
+        }
     }
 
     protected void ReturnSingleAccount()
@@ -183,25 +211,34 @@ public class GetADReplAccountCommand : ADReplPrincipalCommandBase
     protected void FetchSchema()
     {
         // Write the initial progress
-        var progress = new ProgressRecord(2, "Schema Replication", "Replicating Active Directory schema.");
-        progress.PercentComplete = 0;
-        this.WriteProgress(progress);
+        var progressRecord = new ProgressRecord(2, "Schema Replication", "Replicating Active Directory schema.");
+        progressRecord.PercentComplete = 0;
+        this.WriteProgress(progressRecord);
 
         // Update the progress after each replication cycle
-        ReplicationProgressHandler progressReporter = (ReplicationCookie cookie, int processedObjectCount, int totalObjectCount) =>
+        IProgress<ReplicationProgress> progress = new SynchronousProgress<ReplicationProgress>(report =>
         {
-            int percentComplete = (int)(((double)processedObjectCount / (double)totalObjectCount) * 100);
+            int percentComplete = (int)(((double)report.ProcessedObjectCount / (double)report.TotalObjectCount) * 100);
             // AD's object count estimate is sometimes lower than the actual count, so we cap the value to 100%.
-            progress.PercentComplete = Math.Min(percentComplete, 100);
-            this.WriteProgress(progress);
-        };
+            progressRecord.PercentComplete = Math.Min(percentComplete, 100);
+            this.WriteProgress(progressRecord);
+        });
 
-        // Replicate the schema partition
-        this.ReplicationClient.FetchFullSchema(progressReporter);
-
-        // Write progress completed
-        progress.RecordType = ProgressRecordType.Completed;
-        this.WriteProgress(progress);
+        try
+        {
+            // Replicate the schema partition
+            this.ReplicationClient.FetchFullSchema(progress, _cancellationTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            // The pipeline is stopping (e.g. Ctrl+C). Fall through to a clean progress completion.
+        }
+        finally
+        {
+            // Write progress completed
+            progressRecord.RecordType = ProgressRecordType.Completed;
+            this.WriteProgress(progressRecord);
+        }
     }
 
     private new void WriteObject(object sendToPipeline)
