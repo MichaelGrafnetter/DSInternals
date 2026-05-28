@@ -26,7 +26,7 @@ namespace DSInternals::Replication::Interop
         this->_serverReplEpoch = DrsConnection::DefaultReplEpoch;
         this->_schema = schema;
 
-        // Register the RetrieveSessionKey as RCP security callback. Mind the delegate lifecycle.
+        // Register the RetrieveSessionKey as RPC security callback. Mind the delegate lifecycle.
         this->_securityCallback = gcnew SecurityCallback(this, &DrsConnection::RetrieveSessionKey);
         RPC_STATUS status = RpcBindingSetOption(rpcHandle.ToPointer(), RPC_C_OPT_SECURITY_CALLBACK, (ULONG_PTR)Marshal::GetFunctionPointerForDelegate(this->_securityCallback).ToPointer());
 
@@ -809,14 +809,41 @@ namespace DSInternals::Replication::Interop
         // Extract the actual key if the authentication schema uses one
         if (secStatus == SEC_E_OK && nativeKey.SessionKey != nullptr)
         {
-            array<byte>^ managedKey = gcnew array<byte>(nativeKey.SessionKeyLength);
-            // Pin it so the GC does not touch it
-            pin_ptr<byte> pinnedManagedKey = &managedKey[0];
-            // Copy data from native to managed memory
-            memcpy(pinnedManagedKey, nativeKey.SessionKey, nativeKey.SessionKeyLength);
+            // The security callback fires on every RPC. Avoid allocating a managed buffer when the
+            // key is unchanged by pinning the current _sessionKey and memcmp'ing against the
+            // native buffer directly.
+            array<byte>^ existingKey = this->_sessionKey;
+            bool keyChanged = existingKey == nullptr || existingKey->Length != (int)nativeKey.SessionKeyLength;
+
+            if (!keyChanged)
+            {
+                pin_ptr<byte> pinnedExistingKey = &existingKey[0];
+                keyChanged = memcmp(pinnedExistingKey, nativeKey.SessionKey, nativeKey.SessionKeyLength) != 0;
+            }
+
+            if (keyChanged)
+            {
+                // Allocate a fresh managed buffer for the new key. We never overwrite an existing
+                // buffer in place: subscribers (e.g. the secret decryptor's fallback history) keep
+                // references to previous keys and must observe stable bytes.
+                array<byte>^ newKey = gcnew array<byte>(nativeKey.SessionKeyLength);
+                pin_ptr<byte> pinnedNewKey = &newKey[0];
+                memcpy(pinnedNewKey, nativeKey.SessionKey, nativeKey.SessionKeyLength);
+                this->_sessionKey = newKey;
+
+                // Notify subscribers (e.g. the secret decryptor) about the new key. A handler
+                // exception must never escape into the native RPC runtime across this callback.
+                try
+                {
+                    SessionKeyChanged(this, gcnew SessionKeyChangedEventArgs(newKey));
+                }
+                catch (Exception^)
+                {
+                }
+            }
+
             // Do not forget to free the unmanaged memory
             secStatus = FreeContextBuffer(nativeKey.SessionKey);
-            this->_sessionKey = managedKey;
         }
     }
 

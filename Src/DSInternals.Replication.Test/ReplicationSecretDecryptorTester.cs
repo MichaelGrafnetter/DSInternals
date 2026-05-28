@@ -75,6 +75,50 @@ public class ReplicationSecretDecryptorTester
 
 
     [TestMethod]
+    public void PasswordEncryptionKey_SessionKeyChange_UsesLatestKey()
+    {
+        // The session key was renegotiated after the decryptor was created, so the current key
+        // (passed via ChangeSessionKey) is the one that must be used.
+        byte[] staleKey = "00000000000000000000000000000000".HexToBinary();
+        byte[] currentKey = "b0133bfc9ce59c805dd15d5872e247c5".HexToBinary();
+        var pek = new ReplicationSecretDecryptor(staleKey);
+        pek.ChangeSessionKey(currentKey);
+
+        byte[] blob = "e650e0179becf540e1e6dbe37deb38b379618228d74d9ff7e08a588c2a6fbd511ad78f61".HexToBinary();
+        string result = pek.DecryptHash(blob, 500).ToHex(true);
+        Assert.AreEqual("92937945B518814341DE3F726500D4FF", result);
+    }
+
+    [TestMethod]
+    public void PasswordEncryptionKey_SessionKeyChange_FallsBackToPreviousKey()
+    {
+        // Simulates GuyTe's "mid-page" case: the key changed, but this particular secret was
+        // encrypted under the previous key. The latest key fails the CRC check, so the decryptor
+        // must fall back to the retained previous key.
+        byte[] previousKey = "b0133bfc9ce59c805dd15d5872e247c5".HexToBinary();
+        byte[] currentKey = "00000000000000000000000000000000".HexToBinary();
+        var pek = new ReplicationSecretDecryptor(previousKey);
+        pek.ChangeSessionKey(currentKey);
+
+        byte[] blob = "e650e0179becf540e1e6dbe37deb38b379618228d74d9ff7e08a588c2a6fbd511ad78f61".HexToBinary();
+        string result = pek.DecryptHash(blob, 500).ToHex(true);
+        Assert.AreEqual("92937945B518814341DE3F726500D4FF", result);
+    }
+
+    [TestMethod]
+    public void PasswordEncryptionKey_SessionKeyChange_NoMatchingKeyThrows()
+    {
+        // None of the known keys can decrypt the blob, so the CRC check must fail for all of them.
+        byte[] wrongKey1 = "00000000000000000000000000000000".HexToBinary();
+        byte[] wrongKey2 = "11111111111111111111111111111111".HexToBinary();
+        var pek = new ReplicationSecretDecryptor(wrongKey1);
+        pek.ChangeSessionKey(wrongKey2);
+
+        byte[] blob = "e650e0179becf540e1e6dbe37deb38b379618228d74d9ff7e08a588c2a6fbd511ad78f61".HexToBinary();
+        Assert.ThrowsExactly<FormatException>(() => pek.DecryptHash(blob, 500));
+    }
+
+    [TestMethod]
     public void PasswordEncryptionKey_NullInput()
     {
         throw new AssertInconclusiveException();

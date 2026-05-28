@@ -19,14 +19,19 @@ public class ReplicationSecretDecryptor : DirectorySecretDecryptor
     private const int EncryptedBlobMinSize = SaltSize + 1;
 
     /// <summary>
-    /// Decryption key.
+    /// Decryption keys, ordered most-recently-negotiated first.
     /// </summary>
-    private byte[] key;
+    /// <remarks>
+    /// The RPC session key can be renegotiated mid-replication, so secrets within a single
+    /// replication stream may be encrypted under different keys. We therefore keep every key we
+    /// have seen and try them newest-first when decrypting.
+    /// </remarks>
+    private readonly List<byte[]> sessionKeys;
 
     /// <summary>
-    /// Gets the current decryption key.
+    /// Gets the most recently negotiated decryption key.
     /// </summary>
-    public override byte[] CurrentKey => this.key;
+    public override byte[] CurrentKey => this.sessionKeys[0];
 
     /// <summary>
     /// Gets the encryption algorithm used to protect the secrets.
@@ -36,13 +41,30 @@ public class ReplicationSecretDecryptor : DirectorySecretDecryptor
     /// <summary>
     /// Initializes a new instance of the <see cref="ReplicationSecretDecryptor"/> class.
     /// </summary>
-    /// <param name="key">The decryption key.</param>
-    public ReplicationSecretDecryptor(byte[] key)
+    /// <param name="initialSessionKey">The session key in effect when the decryptor is created.</param>
+    public ReplicationSecretDecryptor(byte[] initialSessionKey)
     {
-        ArgumentNullException.ThrowIfNull(key);
+        ArgumentNullException.ThrowIfNull(initialSessionKey);
         // Session key size: NTLM - 16B, Kerberos - 32B
-        Validator.AssertMinLength(key, KeySize);
-        this.key = key;
+        Validator.AssertMinLength(initialSessionKey, KeySize);
+        this.sessionKeys = new List<byte[]>() { initialSessionKey };
+    }
+
+    /// <summary>
+    /// Registers a newly negotiated session key as the preferred decryption key.
+    /// </summary>
+    /// <param name="newKey">The new session key.</param>
+    /// <remarks>
+    /// Previously seen keys are retained so that secrets encrypted before the renegotiation can
+    /// still be decrypted. This method does not throw, as it is invoked from an event raised inside
+    /// the native RPC security callback.
+    /// </remarks>
+    public void ChangeSessionKey(byte[] newKey)
+    {
+        if (newKey != null)
+        {
+            this.sessionKeys.Insert(0, newKey);
+        }
     }
 
     /// <summary>
@@ -59,16 +81,23 @@ public class ReplicationSecretDecryptor : DirectorySecretDecryptor
         byte[] salt = blob.Cut(SaltOffset, SaltSize);
         byte[] encryptedSecret = blob.Cut(SaltOffset + SaltSize);
 
-        // Perform decryption
-        byte[] decryptedBlob = DecryptUsingRC4(encryptedSecret, salt, this.CurrentKey);
+        // The session key may have been renegotiated mid-replication, so try the keys we have seen
+        // newest-first and accept the first one that yields a valid CRC.
+        foreach (byte[] sessionKey in this.sessionKeys)
+        {
+            byte[] decryptedBlob = DecryptUsingRC4(encryptedSecret, salt, sessionKey);
 
-        // The blob is prepended with CRC
-        byte[] decryptedSecret;
-        uint expectedCrc = BitConverter.ToUInt32(decryptedBlob, 0);
-        decryptedSecret = decryptedBlob.Cut(sizeof(uint));
-        Validator.AssertCrcMatches(decryptedSecret, expectedCrc);
+            // The blob is prepended with CRC
+            uint expectedCrc = BitConverter.ToUInt32(decryptedBlob, 0);
+            byte[] decryptedSecret = decryptedBlob.Cut(sizeof(uint));
+            if (Crc32.Calculate(decryptedSecret) == expectedCrc)
+            {
+                return decryptedSecret;
+            }
+        }
 
-        return decryptedSecret;
+        // None of the known session keys produced a valid CRC.
+        throw new FormatException("Secret decryption failed: CRC check did not match for any known session key.");
     }
 
     /// <summary>

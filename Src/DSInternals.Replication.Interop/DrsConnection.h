@@ -46,6 +46,8 @@ namespace DSInternals::Replication::Interop
         {
             cli::array<byte>^ get();
         }
+        // Raised whenever the RPC layer negotiates a new session key mid-connection.
+        event EventHandler<SessionKeyChangedEventArgs^>^ SessionKeyChanged;
         property Guid ServerSiteGuid
         {
             Guid get();
