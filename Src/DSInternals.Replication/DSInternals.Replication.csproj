@@ -4,12 +4,11 @@
     <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <!-- NuGet package metadata -->
     <IsPackable>true</IsPackable>
-    <Version>7.0</Version>
+    <Version>7.1</Version>
     <AssemblyTitle>DSInternals Replication Library</AssemblyTitle>
     <Title>$(AssemblyTitle)</Title>
     <Description>DSInternals Replication implements a client for the Active Directory Replication Service Remote Protocol (DRS-R). It can be used to remotely extract password hashes from domain controllers.</Description>
-    <PackageReleaseNotes>- Breaking: replaced the custom ReplicationProgressHandler delegate with the standard IProgress&lt;ReplicationProgress&gt; interface; long-running replication now also accepts a CancellationToken.
-- Fixed intermittent "CRC check failed." errors caused by RPC session key renegotiation mid-replication.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Updated assembly dependencies.</PackageReleaseNotes>
     <PackageTags>ActiveDirectory Security Replication RPC DRSR DCSync</PackageTags>
     <!-- Override the NuGet package directory structure -->
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);PackReferenceAssemblies;PackRuntimeAssemblies</TargetsForTfmSpecificBuildOutput>

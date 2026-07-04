@@ -129,7 +129,7 @@
       "dsinternals.replication.model": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[7.0.0, )"
+          "DSInternals.Common": "[7.1.0, )"
         }
       },
       "System.Buffers": {
@@ -252,17 +252,17 @@
           "System.Formats.Cbor": "[9.0.9, )"
         }
       },
-      "dsinternals.replication.interop.netcore": {
+      "DSInternals.Replication.Interop": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[7.0.0, )",
-          "DSInternals.Replication.Model": "[7.0.0, )"
+          "DSInternals.Common": "[7.1.0, )",
+          "DSInternals.Replication.Model": "[7.1.0, )"
         }
       },
       "dsinternals.replication.model": {
         "type": "Project",
         "dependencies": {
-          "DSInternals.Common": "[7.0.0, )"
+          "DSInternals.Common": "[7.1.0, )"
         }
       },
       "System.Formats.Cbor": {

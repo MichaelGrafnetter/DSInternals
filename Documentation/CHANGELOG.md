@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+## [7.1] - 2026-07-04
+
+### Fixed
+
+- Fixed [Get-ADDBTrust](PowerShell/Get-ADDBTrust.md#get-addbtrust) failures on Windows versions that no longer support DES Kerberos key derivation; trust key generation now derives only AES and RC4 keys.
+
 ## [7.0] - 2026-05-28
 
 ### Added
@@ -759,7 +765,8 @@ This is a [Chocolatey](https://chocolatey.org/packages/dsinternals-psmodule)-onl
 ## 1.0 - 2015-01-20
 Initial release!
 
-[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v7.0...HEAD
+[Unreleased]: https://github.com/MichaelGrafnetter/DSInternals/compare/v7.1...HEAD
+[7.1]: https://github.com/MichaelGrafnetter/DSInternals/compare/v7.0...v7.1
 [7.0]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.5...v7.0
 [6.5]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.4...v6.5
 [6.4]: https://github.com/MichaelGrafnetter/DSInternals/compare/v6.3...v6.4
