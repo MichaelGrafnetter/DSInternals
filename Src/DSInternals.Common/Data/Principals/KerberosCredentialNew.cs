@@ -72,7 +72,7 @@ public class KerberosCredentialNew
         this.Credentials = credentials.ToArray();
     }
 
-    public KerberosCredentialNew(ReadOnlyMemory<byte> password, string salt, bool includeDES = true, bool includeRC4 = true, bool includeSHA2 = false)
+    public KerberosCredentialNew(ReadOnlyMemory<byte> password, string salt, bool includeDES = false, bool includeRC4 = true, bool includeSHA2 = false)
     {
         if (password.IsEmpty)
         {
@@ -261,7 +261,7 @@ public class KerberosCredentialNew
         }
     }
 
-    public static KerberosCredentialNew Derive(ReadOnlyMemory<byte> currentPassword, ReadOnlyMemory<byte> previousPassword, string salt, bool includeDES = true)
+    public static KerberosCredentialNew Derive(ReadOnlyMemory<byte> currentPassword, ReadOnlyMemory<byte> previousPassword, string salt, bool includeDES = false)
     {
         var currentKeys = new KerberosCredentialNew(currentPassword, salt, includeDES);
 

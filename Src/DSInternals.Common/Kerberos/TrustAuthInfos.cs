@@ -155,7 +155,8 @@ public struct TrustAuthInfos
 
     public KerberosCredentialNew? DeriveKerberosKeys(string salt)
     {
-        return this.CurrentPasswordBytes.IsEmpty ? null : KerberosCredentialNew.Derive(this.CurrentPasswordBytes, this.PreviousPasswordBytes, salt);
+        // Trust Kerberos keys only use AES (and RC4); DES key derivation is no longer supported on recent Windows and would throw.
+        return this.CurrentPasswordBytes.IsEmpty ? null : KerberosCredentialNew.Derive(this.CurrentPasswordBytes, this.PreviousPasswordBytes, salt, includeDES: false);
     }
 
     unsafe private static string? GetPassword(ReadOnlyMemory<byte> passwordBytes)

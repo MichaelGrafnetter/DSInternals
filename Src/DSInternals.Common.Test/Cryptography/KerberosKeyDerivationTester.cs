@@ -88,6 +88,28 @@ public class KerberosKeyDerivationTester
     }
 
     [TestMethod]
+    public void KerberosKeyDerivation_DES_CBC_MD5_Binary()
+    {
+        ReadOnlyMemory<byte> password = "50006100240024007700300072006400".HexToBinary();
+        string salt = "ADATUM.COMApril";
+        int iterations = 4096;
+
+        // On the latest Windows versions, DES key derivation is no longer supported natively.
+        // The ReadOnlyMemory<byte> overload must surface the same NotSupportedException as the SecureString overload.
+        Assert.ThrowsExactly<NotSupportedException>(() => KerberosKeyDerivation.DeriveKey(KerberosKeyType.DES_CBC_MD5, password, salt, iterations));
+    }
+
+    [TestMethod]
+    public void KerberosKeyDerivation_NULL_Binary()
+    {
+        ReadOnlyMemory<byte> password = "50006100240024007700300072006400".HexToBinary();
+        string salt = "ADATUM.COMApril";
+        int iterations = 4096;
+
+        Assert.ThrowsExactly<NotSupportedException>(() => KerberosKeyDerivation.DeriveKey(KerberosKeyType.NULL, password, salt, iterations));
+    }
+
+    [TestMethod]
     public void KerberosKeyDerivation_UserSalt()
     {
         Assert.AreEqual("ADATUM.COMApril", KerberosKeyDerivation.DeriveSalt("April", "Adatum.com"));
