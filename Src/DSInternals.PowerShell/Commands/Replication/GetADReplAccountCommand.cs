@@ -63,6 +63,10 @@ public class GetADReplAccountCommand : ADReplPrincipalCommandBase
     {
         base.BeginProcessing();
 
+        // Track whether the caller explicitly asked for a property set, as opposed to relying
+        // on the default value of the Properties parameter.
+        bool propertiesExplicitlyBound = this.MyInvocation.BoundParameters.ContainsKey(nameof(Properties));
+
         if (this.ExportFormat != null)
         {
             // Override the property set to match the requirements of the export formats.
@@ -85,7 +89,21 @@ public class GetADReplAccountCommand : ADReplPrincipalCommandBase
 
         if (fullSchemaRequired)
         {
-            FetchSchema();
+            // Fetching the schema requires replication rights on the forest-wide Configuration/Schema
+            // partition, which may not be the case for a cross-forest/delegated DCSync account. If
+            // the user does not have those rights, and did not explicitly request LAPS attributes,
+            // skip the LAPS attributes and issue a warning.
+            bool lapsExplicitlyRequested = this.ExportFormat != null ||
+                (propertiesExplicitlyBound && (this.Properties & AccountPropertySets.LAPS) != AccountPropertySets.None);
+            try
+            {
+                FetchSchema();
+            }
+            catch (UnauthorizedAccessException) when (!lapsExplicitlyRequested)
+            {
+                this.WriteWarning("LAPS attributes were skipped: no replication rights on the Schema partition.");
+                this.Properties &= ~AccountPropertySets.LAPS;
+            }
         }
     }
 
